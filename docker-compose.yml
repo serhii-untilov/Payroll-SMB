@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile
-    image: payroll
+    image: untilov/payroll
     restart: always
     ports:
       - 3000:3000
