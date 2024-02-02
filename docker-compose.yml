@@ -14,12 +14,11 @@ services:
 
   reverse-proxy:
     container_name: payroll-nginx
-    image: nginx:latest
+    build:
+      context: .
+      dockerfile: ./packages/nginx/Dockerfile
+    image: untilov/nginx
     restart: always
     ports:
       - 80:80
-    volumes:
-      - ./packages/nginx:/etc/nginx/conf.d
-    env_file:
-      - .env
 
