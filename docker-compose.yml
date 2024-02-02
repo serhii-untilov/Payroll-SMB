@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+
+  application:
+    container_name: payroll-app
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    image: payroll
+    restart: always
+    ports:
+      - 3000:3000
+
+  reverse-proxy:
+    container_name: payroll-nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./packages/nginx:/etc/nginx/conf.d
+    env_file:
+      - .env
+
