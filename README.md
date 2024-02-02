@@ -7,7 +7,7 @@
 - [**Vite**: Server Proxy](https://vitejs.dev/config/server-options#server-proxy)
 - [**NestJS**: Serve Static](https://docs.nestjs.com/recipes/serve-static)
 
-## Init script
+## Initial script
 
 ``` bash
 mkdir nest-react
