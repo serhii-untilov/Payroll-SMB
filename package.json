@@ -1,4 +1,10 @@
 {
+  "name": "nest-react",
+  "description": "Nest React Application inside a Turbo mono repository",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -6,9 +12,5 @@
   },
   "devDependencies": {
     "turbo": "^1.12.2"
-  },
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ]
+  }
 }

@@ -23,3 +23,24 @@ npm run dev
 npm run build
 npm i --workspace api --save @nestjs/serve-static
 ```
+
+## Development mode
+
+``` bash
+npm run dev
+```
+In Development mode frontend and backend applications works on the different ports:
+- Backend URL http://localhost:3000/api
+- Frontend URL http://localhost:5173
+
+
+## Production mode
+
+``` bash
+npm run build
+npm start
+```
+
+In Production mode frontend and backend applications works on the same port:
+- Backend URL http://localhost:3000/api
+- Frontend URL http://localhost:3000
