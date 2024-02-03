@@ -17,7 +17,7 @@ npm run build
 npm i --workspace api --save @nestjs/serve-static
 ```
 
-## Development mode
+## Development
 
 ``` bash
 npm run dev
@@ -28,7 +28,7 @@ In Development mode frontend and backend applications works on the different por
 - Backend URL <http://localhost:3000/api>
 - Frontend URL <http://localhost:5173>
 
-## Production mode
+## Production
 
 ``` bash
 npm run build
@@ -39,6 +39,28 @@ In Production mode frontend and backend applications works on the same port:
 
 - Backend URL <http://localhost:3000/api>
 - Frontend URL <http://localhost:3000>
+
+## Docker
+
+``` bash
+# Build and start application
+npm run build
+docker compose build
+docker compose up --detach
+# Stop application
+docker compose down
+```
+
+## Docker Hub
+
+``` bash
+# Build application and push images to the Docker Hub
+npm run build
+docker compose push
+# Download docker compose script and run docker containers
+curl https://raw.githubusercontent.com/serhii-untilov/nest-react/master/docker-compose.yml >docker-compose.yml
+docker compose up --detach
+```
 
 ## References
 
