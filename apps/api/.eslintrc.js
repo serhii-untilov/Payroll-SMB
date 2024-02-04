@@ -1,12 +1,13 @@
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint/eslint-plugin', 'no-loops'],
+    plugins: ['@typescript-eslint/eslint-plugin', 'no-loops', 'prettier'],
     env: { node: true, jest: true },
     ignorePatterns: ['dist', '.eslintrc.js'],
     extends: [
         'plugin:@typescript-eslint/recommended',
         'plugin:prettier/recommended',
+        'prettier',
     ],
     parserOptions: {
         project: 'tsconfig.json',
@@ -20,5 +21,6 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
         'no-console': 'warn',
         'no-loops/no-loops': 'warn',
+        'prettier/prettier': 'warn',
     },
 };

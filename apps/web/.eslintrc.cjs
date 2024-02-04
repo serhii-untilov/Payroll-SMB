@@ -1,13 +1,14 @@
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
-    plugins: ['react-refresh', 'no-loops'],
+    plugins: ['react-refresh', 'no-loops', 'prettier'],
     env: { browser: true, es2020: true },
     ignorePatterns: ['dist', '.eslintrc.cjs'],
     extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:react-hooks/recommended',
+        'prettier',
     ],
     rules: {
         'react-refresh/only-export-components': [
@@ -20,5 +21,6 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
         'no-console': 'warn',
         'no-loops/no-loops': 'warn',
+        'prettier/prettier': 'warn',
     },
 };
