@@ -7,10 +7,11 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
+    "start": "node apps/api/dist/main",
+    "build": "turbo run build",
     "lint": "turbo lint",
     "format": "turbo format",
-    "build": "turbo run build",
-    "start": "node apps/api/dist/main"
+    "test": "turbo test"
   },
   "devDependencies": {
     "eslint-config-prettier": "^9.1.0",
