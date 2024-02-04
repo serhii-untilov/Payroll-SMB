@@ -6,13 +6,13 @@ import { join } from 'path';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
-  imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../..', 'web', 'dist'),
-    }),
-    UsersModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '../..', 'web', 'dist'),
+        }),
+        UsersModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}

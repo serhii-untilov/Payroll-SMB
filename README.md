@@ -81,3 +81,5 @@ npx --workspace api nest generate resource users modules
 - [**Vite**: Server Proxy](https://vitejs.dev/config/server-options#server-proxy)
 - [**NestJS**: Serve Static](https://docs.nestjs.com/recipes/serve-static)
 - [**NestJS**: Crash Course: Everything you need to know! | NodeJS Tutorial 2023](https://youtu.be/2n3xS89TJMI?si=9EXCuQZD5xS6cZIW)
+- [**Linter**: How to use ESLint with TypeScript](https://khalilstemmler.com/blogs/typescript/eslint-for-typescript/)
+- [**Prettier**: How to use Prettier with ESLint and TypeScript in VSCode](https://khalilstemmler.com/blogs/tooling/prettier/)
