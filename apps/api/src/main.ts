@@ -22,13 +22,22 @@ async function bootstrap() {
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api/v1', app, document, {
-        jsonDocumentUrl: 'api/v1/swagger.json',
+    const apiVersion = 'v1';
+    const apiFileName = 'swagger.json';
+    SwaggerModule.setup(`${globalPrefix}/${apiVersion}`, app, document, {
+        jsonDocumentUrl: `${globalPrefix}/${apiVersion}/${apiFileName}`,
     });
     // Run API
     const host = configService.get<string>('app.host');
     const port = configService.get<number>('app.port');
     await app.listen(port);
-    logger.log(`🚀 API is running on: http://${host}:${port}/${globalPrefix}`);
+    logger.log(`Application is running on: http://${host}:${port}`);
+    logger.log(`API is running on: http://${host}:${port}/${globalPrefix}`);
+    logger.log(
+        `Swagger is running on: http://${host}:${port}/${globalPrefix}/${apiVersion}`,
+    );
+    logger.log(
+        `Swagger JSON file on: http://${host}:${port}/${globalPrefix}/${apiVersion}/${apiFileName}`,
+    );
 }
 bootstrap();
