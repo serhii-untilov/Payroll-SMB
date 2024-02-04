@@ -75,7 +75,7 @@ npx --workspace api nest generate resource users modules
 
 - [**Web apps development methodology**: The Twelve-Factor App](https://12factor.net)
 - [**Project architecture**: Bulletproof node.js project architecture](https://dev.to/santypk4/bulletproof-node-js-project-architecture-4epf)
-- [**Nx**: Full Stack Development Series](https://thefullstack.engineer/full-stack-development-series-an-introduction/)
+- [**Monorepo on Nx**: Full Stack Development Series](https://thefullstack.engineer/full-stack-development-series-an-introduction/)
 - [**Turborepo**: Add Turborepo to your existing monorepo](https://turbo.build/repo/docs/getting-started/existing-monorepo)
 - [**NestJS**: Combine a NestJS app with React](https://youtu.be/nY0R7pslbCI?si=Lunb95j6enSY8GXE)
 - [**Vite**: Server Proxy](https://vitejs.dev/config/server-options#server-proxy)
