@@ -62,6 +62,15 @@ curl https://raw.githubusercontent.com/serhii-untilov/nest-react/master/docker-c
 docker compose up --detach
 ```
 
+## Nest JS
+
+``` bash
+# Create module in the modules directory
+npx --workspace api nest generate module users modules
+# Create resource in the modules directory
+npx --workspace api nest generate resource users modules
+```
+
 ## References
 
 - [**Web apps development methodology**: The Twelve-Factor App](https://12factor.net)
