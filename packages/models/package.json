@@ -1,0 +1,25 @@
+{
+    "name": "models",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "types": "index.ts",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "m:crt": "typeorm migration:create ./migrations/seed",
+        "m:gen": "dotenv -e ../../.env -- typeorm-ts-node-commonjs -d ./datasource.ts migration:generate ./migrations/gen --pretty",
+        "m:run": "dotenv -e ../../.env -- typeorm-ts-node-commonjs -d ./datasource.ts migration:run --transaction each",
+        "m:revert": "dotenv -e ../../.env -- typeorm-ts-node-commonjs -d ./datasource.ts migration:revert",
+        "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+        "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+        "test": "jest --passWithNoTests",
+        "test:watch": "jest --watch"
+    },
+    "dependencies": {
+        "sqlite3": "^5.1.7",
+        "typeorm": "^0.3.20"
+    },
+    "devDependencies": {
+        "ts-node": "^10.9.2"
+    }
+}

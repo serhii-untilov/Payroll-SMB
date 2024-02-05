@@ -67,19 +67,23 @@ docker compose up --detach
 ``` bash
 # Create module in the modules directory
 npx --workspace api nest generate module users modules
-# Create resource in the modules directory
-npx --workspace api nest generate resource users modules
+# Create resource in the models package
+npx --workspace models nest generate resource users resources
+npx --workspace models nest generate resource laws resources
 ```
+
+## TypeORM
 
 ## References
 
-- [**Web apps development methodology**: The Twelve-Factor App](https://12factor.net)
-- [**Project architecture**: Bulletproof node.js project architecture](https://dev.to/santypk4/bulletproof-node-js-project-architecture-4epf)
-- [**Monorepo on Nx**: Full Stack Development Series](https://thefullstack.engineer/full-stack-development-series-an-introduction/)
-- [**Turborepo**: Add Turborepo to your existing monorepo](https://turbo.build/repo/docs/getting-started/existing-monorepo)
-- [**NestJS**: Combine a NestJS app with React](https://youtu.be/nY0R7pslbCI?si=Lunb95j6enSY8GXE)
-- [**Vite**: Server Proxy](https://vitejs.dev/config/server-options#server-proxy)
-- [**NestJS**: Serve Static](https://docs.nestjs.com/recipes/serve-static)
-- [**NestJS**: Crash Course: Everything you need to know! | NodeJS Tutorial 2023](https://youtu.be/2n3xS89TJMI?si=9EXCuQZD5xS6cZIW)
-- [**Linter**: How to use ESLint with TypeScript](https://khalilstemmler.com/blogs/typescript/eslint-for-typescript/)
-- [**Prettier**: How to use Prettier with ESLint and TypeScript in VSCode](https://khalilstemmler.com/blogs/tooling/prettier/)
+- [**Web apps development methodology** - The Twelve-Factor App](https://12factor.net)
+- [**Project architecture** - Bulletproof node.js project architecture](https://dev.to/santypk4/bulletproof-node-js-project-architecture-4epf)
+- [**Monorepo on Nx** - Full Stack Development Series](https://thefullstack.engineer/full-stack-development-series-an-introduction/)
+- [**Turborepo** - Add Turborepo to your existing monorepo](https://turbo.build/repo/docs/getting-started/existing-monorepo)
+- [**NestJS** - Combine a NestJS app with React](https://youtu.be/nY0R7pslbCI?si=Lunb95j6enSY8GXE)
+- [**Vite** - Server Proxy](https://vitejs.dev/config/server-options#server-proxy)
+- [**NestJS** - Serve Static](https://docs.nestjs.com/recipes/serve-static)
+- [**NestJS** - Crash Course: Everything you need to know! | NodeJS Tutorial 2023](https://youtu.be/2n3xS89TJMI?si=9EXCuQZD5xS6cZIW)
+- [**Linter** - How to use ESLint with TypeScript](https://khalilstemmler.com/blogs/typescript/eslint-for-typescript/)
+- [**Prettier** - How to use Prettier with ESLint and TypeScript in VSCode](https://khalilstemmler.com/blogs/tooling/prettier/)
+- [**TypeORM** - Generate Migration with TypeORM in Nest.js](https://www.bytestechnolab.com/blog/mastering-migration-with-typeorm-in-nestjs-step-by-step-guide/)

@@ -11,7 +11,11 @@
     "build": "turbo run build",
     "lint": "turbo lint",
     "format": "turbo format",
-    "test": "turbo test"
+    "test": "turbo test",
+    "m:crt": "turbo run m:crt --filter=models",
+    "m:gen": "turbo run m:gen --filter=models",
+    "m:run": "turbo run m:run --filter=models",
+    "m:revert": "turbo run m:revert --filter=models"
   },
   "devDependencies": {
     "eslint-config-prettier": "^9.1.0",

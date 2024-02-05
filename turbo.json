@@ -32,6 +32,15 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "m:crt": {
+      "cache": false
+    },
+    "m:gen": {
+      "cache": false
+    },
+    "m:run": {
+      "cache": false
     }
   }
 }
