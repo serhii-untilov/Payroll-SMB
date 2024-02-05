@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-// import { ILaw } from './law.interface';
+import { ILaw } from './law.interface';
 
 @Entity()
-export class Law {
+export class Law implements ILaw {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
