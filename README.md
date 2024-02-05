@@ -74,6 +74,13 @@ npx --workspace models nest generate resource laws resources
 
 ## TypeORM
 
+## JWT
+
+``` bash
+# Generate JWT secret key
+openssl rand -base64 60
+```
+
 ## References
 
 - [**Web apps development methodology** - The Twelve-Factor App](https://12factor.net)

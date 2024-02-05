@@ -1,6 +1,5 @@
-import { dbConfig } from 'models';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,25 +7,21 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UsersModule } from '../modules/users/users.module';
 import { appConfig } from '../config/app.config';
+import { dbConfig } from '../config/db.config';
+import { googleConfig } from 'src/config/google.config';
+import { TypeormConfigService } from 'src/config/typeorm-config.service';
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            ignoreEnvFile: true,
-            ignoreEnvVars: false,
-            load: [appConfig],
+            envFilePath: ['.env'],
+            ignoreEnvVars: true,
+            load: [appConfig, dbConfig, googleConfig],
         }),
-        TypeOrmModule.forRoot({
-            ...dbConfig,
-            type:
-                dbConfig.type === 'postgres'
-                    ? 'postgres'
-                    : dbConfig.type === 'mssql'
-                      ? 'mssql'
-                      : dbConfig.type === 'mysql'
-                        ? 'mysql'
-                        : 'sqlite',
+        TypeOrmModule.forRootAsync({
+            useClass: TypeormConfigService,
+            inject: [ConfigService],
         }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '../..', 'web', 'dist'),

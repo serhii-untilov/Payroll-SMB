@@ -1,4 +1,3 @@
-// import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 
 export const dbConfig = {
@@ -18,7 +17,9 @@ export const dbConfig = {
 };
 
 // eslint-disable-next-line no-console
-console.log(`Data source on port ${dbConfig.port}.`);
+// console.log(`Data source on port ${dbConfig.port}.`);
+// eslint-disable-next-line no-console
+console.log('dbConfig:', dbConfig);
 
 export const AppDataSource = new DataSource({
     ...dbConfig,

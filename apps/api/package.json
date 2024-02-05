@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@payroll/api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -31,7 +31,7 @@
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "models": "*",
+    "@payroll/models": "*",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {

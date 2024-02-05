@@ -1,15 +1,16 @@
 {
-    "name": "models",
+    "name": "@payroll/models",
     "version": "1.0.0",
-    "main": "index.ts",
+    "main": "./dist/index.js",
     "types": "index.ts",
     "license": "MIT",
     "private": true,
     "scripts": {
+        "build": "tsc",
         "m:crt": "typeorm migration:create ./migrations/seed",
-        "m:gen": "dotenv -e ../../.env -- typeorm-ts-node-commonjs -d ./datasource.ts migration:generate ./migrations/gen --pretty",
-        "m:run": "dotenv -e ../../.env -- typeorm-ts-node-commonjs -d ./datasource.ts migration:run --transaction each",
-        "m:revert": "dotenv -e ../../.env -- typeorm-ts-node-commonjs -d ./datasource.ts migration:revert",
+        "m:gen": "typeorm-ts-node-commonjs -d ./datasource.ts migration:generate ./migrations/gen --pretty",
+        "m:run": "typeorm-ts-node-commonjs -d ./datasource.ts migration:run --transaction each",
+        "m:revert": "typeorm-ts-node-commonjs -d ./datasource.ts migration:revert",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "test": "jest --passWithNoTests",
@@ -17,9 +18,11 @@
     },
     "dependencies": {
         "sqlite3": "^5.1.7",
+        "ts-loader": "^9.5.1",
         "typeorm": "^0.3.20"
     },
     "devDependencies": {
-        "ts-node": "^10.9.2"
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
     }
 }

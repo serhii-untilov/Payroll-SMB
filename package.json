@@ -12,10 +12,10 @@
     "lint": "turbo lint",
     "format": "turbo format",
     "test": "turbo test",
-    "m:crt": "turbo run m:crt --filter=models",
-    "m:gen": "turbo run m:gen --filter=models",
-    "m:run": "turbo run m:run --filter=models",
-    "m:revert": "turbo run m:revert --filter=models"
+    "m:crt": "turbo run m:crt --filter=@payroll/models",
+    "m:gen": "turbo run m:gen --filter=@payroll/models",
+    "m:run": "turbo run m:run --filter=@payroll/models",
+    "m:revert": "turbo run m:revert --filter=@payroll/models"
   },
   "devDependencies": {
     "eslint-config-prettier": "^9.1.0",
