@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { ILaw } from './law.interface';
+import { ILaw } from '@repo/shared';
 
 @Entity()
 export class Law implements ILaw {

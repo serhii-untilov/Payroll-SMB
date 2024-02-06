@@ -1,3 +1,4 @@
+// This file used for typeorm migrations only
 import { DataSource } from 'typeorm';
 
 export const dbConfig = {
@@ -10,10 +11,13 @@ export const dbConfig = {
     username: process.env['DATABASE_USERNAME'],
     synchronize: process.env['DATABASE_SYNCHRONIZE'] === 'true',
     logging: process.env['DATABASE_LOGGING_ENABLED'] === 'true',
-    database: process.env['DATABASE_SQLITE'],
-    entities: ['./src/**/*entity.ts'],
-    migrations: ['./migrations/**/*.ts'],
-    subscribers: ['./src/**/*subscriber.ts'],
+    database:
+        process.env['DATABASE_TYPE'] === 'sqlite'
+            ? process.env['DATABASE_PATH']
+            : process.env['DATABASE_NAME'],
+    entities: ['./src/resources/**/*entity.ts'],
+    migrations: ['./src/migrations/**/*.ts'],
+    subscribers: ['./src/resources/**/*subscriber.ts'],
 };
 
 // eslint-disable-next-line no-console

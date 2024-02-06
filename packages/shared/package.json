@@ -1,5 +1,5 @@
 {
-    "name": "@payroll/models",
+    "name": "@repo/shared",
     "version": "1.0.0",
     "main": "./dist/index.js",
     "types": "index.ts",
@@ -7,10 +7,6 @@
     "private": true,
     "scripts": {
         "build": "tsc",
-        "m:crt": "typeorm migration:create ./migrations/seed",
-        "m:gen": "typeorm-ts-node-commonjs -d ./datasource.ts migration:generate ./migrations/gen --pretty",
-        "m:run": "typeorm-ts-node-commonjs -d ./datasource.ts migration:run --transaction each",
-        "m:revert": "typeorm-ts-node-commonjs -d ./datasource.ts migration:revert",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "test": "jest --passWithNoTests",

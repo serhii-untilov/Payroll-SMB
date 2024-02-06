@@ -14,7 +14,7 @@ cd ..
 npm install
 npm run dev
 npm run build
-npm i --workspace api --save @nestjs/serve-static
+npm i --workspace @repo/api --save @nestjs/serve-static
 ```
 
 ## Development
@@ -65,11 +65,9 @@ docker compose up --detach
 ## Nest JS
 
 ``` bash
-# Create module in the modules directory
-npx --workspace api nest generate module users modules
-# Create resource in the models package
-npx --workspace models nest generate resource users resources
-npx --workspace models nest generate resource laws resources
+# Create resources
+npx --workspace @repo/api nest generate resource users resources
+npx --workspace @repo/api nest generate resource laws resources
 ```
 
 ## TypeORM
@@ -90,6 +88,7 @@ openssl rand -base64 60
 - [**NestJS** - Combine a NestJS app with React](https://youtu.be/nY0R7pslbCI?si=Lunb95j6enSY8GXE)
 - [**Vite** - Server Proxy](https://vitejs.dev/config/server-options#server-proxy)
 - [**NestJS** - Serve Static](https://docs.nestjs.com/recipes/serve-static)
+- [**NestJS** - Tom Ray: Learn NestJS From The Ground Up](https://www.tomray.dev/)
 - [**NestJS** - Crash Course: Everything you need to know! | NodeJS Tutorial 2023](https://youtu.be/2n3xS89TJMI?si=9EXCuQZD5xS6cZIW)
 - [**Linter** - How to use ESLint with TypeScript](https://khalilstemmler.com/blogs/typescript/eslint-for-typescript/)
 - [**Prettier** - How to use Prettier with ESLint and TypeScript in VSCode](https://khalilstemmler.com/blogs/tooling/prettier/)

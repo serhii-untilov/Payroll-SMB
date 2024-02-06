@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { UsersModule } from '../modules/users/users.module';
+import { UsersModule } from '../resources/users/users.module';
 import { appConfig } from '../config/app.config';
 import { dbConfig } from '../config/db.config';
 import { googleConfig } from 'src/config/google.config';
@@ -15,8 +15,9 @@ import { TypeormConfigService } from 'src/config/typeorm-config.service';
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: ['.env'],
-            ignoreEnvVars: true,
+            // envFilePath: ['.env'],
+            // ignoreEnvVars: true,
+            // ignoreEnvFile: true,
             load: [appConfig, dbConfig, googleConfig],
         }),
         TypeOrmModule.forRootAsync({
