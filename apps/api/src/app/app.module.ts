@@ -25,7 +25,7 @@ import { TypeormConfigService } from 'src/config/typeorm-config.service';
             inject: [ConfigService],
         }),
         ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '../..', 'web', 'dist'),
+            rootPath: join(__dirname, '../../..', 'web', 'dist'),
         }),
         UsersModule,
     ],
