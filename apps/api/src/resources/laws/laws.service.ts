@@ -40,7 +40,7 @@ export class LawsService {
             throw new NotFoundException(`Law could not be found.`);
         }
         await this.lawsRepository.save({ id, ...data });
-        const updated = await this.lawsRepository.findOneBy({ id });
+        const updated = await this.lawsRepository.findOneOrFail({ where: { id } });
         return updated;
     }
 
