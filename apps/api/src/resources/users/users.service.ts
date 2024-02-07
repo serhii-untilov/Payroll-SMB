@@ -39,6 +39,14 @@ export class UsersService {
         return user;
     }
 
+    findOneByEmail(email: string) {
+        const user = this.usersRepository.findOneBy({ email });
+        if (!user) {
+            throw new NotFoundException(`User could not be found.`);
+        }
+        return user;
+    }
+
     async update(id: number, data: UpdateUserDto): Promise<User> {
         const user = await this.usersRepository.findOneBy({ id });
         if (!user) {
@@ -57,5 +65,14 @@ export class UsersService {
         }
         await this.usersRepository.remove(user);
         return user;
+    }
+
+    async delete(id: number): Promise<null> {
+        const user = await this.usersRepository.findOneBy({ id });
+        if (!user) {
+            throw new NotFoundException(`User could not be found.`);
+        }
+        await this.usersRepository.remove(user);
+        return null;
     }
 }

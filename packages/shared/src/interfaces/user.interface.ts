@@ -9,4 +9,4 @@ export interface IUser {
 export type ICreateUser = Pick<IUser, 'name' | 'email' | 'password' | 'isActive'>;
 export type IUpdateUser = Partial<Omit<IUser, 'id'>>;
 export type IUpsertUser = IUser;
-export type IPublicUserData = Omit<IUser, 'password'>;
+export type IPublicUserData = Partial<Omit<IUser, 'password'>>;
