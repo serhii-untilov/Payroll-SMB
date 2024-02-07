@@ -2,33 +2,34 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { LawsService } from './laws.service';
 import { CreateLawDto } from './dto/create-law.dto';
 import { UpdateLawDto } from './dto/update-law.dto';
+import { ILaw } from '@repo/shared';
 
 @Controller('laws')
 export class LawsController {
     constructor(private readonly lawsService: LawsService) {}
 
     @Post()
-    create(@Body() createLawDto: CreateLawDto) {
-        return this.lawsService.create(createLawDto);
+    async create(@Body() createLawDto: CreateLawDto): Promise<ILaw> {
+        return await this.lawsService.create(createLawDto);
     }
 
     @Get()
-    findAll() {
-        return this.lawsService.findAll();
+    async findAll(): Promise<ILaw[]> {
+        return await this.lawsService.findAll();
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.lawsService.findOne(+id);
+    async findOne(@Param('id') id: string): Promise<ILaw> {
+        return await this.lawsService.findOne(+id);
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateLawDto: UpdateLawDto) {
-        return this.lawsService.update(+id, updateLawDto);
+    async update(@Param('id') id: string, @Body() updateLawDto: UpdateLawDto): Promise<ILaw> {
+        return await this.lawsService.update(+id, updateLawDto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.lawsService.remove(+id);
+    async remove(@Param('id') id: string): Promise<ILaw> {
+        return await this.lawsService.remove(+id);
     }
 }
