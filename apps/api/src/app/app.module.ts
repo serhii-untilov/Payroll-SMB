@@ -10,6 +10,7 @@ import { appConfig } from '../config/app.config';
 import { dbConfig } from '../config/db.config';
 import { googleConfig } from 'src/config/google.config';
 import { TypeormConfigService } from 'src/config/typeorm-config.service';
+import { LawsModule } from 'src/resources/laws/laws.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { TypeormConfigService } from 'src/config/typeorm-config.service';
             rootPath: join(__dirname, '../../..', 'web', 'dist'),
         }),
         UsersModule,
+        LawsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
