@@ -20,8 +20,7 @@ export class TypeormConfigService implements TypeOrmOptionsFactory {
             username: dbConfig.username,
             password: dbConfig.password,
             port: dbConfig.port,
-            database:
-                dbConfig.type === 'sqlite' ? dbConfig.path : dbConfig.name,
+            database: dbConfig.type === 'sqlite' ? dbConfig.path : dbConfig.name,
             migrationsRun: dbConfig.migrationsRun,
             synchronize: dbConfig.synchronize,
             logging: dbConfig.logging,

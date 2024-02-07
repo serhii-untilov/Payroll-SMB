@@ -1,26 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLawDto } from './dto/create-law.dto';
 import { UpdateLawDto } from './dto/update-law.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Law } from './entities/law.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class LawsService {
-    create(createLawDto: CreateLawDto) {
-        return 'This action adds a new law';
+    constructor(
+        @InjectRepository(Law)
+        private lawsRepository: Repository<Law>,
+    ) {}
+
+    async create(law: CreateLawDto): Promise<Law> {
+        const existing = this.lawsRepository.findOne({ where: { name: law.name } });
+        if (existing) {
+            throw new BadRequestException(`Law '${law.name}' already exists.`);
+        }
+        const { name } = law;
+        const newLaw = await this.lawsRepository.save({ name });
+        return newLaw;
     }
 
-    findAll() {
-        return `This action returns all laws`;
+    async findAll(): Promise<Law[]> {
+        return await this.lawsRepository.find();
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} law`;
+    async findOne(id: number): Promise<Law> {
+        const law = await this.lawsRepository.findOneBy({ id });
+        if (!law) {
+            throw new NotFoundException(`Law could not be found.`);
+        }
+        return law;
     }
 
-    update(id: number, updateLawDto: UpdateLawDto) {
-        return `This action updates a #${id} law`;
+    async update(id: number, data: UpdateLawDto): Promise<Law> {
+        const law = await this.lawsRepository.findOneBy({ id });
+        if (!law) {
+            throw new NotFoundException(`Law could not be found.`);
+        }
+        await this.lawsRepository.save({ id, ...data });
+        const updated = await this.lawsRepository.findOneBy({ id });
+        return updated;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} law`;
+    async remove(id: number): Promise<null> {
+        const law = await this.lawsRepository.findOneBy({ id });
+        if (!law) {
+            throw new NotFoundException(`Law could not be found.`);
+        }
+        await this.lawsRepository.remove(law);
+        return null;
     }
 }

@@ -34,9 +34,7 @@ async function bootstrap() {
 
     logger.log(`Application is running on: http://${host}:${port}`);
     logger.log(`API is running on: http://${host}:${port}/${globalPrefix}`);
-    logger.log(
-        `Swagger is running on: http://${host}:${port}/${globalPrefix}/${apiVersion}`,
-    );
+    logger.log(`Swagger is running on: http://${host}:${port}/${globalPrefix}/${apiVersion}`);
     logger.log(
         `Swagger JSON file on: http://${host}:${port}/${globalPrefix}/${apiVersion}/${apiFileName}`,
     );

@@ -1,1 +1,5 @@
-export class CreateLawDto {}
+import { ICreateLaw } from '@repo/shared';
+
+export class CreateLawDto implements ICreateLaw {
+    name: string;
+}

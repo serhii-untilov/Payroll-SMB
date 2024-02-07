@@ -15,6 +15,7 @@ npm install
 npm run dev
 npm run build
 npm i --workspace @repo/api --save @nestjs/serve-static
+npm i --workspace @repo/api --save-dev bcrypt
 ```
 
 ## Development
