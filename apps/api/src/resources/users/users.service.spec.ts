@@ -40,7 +40,6 @@ describe('UsersService', () => {
             name: user.name,
             email: user.email,
             password: user.password,
-            isActive: user.isActive,
         };
         repoMock.findOne?.mockReturnValue(null);
         repoMock.save?.mockReturnValue(createUser);
@@ -111,22 +110,6 @@ describe('UsersService', () => {
         repoMock.findOneBy?.mockImplementation(() => null);
         try {
             await service.remove(-1);
-        } catch (err) {
-            expect(err).toBeInstanceOf(NotFoundException);
-        }
-    });
-
-    it('should delete a user if it exists', async () => {
-        const user = createMockUser();
-        repoMock.findOneBy?.mockReturnValue(user);
-        const res = await service.delete(user.id);
-        expect(res).toBeNull();
-    });
-
-    it('should throw if a user could not be found during delete', async () => {
-        repoMock.findOneBy?.mockImplementation(() => null);
-        try {
-            await service.delete(-1);
         } catch (err) {
             expect(err).toBeInstanceOf(NotFoundException);
         }

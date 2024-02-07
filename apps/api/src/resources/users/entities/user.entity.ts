@@ -15,6 +15,6 @@ export class User implements IUser {
     @Column({ type: 'varchar', length: 50 })
     password: string;
 
-    @Column('boolean')
+    @Column({ type: 'boolean', default: true })
     isActive: boolean;
 }
