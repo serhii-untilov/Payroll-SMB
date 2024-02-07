@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LawsService } from './laws.service';
 import { Law } from './entities/law.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { repositoryMockFactory } from '../../testing/repo-mock.factory';
-import { MockType } from 'src/testing/mock-type';
+import { repositoryMockFactory } from '@repo/utils';
+import { MockType } from '@repo/utils';
 import { Repository } from 'typeorm';
 
 describe('LawsService', () => {
