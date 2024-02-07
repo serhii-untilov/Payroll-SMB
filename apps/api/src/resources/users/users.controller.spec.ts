@@ -3,7 +3,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { repositoryMockFactory } from '../../testing/repo-mock.factory';
+import { repositoryMockFactory } from '@repo/utils';
 
 describe('UsersController', () => {
     let controller: UsersController;
