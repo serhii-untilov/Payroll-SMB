@@ -44,12 +44,12 @@ export class LawsService {
         return updated;
     }
 
-    async remove(id: number): Promise<null> {
+    async remove(id: number): Promise<Law> {
         const law = await this.lawsRepository.findOneBy({ id });
         if (!law) {
             throw new NotFoundException(`Law could not be found.`);
         }
         await this.lawsRepository.remove(law);
-        return null;
+        return law;
     }
 }

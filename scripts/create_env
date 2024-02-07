@@ -1,0 +1,5 @@
+#!/bin/sh
+if ! [ -f ./.env ]; then
+  echo "The .env file does not exist. Let's create it."
+  echo "# Replace "localhost" with the real ip address of an API backend server\nNEXT_PUBLIC_API_URL=http://localhost:3001" > .env
+fi

@@ -1,0 +1,17 @@
+#!/bin/sh
+rm -rfv .turbo
+rm -rfv node_modules
+rm -fv package-lock.json
+rm -fv db.sqlite
+
+rm -rfv -rf ./apps/api/.turbo
+rm -rfv -rf ./apps/api/dist
+rm -rfv -rf ./apps/api/node_modules
+
+rm -rfv -rf ./apps/web/.turbo
+rm -rfv -rf ./apps/web/dist
+rm -rfv -rf ./apps/web/node_modules
+
+rm -rfv -rf ./packages/shared/.turbo
+rm -rfv -rf ./packages/shared/dist
+rm -rfv -rf ./packages/shared/node_modules

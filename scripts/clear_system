@@ -1,0 +1,24 @@
+#!/bin/sh
+df -Th / /home
+
+# Remove apt / apt-get files
+sudo apt clean
+sudo apt -s clean
+sudo apt clean all
+sudo apt autoremove
+sudo apt autoclean
+sudo apt-get clean
+sudo apt-get -s clean
+sudo apt-get clean all
+sudo apt-get autoclean
+
+# System logs
+sudo journalctl --vacuum-time=3d
+
+#Remove Old Log Files
+sudo rm -f /var/log/*gz
+
+# Remove Thumbnail Cache
+rm -rf ~/.cache/thumbnails/*
+
+df -Th / /home

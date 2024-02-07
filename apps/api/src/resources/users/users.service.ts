@@ -50,12 +50,12 @@ export class UsersService {
         return updated;
     }
 
-    async remove(id: number): Promise<null> {
+    async remove(id: number): Promise<User> {
         const user = await this.usersRepository.findOneBy({ id });
         if (!user) {
             throw new NotFoundException(`User could not be found.`);
         }
         await this.usersRepository.remove(user);
-        return null;
+        return user;
     }
 }
