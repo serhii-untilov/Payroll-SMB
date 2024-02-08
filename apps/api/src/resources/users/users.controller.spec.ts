@@ -41,6 +41,7 @@ describe('UsersController', () => {
             name: user.name,
             email: user.email,
             password: user.password,
+            roles: [],
         });
         expect(res).toStrictEqual(publicUser);
     });

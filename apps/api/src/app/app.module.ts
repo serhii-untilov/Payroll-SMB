@@ -11,6 +11,7 @@ import { dbConfig } from '../config/db.config';
 import { googleConfig } from 'src/config/google.config';
 import { TypeormConfigService } from 'src/config/typeorm-config.service';
 import { LawsModule } from 'src/resources/laws/laws.module';
+import { RolesModule } from 'src/resources/roles/roles.module';
 
 @Module({
     imports: [
@@ -30,6 +31,7 @@ import { LawsModule } from 'src/resources/laws/laws.module';
         }),
         UsersModule,
         LawsModule,
+        RolesModule,
     ],
     controllers: [AppController],
     providers: [AppService],
