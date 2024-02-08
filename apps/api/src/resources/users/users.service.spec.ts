@@ -40,6 +40,7 @@ describe('UsersService', () => {
             name: user.name,
             email: user.email,
             password: user.password,
+            roles: [],
         };
         repoMock.findOne?.mockReturnValue(null);
         repoMock.save?.mockReturnValue(createUser);

@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IUser } from '@repo/shared';
+import { Role } from '../../roles/entities/role.entity';
 
 @Entity()
 export class User implements IUser {
@@ -17,4 +18,8 @@ export class User implements IUser {
 
     @Column({ type: 'boolean', default: true })
     isActive: boolean;
+
+    @ManyToMany(() => Role, (role) => role.users, { cascade: true })
+    @JoinTable({ name: 'user_roles' })
+    roles: Role[];
 }

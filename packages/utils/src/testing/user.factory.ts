@@ -4,7 +4,7 @@ import { IUser } from '@repo/shared';
 const factory = incrementalNumber();
 
 export const createMockUser = (data?: Partial<IUser>): IUser => {
-    const id = factory();
+    const id: number = factory();
     const email = randEmail();
     const password = randPassword();
     return {
@@ -13,6 +13,7 @@ export const createMockUser = (data?: Partial<IUser>): IUser => {
         email,
         password,
         isActive: true,
+        roles: [],
         ...data,
     };
 };
