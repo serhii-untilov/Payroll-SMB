@@ -12,19 +12,19 @@ export class UsersController {
     @Post()
     async create(@Body() createUserDto: CreateUserDto): Promise<IPublicUserData> {
         const user = await this.usersService.create(createUserDto);
-        return _.omit(user, ['password']);
+        return _.omit(user, ['password', 'refreshToken']);
     }
 
     @Get()
     async findAll(): Promise<IPublicUserData[]> {
         const users = await this.usersService.findAll();
-        return users.map((user) => _.omit(user, ['password']));
+        return users.map((user) => _.omit(user, ['password', 'refreshToken']));
     }
 
     @Get(':id')
     async findOne(@Param('id') id: string): Promise<IPublicUserData> {
         const user = await this.usersService.findOne(+id);
-        return _.omit(user, ['password']);
+        return _.omit(user, ['password', 'refreshToken']);
     }
 
     @Patch(':id')
@@ -33,12 +33,12 @@ export class UsersController {
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<IPublicUserData> {
         const user = await this.usersService.update(+id, updateUserDto);
-        return _.omit(user, ['password']);
+        return _.omit(user, ['password', 'refreshToken']);
     }
 
     @Delete(':id')
     async remove(@Param('id') id: string): Promise<IPublicUserData> {
         const user = await this.usersService.remove(+id);
-        return _.omit(user, ['password']);
+        return _.omit(user, ['password', 'refreshToken']);
     }
 }
