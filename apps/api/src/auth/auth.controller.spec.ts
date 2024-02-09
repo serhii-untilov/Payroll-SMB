@@ -5,17 +5,18 @@ import { BadRequestException } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { IUser } from '@repo/shared';
-import { createMockUser, repositoryMockFactory } from '@repo/utils';
+import { MockType, createMockUser, repositoryMockFactory } from '@repo/utils';
 import { UsersService } from '../resources/users/users.service';
 import { User } from '../resources/users/entities/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersModule } from '../resources/users/users.module';
+import { Repository } from 'typeorm';
 
 describe('AuthController', () => {
     let controller: AuthController;
     let mockUser: IUser;
     let mockUserUnhashedPassword: string;
+    let repoMock: MockType<Repository<User>>;
 
     beforeAll(async () => {
         mockUser = createMockUser();
@@ -32,33 +33,27 @@ describe('AuthController', () => {
             ],
             providers: [
                 AuthService,
-                {
-                    provide: UsersService,
-                    useValue: {
-                        findOneBy: jest.fn(async (name) => {
-                            if (name !== mockUser.name) {
-                                return null;
-                            }
-                            return mockUser;
-                        }),
-                    },
-                },
+                UsersService,
                 {
                     provide: getRepositoryToken(User),
                     useFactory: repositoryMockFactory,
                 },
             ],
             controllers: [AuthController],
+            exports: [UsersService],
         }).compile();
 
         controller = module.get(AuthController);
+        repoMock = module.get(getRepositoryToken(User));
     });
 
     it('should be defined', () => {
         expect(controller).toBeTruthy();
+        expect(repoMock).toBeTruthy();
     });
 
     it('should login a user', async () => {
+        repoMock.findOneBy?.mockReturnValue(mockUser);
         const res = await controller.signIn({
             name: mockUser.name,
             password: mockUserUnhashedPassword,
@@ -69,6 +64,7 @@ describe('AuthController', () => {
 
     it('should throw with a bad email', async () => {
         try {
+            repoMock.findOneBy?.mockReturnValue(null);
             await controller.signIn({ name: '', password: '' });
         } catch (err) {
             expect(err).toBeInstanceOf(BadRequestException);
