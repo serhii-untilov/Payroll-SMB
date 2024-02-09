@@ -7,6 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { createMockUser, repositoryMockFactory } from '@repo/utils';
 import { IPublicUserData } from '@repo/shared';
+import { CreateUserDto } from './dto/create-user.dto';
 
 describe('UsersController', () => {
     let controller: UsersController;
@@ -37,12 +38,8 @@ describe('UsersController', () => {
         const user = createMockUser();
         const publicUser: IPublicUserData = _.omit(user, ['password', 'refreshToken']);
         jest.spyOn(service, 'create').mockReturnValue(Promise.resolve(user));
-        const res = await controller.create({
-            name: user.name,
-            email: user.email,
-            password: user.password,
-            roles: [],
-        });
+        const createUserDto: CreateUserDto = _.omit(user, ['id']);
+        const res = await controller.create(createUserDto);
         expect(res).toStrictEqual(publicUser);
     });
 

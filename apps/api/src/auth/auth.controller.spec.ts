@@ -11,6 +11,7 @@ import { User } from '../resources/users/entities/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { Repository } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthController', () => {
     let controller: AuthController;
@@ -34,6 +35,7 @@ describe('AuthController', () => {
             providers: [
                 AuthService,
                 UsersService,
+                ConfigService,
                 {
                     provide: getRepositoryToken(User),
                     useFactory: repositoryMockFactory,

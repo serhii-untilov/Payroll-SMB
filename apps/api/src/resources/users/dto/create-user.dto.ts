@@ -13,5 +13,8 @@ export class CreateUserDto implements ICreateUser {
     password: string;
 
     @ApiProperty()
+    refreshToken: string;
+
+    @ApiProperty()
     roles: Role[] = [];
 }

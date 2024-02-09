@@ -16,6 +16,8 @@ npm run dev
 npm run build
 npm i --workspace @repo/api --save @nestjs/serve-static
 npm i --workspace @repo/api --save-dev bcrypt
+npm i --workspace @repo/api --save @nestjs/passport @nestjs/jwt passport-jwt
+npm i --workspace @repo/api --save-dev @types/passport-jwt
 ```
 
 ## Development

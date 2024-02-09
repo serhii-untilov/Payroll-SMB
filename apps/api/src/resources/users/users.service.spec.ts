@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { randEmail } from '@ngneat/falso';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
@@ -36,12 +37,7 @@ describe('UsersService', () => {
 
     it('should be able to create a user', async () => {
         const user = createMockUser();
-        const createUser: CreateUserDto = {
-            name: user.name,
-            email: user.email,
-            password: user.password,
-            roles: [],
-        };
+        const createUser: CreateUserDto = _.omit(user, ['id']);
         repoMock.findOne?.mockReturnValue(null);
         repoMock.save?.mockReturnValue(createUser);
         const newUser = await service.create(createUser);
