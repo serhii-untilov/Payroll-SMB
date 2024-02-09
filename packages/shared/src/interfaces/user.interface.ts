@@ -5,6 +5,7 @@ export interface IUser {
     name: string;
     email: string;
     password: string;
+    refreshToken: string;
     isActive: boolean;
     roles: IRole[];
 }
@@ -12,4 +13,4 @@ export interface IUser {
 export type ICreateUser = Pick<IUser, 'name' | 'email' | 'password' | 'roles'>;
 export type IUpdateUser = Partial<Omit<IUser, 'id'>>;
 export type IUpsertUser = IUser;
-export type IPublicUserData = Partial<Omit<IUser, 'password'>>;
+export type IPublicUserData = Partial<Omit<IUser, 'password' | 'refreshToken'>>;
