@@ -11,7 +11,11 @@ import { User } from '../resources/users/entities/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { Repository } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { appConfig } from '../config/app.config';
+import { dbConfig } from '../config/db.config';
+import { authConfig } from '../config/auth.config';
+import { googleConfig } from '../config/google.config';
 
 describe('AuthController', () => {
     let controller: AuthController;
@@ -28,6 +32,10 @@ describe('AuthController', () => {
     beforeEach(async () => {
         const module = await Test.createTestingModule({
             imports: [
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    load: [appConfig, dbConfig, authConfig, googleConfig],
+                }),
                 JwtModule.register({
                     secret: randPassword(),
                 }),
@@ -60,8 +68,8 @@ describe('AuthController', () => {
             name: mockUser.name,
             password: mockUserUnhashedPassword,
         });
-        expect(res.access_token).toBeDefined();
-        expect(typeof res.access_token).toBe('string');
+        expect(res.accessToken).toBeDefined();
+        expect(typeof res.accessToken).toBe('string');
     });
 
     it('should throw with a bad email', async () => {

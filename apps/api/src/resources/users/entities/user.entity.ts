@@ -16,7 +16,7 @@ export class User implements IUser {
     @Column({ type: 'varchar', length: 50 })
     password: string;
 
-    @Column('varchar')
+    @Column({ type: 'varchar', nullable: true })
     refreshToken: string;
 
     @Column({ type: 'boolean', default: true })

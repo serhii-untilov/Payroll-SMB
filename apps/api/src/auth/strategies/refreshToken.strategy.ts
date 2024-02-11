@@ -6,14 +6,11 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
-    constructor() {
+    constructor(private configService: ConfigService) {
         super({
-            useFactory: (config: ConfigService) => ({
-                jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-                secretOrKey: config.getOrThrow<string>('auth.refreshSecret'),
-                passReqToCallback: true,
-            }),
-            inject: [ConfigService],
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            secretOrKey: configService.get<string>('auth.refreshSecret'),
+            passReqToCallback: true,
         });
     }
 

@@ -1,8 +1,20 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Post,
+    Request,
+    UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { CreateUserDto } from '../resources/users/dto/create-user.dto';
-import { Request } from 'express';
+import { TokensDto } from './dto/tokens.dto';
+import { AccessTokenGuard } from '../guards/accessToken.guard';
+import { RefreshTokenGuard } from '../guards/refreshToken.guard';
+import { Request as Req } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -10,19 +22,28 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Post('register')
-    signUp(@Body() user: CreateUserDto) {
-        return this.authService.signUp(user);
+    async signUp(@Body() user: CreateUserDto): Promise<TokensDto> {
+        return await this.authService.signUp(user);
     }
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    signIn(@Body() user: AuthDto) {
-        return this.authService.signIn(user.name, user.password);
+    async signIn(@Body() user: AuthDto): Promise<TokensDto> {
+        return await this.authService.signIn(user.name, user.password);
     }
 
     @HttpCode(HttpStatus.OK)
+    @UseGuards(AccessTokenGuard)
     @Get('logout')
-    logout(@Req() req: Request) {
-        this.authService.logout(req.user['sub']);
+    async logout(@Request() req: Req): Promise<null> {
+        return this.authService.logout(req.user['sub']);
+    }
+
+    @UseGuards(RefreshTokenGuard)
+    @Get('refresh')
+    refreshTokens(@Request() req: Req) {
+        const userId = req.user['sub'];
+        const refreshToken = req.user['refreshToken'];
+        return this.authService.refreshTokens(userId, refreshToken);
     }
 }

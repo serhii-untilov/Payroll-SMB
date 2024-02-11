@@ -9,11 +9,11 @@ import { UsersModule } from '../resources/users/users.module';
 import { appConfig } from '../config/app.config';
 import { dbConfig } from '../config/db.config';
 import { authConfig } from '../config/auth.config';
-import { googleConfig } from 'src/config/google.config';
-import { TypeormConfigService } from 'src/config/typeorm-config.service';
-import { LawsModule } from 'src/resources/laws/laws.module';
-import { RolesModule } from 'src/resources/roles/roles.module';
-import { AuthModule } from 'src/auth/auth.module';
+import { googleConfig } from '../config/google.config';
+import { TypeormConfigService } from '../config/typeorm-config.service';
+import { LawsModule } from '../resources/laws/laws.module';
+import { RolesModule } from '../resources/roles/roles.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
     imports: [

@@ -1,6 +1,7 @@
 import {
     BadRequestException,
     ConflictException,
+    ForbiddenException,
     Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
@@ -9,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '../resources/users/users.service';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '../resources/users/dto/create-user.dto';
-import { TokensDto } from './dto/auth.dto';
+import { TokensDto } from './dto/tokens.dto';
 
 @Injectable()
 export class AuthService {
@@ -35,7 +36,7 @@ export class AuthService {
         return tokens;
     }
 
-    async signIn(name: string, pass: string): Promise<{ access_token: string }> {
+    async signIn(name: string, pass: string): Promise<TokensDto> {
         const user = await this.usersService.findOneBy({ name });
         if (!user) {
             throw new BadRequestException();
@@ -43,14 +44,14 @@ export class AuthService {
         if (!(await bcrypt.compare(pass, user.password))) {
             throw new UnauthorizedException('Password is incorrect');
         }
-        const payload = { sub: user.id, username: user.name };
-        return {
-            access_token: await this.jwtService.signAsync(payload),
-        };
+        const tokens = await this.getTokens(user.id, user.name);
+        await this.updateRefreshToken(user.id, tokens.refreshToken);
+        return tokens;
     }
 
-    async logout(userId: number) {
-        return this.usersService.update(userId, { refreshToken: null });
+    async logout(userId: number): Promise<null> {
+        this.usersService.update(userId, { refreshToken: null });
+        return null;
     }
 
     async hashData(data) {
@@ -92,5 +93,16 @@ export class AuthService {
             accessToken,
             refreshToken,
         };
+    }
+
+    async refreshTokens(userId: number, refreshToken: string) {
+        const user = await this.usersService.findOne(userId);
+        if (!user || !user.refreshToken) throw new ForbiddenException('Access Denied');
+        // const refreshTokenMatches = await argon2.verify(user.refreshToken, refreshToken);
+        const refreshTokenMatches = await bcrypt.compare(refreshToken, user.refreshToken);
+        if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
+        const tokens = await this.getTokens(user.id, user.name);
+        await this.updateRefreshToken(user.id, tokens.refreshToken);
+        return tokens;
     }
 }
