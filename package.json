@@ -12,6 +12,7 @@
     "lint": "turbo lint",
     "format": "turbo format",
     "test": "turbo test",
+    "deploy": "turbo deploy",
     "m:crt": "turbo run m:crt --filter=@repo/api",
     "m:gen": "turbo run m:gen --filter=@repo/api",
     "m:run": "turbo run m:run --filter=@repo/api",

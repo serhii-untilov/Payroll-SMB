@@ -1,7 +1,6 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -14,24 +13,14 @@ export class UsersService {
     ) {}
 
     async create(user: CreateUserDto): Promise<User> {
-        const existing = await this.usersRepository.findOne({ where: { email: user.email } });
-        if (existing) {
-            throw new BadRequestException(`User '${user.email}' already exists.`);
-        }
-        const { email, password } = user;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await this.usersRepository.save({
-            email,
-            password: hashedPassword,
-        });
-        return newUser;
+        return await this.usersRepository.save(user);
     }
 
     async findAll(): Promise<User[]> {
         return await this.usersRepository.find();
     }
 
-    findOne(id: number) {
+    async findOne(id: number): Promise<User> {
         const user = this.usersRepository.findOneBy({ id });
         if (!user) {
             throw new NotFoundException(`User could not be found.`);
@@ -39,12 +28,10 @@ export class UsersService {
         return user;
     }
 
-    findOneByEmail(email: string) {
-        const user = this.usersRepository.findOneBy({ email });
-        if (!user) {
-            throw new NotFoundException(`User could not be found.`);
-        }
-        return user;
+    async findOneBy(
+        where: FindOptionsWhere<User> | FindOptionsWhere<User>[],
+    ): Promise<User | null> {
+        return this.usersRepository.findOneBy(where);
     }
 
     async update(id: number, data: UpdateUserDto): Promise<User> {

@@ -16,6 +16,8 @@ npm run dev
 npm run build
 npm i --workspace @repo/api --save @nestjs/serve-static
 npm i --workspace @repo/api --save-dev bcrypt
+npm i --workspace @repo/api --save @nestjs/passport @nestjs/jwt passport-jwt
+npm i --workspace @repo/api --save-dev @types/passport-jwt
 ```
 
 ## Development
@@ -76,6 +78,13 @@ npx --workspace @repo/api nest generate resource laws resources
 ## JWT
 
 ``` bash
+npx --workspace @repo/api nest g module auth
+npx --workspace @repo/api nest g controller auth
+npx --workspace @repo/api nest g service auth
+npm i --workspace @repo/api --save @nestjs/jwt
+```
+
+``` bash
 # Generate JWT secret key
 openssl rand -base64 60
 ```
@@ -94,3 +103,4 @@ openssl rand -base64 60
 - [**Linter** - How to use ESLint with TypeScript](https://khalilstemmler.com/blogs/typescript/eslint-for-typescript/)
 - [**Prettier** - How to use Prettier with ESLint and TypeScript in VSCode](https://khalilstemmler.com/blogs/tooling/prettier/)
 - [**TypeORM** - Generate Migration with TypeORM in Nest.js](https://www.bytestechnolab.com/blog/mastering-migration-with-typeorm-in-nestjs-step-by-step-guide/)
+- [**JWT** - The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://datatracker.ietf.org/doc/html/rfc6750)
