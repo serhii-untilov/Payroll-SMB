@@ -20,11 +20,6 @@ export const dbConfig = {
     subscribers: ['./src/resources/**/*subscriber.ts'],
 };
 
-// eslint-disable-next-line no-console
-// console.log(`Data source on port ${dbConfig.port}.`);
-// eslint-disable-next-line no-console
-console.log('dbConfig:', dbConfig);
-
 export const AppDataSource = new DataSource({
     ...dbConfig,
     type:

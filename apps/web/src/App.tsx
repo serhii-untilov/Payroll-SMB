@@ -1,18 +1,32 @@
-import { useEffect, useState } from 'react';
 import './App.css';
+import { getGreeting } from './services/greeting.service';
+import { useQuery } from 'react-query';
 
 function App() {
-    const [greeting, setGreeting] = useState('');
+    const { isLoading, isError, data, error } = useQuery<string, Error>(
+        'query-greeting',
+        getGreeting,
+        {
+            enabled: true,
+            retry: 2,
+        },
+    );
 
-    useEffect(() => {
-        fetch('/api')
-            .then((res) => res.text())
-            .then(setGreeting);
-    }, []);
+    if (isError) {
+        return (
+            <>
+                `Error ${error.message}\n${error.stack}`
+            </>
+        );
+    }
+
+    if (isLoading) {
+        return <>...</>;
+    }
 
     return (
         <>
-            <h1>{greeting}</h1>
+            <h1>{data}</h1>
         </>
     );
 }

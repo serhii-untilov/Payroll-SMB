@@ -35,3 +35,9 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Local env and config files
+*.local
+
+# Local database
+*.sqlite

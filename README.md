@@ -18,6 +18,9 @@ npm i --workspace @repo/api --save @nestjs/serve-static
 npm i --workspace @repo/api --save-dev bcrypt
 npm i --workspace @repo/api --save @nestjs/passport @nestjs/jwt passport-jwt
 npm i --workspace @repo/api --save-dev @types/passport-jwt
+
+npm i --workspace @repo/web --save react-query
+npm i --workspace @repo/web --save axios
 ```
 
 ## Development
@@ -106,3 +109,4 @@ openssl rand -base64 60
 - [**JWT** - The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://datatracker.ietf.org/doc/html/rfc6750)
 - [**NestJS** - NestJS JWT Authentication with Refresh Tokens Complete Guide](https://www.elvisduru.com/blog/nestjs-jwt-authentication-refresh-token)
 - [**NestJS** - How to implement refresh tokens JWT in NestJS](https://webera.blog/how-to-implement-refresh-tokens-jwt-in-nestjs-b8093c5642a9)
+- [**React** - React Query and Axios (Typescript) example with Rest API](https://www.bezkoder.com/react-query-axios-typescript/)

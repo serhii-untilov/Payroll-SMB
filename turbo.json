@@ -1,6 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "web#dev": {
+      "dependsOn": [
+        "api#dev"
+      ]
+    },
     "build": {
       "dependsOn": [
         "^build"
@@ -31,10 +36,7 @@
     "format": {},
     "dev": {
       "cache": false,
-      "persistent": true,
-      "dependsOn": [
-        "build"
-      ]
+      "persistent": true
     },
     "m:crt": {
       "cache": false
