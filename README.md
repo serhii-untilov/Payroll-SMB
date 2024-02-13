@@ -21,6 +21,7 @@ npm i --workspace @repo/api --save-dev @types/passport-jwt
 
 npm i --workspace @repo/web --save react-query
 npm i --workspace @repo/web --save axios
+npm i  --workspace @repo/web --save react-router-dom
 ```
 
 ## Development
@@ -110,3 +111,5 @@ openssl rand -base64 60
 - [**NestJS** - NestJS JWT Authentication with Refresh Tokens Complete Guide](https://www.elvisduru.com/blog/nestjs-jwt-authentication-refresh-token)
 - [**NestJS** - How to implement refresh tokens JWT in NestJS](https://webera.blog/how-to-implement-refresh-tokens-jwt-in-nestjs-b8093c5642a9)
 - [**React** - React Query and Axios (Typescript) example with Rest API](https://www.bezkoder.com/react-query-axios-typescript/)
+- [**React** - React Typescript Authentication example with Hooks](https://www.bezkoder.com/react-typescript-authentication-example/)
+- [**React** - React Hook Form](https://react-hook-form.com/)
