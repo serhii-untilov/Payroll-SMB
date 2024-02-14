@@ -3,7 +3,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     plugins: ['react-refresh', 'no-loops', 'prettier'],
     env: { browser: true, es2020: true },
-    ignorePatterns: ['dist', '.eslintrc.cjs'],
+    ignorePatterns: ['dist', '.eslintrc.cjs', 'timeout.js'],
     extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',

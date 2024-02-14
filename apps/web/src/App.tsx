@@ -6,10 +6,6 @@ function App() {
     const { isLoading, isError, data, error } = useQuery<string, Error>(
         'query-greeting',
         getGreeting,
-        {
-            enabled: true,
-            retry: 2,
-        },
     );
 
     if (isError) {
