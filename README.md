@@ -21,7 +21,16 @@ npm i --workspace @repo/api --save-dev @types/passport-jwt
 
 npm i --workspace @repo/web --save react-query
 npm i --workspace @repo/web --save axios
-npm i  --workspace @repo/web --save react-router-dom
+npm i --workspace @repo/web --save react-router-dom
+
+npm i --workspace @repo/web --save react-hook-form
+
+npm i --workspace @repo/web --save @mui/material @emotion/react @emotion/styled
+npm i --workspace @repo/web --save @fontsource/roboto
+npm i --workspace @repo/web --save @mui/icons-material
+
+npm i --workspace @repo/web --save normalize.css
+
 ```
 
 ## Development
@@ -110,6 +119,12 @@ openssl rand -base64 60
 - [**JWT** - The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://datatracker.ietf.org/doc/html/rfc6750)
 - [**NestJS** - NestJS JWT Authentication with Refresh Tokens Complete Guide](https://www.elvisduru.com/blog/nestjs-jwt-authentication-refresh-token)
 - [**NestJS** - How to implement refresh tokens JWT in NestJS](https://webera.blog/how-to-implement-refresh-tokens-jwt-in-nestjs-b8093c5642a9)
+- [**React** - React Libraries to Use in Your Projects in 2024](https://www.freecodecamp.org/news/react-libraries-to-use-in-your-projects/)
 - [**React** - React Query and Axios (Typescript) example with Rest API](https://www.bezkoder.com/react-query-axios-typescript/)
+- [**MUI** - Material UI - React Templates](https://mui.com/material-ui/getting-started/templates/)
+- [**Icons** - Google Fonts - Material Icons](https://fonts.google.com/icons?icon.set=Material+Icons)
+- [**React** - Define React Routes With Better Approach (TypeScript)](https://medium.com/@ahsan-ali-mansoor/define-react-routes-with-better-approach-typescript-d07de782b517)
 - [**React** - React Typescript Authentication example with Hooks](https://www.bezkoder.com/react-typescript-authentication-example/)
+- [**React** - Practical React Query](https://tkdodo.eu/blog/practical-react-query)
+- [**React** - React Query and Forms](https://tkdodo.eu/blog/react-query-and-forms)
 - [**React** - React Hook Form](https://react-hook-form.com/)

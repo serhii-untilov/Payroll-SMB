@@ -30,6 +30,7 @@ import { AuthModule } from '../auth/auth.module';
         }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '../../..', 'web', 'dist'),
+            exclude: ['/api/(.*)'],
         }),
         AuthModule,
         LawsModule,

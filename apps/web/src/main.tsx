@@ -1,9 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import './index.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import CssBaseline from '@mui/material/CssBaseline';
+import './index.css';
+import App from './App.tsx';
+import { ThemeProvider, createTheme } from '@mui/material';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -17,11 +23,16 @@ const queryClient = new QueryClient({
     },
 });
 
+const defaultTheme = createTheme();
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
-                <App />
+                <CssBaseline enableColorScheme />
+                <ThemeProvider theme={defaultTheme}>
+                    <App />
+                </ThemeProvider>
             </BrowserRouter>
         </QueryClientProvider>
     </React.StrictMode>,
