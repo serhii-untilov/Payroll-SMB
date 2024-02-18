@@ -1,8 +1,9 @@
 import { useQuery } from 'react-query';
 // import { Button, notification } from 'antd';
-import Register from './Register';
+import SignUp from './SignUp';
 import { getGreeting } from '../services/greeting.service';
 import { AxiosResponse } from 'axios';
+import { Loading } from '../components/utility/Loading';
 
 function Greeting() {
     const {
@@ -27,7 +28,7 @@ function Greeting() {
         return (
             <>
                 <h1>{response.data}</h1>
-                <Register />
+                <SignUp />
                 {/* <Button type="primary">Button</Button> */}
             </>
         );
@@ -36,7 +37,7 @@ function Greeting() {
     return (
         <>
             {/* {contextHolder} */}
-            {isLoading && <div>Loading...</div>}
+            {isLoading && <Loading />}
         </>
     );
 }

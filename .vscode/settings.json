@@ -1,5 +1,13 @@
 {
-    "cSpell.words": ["AUTOINCREMENT", "falso", "ngneat", "Turborepo", "Unhashed", "untilov"],
+    "cSpell.words": [
+        "AUTOINCREMENT",
+        "falso",
+        "lifecyle",
+        "ngneat",
+        "Turborepo",
+        "Unhashed",
+        "untilov"
+    ],
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true
 }

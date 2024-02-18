@@ -36,12 +36,12 @@ export class AuthService {
         return tokens;
     }
 
-    async signIn(name: string, pass: string): Promise<TokensDto> {
-        const user = await this.usersService.findOneBy({ name });
+    async signIn({ email, password }): Promise<TokensDto> {
+        const user = await this.usersService.findOneBy({ email });
         if (!user) {
             throw new BadRequestException();
         }
-        if (!(await bcrypt.compare(pass, user.password))) {
+        if (!(await bcrypt.compare(password, user.password))) {
             throw new UnauthorizedException('Password is incorrect');
         }
         const tokens = await this.getTokens(user.id, user.name);

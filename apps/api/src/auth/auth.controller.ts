@@ -15,10 +15,15 @@ import { TokensDto } from './dto/tokens.dto';
 import { AccessTokenGuard } from '../guards/accessToken.guard';
 import { RefreshTokenGuard } from '../guards/refreshToken.guard';
 import { Request as Req } from 'express';
+import { User } from 'src/resources/users/entities/user.entity';
+import { UsersService } from 'src/resources/users/users.service';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(
+        private authService: AuthService,
+        private userService: UsersService,
+    ) {}
 
     @HttpCode(HttpStatus.OK)
     @Post('register')
@@ -29,7 +34,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('login')
     async signIn(@Body() user: AuthDto): Promise<TokensDto> {
-        return await this.authService.signIn(user.name, user.password);
+        return await this.authService.signIn({ email: user.email, password: user.password });
     }
 
     @HttpCode(HttpStatus.OK)
@@ -45,5 +50,12 @@ export class AuthController {
         const userId = req.user['sub'];
         const refreshToken = req.user['refreshToken'];
         return this.authService.refreshTokens(userId, refreshToken);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AccessTokenGuard)
+    @Get('user')
+    async getUser(@Request() req: Req): Promise<User> {
+        return this.userService.findOne(req.user['sub']);
     }
 }

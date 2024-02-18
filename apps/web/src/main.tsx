@@ -10,6 +10,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import './index.css';
 import App from './App.tsx';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { AuthProvider } from './context/AuthContext.tsx';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -31,7 +32,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <BrowserRouter>
                 <CssBaseline enableColorScheme />
                 <ThemeProvider theme={defaultTheme}>
-                    <App />
+                    <AuthProvider>
+                        <App />
+                    </AuthProvider>
                 </ThemeProvider>
             </BrowserRouter>
         </QueryClientProvider>

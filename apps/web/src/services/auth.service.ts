@@ -1,14 +1,9 @@
-import { ITokens } from '@repo/shared';
+import { IAuth, ICreateUser, ITokens, IUser } from '@repo/shared';
 import { api } from '../api';
 import authHeader from './auth-header';
 
-export const register = async (name: string, email: string, password: string): Promise<ITokens> => {
-    const response = await api.post('auth/register', {
-        name,
-        email,
-        password,
-        roles: [],
-    });
+export const registerUser = async (params: ICreateUser): Promise<ITokens> => {
+    const response = await api.post('auth/register', params);
     const tokens: ITokens = response.data;
     if (tokens.accessToken) {
         localStorage.setItem('user', JSON.stringify(tokens));
@@ -16,8 +11,8 @@ export const register = async (name: string, email: string, password: string): P
     return tokens;
 };
 
-export const login = async (name: string, password: string): Promise<ITokens> => {
-    const response = await api.post('auth/login', { name, password });
+export const loginUser = async (params: IAuth): Promise<ITokens> => {
+    const response = await api.post('auth/login', params);
     const tokens: ITokens = response.data;
     if (tokens.accessToken) {
         localStorage.setItem('user', JSON.stringify(tokens));
@@ -25,12 +20,16 @@ export const login = async (name: string, password: string): Promise<ITokens> =>
     return tokens;
 };
 
-export const logout = (): Promise<null> => {
+export const logoutUser = async () => {
+    await api.post('auth/logout', { headers: authHeader() });
     localStorage.removeItem('user');
-    return api.post('auth/logout', { headers: authHeader() });
 };
 
-export const getCurrentUser = (): ITokens | null => {
+export const getCurrentUser = async (): Promise<IUser | null> => {
+    return await api.post('auth/user', { headers: authHeader() });
+};
+
+export const getUserTokens = (): ITokens | null => {
     const userStr = localStorage.getItem('user');
     if (userStr) return JSON.parse(userStr);
     return null;
