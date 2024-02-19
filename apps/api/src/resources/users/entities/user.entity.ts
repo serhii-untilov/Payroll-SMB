@@ -8,7 +8,10 @@ export class User implements IUser {
     id: number;
 
     @Column({ type: 'varchar', length: 50 })
-    name: string;
+    firstName: string;
+
+    @Column({ type: 'varchar', length: 50 })
+    lastName: string;
 
     @Column({ type: 'varchar', length: 50 })
     email: string;

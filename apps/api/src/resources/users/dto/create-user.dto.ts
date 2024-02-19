@@ -4,7 +4,10 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto implements ICreateUser {
     @ApiProperty()
-    name: string;
+    firstName: string;
+
+    @ApiProperty()
+    lastName: string;
 
     @ApiProperty()
     email: string;

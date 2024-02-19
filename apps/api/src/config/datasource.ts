@@ -1,5 +1,8 @@
 // This file used for typeorm migrations only
 import { DataSource } from 'typeorm';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 export const dbConfig = {
     type: process.env['DATABASE_TYPE'],
@@ -19,11 +22,6 @@ export const dbConfig = {
     migrations: ['./src/migrations/**/*.ts'],
     subscribers: ['./src/resources/**/*subscriber.ts'],
 };
-
-// eslint-disable-next-line no-console
-// console.log(`Data source on port ${dbConfig.port}.`);
-// eslint-disable-next-line no-console
-console.log('dbConfig:', dbConfig);
 
 export const AppDataSource = new DataSource({
     ...dbConfig,

@@ -19,8 +19,8 @@ import { AuthModule } from '../auth/auth.module';
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            // envFilePath: ['.env'],
-            // ignoreEnvVars: true,
+            envFilePath: ['.env'],
+            ignoreEnvVars: true,
             // ignoreEnvFile: true,
             load: [appConfig, dbConfig, authConfig, googleConfig],
         }),
@@ -30,6 +30,7 @@ import { AuthModule } from '../auth/auth.module';
         }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '../../..', 'web', 'dist'),
+            exclude: ['/api/(.*)'],
         }),
         AuthModule,
         LawsModule,

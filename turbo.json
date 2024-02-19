@@ -31,10 +31,7 @@
     "format": {},
     "dev": {
       "cache": false,
-      "persistent": true,
-      "dependsOn": [
-        "build"
-      ]
+      "persistent": true
     },
     "m:crt": {
       "cache": false

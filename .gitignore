@@ -2,9 +2,8 @@ node_modules
 .turbo
 out
 
-# Local env files
-.env
-.env.local
-.env.*.local
+# Local env and config files
+*.local
 
+# Local database
 *.sqlite

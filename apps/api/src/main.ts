@@ -15,7 +15,8 @@ async function bootstrap() {
     // TODO - revisit and secure this!
     // app.enableCors({ origin: '*' });
     const title = configService.get<string>('app.title');
-    // handle swagger
+
+    // handle Swagger
     const config = new DocumentBuilder()
         .setTitle(`${title} REST API`)
         .setVersion('1.0')
@@ -27,6 +28,7 @@ async function bootstrap() {
     SwaggerModule.setup(`${globalPrefix}/${apiVersion}`, app, document, {
         jsonDocumentUrl: `${globalPrefix}/${apiVersion}/${apiFileName}`,
     });
+
     // Run API
     const host = configService.get<string>('app.host');
     const port = configService.get<number>('app.port');
