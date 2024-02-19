@@ -26,14 +26,13 @@ npm i --workspace @repo/api --save dotenv
 npm i --workspace @repo/web --save react-query
 npm i --workspace @repo/web --save axios
 npm i --workspace @repo/web --save react-router-dom
-
 npm i --workspace @repo/web --save react-hook-form
-
 npm i --workspace @repo/web --save @mui/material @emotion/react @emotion/styled
 npm i --workspace @repo/web --save @fontsource/roboto
 npm i --workspace @repo/web --save @mui/icons-material
 npm i --workspace @repo/web --save @mui/x-data-grid
 npm i --workspace @repo/web --save @mui/x-date-pickers
+npm i --workspace @repo/web --save notistack
 
 ```
 

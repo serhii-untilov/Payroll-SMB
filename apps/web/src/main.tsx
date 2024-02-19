@@ -12,6 +12,7 @@ import App from './App.tsx';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { LocaleProvider } from './context/LocaleContext.tsx';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -35,7 +36,16 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 <ThemeProvider theme={defaultTheme}>
                     <LocaleProvider>
                         <AuthProvider>
-                            <App />
+                            <SnackbarProvider
+                                maxSnack={3}
+                                preventDuplicate
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                            >
+                                <App />
+                            </SnackbarProvider>
                         </AuthProvider>
                     </LocaleProvider>
                 </ThemeProvider>

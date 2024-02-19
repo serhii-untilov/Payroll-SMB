@@ -17,16 +17,14 @@ import useAuth from '../hooks/useAuth';
 import { AppTitle } from '../components/app/AppTitle';
 import { IAuth } from '@repo/shared';
 import { FormTextField } from '../components/form/FormTextField';
-import Snackbar from '@mui/material/Snackbar';
-import { useState } from 'react';
 import { AxiosError } from 'axios';
+import { enqueueSnackbar } from 'notistack';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
     const { login } = useAuth();
-    const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     const { control, handleSubmit } = useForm({
@@ -44,13 +42,9 @@ export default function SignIn() {
                 navigate('/home');
             } catch (e: unknown) {
                 const error = e as AxiosError;
-                setMessage(`${error.code}\n${error.message}`);
+                enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
             }
         }
-    };
-
-    const handleCloseMessage = () => {
-        setMessage('');
     };
 
     return (
@@ -122,14 +116,6 @@ export default function SignIn() {
                         </Grid>
                     </Box>
                 </Box>
-                <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open={!!message}
-                    onClose={handleCloseMessage}
-                    message={message}
-                    autoHideDuration={4500}
-                    key="sign-in-message" // {vertical + horizontal}
-                />
                 <Copyright sx={{ mt: 8, mb: 4 }} />
             </Container>
         </ThemeProvider>
