@@ -40,7 +40,6 @@ export const FormInputRadioGroup: React.FC<FormInputRadioProps> = ({
             <Controller
                 name={name}
                 control={control}
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                     <RadioGroup value={value} onChange={onChange}>
                         {generateRadioOptions()}

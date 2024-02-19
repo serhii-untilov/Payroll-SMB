@@ -36,6 +36,7 @@
     "@nestjs/typeorm": "^10.0.1",
     "@repo/shared": "*",
     "@types/lodash": "^4.14.202",
+    "dotenv": "^16.4.4",
     "lodash": "^4.17.21",
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.3",

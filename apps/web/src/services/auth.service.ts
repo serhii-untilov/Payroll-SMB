@@ -3,7 +3,7 @@ import { api } from '../api';
 import authHeader from './auth-header';
 
 export const registerUser = async (params: ICreateUser): Promise<ITokens> => {
-    const response = await api.post('auth/register', params);
+    const response = await api.post('/api/auth/register', params);
     const tokens: ITokens = response.data;
     if (tokens.accessToken) {
         localStorage.setItem('user', JSON.stringify(tokens));
@@ -12,7 +12,7 @@ export const registerUser = async (params: ICreateUser): Promise<ITokens> => {
 };
 
 export const loginUser = async (params: IAuth): Promise<ITokens> => {
-    const response = await api.post('auth/login', params);
+    const response = await api.post('/api/auth/login', params);
     const tokens: ITokens = response.data;
     if (tokens.accessToken) {
         localStorage.setItem('user', JSON.stringify(tokens));
@@ -21,12 +21,12 @@ export const loginUser = async (params: IAuth): Promise<ITokens> => {
 };
 
 export const logoutUser = async () => {
-    await api.post('auth/logout', { headers: authHeader() });
+    await api.get('/api/auth/logout', { headers: authHeader() });
     localStorage.removeItem('user');
 };
 
 export const getCurrentUser = async (): Promise<IUser | null> => {
-    return await api.post('auth/user', { headers: authHeader() });
+    return await api.get('/api/auth/user', { headers: authHeader() });
 };
 
 export const getUserTokens = (): ITokens | null => {

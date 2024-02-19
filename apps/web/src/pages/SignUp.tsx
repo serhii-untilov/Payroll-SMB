@@ -4,11 +4,8 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
-// import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Link } from '@mui/material';
-
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -26,12 +23,15 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
     const { register } = useAuth();
+    const navigate = useNavigate();
 
     const { control, handleSubmit } = useForm({
         defaultValues: {
-            name: '',
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
+            roles: [],
         },
     });
 
@@ -39,6 +39,7 @@ export default function SignUp() {
         console.log(data);
         if (data.email) {
             await register(data);
+            navigate('/home');
         }
     };
 
@@ -73,7 +74,6 @@ export default function SignUp() {
                                     control={control}
                                     autoComplete="given-name"
                                     name="firstName"
-                                    required
                                     fullWidth
                                     id="firstName"
                                     label="First Name"
@@ -83,7 +83,6 @@ export default function SignUp() {
                             <Grid item xs={12} sm={6}>
                                 <FormTextField
                                     control={control}
-                                    required
                                     fullWidth
                                     id="lastName"
                                     label="Last Name"

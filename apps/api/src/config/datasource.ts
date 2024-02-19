@@ -1,5 +1,8 @@
 // This file used for typeorm migrations only
 import { DataSource } from 'typeorm';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 export const dbConfig = {
     type: process.env['DATABASE_TYPE'],

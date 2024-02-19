@@ -11,6 +11,7 @@ import './index.css';
 import App from './App.tsx';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { AuthProvider } from './context/AuthContext.tsx';
+import { LocaleProvider } from './context/LocaleContext.tsx';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -32,9 +33,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <BrowserRouter>
                 <CssBaseline enableColorScheme />
                 <ThemeProvider theme={defaultTheme}>
-                    <AuthProvider>
-                        <App />
-                    </AuthProvider>
+                    <LocaleProvider>
+                        <AuthProvider>
+                            <App />
+                        </AuthProvider>
+                    </LocaleProvider>
                 </ThemeProvider>
             </BrowserRouter>
         </QueryClientProvider>

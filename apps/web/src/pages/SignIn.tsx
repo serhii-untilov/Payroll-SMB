@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -17,12 +17,17 @@ import useAuth from '../hooks/useAuth';
 import { AppTitle } from '../components/app/AppTitle';
 import { IAuth } from '@repo/shared';
 import { FormTextField } from '../components/form/FormTextField';
+import Snackbar from '@mui/material/Snackbar';
+import { useState } from 'react';
+import { AxiosError } from 'axios';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
     const { login } = useAuth();
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const { control, handleSubmit } = useForm({
         defaultValues: {
@@ -34,8 +39,18 @@ export default function SignIn() {
     const onSubmit: SubmitHandler<IAuth> = async (data) => {
         console.log(data);
         if (data.email) {
-            await login(data);
+            try {
+                await login(data);
+                navigate('/home');
+            } catch (e: unknown) {
+                const error = e as AxiosError;
+                setMessage(`${error.code}\n${error.message}`);
+            }
         }
+    };
+
+    const handleCloseMessage = () => {
+        setMessage('');
     };
 
     return (
@@ -107,6 +122,14 @@ export default function SignIn() {
                         </Grid>
                     </Box>
                 </Box>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={!!message}
+                    onClose={handleCloseMessage}
+                    message={message}
+                    autoHideDuration={4500}
+                    key="sign-in-message" // {vertical + horizontal}
+                />
                 <Copyright sx={{ mt: 8, mb: 4 }} />
             </Container>
         </ThemeProvider>

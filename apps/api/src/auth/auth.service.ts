@@ -6,9 +6,9 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../resources/users/users.service';
-import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '../resources/users/dto/create-user.dto';
 import { TokensDto } from './dto/tokens.dto';
 
@@ -21,17 +21,14 @@ export class AuthService {
     ) {}
 
     async signUp(user: CreateUserDto): Promise<TokensDto> {
-        const exists = await this.usersService.findOneBy([
-            { name: user.name },
-            { email: user.email },
-        ]);
+        const exists = await this.usersService.findOneBy([{ email: user.email }]);
         if (exists) {
             throw new ConflictException('User already exists.');
         }
         const { password } = user;
         const hashedPassword = await this.hashData(password);
         const newUser = await this.usersService.create({ ...user, password: hashedPassword });
-        const tokens = await this.getTokens(newUser.id, newUser.name);
+        const tokens = await this.getTokens(newUser.id, newUser.email);
         await this.updateRefreshToken(newUser.id, tokens.refreshToken);
         return tokens;
     }
@@ -44,7 +41,7 @@ export class AuthService {
         if (!(await bcrypt.compare(password, user.password))) {
             throw new UnauthorizedException('Password is incorrect');
         }
-        const tokens = await this.getTokens(user.id, user.name);
+        const tokens = await this.getTokens(user.id, user.email);
         await this.updateRefreshToken(user.id, tokens.refreshToken);
         return tokens;
     }
@@ -65,12 +62,12 @@ export class AuthService {
         });
     }
 
-    async getTokens(userId: number, username: string): Promise<TokensDto> {
+    async getTokens(userId: number, email: string): Promise<TokensDto> {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(
                 {
                     sub: userId,
-                    username,
+                    email: email,
                 },
                 {
                     secret: this.configService.get<string>('auth.accessSecret'),
@@ -80,7 +77,7 @@ export class AuthService {
             this.jwtService.signAsync(
                 {
                     sub: userId,
-                    username,
+                    email: email,
                 },
                 {
                     secret: this.configService.get<string>('auth.refreshSecret'),
@@ -101,7 +98,7 @@ export class AuthService {
         // const refreshTokenMatches = await argon2.verify(user.refreshToken, refreshToken);
         const refreshTokenMatches = await bcrypt.compare(refreshToken, user.refreshToken);
         if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
-        const tokens = await this.getTokens(user.id, user.name);
+        const tokens = await this.getTokens(user.id, user.email);
         await this.updateRefreshToken(user.id, tokens.refreshToken);
         return tokens;
     }

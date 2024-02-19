@@ -1,4 +1,4 @@
-import { randEmail } from '@ngneat/falso';
+import { randUser } from '@ngneat/falso';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as _ from 'lodash';
 import { UsersController } from './users.controller';
@@ -53,13 +53,19 @@ describe('UsersController', () => {
 
     it('should update an user', async () => {
         const user = createMockUser();
-        const newEmail = randEmail();
-        const updatedUser = { ...user, name: newEmail, email: newEmail };
+        const newUser = randUser();
+        const updatedUser = {
+            ...user,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            email: newUser.email,
+        };
         const publicUser: IPublicUserData = _.omit(updatedUser, ['password', 'refreshToken']);
         jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(updatedUser));
         const res = await controller.update(user.id.toString(), {
-            name: newEmail,
-            email: newEmail,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            email: newUser.email,
         });
         expect(res).toStrictEqual(publicUser);
     });

@@ -1,4 +1,4 @@
-# Nest React Application inside a Turbo mono repository
+# Nest React Application inside a Turbo mono-repository
 
 ## Initial script
 
@@ -14,11 +14,15 @@ cd ..
 npm install
 npm run dev
 npm run build
+
+# api application
 npm i --workspace @repo/api --save @nestjs/serve-static
 npm i --workspace @repo/api --save-dev bcrypt
 npm i --workspace @repo/api --save @nestjs/passport @nestjs/jwt passport-jwt
 npm i --workspace @repo/api --save-dev @types/passport-jwt
+npm i --workspace @repo/api --save dotenv
 
+# web application
 npm i --workspace @repo/web --save react-query
 npm i --workspace @repo/web --save axios
 npm i --workspace @repo/web --save react-router-dom

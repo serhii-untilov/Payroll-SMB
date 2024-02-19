@@ -12,7 +12,6 @@ export const FormTextField = (props: FormTextFieldProps) => {
         <Controller
             name={props.name}
             control={props.control}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                 <TextField
                     helperText={error ? error.message : null}

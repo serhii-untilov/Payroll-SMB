@@ -53,7 +53,6 @@ export const FormInputCheckboxGroup: React.FC<FormInputCheckboxGroupProps> = ({
                             control={
                                 <Controller
                                     name={name}
-                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                     render={({ field }) => {
                                         return (
                                             <Checkbox

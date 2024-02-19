@@ -15,8 +15,8 @@ import { TokensDto } from './dto/tokens.dto';
 import { AccessTokenGuard } from '../guards/accessToken.guard';
 import { RefreshTokenGuard } from '../guards/refreshToken.guard';
 import { Request as Req } from 'express';
-import { User } from 'src/resources/users/entities/user.entity';
-import { UsersService } from 'src/resources/users/users.service';
+import { User } from '../resources/users/entities/user.entity';
+import { UsersService } from '../resources/users/users.service';
 
 @Controller('auth')
 export class AuthController {
