@@ -3,6 +3,7 @@
 ## Initial script
 
 ``` bash
+# Create project
 mkdir nest-react
 cd nest-react
 npm install -D turbo
@@ -15,14 +16,14 @@ npm install
 npm run dev
 npm run build
 
-# api application
+# Init "api" application for back-end
 npm i --workspace @repo/api --save @nestjs/serve-static
 npm i --workspace @repo/api --save-dev bcrypt
 npm i --workspace @repo/api --save @nestjs/passport @nestjs/jwt passport-jwt
 npm i --workspace @repo/api --save-dev @types/passport-jwt
 npm i --workspace @repo/api --save dotenv
 
-# web application
+# Init "web" application for front-end
 npm i --workspace @repo/web --save react-query
 npm i --workspace @repo/web --save axios
 npm i --workspace @repo/web --save react-router-dom
@@ -34,6 +35,10 @@ npm i --workspace @repo/web --save @mui/x-data-grid
 npm i --workspace @repo/web --save @mui/x-date-pickers
 npm i --workspace @repo/web --save notistack
 
+# Init "shared" library
+mkdir packages/shared
+npm i --workspace @repo/shared --save sqlite3 ts-loader typeorm
+npm i --workspace @repo/shared --save-dev ts-node typescript
 ```
 
 ## Development
@@ -87,18 +92,25 @@ docker compose up --detach
 # Create resources
 npx --workspace @repo/api nest generate resource users resources
 npx --workspace @repo/api nest generate resource laws resources
+npx --workspace @repo/api nest g module auth
+npx --workspace @repo/api nest g controller auth
+npx --workspace @repo/api nest g service auth
 ```
 
 ## TypeORM
 
-## JWT
-
 ``` bash
-npx --workspace @repo/api nest g module auth
-npx --workspace @repo/api nest g controller auth
-npx --workspace @repo/api nest g service auth
-npm i --workspace @repo/api --save @nestjs/jwt
+# Create an empty migration
+npm run m:crt
+# Generate a migration
+npm run m:gen
+# Run a migration
+npm run m:run
+# Revert a recent migration
+npm run m:revert
 ```
+
+## JWT
 
 ``` bash
 # Generate JWT secret key
