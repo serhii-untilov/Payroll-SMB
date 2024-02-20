@@ -1,6 +1,5 @@
 import { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
-import { MainLayout } from '../components/layout/MainLayout';
 import { Loading } from '../components/utility/Loading';
 import GuestGuard from '../guards/GuestGuard';
 import AuthGuard from '../guards/AuthGuard';
@@ -41,19 +40,19 @@ const routes: RouteObject[] = [
         path: '*',
         element: (
             <AuthGuard>
-                <MainLayout />
+                <Home />
             </AuthGuard>
         ),
-        children: [
-            {
-                index: true,
-                element: (
-                    <AuthGuard>
-                        <Home />
-                    </AuthGuard>
-                ),
-            },
-        ],
+        // children: [
+        //     {
+        //         index: true,
+        //         element: (
+        //             <AuthGuard>
+        //                 <Home />
+        //             </AuthGuard>
+        //         ),
+        //     },
+        // ],
     },
 ];
 
