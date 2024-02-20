@@ -40,7 +40,7 @@ export function ListItemLink(props: ListItemLinkProps) {
 
     return (
         <li>
-            <ListItem button component={Link} to={to}>
+            <ListItem button dense component={Link} to={to}>
                 {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
                 <ListItemText primary={primary} />
             </ListItem>
@@ -59,7 +59,7 @@ export function ListItemButton(props: ListItemButtonProps) {
 
     return (
         <li>
-            <ListItem button component="button" onClick={onClick}>
+            <ListItem button dense component="button" onClick={onClick}>
                 {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
                 <ListItemText primary={primary} />
             </ListItem>

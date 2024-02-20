@@ -133,3 +133,4 @@ openssl rand -base64 60
 - [**React** - Using Material UI with React Hook Form](https://blog.logrocket.com/using-material-ui-with-react-hook-form/)
 - [**React** - React Query and Forms](https://tkdodo.eu/blog/react-query-and-forms)
 - [**React** - React Hook Form](https://react-hook-form.com/)
+- [**React** - React Snackbars](https://notistack.com/)
