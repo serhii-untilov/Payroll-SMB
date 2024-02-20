@@ -1,14 +1,9 @@
-import { createContext, useEffect, useReducer } from 'react';
-import type { FC, ReactNode } from 'react';
-import PropTypes from 'prop-types';
 import { IAuth, ICreateUser, IUser } from '@repo/shared';
-import {
-    getCurrentUser,
-    getUserTokens,
-    loginUser,
-    logoutUser,
-    registerUser,
-} from '../services/auth.service';
+import PropTypes from 'prop-types';
+import type { FC, ReactNode } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
+import { getCurrentUser, loginUser, logoutUser, registerUser } from '../services/auth.service';
+import { getUserAccessToken } from '../services/token.service';
 
 interface State {
     isInitialized: boolean;
@@ -113,7 +108,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     useEffect(() => {
         const initialize = async (): Promise<void> => {
             try {
-                const accessToken = getUserTokens()?.accessToken;
+                const accessToken = getUserAccessToken();
                 const user = accessToken ? await getCurrentUser() : null;
                 if (user) {
                     dispatch({
