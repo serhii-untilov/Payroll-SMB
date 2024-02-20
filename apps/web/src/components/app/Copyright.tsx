@@ -1,11 +1,10 @@
 import { Box, Link, Typography } from '@mui/material';
-import { useDisabled } from '../../hooks/useDisabled';
 
 export function Copyright(props: any) {
-    const isDisabled = useDisabled();
+    const isVisible = false;
     return (
         <>
-            {!isDisabled && (
+            {isVisible && (
                 <Box>
                     <Typography variant="body2" color="text.secondary" align="center" {...props}>
                         {'Copyright ©'}
