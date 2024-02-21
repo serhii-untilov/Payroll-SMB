@@ -146,3 +146,4 @@ openssl rand -base64 60
 - [**React** - React Query and Forms](https://tkdodo.eu/blog/react-query-and-forms)
 - [**React** - React Hook Form](https://react-hook-form.com/)
 - [**React** - React Snackbars](https://notistack.com/)
+- [**React** - React Data Grid](https://adazzle.github.io/react-data-grid/#/common-features)

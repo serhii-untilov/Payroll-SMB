@@ -1,4 +1,4 @@
-import { IAuth, ICreateUser, IUser } from '@repo/shared';
+import { IAuth, ICreateUser, IPublicUserData } from '@repo/shared';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';
 import { createContext, useEffect, useReducer } from 'react';
@@ -8,7 +8,7 @@ import { getUserAccessToken } from '../services/token.service';
 interface State {
     isInitialized: boolean;
     isAuthenticated: boolean;
-    user: IUser | null;
+    user: IPublicUserData | null;
 }
 
 interface AuthContextValue extends State {
@@ -25,14 +25,14 @@ type InitializeAction = {
     type: 'INITIALIZE';
     payload: {
         isAuthenticated: boolean;
-        user: IUser | null;
+        user: IPublicUserData | null;
     };
 };
 
 type LoginAction = {
     type: 'LOGIN';
     payload: {
-        user: IUser;
+        user: IPublicUserData;
     };
 };
 
@@ -43,7 +43,7 @@ type LogoutAction = {
 type RegisterAction = {
     type: 'REGISTER';
     payload: {
-        user: IUser;
+        user: IPublicUserData;
     };
 };
 

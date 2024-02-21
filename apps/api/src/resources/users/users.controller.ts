@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import * as _ from 'lodash';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -14,21 +13,21 @@ export class UsersController {
     @UseGuards(AccessTokenGuard)
     async create(@Body() createUserDto: CreateUserDto): Promise<IPublicUserData> {
         const user = await this.usersService.create(createUserDto);
-        return _.omit(user, ['password', 'refreshToken']);
+        return UsersService.toPublic(user);
     }
 
     @Get()
     @UseGuards(AccessTokenGuard)
     async findAll(): Promise<IPublicUserData[]> {
         const users = await this.usersService.findAll();
-        return users.map((user) => _.omit(user, ['password', 'refreshToken']));
+        return users.map((user) => UsersService.toPublic(user));
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     async findOne(@Param('id') id: string): Promise<IPublicUserData> {
-        const user = await this.usersService.findOne(+id);
-        return _.omit(user, ['password', 'refreshToken']);
+        const user = await this.usersService.findOne({ where: { id: +id } });
+        return UsersService.toPublic(user);
     }
 
     @Patch(':id')
@@ -38,13 +37,13 @@ export class UsersController {
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<IPublicUserData> {
         const user = await this.usersService.update(+id, updateUserDto);
-        return _.omit(user, ['password', 'refreshToken']);
+        return UsersService.toPublic(user);
     }
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     async remove(@Param('id') id: string): Promise<IPublicUserData> {
         const user = await this.usersService.remove(+id);
-        return _.omit(user, ['password', 'refreshToken']);
+        return UsersService.toPublic(user);
     }
 }

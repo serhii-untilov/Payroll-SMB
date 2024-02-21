@@ -1,31 +1,30 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Copyright } from '../components/app/Copyright';
-import useAuth from '../hooks/useAuth';
-import { AppTitle } from '../components/app/AppTitle';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { IAuth } from '@repo/shared';
-import { FormTextField } from '../components/form/FormTextField';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Link as RouterLink, redirect } from 'react-router-dom';
+import { AppTitle } from '../components/app/AppTitle';
+import { Copyright } from '../components/app/Copyright';
+import { FormTextField } from '../components/form/FormTextField';
+import useAuth from '../hooks/useAuth';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
     const { login } = useAuth();
-    const navigate = useNavigate();
 
     const { control, handleSubmit } = useForm({
         defaultValues: {
@@ -39,7 +38,7 @@ export default function SignIn() {
         if (data.email) {
             try {
                 await login(data);
-                navigate('/home');
+                redirect('/home');
             } catch (e: unknown) {
                 const error = e as AxiosError;
                 enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -109,7 +108,7 @@ export default function SignIn() {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link component={RouterLink} to="/auth/sign-up" variant="body2">
+                                <Link component={RouterLink} to="/signup" variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>

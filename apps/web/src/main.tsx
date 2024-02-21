@@ -31,11 +31,11 @@ const defaultTheme = createTheme();
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-                <CssBaseline enableColorScheme />
-                <ThemeProvider theme={defaultTheme}>
-                    <LocaleProvider>
-                        <AuthProvider>
+            <AuthProvider>
+                <BrowserRouter>
+                    <CssBaseline enableColorScheme />
+                    <ThemeProvider theme={defaultTheme}>
+                        <LocaleProvider>
                             <SnackbarProvider
                                 maxSnack={3}
                                 preventDuplicate
@@ -46,10 +46,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                             >
                                 <App />
                             </SnackbarProvider>
-                        </AuthProvider>
-                    </LocaleProvider>
-                </ThemeProvider>
-            </BrowserRouter>
+                        </LocaleProvider>
+                    </ThemeProvider>
+                </BrowserRouter>
+            </AuthProvider>
         </QueryClientProvider>
     </React.StrictMode>,
 );

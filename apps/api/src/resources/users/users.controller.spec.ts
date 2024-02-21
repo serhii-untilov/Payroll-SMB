@@ -1,13 +1,12 @@
-import { randUser } from '@ngneat/falso';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { randUser } from '@ngneat/falso';
+import { createMockUser, repositoryMockFactory } from '@repo/utils';
 import * as _ from 'lodash';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { createMockUser, repositoryMockFactory } from '@repo/utils';
-import { IPublicUserData } from '@repo/shared';
-import { CreateUserDto } from './dto/create-user.dto';
 
 describe('UsersController', () => {
     let controller: UsersController;
@@ -36,7 +35,7 @@ describe('UsersController', () => {
 
     it('should create a user', async () => {
         const user = createMockUser();
-        const publicUser: IPublicUserData = _.omit(user, ['password', 'refreshToken']);
+        const publicUser = UsersService.toPublic(user);
         jest.spyOn(service, 'create').mockReturnValue(Promise.resolve(user));
         const createUserDto: CreateUserDto = _.omit(user, ['id']);
         const res = await controller.create(createUserDto);
@@ -45,7 +44,7 @@ describe('UsersController', () => {
 
     it('should get user details', async () => {
         const user = createMockUser();
-        const publicUser: IPublicUserData = _.omit(user, ['password', 'refreshToken']);
+        const publicUser = UsersService.toPublic(user);
         jest.spyOn(service, 'findOne').mockReturnValue(Promise.resolve(user));
         const res = await controller.findOne(user.id.toString());
         expect(res).toStrictEqual(publicUser);
@@ -60,7 +59,7 @@ describe('UsersController', () => {
             lastName: newUser.lastName,
             email: newUser.email,
         };
-        const publicUser: IPublicUserData = _.omit(updatedUser, ['password', 'refreshToken']);
+        const publicUser = UsersService.toPublic(user);
         jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(updatedUser));
         const res = await controller.update(user.id.toString(), {
             firstName: newUser.firstName,
@@ -72,7 +71,7 @@ describe('UsersController', () => {
 
     it('should remove a user', async () => {
         const user = createMockUser();
-        const publicUser: IPublicUserData = _.omit(user, ['password', 'refreshToken']);
+        const publicUser = UsersService.toPublic(user);
         jest.spyOn(service, 'remove').mockReturnValue(Promise.resolve(user));
         const res = await controller.remove(user.id.toString());
         expect(res).toStrictEqual(publicUser);

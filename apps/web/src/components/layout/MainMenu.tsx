@@ -1,68 +1,43 @@
-import * as React from 'react';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { Button, Divider, List, ListItem } from '@mui/material';
-import { Link as MuiLink } from '@mui/material';
-import { Link as RouterLink, LinkProps as RouterLinkProps, useNavigate } from 'react-router-dom';
-import { BusinessCenter, Description, People, Logout, Person } from '@mui/icons-material';
-import useAuth from '../../hooks/useAuth';
+import {
+    BusinessCenterOutlined,
+    CalculateOutlined,
+    CreditScore,
+    Equalizer,
+    PeopleOutlined,
+    Schedule,
+} from '@mui/icons-material';
+import { List } from '@mui/material';
+import { ListItemButton } from '../data/ListItemButton';
+import { ListItemLink } from '../data/ListItemLink';
 
 export function MainMenu() {
-    const { logout } = useAuth();
-    const navigate = useNavigate();
-
-    function onLogout() {
-        logout();
-        navigate('/sign-in');
-    }
+    const onCompanyClick = () => {
+        // Make menu:
+        // Company details
+        // -- Select company --
+        // <Company List>
+        // -- Divider --
+        // New Company
+    };
 
     return (
         <List component="nav" sx={{ mx: ['auto'] }}>
-            <ListItemLink to="/company" primary="Company" icon={<BusinessCenter />} />
-            <ListItemLink to="/employees" primary="Employees" icon={<People />} />
-            <ListItemLink to="/payroll-sheet" primary="Payroll" icon={<Description />} />
+            <ListItemButton
+                onClick={onCompanyClick}
+                primary="Company"
+                icon={<BusinessCenterOutlined />}
+            />
+            <ListItemLink to="/employees" primary="Employees" icon={<PeopleOutlined />} />
+            <ListItemLink to="/time-sheet" primary="Time Sheet" icon={<Schedule />} />
+            <ListItemLink to="/payroll" primary="Payroll" icon={<CalculateOutlined />} />
+            <ListItemLink to="/payments" primary="Payments" icon={<CreditScore />} />
+            {/* <ListItemLink to="/pay-contractors" primary="Pay Contractors" icon={<Description />} /> */}
+            {/* <ListItemLink to="/timeoff" primary="Time Off" icon={<Description />} /> */}
+            {/* <ListItemLink to="/benefits" primary="Benefits" icon={<Description />} /> */}
+            {/* <ListItemLink to="/compliant" primary="Stay Compliant" icon={<Description />} /> */}
+            {/* <ListItemLink to="/surveys" primary="Surveys" icon={<Description />} /> */}
+            <ListItemLink to="/reports" primary="Reports" icon={<Equalizer />} />
+            {/* <ListItemLink to="/reports" primary="Settings" icon={<Settings />} /> */}
         </List>
-    );
-}
-
-interface ListItemLinkProps {
-    icon?: React.ReactElement;
-    primary: string;
-    to: string;
-}
-
-const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>(function Link(itemProps, ref) {
-    return <RouterLink ref={ref} {...itemProps} role={undefined} />;
-});
-
-export function ListItemLink(props: ListItemLinkProps) {
-    const { icon, primary, to } = props;
-
-    return (
-        <li>
-            <ListItem button dense component={Link} to={to}>
-                {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-                <ListItemText primary={primary} />
-            </ListItem>
-        </li>
-    );
-}
-
-interface ListItemButtonProps {
-    icon?: React.ReactElement;
-    primary: string;
-    onClick: React.MouseEventHandler;
-}
-
-export function ListItemButton(props: ListItemButtonProps) {
-    const { icon, primary, onClick } = props;
-
-    return (
-        <li>
-            <ListItem button dense component="button" onClick={onClick}>
-                {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-                <ListItemText primary={primary} />
-            </ListItem>
-        </li>
     );
 }
