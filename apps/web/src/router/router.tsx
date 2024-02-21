@@ -16,6 +16,7 @@ const Home = Loadable(lazy(() => import('../pages/Home')));
 const Greeting = Loadable(lazy(() => import('../pages/Greeting')));
 const Companies = Loadable(lazy(() => import('../pages/Companies')));
 const Employees = Loadable(lazy(() => import('../pages/Employees')));
+const TimeOff = Loadable(lazy(() => import('../pages/TimeOff')));
 const TimeSheet = Loadable(lazy(() => import('../pages/TimeSheet')));
 const Payroll = Loadable(lazy(() => import('../pages/Payroll')));
 const Payments = Loadable(lazy(() => import('../pages/Payments')));
@@ -50,7 +51,8 @@ const router: RouteObject[] = [
             { path: 'greeting', element: <Greeting /> },
             { path: 'companies', element: <Companies /> },
             { path: 'employees', element: <Employees /> },
-            { path: 'timesheet', element: <TimeSheet /> },
+            { path: 'time-off', element: <TimeOff /> },
+            { path: 'time-sheet', element: <TimeSheet /> },
             { path: 'payroll', element: <Payroll /> },
             { path: 'payments', element: <Payments /> },
             { path: 'reports', element: <Reports /> },

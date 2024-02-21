@@ -12,7 +12,7 @@ import { ListItemLink } from '../components/data/ListItemLink';
 import { MainMenu } from '../components/layout/MainMenu';
 import { Sidebar } from '../components/layout/Sidebar';
 import useAuth from '../hooks/useAuth';
-import { blue } from '@mui/material/colors';
+import { blue, pink } from '@mui/material/colors';
 
 export default function Home() {
     const { logout } = useAuth();
@@ -66,7 +66,7 @@ export default function Home() {
                                     height: 48,
                                     width: 48,
                                     mx: ['auto'],
-                                    opacity: 0.55,
+                                    opacity: 0.85,
                                     '&:hover:not(.Mui-disabled)': {
                                         cursor: 'pointer',
                                     },
@@ -79,7 +79,7 @@ export default function Home() {
                                 <Typography
                                     component="h1"
                                     // variant="h1"
-                                    color="primary.main"
+                                    color={pink[600]}
                                     noWrap
                                     sx={{ flexGrow: 1, ml: [2], fontSize: 18 }}
                                 >
