@@ -47,9 +47,10 @@ describe('UsersService', () => {
 
     it('should successfully find a user', async () => {
         const user = createMockUser();
-        repoMock.findOneBy?.mockReturnValue(user);
-        expect(await service.findOne(user.id)).toStrictEqual(user);
-        expect(repoMock.findOneBy).toHaveBeenCalledWith({ id: user.id });
+        repoMock.findOne?.mockReturnValue(user);
+        const params = { where: { id: user.id } };
+        expect(await service.findOne(params)).toStrictEqual(user);
+        expect(repoMock.findOne).toHaveBeenCalledWith(params);
     });
 
     it('should throw if a user could not be found', async () => {

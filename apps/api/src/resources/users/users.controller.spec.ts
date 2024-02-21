@@ -59,7 +59,7 @@ describe('UsersController', () => {
             lastName: newUser.lastName,
             email: newUser.email,
         };
-        const publicUser = UsersService.toPublic(user);
+        const publicUser = UsersService.toPublic(updatedUser);
         jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(updatedUser));
         const res = await controller.update(user.id.toString(), {
             firstName: newUser.firstName,
