@@ -9,6 +9,7 @@ export const Sidebar = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'o
             position: 'relative',
             whiteSpace: 'nowrap',
             width: drawerWidth,
+            border: 'none',
             transition: theme.transitions.create('width', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen,

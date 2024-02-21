@@ -3,6 +3,7 @@ import {
     CalculateOutlined,
     CreditScore,
     Equalizer,
+    LandscapeOutlined,
     PeopleOutlined,
     Schedule,
 } from '@mui/icons-material';
@@ -28,11 +29,11 @@ export function MainMenu() {
                 icon={<BusinessCenterOutlined />}
             />
             <ListItemLink to="/employees" primary="Employees" icon={<PeopleOutlined />} />
-            <ListItemLink to="/time-sheet" primary="Time Sheet" icon={<Schedule />} />
+            {/* <ListItemLink to="/time-off" primary="Time Off" icon={<LandscapeOutlined />} /> */}
+            <ListItemLink to="/timesheet" primary="Time Sheet" icon={<Schedule />} />
             <ListItemLink to="/payroll" primary="Payroll" icon={<CalculateOutlined />} />
             <ListItemLink to="/payments" primary="Payments" icon={<CreditScore />} />
             {/* <ListItemLink to="/pay-contractors" primary="Pay Contractors" icon={<Description />} /> */}
-            {/* <ListItemLink to="/timeoff" primary="Time Off" icon={<Description />} /> */}
             {/* <ListItemLink to="/benefits" primary="Benefits" icon={<Description />} /> */}
             {/* <ListItemLink to="/compliant" primary="Stay Compliant" icon={<Description />} /> */}
             {/* <ListItemLink to="/surveys" primary="Surveys" icon={<Description />} /> */}

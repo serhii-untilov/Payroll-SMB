@@ -1,38 +1,42 @@
-import * as React from 'react';
-import { ListItem, Theme, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, ListItem, Typography, styled } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { NavLink, Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
+import * as React from 'react';
+import { NavLink, LinkProps as RouterLinkProps } from 'react-router-dom';
+import { grey } from '@mui/material/colors';
 
 interface ListItemLinkProps {
     icon?: React.ReactElement;
     primary: string;
     to: string;
-    description?: string;
     target?: string;
 }
 
-const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>(function Link(itemProps, ref) {
-    return <RouterLink ref={ref} {...itemProps} role={undefined} />;
+const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) => {
+    return <NavLink ref={ref} {...props} role={undefined} />;
 });
 
 export function ListItemLink(props: ListItemLinkProps) {
-    const { icon, primary, to, description, target } = props;
+    const { icon, primary, to, target } = props;
 
     return (
         <li>
-            <Tooltip title={description}>
-                <ListItem
-                    button
-                    // dense
-                    component={Link}
-                    to={to}
-                    target={target}
-                >
-                    {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-                    <ListItemText primary={primary} />
-                </ListItem>
-            </Tooltip>
+            <ListItem
+                button
+                // dense
+                component={Link}
+                target={target}
+                to={to}
+                sx={{
+                    '&.active': {
+                        bgcolor: grey[300],
+                    },
+                    // color: 'black',
+                }}
+            >
+                {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+                <ListItemText primary={primary} />
+            </ListItem>
         </li>
     );
 }

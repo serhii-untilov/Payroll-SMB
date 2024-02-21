@@ -1,5 +1,4 @@
 import { useQuery } from 'react-query';
-// import { Button, notification } from 'antd';
 import SignUp from './SignUp';
 import { getGreeting } from '../services/greeting.service';
 import { AxiosResponse } from 'axios';

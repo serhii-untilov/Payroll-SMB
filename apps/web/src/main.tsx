@@ -13,6 +13,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { LocaleProvider } from './context/LocaleContext.tsx';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
+import { defaultTheme } from './themes/default.theme.ts';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -26,15 +27,13 @@ const queryClient = new QueryClient({
     },
 });
 
-const defaultTheme = createTheme();
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 <BrowserRouter>
                     <CssBaseline enableColorScheme />
-                    <ThemeProvider theme={defaultTheme}>
+                    <ThemeProvider theme={defaultTheme()}>
                         <LocaleProvider>
                             <SnackbarProvider
                                 maxSnack={3}
