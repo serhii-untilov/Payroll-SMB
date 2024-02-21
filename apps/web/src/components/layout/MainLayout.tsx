@@ -6,15 +6,15 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { Outlet, redirect } from 'react-router-dom';
-import { Copyright } from '../components/app/Copyright';
-import { ListItemButton } from '../components/data/ListItemButton';
-import { ListItemLink } from '../components/data/ListItemLink';
-import { MainMenu } from '../components/layout/MainMenu';
-import { Sidebar } from '../components/layout/Sidebar';
-import useAuth from '../hooks/useAuth';
+import { Copyright } from '../app/Copyright';
+import { ListItemButton } from '../data/ListItemButton';
+import { ListItemLink } from '../data/ListItemLink';
+import { MainMenu } from './MainMenu';
+import { Sidebar } from './Sidebar';
+import useAuth from '../../hooks/useAuth';
 import { blue, pink } from '@mui/material/colors';
 
-export default function Home() {
+export default function MainLayout() {
     const { logout } = useAuth();
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
@@ -126,7 +126,6 @@ export default function Home() {
                     p: [1],
                 }}
             >
-                {/* <DataTable /> */}
                 <Outlet />
             </Box>
         </Box>

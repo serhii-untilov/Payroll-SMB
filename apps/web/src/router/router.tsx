@@ -3,6 +3,7 @@ import { RouteObject } from 'react-router-dom';
 import { Loading } from '../components/utility/Loading';
 import GuestGuard from '../guards/GuestGuard';
 import AuthGuard from '../guards/AuthGuard';
+import MainLayout from '../components/layout/MainLayout';
 
 export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => (
     <Suspense fallback={<Loading />}>
@@ -12,7 +13,6 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
 
 export const SignIn = Loadable(lazy(() => import('../pages/SignIn')));
 const SignUp = Loadable(lazy(() => import('../pages/SignUp')));
-const Home = Loadable(lazy(() => import('../pages/Home')));
 const Greeting = Loadable(lazy(() => import('../pages/Greeting')));
 const Companies = Loadable(lazy(() => import('../pages/Companies')));
 const Employees = Loadable(lazy(() => import('../pages/Employees')));
@@ -44,7 +44,7 @@ const router: RouteObject[] = [
         path: '*',
         element: (
             <AuthGuard>
-                <Home />
+                <MainLayout />
             </AuthGuard>
         ),
         children: [
