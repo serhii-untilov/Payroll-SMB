@@ -13,28 +13,28 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
 export const SignIn = Loadable(lazy(() => import('../pages/SignIn')));
 const SignUp = Loadable(lazy(() => import('../pages/SignUp')));
 const Home = Loadable(lazy(() => import('../pages/Home')));
+const Employees = Loadable(lazy(() => import('../pages/Employees')));
+const Greeting = Loadable(lazy(() => import('../pages/Greeting')));
+const Payroll = Loadable(lazy(() => import('../pages/Payroll')));
+const Profile = Loadable(lazy(() => import('../pages/Profile')));
+const Companies = Loadable(lazy(() => import('../pages/Companies')));
 
-const routes: RouteObject[] = [
+const router: RouteObject[] = [
     {
-        path: 'auth',
-        children: [
-            {
-                path: 'sign-in',
-                element: (
-                    <GuestGuard>
-                        <SignIn />
-                    </GuestGuard>
-                ),
-            },
-            {
-                path: 'sign-up',
-                element: (
-                    <GuestGuard>
-                        <SignUp />
-                    </GuestGuard>
-                ),
-            },
-        ],
+        path: 'signin',
+        element: (
+            <GuestGuard>
+                <SignIn />
+            </GuestGuard>
+        ),
+    },
+    {
+        path: 'signup',
+        element: (
+            <GuestGuard>
+                <SignUp />
+            </GuestGuard>
+        ),
     },
     {
         path: '*',
@@ -43,18 +43,15 @@ const routes: RouteObject[] = [
                 <Home />
             </AuthGuard>
         ),
-        // children: [
-        //     {
-        //         index: true,
-        //         element: (
-        //             <AuthGuard>
-        //                 <Home />
-        //             </AuthGuard>
-        //         ),
-        //     },
-        // ],
+        children: [
+            { path: 'employees', element: <Employees /> },
+            { path: 'payroll', element: <Payroll /> },
+            { path: 'greeting', element: <Greeting /> },
+            { path: 'companies', element: <Companies /> },
+            { path: 'profile', element: <Profile /> },
+        ],
     },
 ];
 
 // eslint-disable-next-line react-refresh/only-export-components
-export default routes;
+export default router;

@@ -1,5 +1,5 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IUser } from '@repo/shared';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 
 @Entity()

@@ -11,11 +11,15 @@ interface AuthGuardProps {
 
 const AuthGuard: FC<AuthGuardProps> = (props) => {
     const { children } = props;
-    const auth = useAuth() as any;
+    const { isAuthenticated, isInitialized } = useAuth();
     const location = useLocation();
     const [requestedLocation, setRequestedLocation] = useState<string | null>();
 
-    if (!auth.isAuthenticated) {
+    if (!isInitialized) {
+        return;
+    }
+
+    if (!isAuthenticated) {
         if (location.pathname !== requestedLocation) {
             setRequestedLocation(location.pathname);
         }

@@ -1,21 +1,29 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
+import {
+    BusinessCenter,
+    Help,
+    Layers,
+    Logout,
+    Person,
+    PersonOutlined,
+    Support,
+    Upgrade,
+} from '@mui/icons-material';
+import { List } from '@mui/material';
 import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { ListItemButton, ListItemLink, MainMenu } from '../components/layout/MainMenu';
+import * as React from 'react';
+import { Outlet, Route, Routes, redirect } from 'react-router-dom';
 import { Copyright } from '../components/app/Copyright';
+import { ListItemButton } from '../components/data/ListItemButton';
+import { ListItemLink } from '../components/data/ListItemLink';
+import { MainMenu } from '../components/layout/MainMenu';
 import { Sidebar } from '../components/layout/Sidebar';
-import DataTable from '../components/data/DataTable';
-import { Button, List } from '@mui/material';
-import { Logout, Person } from '@mui/icons-material';
 import useAuth from '../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
-import { Link as MuiLink } from '@mui/material';
 
 export default function Home() {
     const { logout } = useAuth();
-    const navigate = useNavigate();
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -23,11 +31,13 @@ export default function Home() {
 
     function onLogout() {
         logout();
-        navigate('/sign-in');
+        redirect('/signin');
     }
 
+    function onHelp() {}
+
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', color: 'blue' }}>
             <CssBaseline />
 
             <Sidebar variant="permanent" open={open}>
@@ -59,6 +69,7 @@ export default function Home() {
                                     height: 48,
                                     width: 48,
                                     mx: ['auto'],
+                                    opacity: 0.55,
                                 }}
                                 alt="Application logo."
                                 src="payroll.png"
@@ -68,7 +79,7 @@ export default function Home() {
                                 <Typography
                                     component="h1"
                                     variant="h6"
-                                    color="primary"
+                                    // color="primary"
                                     noWrap
                                     sx={{ flexGrow: 1, ml: [2] }}
                                 >
@@ -82,8 +93,20 @@ export default function Home() {
                         <MainMenu />
                     </Box>
                     <Box>
-                        <List component="nav" sx={{ mx: ['auto'] }}>
-                            <ListItemLink to="/profile" primary="Profile" icon={<Person />} />
+                        <List disablePadding component="nav" sx={{ mx: ['auto'], mb: [3] }}>
+                            <ListItemLink
+                                to="/profile"
+                                primary="Profile"
+                                icon={<PersonOutlined />}
+                            />
+                            {/* <ListItemLink to="/service" primary="Service" icon={<Layers />} /> */}
+                            {/* <ListItemButton onClick={onHelp} primary="Help" icon={<Help />} /> */}
+                            <ListItemLink
+                                target="_blank"
+                                to="https://github.com/serhii-untilov/Payroll/discussions"
+                                primary="Support"
+                                icon={<Support />}
+                            />
                             <ListItemButton onClick={onLogout} primary="Logout" icon={<Logout />} />
                         </List>
                         {open && <Copyright sx={{ mx: ['auto'], mb: [3] }} />}
@@ -105,9 +128,8 @@ export default function Home() {
                     p: [1],
                 }}
             >
-                {/* <Workspace /> */}
-                {/* <BasicTable /> */}
-                <DataTable />
+                {/* <DataTable /> */}
+                <Outlet />
             </Box>
         </Box>
     );

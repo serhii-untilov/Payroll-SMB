@@ -8,7 +8,11 @@ interface GuestGuardProps {
 }
 
 const GuestGuard: FC<GuestGuardProps> = ({ children }) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isInitialized } = useAuth();
+
+    if (!isInitialized) {
+        return;
+    }
 
     if (isAuthenticated) {
         return <Navigate to="/" />;
