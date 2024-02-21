@@ -30,8 +30,17 @@ export function ListItemLink(props: ListItemLinkProps) {
                 sx={{
                     '&.active': {
                         bgcolor: grey[300],
+                        borderRadius: '5px',
+                        py: [0.5],
+                        my: [0.3],
                     },
-                    // color: 'black',
+                    '&:hover': {
+                        borderRadius: '5px',
+                        py: [0.5],
+                        my: [0.3],
+                    },
+                    py: [0.5],
+                    my: [0.3],
                 }}
             >
                 {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
