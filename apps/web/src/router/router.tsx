@@ -13,11 +13,14 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
 export const SignIn = Loadable(lazy(() => import('../pages/SignIn')));
 const SignUp = Loadable(lazy(() => import('../pages/SignUp')));
 const Home = Loadable(lazy(() => import('../pages/Home')));
-const Employees = Loadable(lazy(() => import('../pages/Employees')));
 const Greeting = Loadable(lazy(() => import('../pages/Greeting')));
-const Payroll = Loadable(lazy(() => import('../pages/Payroll')));
-const Profile = Loadable(lazy(() => import('../pages/Profile')));
 const Companies = Loadable(lazy(() => import('../pages/Companies')));
+const Employees = Loadable(lazy(() => import('../pages/Employees')));
+const TimeSheet = Loadable(lazy(() => import('../pages/TimeSheet')));
+const Payroll = Loadable(lazy(() => import('../pages/Payroll')));
+const Payments = Loadable(lazy(() => import('../pages/Payments')));
+const Reports = Loadable(lazy(() => import('../pages/Reports')));
+const Profile = Loadable(lazy(() => import('../pages/Profile')));
 
 const router: RouteObject[] = [
     {
@@ -44,10 +47,13 @@ const router: RouteObject[] = [
             </AuthGuard>
         ),
         children: [
-            { path: 'employees', element: <Employees /> },
-            { path: 'payroll', element: <Payroll /> },
             { path: 'greeting', element: <Greeting /> },
             { path: 'companies', element: <Companies /> },
+            { path: 'employees', element: <Employees /> },
+            { path: 'timesheet', element: <TimeSheet /> },
+            { path: 'payroll', element: <Payroll /> },
+            { path: 'payments', element: <Payments /> },
+            { path: 'reports', element: <Reports /> },
             { path: 'profile', element: <Profile /> },
         ],
     },
