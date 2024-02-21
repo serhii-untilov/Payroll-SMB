@@ -78,10 +78,10 @@ export default function Home() {
                             {open && (
                                 <Typography
                                     component="h1"
-                                    variant="h6"
+                                    // variant="h1"
                                     color="primary.main"
                                     noWrap
-                                    sx={{ flexGrow: 1, ml: [2] }}
+                                    sx={{ flexGrow: 1, ml: [2], fontSize: 18 }}
                                 >
                                     {' Payroll SMB'}
                                 </Typography>

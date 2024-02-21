@@ -1,7 +1,9 @@
+import PageLayout from '../components/layout/PageLayout';
+
 export default function Employees() {
     return (
         <>
-            <h2>Employees</h2>
+            <PageLayout title="Employees"></PageLayout>
         </>
     );
 }

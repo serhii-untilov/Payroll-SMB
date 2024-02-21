@@ -1,7 +1,9 @@
+import PageLayout from '../components/layout/PageLayout';
+
 export default function Payroll() {
     return (
         <>
-            <h2>Payroll</h2>
+            <PageLayout title="Payroll"></PageLayout>
         </>
     );
 }

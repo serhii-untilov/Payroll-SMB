@@ -1,10 +1,9 @@
 import { IPublicUserData } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useQuery } from 'react-query';
+import PageLayout from '../components/layout/PageLayout';
 import { Loading } from '../components/utility/Loading';
 import { getCurrentUser } from '../services/auth.service';
-import { Box, Toolbar, Typography } from '@mui/material';
-import PageLayout from '../components/layout/PageLayout';
 
 export default function Profile() {
     const {
@@ -15,14 +14,7 @@ export default function Profile() {
         error,
     } = useQuery<IPublicUserData | null, Error>('user-profile', getCurrentUser);
 
-    // const [toast, contextHolder] = notification.useNotification();
-
     if (isError) {
-        // toast['error']({
-        //     key: 'query-greeting',
-        //     message: error.name,
-        //     description: error.message,
-        // });
         enqueueSnackbar(`${error.name}\n${error.message}`, { variant: 'error' });
     }
 

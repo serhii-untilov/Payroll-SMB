@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 
 interface PageLayoutProps {
     title: string;
-    children: ReactNode;
+    children?: ReactNode;
 }
 
 const PageLayout: FC<PageLayoutProps> = ({ title, children }) => {
@@ -21,7 +21,13 @@ const PageLayout: FC<PageLayoutProps> = ({ title, children }) => {
                         flexGrow: 1,
                     }}
                 >
-                    <Typography component="h1" variant="h6" color="primary.main" noWrap sx={{}}>
+                    <Typography
+                        component="h1"
+                        variant="h5"
+                        // color="primary.main"
+                        noWrap
+                        sx={{}}
+                    >
                         {title}
                     </Typography>
                 </Box>
