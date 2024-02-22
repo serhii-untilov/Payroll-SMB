@@ -29,11 +29,6 @@ export default function Profile() {
         values: user,
     });
 
-    // useEffect(() => {
-    //     const subscription = watch((value, { name, type }) => console.log(value, name, type));
-    //     return () => subscription.unsubscribe();
-    // }, [watch]);
-
     const { dirtyFields, touchedFields, defaultValues, isDirty } = useFormState({
         control,
     });
