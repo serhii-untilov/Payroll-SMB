@@ -22,6 +22,7 @@ npm i --workspace @repo/api --save-dev bcrypt
 npm i --workspace @repo/api --save @nestjs/passport @nestjs/jwt passport-jwt
 npm i --workspace @repo/api --save-dev @types/passport-jwt
 npm i --workspace @repo/api --save dotenv
+npm i --workspace @repo/api --save-dev typescript jest ts-jest @types/jest
 
 # Init "web" application for front-end
 npm i --workspace @repo/web --save react-query
@@ -34,6 +35,7 @@ npm i --workspace @repo/web --save @mui/icons-material
 npm i --workspace @repo/web --save @mui/x-data-grid
 npm i --workspace @repo/web --save @mui/x-date-pickers
 npm i --workspace @repo/web --save notistack
+npm i --workspace @repo/web --save-dev typescript jest ts-jest @types/jest
 
 # Init "shared" library
 mkdir packages/shared
