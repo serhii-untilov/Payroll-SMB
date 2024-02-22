@@ -1,18 +1,18 @@
 import { Logout, PersonOutlined, Support } from '@mui/icons-material';
-import { Link, List } from '@mui/material';
+import { List } from '@mui/material';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { Outlet, redirect } from 'react-router-dom';
-import { Copyright } from '../app/Copyright';
+import useAuth from '../../hooks/useAuth';
 import { ListItemButton } from '../data/ListItemButton';
 import { ListItemLink } from '../data/ListItemLink';
+import { AppTitle } from './AppTitle';
+import { Copyright } from './Copyright';
+import { Logo } from './Logo';
 import { MainMenu } from './MainMenu';
 import { Sidebar } from './Sidebar';
-import useAuth from '../../hooks/useAuth';
-import { blue, pink } from '@mui/material/colors';
 
 export default function MainLayout() {
     const { logout } = useAuth();
@@ -26,8 +26,6 @@ export default function MainLayout() {
         redirect('/signin');
     }
 
-    function onHelp() {}
-
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -40,10 +38,12 @@ export default function MainLayout() {
                         justifyContent: 'space-between',
                         height: '100%',
                         px: [1],
-                        backgroundColor: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? theme.palette.grey[100]
-                                : theme.palette.grey[900],
+                        // backgroundColor: (theme) =>
+                        //     theme.palette.mode === 'light'
+                        //         ? theme.palette.grey[100]
+                        //         : theme.palette.grey[900],
+                        bgcolor: '#f7f7f7',
+                        // bgcolor: '#fbfbfb',
                     }}
                 >
                     <Box
@@ -60,32 +60,8 @@ export default function MainLayout() {
                                 px: [1],
                             }}
                         >
-                            <Box
-                                component="img"
-                                sx={{
-                                    height: 48,
-                                    width: 48,
-                                    mx: ['auto'],
-                                    opacity: 0.85,
-                                    '&:hover:not(.Mui-disabled)': {
-                                        cursor: 'pointer',
-                                    },
-                                }}
-                                alt="Application logo."
-                                src="payroll.png"
-                                onClick={toggleDrawer}
-                            />
-                            {open && (
-                                <Typography
-                                    component="h1"
-                                    // variant="h1"
-                                    color={pink[600]}
-                                    noWrap
-                                    sx={{ flexGrow: 1, ml: [2], fontSize: 18 }}
-                                >
-                                    {' Payroll SMB'}
-                                </Typography>
-                            )}
+                            <Logo onClick={toggleDrawer} />
+                            {open && <AppTitle align="left" sx={{ flexGrow: 1, ml: [2] }} />}
                         </Toolbar>
 
                         <MainMenu />

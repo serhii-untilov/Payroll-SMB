@@ -36,6 +36,7 @@ npm i --workspace @repo/web --save @mui/x-data-grid
 npm i --workspace @repo/web --save @mui/x-date-pickers
 npm i --workspace @repo/web --save notistack
 npm i --workspace @repo/web --save-dev typescript jest ts-jest @types/jest
+npm i --workspace @repo/web --save avvvatars-react
 
 # Init "shared" library
 mkdir packages/shared

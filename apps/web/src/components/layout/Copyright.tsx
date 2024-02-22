@@ -2,6 +2,7 @@ import { Box, Link, Typography } from '@mui/material';
 
 export function Copyright(props: any) {
     const isVisible = false;
+
     return (
         <>
             {isVisible && (

@@ -1,5 +1,6 @@
-import { Controller } from 'react-hook-form';
+import { InputLabel } from '@mui/material';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
+import { Controller } from 'react-hook-form';
 
 export type FormTextFieldProps = TextFieldProps & {
     name: string;
@@ -8,22 +9,29 @@ export type FormTextFieldProps = TextFieldProps & {
 };
 
 export const FormTextField = (props: FormTextFieldProps) => {
+    const { label } = props;
     return (
-        <Controller
-            name={props.name}
-            control={props.control}
-            render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
-                <TextField
-                    helperText={error ? error.message : null}
-                    size="small"
-                    error={!!error}
-                    onChange={onChange}
-                    value={value}
-                    fullWidth
-                    variant="outlined"
-                    {...props}
-                />
-            )}
-        />
+        <>
+            <InputLabel>{label}</InputLabel>
+            <Controller
+                name={props.name}
+                control={props.control}
+                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                    <TextField
+                        helperText={error ? error.message : null}
+                        size="small"
+                        margin="none"
+                        error={!!error}
+                        onChange={onChange}
+                        value={value}
+                        fullWidth
+                        variant="outlined"
+                        sx={{ mb: 1 }}
+                        {...props}
+                        label=""
+                    />
+                )}
+            />
+        </>
     );
 };
