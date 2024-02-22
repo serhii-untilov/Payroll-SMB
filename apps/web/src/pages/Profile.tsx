@@ -78,9 +78,9 @@ export default function Profile() {
                 >
                     <Box sx={{ mb: 4, mr: { xs: 1, sm: 2, md: 3, lg: 4 } }}>
                         <AvatarGenerator value={watch('email')} />
-                        <Typography variant="body2" align="center" color="text.secondary">
+                        {/* <Typography variant="body2" align="center" color="text.secondary">
                             Avatar depends on email.
-                        </Typography>
+                        </Typography> */}
                     </Box>
                     <Grid container xs={12} sm={6} md={6} lg={3} spacing={1}>
                         <Grid item xs={12}>
