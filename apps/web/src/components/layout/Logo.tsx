@@ -15,8 +15,7 @@ export function Logo(props: any) {
                 },
             }}
             alt="Application logo."
-            // src="payroll.png"
-            src="payroll-contrast.png"
+            src="payroll-black.png"
             {...props}
         />
     );

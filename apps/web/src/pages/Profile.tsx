@@ -123,7 +123,7 @@ export default function Profile() {
                             <FormButton
                                 onClick={onCancel}
                                 variant="contained"
-                                color="error"
+                                color="warning"
                                 disabled={!isDirty}
                             >
                                 {'Cancel'}
