@@ -37,12 +37,16 @@ export function ListItemLink(props: ListItemLinkProps) {
                         py: [0.5],
                         my: [0.3],
                     },
+                    '> .css-cveggr-MuiListItemIcon-root': {
+                        minWidth: 38,
+                    },
                     '&.active > .css-cveggr-MuiListItemIcon-root': {
                         color: 'white',
                         bgcolor: 'primary.main',
                         backgroundColor: 'primary.main',
                         opacity: 0.85,
                         borderRadius: '5px',
+                        minWidth: 38,
                         py: [0.5],
                         my: [0.3],
                     },

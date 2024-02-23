@@ -50,7 +50,7 @@ export function ListItemButton(props: ListItemButtonProps) {
                     my: [0.3],
                 }}
             >
-                {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+                {icon ? <ListItemIcon sx={{ minWidth: 38 }}>{icon}</ListItemIcon> : null}
                 <ListItemText primary={primary} />
             </ListItem>
         </li>
