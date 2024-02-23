@@ -1,10 +1,10 @@
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { IPublicUserData } from '@repo/shared';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
-import { useState } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useQuery } from 'react-query';
+import { FormButton } from '../components/form/FormButton';
 import { FormTextField } from '../components/form/FormTextField';
 import PageLayout from '../components/layout/PageLayout';
 import { AvatarGenerator } from '../components/utility/AvatarGenerator';
@@ -12,7 +12,6 @@ import { Loading } from '../components/utility/Loading';
 import { getCurrentUser } from '../services/auth.service';
 import { updateUser } from '../services/user.service';
 import { getDirtyValues } from '../services/utils';
-import { FormButton } from '../components/form/FormButton';
 
 export default function Profile() {
     const {
@@ -22,8 +21,6 @@ export default function Profile() {
         isLoading,
         error,
     } = useQuery<IPublicUserData | undefined, Error>('user-profile', getCurrentUser);
-
-    const [avatarValue, setAvatarValue] = useState(user?.email);
 
     const { control, handleSubmit, watch, reset } = useForm({
         defaultValues: user,
