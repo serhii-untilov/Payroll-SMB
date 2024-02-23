@@ -1,42 +1,47 @@
-import { Theme, createTheme } from '@mui/material';
-import { FC, ReactNode, createContext, useMemo, useState } from 'react';
-import * as locales from '@mui/material/locale';
-import { ThemeProvider, useTheme } from '@emotion/react';
+import { FC, ReactNode, createContext, useState } from 'react';
+import { Localization, enUS, ukUA } from '@mui/material/locale';
+
+export type Locale = {
+    code: string;
+    name: string;
+    locale: Localization;
+};
+
+const supportedLocales: Locale[] = [
+    { code: 'en', name: 'English', locale: enUS },
+    { code: 'uk', name: 'Українська', locale: ukUA },
+];
 
 export type LocaleContextType = {
-    locale: string | null;
+    locale: Locale;
     setLocale: any;
-    theme: Theme | null;
+    supportedLocales: typeof supportedLocales;
 };
 
 const LocaleContext = createContext<LocaleContextType>({
-    locale: null,
+    locale: supportedLocales[0],
     setLocale: null,
-    theme: null,
+    supportedLocales: supportedLocales,
 });
 
 interface LocaleProviderProps {
     children: ReactNode;
 }
 
-type SupportedLocales = keyof typeof locales;
-
-const navigatorLanguage = (): any => {
-    const currentLang = navigator.language.replace('-', '');
-    return currentLang ? Object.keys(locales).find((o) => o.startsWith(currentLang)) : null;
-};
-
 export const LocaleProvider: FC<LocaleProviderProps> = (props) => {
     const { children } = props;
-    const [locale, setLocale] = useState<SupportedLocales>(navigatorLanguage() || 'enUS');
-    const currentTheme = useTheme();
-    const theme = useMemo(() => createTheme(currentTheme, locales[locale]), [locale, currentTheme]);
+    const [locale, setLocale] = useState<Locale>(getBrowserLocale() || supportedLocales[0]);
 
     return (
-        <LocaleContext.Provider value={{ locale, setLocale, theme }}>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <LocaleContext.Provider value={{ locale, setLocale, supportedLocales }}>
+            {children}
         </LocaleContext.Provider>
     );
 };
+
+function getBrowserLocale(): Locale | undefined {
+    const currentLang = navigator.language.replace('-', '');
+    return supportedLocales.find((o) => o.name.startsWith(currentLang));
+}
 
 export default LocaleContext;
