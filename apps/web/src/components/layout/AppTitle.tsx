@@ -11,7 +11,7 @@ export function AppTitle(props: TypographyProps) {
                 noWrap
                 color="primary.dark"
                 align="center"
-                sx={{ mb: 2 }}
+                sx={{ mb: 2, fontWeight: 500 }}
                 {...props}
             >
                 {title}

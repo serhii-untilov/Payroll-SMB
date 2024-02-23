@@ -61,7 +61,17 @@ export default function MainLayout() {
                             }}
                         >
                             <Logo onClick={toggleDrawer} />
-                            {open && <AppTitle align="left" sx={{ flexGrow: 1, ml: [2] }} />}
+                            {open && (
+                                <Box
+                                    sx={{
+                                        flexGrow: 1,
+                                        ml: [2],
+                                        mt: [2],
+                                    }}
+                                >
+                                    <AppTitle align="left" />
+                                </Box>
+                            )}
                         </Toolbar>
 
                         <MainMenu />
