@@ -1,4 +1,4 @@
-import { FC, ReactNode, createContext, useState } from 'react';
+import { FC, ReactNode, createContext, useEffect, useState } from 'react';
 import { Localization, enUS, ukUA } from '@mui/material/locale';
 
 export type Locale = {
@@ -32,6 +32,16 @@ export const LocaleProvider: FC<LocaleProviderProps> = (props) => {
     const { children } = props;
     const [locale, setLocale] = useState<Locale>(getBrowserLocale() || supportedLocales[0]);
 
+    useEffect(() => {
+        function handleLanguageChange() {
+            setLocale(getBrowserLocale() || supportedLocales[0]);
+        }
+        window.addEventListener('languagechange', handleLanguageChange);
+        return () => {
+            window.removeEventListener('languagechange', handleLanguageChange);
+        };
+    }, []);
+
     return (
         <LocaleContext.Provider value={{ locale, setLocale, supportedLocales }}>
             {children}
@@ -41,7 +51,7 @@ export const LocaleProvider: FC<LocaleProviderProps> = (props) => {
 
 function getBrowserLocale(): Locale | undefined {
     const currentLang = navigator.language.replace('-', '');
-    return supportedLocales.find((o) => o.name.startsWith(currentLang));
+    return supportedLocales.find((o) => o.code.startsWith(currentLang));
 }
 
 export default LocaleContext;
