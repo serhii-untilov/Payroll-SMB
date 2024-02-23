@@ -29,7 +29,19 @@ export function ListItemLink(props: ListItemLinkProps) {
                 to={to}
                 sx={{
                     '&.active': {
-                        bgcolor: grey[300],
+                        color: 'white',
+                        bgcolor: 'primary.main',
+                        backgroundColor: 'primary.main',
+                        opacity: 0.85,
+                        borderRadius: '5px',
+                        py: [0.5],
+                        my: [0.3],
+                    },
+                    '&.active > .css-cveggr-MuiListItemIcon-root': {
+                        color: 'white',
+                        bgcolor: 'primary.main',
+                        backgroundColor: 'primary.main',
+                        opacity: 0.85,
                         borderRadius: '5px',
                         py: [0.5],
                         my: [0.3],
@@ -39,6 +51,7 @@ export function ListItemLink(props: ListItemLinkProps) {
                         py: [0.5],
                         my: [0.3],
                     },
+                    transition: 'none',
                     py: [0.5],
                     my: [0.3],
                 }}

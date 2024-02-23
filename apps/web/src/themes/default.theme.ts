@@ -2,6 +2,18 @@ import { createTheme, responsiveFontSizes } from '@mui/material';
 
 export function defaultTheme() {
     const theme = createTheme({
+        components: {
+            MuiButtonBase: {
+                defaultProps: {
+                    // disableRipple: true,
+                    disableTouchRipple: true,
+                },
+            },
+        },
+        // transitions: {
+        //     // So we have `transition: none;` everywhere
+        //     create: () => 'none',
+        // },
         palette: {
             secondary: {
                 light: '#ffa733',
