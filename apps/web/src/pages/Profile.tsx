@@ -39,10 +39,7 @@ export default function Profile() {
     };
 
     const onSubmit: SubmitHandler<IPublicUserData> = async (data) => {
-        console.log('data', data);
-        console.log('dirtyFields', dirtyFields);
-        console.log('touchedFields', touchedFields);
-        console.log('defaultValues', defaultValues);
+        if (!isDirty) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         console.log('dirtyValues', dirtyValues);
         if (!data?.id) {
@@ -116,17 +113,22 @@ export default function Profile() {
                             <FormButton
                                 type="submit"
                                 variant="contained"
-                                disabled={!isDirty}
+                                // disabled={!isDirty}
                                 color="primary"
                                 sx={{ mr: [1] }}
                             >
                                 {'Update'}
                             </FormButton>
-                            {isDirty && (
-                                <FormButton onClick={onCancel} variant="contained" color="error">
-                                    {'Cancel'}
-                                </FormButton>
-                            )}
+                            {/* {isDirty && ( */}
+                            <FormButton
+                                onClick={onCancel}
+                                variant="contained"
+                                color="error"
+                                disabled={!isDirty}
+                            >
+                                {'Cancel'}
+                            </FormButton>
+                            {/* )} */}
                         </Grid>
                     </Grid>
                 </Box>
