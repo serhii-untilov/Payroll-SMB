@@ -55,6 +55,7 @@ export function ListItemLink(props: ListItemLinkProps) {
                         py: [0.5],
                         my: [0.3],
                     },
+                    height: 40,
                     transition: 'none',
                     py: [0.5],
                     my: [0.3],

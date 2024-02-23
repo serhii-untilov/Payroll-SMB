@@ -46,6 +46,7 @@ export function ListItemButton(props: ListItemButtonProps) {
                         my: [0.3],
                     },
                     transition: 'none',
+                    height: 40,
                     py: [0.5],
                     my: [0.3],
                 }}
