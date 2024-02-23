@@ -58,12 +58,10 @@ export default function SignIn() {
                     <LockOutlinedIcon />
                 </Avatar>
                 <FormTitle title="Sign in" />
-                <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+                <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
                     <FormTextField
                         control={control}
-                        margin="normal"
                         required
-                        fullWidth
                         id="email"
                         label="Email Address"
                         name="email"
@@ -72,9 +70,7 @@ export default function SignIn() {
                     />
                     <FormTextField
                         control={control}
-                        margin="normal"
                         required
-                        fullWidth
                         name="password"
                         label="Password"
                         type="password"
@@ -84,10 +80,12 @@ export default function SignIn() {
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
+                        sx={{ mb: 2 }}
                     />
-                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                    <Button type="submit" fullWidth variant="contained" sx={{ mb: 2 }}>
                         Sign In
                     </Button>
+
                     <Grid container>
                         <Grid item xs>
                             <Link component={RouterLink} to="#" variant="body2">

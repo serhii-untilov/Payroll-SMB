@@ -8,18 +8,18 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import { ICreateUser } from '@repo/shared';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link as RouterLink, redirect } from 'react-router-dom';
+import { FormTextField } from '../components/form/FormTextField';
 import { AppTitle } from '../components/layout/AppTitle';
 import { Copyright } from '../components/layout/Copyright';
-import { FormTextField } from '../components/form/FormTextField';
+import { FormTitle } from '../components/layout/FormTitle';
 import useAuth from '../hooks/useAuth';
 
 export default function SignUp() {
     const { register } = useAuth();
-    const { control, handleSubmit } = useForm({
+    const { control, handleSubmit, watch } = useForm({
         defaultValues: {
             firstName: '',
             lastName: '',
@@ -52,37 +52,34 @@ export default function SignUp() {
                 <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component="h2" variant="h2">
-                    Sign up
-                </Typography>
-                <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 3 }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <FormTextField
-                                control={control}
-                                autoComplete="given-name"
-                                name="firstName"
-                                fullWidth
-                                id="firstName"
-                                label="First Name"
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <FormTextField
-                                control={control}
-                                fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="family-name"
-                            />
+                <FormTitle title="Sign up" />
+                <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+                    <Grid container>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <FormTextField
+                                    control={control}
+                                    autoComplete="given-name"
+                                    name="firstName"
+                                    id="firstName"
+                                    label="First Name"
+                                    autoFocus
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <FormTextField
+                                    control={control}
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    autoComplete="family-name"
+                                />
+                            </Grid>
                         </Grid>
                         <Grid item xs={12}>
                             <FormTextField
                                 control={control}
                                 required
-                                fullWidth
                                 id="email"
                                 label="Email Address"
                                 name="email"
@@ -93,7 +90,6 @@ export default function SignUp() {
                             <FormTextField
                                 control={control}
                                 required
-                                fullWidth
                                 name="password"
                                 label="Password"
                                 type="password"

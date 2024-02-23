@@ -15,6 +15,7 @@ export function PageTitle(props: PageTitleProps) {
                 noWrap
                 // color="primary.dark"
                 align="left"
+                sx={{ mb: 2 }}
                 {...props}
             >
                 {title}

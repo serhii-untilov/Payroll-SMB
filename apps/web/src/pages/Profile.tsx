@@ -12,6 +12,7 @@ import { Loading } from '../components/utility/Loading';
 import { getCurrentUser } from '../services/auth.service';
 import { updateUser } from '../services/user.service';
 import { getDirtyValues } from '../services/utils';
+import { FormButton } from '../components/form/FormButton';
 
 export default function Profile() {
     const {
@@ -112,7 +113,7 @@ export default function Profile() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button
+                            <FormButton
                                 type="submit"
                                 variant="contained"
                                 disabled={!isDirty}
@@ -120,11 +121,11 @@ export default function Profile() {
                                 sx={{ mr: [1] }}
                             >
                                 {'Update'}
-                            </Button>
+                            </FormButton>
                             {isDirty && (
-                                <Button onClick={onCancel} variant="contained" color="error">
+                                <FormButton onClick={onCancel} variant="contained" color="error">
                                     {'Cancel'}
-                                </Button>
+                                </FormButton>
                             )}
                         </Grid>
                     </Grid>
