@@ -1,0 +1,30 @@
+{
+    "translation": {
+        "headerTitle": "My {{appName}} Header Title",
+        "Language": "Language",
+        "Email": "Email Address",
+        "First Name": "First Name",
+        "Last Name": "Last Name",
+        "Email Address": "Email Address",
+        "Update": "Update",
+        "Cancel": "Cancel",
+        "Company": "Company",
+        "Employees": "Employees",
+        "Time Off": "Time Off",
+        "Time Sheet": "Time Sheet",
+        "Payroll": "Payroll",
+        "Payments": "Payments",
+        "Reports": "Reports",
+        "Payroll SMB": "Payroll SMB",
+        "Profile": "Profile",
+        "Support": "Support",
+        "Logout": "Logout",
+        "Companies": "Companies",
+        "User Profile": "User Profile",
+        "Sign in": "Sign in",
+        "Password": "Password",
+        "Remember me": "Remember me",
+        "Forgot password?": "Forgot password?",
+        "Don't have an account? Sign Up": "Don't have an account? Sign Up"
+    }
+}

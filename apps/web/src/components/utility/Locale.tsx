@@ -1,6 +1,7 @@
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import useLocale from '../../hooks/useLocale';
 import { FormControl, InputLabel, MenuItem } from '@mui/material';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { supportedLanguages } from '../../context/LocaleContext';
+import useLocale from '../../hooks/useLocale';
 
 const options = [
     {
@@ -14,10 +15,10 @@ const options = [
 ];
 
 export const Locale = () => {
-    const { locale, setLocale } = useLocale();
+    const { locale, setLanguage } = useLocale();
 
     const handleChange = (event: SelectChangeEvent) => {
-        setLocale(event.target.value as string);
+        setLanguage(event.target.value as supportedLanguages);
     };
 
     const generateMenuItems = () => {
@@ -37,7 +38,7 @@ export const Locale = () => {
                 fullWidth
                 labelId="locale-select-label"
                 id="locale-select"
-                value={locale || 'enUS'}
+                value={locale.language || 'enUS'}
                 onChange={handleChange}
             >
                 {generateMenuItems()}

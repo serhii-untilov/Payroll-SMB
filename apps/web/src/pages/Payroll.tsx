@@ -1,9 +1,17 @@
+import { useTranslation } from 'react-i18next';
 import PageLayout from '../components/layout/PageLayout';
+import useLocale from '../hooks/useLocale';
+import { useEffect } from 'react';
 
 export default function Payroll() {
+    const { locale } = useLocale();
+    const { t } = useTranslation();
+
+    useEffect(() => {}, [locale]);
+
     return (
         <>
-            <PageLayout title="Payroll"></PageLayout>
+            <PageLayout title={t('Payroll')}></PageLayout>
         </>
     );
 }

@@ -59,6 +59,7 @@ export function ListItemLink(props: ListItemLinkProps) {
                     transition: 'none',
                     py: [0.5],
                     my: [0.3],
+                    px: [1],
                 }}
             >
                 {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}

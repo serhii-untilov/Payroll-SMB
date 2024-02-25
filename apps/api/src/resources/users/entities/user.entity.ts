@@ -25,6 +25,9 @@ export class User implements IUser {
     @Column({ type: 'boolean', default: true })
     isActive: boolean;
 
+    @Column({ type: 'varchar', length: '5', nullable: true })
+    language: string;
+
     @ManyToMany(() => Role, (role) => role.users, { cascade: true })
     @JoinTable({ name: 'user_roles' })
     roles: Role[];

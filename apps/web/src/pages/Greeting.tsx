@@ -1,17 +1,16 @@
 import { useQuery } from 'react-query';
-import SignUp from './SignUp';
-import { getGreeting } from '../services/greeting.service';
-import { AxiosResponse } from 'axios';
 import { Loading } from '../components/utility/Loading';
+import { getGreeting } from '../services/greeting.service';
+import SignUp from './SignUp';
 
 function Greeting() {
     const {
-        data: response,
+        data: greeting,
         isError,
         isSuccess,
         isLoading,
         // error,
-    } = useQuery<AxiosResponse, Error>('query-greeting', getGreeting);
+    } = useQuery<string, Error>('query-greeting', getGreeting);
 
     // const [toast, contextHolder] = notification.useNotification();
 
@@ -26,7 +25,7 @@ function Greeting() {
     if (isSuccess) {
         return (
             <>
-                <h1>{response.data}</h1>
+                <h1>{greeting}</h1>
                 <SignUp />
                 {/* <Button type="primary">Button</Button> */}
             </>

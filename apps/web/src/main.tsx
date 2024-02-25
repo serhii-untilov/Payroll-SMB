@@ -12,6 +12,7 @@ import './index.css';
 import { ThemeProvider } from '@emotion/react';
 import { defaultTheme } from './themes/default.theme.ts';
 import { LocaleProvider } from './context/LocaleContext.tsx';
+import './i18n.ts'; // ts => import './i18n.ts'
 
 const queryClient = new QueryClient({
     defaultOptions: {

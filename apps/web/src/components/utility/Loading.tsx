@@ -1,7 +1,9 @@
-import { Box, CircularProgress } from '@mui/material';
+import { CircularProgress, CircularProgressProps, Grid } from '@mui/material';
 
-export const Loading = () => (
-    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', mx: ['auto'] }}>
-        <CircularProgress color="inherit" />
-    </Box>
+export const Loading = (props: CircularProgressProps) => (
+    <Grid container flexDirection="column" justifyContent="center" height={'100%'}>
+        <Grid item container justifyContent="center">
+            <CircularProgress color="primary" {...props} />
+        </Grid>
+    </Grid>
 );

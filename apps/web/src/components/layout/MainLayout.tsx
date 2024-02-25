@@ -6,17 +6,22 @@ import Toolbar from '@mui/material/Toolbar';
 import * as React from 'react';
 import { Outlet, redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-import { ListItemButton } from '../data/ListItemButton';
-import { ListItemLink } from '../data/ListItemLink';
+import { ListItemButton } from './ListItemButton';
+import { ListItemLink } from './ListItemLink';
 import { AppTitle } from './AppTitle';
 import { Copyright } from './Copyright';
 import { Logo } from './Logo';
 import { MainMenu } from './MainMenu';
 import { Sidebar } from './Sidebar';
+import useLocale from '../../hooks/useLocale';
+import { useTranslation } from 'react-i18next';
 
 export default function MainLayout() {
     const { logout } = useAuth();
     const [open, setOpen] = React.useState(true);
+    const { locale } = useLocale();
+    const { t } = useTranslation();
+
     const toggleDrawer = () => {
         setOpen(!open);
     };
@@ -80,7 +85,7 @@ export default function MainLayout() {
                         <List disablePadding component="nav" sx={{ mx: ['auto'], mb: [3] }}>
                             <ListItemLink
                                 to="/profile"
-                                primary="Profile"
+                                primary={t('Profile')}
                                 icon={<PersonOutlined />}
                             />
                             {/* <ListItemLink to="/service" primary="Service" icon={<Layers />} /> */}
@@ -88,10 +93,14 @@ export default function MainLayout() {
                             <ListItemLink
                                 target="_blank"
                                 to="https://github.com/serhii-untilov/Payroll/discussions"
-                                primary="Support"
+                                primary={t('Support')}
                                 icon={<Support />}
                             />
-                            <ListItemButton onClick={onLogout} primary="Logout" icon={<Logout />} />
+                            <ListItemButton
+                                onClick={onLogout}
+                                primary={t('Logout')}
+                                icon={<Logout />}
+                            />
                         </List>
                         {open && <Copyright sx={{ mx: ['auto'], mb: [3] }} />}
                     </Box>

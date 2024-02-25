@@ -13,6 +13,7 @@ export default function App() {
     const { locale } = useLocale();
     const theme = useTheme();
     const localeTheme = useMemo(() => createTheme(theme, locale.locale), [locale.locale, theme]);
+
     return (
         <>
             <CssBaseline enableColorScheme />

@@ -26,8 +26,7 @@ export const FormTextField = (props: FormTextFieldProps) => {
                         value={value}
                         fullWidth
                         variant="outlined"
-                        sx={{ mb: 2 }}
-                        {...props}
+                        // {...props}
                         label=""
                     />
                 )}

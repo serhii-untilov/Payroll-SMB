@@ -18,9 +18,13 @@ import { AppTitle } from '../components/layout/AppTitle';
 import { Copyright } from '../components/layout/Copyright';
 import { FormTitle } from '../components/layout/FormTitle';
 import useAuth from '../hooks/useAuth';
+import useLocale from '../hooks/useLocale';
+import { useTranslation } from 'react-i18next';
 
 export default function SignIn() {
     const { login } = useAuth();
+    const { locale } = useLocale();
+    const { t } = useTranslation();
 
     const { control, handleSubmit } = useForm({
         defaultValues: {
@@ -57,13 +61,13 @@ export default function SignIn() {
                 <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                     <LockOutlinedIcon />
                 </Avatar>
-                <FormTitle title="Sign in" />
+                <FormTitle title={t('Sign in')} />
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
                     <FormTextField
                         control={control}
                         required
                         id="email"
-                        label="Email Address"
+                        label={t('Email Address')}
                         name="email"
                         autoComplete="email"
                         autoFocus
@@ -72,30 +76,30 @@ export default function SignIn() {
                         control={control}
                         required
                         name="password"
-                        label="Password"
+                        label={t('Password')}
                         type="password"
                         id="password"
                         autoComplete="current-password"
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
+                        label={t('Remember me')}
                         sx={{ mb: 2 }}
                     />
 
                     <Button type="submit" fullWidth variant="contained" sx={{ mb: 2 }}>
-                        Sign In
+                        {t('Sign In')}
                     </Button>
 
                     <Grid container>
                         <Grid item xs>
                             <Link component={RouterLink} to="#" variant="body2">
-                                Forgot password?
+                                {t('Forgot password?')}
                             </Link>
                         </Grid>
                         <Grid item>
                             <Link component={RouterLink} to="/signup" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                                {t("Don't have an account? Sign Up")}
                             </Link>
                         </Grid>
                     </Grid>

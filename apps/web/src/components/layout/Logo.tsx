@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import { MouseEventHandler } from 'react';
 
 export function Logo(props: any) {
     return (
@@ -7,9 +6,9 @@ export function Logo(props: any) {
             component="img"
             sx={{
                 height: 48,
-                width: 48,
+                width: 41,
                 mx: ['auto'],
-                opacity: 0.85,
+                opacity: 0.65,
                 '&:hover:not(.Mui-disabled)': {
                     cursor: 'pointer',
                 },

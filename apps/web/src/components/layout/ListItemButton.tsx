@@ -49,6 +49,7 @@ export function ListItemButton(props: ListItemButtonProps) {
                     height: 40,
                     py: [0.5],
                     my: [0.3],
+                    px: [1],
                 }}
             >
                 {icon ? <ListItemIcon sx={{ minWidth: 38 }}>{icon}</ListItemIcon> : null}

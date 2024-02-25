@@ -26,7 +26,7 @@ export const logoutUser = async () => {
     removeUserTokens();
 };
 
-export const getCurrentUser = async (): Promise<IPublicUserData | undefined> => {
+export const getCurrentUser = async (): Promise<IPublicUserData> => {
     const response = await api.get('/api/auth/user', { headers: authHeader() });
     return response.data;
 };
