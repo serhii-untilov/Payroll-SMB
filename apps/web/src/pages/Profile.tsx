@@ -1,10 +1,12 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { IPublicUserData } from '@repo/shared';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
+import * as Yup from 'yup';
 import { FormButton } from '../components/form/FormButton';
 import { FormInputDropdown } from '../components/form/FormInputDropdown';
 import { FormTextField } from '../components/form/FormTextField';
@@ -16,20 +18,29 @@ import useLocale from '../hooks/useLocale';
 import { getCurrentUser } from '../services/auth.service';
 import { updateUser } from '../services/user.service';
 import { getDirtyValues } from '../services/utils';
-import { useEffect } from 'react';
+
+const formSchema = Yup.object().shape({
+    id: Yup.number(),
+    firstName: Yup.string().required('First name is required'),
+    lastName: Yup.string().required('Last name is required'),
+    email: Yup.string().required('Email is required').email('Email is invalid'),
+    language: Yup.string().nullable(),
+});
+
+type FormType = Yup.InferType<typeof formSchema>;
 
 // To prevent Warning: A component is changing an uncontrolled input to be controlled.
-const defaultUser = {
+const defaultValues: FormType = {
+    id: -1,
     firstName: '',
     lastName: '',
     email: '',
-    isActive: false,
-    language: 'en',
-    roles: [],
+    language: '',
 };
 
 export default function Profile() {
     const { supportedLocales, setLanguage } = useLocale();
+    const { locale } = useLocale();
     const { t } = useTranslation();
 
     const {
@@ -37,7 +48,9 @@ export default function Profile() {
         isError: isQueryError,
         isLoading,
         error: queryError,
-    } = useQuery<IPublicUserData, Error>('user-profile', getCurrentUser);
+    } = useQuery<FormType, Error>('user-profile', async () => {
+        return formSchema.cast(await getCurrentUser());
+    });
 
     const {
         control,
@@ -46,11 +59,24 @@ export default function Profile() {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: user || defaultUser,
-        values: user || defaultUser,
+        defaultValues: user || defaultValues,
+        values: user || defaultValues,
+        resolver: yupResolver<FormType>(formSchema),
+        shouldFocusError: true,
     });
 
     const { dirtyFields, isDirty } = useFormState({ control });
+
+    useEffect(() => {}, [locale]);
+
+    useEffect(() => {
+        formErrors.firstName?.message &&
+            enqueueSnackbar(t(formErrors.firstName?.message), { variant: 'error' });
+        formErrors.lastName?.message &&
+            enqueueSnackbar(t(formErrors.lastName?.message), { variant: 'error' });
+        formErrors.email?.message &&
+            enqueueSnackbar(t(formErrors.email?.message), { variant: 'error' });
+    }, [formErrors, t]);
 
     if (isLoading) {
         return <Loading />;
@@ -60,7 +86,7 @@ export default function Profile() {
         return enqueueSnackbar(`${queryError.name}\n${queryError.message}`, { variant: 'error' });
     }
 
-    const onSubmit: SubmitHandler<IPublicUserData> = async (data) => {
+    const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
         if (!data?.id) {
             enqueueSnackbar(`!data?.id`, { variant: 'error' });
@@ -101,6 +127,7 @@ export default function Profile() {
                             name="firstName"
                             id="firstName"
                             label={t('First Name')}
+                            type="text"
                             autoFocus
                         />
                     </Grid>
@@ -110,6 +137,7 @@ export default function Profile() {
                             id="lastName"
                             label={t('Last Name')}
                             name="lastName"
+                            type="text"
                             autoComplete="family-name"
                         />
                     </Grid>
@@ -119,6 +147,7 @@ export default function Profile() {
                             required
                             label={t('Email Address')}
                             name="email"
+                            type="email"
                             autoComplete="email"
                         />
                     </Grid>
@@ -128,6 +157,7 @@ export default function Profile() {
                             label={t('Language')}
                             name="language"
                             autoComplete="language"
+                            type="text"
                             options={supportedLocales.map((o) => {
                                 return { label: o.name, value: o.language as string };
                             })}

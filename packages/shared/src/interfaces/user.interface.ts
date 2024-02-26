@@ -8,7 +8,7 @@ export interface IUser {
     password: string;
     refreshToken: string;
     isActive: boolean;
-    language: string;
+    language: string | null | undefined;
     roles: IRole[];
 }
 

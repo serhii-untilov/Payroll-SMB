@@ -1,3 +1,5 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { IconButton, InputAdornment, Link } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -9,19 +11,36 @@ import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import { ICreateUser } from '@repo/shared';
+import { enqueueSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, redirect } from 'react-router-dom';
+import * as Yup from 'yup';
 import { FormTextField } from '../components/form/FormTextField';
 import { AppTitle } from '../components/layout/AppTitle';
 import { Copyright } from '../components/layout/Copyright';
-import { FormTitle } from '../components/layout/FormTitle';
 import useAuth from '../hooks/useAuth';
-import { useEffect, useState } from 'react';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import useLocale from '../hooks/useLocale';
-import { useTranslation } from 'react-i18next';
-import { enqueueSnackbar } from 'notistack';
 import { errorMessage } from '../services/utils';
+
+const formSchema = Yup.object().shape({
+    firstName: Yup.string().required('First name is required'),
+    lastName: Yup.string().required('Last name is required'),
+    email: Yup.string().required('Email is required').email('Email is invalid'),
+    password: Yup.string().required('Password is required'),
+    roles: Yup.array().required('Role is required'),
+});
+
+type FormType = Yup.InferType<typeof formSchema>;
+
+const defaultValues: FormType = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    roles: [],
+};
 
 export default function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
@@ -29,17 +48,28 @@ export default function SignUp() {
     const { locale } = useLocale();
     const { t } = useTranslation();
 
-    const { control, handleSubmit, watch } = useForm({
-        defaultValues: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            roles: [],
-        },
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        values: defaultValues,
+        defaultValues: defaultValues,
+        resolver: yupResolver(formSchema),
+        shouldFocusError: true,
     });
 
     useEffect(() => {}, [locale]);
+
+    useEffect(() => {
+        errors.firstName?.message &&
+            enqueueSnackbar(t(errors.firstName?.message), { variant: 'error' });
+        errors.lastName?.message &&
+            enqueueSnackbar(t(errors.lastName?.message), { variant: 'error' });
+        errors.email?.message && enqueueSnackbar(t(errors.email?.message), { variant: 'error' });
+        errors.password?.message &&
+            enqueueSnackbar(t(errors.password?.message), { variant: 'error' });
+    }, [errors, t]);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -85,6 +115,7 @@ export default function SignUp() {
                                     name="firstName"
                                     id="firstName"
                                     label={t('First Name')}
+                                    type="text"
                                     autoFocus
                                 />
                             </Grid>
@@ -94,6 +125,7 @@ export default function SignUp() {
                                     id="lastName"
                                     label={t('Last Name')}
                                     name="lastName"
+                                    type="text"
                                     autoComplete="family-name"
                                 />
                             </Grid>

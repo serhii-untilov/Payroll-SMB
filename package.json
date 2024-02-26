@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "start": "node apps/api/dist/main",
+    "start": "npm --workspace @repo/api start",
     "build": "turbo run build",
     "lint": "turbo lint",
     "format": "turbo format",

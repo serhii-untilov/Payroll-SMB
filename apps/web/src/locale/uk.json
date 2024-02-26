@@ -29,6 +29,12 @@
         "I want to receive notifications via email": "Я хочу отримувати сповіщення електронною поштою",
         "Sign Up": "Реєстрація",
         "Already have an account? Sign in": "Вже є аккаунт? Увійти",
-        "Home": "Домашня сторінка"
+        "Home": "Домашня сторінка",
+        "Email is required": "Необхідно вказати адресу електронної пошти",
+        "Email is invalid": "Електронна адреса недійсна",
+        "Password is required": "Необхідно ввести пароль",
+        "First name is required": "Необхідно ввести ім'я",
+        "Last name is required": "Необхідно ввести прізвище",
+        "Role is required": "Необхідно вказати роль користувача"
     }
 }
