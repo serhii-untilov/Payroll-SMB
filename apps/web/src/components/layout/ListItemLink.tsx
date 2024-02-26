@@ -1,9 +1,8 @@
-import { Box, ListItem, Typography, styled } from '@mui/material';
+import { ListItem } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
 import { NavLink, LinkProps as RouterLinkProps } from 'react-router-dom';
-import { grey } from '@mui/material/colors';
 
 interface ListItemLinkProps {
     icon?: React.ReactElement;
@@ -23,7 +22,6 @@ export function ListItemLink(props: ListItemLinkProps) {
         <li>
             <ListItem
                 button
-                // dense
                 component={Link}
                 target={target}
                 to={to}
@@ -31,22 +29,20 @@ export function ListItemLink(props: ListItemLinkProps) {
                     '&.active': {
                         color: 'white',
                         bgcolor: 'primary.main',
-                        backgroundColor: 'primary.main',
+
                         opacity: 0.85,
                         borderRadius: '5px',
                         py: [0.5],
                         my: [0.3],
                     },
                     '> .css-cveggr-MuiListItemIcon-root': {
-                        minWidth: 38,
+                        minWidth: 39,
                     },
                     '&.active > .css-cveggr-MuiListItemIcon-root': {
                         color: 'white',
-                        bgcolor: 'primary.main',
-                        backgroundColor: 'primary.main',
                         opacity: 0.85,
                         borderRadius: '5px',
-                        minWidth: 38,
+                        minWidth: 39,
                         py: [0.5],
                         my: [0.3],
                     },

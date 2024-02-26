@@ -4,23 +4,25 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, Outlet, redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-import { ListItemButton } from './ListItemButton';
-import { ListItemLink } from './ListItemLink';
+import useLocale from '../../hooks/useLocale';
 import { AppTitle } from './AppTitle';
 import { Copyright } from './Copyright';
+import { ListItemButton } from './ListItemButton';
+import { ListItemLink } from './ListItemLink';
 import { Logo } from './Logo';
 import { MainMenu } from './MainMenu';
 import { Sidebar } from './Sidebar';
-import useLocale from '../../hooks/useLocale';
-import { useTranslation } from 'react-i18next';
 
 export default function MainLayout() {
     const { logout } = useAuth();
     const [open, setOpen] = React.useState(true);
     const { locale } = useLocale();
     const { t } = useTranslation();
+
+    React.useEffect(() => {}, [locale, t]);
 
     const toggleDrawer = () => {
         setOpen(!open);
@@ -43,12 +45,7 @@ export default function MainLayout() {
                         justifyContent: 'space-between',
                         height: '100%',
                         px: [1],
-                        // backgroundColor: (theme) =>
-                        //     theme.palette.mode === 'light'
-                        //         ? theme.palette.grey[100]
-                        //         : theme.palette.grey[900],
                         bgcolor: '#f7f7f7',
-                        // bgcolor: '#fbfbfb',
                     }}
                 >
                     <Box
@@ -62,7 +59,7 @@ export default function MainLayout() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'flex-end',
-                                px: [1],
+                                px: [0],
                             }}
                         >
                             <Logo onClick={toggleDrawer} />
