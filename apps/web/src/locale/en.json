@@ -33,6 +33,9 @@
         "Home": "Home",
         "Email is required": "Email is required",
         "Email is invalid": "Email is invalid",
-        "Password is required": "Password is required"
+        "Password is required": "Password is required",
+        "First name is required": "First name is required",
+        "Last name is required": "Last name is required",
+        "Role is required": "User role is required"
     }
 }

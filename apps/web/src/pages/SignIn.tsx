@@ -1,4 +1,3 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -17,13 +16,14 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, redirect } from 'react-router-dom';
-import * as Yup from 'yup';
 import { FormTextField } from '../components/form/FormTextField';
 import { AppTitle } from '../components/layout/AppTitle';
 import { Copyright } from '../components/layout/Copyright';
 import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
 import { errorMessage } from '../services/utils';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const formSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email is invalid'),
@@ -53,8 +53,6 @@ export default function SignIn() {
         resolver: yupResolver(formSchema),
         shouldFocusError: true,
     });
-
-    console.log('errors', errors);
 
     useEffect(() => {}, [locale]);
 

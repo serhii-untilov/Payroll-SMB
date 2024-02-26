@@ -32,6 +32,9 @@
         "Home": "Домашня сторінка",
         "Email is required": "Необхідно вказати адресу електронної пошти",
         "Email is invalid": "Електронна адреса недійсна",
-        "Password is required": "Необхідно ввести пароль"
+        "Password is required": "Необхідно ввести пароль",
+        "First name is required": "Необхідно ввести ім'я",
+        "Last name is required": "Необхідно ввести прізвище",
+        "Role is required": "Необхідно вказати роль користувача"
     }
 }
