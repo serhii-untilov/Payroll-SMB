@@ -3,7 +3,7 @@ import PageLayout from '../components/layout/PageLayout';
 import useLocale from '../hooks/useLocale';
 import { useEffect } from 'react';
 
-export default function TimeOff() {
+export default function Home() {
     const { locale } = useLocale();
     const { t } = useTranslation();
 
@@ -11,7 +11,7 @@ export default function TimeOff() {
 
     return (
         <>
-            <PageLayout title={t('Time Off')}></PageLayout>
+            <PageLayout title={t('Home')}></PageLayout>
         </>
     );
 }

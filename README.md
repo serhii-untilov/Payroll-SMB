@@ -38,6 +38,7 @@ npm i --workspace @repo/web --save notistack
 npm i --workspace @repo/web --save-dev typescript jest ts-jest @types/jest
 npm i --workspace @repo/web --save avvvatars-react
 npm i --workspace @repo/web --save react-i18next i18next
+npm i --workspace @repo/web --save i18next-browser-languagedetector
 
 # Init "shared" library
 mkdir packages/shared

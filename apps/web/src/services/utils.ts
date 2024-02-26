@@ -1,3 +1,5 @@
+import { ApiError } from '../api';
+
 export function rgb(r: number, g: number, b: number): string {
     return '#' + r.toString(16) + g.toString(16) + b.toString(16);
 }
@@ -24,4 +26,9 @@ export function getDirtyValues<
     }, {});
 
     return dirtyValues;
+}
+
+export function errorMessage(error: unknown): string {
+    const e = error as ApiError;
+    return e.message || e.error || e.statusCode || 'Unknown error';
 }

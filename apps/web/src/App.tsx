@@ -2,7 +2,7 @@ import { useTheme } from '@emotion/react';
 import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { SnackbarProvider } from 'notistack';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRoutes } from 'react-router-dom';
 import useLocale from './hooks/useLocale.ts';
 import './index.css';

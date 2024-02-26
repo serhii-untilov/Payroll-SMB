@@ -14,6 +14,7 @@ export function AppTitle(props: TypographyProps) {
         <>
             <Typography
                 component="h1"
+                color="text.primary"
                 variant="h1"
                 noWrap
                 align="center"

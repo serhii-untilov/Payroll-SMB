@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import * as React from 'react';
-import { Outlet, redirect } from 'react-router-dom';
+import { Link, Outlet, redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { ListItemButton } from './ListItemButton';
 import { ListItemLink } from './ListItemLink';
@@ -74,7 +74,9 @@ export default function MainLayout() {
                                         mt: [2],
                                     }}
                                 >
-                                    <AppTitle align="left" />
+                                    <Link to="/home">
+                                        <AppTitle align="left" />
+                                    </Link>
                                 </Box>
                             )}
                         </Toolbar>

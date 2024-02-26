@@ -20,10 +20,15 @@
         "Logout": "Вихід",
         "Companies": "Підприємства",
         "User Profile": "Профіль користувача",
-        "Sign in": "Вхід",
+        "Sign In": "Вхід",
         "Password": "Пароль",
         "Remember me": "Запам'ятати мене",
         "Forgot password?": "Забули пароль?",
-        "Don't have an account? Sign Up": "Не маєте облікового запису? Реєстрація"
+        "Don't have an account? Sign Up": "Не маєте облікового запису? Реєстрація",
+        "User not found": "Користувача на знайдено",
+        "I want to receive notifications via email": "Я хочу отримувати сповіщення електронною поштою",
+        "Sign Up": "Реєстрація",
+        "Already have an account? Sign in": "Вже є аккаунт? Увійти",
+        "Home": "Домашня сторінка"
     }
 }

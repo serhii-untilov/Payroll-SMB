@@ -8,13 +8,13 @@ export function Logo(props: any) {
                 height: 48,
                 width: 41,
                 mx: ['auto'],
-                opacity: 0.65,
+                opacity: 0.85,
                 '&:hover:not(.Mui-disabled)': {
                     cursor: 'pointer',
                 },
             }}
             alt="Application logo."
-            src="payroll-black.png"
+            src="payroll.svg"
             {...props}
         />
     );
