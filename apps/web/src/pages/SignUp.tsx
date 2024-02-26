@@ -1,3 +1,5 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { IconButton, InputAdornment, Link } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -9,21 +11,18 @@ import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import { ICreateUser } from '@repo/shared';
+import { enqueueSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, redirect } from 'react-router-dom';
+import * as Yup from 'yup';
 import { FormTextField } from '../components/form/FormTextField';
 import { AppTitle } from '../components/layout/AppTitle';
 import { Copyright } from '../components/layout/Copyright';
-import { FormTitle } from '../components/layout/FormTitle';
 import useAuth from '../hooks/useAuth';
-import { useEffect, useState } from 'react';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import useLocale from '../hooks/useLocale';
-import { useTranslation } from 'react-i18next';
-import { enqueueSnackbar } from 'notistack';
 import { errorMessage } from '../services/utils';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 const formSchema = Yup.object().shape({
     firstName: Yup.string().required('First name is required'),
