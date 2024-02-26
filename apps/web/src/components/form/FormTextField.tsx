@@ -6,6 +6,7 @@ export type FormTextFieldProps = OutlinedInputProps & {
     name: string;
     control: any;
     label: string;
+    rules?: any;
 };
 
 export const FormTextField = (props: FormTextFieldProps) => {
@@ -16,16 +17,14 @@ export const FormTextField = (props: FormTextFieldProps) => {
             <Controller
                 name={props.name}
                 control={props.control}
+                rules={props.rules}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                     <OutlinedInput
-                        // helperText={error ? error.message : null}
                         size="small"
-                        // margin="none"
-                        error={!!error}
+                        error={error != undefined}
                         onChange={onChange}
                         value={value}
                         fullWidth
-                        // variant="outlined"
                         {...props}
                         label=""
                     />

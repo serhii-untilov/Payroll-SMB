@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -16,13 +17,25 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, redirect } from 'react-router-dom';
+import * as Yup from 'yup';
 import { FormTextField } from '../components/form/FormTextField';
 import { AppTitle } from '../components/layout/AppTitle';
 import { Copyright } from '../components/layout/Copyright';
-import { FormTitle } from '../components/layout/FormTitle';
 import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
 import { errorMessage } from '../services/utils';
+
+const formSchema = Yup.object().shape({
+    email: Yup.string().required('Email is required').email('Email is invalid'),
+    password: Yup.string().required('Password is required'),
+});
+
+type FormType = Yup.InferType<typeof formSchema>;
+
+const defaultValues: FormType = {
+    email: '',
+    password: '',
+};
 
 export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
@@ -30,14 +43,26 @@ export default function SignIn() {
     const { locale } = useLocale();
     const { t } = useTranslation();
 
-    const { control, handleSubmit } = useForm({
-        defaultValues: {
-            email: '',
-            password: '',
-        },
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        values: defaultValues,
+        defaultValues: defaultValues,
+        resolver: yupResolver(formSchema),
+        shouldFocusError: true,
     });
 
+    console.log('errors', errors);
+
     useEffect(() => {}, [locale]);
+
+    useEffect(() => {
+        errors.email?.message && enqueueSnackbar(t(errors.email?.message), { variant: 'error' });
+        errors.password?.message &&
+            enqueueSnackbar(t(errors.password?.message), { variant: 'error' });
+    }, [errors, t]);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -46,14 +71,11 @@ export default function SignIn() {
     };
 
     const onSubmit: SubmitHandler<IAuth> = async (data) => {
-        console.log(data);
-        if (data.email) {
-            try {
-                await login(data);
-                redirect('/home');
-            } catch (e) {
-                enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
-            }
+        try {
+            await login(data);
+            redirect('/home');
+        } catch (e) {
+            enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
         }
     };
 
@@ -76,21 +98,25 @@ export default function SignIn() {
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
                     <FormTextField
                         control={control}
-                        required
                         id="email"
                         label={t('Email Address')}
                         name="email"
                         autoComplete="email"
+                        type="email"
                         autoFocus
                         sx={{ mb: [2] }}
                     />
+
                     <FormTextField
                         control={control}
                         required
+                        id="password"
                         name="password"
                         label={t('Password')}
                         type={showPassword ? 'text' : 'password'}
-                        id="password"
+                        rules={{
+                            required: true,
+                        }}
                         autoComplete="current-password"
                         endAdornment={
                             <InputAdornment position="end">

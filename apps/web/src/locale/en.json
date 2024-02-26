@@ -30,6 +30,9 @@
         "I want to receive notifications via email": "I want to receive notifications via email",
         "Sign Up": "Sign Up",
         "Already have an account? Sign in": "Already have an account? Sign in",
-        "Home": "Home"
+        "Home": "Home",
+        "Email is required": "Email is required",
+        "Email is invalid": "Email is invalid",
+        "Password is required": "Password is required"
     }
 }

@@ -20,6 +20,7 @@ export default function App() {
             <SnackbarProvider
                 maxSnack={3}
                 preventDuplicate
+                hideIconVariant
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',

@@ -39,6 +39,7 @@ npm i --workspace @repo/web --save-dev typescript jest ts-jest @types/jest
 npm i --workspace @repo/web --save avvvatars-react
 npm i --workspace @repo/web --save react-i18next i18next
 npm i --workspace @repo/web --save i18next-browser-languagedetector
+npm i --workspace @repo/web --save @hookform/resolvers yup
 
 # Init "shared" library
 mkdir packages/shared
@@ -152,5 +153,5 @@ openssl rand -base64 60
 - [**React** - React Hook Form](https://react-hook-form.com/)
 - [**React** - React Snackbars](https://notistack.com/)
 - [**React** - React Data Grid](https://adazzle.github.io/react-data-grid/#/common-features)
-- [**Localization** - React MUI Localization](https://www.geeksforgeeks.org/react-mui-localization/)
-- [**Internationalization** - How to use i18n in your React App](https://medium.com/@devpedrodias/how-to-use-i18n-in-your-react-app-1f26deb2a3d8)
+- [**l10n** - React MUI Localization](https://www.geeksforgeeks.org/react-mui-localization/)
+- [**i18n** - How to use i18n in your React App](https://medium.com/@devpedrodias/how-to-use-i18n-in-your-react-app-1f26deb2a3d8)
