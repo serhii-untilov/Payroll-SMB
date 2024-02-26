@@ -37,7 +37,7 @@ export function MainMenu() {
                 icon={<BusinessCenterOutlined />}
             />
             <ListItemLink to="/employees" primary={t('Employees')} icon={<PeopleOutlined />} />
-            <ListItemLink to="/time-off" primary={t('Time Off')} icon={<LandscapeOutlined />} />
+            {/* <ListItemLink to="/time-off" primary={t('Time Off')} icon={<LandscapeOutlined />} /> */}
             <ListItemLink to="/time-sheet" primary={t('Time Sheet')} icon={<Schedule />} />
             <ListItemLink to="/payroll" primary={t('Payroll')} icon={<CalculateOutlined />} />
             <ListItemLink to="/payments" primary={t('Payments')} icon={<CreditScore />} />
