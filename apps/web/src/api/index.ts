@@ -31,7 +31,9 @@ api.interceptors.response.use(
 
             try {
                 const refreshToken = getUserRefreshToken();
-                const response = await axios.post('/api/auth/refresh', { refreshToken });
+                const response = await axios.post('/api/auth/refresh', {
+                    headers: authHeader(refreshToken),
+                });
                 const tokens = response.data;
                 saveUserTokens(tokens);
                 // Retry the original request with the new token

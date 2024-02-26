@@ -1,10 +1,10 @@
 import { getUserAccessToken } from './token.service';
 
-export default function authHeader() {
-    const accessToken = getUserAccessToken();
+export default function authHeader(token?: string | undefined) {
+    const headerToken = token || getUserAccessToken();
 
-    if (accessToken) {
-        return { Authorization: `Bearer ${accessToken}` };
+    if (headerToken) {
+        return { Authorization: `Bearer ${headerToken}` };
     } else {
         return { Authorization: null };
     }
