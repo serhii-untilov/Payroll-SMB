@@ -1,9 +1,10 @@
 import { Logout, PersonOutlined, Support } from '@mui/icons-material';
-import { List } from '@mui/material';
+import { List, useMediaQuery } from '@mui/material';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, redirect } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
@@ -21,8 +22,13 @@ export default function MainLayout() {
     const [open, setOpen] = React.useState(true);
     const { locale } = useLocale();
     const { t } = useTranslation();
+    const matches = useMediaQuery('(min-width:900px)');
 
-    React.useEffect(() => {}, [locale, t]);
+    useEffect(() => {}, [locale, t]);
+
+    useEffect(() => {
+        setOpen(matches);
+    }, [matches]);
 
     const toggleDrawer = () => {
         setOpen(!open);
