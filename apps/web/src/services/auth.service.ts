@@ -1,7 +1,7 @@
-import { IAuth, ICreateUser, IPublicUserData, ITokens, IUser } from '@repo/shared';
+import { IAuth, ICreateUser, IPublicUserData, ITokens } from '@repo/shared';
 import { api } from '../api';
 import authHeader from './auth-header';
-import { saveUserTokens, removeUserTokens } from './token.service';
+import { removeUserTokens, saveUserTokens } from './token.service';
 
 export const registerUser = async (params: ICreateUser): Promise<ITokens> => {
     const response = await api.post('/api/auth/register', params);
@@ -26,6 +26,7 @@ export const logoutUser = async () => {
     removeUserTokens();
 };
 
-export const getCurrentUser = async (): Promise<IPublicUserData | null> => {
-    return await api.get('/api/auth/user', { headers: authHeader() });
+export const getCurrentUser = async (): Promise<IPublicUserData> => {
+    const response = await api.get('/api/auth/user', { headers: authHeader() });
+    return response.data;
 };

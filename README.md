@@ -22,6 +22,7 @@ npm i --workspace @repo/api --save-dev bcrypt
 npm i --workspace @repo/api --save @nestjs/passport @nestjs/jwt passport-jwt
 npm i --workspace @repo/api --save-dev @types/passport-jwt
 npm i --workspace @repo/api --save dotenv
+npm i --workspace @repo/api --save-dev typescript jest ts-jest @types/jest
 
 # Init "web" application for front-end
 npm i --workspace @repo/web --save react-query
@@ -34,6 +35,10 @@ npm i --workspace @repo/web --save @mui/icons-material
 npm i --workspace @repo/web --save @mui/x-data-grid
 npm i --workspace @repo/web --save @mui/x-date-pickers
 npm i --workspace @repo/web --save notistack
+npm i --workspace @repo/web --save-dev typescript jest ts-jest @types/jest
+npm i --workspace @repo/web --save avvvatars-react
+npm i --workspace @repo/web --save react-i18next i18next
+npm i --workspace @repo/web --save i18next-browser-languagedetector
 
 # Init "shared" library
 mkdir packages/shared
@@ -147,3 +152,5 @@ openssl rand -base64 60
 - [**React** - React Hook Form](https://react-hook-form.com/)
 - [**React** - React Snackbars](https://notistack.com/)
 - [**React** - React Data Grid](https://adazzle.github.io/react-data-grid/#/common-features)
+- [**Localization** - React MUI Localization](https://www.geeksforgeeks.org/react-mui-localization/)
+- [**Internationalization** - How to use i18n in your React App](https://medium.com/@devpedrodias/how-to-use-i18n-in-your-react-app-1f26deb2a3d8)

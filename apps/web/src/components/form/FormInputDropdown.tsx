@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, SelectProps } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
 /**
@@ -9,22 +9,20 @@ import { Controller } from 'react-hook-form';
  */
 export type DropdownOption = {
     label: string;
-    value: number | string;
+    value: any;
 };
 
-export interface FormInputDropdownProps {
+export type FormInputDropdownProps = SelectProps & {
     name: string;
     control: any;
     label: string;
     options: DropdownOption[];
-}
+};
 
-export const FormInputDropdown: React.FC<FormInputDropdownProps> = ({
-    name,
-    control,
-    label,
-    options,
-}) => {
+export const FormInputDropdown: React.FC<FormInputDropdownProps> = (
+    props: FormInputDropdownProps,
+) => {
+    const { options, label } = props;
     const generateSingleOptions = () => {
         return options.map((option: any) => {
             return (
@@ -34,18 +32,29 @@ export const FormInputDropdown: React.FC<FormInputDropdownProps> = ({
             );
         });
     };
+
     return (
-        <FormControl size={'small'}>
+        <>
             <InputLabel>{label}</InputLabel>
             <Controller
-                render={({ field: { onChange, value } }) => (
-                    <Select onChange={onChange} value={value}>
+                name={props.name}
+                control={props.control}
+                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                    <Select
+                        size="small"
+                        margin="none"
+                        fullWidth
+                        error={!!error}
+                        onChange={onChange}
+                        value={value}
+                        // sx={{ mb: 2 }}
+                        {...props}
+                        label={''}
+                    >
                         {generateSingleOptions()}
                     </Select>
                 )}
-                control={control}
-                name={name}
             />
-        </FormControl>
+        </>
     );
 };

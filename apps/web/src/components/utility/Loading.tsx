@@ -1,13 +1,9 @@
-import { Box, CircularProgress } from '@mui/material';
+import { CircularProgress, CircularProgressProps, Grid } from '@mui/material';
 
-export const TextLoading = () => (
-    <div>
-        <h1>Loading...</h1>
-    </div>
-);
-
-export const Loading = () => (
-    <Box sx={{ display: 'flex' }}>
-        <CircularProgress />
-    </Box>
+export const Loading = (props: CircularProgressProps) => (
+    <Grid container flexDirection="column" justifyContent="center" height={'100%'}>
+        <Grid item container justifyContent="center">
+            <CircularProgress color="primary" {...props} />
+        </Grid>
+    </Grid>
 );

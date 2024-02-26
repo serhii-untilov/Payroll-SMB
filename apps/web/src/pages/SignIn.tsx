@@ -1,4 +1,6 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { IconButton, InputAdornment } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,23 +10,25 @@ import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { IAuth } from '@repo/shared';
-import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, redirect } from 'react-router-dom';
-import { AppTitle } from '../components/app/AppTitle';
-import { Copyright } from '../components/app/Copyright';
 import { FormTextField } from '../components/form/FormTextField';
+import { AppTitle } from '../components/layout/AppTitle';
+import { Copyright } from '../components/layout/Copyright';
+import { FormTitle } from '../components/layout/FormTitle';
 import useAuth from '../hooks/useAuth';
-
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+import useLocale from '../hooks/useLocale';
+import { errorMessage } from '../services/utils';
 
 export default function SignIn() {
+    const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
+    const { locale } = useLocale();
+    const { t } = useTranslation();
 
     const { control, handleSubmit } = useForm({
         defaultValues: {
@@ -33,90 +37,99 @@ export default function SignIn() {
         },
     });
 
+    useEffect(() => {}, [locale]);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
+
     const onSubmit: SubmitHandler<IAuth> = async (data) => {
         console.log(data);
         if (data.email) {
             try {
                 await login(data);
                 redirect('/home');
-            } catch (e: unknown) {
-                const error = e as AxiosError;
-                enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
+            } catch (e) {
+                enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
             }
         }
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <AppTitle component="h1" variant="h4" />
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <AppTitle />
+                <Avatar sx={{ m: 1, mb: 2, bgcolor: 'secondary.main' }}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                {/* <FormTitle title={t('Sign In')} /> */}
+                <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+                    <FormTextField
+                        control={control}
+                        required
+                        id="email"
+                        label={t('Email Address')}
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        sx={{ mb: [2] }}
+                    />
+                    <FormTextField
+                        control={control}
+                        required
+                        name="password"
+                        label={t('Password')}
+                        type={showPassword ? 'text' : 'password'}
+                        id="password"
+                        autoComplete="current-password"
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label={t('Remember me')}
+                        sx={{ mb: 2 }}
+                    />
 
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h2" variant="h5">
-                        Sign in
-                    </Typography>
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit(onSubmit)}
-                        noValidate
-                        sx={{ mt: 1 }}
-                    >
-                        <FormTextField
-                            control={control}
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                        />
-                        <FormTextField
-                            control={control}
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                            Sign In
-                        </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link component={RouterLink} to="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link component={RouterLink} to="/signup" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
+                    <Button type="submit" fullWidth variant="contained" sx={{ mb: 2 }}>
+                        {t('Sign In')}
+                    </Button>
+
+                    <Grid container>
+                        <Grid item xs>
+                            <Link component={RouterLink} to="#" variant="body2">
+                                {t('Forgot password?')}
+                            </Link>
                         </Grid>
-                    </Box>
+                        <Grid item>
+                            <Link component={RouterLink} to="/signup" variant="body2">
+                                {t("Don't have an account? Sign Up")}
+                            </Link>
+                        </Grid>
+                    </Grid>
                 </Box>
-                <Copyright sx={{ mt: 8, mb: 4 }} />
-            </Container>
-        </ThemeProvider>
+            </Box>
+            <Copyright sx={{ mt: 8, mb: 4 }} />
+        </Container>
     );
 }

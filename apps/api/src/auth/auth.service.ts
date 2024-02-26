@@ -36,7 +36,7 @@ export class AuthService {
     async signIn({ email, password }): Promise<TokensDto> {
         const user = await this.usersService.findOneBy({ email });
         if (!user) {
-            throw new BadRequestException();
+            throw new BadRequestException('User not found');
         }
         if (!(await bcrypt.compare(password, user.password))) {
             throw new UnauthorizedException('Password is incorrect');

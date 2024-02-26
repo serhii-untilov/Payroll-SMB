@@ -13,6 +13,7 @@ export const createMockUser = (data?: Partial<IUser>): IUser => {
         password: randPassword(),
         refreshToken: randUuid(),
         isActive: true,
+        language: undefined,
         roles: [],
         ...data,
     };

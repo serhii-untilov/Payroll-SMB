@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import CssBaseline from '@mui/material/CssBaseline';
-import './index.css';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
-import { ThemeProvider, createTheme } from '@mui/material';
 import { AuthProvider } from './context/AuthContext.tsx';
+import './index.css';
+import { ThemeProvider } from '@emotion/react';
+import { defaultTheme } from './themes/default.theme.ts';
 import { LocaleProvider } from './context/LocaleContext.tsx';
-import { SnackbarProvider, enqueueSnackbar } from 'notistack';
+import './i18n.ts'; // ts => import './i18n.ts'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -26,26 +26,14 @@ const queryClient = new QueryClient({
     },
 });
 
-const defaultTheme = createTheme();
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 <BrowserRouter>
-                    <CssBaseline enableColorScheme />
-                    <ThemeProvider theme={defaultTheme}>
+                    <ThemeProvider theme={defaultTheme()}>
                         <LocaleProvider>
-                            <SnackbarProvider
-                                maxSnack={3}
-                                preventDuplicate
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                            >
-                                <App />
-                            </SnackbarProvider>
+                            <App />
                         </LocaleProvider>
                     </ThemeProvider>
                 </BrowserRouter>
