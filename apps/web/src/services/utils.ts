@@ -32,3 +32,11 @@ export function errorMessage(error: unknown): string {
     const e = error as ApiError;
     return e.message || e.error || e.statusCode || 'Unknown error';
 }
+
+export function getPartOfDay(hours: number) {
+    return hours < 12 ? 'morning' : hours < 18 ? 'afternoon' : 'evening';
+}
+
+export function capitalizeFirstChar(word: string | undefined | null): string {
+    return word ? word.charAt(0).toUpperCase() + word.slice(1) : '';
+}

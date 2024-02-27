@@ -15,7 +15,7 @@ export function PageTitle(props: PageTitleProps) {
             variant="h1"
             noWrap
             align="left"
-            sx={{ mb: 2, fontWeight: 500 }}
+            sx={{ fontWeight: 500 }}
             {...props}
         >
             {title}

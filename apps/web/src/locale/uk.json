@@ -35,6 +35,11 @@
         "Password is required": "Необхідно ввести пароль",
         "First name is required": "Необхідно ввести ім'я",
         "Last name is required": "Необхідно ввести прізвище",
-        "Role is required": "Необхідно вказати роль користувача"
+        "Role is required": "Необхідно вказати роль користувача",
+        "morning": "Добрий ранок",
+        "afternoon": "Добрий день",
+        "evening": "Добрий вечір",
+        "Have any questions? Visit the": "Виникли запитання? Відвідайте",
+        "Support Center": "Центр підтримки"
     }
 }

@@ -36,6 +36,11 @@
         "Password is required": "Password is required",
         "First name is required": "First name is required",
         "Last name is required": "Last name is required",
-        "Role is required": "User role is required"
+        "Role is required": "User role is required",
+        "morning": "Good Morning",
+        "afternoon": "Good Afternoon",
+        "evening": "Good Evening",
+        "Have any questions? Visit the": "Have any questions? Visit the",
+        "Support Center": "Support Center"
     }
 }
