@@ -10,19 +10,20 @@ interface PageLayoutProps {
 }
 
 const PageLayout: FC<PageLayoutProps> = ({ title, children }) => {
-    // const { compactView } = useAppContext();
+    const { compactView } = useAppContext();
     return (
         <Box
             sx={{
                 pt: { xs: 1, sm: 1 },
                 px: { xs: 1, sm: 1 },
+                height: '100%',
             }}
         >
-            {/* {compactView && (
+            {compactView && (
                 <Box sx={{ flexGrow: 1, mb: 2 }}>
                     <PageTitle title={title} />
                 </Box>
-            )} */}
+            )}
             {children}
         </Box>
     );

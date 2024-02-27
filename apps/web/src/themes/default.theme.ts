@@ -24,23 +24,24 @@ export function defaultTheme() {
         typography: {
             h1: {
                 fontSize: '1.2rem',
-                fontWeight: 400,
+                fontWeight: 500,
             },
             h2: {
-                fontSize: '2rem',
-                fontWeight: 400,
+                fontSize: '1.6rem',
+                fontWeight: 500,
             },
             h3: {
-                fontSize: '1.8rem',
+                fontSize: '1.2rem',
+                fontWeight: 500,
             },
             h4: {
-                fontSize: '1.6rem',
+                fontSize: '1.15rem',
             },
             h5: {
-                fontSize: '1.4rem',
+                fontSize: '1.1rem',
             },
             h6: {
-                fontSize: '1.2rem',
+                fontSize: '1.1rem',
             },
         },
     });

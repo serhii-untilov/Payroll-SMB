@@ -1,5 +1,4 @@
 import { Typography, TypographyProps } from '@mui/material';
-import useAppContext from '../../hooks/useAppContext';
 
 type PageTitleProps = TypographyProps & {
     title: string;
@@ -10,12 +9,11 @@ export function PageTitle(props: PageTitleProps) {
 
     return (
         <Typography
-            component="h1"
+            component="h2"
             color="text.primary"
-            variant="h1"
+            variant="h2"
             noWrap
-            align="left"
-            sx={{ fontWeight: 500 }}
+            align="center"
             {...props}
         >
             {title}
