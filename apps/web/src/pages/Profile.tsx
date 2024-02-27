@@ -114,7 +114,7 @@ export default function Profile() {
                 component="form"
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
-                spacing={4}
+                spacing={2}
             >
                 <Grid item>
                     <AvatarGenerator value={watch('email')} />

@@ -82,7 +82,7 @@ export default function SignUp() {
         if (data.email) {
             try {
                 await register(data);
-                redirect('/home');
+                redirect('/dashboard');
             } catch (e) {
                 enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
             }

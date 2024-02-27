@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import { ListItem, Tooltip, useMediaQuery } from '@mui/material';
+import { ListItem } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
 import { NavLink, LinkProps as RouterLinkProps } from 'react-router-dom';
+import useAppContext from '../../hooks/useAppContext';
+import { Tooltip } from './Tooltip';
 
 interface ListItemLinkProps {
     icon?: React.ReactElement;
@@ -18,12 +19,7 @@ const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) =
 
 export function ListItemLink(props: ListItemLinkProps) {
     const { icon, primary, to, target } = props;
-    const [compactSidebar, setCompactSidebar] = useState(true);
-    const matches = useMediaQuery('(min-width:900px)');
-
-    useEffect(() => {
-        setCompactSidebar(!matches);
-    }, [matches]);
+    const { compactView } = useAppContext();
 
     return (
         <li>
@@ -67,10 +63,10 @@ export function ListItemLink(props: ListItemLinkProps) {
             >
                 {icon ? (
                     <Tooltip
-                        disableFocusListener={!compactSidebar}
-                        disableHoverListener={!compactSidebar}
-                        disableInteractive={!compactSidebar}
-                        disableTouchListener={!compactSidebar}
+                        disableFocusListener={!compactView}
+                        disableHoverListener={!compactView}
+                        disableInteractive={!compactView}
+                        disableTouchListener={!compactView}
                         placement="right"
                         title={primary}
                     >

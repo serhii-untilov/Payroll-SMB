@@ -1,12 +1,12 @@
 import { Logout, PersonOutlined, Support } from '@mui/icons-material';
-import { List, useMediaQuery } from '@mui/material';
+import { List } from '@mui/material';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
-import * as React from 'react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, redirect } from 'react-router-dom';
+import useAppContext from '../../hooks/useAppContext';
 import useAuth from '../../hooks/useAuth';
 import useLocale from '../../hooks/useLocale';
 import { AppTitle } from './AppTitle';
@@ -19,19 +19,14 @@ import { Sidebar } from './Sidebar';
 
 export default function MainLayout() {
     const { logout } = useAuth();
-    const [open, setOpen] = React.useState(true);
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const matches = useMediaQuery('(min-width:900px)');
+    const { compactView, setCompactView } = useAppContext();
 
     useEffect(() => {}, [locale, t]);
 
-    useEffect(() => {
-        setOpen(matches);
-    }, [matches]);
-
     const toggleDrawer = () => {
-        setOpen(!open);
+        setCompactView(!compactView);
     };
 
     function onLogout() {
@@ -43,7 +38,7 @@ export default function MainLayout() {
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
 
-            <Sidebar variant="permanent" open={open}>
+            <Sidebar variant="permanent" open={!compactView}>
                 <Box
                     sx={{
                         display: 'flex',
@@ -69,7 +64,7 @@ export default function MainLayout() {
                             }}
                         >
                             <Logo onClick={toggleDrawer} />
-                            {open && (
+                            {!compactView && (
                                 <Box
                                     sx={{
                                         flexGrow: 1,
@@ -107,7 +102,7 @@ export default function MainLayout() {
                                 icon={<Logout />}
                             />
                         </List>
-                        {open && <Copyright sx={{ mx: ['auto'], mb: [3] }} />}
+                        {!compactView && <Copyright sx={{ mx: ['auto'], mb: [3] }} />}
                     </Box>
                 </Box>
             </Sidebar>

@@ -31,7 +31,7 @@ export function MainMenu() {
 
     return (
         <List component="nav" sx={{ mx: ['auto'] }}>
-            <ListItemLink to="/home" primary={t('Home')} icon={<DashboardOutlined />} />
+            <ListItemLink to="/dashboard" primary={t('Dashboard')} icon={<DashboardOutlined />} />
             <ListItemButton
                 onClick={onCompanyClick}
                 primary={t('Company')}

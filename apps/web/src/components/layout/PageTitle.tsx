@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Typography, TypographyProps, useMediaQuery } from '@mui/material';
+import { Typography, TypographyProps } from '@mui/material';
+import useAppContext from '../../hooks/useAppContext';
 
 type PageTitleProps = TypographyProps & {
     title: string;
@@ -7,28 +7,18 @@ type PageTitleProps = TypographyProps & {
 
 export function PageTitle(props: PageTitleProps) {
     const { title } = props;
-    const [titleVisible, setTitleVisible] = useState(true);
-    const matches = useMediaQuery('(min-width:900px)');
-
-    useEffect(() => {
-        setTitleVisible(!matches);
-    }, [matches]);
 
     return (
-        titleVisible && (
-            <>
-                <Typography
-                    component="h2"
-                    variant="h2"
-                    noWrap
-                    // color="primary.dark"
-                    align="left"
-                    sx={{ mb: 2 }}
-                    {...props}
-                >
-                    {title}
-                </Typography>
-            </>
-        )
+        <Typography
+            component="h1"
+            color="text.primary"
+            variant="h1"
+            noWrap
+            align="left"
+            sx={{ mb: 2, fontWeight: 500 }}
+            {...props}
+        >
+            {title}
+        </Typography>
     );
 }

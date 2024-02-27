@@ -71,7 +71,7 @@ export default function SignIn() {
     const onSubmit: SubmitHandler<IAuth> = async (data) => {
         try {
             await login(data);
-            redirect('/home');
+            redirect('/dashboard');
         } catch (e) {
             enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
         }

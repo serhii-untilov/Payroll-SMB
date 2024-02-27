@@ -9,6 +9,7 @@ import './index.css';
 import router from './router/router';
 import { useTranslation } from 'react-i18next';
 import { Close } from '@mui/icons-material';
+import { AppProvider } from './context/AppContext.tsx';
 
 export default function App() {
     const content = useRoutes(router);
@@ -38,7 +39,9 @@ export default function App() {
                     </IconButton>
                 )}
             >
-                <ThemeProvider theme={localeTheme}>{content}</ThemeProvider>
+                <ThemeProvider theme={localeTheme}>
+                    <AppProvider>{content}</AppProvider>
+                </ThemeProvider>
             </SnackbarProvider>
         </>
     );
