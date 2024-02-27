@@ -1,9 +1,7 @@
-import * as React from 'react';
-import { ListItem } from '@mui/material';
+import { ListItem, Tooltip, useMediaQuery } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { grey } from '@mui/material/colors';
-import { blue } from '@mui/material/colors';
+import { useEffect, useState } from 'react';
 
 interface ListItemButtonProps {
     icon?: React.ReactElement;
@@ -13,6 +11,12 @@ interface ListItemButtonProps {
 
 export function ListItemButton(props: ListItemButtonProps) {
     const { icon, primary, onClick } = props;
+    const [compactSidebar, setCompactSidebar] = useState(true);
+    const matches = useMediaQuery('(min-width:900px)');
+
+    useEffect(() => {
+        setCompactSidebar(!matches);
+    }, [matches]);
 
     return (
         <li>
@@ -52,7 +56,18 @@ export function ListItemButton(props: ListItemButtonProps) {
                     px: [1],
                 }}
             >
-                {icon ? <ListItemIcon sx={{ minWidth: 38 }}>{icon}</ListItemIcon> : null}
+                {icon ? (
+                    <Tooltip
+                        disableFocusListener={!compactSidebar}
+                        disableHoverListener={!compactSidebar}
+                        disableInteractive={!compactSidebar}
+                        disableTouchListener={!compactSidebar}
+                        placement="right"
+                        title={primary}
+                    >
+                        <ListItemIcon sx={{ minWidth: 39 }}>{icon}</ListItemIcon>
+                    </Tooltip>
+                ) : null}
                 <ListItemText primary={primary} />
             </ListItem>
         </li>

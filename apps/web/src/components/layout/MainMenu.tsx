@@ -2,17 +2,17 @@ import {
     BusinessCenterOutlined,
     CalculateOutlined,
     CreditScore,
+    DashboardOutlined,
     Equalizer,
-    LandscapeOutlined,
     PeopleOutlined,
     Schedule,
 } from '@mui/icons-material';
 import { List } from '@mui/material';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import useLocale from '../../hooks/useLocale';
 import { ListItemButton } from './ListItemButton';
 import { ListItemLink } from './ListItemLink';
-import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
-import useLocale from '../../hooks/useLocale';
 
 export function MainMenu() {
     const { locale } = useLocale();
@@ -31,11 +31,13 @@ export function MainMenu() {
 
     return (
         <List component="nav" sx={{ mx: ['auto'] }}>
+            <ListItemLink to="/home" primary={t('Home')} icon={<DashboardOutlined />} />
             <ListItemButton
                 onClick={onCompanyClick}
                 primary={t('Company')}
                 icon={<BusinessCenterOutlined />}
             />
+
             <ListItemLink to="/employees" primary={t('Employees')} icon={<PeopleOutlined />} />
             {/* <ListItemLink to="/time-off" primary={t('Time Off')} icon={<LandscapeOutlined />} /> */}
             <ListItemLink to="/time-sheet" primary={t('Time Sheet')} icon={<Schedule />} />

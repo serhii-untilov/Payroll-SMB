@@ -1,4 +1,5 @@
-import { ListItem } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { ListItem, Tooltip, useMediaQuery } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
@@ -17,6 +18,12 @@ const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) =
 
 export function ListItemLink(props: ListItemLinkProps) {
     const { icon, primary, to, target } = props;
+    const [compactSidebar, setCompactSidebar] = useState(true);
+    const matches = useMediaQuery('(min-width:900px)');
+
+    useEffect(() => {
+        setCompactSidebar(!matches);
+    }, [matches]);
 
     return (
         <li>
@@ -58,7 +65,19 @@ export function ListItemLink(props: ListItemLinkProps) {
                     px: [1],
                 }}
             >
-                {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+                {icon ? (
+                    <Tooltip
+                        disableFocusListener={!compactSidebar}
+                        disableHoverListener={!compactSidebar}
+                        disableInteractive={!compactSidebar}
+                        disableTouchListener={!compactSidebar}
+                        placement="right"
+                        title={primary}
+                    >
+                        <ListItemIcon>{icon}</ListItemIcon>
+                    </Tooltip>
+                ) : null}
+
                 <ListItemText primary={primary} />
             </ListItem>
         </li>

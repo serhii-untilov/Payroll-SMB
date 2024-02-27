@@ -14,7 +14,7 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
 export const SignIn = Loadable(lazy(() => import('../pages/SignIn')));
 const SignUp = Loadable(lazy(() => import('../pages/SignUp')));
 const Home = Loadable(lazy(() => import('../pages/Home')));
-const Greeting = Loadable(lazy(() => import('../pages/Greeting')));
+const Welcome = Loadable(lazy(() => import('../pages/Welcome')));
 const Companies = Loadable(lazy(() => import('../pages/Companies')));
 const Employees = Loadable(lazy(() => import('../pages/Employees')));
 const TimeOff = Loadable(lazy(() => import('../pages/TimeOff')));
@@ -25,6 +25,14 @@ const Reports = Loadable(lazy(() => import('../pages/Reports')));
 const Profile = Loadable(lazy(() => import('../pages/Profile')));
 
 const router: RouteObject[] = [
+    {
+        path: 'welcome',
+        element: (
+            // <GuestGuard>
+            <Welcome />
+            // </GuestGuard>
+        ),
+    },
     {
         path: 'signin',
         element: (
@@ -50,7 +58,6 @@ const router: RouteObject[] = [
         ),
         children: [
             { path: 'home', element: <Home /> },
-            { path: 'greeting', element: <Greeting /> },
             { path: 'companies', element: <Companies /> },
             { path: 'employees', element: <Employees /> },
             { path: 'time-off', element: <TimeOff /> },
