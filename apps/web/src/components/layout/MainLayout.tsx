@@ -90,12 +90,14 @@ export default function MainLayout() {
                             />
                             {/* <ListItemLink to="/service" primary="Service" icon={<Layers />} /> */}
                             {/* <ListItemButton onClick={onHelp} primary="Help" icon={<Help />} /> */}
+
                             <ListItemLink
                                 target="_blank"
                                 to="https://github.com/serhii-untilov/Payroll/discussions"
                                 primary={t('Support')}
                                 icon={<Support />}
                             />
+
                             <ListItemButton
                                 onClick={onLogout}
                                 primary={t('Logout')}
