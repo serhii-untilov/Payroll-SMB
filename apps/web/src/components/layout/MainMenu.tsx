@@ -1,5 +1,4 @@
 import {
-    BusinessCenterOutlined,
     CalculateOutlined,
     CreditScore,
     DashboardOutlined,
@@ -11,33 +10,20 @@ import { List } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import useLocale from '../../hooks/useLocale';
-import { ListItemButton } from './ListItemButton';
 import { ListItemLink } from './ListItemLink';
+
+import { CompanyListItem } from './CompanyMenu';
 
 export function MainMenu() {
     const { locale } = useLocale();
     const { t } = useTranslation();
-
-    const onCompanyClick = () => {
-        // Make menu:
-        // Company details
-        // -- Select company --
-        // <Company List>
-        // -- Divider --
-        // New Company
-    };
 
     useEffect(() => {}, [locale]);
 
     return (
         <List component="nav" sx={{ mx: ['auto'] }}>
             <ListItemLink to="/dashboard" primary={t('Dashboard')} icon={<DashboardOutlined />} />
-            <ListItemButton
-                onClick={onCompanyClick}
-                primary={t('Company')}
-                icon={<BusinessCenterOutlined />}
-            />
-
+            <CompanyListItem />
             <ListItemLink to="/employees" primary={t('Employees')} icon={<PeopleOutlined />} />
             {/* <ListItemLink to="/time-off" primary={t('Time Off')} icon={<LandscapeOutlined />} /> */}
             <ListItemLink to="/time-sheet" primary={t('Time Sheet')} icon={<Schedule />} />

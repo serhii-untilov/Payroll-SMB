@@ -40,6 +40,7 @@ npm i --workspace @repo/web --save avvvatars-react
 npm i --workspace @repo/web --save react-i18next i18next
 npm i --workspace @repo/web --save i18next-browser-languagedetector
 npm i --workspace @repo/web --save @hookform/resolvers yup
+npm i --workspace @repo/web --save material-ui-popup-state
 
 # Init "shared" library
 mkdir packages/shared

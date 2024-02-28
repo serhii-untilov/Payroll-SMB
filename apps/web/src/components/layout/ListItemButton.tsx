@@ -6,8 +6,8 @@ import { Tooltip } from './Tooltip';
 
 interface ListItemButtonProps {
     icon?: React.ReactElement;
-    primary: string;
-    onClick: React.MouseEventHandler;
+    primary: string | React.ReactElement;
+    onClick?: React.MouseEventHandler;
 }
 
 export function ListItemButton(props: ListItemButtonProps) {
