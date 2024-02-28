@@ -31,7 +31,7 @@ api.interceptors.response.use(
 
             try {
                 const refreshToken = getUserRefreshToken();
-                const response = await axios.post('/api/auth/refresh', {
+                const response = await axios.get('/api/auth/refresh', {
                     headers: authHeader(refreshToken),
                 });
                 const tokens = response.data;

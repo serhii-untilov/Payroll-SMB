@@ -4,6 +4,7 @@ import {
     Get,
     HttpCode,
     HttpStatus,
+    Logger,
     Post,
     Request,
     UseGuards,
@@ -20,6 +21,8 @@ import { TokensDto } from './dto/tokens.dto';
 
 @Controller('auth')
 export class AuthController {
+    private readonly logger = new Logger(AuthController.name);
+
     constructor(
         private authService: AuthService,
         private userService: UsersService,
@@ -47,8 +50,10 @@ export class AuthController {
     @UseGuards(RefreshTokenGuard)
     @Get('refresh')
     refreshTokens(@Request() req: Req) {
+        this.logger.log('refreshTokens');
         const userId = req.user['sub'];
         const refreshToken = req.user['refreshToken'];
+        this.logger.log('refreshTokens', userId, refreshToken);
         return this.authService.refreshTokens(userId, refreshToken);
     }
 

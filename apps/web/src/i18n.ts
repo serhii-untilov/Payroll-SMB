@@ -17,7 +17,7 @@ i18n.use(LanguageDetector)
             uk: ['uk', 'en'],
             default: ['en'],
         },
-        debug: true,
+        debug: false,
         resources: {
             en: { ...enJSON },
             uk: { ...ukJSON },
