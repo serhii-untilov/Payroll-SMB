@@ -1,9 +1,9 @@
 import { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
-import { Loading } from '../components/utility/Loading';
-import GuestGuard from '../guards/GuestGuard';
-import AuthGuard from '../guards/AuthGuard';
 import MainLayout from '../components/layout/MainLayout';
+import { Loading } from '../components/utility/Loading';
+import AuthGuard from '../guards/AuthGuard';
+import GuestGuard from '../guards/GuestGuard';
 
 export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => (
     <Suspense fallback={<Loading />}>
@@ -57,6 +57,7 @@ const router: RouteObject[] = [
             </AuthGuard>
         ),
         children: [
+            { index: true, element: <Dashboard /> },
             { path: 'dashboard', element: <Dashboard /> },
             { path: 'companies', element: <Companies /> },
             { path: 'employees', element: <Employees /> },
