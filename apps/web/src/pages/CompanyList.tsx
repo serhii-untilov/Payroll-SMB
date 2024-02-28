@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import useLocale from '../hooks/useLocale';
 import { useEffect } from 'react';
 
-export default function Companies() {
+export default function CompanyList() {
     const { locale } = useLocale();
     const { t } = useTranslation();
 

@@ -99,6 +99,8 @@ docker compose up --detach
 # Create resources
 npx --workspace @repo/api nest generate resource users resources
 npx --workspace @repo/api nest generate resource laws resources
+npx --workspace @repo/api nest generate resource accounting resources
+npx --workspace @repo/api nest generate resource companies resources
 npx --workspace @repo/api nest g module auth
 npx --workspace @repo/api nest g controller auth
 npx --workspace @repo/api nest g service auth
