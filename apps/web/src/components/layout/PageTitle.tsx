@@ -13,7 +13,7 @@ export function PageTitle(props: PageTitleProps) {
             color="text.primary"
             variant="h2"
             noWrap
-            align="center"
+            // align="center"
             {...props}
         >
             {title}
