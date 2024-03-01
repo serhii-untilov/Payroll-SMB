@@ -1,15 +1,12 @@
-import { OmitType, PartialType } from '@nestjs/mapped-types';
-import { Company } from '../entities/company.entity';
+import { IAccounting, IUpdateCompany, ILaw } from '@repo/shared';
 
-export class UpdateCompanyDto extends PartialType(
-    OmitType(Company, [
-        'id',
-        'owner',
-        'createdDate',
-        'createdUser',
-        'updatedDate',
-        'deletedDate',
-        'deletedUser',
-        'version',
-    ]),
-) {}
+export class UpdateCompanyDto implements IUpdateCompany {
+    name: string;
+    law: ILaw;
+    taxId?: string;
+    accounting: IAccounting;
+    dateFrom: Date;
+    dateTo: Date;
+    payPeriod: Date;
+    checkDate: Date;
+}

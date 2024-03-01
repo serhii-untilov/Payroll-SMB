@@ -1,6 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { ILaw } from '@repo/shared';
-import { Company } from '../../companies/entities/company.entity';
+import { ILaw, LawType } from '@repo/shared';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Law implements ILaw {
@@ -10,6 +9,10 @@ export class Law implements ILaw {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @OneToMany(() => Company, (company) => company.law)
-    companies: Company[];
+    @Column({
+        type: 'varchar',
+        length: 15,
+        default: LawType.UKRAINE,
+    })
+    type: string;
 }

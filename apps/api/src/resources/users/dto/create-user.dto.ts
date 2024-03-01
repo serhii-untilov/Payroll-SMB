@@ -16,5 +16,8 @@ export class CreateUserDto implements ICreateUser {
     password: string;
 
     @ApiProperty()
-    roles: Role[] = [];
+    language: string;
+
+    @ApiProperty()
+    roles?: Role[] = [];
 }

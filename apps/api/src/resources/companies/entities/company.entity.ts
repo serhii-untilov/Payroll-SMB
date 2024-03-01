@@ -13,13 +13,17 @@ export class Company extends Logger implements ICompany {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @Column({ type: 'varchar', length: 15 })
-    taxId: string;
+    @Column({ type: 'varchar', length: 15, nullable: true })
+    taxId?: string;
 
-    @ManyToOne(() => Law, (law) => law.companies)
+    @ManyToOne(() => Law, {
+        createForeignKeyConstraints: false,
+    })
     law: Law;
 
-    @ManyToOne(() => Accounting, (accounting) => accounting.companies)
+    @ManyToOne(() => Accounting, {
+        createForeignKeyConstraints: false,
+    })
     accounting: Accounting;
 
     @ManyToOne(() => User, (user) => user.companies)

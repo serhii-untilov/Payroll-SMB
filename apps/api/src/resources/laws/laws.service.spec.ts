@@ -8,6 +8,7 @@ import { MockType } from '@repo/utils';
 import { Repository } from 'typeorm';
 import { CreateLawDto } from './dto/create-law.dto';
 import { NotFoundException } from '@nestjs/common';
+import { LawType } from '@repo/shared';
 
 describe('LawsService', () => {
     let service: LawsService;
@@ -35,7 +36,7 @@ describe('LawsService', () => {
 
     it('should be able to create a law', async () => {
         const law = createMockLaw();
-        const createLaw: CreateLawDto = { name: law.name };
+        const createLaw: CreateLawDto = { name: law.name, type: LawType.UKRAINE };
         repoMock.findOne?.mockReturnValue(null);
         repoMock.save?.mockReturnValue(law);
         const newLaw = await service.create(createLaw);

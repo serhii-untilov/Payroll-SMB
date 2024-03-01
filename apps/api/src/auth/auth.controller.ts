@@ -1,15 +1,6 @@
-import {
-    Body,
-    Controller,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Post,
-    Request,
-    UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { IPublicUserData } from '@repo/shared';
-import { Request as Req } from 'express';
+import { Request } from 'express';
 import { AccessTokenGuard } from '../guards/accessToken.guard';
 import { RefreshTokenGuard } from '../guards/refreshToken.guard';
 import { CreateUserDto } from '../resources/users/dto/create-user.dto';
@@ -40,13 +31,14 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(AccessTokenGuard)
     @Get('logout')
-    async logout(@Request() req: Req): Promise<null> {
+    async logout(@Req() req: Request): Promise<null> {
         return this.authService.logout(req.user['sub']);
     }
 
+    @HttpCode(HttpStatus.OK)
     @UseGuards(RefreshTokenGuard)
     @Get('refresh')
-    refreshTokens(@Request() req: Req) {
+    refreshTokens(@Req() req: Request) {
         const userId = req.user['sub'];
         const refreshToken = req.user['refreshToken'];
         return this.authService.refreshTokens(userId, refreshToken);
@@ -55,7 +47,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(AccessTokenGuard)
     @Get('user')
-    async getUser(@Request() req: Req): Promise<IPublicUserData> {
+    async getUser(@Req() req: Request): Promise<IPublicUserData> {
         const user = await this.userService.findOne({
             where: {
                 id: req.user['sub'],

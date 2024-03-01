@@ -1,6 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { IAccounting } from '@repo/shared';
-import { Company } from '../../companies/entities/company.entity';
+import { AccountingType, IAccounting } from '@repo/shared';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Accounting implements IAccounting {
@@ -10,6 +9,10 @@ export class Accounting implements IAccounting {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @OneToMany(() => Company, (company) => company.accounting)
-    companies: Company[];
+    @Column({
+        type: 'varchar',
+        length: 15,
+        default: AccountingType.GENERIC,
+    })
+    type: string;
 }

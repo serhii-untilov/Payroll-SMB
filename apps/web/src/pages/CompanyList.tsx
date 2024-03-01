@@ -10,7 +10,7 @@ export default function CompanyList() {
 
     return (
         <>
-            <h2>{t('Companies')}</h2>
+            <h2>{t('Company list')}</h2>
         </>
     );
 }

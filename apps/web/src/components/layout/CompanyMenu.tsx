@@ -1,12 +1,14 @@
 import { Box, Menu, MenuItem, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { ListItemButton } from './ListItemButton';
 import useLocale from '../../hooks/useLocale';
 import { useTranslation } from 'react-i18next';
 import { ArrowDropDown, BusinessCenterOutlined } from '@mui/icons-material';
 import { Divider } from './Divider';
+import { redirect } from 'react-router-dom';
+import { ListItemLink } from './ListItemLink';
 
 type CompanyMenuProps = {
     popupState: any;
@@ -32,12 +34,13 @@ function CompanyMenu(props: CompanyMenuProps) {
             >
                 Select company
             </Typography>
+
             <MenuItem onClick={popupState.close}>Diamond Silence</MenuItem>
             <MenuItem onClick={popupState.close}>Zero Solutions</MenuItem>
             <Divider />
             <MenuItem onClick={popupState.close}>Company list</MenuItem>
             <Divider />
-            <MenuItem onClick={popupState.close}>Create a new company</MenuItem>
+            <ListItemLink to="/companies-new" primary="New company" onClick={popupState.close} />
         </Menu>
     );
 }

@@ -1,5 +1,5 @@
 import { incrementalNumber, randRole } from '@ngneat/falso';
-import { IRole } from '@repo/shared';
+import { IRole, RoleType } from '@repo/shared';
 
 const factory = incrementalNumber();
 
@@ -9,6 +9,7 @@ export const createMockRole = (data?: Partial<IRole>): IRole => {
     return {
         id,
         name,
+        type: RoleType.GUEST,
         users: [],
         ...data,
     };

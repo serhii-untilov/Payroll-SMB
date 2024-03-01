@@ -29,8 +29,9 @@ export abstract class Logger {
 
     @ManyToOne(() => User, {
         createForeignKeyConstraints: false,
+        nullable: true,
     })
-    deletedUser: User;
+    deletedUser?: User;
 
     @VersionColumn()
     version: number;

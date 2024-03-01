@@ -31,8 +31,8 @@ export class User implements IUser {
 
     @ManyToMany(() => Role, (role) => role.users, { cascade: true })
     @JoinTable({ name: 'user_roles' })
-    roles: Role[];
+    roles?: Role[];
 
     @OneToMany(() => Company, (company) => company.owner)
-    companies: Company[];
+    companies?: Company[];
 }

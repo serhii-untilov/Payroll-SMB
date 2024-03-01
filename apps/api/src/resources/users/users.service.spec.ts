@@ -37,7 +37,7 @@ describe('UsersService', () => {
 
     it('should be able to create a user', async () => {
         const user = createMockUser();
-        const createUser: CreateUserDto = _.omit(user, ['id']);
+        const createUser: CreateUserDto = _.omit(user, ['id', 'isActive', 'refreshToken']);
         repoMock.findOne?.mockReturnValue(null);
         repoMock.save?.mockReturnValue(createUser);
         const newUser = await service.create(createUser);

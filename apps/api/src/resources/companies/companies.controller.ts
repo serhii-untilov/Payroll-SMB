@@ -1,34 +1,70 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    ParseIntPipe,
+    HttpCode,
+    HttpStatus,
+    UseGuards,
+    Req,
+} from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Request } from 'express';
+import { UsersService } from '../users/users.service';
+import { AccessTokenGuard } from '../../guards/accessToken.guard';
 
 @Controller('companies')
 export class CompaniesController {
-    constructor(private readonly companiesService: CompaniesService) {}
+    constructor(
+        private readonly companiesService: CompaniesService,
+        private readonly usersService: UsersService,
+    ) {}
 
     @Post()
-    async create(@Body() createCompanyDto: CreateCompanyDto) {
-        return await this.companiesService.create(createCompanyDto);
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async create(@Req() req: Request, @Body() createCompanyDto: CreateCompanyDto) {
+        const user = await this.usersService.findOne({ id: req.user['sub'] });
+        return await this.companiesService.create(user, createCompanyDto);
     }
 
     @Get()
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     async findAll() {
         return await this.companiesService.findAll();
     }
 
     @Get(':id')
-    async findOne(@Param('id') id: string) {
-        return await this.companiesService.findOne(+id);
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async findOne(@Param('id', ParseIntPipe) id: number) {
+        return await this.companiesService.findOne(id);
     }
 
     @Patch(':id')
-    async update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-        return await this.companiesService.update(+id, updateCompanyDto);
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async update(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateCompanyDto: UpdateCompanyDto,
+    ) {
+        const user = await this.usersService.findOne({ id: req.user['sub'] });
+        return await this.companiesService.update(user, id, updateCompanyDto);
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string) {
-        return await this.companiesService.remove(+id);
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+        const user = await this.usersService.findOne({ id: req.user['sub'] });
+        return await this.companiesService.remove(user, id);
     }
 }

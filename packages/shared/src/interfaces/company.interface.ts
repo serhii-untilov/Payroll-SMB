@@ -22,21 +22,7 @@ export interface ICompany {
     version: number;
 }
 
-export type ICreateCompany = Pick<
-    ICompany,
-    | 'name'
-    | 'law'
-    | 'taxId'
-    | 'accounting'
-    | 'owner'
-    | 'dateFrom'
-    | 'dateTo'
-    | 'payPeriod'
-    | 'checkDate'
-    | 'createdUser'
->;
-
-export type IUpdateCompany = Partial<
+export type ICreateCompany = Partial<
     Omit<
         ICompany,
         | 'id'
@@ -44,10 +30,13 @@ export type IUpdateCompany = Partial<
         | 'createdDate'
         | 'createdUser'
         | 'updatedDate'
+        | 'updatedUser'
         | 'deletedDate'
         | 'deletedUser'
         | 'version'
     >
 >;
+
+export type IUpdateCompany = ICreateCompany;
 
 export type IUpsertCompany = ICompany;

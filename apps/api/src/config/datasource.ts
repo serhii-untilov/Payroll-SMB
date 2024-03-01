@@ -6,6 +6,7 @@ dotenv.config();
 
 export const dbConfig = {
     type: process.env['DATABASE_TYPE'],
+    language: process.env['LANGUAGE'],
     host: process.env['DATABASE_HOST'],
     port: +process.env['DATABASE_PORT'],
     password: process.env['DATABASE_PASSWORD'],

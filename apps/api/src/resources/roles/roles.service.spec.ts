@@ -35,7 +35,7 @@ describe('RolesService', () => {
 
     it('should be able to create a role', async () => {
         const role = createMockRole();
-        const createRole: CreateRoleDto = { name: role.name };
+        const createRole: CreateRoleDto = role;
         repoMock.findOne?.mockReturnValue(null);
         repoMock.save?.mockReturnValue(role);
         const newRole = await service.create(createRole);

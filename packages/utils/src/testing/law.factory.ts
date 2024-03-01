@@ -1,5 +1,5 @@
 import { incrementalNumber, randCountry } from '@ngneat/falso';
-import { ILaw } from '@repo/shared';
+import { ILaw, LawType } from '@repo/shared';
 
 const factory = incrementalNumber();
 
@@ -9,6 +9,7 @@ export const createMockLaw = (data?: Partial<ILaw>): ILaw => {
     return {
         id,
         name,
+        type: LawType.UKRAINE,
         ...data,
     };
 };

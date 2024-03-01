@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { IUser } from '@repo/shared';
+import { Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class CompaniesService {
@@ -12,13 +13,17 @@ export class CompaniesService {
         private companiesRepository: Repository<Company>,
     ) {}
 
-    async create(company: CreateCompanyDto): Promise<Company> {
+    async create(user: IUser, company: CreateCompanyDto): Promise<Company> {
         const existing = this.companiesRepository.findOne({ where: { name: company.name } });
         if (existing) {
             throw new BadRequestException(`Company '${company.name}' already exists.`);
         }
-        const { name } = company;
-        const newCompany = await this.companiesRepository.save({ name });
+        const newCompany = await this.companiesRepository.save({
+            ...company,
+            owner: user,
+            createdUser: user,
+            updatedUser: user,
+        });
         return newCompany;
     }
 
@@ -34,22 +39,30 @@ export class CompaniesService {
         return company;
     }
 
-    async update(id: number, data: UpdateCompanyDto): Promise<Company> {
+    async update(user: IUser, id: number, data: UpdateCompanyDto): Promise<Company> {
         const company = await this.companiesRepository.findOneBy({ id });
         if (!company) {
             throw new NotFoundException(`Company could not be found.`);
         }
-        await this.companiesRepository.save({ id, ...data });
+        await this.companiesRepository.save({
+            ...data,
+            id,
+            updatedUser: user,
+        });
         const updated = await this.companiesRepository.findOneOrFail({ where: { id } });
         return updated;
     }
 
-    async remove(id: number): Promise<Company> {
+    async remove(user: IUser, id: number): Promise<Company> {
         const company = await this.companiesRepository.findOneBy({ id });
         if (!company) {
             throw new NotFoundException(`Company could not be found.`);
         }
-        await this.companiesRepository.remove(company);
+        await this.companiesRepository.save({
+            ...company,
+            deletedDate: new Date(),
+            deletedUser: user,
+        });
         return company;
     }
 }
