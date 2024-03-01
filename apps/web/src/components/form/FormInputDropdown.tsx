@@ -46,7 +46,7 @@ export const FormInputDropdown: React.FC<FormInputDropdownProps> = (
                         fullWidth
                         error={!!error}
                         onChange={onChange}
-                        value={value}
+                        value={value || ''}
                         // sx={{ mb: 2 }}
                         {...props}
                         label={''}

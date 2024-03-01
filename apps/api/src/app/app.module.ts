@@ -14,6 +14,8 @@ import { TypeormConfigService } from '../config/typeorm-config.service';
 import { LawsModule } from '../resources/laws/laws.module';
 import { RolesModule } from '../resources/roles/roles.module';
 import { AuthModule } from '../auth/auth.module';
+import { AccountingModule } from '../resources/accounting/accounting.module';
+import { CompaniesModule } from '../resources/companies/companies.module';
 
 @Module({
     imports: [
@@ -36,6 +38,8 @@ import { AuthModule } from '../auth/auth.module';
         LawsModule,
         RolesModule,
         UsersModule,
+        AccountingModule,
+        CompaniesModule,
     ],
     controllers: [AppController],
     providers: [AppService],

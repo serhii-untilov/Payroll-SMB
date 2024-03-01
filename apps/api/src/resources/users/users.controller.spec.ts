@@ -46,7 +46,7 @@ describe('UsersController', () => {
         const user = createMockUser();
         const publicUser = UsersService.toPublic(user);
         jest.spyOn(service, 'findOne').mockReturnValue(Promise.resolve(user));
-        const res = await controller.findOne(user.id.toString());
+        const res = await controller.findOne(user.id);
         expect(res).toStrictEqual(publicUser);
     });
 
@@ -61,7 +61,7 @@ describe('UsersController', () => {
         };
         const publicUser = UsersService.toPublic(updatedUser);
         jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(updatedUser));
-        const res = await controller.update(user.id.toString(), {
+        const res = await controller.update(user.id, {
             firstName: newUser.firstName,
             lastName: newUser.lastName,
             email: newUser.email,
@@ -73,7 +73,7 @@ describe('UsersController', () => {
         const user = createMockUser();
         const publicUser = UsersService.toPublic(user);
         jest.spyOn(service, 'remove').mockReturnValue(Promise.resolve(user));
-        const res = await controller.remove(user.id.toString());
+        const res = await controller.remove(user.id);
         expect(res).toStrictEqual(publicUser);
     });
 });

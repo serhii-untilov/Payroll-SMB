@@ -1,5 +1,5 @@
+import { ILaw, LawType } from '@repo/shared';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { ILaw } from '@repo/shared';
 
 @Entity()
 export class Law implements ILaw {
@@ -8,4 +8,11 @@ export class Law implements ILaw {
 
     @Column({ type: 'varchar', length: 50 })
     name: string;
+
+    @Column({
+        type: 'varchar',
+        length: 15,
+        default: LawType.UKRAINE,
+    })
+    type: string;
 }

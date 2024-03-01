@@ -34,14 +34,14 @@ describe('RolesController', () => {
     it('should create a role', async () => {
         const role = createMockRole();
         jest.spyOn(service, 'create').mockReturnValue(Promise.resolve(role));
-        const res = await controller.create({ name: role.name });
+        const res = await controller.create(role);
         expect(res).toStrictEqual(role);
     });
 
     it('should get role details', async () => {
         const role = createMockRole();
         jest.spyOn(service, 'findOne').mockReturnValue(Promise.resolve(role));
-        const res = await controller.findOne(role.id.toString());
+        const res = await controller.findOne(role.id);
         expect(res).toStrictEqual(role);
     });
 
@@ -50,14 +50,14 @@ describe('RolesController', () => {
         const newName = randCountry();
         const updatedRole = { ...role, name: newName };
         jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(updatedRole));
-        const res = await controller.update(role.id.toString(), { name: newName });
+        const res = await controller.update(role.id, { name: newName });
         expect(res).toStrictEqual(updatedRole);
     });
 
     it('should remove a role', async () => {
         const role = createMockRole();
         jest.spyOn(service, 'remove').mockReturnValue(Promise.resolve(role));
-        const res = await controller.remove(role.id.toString());
+        const res = await controller.remove(role.id);
         expect(res).toStrictEqual(role);
     });
 });

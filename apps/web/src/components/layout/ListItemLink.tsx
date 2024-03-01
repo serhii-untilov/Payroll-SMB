@@ -11,6 +11,7 @@ interface ListItemLinkProps {
     primary: string;
     to: string;
     target?: string;
+    onClick?: any;
 }
 
 const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) => {
@@ -18,7 +19,7 @@ const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) =
 });
 
 export function ListItemLink(props: ListItemLinkProps) {
-    const { icon, primary, to, target } = props;
+    const { icon, primary, to, target, onClick } = props;
     const { compactView } = useAppContext();
 
     return (
@@ -28,6 +29,7 @@ export function ListItemLink(props: ListItemLinkProps) {
                 component={Link}
                 target={target}
                 to={to}
+                onClick={onClick}
                 sx={{
                     '&.active': {
                         color: 'white',

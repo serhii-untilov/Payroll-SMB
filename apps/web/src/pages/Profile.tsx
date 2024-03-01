@@ -31,7 +31,7 @@ type FormType = Yup.InferType<typeof formSchema>;
 
 // To prevent Warning: A component is changing an uncontrolled input to be controlled.
 const defaultValues: FormType = {
-    id: -1,
+    id: undefined,
     firstName: '',
     lastName: '',
     email: '',
@@ -158,9 +158,11 @@ export default function Profile() {
                             name="language"
                             autoComplete="language"
                             type="text"
-                            options={supportedLocales.map((o) => {
-                                return { label: o.name, value: o.language as string };
-                            })}
+                            options={
+                                supportedLocales?.map((o) => {
+                                    return { label: o.name, value: o.language as string };
+                                }) || []
+                            }
                         />
                     </Grid>
                     <Grid item xs={12}>

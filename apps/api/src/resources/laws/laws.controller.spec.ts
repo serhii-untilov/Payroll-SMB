@@ -34,14 +34,14 @@ describe('LawsController', () => {
     it('should create a law', async () => {
         const law = createMockLaw();
         jest.spyOn(service, 'create').mockReturnValue(Promise.resolve(law));
-        const res = await controller.create({ name: law.name });
+        const res = await controller.create(law);
         expect(res).toStrictEqual(law);
     });
 
     it('should get law details', async () => {
         const law = createMockLaw();
         jest.spyOn(service, 'findOne').mockReturnValue(Promise.resolve(law));
-        const res = await controller.findOne(law.id.toString());
+        const res = await controller.findOne(law.id);
         expect(res).toStrictEqual(law);
     });
 
@@ -50,14 +50,14 @@ describe('LawsController', () => {
         const newName = randCountry();
         const updatedLaw = { ...law, name: newName };
         jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(updatedLaw));
-        const res = await controller.update(law.id.toString(), { name: newName });
+        const res = await controller.update(law.id, { name: newName });
         expect(res).toStrictEqual(updatedLaw);
     });
 
     it('should remove a law', async () => {
         const law = createMockLaw();
         jest.spyOn(service, 'remove').mockReturnValue(Promise.resolve(law));
-        const res = await controller.remove(law.id.toString());
+        const res = await controller.remove(law.id);
         expect(res).toStrictEqual(law);
     });
 });

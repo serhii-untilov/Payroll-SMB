@@ -99,6 +99,8 @@ docker compose up --detach
 # Create resources
 npx --workspace @repo/api nest generate resource users resources
 npx --workspace @repo/api nest generate resource laws resources
+npx --workspace @repo/api nest generate resource accounting resources
+npx --workspace @repo/api nest generate resource companies resources
 npx --workspace @repo/api nest g module auth
 npx --workspace @repo/api nest g controller auth
 npx --workspace @repo/api nest g service auth
@@ -144,6 +146,7 @@ openssl rand -base64 60
 - [**React** - React Libraries to Use in Your Projects in 2024](https://www.freecodecamp.org/news/react-libraries-to-use-in-your-projects/)
 - [**React** - React Query and Axios (Typescript) example with Rest API](https://www.bezkoder.com/react-query-axios-typescript/)
 - [**MUI** - Material UI - React Templates](https://mui.com/material-ui/getting-started/templates/)
+- [**Icons** - MUI Icons](https://mui.com/material-ui/material-icons/)
 - [**Icons** - Google Fonts - Material Icons](https://fonts.google.com/icons?icon.set=Material+Icons)
 - [**React** - Define React Routes With Better Approach (TypeScript)](https://medium.com/@ahsan-ali-mansoor/define-react-routes-with-better-approach-typescript-d07de782b517)
 - [**React** - Rules of Hooks](https://legacy.reactjs.org/docs/hooks-rules.html)
@@ -156,3 +159,4 @@ openssl rand -base64 60
 - [**React** - React Data Grid](https://adazzle.github.io/react-data-grid/#/common-features)
 - [**l10n** - React MUI Localization](https://www.geeksforgeeks.org/react-mui-localization/)
 - [**i18n** - How to use i18n in your React App](https://medium.com/@devpedrodias/how-to-use-i18n-in-your-react-app-1f26deb2a3d8)
+- [**VS Code** - Reducing VSCode Memory Consumption](https://dev.to/claudiodavi/reducing-vscode-memory-consumption-527k)

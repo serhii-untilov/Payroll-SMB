@@ -41,6 +41,9 @@
     },
     "m:run": {
       "cache": false
+    },
+    "m:revert": {
+      "cache": false
     }
   }
 }

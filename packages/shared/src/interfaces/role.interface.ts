@@ -1,11 +1,18 @@
 import { IUser } from './user.interface';
 
+export enum RoleType {
+    SYS_ADMIN = 'sys-admin',
+    EMPLOYER = 'employer',
+    EMPLOYEE = 'employee',
+    GUEST = 'guest',
+}
 export interface IRole {
     id: number;
     name: string;
-    users: IUser[];
+    type: string;
+    users?: IUser[];
 }
 
-export type ICreateRole = Pick<IRole, 'name'>;
-export type IUpdateRole = Partial<Omit<IRole, 'id'>>;
-export type IUpsertRole = IRole;
+export type ICreateRole = Omit<IRole, 'id' | 'users'>;
+export type IUpdateRole = Partial<Omit<IRole, 'id' | 'users'>>;
+export type IUpsertRole = Partial<IRole>;

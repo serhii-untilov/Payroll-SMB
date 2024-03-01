@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "m:crt": "NODE_ENV=development typeorm migration:create ./src/migrations/seed",
-    "m:gen": "NODE_ENV=development typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:generate ./src/migrations/gen --pretty",
+    "m:gen": "NODE_ENV=development npm run m:run && typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:generate ./src/migrations/gen --pretty",
     "m:run": "NODE_ENV=development typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:run --transaction each",
     "m:revert": "NODE_ENV=development typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:revert"
   },

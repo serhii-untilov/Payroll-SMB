@@ -15,7 +15,8 @@ export const SignIn = Loadable(lazy(() => import('../pages/SignIn')));
 const SignUp = Loadable(lazy(() => import('../pages/SignUp')));
 const Dashboard = Loadable(lazy(() => import('../pages/Dashboard')));
 const Welcome = Loadable(lazy(() => import('../pages/Welcome')));
-const Companies = Loadable(lazy(() => import('../pages/Companies')));
+const Company = Loadable(lazy(() => import('../pages/Company')));
+const CompanyList = Loadable(lazy(() => import('../pages/CompanyList')));
 const Employees = Loadable(lazy(() => import('../pages/Employees')));
 const TimeOff = Loadable(lazy(() => import('../pages/TimeOff')));
 const TimeSheet = Loadable(lazy(() => import('../pages/TimeSheet')));
@@ -59,7 +60,7 @@ const router: RouteObject[] = [
         children: [
             { index: true, element: <Dashboard /> },
             { path: 'dashboard', element: <Dashboard /> },
-            { path: 'companies', element: <Companies /> },
+            { path: 'company', element: <Company /> },
             { path: 'employees', element: <Employees /> },
             { path: 'time-off', element: <TimeOff /> },
             { path: 'time-sheet', element: <TimeSheet /> },

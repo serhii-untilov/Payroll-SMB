@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    UseGuards,
+    ParseIntPipe,
+    HttpCode,
+    HttpStatus,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -11,6 +23,7 @@ export class UsersController {
 
     @Post()
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     async create(@Body() createUserDto: CreateUserDto): Promise<IPublicUserData> {
         const user = await this.usersService.create(createUserDto);
         return UsersService.toPublic(user);
@@ -18,6 +31,7 @@ export class UsersController {
 
     @Get()
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     async findAll(): Promise<IPublicUserData[]> {
         const users = await this.usersService.findAll();
         return users.map((user) => UsersService.toPublic(user));
@@ -25,25 +39,28 @@ export class UsersController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    async findOne(@Param('id') id: string): Promise<IPublicUserData> {
-        const user = await this.usersService.findOne({ where: { id: +id } });
+    @HttpCode(HttpStatus.OK)
+    async findOne(@Param('id', ParseIntPipe) id: number): Promise<IPublicUserData> {
+        const user = await this.usersService.findOne({ where: { id } });
         return UsersService.toPublic(user);
     }
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     async update(
-        @Param('id') id: string,
+        @Param('id', ParseIntPipe) id: number,
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<IPublicUserData> {
-        const user = await this.usersService.update(+id, updateUserDto);
+        const user = await this.usersService.update(id, updateUserDto);
         return UsersService.toPublic(user);
     }
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    async remove(@Param('id') id: string): Promise<IPublicUserData> {
-        const user = await this.usersService.remove(+id);
+    @HttpCode(HttpStatus.OK)
+    async remove(@Param('id', ParseIntPipe) id: number): Promise<IPublicUserData> {
+        const user = await this.usersService.remove(id);
         return UsersService.toPublic(user);
     }
 }
