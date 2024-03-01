@@ -9,12 +9,11 @@ export interface IUser {
     password: string;
     refreshToken: string;
     isActive: boolean;
-    language: string | null | undefined;
-    roles?: IRole[] | null | undefined;
-    companies?: ICompany[] | null | undefined;
+    language: string;
+    roles?: IRole[];
+    companies?: ICompany[];
 }
 
-export type ICreateUser = Pick<IUser, 'firstName' | 'lastName' | 'email' | 'password' | 'roles'>;
-export type IUpdateUser = Partial<Omit<IUser, 'id'>>;
-export type IUpsertUser = IUser;
+export type ICreateUser = Pick<IUser, 'firstName' | 'lastName' | 'email' | 'password'>;
+export type IUpdateUser = Partial<ICreateUser>;
 export type IPublicUserData = Partial<Omit<IUser, 'password' | 'refreshToken'>>;

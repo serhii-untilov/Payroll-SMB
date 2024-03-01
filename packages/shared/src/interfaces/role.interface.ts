@@ -10,7 +10,7 @@ export interface IRole {
     id: number;
     name: string;
     type: string;
-    users?: IUser[] | null | undefined;
+    users?: IUser[];
 }
 
 export type ICreateRole = Omit<IRole, 'id' | 'users'>;

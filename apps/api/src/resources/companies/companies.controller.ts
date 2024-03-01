@@ -30,7 +30,7 @@ export class CompaniesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() createCompanyDto: CreateCompanyDto) {
-        const user = await this.usersService.findOne({ id: req.user['sub'] });
+        const user = await this.usersService.findOneBy({ id: req.user['sub'] });
         return await this.companiesService.create(user, createCompanyDto);
     }
 
@@ -56,7 +56,7 @@ export class CompaniesController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updateCompanyDto: UpdateCompanyDto,
     ) {
-        const user = await this.usersService.findOne({ id: req.user['sub'] });
+        const user = await this.usersService.findOneBy({ id: req.user['sub'] });
         return await this.companiesService.update(user, id, updateCompanyDto);
     }
 
@@ -64,7 +64,7 @@ export class CompaniesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-        const user = await this.usersService.findOne({ id: req.user['sub'] });
+        const user = await this.usersService.findOneBy({ id: req.user['sub'] });
         return await this.companiesService.remove(user, id);
     }
 }

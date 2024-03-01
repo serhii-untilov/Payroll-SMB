@@ -14,7 +14,7 @@ export class CompaniesService {
     ) {}
 
     async create(user: IUser, company: CreateCompanyDto): Promise<Company> {
-        const existing = this.companiesRepository.findOne({ where: { name: company.name } });
+        const existing = await this.companiesRepository.findOneBy({ name: company.name });
         if (existing) {
             throw new BadRequestException(`Company '${company.name}' already exists.`);
         }

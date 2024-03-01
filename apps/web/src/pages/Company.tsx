@@ -19,15 +19,16 @@ import { getAccountingList } from '../services/accounting.service';
 import { createCompany, getCompany, updateCompany } from '../services/company.service';
 import { getLawList } from '../services/law.service';
 import { getDirtyValues } from '../services/utils';
+import * as _ from 'lodash';
 
 const formSchema = yup.object().shape({
     id: yup.number().nullable(),
     name: yup.string().required('Name is required'),
-    law: yup.string().nullable(),
-    taxId: yup.string().nullable(),
-    accounting: yup.string().nullable(),
-    dateFrom: yup.date().nullable(),
-    dateTo: yup.date().nullable(),
+    lawId: yup.number().positive('Law is required').required(),
+    taxId: yup.string(),
+    accountingId: yup.number().positive('Accounting is required').required(),
+    dateFrom: yup.date().required('DateFrom is required'),
+    dateTo: yup.date().required('DateTo is required'),
     payPeriod: yup.date().required('Pay period is required'),
     checkDate: yup.date().required('Check date is required'),
 });
@@ -38,9 +39,9 @@ type FormType = yup.InferType<typeof formSchema>;
 const defaultValues: FormType = {
     id: 0,
     name: '',
-    law: '',
+    lawId: 0,
     taxId: '',
-    accounting: '',
+    accountingId: 0,
     dateFrom: new Date('1970-01-01'),
     dateTo: new Date('1970-01-01'),
     payPeriod: new Date('1970-01-01'),
@@ -99,10 +100,10 @@ export default function Company() {
     useEffect(() => {
         formErrors.name?.message &&
             enqueueSnackbar(t(formErrors.name?.message), { variant: 'error' });
-        formErrors.law?.message &&
-            enqueueSnackbar(t(formErrors.law?.message), { variant: 'error' });
-        formErrors.accounting?.message &&
-            enqueueSnackbar(t(formErrors.accounting?.message), { variant: 'error' });
+        formErrors.lawId?.message &&
+            enqueueSnackbar(t(formErrors.lawId?.message), { variant: 'error' });
+        formErrors.accountingId?.message &&
+            enqueueSnackbar(t(formErrors.accountingId?.message), { variant: 'error' });
         formErrors.payPeriod?.message &&
             enqueueSnackbar(t(formErrors.payPeriod?.message), { variant: 'error' });
         formErrors.checkDate?.message &&
@@ -135,13 +136,13 @@ export default function Company() {
         if (!isDirty) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            // if (data.id) {
-            //     const company = updateCompany(data.id, dirtyValues);
-            //     reset(company);
-            // } else {
-            //     const company = createCompany(data);
-            //     reset(company);
-            // }
+            if (data.id) {
+                const company = await updateCompany(data.id, dirtyValues);
+                reset(company);
+            } else {
+                const company = await createCompany(data);
+                reset(company);
+            }
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -177,9 +178,9 @@ export default function Company() {
                         <FormInputDropdown
                             control={control}
                             label={t('Law')}
-                            name="law"
-                            autoComplete="law"
-                            type="text"
+                            name="lawId"
+                            autoComplete="lawId"
+                            type="number"
                             options={
                                 lawList?.map((o) => {
                                     return { label: o.name, value: o.id };
@@ -201,9 +202,9 @@ export default function Company() {
                         <FormInputDropdown
                             control={control}
                             label={t('Accounting')}
-                            name="accounting"
-                            autoComplete="accounting"
-                            type="text"
+                            name="accountingId"
+                            autoComplete="accountingId"
+                            type="number"
                             options={
                                 accountingList?.map((o) => {
                                     return { label: o.name, value: o.id };

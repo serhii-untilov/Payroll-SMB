@@ -13,21 +13,30 @@ export class Company extends Logger implements ICompany {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @Column({ type: 'varchar', length: 15, nullable: true })
-    taxId?: string;
+    @Column({ type: 'varchar', length: 15, default: '' })
+    taxId: string;
 
     @ManyToOne(() => Law, {
         createForeignKeyConstraints: false,
     })
-    law: Law;
+    law?: Law;
+
+    @Column({ type: 'integer', nullable: true })
+    lawId: number;
 
     @ManyToOne(() => Accounting, {
         createForeignKeyConstraints: false,
     })
-    accounting: Accounting;
+    accounting?: Accounting;
+
+    @Column({ type: 'integer', nullable: true })
+    accountingId: number;
 
     @ManyToOne(() => User, (user) => user.companies)
-    owner: User;
+    owner?: User;
+
+    @Column({ type: 'integer', nullable: true })
+    ownerId: number;
 
     @Column({ type: 'date', default: '1970-01-01' })
     dateFrom: Date;

@@ -1,4 +1,5 @@
 import {
+    Column,
     CreateDateColumn,
     DeleteDateColumn,
     ManyToOne,
@@ -14,7 +15,10 @@ export abstract class Logger {
     @ManyToOne(() => User, {
         createForeignKeyConstraints: false,
     })
-    createdUser: User;
+    createdUser?: User;
+
+    @Column({ type: 'integer', nullable: true })
+    createdUserId: number;
 
     @UpdateDateColumn()
     updatedDate: Date;
@@ -22,7 +26,10 @@ export abstract class Logger {
     @ManyToOne(() => User, {
         createForeignKeyConstraints: false,
     })
-    updatedUser: User;
+    updatedUser?: User;
+
+    @Column({ type: 'integer', nullable: true })
+    updatedUserId: number;
 
     @DeleteDateColumn()
     deletedDate: Date;
@@ -32,6 +39,9 @@ export abstract class Logger {
         nullable: true,
     })
     deletedUser?: User;
+
+    @Column({ type: 'integer', nullable: true })
+    deletedUserId?: number;
 
     @VersionColumn()
     version: number;

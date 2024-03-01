@@ -1,10 +1,10 @@
-import { IAccounting, ICreateCompany, ILaw } from '@repo/shared';
+import { ICreateCompany } from '@repo/shared';
 
 export class CreateCompanyDto implements ICreateCompany {
     name: string;
-    law: ILaw;
-    taxId?: string;
-    accounting: IAccounting;
+    lawId: number;
+    taxId: string;
+    accountingId: number;
     dateFrom: Date;
     dateTo: Date;
     payPeriod: Date;
