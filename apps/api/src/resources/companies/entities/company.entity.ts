@@ -14,7 +14,7 @@ export class Company extends Logger implements ICompany {
     name: string;
 
     @Column({ type: 'varchar', length: 15, default: '' })
-    taxId: string;
+    taxId?: string;
 
     @ManyToOne(() => Law, {
         createForeignKeyConstraints: false,
