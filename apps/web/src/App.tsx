@@ -8,7 +8,7 @@ import useLocale from './hooks/useLocale.ts';
 import './index.css';
 import router from './router/router';
 import { useTranslation } from 'react-i18next';
-import { Close } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
 import { AppProvider } from './context/AppContext.tsx';
 
 export default function App() {

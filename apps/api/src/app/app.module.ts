@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { UsersModule } from '../resources/users/users.module';
+import { AuthModule } from '../auth/auth.module';
 import { appConfig } from '../config/app.config';
-import { dbConfig } from '../config/db.config';
 import { authConfig } from '../config/auth.config';
+import { dbConfig } from '../config/db.config';
 import { googleConfig } from '../config/google.config';
 import { TypeormConfigService } from '../config/typeorm-config.service';
-import { LawsModule } from '../resources/laws/laws.module';
-import { RolesModule } from '../resources/roles/roles.module';
-import { AuthModule } from '../auth/auth.module';
 import { AccountingModule } from '../resources/accounting/accounting.module';
 import { CompaniesModule } from '../resources/companies/companies.module';
+import { LawsModule } from '../resources/laws/laws.module';
+import { RolesModule } from '../resources/roles/roles.module';
+import { UsersModule } from '../resources/users/users.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
     imports: [
