@@ -25,7 +25,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('login')
     async signIn(@Body() user: AuthDto): Promise<TokensDto> {
-        return await this.authService.signIn({ email: user.email, password: user.password });
+        return await this.authService.signIn(user);
     }
 
     @HttpCode(HttpStatus.OK)

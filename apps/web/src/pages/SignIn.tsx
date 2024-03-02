@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -16,29 +17,31 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, redirect } from 'react-router-dom';
+import * as yup from 'yup';
 import { FormTextField } from '../components/form/FormTextField';
 import { AppTitle } from '../components/layout/AppTitle';
 import { Copyright } from '../components/layout/Copyright';
 import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
 import { errorMessage } from '../services/utils';
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-const formSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email is invalid'),
-    password: Yup.string().required('Password is required'),
+const formSchema = yup.object().shape({
+    email: yup.string().required('Email is required').email('Email is invalid'),
+    password: yup.string().required('Password is required'),
+    rememberMe: yup.boolean(),
 });
 
-type FormType = Yup.InferType<typeof formSchema>;
+type FormType = yup.InferType<typeof formSchema>;
 
 const defaultValues: FormType = {
     email: '',
     password: '',
+    rememberMe: false,
 };
 
 export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
     const { login } = useAuth();
     const { locale } = useLocale();
     const { t } = useTranslation();
@@ -70,7 +73,7 @@ export default function SignIn() {
 
     const onSubmit: SubmitHandler<IAuth> = async (data) => {
         try {
-            await login(data);
+            await login({ ...data, rememberMe });
             redirect('/dashboard');
         } catch (e) {
             enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
@@ -130,7 +133,15 @@ export default function SignIn() {
                         }
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={
+                            <Checkbox
+                                checked={rememberMe}
+                                color="primary"
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                    setRememberMe(event.target.checked);
+                                }}
+                            />
+                        }
                         label={t('Remember me')}
                         sx={{ mb: 2 }}
                     />
