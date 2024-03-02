@@ -45,7 +45,10 @@ export class CompaniesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.companiesService.findOne(id);
+        return await this.companiesService.findOne({
+            where: { id },
+            relations: { law: true, accounting: true, owner: true },
+        });
     }
 
     @Patch(':id')

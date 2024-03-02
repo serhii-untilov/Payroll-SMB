@@ -54,6 +54,7 @@ export class AuthController {
             },
             relations: {
                 roles: true,
+                companies: true,
             },
         });
         return UsersService.toPublic(user);
