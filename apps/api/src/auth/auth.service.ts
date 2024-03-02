@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '../resources/users/users.service';
 import { CreateUserDto } from '../resources/users/dto/create-user.dto';
 import { TokensDto } from './dto/tokens.dto';
+import { AuthDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -33,15 +34,15 @@ export class AuthService {
         return tokens;
     }
 
-    async signIn({ email, password }): Promise<TokensDto> {
-        const user = await this.usersService.findOneBy({ email });
+    async signIn(auth: AuthDto): Promise<TokensDto> {
+        const user = await this.usersService.findOneBy({ email: auth.email });
         if (!user) {
             throw new BadRequestException('User not found');
         }
-        if (!(await bcrypt.compare(password, user.password))) {
+        if (!(await bcrypt.compare(auth.password, user.password))) {
             throw new UnauthorizedException('Password is incorrect');
         }
-        const tokens = await this.getTokens(user.id, user.email);
+        const tokens = await this.getTokens(user.id, user.email, !auth.rememberMe);
         await this.updateRefreshToken(user.id, tokens.refreshToken);
         return tokens;
     }
@@ -55,14 +56,14 @@ export class AuthService {
         return await bcrypt.hash(data, 10);
     }
 
-    async updateRefreshToken(userId: number, refreshToken: string) {
-        const hashedRefreshToken = await this.hashData(refreshToken);
+    async updateRefreshToken(userId: number, refreshToken: string | null) {
+        const hashedRefreshToken = refreshToken ? await this.hashData(refreshToken) : null;
         await this.usersService.update(userId, {
             refreshToken: hashedRefreshToken,
         });
     }
 
-    async getTokens(userId: number, email: string): Promise<TokensDto> {
+    async getTokens(userId: number, email: string, skipRefreshToken?: boolean): Promise<TokensDto> {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(
                 {
@@ -74,16 +75,18 @@ export class AuthService {
                     expiresIn: this.configService.get<string>('auth.accessExpiration'),
                 },
             ),
-            this.jwtService.signAsync(
-                {
-                    sub: userId,
-                    email: email,
-                },
-                {
-                    secret: this.configService.get<string>('auth.refreshSecret'),
-                    expiresIn: this.configService.get<string>('auth.refreshExpiration'),
-                },
-            ),
+            skipRefreshToken
+                ? Promise.resolve(null)
+                : this.jwtService.signAsync(
+                      {
+                          sub: userId,
+                          email: email,
+                      },
+                      {
+                          secret: this.configService.get<string>('auth.refreshSecret'),
+                          expiresIn: this.configService.get<string>('auth.refreshExpiration'),
+                      },
+                  ),
         ]);
 
         return {

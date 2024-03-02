@@ -67,6 +67,7 @@ describe('AuthController', () => {
         const res = await controller.signIn({
             ...mockUser,
             password: mockUserUnhashedPassword,
+            rememberMe: false,
         });
         expect(res.accessToken).toBeDefined();
         expect(typeof res.accessToken).toBe('string');
@@ -75,7 +76,7 @@ describe('AuthController', () => {
     it('should throw with a bad email', async () => {
         try {
             repoMock.findOneBy?.mockReturnValue(null);
-            await controller.signIn({ email: '', password: '' });
+            await controller.signIn({ email: '', password: '', rememberMe: false });
         } catch (err) {
             expect(err).toBeInstanceOf(BadRequestException);
         }
