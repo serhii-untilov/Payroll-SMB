@@ -39,6 +39,7 @@ const defaultValues: FormType = {
 
 export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(localStorage.getItem('rememberMe') || true);
     const { login } = useAuth();
     const { locale } = useLocale();
     const { t } = useTranslation();
@@ -130,7 +131,7 @@ export default function SignIn() {
                         }
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox value={rememberMe} color="primary" />}
                         label={t('Remember me')}
                         sx={{ mb: 2 }}
                     />
