@@ -1,23 +1,23 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
-    ParseIntPipe,
+    Get,
     HttpCode,
     HttpStatus,
-    UseGuards,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
     Req,
+    UseGuards,
 } from '@nestjs/common';
+import { Request } from 'express';
+import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { UsersService } from '../users/users.service';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { Request } from 'express';
-import { UsersService } from '../users/users.service';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
 
 @Controller('companies')
 export class CompaniesController {

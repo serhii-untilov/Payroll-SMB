@@ -41,6 +41,8 @@ npm i --workspace @repo/web --save react-i18next i18next
 npm i --workspace @repo/web --save i18next-browser-languagedetector
 npm i --workspace @repo/web --save @hookform/resolvers yup
 npm i --workspace @repo/web --save material-ui-popup-state
+npm i --workspace @repo/web --save i18next-http-backend
+npm i --workspace @repo/web --save-dev rollup-plugin-visualizer
 
 # Init "shared" library
 mkdir packages/shared
@@ -101,6 +103,7 @@ npx --workspace @repo/api nest generate resource users resources
 npx --workspace @repo/api nest generate resource laws resources
 npx --workspace @repo/api nest generate resource accounting resources
 npx --workspace @repo/api nest generate resource companies resources
+npx --workspace @repo/api nest generate resource locales resources
 npx --workspace @repo/api nest g module auth
 npx --workspace @repo/api nest g controller auth
 npx --workspace @repo/api nest g service auth

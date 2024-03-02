@@ -20,5 +20,11 @@ module.exports = {
         // 'no-console': 'warn',
         'no-loops/no-loops': 'warn',
         'prettier/prettier': 'warn',
+        'no-restricted-imports': [
+            'error',
+            {
+                patterns: ['@mui/*/*/*'],
+            },
+        ],
     },
 };

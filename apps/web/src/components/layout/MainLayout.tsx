@@ -1,5 +1,7 @@
-import { Logout, PersonOutlined, Support } from '@mui/icons-material';
-import { List } from '@mui/material';
+import Logout from '@mui/icons-material/Logout';
+import PersonOutlined from '@mui/icons-material/PersonOutlined';
+import Support from '@mui/icons-material/Support';
+import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
