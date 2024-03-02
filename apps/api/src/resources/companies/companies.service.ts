@@ -31,8 +31,8 @@ export class CompaniesService {
         return await this.companiesRepository.find();
     }
 
-    async findOne(id: number): Promise<Company> {
-        const company = await this.companiesRepository.findOneBy({ id });
+    async findOne(params): Promise<Company> {
+        const company = await this.companiesRepository.findOne(params);
         if (!company) {
             throw new NotFoundException(`Company could not be found.`);
         }

@@ -20,6 +20,7 @@ import { createCompany, getCompany, updateCompany } from '../services/company.se
 import { getLawList } from '../services/law.service';
 import { getDirtyValues } from '../services/utils';
 import * as _ from 'lodash';
+import useAppContext from '../hooks/useAppContext';
 
 const formSchema = yup.object().shape({
     id: yup.number().nullable(),
@@ -37,7 +38,7 @@ type FormType = yup.InferType<typeof formSchema>;
 
 // To prevent Warning: A component is changing an uncontrolled input to be controlled.
 const defaultValues: FormType = {
-    id: 0,
+    id: null,
     name: '',
     lawId: 0,
     taxId: '',
@@ -50,6 +51,7 @@ const defaultValues: FormType = {
 
 export default function Company() {
     const { id } = useParams();
+    const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const { locale } = useLocale();
     const { t } = useTranslation();
 
@@ -59,7 +61,8 @@ export default function Company() {
         isLoading: isCompanyLoading,
         error: companyError,
     } = useQuery<FormType, Error>('company', async () => {
-        return formSchema.cast(id ? await getCompany(+id) : defaultValues);
+        const companyId = id ? +id : currentCompany?.id;
+        return formSchema.cast(companyId ? await getCompany(companyId) : defaultValues);
     });
 
     const {
@@ -136,12 +139,12 @@ export default function Company() {
         if (!isDirty) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            if (data.id) {
-                const company = await updateCompany(data.id, dirtyValues);
-                reset(company);
-            } else {
-                const company = await createCompany(data);
-                reset(company);
+            const company = data.id
+                ? await updateCompany(data.id, dirtyValues)
+                : await createCompany(data);
+            reset(company);
+            if (!currentCompany || currentCompany.id === company.id) {
+                setCurrentCompany(company);
             }
         } catch (e: unknown) {
             const error = e as AxiosError;

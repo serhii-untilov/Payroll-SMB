@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import useLocale from '../../hooks/useLocale';
 import { ListItemLink } from './ListItemLink';
+import useAppContext from '../../hooks/useAppContext';
 
 export function MainMenu() {
     const { locale } = useLocale();
@@ -22,7 +23,11 @@ export function MainMenu() {
     return (
         <List component="nav" sx={{ mx: ['auto'] }}>
             <ListItemLink to="/dashboard" primary={t('Dashboard')} icon={<DashboardOutlined />} />
-            <ListItemLink to="/company" primary={t('Company')} icon={<BusinessCenterOutlined />} />
+            <ListItemLink
+                to={'/company/'}
+                primary={t('Company')}
+                icon={<BusinessCenterOutlined />}
+            />
             <ListItemLink to="/employees" primary={t('Employees')} icon={<PeopleOutlined />} />
             {/* <ListItemLink to="/time-off" primary={t('Time Off')} icon={<LandscapeOutlined />} /> */}
             <ListItemLink to="/time-sheet" primary={t('Time Sheet')} icon={<Schedule />} />
