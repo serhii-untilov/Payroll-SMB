@@ -16,10 +16,10 @@ export default function Dashboard() {
 
     return (
         <>
-            <PageLayout title={t('Dashboard')}>
+            <PageLayout title={''}>
                 <Grid container flexDirection="column" spacing={2} sx={{ height: '100%' }}>
                     <Grid item>
-                        <Typography component="h2" variant="h2" textAlign={'center'}>
+                        <Typography component="h2" variant="h1" textAlign={'center'}>
                             <Greeting />
                         </Typography>
                     </Grid>
@@ -44,7 +44,9 @@ export default function Dashboard() {
                                 my: { xs: 1, sm: 2 },
                                 mx: { xs: 1, sm: 2, md: 8, lg: 18 },
                                 p: { xs: 1, sm: 3 },
+                                color: (theme) => theme.palette.common.black,
                                 bgcolor: amber[50],
+                                opacity: 50,
                             }}
                         >
                             <SummaryTodo></SummaryTodo>

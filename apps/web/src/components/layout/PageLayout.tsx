@@ -19,7 +19,7 @@ const PageLayout: FC<PageLayoutProps> = ({ title, children }) => {
                 height: '100%',
             }}
         >
-            {compactView && (
+            {compactView && title && (
                 <Box sx={{ flexGrow: 1, mb: 2 }}>
                     <PageTitle title={title} />
                 </Box>

@@ -1,7 +1,7 @@
 import Drawer from '@mui/material/Drawer';
 import { styled } from '@mui/material/styles';
 
-const drawerWidth: number = 260;
+const drawerWidth: number = 270;
 
 export const Sidebar = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({

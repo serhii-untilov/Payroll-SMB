@@ -32,19 +32,22 @@ export function ListItemLink(props: ListItemLinkProps) {
                 onClick={onClick}
                 sx={{
                     '&.active': {
-                        color: 'white',
-                        bgcolor: 'primary.main',
-
+                        color: (theme) => theme.palette.background.default,
+                        bgcolor: (theme) =>
+                            theme.palette.mode === 'dark'
+                                ? theme.palette.primary.main
+                                : theme.palette.primary.main,
                         opacity: 0.85,
                         borderRadius: '5px',
                         py: [0.5],
                         my: [0.3],
                     },
-                    '> .css-cveggr-MuiListItemIcon-root': {
+                    '> .MuiListItemIcon-root': {
+                        opacity: 0.85,
                         minWidth: 39,
                     },
-                    '&.active > .css-cveggr-MuiListItemIcon-root': {
-                        color: 'white',
+                    '&.active > .MuiListItemIcon-root': {
+                        color: (theme) => theme.palette.background.default,
                         opacity: 0.85,
                         borderRadius: '5px',
                         minWidth: 39,
@@ -56,8 +59,9 @@ export function ListItemLink(props: ListItemLinkProps) {
                         py: [0.5],
                         my: [0.3],
                     },
-                    height: 40,
                     transition: 'none',
+                    height: 40,
+                    // opacity: 0.85,
                     py: [0.5],
                     my: [0.3],
                     px: [1],
@@ -72,7 +76,7 @@ export function ListItemLink(props: ListItemLinkProps) {
                         placement="right"
                         title={primary}
                     >
-                        <ListItemIcon>{icon}</ListItemIcon>
+                        <ListItemIcon sx={{ minWidth: 39 }}>{icon}</ListItemIcon>
                     </Tooltip>
                 ) : null}
 

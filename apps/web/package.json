@@ -21,7 +21,6 @@
     "@mui/x-data-grid": "^6.19.4",
     "@mui/x-date-pickers": "^6.19.4",
     "@repo/shared": "*",
-    "avvvatars-react": "^0.4.2",
     "axios": "^1.6.7",
     "i18next": "^23.10.0",
     "i18next-browser-languagedetector": "^7.2.0",

@@ -24,6 +24,7 @@ import { Copyright } from '../components/layout/Copyright';
 import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
 import { errorMessage } from '../services/utils';
+import { grey } from '@mui/material/colors';
 
 const formSchema = Yup.object().shape({
     firstName: Yup.string().required('First name is required'),
@@ -153,6 +154,7 @@ export default function SignUp() {
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
+                                            sx={{ color: grey[600] }}
                                             aria-label="toggle password visibility"
                                             onClick={handleClickShowPassword}
                                             onMouseDown={handleMouseDownPassword}
@@ -171,7 +173,12 @@ export default function SignUp() {
                             />
                         </Grid>
                     </Grid>
-                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2, color: (theme) => theme.palette.background.default }}
+                    >
                         {t('Sign Up')}
                     </Button>
                     <Grid container justifyContent="flex-end">

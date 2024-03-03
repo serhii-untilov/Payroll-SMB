@@ -1,13 +1,15 @@
+import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
 import Support from '@mui/icons-material/Support';
-import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
+import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, Outlet, redirect } from 'react-router-dom';
+import { Outlet, redirect } from 'react-router-dom';
+import { Link } from './Link';
 import useAppContext from '../../hooks/useAppContext';
 import useAuth from '../../hooks/useAuth';
 import useLocale from '../../hooks/useLocale';
@@ -23,7 +25,7 @@ export default function MainLayout() {
     const { logout } = useAuth();
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { compactView, setCompactView } = useAppContext();
+    const { compactView, setCompactView, themeMode, theme, switchThemeMode } = useAppContext();
 
     useEffect(() => {}, [locale, t]);
 
@@ -48,7 +50,7 @@ export default function MainLayout() {
                         justifyContent: 'space-between',
                         height: '100%',
                         px: [1],
-                        bgcolor: '#f7f7f7',
+                        bgcolor: (theme) => theme.palette.background.paper,
                     }}
                 >
                     <Box
@@ -74,7 +76,7 @@ export default function MainLayout() {
                                         mt: [2],
                                     }}
                                 >
-                                    <Link to="/welcome">
+                                    <Link to="/welcome" color={'common.black'}>
                                         <AppTitle align="left" />
                                     </Link>
                                 </Box>
@@ -90,8 +92,18 @@ export default function MainLayout() {
                                 primary={t('Profile')}
                                 icon={<PersonOutlined />}
                             />
-                            {/* <ListItemLink to="/service" primary="Service" icon={<Layers />} /> */}
-                            {/* <ListItemButton onClick={onHelp} primary="Help" icon={<Help />} /> */}
+
+                            <ListItemButton
+                                onClick={switchThemeMode}
+                                primary={themeMode === 'light' ? t('Light theme') : t('Dark theme')}
+                                icon={
+                                    themeMode === 'light' ? (
+                                        <LightModeOutlined />
+                                    ) : (
+                                        <DarkModeOutlined />
+                                    )
+                                }
+                            />
 
                             <ListItemLink
                                 target="_blank"
@@ -114,10 +126,13 @@ export default function MainLayout() {
             <Box
                 component="main"
                 sx={{
-                    bgcolor: (theme) =>
-                        theme.palette.mode === 'light'
-                            ? 'background.paper'
-                            : theme.palette.grey[100],
+                    // bgcolor: (theme) =>
+                    //     theme.palette.mode === 'light'
+                    //         ? 'background.paper'
+                    //         : theme.palette.grey[100],
+                    // bgcolor: 'background.paper',
+                    // bgcolor: 'background.default',
+                    // color: 'text.primary',
                     flexGrow: 1,
                     height: '100vh',
                     width: '100%',

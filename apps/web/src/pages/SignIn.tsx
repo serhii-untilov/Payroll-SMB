@@ -26,6 +26,7 @@ import { Copyright } from '../components/layout/Copyright';
 import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
 import { errorMessage } from '../services/utils';
+import { grey } from '@mui/material/colors';
 
 const formSchema = yup.object().shape({
     email: yup.string().required('Email is required').email('Email is invalid'),
@@ -128,6 +129,7 @@ export default function SignIn() {
                                     onClick={handleClickShowPassword}
                                     onMouseDown={handleMouseDownPassword}
                                     edge="end"
+                                    sx={{ color: grey[600] }}
                                 >
                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
@@ -148,7 +150,12 @@ export default function SignIn() {
                         sx={{ mb: 2 }}
                     />
 
-                    <Button type="submit" fullWidth variant="contained" sx={{ mb: 2 }}>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mb: 2, color: (theme) => theme.palette.background.default }}
+                    >
                         {t('Sign In')}
                     </Button>
 

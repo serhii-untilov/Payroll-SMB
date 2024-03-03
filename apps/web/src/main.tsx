@@ -10,7 +10,7 @@ import App from './App.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import './index.css';
 import { ThemeProvider } from '@emotion/react';
-import { defaultTheme } from './themes/default.theme.ts';
+// import { defaultTheme } from './themes/defaultTheme.ts';
 import { LocaleProvider } from './context/LocaleContext.tsx';
 import './i18n.ts'; // ts => import './i18n.ts'
 
@@ -31,11 +31,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 <BrowserRouter>
-                    <ThemeProvider theme={defaultTheme()}>
-                        <LocaleProvider>
-                            <App />
-                        </LocaleProvider>
-                    </ThemeProvider>
+                    {/* <ThemeProvider theme={defaultTheme()}> */}
+                    <LocaleProvider>
+                        <App />
+                    </LocaleProvider>
+                    {/* </ThemeProvider> */}
                 </BrowserRouter>
             </AuthProvider>
         </QueryClientProvider>
