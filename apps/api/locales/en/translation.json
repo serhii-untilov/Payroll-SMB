@@ -45,5 +45,9 @@
     "Reminders": "Reminders",
     "Upcoming": "Upcoming events",
     "Light theme": "Theme",
-    "Dark theme": "Theme"
+    "Dark theme": "Theme",
+    "Name": "Name",
+    "Law": "Law",
+    "Tax ID": "Tax ID",
+    "Accounting": "Accounting type"
 }

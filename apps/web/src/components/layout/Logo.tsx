@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
+import logoImage from '/payroll.svg';
 
 export function Logo(props: any) {
+    console.log();
     return (
         <Box
             component="img"
@@ -14,7 +16,7 @@ export function Logo(props: any) {
                 },
             }}
             alt="Application logo."
-            src="payroll.svg"
+            src={logoImage}
             {...props}
         />
     );
