@@ -14,12 +14,12 @@ export function AppTitle(props: TypographyProps) {
         <>
             <Typography
                 component="h1"
-                color="text.primary"
-                variant="h1"
+                variant="h2"
                 noWrap
                 align="center"
-                sx={{ mb: 2, fontWeight: 500 }}
+                sx={{ mb: 2 }}
                 {...props}
+                color="text.primary"
             >
                 {t(title)}
             </Typography>

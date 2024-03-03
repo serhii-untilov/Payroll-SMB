@@ -24,8 +24,10 @@ export function ListItemButton(props: ListItemButtonProps) {
                 sx={{
                     '&.active': {
                         color: 'white',
-                        bgcolor: 'primary.main',
-                        backgroundColor: 'primary.main',
+                        bgcolor: (theme) =>
+                            theme.palette.mode === 'dark'
+                                ? theme.palette.primary.dark
+                                : theme.palette.primary.main,
                         opacity: 0.85,
                         borderRadius: '5px',
                         py: [0.5],
@@ -47,6 +49,7 @@ export function ListItemButton(props: ListItemButtonProps) {
                     },
                     transition: 'none',
                     height: 40,
+                    // opacity: 0.85,
                     py: [0.5],
                     my: [0.3],
                     px: [1],

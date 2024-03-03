@@ -11,7 +11,7 @@ import { FormButton } from '../components/form/FormButton';
 import { FormInputDropdown } from '../components/form/FormInputDropdown';
 import { FormTextField } from '../components/form/FormTextField';
 import PageLayout from '../components/layout/PageLayout';
-import { AvatarGenerator } from '../components/utility/AvatarGenerator';
+import { AvatarBox } from '../components/utility/AvatarBox';
 import { Loading } from '../components/utility/Loading';
 import { supportedLanguages } from '../context/LocaleContext';
 import useLocale from '../hooks/useLocale';
@@ -117,7 +117,7 @@ export default function Profile() {
                 spacing={2}
             >
                 <Grid item>
-                    <AvatarGenerator value={watch('email')} />
+                    <AvatarBox />
                 </Grid>
                 <Grid container item xs={12} sm={7} md={6} lg={4} spacing={2}>
                     <Grid item xs={12}>

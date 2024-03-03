@@ -1,33 +1,24 @@
-import { createTheme, responsiveFontSizes } from '@mui/material';
+import { paletteDark } from './paletteDark';
+import { paletteLight } from './paletteLight';
 
-export function defaultTheme() {
-    const theme = createTheme({
+export function defaultTheme(themeMode?: string) {
+    return {
+        palette: themeMode === 'dark' ? paletteDark() : paletteLight(),
         components: {
             MuiButtonBase: {
                 defaultProps: {
                     // disableRipple: true,
-                    disableTouchRipple: true,
+                    // disableTouchRipple: true,
                 },
-            },
-        },
-        // transitions: {
-        //     // So we have `transition: none;` everywhere
-        //     create: () => 'none',
-        // },
-        palette: {
-            secondary: {
-                light: '#ffa733',
-                main: '#ff9100',
-                dark: '#b26500',
             },
         },
         typography: {
             h1: {
-                fontSize: '1.2rem',
+                fontSize: '1.4rem',
                 fontWeight: 500,
             },
             h2: {
-                fontSize: '1.6rem',
+                fontSize: '1.2rem',
                 fontWeight: 500,
             },
             h3: {
@@ -44,6 +35,5 @@ export function defaultTheme() {
                 fontSize: '1.1rem',
             },
         },
-    });
-    return responsiveFontSizes(theme);
+    };
 }

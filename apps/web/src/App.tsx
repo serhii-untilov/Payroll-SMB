@@ -13,10 +13,6 @@ import { AppProvider } from './context/AppContext.tsx';
 
 export default function App() {
     const content = useRoutes(router);
-    const { locale } = useLocale();
-    const theme = useTheme();
-    const localeTheme = useMemo(() => createTheme(theme, locale.locale), [locale.locale, theme]);
-    const { t } = useTranslation();
 
     return (
         <>
@@ -39,9 +35,7 @@ export default function App() {
                     </IconButton>
                 )}
             >
-                <ThemeProvider theme={localeTheme}>
-                    <AppProvider>{content}</AppProvider>
-                </ThemeProvider>
+                <AppProvider>{content}</AppProvider>
             </SnackbarProvider>
         </>
     );

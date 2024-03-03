@@ -30,7 +30,7 @@ function CompanyMenu(props: CompanyMenuProps) {
             <Typography
                 variant="body2"
                 color={grey[600]}
-                minWidth={260}
+                minWidth={270}
                 sx={{ p: 1.5, cursor: 'default' }}
             >
                 Select company
