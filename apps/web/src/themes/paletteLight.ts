@@ -84,7 +84,7 @@ export function paletteLight(): PaletteOptions {
             selected: rgba(0, 0, 0, 0.08),
             selectedOpacity: 0.08,
             disabled: rgba(0, 0, 0, 0.26),
-            disabledBackground: rgba(0, 0, 0, 0.12),
+            disabledBackground: '#9e9e9e', // rgba(0, 0, 0, 0.12),
             disabledOpacity: 0.38,
             focus: rgba(0, 0, 0, 0.12),
             focusOpacity: 0.12,

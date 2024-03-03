@@ -5,6 +5,7 @@ import * as React from 'react';
 import { NavLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 import useAppContext from '../../hooks/useAppContext';
 import { Tooltip } from './Tooltip';
+import { grey } from '@mui/material/colors';
 
 interface ListItemLinkProps {
     icon?: React.ReactElement;
@@ -32,11 +33,12 @@ export function ListItemLink(props: ListItemLinkProps) {
                 onClick={onClick}
                 sx={{
                     '&.active': {
-                        color: (theme) => theme.palette.background.default,
-                        bgcolor: (theme) =>
+                        color: (theme) =>
                             theme.palette.mode === 'dark'
-                                ? theme.palette.primary.main
-                                : theme.palette.primary.main,
+                                ? theme.palette.background.default
+                                : theme.palette.text.primary,
+                        // bgcolor: (theme) => theme.palette.primary.main,
+                        bgcolor: (theme) => grey[300],
                         opacity: 0.85,
                         borderRadius: '5px',
                         py: [0.5],
@@ -47,7 +49,10 @@ export function ListItemLink(props: ListItemLinkProps) {
                         minWidth: 39,
                     },
                     '&.active > .MuiListItemIcon-root': {
-                        color: (theme) => theme.palette.background.default,
+                        color: (theme) =>
+                            theme.palette.mode === 'dark'
+                                ? theme.palette.background.default
+                                : theme.palette.text.primary,
                         opacity: 0.85,
                         borderRadius: '5px',
                         minWidth: 39,
