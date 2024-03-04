@@ -14,5 +14,4 @@ export interface IRole {
 }
 
 export type ICreateRole = Omit<IRole, 'id' | 'users'>;
-export type IUpdateRole = Partial<Omit<IRole, 'id' | 'users'>>;
-export type IUpsertRole = Partial<IRole>;
+export type IUpdateRole = Partial<ICreateRole>;

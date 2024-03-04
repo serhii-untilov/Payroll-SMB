@@ -5,6 +5,9 @@ import { IUser } from './user.interface';
 export interface ICompany {
     id: number;
     name: string;
+    dateFrom: Date;
+    dateTo: Date;
+
     law?: ILaw;
     lawId: number;
     taxId?: string;
@@ -12,10 +15,9 @@ export interface ICompany {
     accountingId: number;
     owner?: IUser;
     ownerId: number;
-    dateFrom: Date;
-    dateTo: Date;
     payPeriod: Date;
     checkDate: Date;
+
     createdDate: Date;
     createdUser?: IUser;
     createdUserId: number;
@@ -28,9 +30,19 @@ export interface ICompany {
     version: number;
 }
 
-export type ICreateCompany = Pick<
+export type ICreateCompany = Omit<
     ICompany,
-    'name' | 'lawId' | 'taxId' | 'accountingId' | 'dateFrom' | 'dateTo' | 'payPeriod' | 'checkDate'
+    | 'id'
+    | 'createdDate'
+    | 'createdUser'
+    | 'createdUserId'
+    | 'updatedDate'
+    | 'updatedUser'
+    | 'updatedUserId: '
+    | 'deletedDate'
+    | 'deletedUser'
+    | 'deletedUserId'
+    | 'version'
 >;
 
 export type IUpdateCompany = Partial<ICreateCompany>;

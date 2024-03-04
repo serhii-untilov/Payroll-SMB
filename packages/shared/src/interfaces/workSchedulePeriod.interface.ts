@@ -9,4 +9,4 @@ export interface IWorkSchedulePeriod {
 }
 
 export type ICreateWorkSchedulePeriod = Omit<IWorkSchedulePeriod, 'id'>;
-export type IUpdateWorkSchedulePeriod = Partial<Omit<IWorkSchedulePeriod, 'id'>>;
+export type IUpdateWorkSchedulePeriod = Partial<ICreateWorkSchedulePeriod>;

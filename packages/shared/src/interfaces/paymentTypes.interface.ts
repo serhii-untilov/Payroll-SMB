@@ -1,3 +1,5 @@
+import { IUser } from './user.interface';
+
 export enum PaymentPart {
     PAYMENT_ACCRUALS = 'accruals',
     PAYMENT_DEDUCTIONS = 'deductions',
@@ -58,7 +60,32 @@ export interface IPaymentType {
     name: string;
     paymentGroup: string;
     paymentMethod: string;
+
+    createdDate: Date;
+    createdUser?: IUser;
+    createdUserId: number;
+    updatedDate: Date;
+    updatedUser?: IUser;
+    updatedUserId: number;
+    deletedDate: Date;
+    deletedUser?: IUser;
+    deletedUserId?: number;
+    version: number;
 }
 
-export type ICreatePaymentType = Omit<IPaymentType, 'id'>;
-export type IUpdatePaymentType = Partial<Omit<IPaymentType, 'id'>>;
+export type ICreatePaymentType = Omit<
+    IPaymentType,
+    | 'id'
+    | 'createdDate'
+    | 'createdUser'
+    | 'createdUserId'
+    | 'updatedDate'
+    | 'updatedUser'
+    | 'updatedUserId: '
+    | 'deletedDate'
+    | 'deletedUser'
+    | 'deletedUserId'
+    | 'version'
+>;
+
+export type IUpdatePaymentType = Partial<ICreatePaymentType>;
