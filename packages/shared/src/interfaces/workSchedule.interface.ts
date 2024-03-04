@@ -1,4 +1,4 @@
-import { IUser } from './user.interface';
+import { ILogger } from './logger.interface';
 import { IWorkSchedulePeriod } from './workSchedulePeriod.interface';
 
 export enum WorkScheduleType {
@@ -7,7 +7,7 @@ export enum WorkScheduleType {
     VARIABLE = 'variable', // Variable (hours vary every week)
 }
 
-export interface IWorkSchedule {
+export interface IWorkSchedule extends ILogger {
     id: number;
     name: string;
     type: string;
@@ -15,17 +15,6 @@ export interface IWorkSchedule {
     dateTo: Date;
 
     periods?: IWorkSchedulePeriod[];
-
-    createdDate: Date;
-    createdUser?: IUser;
-    createdUserId: number;
-    updatedDate: Date;
-    updatedUser?: IUser;
-    updatedUserId: number;
-    deletedDate: Date;
-    deletedUser?: IUser;
-    deletedUserId?: number;
-    version: number;
 }
 
 export type ICreateWorkSchedule = Omit<

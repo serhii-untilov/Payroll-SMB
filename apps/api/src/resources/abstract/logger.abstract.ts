@@ -7,8 +7,9 @@ import {
     VersionColumn,
 } from 'typeorm';
 import { User } from '../users/entities/user.entity';
+import { ILogger } from '@repo/shared/src/interfaces/logger.interface';
 
-export abstract class Logger {
+export abstract class Logger implements ILogger {
     @CreateDateColumn()
     createdDate: Date;
 

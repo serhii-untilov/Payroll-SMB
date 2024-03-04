@@ -1,9 +1,10 @@
 import { IAccounting } from './accounting.interface';
-import { IDepartment } from './department.interface';
+// import { IDepartment } from './department.interface';
 import { ILaw } from './law.interface';
+import { ILogger } from './logger.interface';
 import { IUser } from './user.interface';
 
-export interface ICompany {
+export interface ICompany extends ILogger {
     id: number;
     name: string;
     dateFrom: Date;
@@ -14,22 +15,11 @@ export interface ICompany {
     taxId?: string;
     accounting?: IAccounting;
     accountingId: number;
-    departments?: IDepartment[];
+    // departments?: IDepartment[];
     owner?: IUser;
-    ownerId?: number;
+    ownerId: number;
     payPeriod: Date;
     checkDate: Date;
-
-    createdDate: Date;
-    createdUser?: IUser;
-    createdUserId: number;
-    updatedDate: Date;
-    updatedUser?: IUser;
-    updatedUserId: number;
-    deletedDate: Date;
-    deletedUser?: IUser;
-    deletedUserId?: number;
-    version: number;
 }
 
 export type ICreateCompany = Omit<
@@ -37,7 +27,7 @@ export type ICreateCompany = Omit<
     | 'id'
     | 'law'
     | 'accounting'
-    | 'departments'
+    // | 'departments'
     | 'owner'
     | 'ownerId'
     | 'createdDate'

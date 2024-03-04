@@ -7,7 +7,9 @@ export class Department extends Logger implements IDepartment {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @ManyToOne(() => Company, (company) => company.departments)
+    @ManyToOne(() => Company, {
+        createForeignKeyConstraints: false,
+    })
     company?: Company;
 
     @Column({ type: 'integer' })

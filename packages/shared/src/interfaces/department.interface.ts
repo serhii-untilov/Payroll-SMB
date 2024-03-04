@@ -1,7 +1,7 @@
 import { ICompany } from './company.interface';
-import { IUser } from './user.interface';
+import { ILogger } from './logger.interface';
 
-export interface IDepartment {
+export interface IDepartment extends ILogger {
     id: number;
     company?: ICompany;
     companyId: number;
@@ -10,17 +10,6 @@ export interface IDepartment {
     dateTo: Date;
 
     parent?: IDepartment;
-
-    createdDate: Date;
-    createdUser?: IUser;
-    createdUserId: number;
-    updatedDate: Date;
-    updatedUser?: IUser;
-    updatedUserId: number;
-    deletedDate: Date;
-    deletedUser?: IUser;
-    deletedUserId?: number;
-    version: number;
 }
 
 export type ICreateDepartment = Omit<

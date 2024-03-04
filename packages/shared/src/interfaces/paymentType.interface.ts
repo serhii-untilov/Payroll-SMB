@@ -1,4 +1,4 @@
-import { IUser } from './user.interface';
+import { ILogger } from './logger.interface';
 
 export enum PaymentPart {
     PAYMENT_ACCRUALS = 'accruals',
@@ -55,22 +55,11 @@ export enum PaymentMethod {
     ONE_TIME_DEDUCTION = 'one-time-deduction',
 }
 
-export interface IPaymentType {
+export interface IPaymentType extends ILogger {
     id: number;
     name: string;
     paymentGroup: string;
     paymentMethod: string;
-
-    createdDate: Date;
-    createdUser?: IUser;
-    createdUserId: number;
-    updatedDate: Date;
-    updatedUser?: IUser;
-    updatedUserId: number;
-    deletedDate: Date;
-    deletedUser?: IUser;
-    deletedUserId?: number;
-    version: number;
 }
 
 export type ICreatePaymentType = Omit<

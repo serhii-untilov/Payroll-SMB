@@ -1,19 +1,8 @@
-import { IUser } from './user.interface';
+import { ILogger } from './logger.interface';
 
-export interface IJob {
+export interface IJob extends ILogger {
     id: number;
     name: string;
-
-    createdDate: Date;
-    createdUser?: IUser;
-    createdUserId: number;
-    updatedDate: Date;
-    updatedUser?: IUser;
-    updatedUserId: number;
-    deletedDate: Date;
-    deletedUser?: IUser;
-    deletedUserId?: number;
-    version: number;
 }
 
 export type ICreateJob = Omit<
