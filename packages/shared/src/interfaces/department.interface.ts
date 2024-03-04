@@ -3,7 +3,8 @@ import { IUser } from './user.interface';
 
 export interface IDepartment {
     id: number;
-    company: ICompany;
+    company?: ICompany;
+    companyId: number;
     name: string;
     dateFrom: Date;
     dateTo: Date;
@@ -23,14 +24,14 @@ export interface IDepartment {
 }
 
 export type ICreateDepartment = Omit<
-    ICompany,
+    IDepartment,
     | 'id'
     | 'createdDate'
     | 'createdUser'
     | 'createdUserId'
     | 'updatedDate'
     | 'updatedUser'
-    | 'updatedUserId: '
+    | 'updatedUserId'
     | 'deletedDate'
     | 'deletedUser'
     | 'deletedUserId'

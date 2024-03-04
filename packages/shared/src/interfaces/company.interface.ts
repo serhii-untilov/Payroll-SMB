@@ -1,4 +1,5 @@
 import { IAccounting } from './accounting.interface';
+import { IDepartment } from './department.interface';
 import { ILaw } from './law.interface';
 import { IUser } from './user.interface';
 
@@ -13,8 +14,9 @@ export interface ICompany {
     taxId?: string;
     accounting?: IAccounting;
     accountingId: number;
+    departments?: IDepartment[];
     owner?: IUser;
-    ownerId: number;
+    ownerId?: number;
     payPeriod: Date;
     checkDate: Date;
 
@@ -33,12 +35,17 @@ export interface ICompany {
 export type ICreateCompany = Omit<
     ICompany,
     | 'id'
+    | 'law'
+    | 'accounting'
+    | 'departments'
+    | 'owner'
+    | 'ownerId'
     | 'createdDate'
     | 'createdUser'
     | 'createdUserId'
     | 'updatedDate'
     | 'updatedUser'
-    | 'updatedUserId: '
+    | 'updatedUserId'
     | 'deletedDate'
     | 'deletedUser'
     | 'deletedUserId'

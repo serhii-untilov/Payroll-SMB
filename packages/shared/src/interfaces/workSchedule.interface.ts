@@ -33,7 +33,7 @@ export type ICreateWorkSchedule = Omit<
     | 'createdUserId'
     | 'updatedDate'
     | 'updatedUser'
-    | 'updatedUserId: '
+    | 'updatedUserId'
     | 'deletedDate'
     | 'deletedUser'
     | 'deletedUserId'

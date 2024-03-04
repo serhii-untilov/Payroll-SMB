@@ -24,7 +24,7 @@ export type ICreateJob = Omit<
     | 'createdUserId'
     | 'updatedDate'
     | 'updatedUser'
-    | 'updatedUserId: '
+    | 'updatedUserId'
     | 'deletedDate'
     | 'deletedUser'
     | 'deletedUserId'

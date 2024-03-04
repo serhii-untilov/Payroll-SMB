@@ -1,9 +1,10 @@
 import { ICompany } from '@repo/shared';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Accounting } from '../../accounting/entities/accounting.entity';
 import { User } from '../../users/entities/user.entity';
 import { Law } from '../../laws/entities/law.entity';
+import { Department } from 'src/resources/departments/entities/department.entity';
 
 @Entity()
 export class Company extends Logger implements ICompany {
@@ -31,6 +32,9 @@ export class Company extends Logger implements ICompany {
 
     @Column({ type: 'integer', nullable: true })
     accountingId: number;
+
+    @OneToMany(() => Department, (department) => department.company)
+    departments?: Department[];
 
     @ManyToOne(() => User, (user) => user.companies)
     owner?: User;

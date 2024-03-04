@@ -81,7 +81,7 @@ export type ICreatePaymentType = Omit<
     | 'createdUserId'
     | 'updatedDate'
     | 'updatedUser'
-    | 'updatedUserId: '
+    | 'updatedUserId'
     | 'deletedDate'
     | 'deletedUser'
     | 'deletedUserId'
