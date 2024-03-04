@@ -13,4 +13,3 @@ export interface IAccounting {
 
 export type ICreateAccounting = Omit<IAccounting, 'id'>;
 export type IUpdateAccounting = Partial<Omit<IAccounting, 'id'>>;
-export type IUpsertAccounting = Partial<IAccounting>;

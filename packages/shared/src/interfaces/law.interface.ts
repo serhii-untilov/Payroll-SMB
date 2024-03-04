@@ -11,4 +11,3 @@ export interface ILaw {
 
 export type ICreateLaw = Omit<ILaw, 'id'>;
 export type IUpdateLaw = Partial<Omit<ILaw, 'id'>>;
-export type IUpsertLaw = Partial<ILaw>;
