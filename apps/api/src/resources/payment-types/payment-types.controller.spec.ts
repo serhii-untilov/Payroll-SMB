@@ -3,18 +3,18 @@ import { PaymentTypesController } from './payment-types.controller';
 import { PaymentTypesService } from './payment-types.service';
 
 describe('PaymentTypesController', () => {
-  let controller: PaymentTypesController;
+    let controller: PaymentTypesController;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [PaymentTypesController],
-      providers: [PaymentTypesService],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            controllers: [PaymentTypesController],
+            providers: [PaymentTypesService],
+        }).compile();
 
-    controller = module.get<PaymentTypesController>(PaymentTypesController);
-  });
+        controller = module.get<PaymentTypesController>(PaymentTypesController);
+    });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(controller).toBeDefined();
+    });
 });

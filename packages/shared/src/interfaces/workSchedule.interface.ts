@@ -1,4 +1,5 @@
 import { IUser } from './user.interface';
+import { IWorkSchedulePeriod } from './workSchedulePeriod.interface';
 
 export enum WorkScheduleType {
     WEEKLY = 'weekly', // Fixed hours per week
@@ -12,6 +13,8 @@ export interface IWorkSchedule {
     type: string;
     dateFrom: Date;
     dateTo: Date;
+
+    periods?: IWorkSchedulePeriod[];
 
     createdDate: Date;
     createdUser?: IUser;
@@ -28,6 +31,7 @@ export interface IWorkSchedule {
 export type ICreateWorkSchedule = Omit<
     IWorkSchedule,
     | 'id'
+    | 'periods'
     | 'createdDate'
     | 'createdUser'
     | 'createdUserId'

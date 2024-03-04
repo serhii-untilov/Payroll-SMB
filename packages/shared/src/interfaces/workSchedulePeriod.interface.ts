@@ -2,7 +2,7 @@ import { IWorkSchedule } from './workSchedule.interface';
 
 export interface IWorkSchedulePeriod {
     id: number;
-    workSchedule: IWorkSchedule;
+    workSchedule?: IWorkSchedule;
     workScheduleId: number;
     day: number;
     hours: number;
