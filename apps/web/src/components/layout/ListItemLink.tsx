@@ -34,12 +34,15 @@ export function ListItemLink(props: ListItemLinkProps) {
                 sx={{
                     '&.active': {
                         color: (theme) =>
-                            theme.palette.mode === 'dark'
-                                ? theme.palette.background.default
-                                : theme.palette.text.primary,
-                        // bgcolor: (theme) => theme.palette.primary.main,
-                        bgcolor: (theme) => grey[300],
-                        // opacity: 0.85,
+                            theme.palette.mode === 'light'
+                                ? theme.palette.common.white
+                                : theme.palette.common.black,
+                        bgcolor: (theme) =>
+                            theme.palette.mode === 'light'
+                                ? theme.palette.primary.main
+                                : theme.palette.primary.main,
+                        // bgcolor: (theme) => grey[300],
+                        opacity: 0.85,
                         borderRadius: '5px',
                         py: [0.5],
                         my: [0.3],
