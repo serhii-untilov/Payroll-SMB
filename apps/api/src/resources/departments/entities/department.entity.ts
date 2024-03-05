@@ -1,8 +1,9 @@
 import { IDepartment } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
-import { Column, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Company } from '../../companies/entities/company.entity';
 
+@Entity()
 export class Department extends Logger implements IDepartment {
     @PrimaryGeneratedColumn('increment')
     id: number;
@@ -11,6 +12,7 @@ export class Department extends Logger implements IDepartment {
     name: string;
 
     @ManyToOne(() => Company, (company) => company.departments)
+    // @ManyToOne(() => Company, { createForeignKeyConstraints: false })
     @JoinColumn()
     company?: Company;
 

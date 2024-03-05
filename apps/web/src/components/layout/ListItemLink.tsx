@@ -39,7 +39,7 @@ export function ListItemLink(props: ListItemLinkProps) {
                                 : theme.palette.text.primary,
                         // bgcolor: (theme) => theme.palette.primary.main,
                         bgcolor: (theme) => grey[300],
-                        opacity: 0.85,
+                        // opacity: 0.85,
                         borderRadius: '5px',
                         py: [0.5],
                         my: [0.3],

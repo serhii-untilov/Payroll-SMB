@@ -32,7 +32,7 @@ export type ICreateCompany = Omit<
     | 'id'
     | 'law'
     | 'accounting'
-    // | 'departments'
+    | 'departments'
     | 'owner'
     | 'ownerId'
     | 'createdDate'

@@ -1,8 +1,9 @@
 import { IWorkSchedule } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
-import { Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, OneToMany, Entity } from 'typeorm';
 import { WorkSchedulePeriod } from './work-schedule-period.entity';
 
+@Entity()
 export class WorkSchedule extends Logger implements IWorkSchedule {
     @PrimaryGeneratedColumn('increment')
     id: number;
