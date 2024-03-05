@@ -2,48 +2,48 @@ import {
     Column,
     CreateDateColumn,
     DeleteDateColumn,
-    ManyToOne,
+    // ManyToOne,
     UpdateDateColumn,
     VersionColumn,
 } from 'typeorm';
-import { User } from '../users/entities/user.entity';
+// import { User } from '../users/entities/user.entity';
 import { ILogger } from '@repo/shared/src/interfaces/logger.interface';
 
 export abstract class Logger implements ILogger {
     @CreateDateColumn()
-    createdDate: Date;
+    createdDate?: Date;
 
-    @ManyToOne(() => User, {
-        createForeignKeyConstraints: false,
-    })
-    createdUser?: User;
+    // @ManyToOne(() => User, {
+    //     createForeignKeyConstraints: false,
+    // })
+    // createdUser?: User;
 
     @Column({ type: 'integer', nullable: true })
-    createdUserId: number;
+    createdUserId?: number;
 
     @UpdateDateColumn()
-    updatedDate: Date;
+    updatedDate?: Date;
 
-    @ManyToOne(() => User, {
-        createForeignKeyConstraints: false,
-    })
-    updatedUser?: User;
+    // @ManyToOne(() => User, {
+    //     createForeignKeyConstraints: false,
+    // })
+    // updatedUser?: User;
 
     @Column({ type: 'integer', nullable: true })
-    updatedUserId: number;
+    updatedUserId?: number;
 
-    @DeleteDateColumn()
-    deletedDate: Date;
+    @DeleteDateColumn({ default: '9999-12-31' })
+    deletedDate?: Date;
 
-    @ManyToOne(() => User, {
-        createForeignKeyConstraints: false,
-        nullable: true,
-    })
-    deletedUser?: User;
+    // @ManyToOne(() => User, {
+    //     createForeignKeyConstraints: false,
+    //     nullable: true,
+    // })
+    // deletedUser?: User;
 
     @Column({ type: 'integer', nullable: true })
     deletedUserId?: number;
 
     @VersionColumn()
-    version: number;
+    version?: number;
 }

@@ -1,7 +1,7 @@
 import { IWorkSchedule } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
 import { Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { WorkSchedulePeriod } from '../../work-schedule-periods/entities/work-schedule-period.entity';
+import { WorkSchedulePeriod } from './work-schedule-period.entity';
 
 export class WorkSchedule extends Logger implements IWorkSchedule {
     @PrimaryGeneratedColumn('increment')
@@ -14,10 +14,10 @@ export class WorkSchedule extends Logger implements IWorkSchedule {
     type: string;
 
     @Column({ type: 'date', default: '1970-01-01' })
-    dateFrom: Date;
+    dateFrom?: Date;
 
     @Column({ type: 'date', default: '9999-12-31' })
-    dateTo: Date;
+    dateTo?: Date;
 
     @OneToMany(() => WorkSchedulePeriod, (workSchedulePeriod) => workSchedulePeriod.workSchedule)
     periods?: WorkSchedulePeriod[];

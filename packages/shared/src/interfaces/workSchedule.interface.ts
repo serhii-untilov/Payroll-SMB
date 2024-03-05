@@ -11,8 +11,8 @@ export interface IWorkSchedule extends ILogger {
     id: number;
     name: string;
     type: string;
-    dateFrom: Date;
-    dateTo: Date;
+    dateFrom?: Date;
+    dateTo?: Date;
 
     periods?: IWorkSchedulePeriod[];
 }

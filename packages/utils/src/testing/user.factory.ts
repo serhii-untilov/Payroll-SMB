@@ -15,7 +15,7 @@ export const createMockUser = (data?: Partial<IUser>): IUser => {
         isActive: true,
         language: undefined,
         roles: [],
-        companies: [],
+        // companies: [],
         ...data,
     };
 };

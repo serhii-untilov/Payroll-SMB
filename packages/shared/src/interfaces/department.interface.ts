@@ -3,13 +3,18 @@ import { ILogger } from './logger.interface';
 
 export interface IDepartment extends ILogger {
     id: number;
+    name: string;
+
     company?: ICompany;
     companyId: number;
-    name: string;
-    dateFrom: Date;
-    dateTo: Date;
 
-    parent?: IDepartment;
+    dateFrom?: Date;
+    dateTo?: Date;
+
+    parentDepartment?: IDepartment | null;
+    parentDepartmentId?: number | null;
+
+    childDepartments?: IDepartment[];
 }
 
 export type ICreateDepartment = Omit<
