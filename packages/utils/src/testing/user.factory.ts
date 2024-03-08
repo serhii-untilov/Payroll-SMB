@@ -1,5 +1,5 @@
 import { incrementalNumber, randPassword, randUser, randUuid } from '@ngneat/falso';
-import { IUser } from '@repo/shared';
+import { IUser, RoleType } from '@repo/shared';
 
 const factory = incrementalNumber();
 
@@ -14,7 +14,7 @@ export const createMockUser = (data?: Partial<IUser>): IUser => {
         refreshToken: randUuid(),
         isActive: true,
         language: undefined,
-        roles: [],
+        roleId: 1,
         // companies: [],
         ...data,
     };

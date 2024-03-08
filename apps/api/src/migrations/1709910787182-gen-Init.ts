@@ -1,76 +1,9 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Gen1709629322277 implements MigrationInterface {
-    name = 'Gen1709629322277';
+export class Gen1709910787182 implements MigrationInterface {
+    name = 'Gen1709910787182'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
-            CREATE TABLE "temporary_company" (
-                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "deletedDate" datetime,
-                "version" integer NOT NULL,
-                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "name" varchar(50) NOT NULL,
-                "taxId" varchar(15) NOT NULL DEFAULT (''),
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
-                "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
-                "payPeriod" date NOT NULL DEFAULT ('1970-01-01'),
-                "checkDate" date NOT NULL DEFAULT ('1970-01-01'),
-                "createdUserId" integer,
-                "updatedUserId" integer,
-                "deletedUserId" integer,
-                "lawId" integer,
-                "accountingId" integer,
-                "ownerId" integer
-            )
-        `);
-        await queryRunner.query(`
-            INSERT INTO "temporary_company"(
-                    "createdDate",
-                    "updatedDate",
-                    "deletedDate",
-                    "version",
-                    "id",
-                    "name",
-                    "taxId",
-                    "dateFrom",
-                    "dateTo",
-                    "payPeriod",
-                    "checkDate",
-                    "createdUserId",
-                    "updatedUserId",
-                    "deletedUserId",
-                    "lawId",
-                    "accountingId",
-                    "ownerId"
-                )
-            SELECT "createdDate",
-                "updatedDate",
-                "deletedDate",
-                "version",
-                "id",
-                "name",
-                "taxId",
-                "dateFrom",
-                "dateTo",
-                "payPeriod",
-                "checkDate",
-                "createdUserId",
-                "updatedUserId",
-                "deletedUserId",
-                "lawId",
-                "accountingId",
-                "ownerId"
-            FROM "company"
-        `);
-        await queryRunner.query(`
-            DROP TABLE "company"
-        `);
-        await queryRunner.query(`
-            ALTER TABLE "temporary_company"
-                RENAME TO "company"
-        `);
         await queryRunner.query(`
             CREATE TABLE "work_schedule_period" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
@@ -103,6 +36,33 @@ export class Gen1709629322277 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
+            CREATE TABLE "role" (
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "name" varchar(50) NOT NULL,
+                "type" varchar(15) NOT NULL DEFAULT ('guest')
+            )
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "user" (
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "firstName" varchar(50) NOT NULL,
+                "lastName" varchar(50) NOT NULL,
+                "email" varchar(50) NOT NULL,
+                "password" varchar(50) NOT NULL,
+                "refreshToken" varchar,
+                "isActive" boolean NOT NULL DEFAULT (1),
+                "language" varchar(5),
+                "roleId" integer NOT NULL
+            )
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "accounting" (
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "name" varchar(50) NOT NULL,
+                "type" varchar(15) NOT NULL DEFAULT ('generic')
+            )
+        `);
+        await queryRunner.query(`
             CREATE TABLE "department" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "createdUserId" integer,
@@ -117,6 +77,42 @@ export class Gen1709629322277 implements MigrationInterface {
                 "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
                 "parentDepartmentId" integer
+            )
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "law" (
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "name" varchar(50) NOT NULL,
+                "type" varchar(15) NOT NULL DEFAULT ('ukraine')
+            )
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "company" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer,
+                "deletedDate" datetime DEFAULT ('9999-12-31'),
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "name" varchar(50) NOT NULL,
+                "taxId" varchar(15) NOT NULL DEFAULT (''),
+                "lawId" integer,
+                "accountingId" integer,
+                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
+                "payPeriod" date NOT NULL DEFAULT ('1970-01-01'),
+                "checkDate" date NOT NULL DEFAULT ('1970-01-01')
+            )
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "user_company" (
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "userId" integer NOT NULL,
+                "companyId" integer NOT NULL,
+                "roleId" integer NOT NULL,
+                "roleIdId" integer
             )
         `);
         await queryRunner.query(`
@@ -146,73 +142,6 @@ export class Gen1709629322277 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "name" varchar(50) NOT NULL
             )
-        `);
-        await queryRunner.query(`
-            CREATE TABLE "temporary_company" (
-                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "deletedDate" datetime DEFAULT ('9999-12-31'),
-                "version" integer NOT NULL,
-                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "name" varchar(50) NOT NULL,
-                "taxId" varchar(15) NOT NULL DEFAULT (''),
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
-                "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
-                "payPeriod" date NOT NULL DEFAULT ('1970-01-01'),
-                "checkDate" date NOT NULL DEFAULT ('1970-01-01'),
-                "createdUserId" integer,
-                "updatedUserId" integer,
-                "deletedUserId" integer,
-                "lawId" integer,
-                "accountingId" integer,
-                "ownerId" integer
-            )
-        `);
-        await queryRunner.query(`
-            INSERT INTO "temporary_company"(
-                    "createdDate",
-                    "updatedDate",
-                    "deletedDate",
-                    "version",
-                    "id",
-                    "name",
-                    "taxId",
-                    "dateFrom",
-                    "dateTo",
-                    "payPeriod",
-                    "checkDate",
-                    "createdUserId",
-                    "updatedUserId",
-                    "deletedUserId",
-                    "lawId",
-                    "accountingId",
-                    "ownerId"
-                )
-            SELECT "createdDate",
-                "updatedDate",
-                "deletedDate",
-                "version",
-                "id",
-                "name",
-                "taxId",
-                "dateFrom",
-                "dateTo",
-                "payPeriod",
-                "checkDate",
-                "createdUserId",
-                "updatedUserId",
-                "deletedUserId",
-                "lawId",
-                "accountingId",
-                "ownerId"
-            FROM "company"
-        `);
-        await queryRunner.query(`
-            DROP TABLE "company"
-        `);
-        await queryRunner.query(`
-            ALTER TABLE "temporary_company"
-                RENAME TO "company"
         `);
         await queryRunner.query(`
             CREATE TABLE "temporary_work_schedule_period" (
@@ -429,80 +358,31 @@ export class Gen1709629322277 implements MigrationInterface {
             DROP TABLE "temporary_work_schedule_period"
         `);
         await queryRunner.query(`
-            ALTER TABLE "company"
-                RENAME TO "temporary_company"
-        `);
-        await queryRunner.query(`
-            CREATE TABLE "company" (
-                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "deletedDate" datetime,
-                "version" integer NOT NULL,
-                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "name" varchar(50) NOT NULL,
-                "taxId" varchar(15) NOT NULL DEFAULT (''),
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
-                "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
-                "payPeriod" date NOT NULL DEFAULT ('1970-01-01'),
-                "checkDate" date NOT NULL DEFAULT ('1970-01-01'),
-                "createdUserId" integer,
-                "updatedUserId" integer,
-                "deletedUserId" integer,
-                "lawId" integer,
-                "accountingId" integer,
-                "ownerId" integer
-            )
-        `);
-        await queryRunner.query(`
-            INSERT INTO "company"(
-                    "createdDate",
-                    "updatedDate",
-                    "deletedDate",
-                    "version",
-                    "id",
-                    "name",
-                    "taxId",
-                    "dateFrom",
-                    "dateTo",
-                    "payPeriod",
-                    "checkDate",
-                    "createdUserId",
-                    "updatedUserId",
-                    "deletedUserId",
-                    "lawId",
-                    "accountingId",
-                    "ownerId"
-                )
-            SELECT "createdDate",
-                "updatedDate",
-                "deletedDate",
-                "version",
-                "id",
-                "name",
-                "taxId",
-                "dateFrom",
-                "dateTo",
-                "payPeriod",
-                "checkDate",
-                "createdUserId",
-                "updatedUserId",
-                "deletedUserId",
-                "lawId",
-                "accountingId",
-                "ownerId"
-            FROM "temporary_company"
-        `);
-        await queryRunner.query(`
-            DROP TABLE "temporary_company"
-        `);
-        await queryRunner.query(`
             DROP TABLE "job"
         `);
         await queryRunner.query(`
             DROP TABLE "payment_type"
         `);
         await queryRunner.query(`
+            DROP TABLE "user_company"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "company"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "law"
+        `);
+        await queryRunner.query(`
             DROP TABLE "department"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "accounting"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "user"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "role"
         `);
         await queryRunner.query(`
             DROP TABLE "work_schedule"
@@ -510,73 +390,6 @@ export class Gen1709629322277 implements MigrationInterface {
         await queryRunner.query(`
             DROP TABLE "work_schedule_period"
         `);
-        await queryRunner.query(`
-            ALTER TABLE "company"
-                RENAME TO "temporary_company"
-        `);
-        await queryRunner.query(`
-            CREATE TABLE "company" (
-                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "deletedDate" datetime,
-                "version" integer NOT NULL,
-                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "name" varchar(50) NOT NULL,
-                "taxId" varchar(15) NOT NULL DEFAULT (''),
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
-                "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
-                "payPeriod" date NOT NULL DEFAULT ('1970-01-01'),
-                "checkDate" date NOT NULL DEFAULT ('1970-01-01'),
-                "createdUserId" integer,
-                "updatedUserId" integer,
-                "deletedUserId" integer,
-                "lawId" integer,
-                "accountingId" integer,
-                "ownerId" integer,
-                CONSTRAINT "FK_ee87438803acb531639e8284be0" FOREIGN KEY ("ownerId") REFERENCES "user" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
-            )
-        `);
-        await queryRunner.query(`
-            INSERT INTO "company"(
-                    "createdDate",
-                    "updatedDate",
-                    "deletedDate",
-                    "version",
-                    "id",
-                    "name",
-                    "taxId",
-                    "dateFrom",
-                    "dateTo",
-                    "payPeriod",
-                    "checkDate",
-                    "createdUserId",
-                    "updatedUserId",
-                    "deletedUserId",
-                    "lawId",
-                    "accountingId",
-                    "ownerId"
-                )
-            SELECT "createdDate",
-                "updatedDate",
-                "deletedDate",
-                "version",
-                "id",
-                "name",
-                "taxId",
-                "dateFrom",
-                "dateTo",
-                "payPeriod",
-                "checkDate",
-                "createdUserId",
-                "updatedUserId",
-                "deletedUserId",
-                "lawId",
-                "accountingId",
-                "ownerId"
-            FROM "temporary_company"
-        `);
-        await queryRunner.query(`
-            DROP TABLE "temporary_company"
-        `);
     }
+
 }

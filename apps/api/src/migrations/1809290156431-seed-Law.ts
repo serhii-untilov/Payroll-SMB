@@ -7,7 +7,7 @@ const lang = process.env.LANGUAGE;
 const entity = Law;
 const recordList = [{ id: 1, name: { en: 'Ukraine', uk: 'Україна' }, type: LawType.UKRAINE }];
 
-export class Seed1709290156431 implements MigrationInterface {
+export class Seed1809290156431 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         recordList.forEach(async (record) => {

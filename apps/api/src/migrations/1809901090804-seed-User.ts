@@ -12,6 +12,7 @@ const recordList = [
         lastName: '',
         email: 'admin@mail.com',
         password: 'admin',
+        roleId: 1,
     },
     {
         id: 2,
@@ -19,6 +20,7 @@ const recordList = [
         lastName: '',
         email: 'user@mail.com',
         password: 'user',
+        roleId: 2,
     },
     {
         id: 3,
@@ -26,10 +28,11 @@ const recordList = [
         lastName: '',
         email: 'guest@mail.com',
         password: 'guest',
+        roleId: 4,
     },
 ];
 
-export class Seed1709301090804 implements MigrationInterface {
+export class Seed1809901090804 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         recordList.forEach(async (record) => {

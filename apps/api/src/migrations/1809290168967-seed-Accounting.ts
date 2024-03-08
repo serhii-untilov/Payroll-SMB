@@ -1,18 +1,19 @@
-import { RoleType } from '@repo/shared';
-import { Role } from '../resources/roles/entities/role.entity';
 import { langPipe } from '../utils/langPipe';
+import { Accounting } from '../resources/accounting/entities/accounting.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import { AccountingType } from '@repo/shared';
 
 const lang = process.env.LANGUAGE;
-const entity = Role;
+const entity = Accounting;
 const recordList = [
-    { id: 1, name: { en: 'Admin', uk: 'Адміністратор' }, type: RoleType.SYS_ADMIN },
-    { id: 2, name: { en: 'Employer', uk: 'Роботодавець' }, type: RoleType.EMPLOYER },
-    { id: 3, name: { en: 'Employee', uk: 'Працівник' }, type: RoleType.EMPLOYEE },
-    { id: 4, name: { en: 'Guest', uk: 'Гість' }, type: RoleType.GUEST },
+    { id: 1, name: { en: 'Generic', uk: 'Загальний' }, type: AccountingType.GENERIC },
+    { id: 2, name: { en: 'Kindergarten', uk: 'Дитсадок' }, type: AccountingType.KINDERGARTEN },
+    { id: 3, name: { en: 'Services', uk: 'Послуги' }, type: AccountingType.SERVICES },
+    { id: 4, name: { en: 'Trade', uk: 'Торгівля' }, type: AccountingType.TRADE },
+    { id: 5, name: { en: 'Custom', uk: 'Довільний' }, type: AccountingType.CUSTOM },
 ];
 
-export class Seed1709292807183 implements MigrationInterface {
+export class Seed1809290168967 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         recordList.forEach(async (record) => {

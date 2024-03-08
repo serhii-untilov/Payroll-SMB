@@ -19,9 +19,7 @@ export class UserCompany implements IUserCompany {
     @Column()
     companyId: number;
 
-    @ManyToOne(() => Role, {
-        createForeignKeyConstraints: false,
-    })
+    @ManyToOne(() => Role, { createForeignKeyConstraints: false })
     @Column()
     roleId: number;
 }

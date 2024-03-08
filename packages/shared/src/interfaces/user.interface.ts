@@ -9,8 +9,8 @@ export interface IUser {
     refreshToken: string;
     isActive: boolean;
     language: string;
-    roles?: IRole[];
-    // companies: ICompany[];
+    role?: IRole;
+    roleId: number;
 }
 
 export type ICreateUser = Pick<IUser, 'firstName' | 'lastName' | 'email' | 'password'>;

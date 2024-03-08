@@ -27,7 +27,8 @@ export class CompaniesController {
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() createCompanyDto: CreateCompanyDto) {
         const userId = req.user['sub'];
-        return await this.companiesService.create(userId, createCompanyDto);
+        const company = await this.companiesService.create(userId, createCompanyDto);
+        return company;
     }
 
     @Get()
