@@ -10,12 +10,14 @@ import {
     ParseIntPipe,
     HttpCode,
     HttpStatus,
+    Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IPublicUserData } from '@repo/shared';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -62,5 +64,29 @@ export class UsersController {
     async remove(@Param('id', ParseIntPipe) id: number): Promise<IPublicUserData> {
         const user = await this.usersService.remove(id);
         return UsersService.toPublic(user);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AccessTokenGuard)
+    @Get('user')
+    async getCurrentUser(@Req() req: Request): Promise<IPublicUserData> {
+        const id: number = req.user['sub'];
+        const user = await this.usersService.findOne({
+            where: {
+                id,
+            },
+            relations: {
+                roles: true,
+                companies: true,
+            },
+        });
+        return UsersService.toPublic(user);
+    }
+
+    @Get(':id/companies')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async userCompanyList(@Param('id', ParseIntPipe) id: number): Promise<IPublicUserData[]> {
+        return await this.usersService.getUserCompanyList(id);
     }
 }

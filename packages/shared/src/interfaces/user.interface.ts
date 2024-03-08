@@ -1,4 +1,3 @@
-import { ICompany } from './company.interface';
 import { IRole } from './role.interface';
 
 export interface IUser {
@@ -11,7 +10,7 @@ export interface IUser {
     isActive: boolean;
     language: string;
     roles?: IRole[];
-    companies?: ICompany[];
+    // companies: ICompany[];
 }
 
 export type ICreateUser = Pick<IUser, 'firstName' | 'lastName' | 'email' | 'password'>;

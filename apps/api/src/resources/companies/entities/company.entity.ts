@@ -2,9 +2,8 @@ import { ICompany } from '@repo/shared';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Accounting } from '../../accounting/entities/accounting.entity';
-import { Law } from '../../laws/entities/law.entity';
-import { User } from '../../users/entities/user.entity';
 import { Department } from '../../departments/entities/department.entity';
+import { Law } from '../../laws/entities/law.entity';
 
 @Entity()
 export class Company extends Logger implements ICompany {
@@ -33,13 +32,12 @@ export class Company extends Logger implements ICompany {
     @Column({ type: 'integer', nullable: true })
     accountingId: number;
 
-    @ManyToOne(() => User, {
-        createForeignKeyConstraints: false,
-    })
-    owner?: User;
+    // @ManyToOne(() => User, (user) => user.companies)
+    // @JoinColumn()
+    // owner: User;
 
-    @Column({ type: 'integer', nullable: true })
-    ownerId: number;
+    // @Column({ type: 'integer', nullable: true })
+    // ownerId: number;
 
     @Column({ type: 'date', default: '1970-01-01' })
     dateFrom?: Date;

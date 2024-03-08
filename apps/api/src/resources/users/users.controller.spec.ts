@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { UserCompany } from './entities/user-company.entity';
 
 describe('UsersController', () => {
     let controller: UsersController;
@@ -19,6 +20,10 @@ describe('UsersController', () => {
                 UsersService,
                 {
                     provide: getRepositoryToken(User),
+                    useFactory: repositoryMockFactory,
+                },
+                {
+                    provide: getRepositoryToken(UserCompany),
                     useFactory: repositoryMockFactory,
                 },
             ],

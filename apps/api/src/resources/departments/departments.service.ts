@@ -20,7 +20,7 @@ export class DepartmentsService {
         }
         const newDepartment = await this.DepartmentsRepository.save({
             ...Department,
-            owner: user,
+            // owner: user,
             createdUser: user,
             updatedUser: user,
         });

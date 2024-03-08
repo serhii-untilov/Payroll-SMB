@@ -1,19 +1,19 @@
-import * as _ from 'lodash';
-import { randEmail } from '@ngneat/falso';
-import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
-import { Repository } from 'typeorm';
-import { MockType } from '@repo/utils';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { repositoryMockFactory } from '@repo/utils';
-import { createMockUser } from '@repo/utils';
-import { CreateUserDto } from './dto/create-user.dto';
 import { NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { randEmail } from '@ngneat/falso';
+import { MockType, createMockUser, repositoryMockFactory } from '@repo/utils';
+import * as _ from 'lodash';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UserCompany } from './entities/user-company.entity';
+import { User } from './entities/user.entity';
+import { UsersService } from './users.service';
 
 describe('UsersService', () => {
-    let service: UsersService;
-    let repoMock: MockType<Repository<User>>;
+    let usersService: UsersService;
+    let repoUsersMock: MockType<Repository<User>>;
+    let repoUserCompanyMock: MockType<Repository<UserCompany>>;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -23,40 +23,46 @@ describe('UsersService', () => {
                     provide: getRepositoryToken(User),
                     useFactory: repositoryMockFactory,
                 },
+                {
+                    provide: getRepositoryToken(UserCompany),
+                    useFactory: repositoryMockFactory,
+                },
             ],
         }).compile();
 
-        service = module.get<UsersService>(UsersService);
-        repoMock = module.get(getRepositoryToken(User));
+        usersService = module.get<UsersService>(UsersService);
+        repoUsersMock = module.get(getRepositoryToken(User));
+        repoUserCompanyMock = module.get(getRepositoryToken(UserCompany));
     });
 
     it('should be defined', () => {
-        expect(service).toBeDefined();
-        expect(repoMock).toBeTruthy();
+        expect(usersService).toBeDefined();
+        expect(repoUsersMock).toBeTruthy();
+        expect(repoUserCompanyMock).toBeTruthy();
     });
 
     it('should be able to create a user', async () => {
         const user = createMockUser();
         const createUser: CreateUserDto = _.omit(user, ['id', 'isActive', 'refreshToken']);
-        repoMock.findOne?.mockReturnValue(null);
-        repoMock.save?.mockReturnValue(createUser);
-        const newUser = await service.create(createUser);
+        repoUsersMock.findOne?.mockReturnValue(null);
+        repoUsersMock.save?.mockReturnValue(createUser);
+        const newUser = await usersService.create(createUser);
         expect(newUser).toStrictEqual(createUser);
-        expect(repoMock.save).toHaveBeenCalled();
+        expect(repoUsersMock.save).toHaveBeenCalled();
     });
 
     it('should successfully find a user', async () => {
         const user = createMockUser();
-        repoMock.findOne?.mockReturnValue(user);
+        repoUsersMock.findOne?.mockReturnValue(user);
         const params = { where: { id: user.id } };
-        expect(await service.findOne(params)).toStrictEqual(user);
-        expect(repoMock.findOne).toHaveBeenCalledWith(params);
+        expect(await usersService.findOne(params)).toStrictEqual(user);
+        expect(repoUsersMock.findOne).toHaveBeenCalledWith(params);
     });
 
     it('should throw if a user could not be found', async () => {
-        repoMock.findOneBy?.mockImplementation(() => null);
+        repoUsersMock.findOneBy?.mockImplementation(() => null);
         try {
-            await service.findOne(-1);
+            await usersService.findOne(-1);
         } catch (err) {
             expect(err).toBeInstanceOf(NotFoundException);
         }
@@ -64,15 +70,15 @@ describe('UsersService', () => {
 
     it('should find a user by email', async () => {
         const user = createMockUser();
-        repoMock.findOneBy?.mockReturnValue(user);
-        expect(await service.findOneBy({ email: user.email })).toStrictEqual(user);
-        expect(repoMock.findOneBy).toHaveBeenCalledWith({ email: user.email });
+        repoUsersMock.findOneBy?.mockReturnValue(user);
+        expect(await usersService.findOneBy({ email: user.email })).toStrictEqual(user);
+        expect(repoUsersMock.findOneBy).toHaveBeenCalledWith({ email: user.email });
     });
 
     it('should throw if a user could not be found by email', async () => {
-        repoMock.findOneBy?.mockImplementation(() => null);
+        repoUsersMock.findOneBy?.mockImplementation(() => null);
         try {
-            await service.findOneBy({ email: 'foo' });
+            await usersService.findOneBy({ email: 'foo' });
         } catch (err) {
             expect(err).toBeInstanceOf(NotFoundException);
         }
@@ -81,17 +87,17 @@ describe('UsersService', () => {
     it('should update a user if it exists', async () => {
         const user = createMockUser();
         const newEmail = randEmail();
-        repoMock.findOneBy?.mockReturnValue(user);
-        repoMock.save?.mockReturnValue({ ...user, email: newEmail });
-        repoMock.findOneOrFail?.mockReturnValue({ ...user, email: newEmail });
-        const res = await service.update(user.id, { email: newEmail });
+        repoUsersMock.findOneBy?.mockReturnValue(user);
+        repoUsersMock.save?.mockReturnValue({ ...user, email: newEmail });
+        repoUsersMock.findOneOrFail?.mockReturnValue({ ...user, email: newEmail });
+        const res = await usersService.update(user.id, { email: newEmail });
         expect(res).toStrictEqual({ ...user, email: newEmail });
     });
 
     it('should throw if a user could not be found during update', async () => {
-        repoMock.findOneBy?.mockImplementation(() => null);
+        repoUsersMock.findOneBy?.mockImplementation(() => null);
         try {
-            await service.update(0, {});
+            await usersService.update(0, {});
         } catch (err) {
             expect(err).toBeInstanceOf(NotFoundException);
         }
@@ -99,15 +105,15 @@ describe('UsersService', () => {
 
     it('should remove a user if it exists', async () => {
         const user = createMockUser();
-        repoMock.findOneBy?.mockReturnValue(user);
-        const res = await service.remove(user.id);
+        repoUsersMock.findOneBy?.mockReturnValue(user);
+        const res = await usersService.remove(user.id);
         expect(res).toStrictEqual(user);
     });
 
     it('should throw if a user could not be found during remove', async () => {
-        repoMock.findOneBy?.mockImplementation(() => null);
+        repoUsersMock.findOneBy?.mockImplementation(() => null);
         try {
-            await service.remove(-1);
+            await usersService.remove(-1);
         } catch (err) {
             expect(err).toBeInstanceOf(NotFoundException);
         }

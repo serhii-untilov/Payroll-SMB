@@ -8,34 +8,37 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from '../resources/users/users.service';
 import { CreateUserDto } from '../resources/users/dto/create-user.dto';
 import { TokensDto } from './dto/tokens.dto';
 import { AuthDto } from './dto/auth.dto';
+import { User } from '../resources/users/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private usersService: UsersService,
+        @InjectRepository(User)
+        private usersRepository: Repository<User>,
         private jwtService: JwtService,
         private configService: ConfigService,
     ) {}
 
     async signUp(user: CreateUserDto): Promise<TokensDto> {
-        const exists = await this.usersService.findOneBy([{ email: user.email }]);
+        const exists = await this.usersRepository.findOneBy({ email: user.email });
         if (exists) {
             throw new ConflictException('User already exists.');
         }
         const { password } = user;
         const hashedPassword = await this.hashData(password);
-        const newUser = await this.usersService.create({ ...user, password: hashedPassword });
+        const newUser = await this.usersRepository.save({ ...user, password: hashedPassword });
         const tokens = await this.getTokens(newUser.id, newUser.email);
         await this.updateRefreshToken(newUser.id, tokens.refreshToken);
         return tokens;
     }
 
     async signIn(auth: AuthDto): Promise<TokensDto> {
-        const user = await this.usersService.findOneBy({ email: auth.email });
+        const user = await this.usersRepository.findOneBy({ email: auth.email });
         if (!user) {
             throw new BadRequestException('User not found');
         }
@@ -48,7 +51,7 @@ export class AuthService {
     }
 
     async logout(userId: number): Promise<null> {
-        this.usersService.update(userId, { refreshToken: null });
+        this.usersRepository.save({ id: userId, refreshToken: null });
         return null;
     }
 
@@ -58,9 +61,8 @@ export class AuthService {
 
     async updateRefreshToken(userId: number, refreshToken: string | null) {
         const hashedRefreshToken = refreshToken ? await this.hashData(refreshToken) : null;
-        await this.usersService.update(userId, {
-            refreshToken: hashedRefreshToken,
-        });
+        await this.usersRepository.save({ id: userId, refreshToken: hashedRefreshToken });
+        return this.usersRepository.findOneBy({ id: userId });
     }
 
     async getTokens(userId: number, email: string, skipRefreshToken?: boolean): Promise<TokensDto> {
@@ -96,7 +98,7 @@ export class AuthService {
     }
 
     async refreshTokens(userId: number, refreshToken: string) {
-        const user = await this.usersService.findOne({ where: { id: userId } });
+        const user = await this.usersRepository.findOneBy({ id: userId });
         if (!user || !user.refreshToken) throw new ForbiddenException('Access Denied');
         // const refreshTokenMatches = await argon2.verify(user.refreshToken, refreshToken);
         const refreshTokenMatches = await bcrypt.compare(refreshToken, user.refreshToken);

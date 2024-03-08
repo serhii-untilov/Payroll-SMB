@@ -9,18 +9,19 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { FormButton } from '../components/form/FormButton';
-import { FormInputDropdown } from '../components/form/FormInputDropdown';
-import { FormTextField } from '../components/form/FormTextField';
-import PageLayout from '../components/layout/PageLayout';
-import { Loading } from '../components/utility/Loading';
-import useLocale from '../hooks/useLocale';
-import { getAccountingList } from '../services/accounting.service';
-import { createCompany, getCompany, updateCompany } from '../services/company.service';
-import { getLawList } from '../services/law.service';
-import { getDirtyValues } from '../services/utils';
+import { FormButton } from '../../components/form/FormButton';
+import { FormInputDropdown } from '../../components/form/FormInputDropdown';
+import { FormTextField } from '../../components/form/FormTextField';
+import PageLayout from '../../components/layout/PageLayout';
+import { Loading } from '../../components/utility/Loading';
+import useLocale from '../../hooks/useLocale';
+import { getAccountingList } from '../../services/accounting.service';
+import { createCompany, getCompany, updateCompany } from '../../services/company.service';
+import { getLawList } from '../../services/law.service';
+import { getDirtyValues } from '../../services/utils';
 import * as _ from 'lodash';
-import useAppContext from '../hooks/useAppContext';
+import useAppContext from '../../hooks/useAppContext';
+import CompanyDetails from './CompanyDetails';
 
 const formSchema = yup.object().shape({
     id: yup.number().nullable(),
@@ -215,14 +216,19 @@ export default function Company() {
                             }
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sx={{ mb: 2 }}>
                         <Grid container spacing={1}>
                             <Grid item>
-                                <FormButton type="submit" variant="contained" color="primary">
+                                <FormButton
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={!isDirty}
+                                >
                                     {t('Update')}
                                 </FormButton>
                             </Grid>
-                            <Grid item>
+                            {/* <Grid item>
                                 <FormButton
                                     onClick={onCancel}
                                     variant="contained"
@@ -231,11 +237,12 @@ export default function Company() {
                                 >
                                     {t('Cancel')}
                                 </FormButton>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
+            {currentCompany && <CompanyDetails companyId={currentCompany.id} />}
         </PageLayout>
     );
 }

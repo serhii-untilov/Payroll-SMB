@@ -9,13 +9,10 @@ export type ICreateJob = Omit<
     IJob,
     | 'id'
     | 'createdDate'
-    | 'createdUser'
     | 'createdUserId'
     | 'updatedDate'
-    | 'updatedUser'
     | 'updatedUserId'
     | 'deletedDate'
-    | 'deletedUser'
     | 'deletedUserId'
     | 'version'
 >;

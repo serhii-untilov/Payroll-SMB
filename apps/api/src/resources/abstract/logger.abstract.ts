@@ -1,22 +1,15 @@
+import { ILogger } from '@repo/shared/src/interfaces/logger.interface';
 import {
     Column,
     CreateDateColumn,
     DeleteDateColumn,
-    // ManyToOne,
     UpdateDateColumn,
     VersionColumn,
 } from 'typeorm';
-// import { User } from '../users/entities/user.entity';
-import { ILogger } from '@repo/shared/src/interfaces/logger.interface';
 
 export abstract class Logger implements ILogger {
     @CreateDateColumn()
     createdDate?: Date;
-
-    // @ManyToOne(() => User, {
-    //     createForeignKeyConstraints: false,
-    // })
-    // createdUser?: User;
 
     @Column({ type: 'integer', nullable: true })
     createdUserId?: number;
@@ -24,22 +17,11 @@ export abstract class Logger implements ILogger {
     @UpdateDateColumn()
     updatedDate?: Date;
 
-    // @ManyToOne(() => User, {
-    //     createForeignKeyConstraints: false,
-    // })
-    // updatedUser?: User;
-
     @Column({ type: 'integer', nullable: true })
     updatedUserId?: number;
 
     @DeleteDateColumn({ default: '9999-12-31' })
     deletedDate?: Date;
-
-    // @ManyToOne(() => User, {
-    //     createForeignKeyConstraints: false,
-    //     nullable: true,
-    // })
-    // deletedUser?: User;
 
     @Column({ type: 'integer', nullable: true })
     deletedUserId?: number;

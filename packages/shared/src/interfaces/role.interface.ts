@@ -1,5 +1,3 @@
-import { IUser } from './user.interface';
-
 export enum RoleType {
     SYS_ADMIN = 'sys-admin',
     EMPLOYER = 'employer',
@@ -10,8 +8,8 @@ export interface IRole {
     id: number;
     name: string;
     type: string;
-    users?: IUser[];
+    // users?: IUser[];
 }
 
-export type ICreateRole = Omit<IRole, 'id' | 'users'>;
+export type ICreateRole = Omit<IRole, 'id'>;
 export type IUpdateRole = Partial<ICreateRole>;

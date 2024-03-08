@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IUser } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { CreateWorkScheduleDto } from './dto/create-work-schedule.dto';
 import { UpdateWorkScheduleDto } from './dto/update-work-schedule.dto';
@@ -13,16 +12,15 @@ export class WorkSchedulesService {
         private workSchedulesRepository: Repository<WorkSchedule>,
     ) {}
 
-    async create(user: IUser, WorkSchedule: CreateWorkScheduleDto): Promise<WorkSchedule> {
+    async create(userId: number, WorkSchedule: CreateWorkScheduleDto): Promise<WorkSchedule> {
         const existing = await this.workSchedulesRepository.findOneBy({ name: WorkSchedule.name });
         if (existing) {
             throw new BadRequestException(`WorkSchedule '${WorkSchedule.name}' already exists.`);
         }
         const newWorkSchedule = await this.workSchedulesRepository.save({
             ...WorkSchedule,
-            owner: user,
-            createdUser: user,
-            updatedUser: user,
+            createdUserId: userId,
+            updatedUserId: userId,
         });
         return newWorkSchedule;
     }
@@ -39,7 +37,7 @@ export class WorkSchedulesService {
         return WorkSchedule;
     }
 
-    async update(user: IUser, id: number, data: UpdateWorkScheduleDto): Promise<WorkSchedule> {
+    async update(userId: number, id: number, data: UpdateWorkScheduleDto): Promise<WorkSchedule> {
         const WorkSchedule = await this.workSchedulesRepository.findOneBy({ id });
         if (!WorkSchedule) {
             throw new NotFoundException(`WorkSchedule could not be found.`);
@@ -47,13 +45,13 @@ export class WorkSchedulesService {
         await this.workSchedulesRepository.save({
             ...data,
             id,
-            updatedUser: user,
+            updatedUserId: userId,
         });
         const updated = await this.workSchedulesRepository.findOneOrFail({ where: { id } });
         return updated;
     }
 
-    async remove(user: IUser, id: number): Promise<WorkSchedule> {
+    async remove(userId: number, id: number): Promise<WorkSchedule> {
         const WorkSchedule = await this.workSchedulesRepository.findOneBy({ id });
         if (!WorkSchedule) {
             throw new NotFoundException(`WorkSchedule could not be found.`);
@@ -61,7 +59,7 @@ export class WorkSchedulesService {
         await this.workSchedulesRepository.save({
             ...WorkSchedule,
             deletedDate: new Date(),
-            deletedUser: user,
+            deletedUserId: userId,
         });
         return WorkSchedule;
     }

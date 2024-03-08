@@ -72,7 +72,7 @@ export function paletteLight(): PaletteOptions {
             secondary: rgba(0, 0, 0, 0.6),
             disabled: rgba(0, 0, 0, 0.38),
         },
-        divider: rgba(0, 0, 0, 0.12),
+        divider: '#bdbdbd', // rgba(0, 0, 0, 0.12),
         background: {
             paper: '#f9f9f9', // '#fff',
             default: '#fff',

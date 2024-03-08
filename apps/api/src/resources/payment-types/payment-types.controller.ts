@@ -14,24 +14,20 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { UsersService } from '../users/users.service';
 import { PaymentTypesService } from './payment-types.service';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
 
 @Controller('payment-types')
 export class PaymentTypesController {
-    constructor(
-        private readonly paymentTypesService: PaymentTypesService,
-        private readonly usersService: UsersService,
-    ) {}
+    constructor(private readonly paymentTypesService: PaymentTypesService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() createPaymentTypeDto: CreatePaymentTypeDto) {
-        const user = await this.usersService.findOneBy({ id: req.user['sub'] });
-        return await this.paymentTypesService.create(user, createPaymentTypeDto);
+        const userId = req.user['sub'];
+        return await this.paymentTypesService.create(userId, createPaymentTypeDto);
     }
 
     @Get()
@@ -47,7 +43,11 @@ export class PaymentTypesController {
     async findOne(@Param('id', ParseIntPipe) id: number) {
         return await this.paymentTypesService.findOne({
             where: { id },
-            relations: { law: true, accounting: true, owner: true },
+            relations: {
+                law: true,
+                accounting: true,
+                // , owner: true
+            },
         });
     }
 
@@ -59,15 +59,15 @@ export class PaymentTypesController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updatePaymentTypeDto: UpdatePaymentTypeDto,
     ) {
-        const user = await this.usersService.findOneBy({ id: req.user['sub'] });
-        return await this.paymentTypesService.update(user, id, updatePaymentTypeDto);
+        const userId = req.user['sub'];
+        return await this.paymentTypesService.update(userId, id, updatePaymentTypeDto);
     }
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-        const user = await this.usersService.findOneBy({ id: req.user['sub'] });
-        return await this.paymentTypesService.remove(user, id);
+        const userId = req.user['sub'];
+        return await this.paymentTypesService.remove(userId, id);
     }
 }

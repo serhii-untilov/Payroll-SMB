@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IUser } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
@@ -13,16 +12,15 @@ export class PaymentTypesService {
         private PaymentTypesRepository: Repository<PaymentType>,
     ) {}
 
-    async create(user: IUser, PaymentType: CreatePaymentTypeDto): Promise<PaymentType> {
+    async create(userId: number, PaymentType: CreatePaymentTypeDto): Promise<PaymentType> {
         const existing = await this.PaymentTypesRepository.findOneBy({ name: PaymentType.name });
         if (existing) {
             throw new BadRequestException(`PaymentType '${PaymentType.name}' already exists.`);
         }
         const newPaymentType = await this.PaymentTypesRepository.save({
             ...PaymentType,
-            owner: user,
-            createdUser: user,
-            updatedUser: user,
+            createdUserId: userId,
+            updatedUserId: userId,
         });
         return newPaymentType;
     }
@@ -39,7 +37,7 @@ export class PaymentTypesService {
         return PaymentType;
     }
 
-    async update(user: IUser, id: number, data: UpdatePaymentTypeDto): Promise<PaymentType> {
+    async update(userId: number, id: number, data: UpdatePaymentTypeDto): Promise<PaymentType> {
         const PaymentType = await this.PaymentTypesRepository.findOneBy({ id });
         if (!PaymentType) {
             throw new NotFoundException(`PaymentType could not be found.`);
@@ -47,13 +45,13 @@ export class PaymentTypesService {
         await this.PaymentTypesRepository.save({
             ...data,
             id,
-            updatedUser: user,
+            updatedUserId: userId,
         });
         const updated = await this.PaymentTypesRepository.findOneOrFail({ where: { id } });
         return updated;
     }
 
-    async remove(user: IUser, id: number): Promise<PaymentType> {
+    async remove(userId: number, id: number): Promise<PaymentType> {
         const PaymentType = await this.PaymentTypesRepository.findOneBy({ id });
         if (!PaymentType) {
             throw new NotFoundException(`PaymentType could not be found.`);
@@ -61,7 +59,7 @@ export class PaymentTypesService {
         await this.PaymentTypesRepository.save({
             ...PaymentType,
             deletedDate: new Date(),
-            deletedUser: user,
+            deletedUserId: userId,
         });
         return PaymentType;
     }

@@ -10,7 +10,7 @@ export const createMockRole = (data?: Partial<IRole>): IRole => {
         id,
         name,
         type: RoleType.GUEST,
-        users: [],
+        // users: [],
         ...data,
     };
 };

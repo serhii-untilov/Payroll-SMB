@@ -22,13 +22,10 @@ export type ICreateWorkSchedule = Omit<
     | 'id'
     | 'periods'
     | 'createdDate'
-    | 'createdUser'
     | 'createdUserId'
     | 'updatedDate'
-    | 'updatedUser'
     | 'updatedUserId'
     | 'deletedDate'
-    | 'deletedUser'
     | 'deletedUserId'
     | 'version'
 >;

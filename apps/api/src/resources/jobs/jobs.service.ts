@@ -20,7 +20,7 @@ export class JobsService {
         }
         const newJob = await this.jobsRepository.save({
             ...Job,
-            owner: user,
+            // owner: user,
             createdUser: user,
             updatedUser: user,
         });

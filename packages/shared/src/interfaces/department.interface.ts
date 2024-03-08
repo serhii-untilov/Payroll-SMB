@@ -21,13 +21,10 @@ export type ICreateDepartment = Omit<
     IDepartment,
     | 'id'
     | 'createdDate'
-    | 'createdUser'
     | 'createdUserId'
     | 'updatedDate'
-    | 'updatedUser'
     | 'updatedUserId'
     | 'deletedDate'
-    | 'deletedUser'
     | 'deletedUserId'
     | 'version'
 >;

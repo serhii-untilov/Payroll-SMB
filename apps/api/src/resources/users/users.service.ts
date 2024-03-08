@@ -1,17 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { IPublicUserData, IUser } from '@repo/shared';
 import * as _ from 'lodash';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserCompany } from './entities/user-company.entity';
 import { User } from './entities/user.entity';
-import { IPublicUserData, IUser } from '@repo/shared';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User)
         private usersRepository: Repository<User>,
+        @InjectRepository(UserCompany)
+        private userCompanyRepository: Repository<UserCompany>,
     ) {}
 
     async create(user: CreateUserDto): Promise<User> {
@@ -59,5 +62,9 @@ export class UsersService {
     public static toPublic(user: IUser): IPublicUserData {
         const publicUser = _.omit(user, ['password', 'refreshToken']);
         return publicUser;
+    }
+
+    async getUserCompanyList(id: number): Promise<UserCompany[]> {
+        return await this.userCompanyRepository.findBy({ userId: id });
     }
 }

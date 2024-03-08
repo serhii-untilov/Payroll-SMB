@@ -66,13 +66,10 @@ export type ICreatePaymentType = Omit<
     IPaymentType,
     | 'id'
     | 'createdDate'
-    | 'createdUser'
     | 'createdUserId'
     | 'updatedDate'
-    | 'updatedUser'
     | 'updatedUserId'
     | 'deletedDate'
-    | 'deletedUser'
     | 'deletedUserId'
     | 'version'
 >;

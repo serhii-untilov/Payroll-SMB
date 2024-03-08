@@ -6,7 +6,6 @@ import { JwtModule } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { IUser } from '@repo/shared';
 import { MockType, createMockUser, repositoryMockFactory } from '@repo/utils';
-import { UsersService } from '../resources/users/users.service';
 import { User } from '../resources/users/entities/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -42,7 +41,6 @@ describe('AuthController', () => {
             ],
             providers: [
                 AuthService,
-                UsersService,
                 ConfigService,
                 {
                     provide: getRepositoryToken(User),
@@ -50,7 +48,7 @@ describe('AuthController', () => {
                 },
             ],
             controllers: [AuthController],
-            exports: [UsersService],
+            exports: [],
         }).compile();
 
         controller = module.get(AuthController);

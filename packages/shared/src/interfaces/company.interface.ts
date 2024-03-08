@@ -2,7 +2,6 @@ import { IAccounting } from './accounting.interface';
 import { IDepartment } from './department.interface';
 import { ILaw } from './law.interface';
 import { ILogger } from './logger.interface';
-import { IUser } from './user.interface';
 
 export interface ICompany extends ILogger {
     id: number;
@@ -18,9 +17,6 @@ export interface ICompany extends ILogger {
     accounting?: IAccounting;
     accountingId: number;
 
-    owner?: IUser;
-    ownerId: number;
-
     payPeriod: Date;
     checkDate: Date;
 
@@ -33,8 +29,8 @@ export type ICreateCompany = Omit<
     | 'law'
     | 'accounting'
     | 'departments'
-    | 'owner'
-    | 'ownerId'
+    // | 'owner'
+    // | 'ownerId'
     | 'createdDate'
     | 'createdUser'
     | 'createdUserId'

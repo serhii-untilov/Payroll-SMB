@@ -1,7 +1,5 @@
 import { IUser } from '@repo/shared';
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Role } from '../../roles/entities/role.entity';
-import { Company } from '../../companies/entities/company.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User implements IUser {
@@ -29,10 +27,10 @@ export class User implements IUser {
     @Column({ type: 'varchar', length: '5', nullable: true })
     language: string;
 
-    @ManyToMany(() => Role, (role) => role.users, { cascade: true })
-    @JoinTable({ name: 'user_roles' })
-    roles?: Role[];
+    // @ManyToMany(() => Role, (role) => role.users, { cascade: true })
+    // @JoinTable({ name: 'user_roles' })
+    // roles?: Role[];
 
-    @OneToMany(() => Company, (company) => company.owner)
-    companies?: Company[];
+    // @OneToMany(() => Company, (company) => company.owner)
+    // companies: Company[];
 }
