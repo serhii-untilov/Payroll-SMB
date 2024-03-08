@@ -62,7 +62,7 @@ describe('AuthController', () => {
 
     it('should login a user', async () => {
         repoMock.findOneBy?.mockReturnValue(mockUser);
-        const res = await controller.signIn({
+        const res = await controller.login({
             ...mockUser,
             password: mockUserUnhashedPassword,
             rememberMe: false,
@@ -74,7 +74,7 @@ describe('AuthController', () => {
     it('should throw with a bad email', async () => {
         try {
             repoMock.findOneBy?.mockReturnValue(null);
-            await controller.signIn({ email: '', password: '', rememberMe: false });
+            await controller.login({ email: '', password: '', rememberMe: false });
         } catch (err) {
             expect(err).toBeInstanceOf(BadRequestException);
         }

@@ -13,14 +13,14 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Post('register')
-    async signUp(@Body() user: CreateUserDto): Promise<TokensDto> {
-        return await this.authService.signUp(user);
+    async register(@Body() user: CreateUserDto): Promise<TokensDto> {
+        return await this.authService.register(user);
     }
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    async signIn(@Body() user: AuthDto): Promise<TokensDto> {
-        return await this.authService.signIn(user);
+    async login(@Body() user: AuthDto): Promise<TokensDto> {
+        return await this.authService.login(user);
     }
 
     @HttpCode(HttpStatus.OK)

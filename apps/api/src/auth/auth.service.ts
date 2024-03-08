@@ -24,7 +24,7 @@ export class AuthService {
         private configService: ConfigService,
     ) {}
 
-    async signUp(user: CreateUserDto): Promise<TokensDto> {
+    async register(user: CreateUserDto): Promise<TokensDto> {
         const exists = await this.usersRepository.findOneBy({ email: user.email });
         if (exists) {
             throw new ConflictException('User already exists.');
@@ -37,7 +37,7 @@ export class AuthService {
         return tokens;
     }
 
-    async signIn(auth: AuthDto): Promise<TokensDto> {
+    async login(auth: AuthDto): Promise<TokensDto> {
         const user = await this.usersRepository.findOneBy({ email: auth.email });
         if (!user) {
             throw new BadRequestException('User not found');
