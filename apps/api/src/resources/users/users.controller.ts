@@ -23,6 +23,14 @@ import { Request } from 'express';
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
+    @Get()
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async findAll(): Promise<IPublicUserData[]> {
+        const users = await this.usersService.findAll();
+        return users.map((user) => UsersService.toPublic(user));
+    }
+
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
@@ -31,12 +39,13 @@ export class UsersController {
         return UsersService.toPublic(user);
     }
 
-    @Get()
-    @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(): Promise<IPublicUserData[]> {
-        const users = await this.usersService.findAll();
-        return users.map((user) => UsersService.toPublic(user));
+    @UseGuards(AccessTokenGuard)
+    @Get('user')
+    async getCurrentUser(@Req() req: Request): Promise<IPublicUserData> {
+        const id: number = req.user['sub'];
+        const user = await this.usersService.findOne({ where: { id } });
+        return UsersService.toPublic(user);
     }
 
     @Get(':id')
@@ -63,23 +72,6 @@ export class UsersController {
     @HttpCode(HttpStatus.OK)
     async remove(@Param('id', ParseIntPipe) id: number): Promise<IPublicUserData> {
         const user = await this.usersService.remove(id);
-        return UsersService.toPublic(user);
-    }
-
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(AccessTokenGuard)
-    @Get('user')
-    async getCurrentUser(@Req() req: Request): Promise<IPublicUserData> {
-        const id: number = req.user['sub'];
-        const user = await this.usersService.findOne({
-            where: {
-                id,
-            },
-            relations: {
-                roles: true,
-                companies: true,
-            },
-        });
         return UsersService.toPublic(user);
     }
 
