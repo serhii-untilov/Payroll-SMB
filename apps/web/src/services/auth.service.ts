@@ -27,6 +27,6 @@ export const logoutUser = async () => {
 };
 
 export const getCurrentUser = async (): Promise<IPublicUserData> => {
-    const response = await api.get('/api/auth/user', { headers: authHeader() });
+    const response = await api.get('/api/users/user', { headers: authHeader() });
     return response.data;
 };
