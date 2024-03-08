@@ -16,7 +16,7 @@ export type AppContextType = {
     compactView: boolean;
     setCompactView: Dispatch<boolean>;
     company: ICompany | undefined;
-    setCompany: Dispatch<ICompany>;
+    setCompany: Dispatch<ICompany | null>;
     theme: ThemeOptions;
     themeMode: string;
     setThemeMode: Dispatch<string>;
@@ -43,7 +43,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     const [compactView, setCompactView] = useState(false);
     const wideScreen = useMediaQuery('(min-width:900px)');
     const [companyList, setCompanyList] = useState<ICompany[]>([]);
-    const [company, setCompany] = useState<ICompany>();
+    const [company, setCompany] = useState<ICompany | null>(null);
     const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') || 'light');
     const { user } = useAuth();
     const { locale } = useLocale();

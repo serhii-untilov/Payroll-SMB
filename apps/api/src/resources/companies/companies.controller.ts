@@ -44,7 +44,7 @@ export class CompaniesController {
     async findOne(@Param('id', ParseIntPipe) id: number) {
         return await this.companiesService.findOne({
             where: { id },
-            relations: { law: true, accounting: true, owner: true },
+            relations: { law: true, accounting: true },
         });
     }
 

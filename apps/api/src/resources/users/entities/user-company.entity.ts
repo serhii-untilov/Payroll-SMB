@@ -1,4 +1,4 @@
-import { IUserCompany } from '@repo/shared';
+import { IRole, IUserCompany } from '@repo/shared';
 import { Company } from '../../companies/entities/company.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
@@ -14,12 +14,14 @@ export class UserCompany implements IUserCompany {
     @ManyToOne(() => Company, {
         createForeignKeyConstraints: false,
     })
-    company: Company;
+    company?: Company;
 
     @Column()
     companyId: number;
 
     @ManyToOne(() => Role, { createForeignKeyConstraints: false })
+    role?: IRole;
+
     @Column()
     roleId: number;
 }

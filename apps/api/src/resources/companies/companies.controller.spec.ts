@@ -4,6 +4,8 @@ import { repositoryMockFactory } from '@repo/utils';
 import { CompaniesController } from './companies.controller';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
+import { UserCompany } from '../users/entities/user-company.entity';
+import { User } from '../users/entities/user.entity';
 
 describe('CompaniesController', () => {
     let controller: CompaniesController;
@@ -16,6 +18,14 @@ describe('CompaniesController', () => {
                 CompaniesService,
                 {
                     provide: getRepositoryToken(Company),
+                    useFactory: repositoryMockFactory,
+                },
+                {
+                    provide: getRepositoryToken(UserCompany),
+                    useFactory: repositoryMockFactory,
+                },
+                {
+                    provide: getRepositoryToken(User),
                     useFactory: repositoryMockFactory,
                 },
             ],

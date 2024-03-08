@@ -32,13 +32,6 @@ export class Company extends Logger implements ICompany {
     @Column({ type: 'integer', nullable: true })
     accountingId: number;
 
-    // @ManyToOne(() => User, (user) => user.companies)
-    // @JoinColumn()
-    // owner: User;
-
-    // @Column({ type: 'integer', nullable: true })
-    // ownerId: number;
-
     @Column({ type: 'date', default: '1970-01-01' })
     dateFrom?: Date;
 

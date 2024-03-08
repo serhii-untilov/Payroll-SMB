@@ -47,7 +47,7 @@ const defaultValues: FormType = {
     dateFrom: new Date('1970-01-01'),
     dateTo: new Date('1970-01-01'),
     payPeriod: new Date('1970-01-01'),
-    checkDate: new Date('9999-12-31'),
+    checkDate: new Date('1970-01-01'),
 };
 
 export default function Company() {
@@ -119,6 +119,7 @@ export default function Company() {
     }
 
     if (isCompanyError) {
+        setCurrentCompany(null);
         return enqueueSnackbar(`${companyError.name}\n${companyError.message}`, {
             variant: 'error',
         });

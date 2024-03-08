@@ -7,8 +7,8 @@ export interface ILogger {
     updatedDate?: Date;
     updatedUserId?: number;
 
-    deletedDate?: Date;
-    deletedUserId?: number;
+    deletedDate?: Date | null;
+    deletedUserId?: number | null;
 
     version?: number;
 }

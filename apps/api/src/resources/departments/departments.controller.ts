@@ -46,7 +46,6 @@ export class DepartmentsController {
             relations: {
                 law: true,
                 accounting: true,
-                // , owner: true
             },
         });
     }

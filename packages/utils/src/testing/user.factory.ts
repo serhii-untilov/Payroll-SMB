@@ -1,5 +1,5 @@
 import { incrementalNumber, randPassword, randUser, randUuid } from '@ngneat/falso';
-import { IUser, RoleType } from '@repo/shared';
+import { IUser } from '@repo/shared';
 
 const factory = incrementalNumber();
 

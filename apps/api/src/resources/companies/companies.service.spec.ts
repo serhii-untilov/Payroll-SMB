@@ -5,6 +5,8 @@ import { Company } from './entities/company.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType } from '@repo/utils';
 import { Repository } from 'typeorm';
+import { UserCompany } from '../users/entities/user-company.entity';
+import { User } from '../users/entities/user.entity';
 
 describe('CompaniesService', () => {
     let service: CompaniesService;
@@ -16,6 +18,14 @@ describe('CompaniesService', () => {
                 CompaniesService,
                 {
                     provide: getRepositoryToken(Company),
+                    useFactory: repositoryMockFactory,
+                },
+                {
+                    provide: getRepositoryToken(UserCompany),
+                    useFactory: repositoryMockFactory,
+                },
+                {
+                    provide: getRepositoryToken(User),
                     useFactory: repositoryMockFactory,
                 },
             ],

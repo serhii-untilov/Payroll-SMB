@@ -46,7 +46,6 @@ export class PaymentTypesController {
             relations: {
                 law: true,
                 accounting: true,
-                // , owner: true
             },
         });
     }

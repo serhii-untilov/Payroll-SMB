@@ -15,7 +15,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { IPublicUserData } from '@repo/shared';
+import { IPublicUserData, IUserCompany } from '@repo/shared';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { Request } from 'express';
 
@@ -78,7 +78,7 @@ export class UsersController {
     @Get(':id/companies')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async userCompanyList(@Param('id', ParseIntPipe) id: number): Promise<IPublicUserData[]> {
+    async userCompanyList(@Param('id', ParseIntPipe) id: number): Promise<IUserCompany[]> {
         return await this.usersService.getUserCompanyList(id);
     }
 }

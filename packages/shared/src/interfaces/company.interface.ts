@@ -29,8 +29,6 @@ export type ICreateCompany = Omit<
     | 'law'
     | 'accounting'
     | 'departments'
-    // | 'owner'
-    // | 'ownerId'
     | 'createdDate'
     | 'createdUser'
     | 'createdUserId'

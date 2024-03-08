@@ -46,7 +46,6 @@ export class WorkSchedulesController {
             relations: {
                 law: true,
                 accounting: true,
-                // , owner: true
             },
         });
     }

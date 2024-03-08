@@ -30,9 +30,6 @@ export const createMockCompany = (data?: Partial<ICompany>): ICompany => {
         accounting: accounting,
         accountingId: accounting.id,
 
-        // owner: user,
-        // ownerId: user.id,
-
         payPeriod: monthBeg(currentDate),
         checkDate: monthBeg(currentDate),
 
