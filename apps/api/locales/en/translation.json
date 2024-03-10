@@ -49,5 +49,11 @@
     "Name": "Name",
     "Law": "Law",
     "Tax ID": "Tax ID",
-    "Accounting": "Accounting type"
+    "Accounting": "Accounting type",
+    "Date From": "Date From",
+    "Date To": "Date To",
+    "Parent Department": "Parent Department",
+    "Departments": "Departments",
+    "Managers": "Managers",
+    "Accounts": "Accounts"
 }

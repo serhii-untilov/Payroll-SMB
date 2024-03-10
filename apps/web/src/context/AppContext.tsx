@@ -15,7 +15,7 @@ import { getUserCompanyList } from '../services/user.service';
 export type AppContextType = {
     compactView: boolean;
     setCompactView: Dispatch<boolean>;
-    company: ICompany | undefined;
+    company: ICompany | null | undefined;
     setCompany: Dispatch<ICompany | null>;
     theme: ThemeOptions;
     themeMode: string;
@@ -43,7 +43,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     const [compactView, setCompactView] = useState(false);
     const wideScreen = useMediaQuery('(min-width:900px)');
     const [companyList, setCompanyList] = useState<ICompany[]>([]);
-    const [company, setCompany] = useState<ICompany | null>(null);
+    const [company, setCompany] = useState<ICompany | null | undefined>(null);
     const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') || 'light');
     const { user } = useAuth();
     const { locale } = useLocale();

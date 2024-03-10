@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
+import { Box, Grid, Paper } from '@mui/material';
 import { IAccounting, ILaw } from '@repo/shared';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
@@ -22,6 +22,7 @@ import { getDirtyValues } from '../../services/utils';
 import * as _ from 'lodash';
 import useAppContext from '../../hooks/useAppContext';
 import CompanyDetails from './CompanyDetails';
+import { CompanyDepartments } from './CompanyDepartments';
 
 const formSchema = yup.object().shape({
     id: yup.number().nullable(),
@@ -51,7 +52,7 @@ const defaultValues: FormType = {
 };
 
 export default function Company() {
-    const { id } = useParams();
+    // const { id } = useParams();
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const { locale } = useLocale();
     const { t } = useTranslation();
@@ -62,8 +63,11 @@ export default function Company() {
         isLoading: isCompanyLoading,
         error: companyError,
     } = useQuery<FormType, Error>('company', async () => {
-        const companyId = id ? +id : currentCompany?.id;
-        return formSchema.cast(companyId ? await getCompany(companyId) : defaultValues);
+        // const companyId = id ? +id : currentCompany?.id;
+        // return formSchema.cast(companyId ? await getCompany(companyId) : defaultValues);
+        return formSchema.cast(
+            currentCompany?.id ? await getCompany(currentCompany?.id) : defaultValues,
+        );
     });
 
     const {
@@ -244,6 +248,8 @@ export default function Company() {
                 </Grid>
             </Grid>
             {currentCompany && <CompanyDetails companyId={currentCompany.id} />}
+            {/* <CompanyDepartments companyId={currentCompany.id || 0} /> */}
+            {/*<Box sx={{ bgcolor: 'red', flex: 1 }}>Test</Box> */}
         </PageLayout>
     );
 }

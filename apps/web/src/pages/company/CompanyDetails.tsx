@@ -1,42 +1,11 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { grey } from '@mui/material/colors';
-
-interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-function a11yProps(index: number) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import * as React from 'react';
+import { CompanyDepartments } from './CompanyDepartments';
+import { TabPanel } from '../../components/layout/TabPanel';
+import useAppContext from '../../hooks/useAppContext';
+import { useTranslation } from 'react-i18next';
 
 export type CompanyDetailsProps = {
     companyId: number;
@@ -45,40 +14,44 @@ export type CompanyDetailsProps = {
 export default function CompanyDetails(props: CompanyDetailsProps) {
     const { companyId } = props;
     const [value, setValue] = React.useState(0);
+    const { t } = useTranslation();
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 0.5, borderColor: 'divider' }}>
+        <Box
+            sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+            }}
+        >
+            <Box
+            // sx={{ borderBottom: 0.5, borderColor: 'divider' }}
+            >
                 <Tabs
                     value={value}
                     onChange={handleChange}
+                    textColor={'inherit'}
                     indicatorColor="primary"
-                    textColor="inherit"
-                    // variant="fullWidth"
-                    aria-label="company details tabs"
-                    // sx={{
-                    //     borderBottom: '5px solid',
-                    //     borderColor: grey[100],
-                    // }}
                 >
-                    <Tab label="Підрозділи" {...a11yProps(0)} />
-                    <Tab label="Керівники" {...a11yProps(1)} />
-                    <Tab label="Розрахункові рахунки" {...a11yProps(2)} />
+                    <Tab label={t('Departments')} />
+                    <Tab label={t('Managers')} />
+                    <Tab label={t('Accounts')} />
                 </Tabs>
             </Box>
-            <CustomTabPanel value={value} index={0}>
-                Item One
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}>
+            <TabPanel value={value} index={0} sx={{ flex: 1 }}>
+                <CompanyDepartments companyId={companyId} />
+            </TabPanel>
+            <TabPanel value={value} index={1} sx={{ flex: 1 }}>
                 Item Two
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
+            </TabPanel>
+            <TabPanel value={value} index={2} sx={{ flex: 1 }}>
                 Item Three
-            </CustomTabPanel>
+            </TabPanel>
         </Box>
     );
 }

@@ -9,6 +9,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -33,8 +34,8 @@ export class DepartmentsController {
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll() {
-        return await this.departmentsService.findAll();
+    async findAll(@Query('companyId', ParseIntPipe) companyId: number) {
+        return await this.departmentsService.findAll({ companyId });
     }
 
     @Get(':id')

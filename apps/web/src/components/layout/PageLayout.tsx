@@ -12,15 +12,16 @@ const PageLayout: FC<PageLayoutProps> = ({ title, children }) => {
     const { compactView } = useAppContext();
     return (
         <Box
+            mt={{ xs: 1, sm: 2 }}
+            mx={{ xs: 1, sm: 2 }}
             sx={{
-                pt: 1,
-                px: 1,
                 height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
             }}
         >
             {compactView && title && (
-                // {title && (
-                <Box sx={{ flexGrow: 1, mb: 2, mt: 1 }}>
+                <Box mb={{ xs: 1, sm: 2 }}>
                     <PageTitle title={title} />
                 </Box>
             )}

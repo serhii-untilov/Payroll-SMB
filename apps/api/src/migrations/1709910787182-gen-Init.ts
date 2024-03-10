@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class Gen1709910787182 implements MigrationInterface {
-    name = 'Gen1709910787182'
+    name = 'Gen1709910787182';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -391,5 +391,4 @@ export class Gen1709910787182 implements MigrationInterface {
             DROP TABLE "work_schedule_period"
         `);
     }
-
 }

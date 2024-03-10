@@ -26,8 +26,8 @@ export class DepartmentsService {
         return newDepartment;
     }
 
-    async findAll(): Promise<Department[]> {
-        return await this.DepartmentsRepository.find();
+    async findAll(params): Promise<Department[]> {
+        return await this.DepartmentsRepository.find(params);
     }
 
     async findOne(params): Promise<Department> {

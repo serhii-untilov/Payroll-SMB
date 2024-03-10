@@ -35,20 +35,17 @@ export function ListItemLink(props: ListItemLinkProps) {
                     '&.active': {
                         color: (theme) =>
                             theme.palette.mode === 'light'
-                                ? theme.palette.common.white
-                                : theme.palette.common.black,
+                                ? theme.palette.common.black
+                                : theme.palette.common.white,
                         bgcolor: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? theme.palette.primary.main
-                                : theme.palette.primary.main,
-                        // bgcolor: (theme) => grey[300],
-                        opacity: 0.85,
-                        borderRadius: '5px',
+                            theme.palette.mode === 'light' ? '#1976d222' : '#1976d277',
+                        opacity: 1,
+                        borderRadius: '12px',
                         py: [0.5],
                         my: [0.3],
                     },
                     '> .MuiListItemIcon-root': {
-                        opacity: 0.85,
+                        opacity: 1,
                         minWidth: 39,
                     },
                     '&.active > .MuiListItemIcon-root': {
@@ -56,20 +53,20 @@ export function ListItemLink(props: ListItemLinkProps) {
                             theme.palette.mode === 'dark'
                                 ? theme.palette.background.default
                                 : theme.palette.text.primary,
-                        opacity: 0.85,
-                        borderRadius: '5px',
+                        opacity: 1,
+                        borderRadius: '12px',
                         minWidth: 39,
                         py: [0.5],
                         my: [0.3],
                     },
                     '&:hover': {
-                        borderRadius: '5px',
+                        borderRadius: '12px',
                         py: [0.5],
                         my: [0.3],
                     },
                     transition: 'none',
                     height: 40,
-                    // opacity: 0.85,
+                    // opacity: 1,
                     py: [0.5],
                     my: [0.3],
                     px: [1],
