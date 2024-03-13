@@ -1,9 +1,7 @@
 {
     "name": "@repo/shared",
     "version": "1.0.0",
-    "files": [
-        "./dist/index.js"
-    ],
+    "main": "./dist/index.js",
     "types": "index.ts",
     "license": "MIT",
     "private": true,
