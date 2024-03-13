@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { FormButton } from '../../components/form/FormButton';
+import { Button } from '../../components/layout/Button';
 import { FormInputDropdown } from '../../components/form/FormInputDropdown';
 import { FormTextField } from '../../components/form/FormTextField';
 import PageLayout from '../../components/layout/PageLayout';
@@ -23,6 +23,7 @@ import * as _ from 'lodash';
 import useAppContext from '../../hooks/useAppContext';
 import CompanyDetails from './CompanyDetails';
 import { CompanyDepartments } from './CompanyDepartments';
+import { maxDate, minDate, monthBegin, monthEnd } from '@repo/utils';
 
 const formSchema = yup.object().shape({
     id: yup.number().nullable(),
@@ -45,14 +46,13 @@ const defaultValues: FormType = {
     lawId: 0,
     taxId: '',
     accountingId: 0,
-    dateFrom: new Date('1970-01-01'),
-    dateTo: new Date('1970-01-01'),
-    payPeriod: new Date('1970-01-01'),
-    checkDate: new Date('1970-01-01'),
+    dateFrom: minDate(),
+    dateTo: maxDate(),
+    payPeriod: monthBegin(new Date()),
+    checkDate: monthEnd(new Date()),
 };
 
 export default function Company() {
-    // const { id } = useParams();
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const { locale } = useLocale();
     const { t } = useTranslation();
@@ -224,32 +224,19 @@ export default function Company() {
                     <Grid item xs={12} sx={{ mb: 2 }}>
                         <Grid container spacing={1}>
                             <Grid item>
-                                <FormButton
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={!isDirty}
-                                >
+                                <Button type="submit" disabled={!isDirty}>
                                     {t('Update')}
-                                </FormButton>
+                                </Button>
                             </Grid>
-                            {/* <Grid item>
-                                <FormButton
-                                    onClick={onCancel}
-                                    variant="contained"
-                                    color="warning"
-                                    disabled={!isDirty}
-                                >
-                                    {t('Cancel')}
-                                </FormButton>
-                            </Grid> */}
+
+                            <Grid item>
+                                {isDirty && <Button onClick={onCancel}>{t('Cancel')}</Button>}
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
             {currentCompany && <CompanyDetails companyId={currentCompany.id} />}
-            {/* <CompanyDepartments companyId={currentCompany.id || 0} /> */}
-            {/*<Box sx={{ bgcolor: 'red', flex: 1 }}>Test</Box> */}
         </PageLayout>
     );
 }

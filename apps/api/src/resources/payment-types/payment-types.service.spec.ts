@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PaymentTypesService } from './payment-types.service';
-import { MockType, repositoryMockFactory } from '@repo/utils';
+import { MockType, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
 import { PaymentType } from './entities/payment-type.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';

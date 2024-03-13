@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { randUser } from '@ngneat/falso';
-import { createMockUser, repositoryMockFactory } from '@repo/utils';
+import { createMockUser, repositoryMockFactory } from '@repo/testing';
 import * as _ from 'lodash';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';

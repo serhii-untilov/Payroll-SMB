@@ -5,7 +5,7 @@ import { BadRequestException } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { IUser } from '@repo/shared';
-import { MockType, createMockUser, repositoryMockFactory } from '@repo/utils';
+import { MockType, createMockUser, repositoryMockFactory } from '@repo/testing';
 import { User } from '../resources/users/entities/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';

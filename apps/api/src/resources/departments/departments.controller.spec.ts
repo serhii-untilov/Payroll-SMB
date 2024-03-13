@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { repositoryMockFactory } from '@repo/utils';
+import { repositoryMockFactory } from '@repo/testing';
 import { DepartmentsController } from './departments.controller';
 import { DepartmentsService } from './departments.service';
 import { Department } from './entities/department.entity';

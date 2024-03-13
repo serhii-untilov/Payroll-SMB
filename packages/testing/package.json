@@ -1,12 +1,12 @@
 {
-    "name": "@repo/utils",
+    "name": "@repo/testing",
     "version": "1.0.0",
-    "license": "MIT",
-    "private": true,
     "files": [
         "./dist/index.js"
     ],
     "types": "index.ts",
+    "license": "MIT",
+    "private": true,
     "scripts": {
         "build": "tsc",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -15,9 +15,14 @@
         "test:watch": "jest --watch"
     },
     "dependencies": {
-        "ts-loader": "^9.5.1"
+        "sqlite3": "^5.1.7",
+        "ts-loader": "^9.5.1",
+        "typeorm": "^0.3.20",
+        "@repo/shared": "*",
+        "@repo/utils": "*"
     },
     "devDependencies": {
+        "@ngneat/falso": "^7.1.1",
         "ts-node": "^10.9.2",
         "typescript": "^5.3.3"
     }

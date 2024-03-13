@@ -1,4 +1,4 @@
-export function monthBeg(date: Date): Date {
+export function monthBegin(date: Date): Date {
     return new Date(date.getFullYear(), date.getMonth(), 1);
 }
 
@@ -36,13 +36,11 @@ export function dateToTime(date: Date): number {
 }
 
 export function minDate(): Date {
-    const d = new Date('1900-01-01');
-    return d;
+    return new Date('1900-01-01');
 }
 
 export function maxDate(): Date {
-    const d = new Date('9999-12-31');
-    return d;
+    return new Date('9999-12-31');
 }
 
 export function getMonthName(date: Date): string {

@@ -3,7 +3,7 @@ import { WorkSchedulesController } from './work-schedules.controller';
 import { WorkSchedulesService } from './work-schedules.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { WorkSchedule } from './entities/work-schedule.entity';
-import { repositoryMockFactory } from '@repo/utils';
+import { repositoryMockFactory } from '@repo/testing';
 
 describe('WorkSchedulesController', () => {
     let controller: WorkSchedulesController;

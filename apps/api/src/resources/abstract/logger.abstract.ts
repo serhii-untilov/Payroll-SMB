@@ -1,4 +1,4 @@
-import { ILogger } from '@repo/shared/src/interfaces/logger.interface';
+import { ILogger } from '@repo/shared';
 import {
     Column,
     CreateDateColumn,

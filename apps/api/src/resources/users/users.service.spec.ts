@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { randEmail } from '@ngneat/falso';
-import { MockType, createMockUser, repositoryMockFactory } from '@repo/utils';
+import { MockType, createMockUser, repositoryMockFactory } from '@repo/testing';
 import * as _ from 'lodash';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';

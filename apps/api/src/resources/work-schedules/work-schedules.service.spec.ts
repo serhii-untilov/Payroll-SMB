@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { MockType, repositoryMockFactory } from '@repo/utils';
+import { MockType, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
 import { WorkSchedule } from './entities/work-schedule.entity';
 import { WorkSchedulesService } from './work-schedules.service';

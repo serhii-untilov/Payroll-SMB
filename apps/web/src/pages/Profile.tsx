@@ -7,7 +7,7 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import * as Yup from 'yup';
-import { FormButton } from '../components/form/FormButton';
+import { Button } from '../components/layout/Button';
 import { FormInputDropdown } from '../components/form/FormInputDropdown';
 import { FormTextField } from '../components/form/FormTextField';
 import PageLayout from '../components/layout/PageLayout';
@@ -168,19 +168,19 @@ export default function Profile() {
                     <Grid item xs={12}>
                         <Grid container spacing={1}>
                             <Grid item>
-                                <FormButton type="submit" variant="contained" color="primary">
+                                <Button type="submit" variant="contained" color="primary">
                                     {t('Update')}
-                                </FormButton>
+                                </Button>
                             </Grid>
                             <Grid item>
-                                <FormButton
+                                <Button
                                     onClick={onCancel}
                                     variant="contained"
                                     color="warning"
                                     disabled={!isDirty}
                                 >
                                     {t('Cancel')}
-                                </FormButton>
+                                </Button>
                             </Grid>
                         </Grid>
                     </Grid>

@@ -4,7 +4,7 @@ import { ICompany } from '@repo/shared';
 import { createMockLaw } from './law.factory';
 import { createMockAccounting } from './accounting.factory';
 import { createMockUser } from './user.factory';
-import { monthBeg } from '../utils/date';
+import { maxDate, minDate, monthBegin, monthEnd } from '@repo/utils';
 import { createMockTaxId } from './taxId.factory';
 
 const factory = incrementalNumber();
@@ -19,8 +19,8 @@ export const createMockCompany = (data?: Partial<ICompany>): ICompany => {
         id: factory(),
         name: randCompanyName(),
 
-        dateFrom: new Date('1970-01-01'),
-        dateTo: new Date('9999-12-31'),
+        dateFrom: minDate(),
+        dateTo: maxDate(),
 
         law: law,
         lawId: law.id,
@@ -30,8 +30,8 @@ export const createMockCompany = (data?: Partial<ICompany>): ICompany => {
         accounting: accounting,
         accountingId: accounting.id,
 
-        payPeriod: monthBeg(currentDate),
-        checkDate: monthBeg(currentDate),
+        payPeriod: monthBegin(currentDate),
+        checkDate: monthEnd(currentDate),
 
         departments: [department],
 
@@ -39,7 +39,8 @@ export const createMockCompany = (data?: Partial<ICompany>): ICompany => {
         createdUserId: user.id,
         updatedDate: currentDate,
         updatedUserId: user.id,
-        deletedDate: new Date('9999-12-31'),
+        deletedDate: undefined,
+        deletedUserId: undefined,
         version: 1,
         ...data,
     };

@@ -35,8 +35,8 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
                 <Tabs
                     value={value}
                     onChange={handleChange}
-                    textColor={'inherit'}
-                    indicatorColor="primary"
+                    // textColor={'inherit'}
+                    // indicatorColor="primary"
                 >
                     <Tab label={t('Departments')} />
                     <Tab label={t('Managers')} />
