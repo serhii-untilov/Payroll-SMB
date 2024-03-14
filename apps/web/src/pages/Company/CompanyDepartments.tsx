@@ -1,22 +1,3 @@
-import { useQuery, useQueryClient } from 'react-query';
-import { CompanyDetailsProps } from './CompanyDetails';
-import { ICompany, IDepartment } from '@repo/shared';
-import { getDepartmentList } from '../../services/department.service';
-import { Loading } from '../../components/utility/Loading';
-import { enqueueSnackbar } from 'notistack';
-import {
-    Box,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-} from '@mui/material';
-import { FormDate } from '../../components/data/Date';
-import { useTranslation } from 'react-i18next';
-import { TableToolbar } from '../../components/layout/TableToolbar';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -24,10 +5,18 @@ import {
     GridRowParams,
     MuiEvent,
 } from '@mui/x-data-grid';
-import DepartmentForm from './DepartmentForm';
-import { KeyboardEvent, useState } from 'react';
-import { dateView, maxDate, minDate } from '@repo/utils';
+import { IDepartment } from '@repo/shared';
+import { dateView } from '@repo/utils';
+import { enqueueSnackbar } from 'notistack';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useQuery, useQueryClient } from 'react-query';
 import { DataGrid } from '../../components/data/DataGrid';
+import { TableToolbar } from '../../components/layout/TableToolbar';
+import { Loading } from '../../components/utility/Loading';
+import { getDepartmentList } from '../../services/department.service';
+import { CompanyDetailsProps } from './CompanyDetails';
+import DepartmentForm from './DepartmentForm';
 
 export function CompanyDepartments(params: CompanyDetailsProps) {
     const { companyId } = params;
