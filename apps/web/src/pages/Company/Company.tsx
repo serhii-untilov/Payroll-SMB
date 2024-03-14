@@ -175,6 +175,7 @@ export default function Company() {
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
                 spacing={2}
+                sx={{ mb: 1 }}
             >
                 <Grid container item xs={12} sm={12} md={8} lg={4} spacing={2}>
                     <Grid item xs={12}>
@@ -227,23 +228,21 @@ export default function Company() {
                             }
                         />
                     </Grid>
-                    <Grid item xs={12} sx={{ mb: 1 }}>
-                        <Grid container spacing={1}>
-                            <Grid item>
-                                <Button type="submit" disabled={!isDirty}>
-                                    {t('Update')}
-                                </Button>
-                            </Grid>
+                    {(isDirty || !currentCompany) && (
+                        <Grid item xs={12} sx={{ mb: 1 }}>
+                            <Grid container spacing={1}>
+                                <Grid item>
+                                    <Button type="submit">{t('Update')}</Button>
+                                </Grid>
 
-                            <Grid item>
-                                {isDirty && (
+                                <Grid item>
                                     <Button color="secondary" onClick={onCancel}>
                                         {t('Cancel')}
                                     </Button>
-                                )}
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
+                    )}
                 </Grid>
             </Grid>
             {currentCompany && <CompanyDetails companyId={currentCompany.id} />}
