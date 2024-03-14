@@ -1,33 +1,31 @@
-import TextField from '@mui/material/TextField';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { IDepartment } from '@repo/shared';
+import { maxDate, minDate } from '@repo/utils';
+import { AxiosError } from 'axios';
+import { enqueueSnackbar } from 'notistack';
+import { Dispatch, Fragment, useEffect } from 'react';
+import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../components/layout/Button';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { useQuery, useQueryClient } from 'react-query';
+import * as yup from 'yup';
+import { FormInputDropdown } from '../../components/form/FormInputDropdown';
+import { FormTextField } from '../../components/form/FormTextField';
+import { Button } from '../../components/layout/Button';
+import { Loading } from '../../components/utility/Loading';
+import useAppContext from '../../hooks/useAppContext';
+import useLocale from '../../hooks/useLocale';
 import {
     createDepartment,
     getDepartment,
     getDepartmentList,
     updateDepartment,
 } from '../../services/department.service';
-import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
-import { Dispatch, FormEvent, Fragment, useEffect, useState } from 'react';
-import useLocale from '../../hooks/useLocale';
-import { enqueueSnackbar } from 'notistack';
-import { maxDate, minDate } from '@repo/utils';
-import { Loading } from '../../components/utility/Loading';
 import { getDirtyValues } from '../../services/utils';
-import { AxiosError } from 'axios';
-import { Grid } from '@mui/material';
-import { FormTextField } from '../../components/form/FormTextField';
-import { FormInputDropdown } from '../../components/form/FormInputDropdown';
-import useAppContext from '../../hooks/useAppContext';
 
 export interface DepartmentFormParams {
     open: boolean;
@@ -71,7 +69,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
         isLoading: isDepartmentLoading,
         error: departmentError,
     } = useQuery<FormType, Error>({
-        queryKey: ['department'],
+        queryKey: ['department', departmentId],
         queryFn: async () => {
             return formSchema.cast(
                 departmentId
@@ -80,6 +78,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
             );
         },
         enabled: !!company?.id,
+        // suspense: true,
     });
 
     const {
@@ -87,16 +86,14 @@ export default function DepartmentForm(params: DepartmentFormParams) {
         isError: isDepartmentListError,
         isLoading: isDepartmentListLoading,
         error: departmentListError,
-    } = useQuery<IDepartment[], Error>(
-        'departmentList',
-        async () => {
+    } = useQuery<IDepartment[], Error>({
+        queryKey: 'departmentList',
+        queryFn: async () => {
             return company?.id ? await getDepartmentList(company?.id) : [];
         },
-        {
-            // The query will not execute until the company Id exists
-            enabled: !!company?.id,
-        },
-    );
+        enabled: !!company?.id,
+        // suspense: true,
+    });
 
     const {
         control,
@@ -151,27 +148,28 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                 : await createDepartment(data);
             reset(department);
             params.setOpen(false);
-            queryClient.invalidateQueries({ queryKey: ['department'] });
+            queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
         }
     };
 
-    // const onCancel = () => {
-    //     reset(department);
-    //     params.setOpen(false);
-    //     queryClient.invalidateQueries({ queryKey: ['department'] });
-    // };
+    const onCancel = () => {
+        reset(department);
+        params.setOpen(false);
+        queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
+    };
 
     return (
         <Fragment>
             <Dialog
+                disableRestoreFocus
                 open={params.open}
                 onClose={() => {
                     params.setOpen(false);
                     reset(department);
-                    queryClient.invalidateQueries({ queryKey: ['department'] });
+                    queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
                 }}
                 // PaperProps={{
                 //     component: 'form',
@@ -198,6 +196,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                                 label={t('Name')}
                                 type="text"
                                 autoFocus
+                                sx={{ fontWeight: 'bold' }}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -256,9 +255,9 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                         Subscribe
                     </Button> */}
                     <Button onClick={handleSubmit(onSubmit)}>{t('Update')}</Button>
-                    {/* <Button onClick={onCancel}>
+                    <Button color="secondary" onClick={onCancel}>
                         {t('Cancel')}
-                    </Button> */}
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Fragment>

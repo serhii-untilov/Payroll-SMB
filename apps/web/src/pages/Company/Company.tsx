@@ -227,7 +227,7 @@ export default function Company() {
                             }
                         />
                     </Grid>
-                    <Grid item xs={12} sx={{ mb: 2 }}>
+                    <Grid item xs={12} sx={{ mb: 1 }}>
                         <Grid container spacing={1}>
                             <Grid item>
                                 <Button type="submit" disabled={!isDirty}>
@@ -236,7 +236,11 @@ export default function Company() {
                             </Grid>
 
                             <Grid item>
-                                {isDirty && <Button onClick={onCancel}>{t('Cancel')}</Button>}
+                                {isDirty && (
+                                    <Button color="secondary" onClick={onCancel}>
+                                        {t('Cancel')}
+                                    </Button>
+                                )}
                             </Grid>
                         </Grid>
                     </Grid>

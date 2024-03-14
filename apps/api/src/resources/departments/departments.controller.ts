@@ -45,8 +45,7 @@ export class DepartmentsController {
         return await this.departmentsService.findOne({
             where: { id },
             relations: {
-                law: true,
-                accounting: true,
+                parentDepartment: true,
             },
         });
     }

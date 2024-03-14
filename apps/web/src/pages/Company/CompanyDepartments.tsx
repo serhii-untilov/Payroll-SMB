@@ -116,7 +116,11 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
                 rows={departmentList || []}
                 columns={columns}
                 checkboxSelection={checkboxSelection}
-                onRowClick={(params: GridRowParams) => onEditDepartment(params.row.id)}
+                onRowDoubleClick={(
+                    params: GridRowParams,
+                    event: MuiEvent,
+                    details: GridCallbackDetails,
+                ) => onEditDepartment(params.row.id)}
             />
             <DepartmentForm open={openForm} setOpen={setOpenForm} departmentId={departmentId} />
         </>

@@ -168,20 +168,22 @@ export default function Profile() {
                     <Grid item xs={12}>
                         <Grid container spacing={1}>
                             <Grid item>
-                                <Button type="submit" variant="contained" color="primary">
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={!isDirty}
+                                >
                                     {t('Update')}
                                 </Button>
                             </Grid>
-                            <Grid item>
-                                <Button
-                                    onClick={onCancel}
-                                    variant="contained"
-                                    color="warning"
-                                    disabled={!isDirty}
-                                >
-                                    {t('Cancel')}
-                                </Button>
-                            </Grid>
+                            {isDirty && (
+                                <Grid item>
+                                    <Button onClick={onCancel} variant="contained" color="warning">
+                                        {t('Cancel')}
+                                    </Button>
+                                </Grid>
+                            )}
                         </Grid>
                     </Grid>
                 </Grid>

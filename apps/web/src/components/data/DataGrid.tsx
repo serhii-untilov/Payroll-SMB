@@ -4,6 +4,8 @@ import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
 export function DataGrid(props: DataGridProps) {
     return (
         <MuiDataGrid
+            rowHeight={40}
+            columnHeaderHeight={40}
             initialState={{
                 pagination: {
                     paginationModel: { page: 0, pageSize: 10 },
@@ -15,7 +17,6 @@ export function DataGrid(props: DataGridProps) {
                 border: 1,
                 borderColor: 'divider',
                 minHeight: 240,
-                // borderRadius: '2px',
                 '& .MuiDataGrid-columnHeaders': {
                     backgroundColor: 'background.paper',
                     borderColor: 'divider',
@@ -24,19 +25,18 @@ export function DataGrid(props: DataGridProps) {
                 '& .MuiDataGrid-footerContainer': {
                     backgroundColor: 'background.paper',
                     borderColor: 'divider',
-                    // fontSize: '1rem',
+                    height: 40,
+                    minHeight: 40,
                 },
                 '& .MuiDataGrid-row': {
                     // border: 0.5,
                     // borderColor: 'divider',
                 },
                 '& .MuiDataGrid-cell': {
-                    // backgroundColor: 'rgba(255, 7, 0, 0.55)',
                     fontSize: '1rem',
                 },
 
                 '& .MuiDataGrid-row:hover': {
-                    // color: 'primary.main',
                     backgroundColor: 'background.paper',
                 },
             }}

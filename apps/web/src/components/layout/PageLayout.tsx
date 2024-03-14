@@ -15,9 +15,10 @@ const PageLayout: FC<PageLayoutProps> = ({ title, children }) => {
             mt={{ xs: 1, sm: 2 }}
             mx={{ xs: 1, sm: 2 }}
             sx={{
-                height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
+                flexGrow: 1,
+                flex: 1,
             }}
         >
             {compactView && title && (
