@@ -5,6 +5,7 @@ import {
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
+    useGridApiContext,
 } from '@mui/x-data-grid';
 import { IDepartment } from '@repo/shared';
 import { dateView } from '@repo/utils';
@@ -97,13 +98,6 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
         setOpenForm(true);
     };
 
-    const onDeleteDepartment = async () => {
-        for (const id of rowSelectionModel) {
-            await deleteDepartment(+id);
-        }
-        queryClient.invalidateQueries({ queryKey: ['departmentList-relations', companyId] });
-    };
-
     const onEditDepartment = (departmentId: number) => {
         setDepartmentId(departmentId);
         setOpenForm(true);
@@ -113,17 +107,36 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
         queryClient.invalidateQueries({ queryKey: ['departmentList-relations', companyId] });
     };
 
+    const onDeleteDepartment = async () => {
+        for (const id of rowSelectionModel) {
+            await deleteDepartment(+id);
+        }
+        queryClient.invalidateQueries({ queryKey: ['departmentList-relations', companyId] });
+    };
+
+    const onPrint = () => {
+        console.log('onPrint');
+    };
+
+    const onExport = () => {
+        console.log('onExport');
+    };
+
     return (
         <>
             <TableToolbar
                 onAdd={onAddDepartment}
-                onDelete={onDeleteDepartment}
-                deleteDisabled={!rowSelectionModel.length}
                 onCheckboxSelection={() => {
                     setCheckboxSelection(!checkboxSelection);
                     if (!checkboxSelection) setRowSelectionModel([]);
                 }}
-                checkboxSelectionDisabled={false}
+                checkboxSelectionDisabled={!departmentList?.length}
+                onDelete={onDeleteDepartment}
+                deleteDisabled={!rowSelectionModel.length}
+                onPrint={onPrint}
+                printDisabled={!departmentList?.length}
+                onExport={onExport}
+                exportDisabled={!departmentList?.length}
             />
             <DataGrid
                 rows={departmentList || []}

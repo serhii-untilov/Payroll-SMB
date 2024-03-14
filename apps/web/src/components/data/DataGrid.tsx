@@ -1,9 +1,12 @@
-import { DataGridProps } from '@mui/x-data-grid';
+import { DataGridProps, GridToolbar } from '@mui/x-data-grid';
 import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
 
 export function DataGrid(props: DataGridProps) {
     return (
         <MuiDataGrid
+            // slots={{ toolbar: GridToolbar }}
+            // slotProps={{ toolbar: { csvOptions } }}
+            // slotProps={{ toolbar: { printOptions: { disableToolbarButton: true } } }}
             autoPageSize={true}
             rowSelection={true}
             density={'standard'}
