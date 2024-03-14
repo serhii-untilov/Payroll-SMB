@@ -3,18 +3,19 @@ import {
     GridCellParams,
     GridColDef,
     GridRowParams,
+    GridRowSelectionModel,
     MuiEvent,
 } from '@mui/x-data-grid';
 import { IDepartment } from '@repo/shared';
 import { dateView } from '@repo/utils';
 import { enqueueSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { DataGrid } from '../../components/data/DataGrid';
 import { TableToolbar } from '../../components/layout/TableToolbar';
 import { Loading } from '../../components/utility/Loading';
-import { getDepartmentList } from '../../services/department.service';
+import { deleteDepartment, getDepartmentList } from '../../services/department.service';
 import { CompanyDetailsProps } from './CompanyDetails';
 import DepartmentForm from './DepartmentForm';
 
@@ -25,6 +26,7 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
     const [checkboxSelection, setCheckboxSelection] = useState(false);
     const [departmentId, setDepartmentId] = useState<number | null>(null);
     const queryClient = useQueryClient();
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     const columns: GridColDef[] = [
         // { field: 'id', headerName: t('ID'), type: 'number', width: 70 },
@@ -95,8 +97,11 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
         setOpenForm(true);
     };
 
-    const onDeleteDepartment = () => {
-        console.log('onDeleteDepartment');
+    const onDeleteDepartment = async () => {
+        for (const id of rowSelectionModel) {
+            await deleteDepartment(+id);
+        }
+        queryClient.invalidateQueries({ queryKey: ['departmentList-relations', companyId] });
     };
 
     const onEditDepartment = (departmentId: number) => {
@@ -113,9 +118,10 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
             <TableToolbar
                 onAdd={onAddDepartment}
                 onDelete={onDeleteDepartment}
-                deleteDisabled={true}
+                deleteDisabled={!rowSelectionModel.length}
                 onCheckboxSelection={() => {
                     setCheckboxSelection(!checkboxSelection);
+                    if (!checkboxSelection) setRowSelectionModel([]);
                 }}
                 checkboxSelectionDisabled={false}
             />
@@ -123,6 +129,10 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
                 rows={departmentList || []}
                 columns={columns}
                 checkboxSelection={checkboxSelection}
+                onRowSelectionModelChange={(newRowSelectionModel) => {
+                    setRowSelectionModel(newRowSelectionModel);
+                }}
+                rowSelectionModel={rowSelectionModel}
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,

@@ -10,6 +10,7 @@ export function DataGrid(props: DataGridProps) {
             editMode={'row'}
             ignoreDiacritics={true}
             showCellVerticalBorder={true}
+            disableRowSelectionOnClick={true}
             rowHeight={40}
             columnHeaderHeight={40}
             // pagination={true}
