@@ -31,6 +31,7 @@ export interface DepartmentFormParams {
     open: boolean;
     setOpen: Dispatch<boolean>;
     departmentId: number | null;
+    submitCallback?: Dispatch<IDepartment>;
 }
 
 const formSchema = yup.object().shape({
@@ -55,7 +56,7 @@ const defaultValues: FormType = {
 };
 
 export default function DepartmentForm(params: DepartmentFormParams) {
-    const { departmentId } = params;
+    const { departmentId, submitCallback } = params;
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company } = useAppContext();
@@ -87,7 +88,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
         isLoading: isDepartmentListLoading,
         error: departmentListError,
     } = useQuery<IDepartment[], Error>({
-        queryKey: 'departmentList',
+        queryKey: ['departmentList', company?.id],
         queryFn: async () => {
             return company?.id ? await getDepartmentList(company?.id) : [];
         },
@@ -147,6 +148,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                 ? await updateDepartment(data.id, dirtyValues)
                 : await createDepartment(data);
             reset(department);
+            if (submitCallback) submitCallback(department);
             params.setOpen(false);
             queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
         } catch (e: unknown) {
@@ -158,7 +160,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
     const onCancel = () => {
         reset(department);
         params.setOpen(false);
-        queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
+        // queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
     };
 
     return (

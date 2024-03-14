@@ -39,15 +39,6 @@ export function TableToolbar(props: TableToolbarProps) {
                     <AddOutlined />
                 </IconButton>
             )}
-            {props.onDelete && (
-                <IconButton
-                    color={props.deleteDisabled ? 'inherit' : 'primary'}
-                    disabled={props.deleteDisabled}
-                    onClick={props.onDelete}
-                >
-                    <DeleteOutlined />
-                </IconButton>
-            )}
             {props.onCheckboxSelection && (
                 <IconButton
                     color={props.checkboxSelectionDisabled ? 'inherit' : 'primary'}
@@ -55,6 +46,15 @@ export function TableToolbar(props: TableToolbarProps) {
                     onClick={props.onCheckboxSelection}
                 >
                     <Checklist />
+                </IconButton>
+            )}
+            {props.onDelete && (
+                <IconButton
+                    color={props.deleteDisabled ? 'inherit' : 'primary'}
+                    disabled={props.deleteDisabled}
+                    onClick={props.onDelete}
+                >
+                    <DeleteOutlined />
                 </IconButton>
             )}
         </Stack>

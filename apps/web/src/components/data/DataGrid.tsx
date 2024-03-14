@@ -4,8 +4,15 @@ import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
 export function DataGrid(props: DataGridProps) {
     return (
         <MuiDataGrid
+            autoPageSize={true}
+            rowSelection={true}
+            density={'standard'}
+            editMode={'row'}
+            ignoreDiacritics={true}
+            showCellVerticalBorder={true}
             rowHeight={40}
             columnHeaderHeight={40}
+            // pagination={true}
             initialState={{
                 pagination: {
                     paginationModel: { page: 0, pageSize: 10 },
@@ -34,6 +41,7 @@ export function DataGrid(props: DataGridProps) {
                 },
                 '& .MuiDataGrid-cell': {
                     fontSize: '1rem',
+                    borderColor: 'divider',
                 },
 
                 '& .MuiDataGrid-row:hover': {

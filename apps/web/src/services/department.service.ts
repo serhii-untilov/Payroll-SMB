@@ -7,10 +7,16 @@ export async function createDepartment(department: ICreateDepartment): Promise<I
     return response.data;
 }
 
-export async function getDepartmentList(companyId: number): Promise<IDepartment[]> {
-    const response = await api.get(`/api/departments/?companyId=${companyId}`, {
-        headers: authHeader(),
-    });
+export async function getDepartmentList(
+    companyId: number,
+    relations: boolean = false,
+): Promise<IDepartment[]> {
+    const response = await api.get(
+        `/api/departments/?companyId=${companyId}&relations=${relations}`,
+        {
+            headers: authHeader(),
+        },
+    );
     return response.data;
 }
 

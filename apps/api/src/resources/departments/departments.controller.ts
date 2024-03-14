@@ -6,6 +6,7 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
@@ -34,8 +35,14 @@ export class DepartmentsController {
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(@Query('companyId', ParseIntPipe) companyId: number) {
-        return await this.departmentsService.findAll({ companyId });
+    async findAll(
+        @Query('companyId', ParseIntPipe) companyId: number,
+        @Query('relations', ParseBoolPipe) relations: boolean,
+    ) {
+        return await this.departmentsService.findAll({
+            companyId,
+            relations: { parentDepartment: relations },
+        });
     }
 
     @Get(':id')
