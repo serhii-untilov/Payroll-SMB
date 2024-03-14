@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LawsController } from './laws.controller';
 import { LawsService } from './laws.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { createMockLaw, repositoryMockFactory } from '@repo/utils';
+import { createMockLaw, repositoryMockFactory } from '@repo/testing';
 import { Law } from './entities/law.entity';
 
 describe('LawsController', () => {

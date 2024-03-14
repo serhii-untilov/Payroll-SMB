@@ -14,24 +14,21 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { UsersService } from '../users/users.service';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 
 @Controller('companies')
 export class CompaniesController {
-    constructor(
-        private readonly companiesService: CompaniesService,
-        private readonly usersService: UsersService,
-    ) {}
+    constructor(private readonly companiesService: CompaniesService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() createCompanyDto: CreateCompanyDto) {
-        const user = await this.usersService.findOneBy({ id: req.user['sub'] });
-        return await this.companiesService.create(user, createCompanyDto);
+        const userId = req.user['sub'];
+        const company = await this.companiesService.create(userId, createCompanyDto);
+        return company;
     }
 
     @Get()
@@ -47,7 +44,7 @@ export class CompaniesController {
     async findOne(@Param('id', ParseIntPipe) id: number) {
         return await this.companiesService.findOne({
             where: { id },
-            relations: { law: true, accounting: true, owner: true },
+            relations: { law: true, accounting: true },
         });
     }
 
@@ -59,15 +56,15 @@ export class CompaniesController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updateCompanyDto: UpdateCompanyDto,
     ) {
-        const user = await this.usersService.findOneBy({ id: req.user['sub'] });
-        return await this.companiesService.update(user, id, updateCompanyDto);
+        const userId = req.user['sub'];
+        return await this.companiesService.update(userId, id, updateCompanyDto);
     }
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-        const user = await this.usersService.findOneBy({ id: req.user['sub'] });
-        return await this.companiesService.remove(user, id);
+        const userId = req.user['sub'];
+        return await this.companiesService.remove(userId, id);
     }
 }

@@ -5,8 +5,7 @@ import { BadRequestException } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { IUser } from '@repo/shared';
-import { MockType, createMockUser, repositoryMockFactory } from '@repo/utils';
-import { UsersService } from '../resources/users/users.service';
+import { MockType, createMockUser, repositoryMockFactory } from '@repo/testing';
 import { User } from '../resources/users/entities/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -42,7 +41,6 @@ describe('AuthController', () => {
             ],
             providers: [
                 AuthService,
-                UsersService,
                 ConfigService,
                 {
                     provide: getRepositoryToken(User),
@@ -50,7 +48,7 @@ describe('AuthController', () => {
                 },
             ],
             controllers: [AuthController],
-            exports: [UsersService],
+            exports: [],
         }).compile();
 
         controller = module.get(AuthController);
@@ -64,7 +62,7 @@ describe('AuthController', () => {
 
     it('should login a user', async () => {
         repoMock.findOneBy?.mockReturnValue(mockUser);
-        const res = await controller.signIn({
+        const res = await controller.login({
             ...mockUser,
             password: mockUserUnhashedPassword,
             rememberMe: false,
@@ -76,7 +74,7 @@ describe('AuthController', () => {
     it('should throw with a bad email', async () => {
         try {
             repoMock.findOneBy?.mockReturnValue(null);
-            await controller.signIn({ email: '', password: '', rememberMe: false });
+            await controller.login({ email: '', password: '', rememberMe: false });
         } catch (err) {
             expect(err).toBeInstanceOf(BadRequestException);
         }

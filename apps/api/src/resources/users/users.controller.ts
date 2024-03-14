@@ -10,16 +10,26 @@ import {
     ParseIntPipe,
     HttpCode,
     HttpStatus,
+    Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { IPublicUserData } from '@repo/shared';
+import { IPublicUserData, IUserCompany } from '@repo/shared';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
+
+    @Get()
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async findAll(): Promise<IPublicUserData[]> {
+        const users = await this.usersService.findAll();
+        return users.map((user) => UsersService.toPublic(user));
+    }
 
     @Post()
     @UseGuards(AccessTokenGuard)
@@ -29,12 +39,13 @@ export class UsersController {
         return UsersService.toPublic(user);
     }
 
-    @Get()
-    @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(): Promise<IPublicUserData[]> {
-        const users = await this.usersService.findAll();
-        return users.map((user) => UsersService.toPublic(user));
+    @UseGuards(AccessTokenGuard)
+    @Get('user')
+    async getCurrentUser(@Req() req: Request): Promise<IPublicUserData> {
+        const id: number = req.user['sub'];
+        const user = await this.usersService.findOne({ where: { id } });
+        return UsersService.toPublic(user);
     }
 
     @Get(':id')
@@ -62,5 +73,12 @@ export class UsersController {
     async remove(@Param('id', ParseIntPipe) id: number): Promise<IPublicUserData> {
         const user = await this.usersService.remove(id);
         return UsersService.toPublic(user);
+    }
+
+    @Get(':id/companies')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async userCompanyList(@Param('id', ParseIntPipe) id: number): Promise<IUserCompany[]> {
+        return await this.usersService.getUserCompanyList(id);
     }
 }

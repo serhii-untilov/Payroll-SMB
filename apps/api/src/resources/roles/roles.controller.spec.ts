@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RolesController } from './roles.controller';
 import { RolesService } from './roles.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { createMockRole, repositoryMockFactory } from '@repo/utils';
+import { createMockRole, repositoryMockFactory } from '@repo/testing';
 import { Role } from './entities/role.entity';
 
 describe('RolesController', () => {

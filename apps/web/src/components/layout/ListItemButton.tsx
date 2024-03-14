@@ -28,12 +28,12 @@ export function ListItemButton(props: ListItemButtonProps) {
                             theme.palette.mode === 'dark'
                                 ? theme.palette.primary.dark
                                 : theme.palette.primary.main,
-                        opacity: 0.85,
+                        // opacity: 0.85,
                         borderRadius: '5px',
                         py: [0.5],
                         my: [0.3],
                     },
-                    '&.active > .css-cveggr-MuiListItemIcon-root': {
+                    '&.active > .MuiListItemIcon-root': {
                         color: 'white',
                         bgcolor: 'primary.main',
                         backgroundColor: 'primary.main',
@@ -64,7 +64,17 @@ export function ListItemButton(props: ListItemButtonProps) {
                         placement="right"
                         title={primary}
                     >
-                        <ListItemIcon sx={{ minWidth: 39 }}>{icon}</ListItemIcon>
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 39,
+                                // color: (theme) =>
+                                //     theme.palette.mode === 'light'
+                                //         ? theme.palette.grey[700]
+                                //         : theme.palette.grey[500],
+                            }}
+                        >
+                            {icon}
+                        </ListItemIcon>
                     </Tooltip>
                 ) : null}
                 <ListItemText primary={primary} />

@@ -73,7 +73,7 @@ export function paletteDark(): PaletteOptions {
             disabled: rgba(255, 255, 255, 0.5),
         },
         // icon: rgba(255, 255, 255, 0.5),
-        divider: rgba(255, 255, 255, 0.12),
+        divider: '#424242', // rgba(255, 255, 255, 0.12),
         background: {
             paper: '#151515',
             default: '#191919', // '#121212',

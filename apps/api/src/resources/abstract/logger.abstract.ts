@@ -1,48 +1,31 @@
+import { ILogger } from '@repo/shared';
 import {
     Column,
     CreateDateColumn,
     DeleteDateColumn,
-    ManyToOne,
     UpdateDateColumn,
     VersionColumn,
 } from 'typeorm';
-import { User } from '../users/entities/user.entity';
 
-export abstract class Logger {
+export abstract class Logger implements ILogger {
     @CreateDateColumn()
-    createdDate: Date;
+    createdDate?: Date;
 
-    @ManyToOne(() => User, {
-        createForeignKeyConstraints: false,
-    })
-    createdUser?: User;
-
-    @Column({ type: 'integer', nullable: true })
-    createdUserId: number;
+    @Column({ type: 'integer' })
+    createdUserId?: number;
 
     @UpdateDateColumn()
-    updatedDate: Date;
+    updatedDate?: Date;
 
-    @ManyToOne(() => User, {
-        createForeignKeyConstraints: false,
-    })
-    updatedUser?: User;
+    @Column({ type: 'integer' })
+    updatedUserId?: number;
 
-    @Column({ type: 'integer', nullable: true })
-    updatedUserId: number;
-
-    @DeleteDateColumn()
-    deletedDate: Date;
-
-    @ManyToOne(() => User, {
-        createForeignKeyConstraints: false,
-        nullable: true,
-    })
-    deletedUser?: User;
+    @DeleteDateColumn({ nullable: true })
+    deletedDate?: Date | null;
 
     @Column({ type: 'integer', nullable: true })
     deletedUserId?: number;
 
     @VersionColumn()
-    version: number;
+    version?: number;
 }

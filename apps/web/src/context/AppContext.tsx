@@ -10,12 +10,13 @@ import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } 
 import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
 import { defaultTheme } from '../themes/defaultTheme';
+import { getUserCompanyList } from '../services/user.service';
 
 export type AppContextType = {
     compactView: boolean;
     setCompactView: Dispatch<boolean>;
-    company: ICompany | undefined;
-    setCompany: Dispatch<ICompany>;
+    company: ICompany | null | undefined;
+    setCompany: Dispatch<ICompany | null>;
     theme: ThemeOptions;
     themeMode: string;
     setThemeMode: Dispatch<string>;
@@ -41,7 +42,8 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     const { children } = props;
     const [compactView, setCompactView] = useState(false);
     const wideScreen = useMediaQuery('(min-width:900px)');
-    const [company, setCompany] = useState<ICompany>();
+    const [companyList, setCompanyList] = useState<ICompany[]>([]);
+    const [company, setCompany] = useState<ICompany | null | undefined>(null);
     const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') || 'light');
     const { user } = useAuth();
     const { locale } = useLocale();
@@ -55,12 +57,22 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     }, [wideScreen]);
 
     useEffect(() => {
+        const initCompanyList = async () => {
+            const userCompanyList = user?.id ? await getUserCompanyList(user?.id) : [];
+            setCompanyList(userCompanyList);
+        };
+        initCompanyList();
+    }, [user]);
+
+    useEffect(() => {
         const initCompany = () => {
             const companyId = +(localStorage.getItem('company') || 0);
-            setCompany(user?.companies?.find((o) => o.id === companyId) || user?.companies?.[0]);
+            if (companyList.length) {
+                setCompany(companyList.find((o) => o.id === companyId) || companyList[0]);
+            }
         };
         initCompany();
-    }, [user]);
+    }, [companyList]);
 
     useEffect(() => {
         localStorage.setItem('themeMode', themeMode);

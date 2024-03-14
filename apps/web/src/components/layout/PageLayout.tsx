@@ -1,8 +1,7 @@
-import { Box, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { Box } from '@mui/material';
 import { FC, ReactNode } from 'react';
-import { PageTitle } from './PageTitle';
 import useAppContext from '../../hooks/useAppContext';
+import { PageTitle } from './PageTitle';
 
 interface PageLayoutProps {
     title: string;
@@ -13,14 +12,17 @@ const PageLayout: FC<PageLayoutProps> = ({ title, children }) => {
     const { compactView } = useAppContext();
     return (
         <Box
+            mt={{ xs: 1, sm: 2 }}
+            mx={{ xs: 1, sm: 2 }}
             sx={{
-                pt: { xs: 1, sm: 1 },
-                px: { xs: 1, sm: 1 },
-                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+                flex: 1,
             }}
         >
             {compactView && title && (
-                <Box sx={{ flexGrow: 1, mb: 2, mt: 1 }}>
+                <Box mb={{ xs: 1, sm: 2 }}>
                     <PageTitle title={title} />
                 </Box>
             )}

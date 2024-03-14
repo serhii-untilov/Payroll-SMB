@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        // "module": "commonjs",
+        "declaration": true,
+
+        // "declarationMap": true,
+        "rootDir": ".",
+        "composite": true,
+        // "esModuleInterop": true,
+        "outDir": "./dist",
+
+        // "removeComments": true,
+        // "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
+    },
+    "include": ["**/*.ts"],
+    // "exclude": ["node_modules", "dist"],
+    // "target": "es2017",
+    "module": "ES2020",
+    "lib": ["ES2020"],
+
+    "target": "ES6"
+    // "target": "ES2021",
+    // "sourceMap": true,
+    // "baseUrl": "./",
+    // "incremental": true,
+    // "skipLibCheck": true,
+    // "strictNullChecks": false,
+    // "noImplicitAny": false,
+    // "strictBindCallApply": false,
+    // "forceConsistentCasingInFileNames": false,
+    // "noFallthroughCasesInSwitch": false
+}

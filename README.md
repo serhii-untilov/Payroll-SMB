@@ -107,6 +107,12 @@ npx --workspace @repo/api nest generate resource locales resources
 npx --workspace @repo/api nest g module auth
 npx --workspace @repo/api nest g controller auth
 npx --workspace @repo/api nest g service auth
+npx --workspace @repo/api nest generate resource departments resources
+npx --workspace @repo/api nest generate resource jobs resources
+npx --workspace @repo/api nest generate resource paymentTypes resources
+npx --workspace @repo/api nest generate resource workSchedules resources
+npx --workspace @repo/api nest generate resource workSchedulePeriods resources
+
 ```
 
 ## TypeORM

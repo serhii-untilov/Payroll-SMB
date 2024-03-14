@@ -133,7 +133,11 @@ export default function MainLayout() {
                     // bgcolor: 'background.paper',
                     // bgcolor: 'background.default',
                     // color: 'text.primary',
+                    display: 'flex',
+                    flexDirection: 'column',
                     flexGrow: 1,
+                    flex: 1,
+
                     height: '100vh',
                     width: '100%',
                     overflow: 'auto',

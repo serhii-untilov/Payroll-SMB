@@ -26,7 +26,7 @@ export function ListItemLink(props: ListItemLinkProps) {
     return (
         <li>
             <ListItem
-                button
+                // button
                 component={Link}
                 target={target}
                 to={to}
@@ -34,18 +34,18 @@ export function ListItemLink(props: ListItemLinkProps) {
                 sx={{
                     '&.active': {
                         color: (theme) =>
-                            theme.palette.mode === 'dark'
-                                ? theme.palette.background.default
-                                : theme.palette.text.primary,
-                        // bgcolor: (theme) => theme.palette.primary.main,
-                        bgcolor: (theme) => grey[300],
-                        opacity: 0.85,
-                        borderRadius: '5px',
+                            theme.palette.mode === 'light'
+                                ? theme.palette.common.white
+                                : theme.palette.common.black,
+                        bgcolor: (theme) =>
+                            theme.palette.mode === 'light' ? '#1976d2' : '#1976d2',
+                        opacity: 1,
+                        borderRadius: '3px',
                         py: [0.5],
                         my: [0.3],
                     },
                     '> .MuiListItemIcon-root': {
-                        opacity: 0.85,
+                        opacity: 1,
                         minWidth: 39,
                     },
                     '&.active > .MuiListItemIcon-root': {
@@ -53,23 +53,27 @@ export function ListItemLink(props: ListItemLinkProps) {
                             theme.palette.mode === 'dark'
                                 ? theme.palette.background.default
                                 : theme.palette.text.primary,
-                        opacity: 0.85,
-                        borderRadius: '5px',
+                        opacity: 1,
+                        borderRadius: '3px',
                         minWidth: 39,
                         py: [0.5],
                         my: [0.3],
                     },
                     '&:hover': {
-                        borderRadius: '5px',
+                        borderRadius: '3px',
                         py: [0.5],
                         my: [0.3],
                     },
                     transition: 'none',
                     height: 40,
-                    // opacity: 0.85,
+                    // opacity: 1,
                     py: [0.5],
                     my: [0.3],
                     px: [1],
+                    color: (theme) =>
+                        theme.palette.mode === 'light'
+                            ? theme.palette.common.black
+                            : theme.palette.common.white,
                 }}
             >
                 {icon ? (
@@ -81,7 +85,17 @@ export function ListItemLink(props: ListItemLinkProps) {
                         placement="right"
                         title={primary}
                     >
-                        <ListItemIcon sx={{ minWidth: 39 }}>{icon}</ListItemIcon>
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 39,
+                                // color: (theme) =>
+                                //     theme.palette.mode === 'light'
+                                //         ? theme.palette.grey[700]
+                                //         : theme.palette.grey[500],
+                            }}
+                        >
+                            {icon}
+                        </ListItemIcon>
                     </Tooltip>
                 ) : null}
 

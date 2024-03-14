@@ -7,7 +7,7 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import * as Yup from 'yup';
-import { FormButton } from '../components/form/FormButton';
+import { Button } from '../components/layout/Button';
 import { FormInputDropdown } from '../components/form/FormInputDropdown';
 import { FormTextField } from '../components/form/FormTextField';
 import PageLayout from '../components/layout/PageLayout';
@@ -165,25 +165,27 @@ export default function Profile() {
                             }
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <Grid container spacing={1}>
-                            <Grid item>
-                                <FormButton type="submit" variant="contained" color="primary">
-                                    {t('Update')}
-                                </FormButton>
-                            </Grid>
-                            <Grid item>
-                                <FormButton
-                                    onClick={onCancel}
-                                    variant="contained"
-                                    color="warning"
-                                    disabled={!isDirty}
-                                >
-                                    {t('Cancel')}
-                                </FormButton>
+                    {isDirty && (
+                        <Grid item xs={12}>
+                            <Grid container spacing={1}>
+                                <Grid item>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={!isDirty}
+                                    >
+                                        {t('Update')}
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button onClick={onCancel} variant="contained" color="warning">
+                                        {t('Cancel')}
+                                    </Button>
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
+                    )}
                 </Grid>
             </Grid>
         </PageLayout>

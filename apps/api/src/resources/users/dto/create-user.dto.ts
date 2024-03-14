@@ -1,6 +1,5 @@
-import { ICreateUser } from '@repo/shared';
-import { Role } from '../../roles/entities/role.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { ICreateUser } from '@repo/shared';
 
 export class CreateUserDto implements ICreateUser {
     @ApiProperty()
@@ -14,10 +13,4 @@ export class CreateUserDto implements ICreateUser {
 
     @ApiProperty()
     password: string;
-
-    @ApiProperty()
-    language: string;
-
-    @ApiProperty()
-    roles?: Role[] = [];
 }

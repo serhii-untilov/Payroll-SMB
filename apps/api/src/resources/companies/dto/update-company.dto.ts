@@ -1,10 +1,10 @@
-import { IAccounting, IUpdateCompany, ILaw } from '@repo/shared';
+import { IUpdateCompany } from '@repo/shared';
 
 export class UpdateCompanyDto implements IUpdateCompany {
     name: string;
-    law: ILaw;
-    taxId?: string;
-    accounting: IAccounting;
+    lawId: number;
+    taxId: string;
+    accountingId: number;
     dateFrom: Date;
     dateTo: Date;
     payPeriod: Date;

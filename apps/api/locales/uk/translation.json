@@ -48,5 +48,14 @@
     "Name": "Назва",
     "Law": "Законодавство",
     "Tax ID": "Податковий номер",
-    "Accounting": "Вид обліку"
+    "Accounting": "Вид обліку",
+    "Date From": "Діє з",
+    "Date To": "Діє до",
+    "Parent Department": "Підпорядкування",
+    "Departments": "Підрозділи",
+    "Department": "Підрозділ",
+    "Managers": "Керівники",
+    "Accounts": "Розрахункові рахунки",
+    "Name is required": "Необхідно вказати назву",
+    "Company is required": "Необхідно вказати підприємство"
 }

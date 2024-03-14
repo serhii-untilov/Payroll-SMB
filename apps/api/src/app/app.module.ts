@@ -16,6 +16,10 @@ import { RolesModule } from '../resources/roles/roles.module';
 import { UsersModule } from '../resources/users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { DepartmentsModule } from '../resources/departments/departments.module';
+import { JobsModule } from 'src/resources/jobs/jobs.module';
+import { PaymentTypesModule } from '../resources/payment-types/payment-types.module';
+import { WorkSchedulesModule } from '../resources/work-schedules/work-schedules.module';
 
 @Module({
     imports: [
@@ -40,6 +44,10 @@ import { AppService } from './app.service';
         UsersModule,
         AccountingModule,
         CompaniesModule,
+        DepartmentsModule,
+        JobsModule,
+        PaymentTypesModule,
+        WorkSchedulesModule,
     ],
     controllers: [AppController],
     providers: [AppService],
