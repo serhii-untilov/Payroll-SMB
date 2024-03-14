@@ -68,3 +68,14 @@ export function getPeriodName(date: Date, format: string = 'ym'): string {
     const year = d.getFullYear();
     return format.localeCompare('ym') === 0 ? `${year} ${monthName}` : `${monthName} ${year}`;
 }
+
+export function dateView(date: Date): string {
+    date = new Date(date);
+    if (date.getTime() <= minDate().getTime()) {
+        return '';
+    }
+    if (date.getTime() >= maxDate().getTime()) {
+        return '';
+    }
+    return formatDate(date);
+}

@@ -64,7 +64,17 @@ export function ListItemButton(props: ListItemButtonProps) {
                         placement="right"
                         title={primary}
                     >
-                        <ListItemIcon sx={{ minWidth: 39 }}>{icon}</ListItemIcon>
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 39,
+                                // color: (theme) =>
+                                //     theme.palette.mode === 'light'
+                                //         ? theme.palette.grey[700]
+                                //         : theme.palette.grey[500],
+                            }}
+                        >
+                            {icon}
+                        </ListItemIcon>
                     </Tooltip>
                 ) : null}
                 <ListItemText primary={primary} />

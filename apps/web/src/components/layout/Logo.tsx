@@ -10,7 +10,7 @@ export function Logo(props: any) {
                 height: 48,
                 width: 41,
                 mx: ['auto'],
-                opacity: 0.55,
+                opacity: 0.85,
                 '&:hover:not(.Mui-disabled)': {
                     cursor: 'pointer',
                 },

@@ -26,7 +26,7 @@ export function ListItemLink(props: ListItemLinkProps) {
     return (
         <li>
             <ListItem
-                button
+                // button
                 component={Link}
                 target={target}
                 to={to}
@@ -35,12 +35,12 @@ export function ListItemLink(props: ListItemLinkProps) {
                     '&.active': {
                         color: (theme) =>
                             theme.palette.mode === 'light'
-                                ? theme.palette.common.black
-                                : theme.palette.common.white,
+                                ? theme.palette.common.white
+                                : theme.palette.common.black,
                         bgcolor: (theme) =>
-                            theme.palette.mode === 'light' ? '#1976d222' : '#1976d277',
+                            theme.palette.mode === 'light' ? '#1976d2' : '#1976d2',
                         opacity: 1,
-                        borderRadius: '12px',
+                        borderRadius: '3px',
                         py: [0.5],
                         my: [0.3],
                     },
@@ -54,13 +54,13 @@ export function ListItemLink(props: ListItemLinkProps) {
                                 ? theme.palette.background.default
                                 : theme.palette.text.primary,
                         opacity: 1,
-                        borderRadius: '12px',
+                        borderRadius: '3px',
                         minWidth: 39,
                         py: [0.5],
                         my: [0.3],
                     },
                     '&:hover': {
-                        borderRadius: '12px',
+                        borderRadius: '3px',
                         py: [0.5],
                         my: [0.3],
                     },
@@ -70,6 +70,10 @@ export function ListItemLink(props: ListItemLinkProps) {
                     py: [0.5],
                     my: [0.3],
                     px: [1],
+                    color: (theme) =>
+                        theme.palette.mode === 'light'
+                            ? theme.palette.common.black
+                            : theme.palette.common.white,
                 }}
             >
                 {icon ? (
@@ -81,7 +85,17 @@ export function ListItemLink(props: ListItemLinkProps) {
                         placement="right"
                         title={primary}
                     >
-                        <ListItemIcon sx={{ minWidth: 39 }}>{icon}</ListItemIcon>
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 39,
+                                // color: (theme) =>
+                                //     theme.palette.mode === 'light'
+                                //         ? theme.palette.grey[700]
+                                //         : theme.palette.grey[500],
+                            }}
+                        >
+                            {icon}
+                        </ListItemIcon>
                     </Tooltip>
                 ) : null}
 

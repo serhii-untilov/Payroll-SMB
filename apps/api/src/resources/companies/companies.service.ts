@@ -57,6 +57,10 @@ export class CompaniesService {
         if (!company) {
             throw new NotFoundException(`Company could not be found.`);
         }
+        const user = await this.userRepository.findOneBy({ id: userId });
+        if (!user) {
+            throw new BadRequestException(`User '${userId}' not found.`);
+        }
         await this.companiesRepository.save({
             ...data,
             id,

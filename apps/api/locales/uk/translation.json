@@ -53,6 +53,9 @@
     "Date To": "Діє до",
     "Parent Department": "Підпорядкування",
     "Departments": "Підрозділи",
+    "Department": "Підрозділ",
     "Managers": "Керівники",
-    "Accounts": "Розрахункові рахунки"
+    "Accounts": "Розрахункові рахунки",
+    "Name is required": "Необхідно вказати назву",
+    "Company is required": "Необхідно вказати підприємство"
 }

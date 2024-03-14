@@ -6,7 +6,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { Button } from '../../components/layout/Button';
@@ -56,18 +56,21 @@ export default function Company() {
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const { locale } = useLocale();
     const { t } = useTranslation();
+    const queryClient = useQueryClient();
 
     const {
         data: company,
         isError: isCompanyError,
         isLoading: isCompanyLoading,
         error: companyError,
-    } = useQuery<FormType, Error>('company', async () => {
-        // const companyId = id ? +id : currentCompany?.id;
-        // return formSchema.cast(companyId ? await getCompany(companyId) : defaultValues);
-        return formSchema.cast(
-            currentCompany?.id ? await getCompany(currentCompany?.id) : defaultValues,
-        );
+    } = useQuery<FormType, Error>({
+        queryKey: 'company',
+        queryFn: async () => {
+            return formSchema.cast(
+                currentCompany?.id ? await getCompany(currentCompany?.id) : defaultValues,
+            );
+        },
+        enabled: !!currentCompany?.id,
     });
 
     const {
@@ -149,6 +152,7 @@ export default function Company() {
                 ? await updateCompany(data.id, dirtyValues)
                 : await createCompany(data);
             reset(company);
+            queryClient.invalidateQueries({ queryKey: ['company'] });
             if (!currentCompany || currentCompany.id === company.id) {
                 setCurrentCompany(company);
             }
@@ -160,6 +164,7 @@ export default function Company() {
 
     const onCancel = () => {
         reset(company);
+        queryClient.invalidateQueries({ queryKey: ['company'] });
     };
 
     return (
@@ -171,7 +176,7 @@ export default function Company() {
                 noValidate
                 spacing={2}
             >
-                <Grid container item xs={12} sm={7} md={6} lg={4} spacing={2}>
+                <Grid container item xs={12} sm={12} md={8} lg={4} spacing={2}>
                     <Grid item xs={12}>
                         <FormTextField
                             control={control}
@@ -181,9 +186,10 @@ export default function Company() {
                             label={t('Name')}
                             type="text"
                             autoFocus
+                            sx={{ fontWeight: 'bold' }}
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sm={8} md={6}>
                         <FormInputDropdown
                             control={control}
                             label={t('Law')}
@@ -197,7 +203,7 @@ export default function Company() {
                             }
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sm={8} md={6}>
                         <FormTextField
                             control={control}
                             required

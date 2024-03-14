@@ -1,4 +1,10 @@
-import { AddOutlined, DeleteOutlined, RefreshOutlined } from '@mui/icons-material';
+import {
+    AddOutlined,
+    CheckBoxOutlineBlank,
+    Checklist,
+    DeleteOutlined,
+    RefreshOutlined,
+} from '@mui/icons-material';
 import { Button, ButtonGroup, IconButton, Stack, StackProps } from '@mui/material';
 import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +16,8 @@ export interface TableToolbarProps extends StackProps {
     addDisabled?: boolean;
     onDelete?: Func<any>;
     deleteDisabled?: boolean;
+    onCheckboxSelection?: Func<any>;
+    checkboxSelectionDisabled?: boolean;
 }
 
 export function TableToolbar(props: TableToolbarProps) {
@@ -20,7 +28,7 @@ export function TableToolbar(props: TableToolbarProps) {
             spacing={1}
             aria-label="Table toolbar button group"
             mt={1}
-            {...props}
+            // {...props}
         >
             {props.onAdd && (
                 <IconButton
@@ -38,6 +46,15 @@ export function TableToolbar(props: TableToolbarProps) {
                     onClick={props.onDelete}
                 >
                     <DeleteOutlined />
+                </IconButton>
+            )}
+            {props.onCheckboxSelection && (
+                <IconButton
+                    color={props.checkboxSelectionDisabled ? 'inherit' : 'primary'}
+                    disabled={props.checkboxSelectionDisabled}
+                    onClick={props.onCheckboxSelection}
+                >
+                    <Checklist />
                 </IconButton>
             )}
         </Stack>

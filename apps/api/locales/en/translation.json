@@ -54,6 +54,9 @@
     "Date To": "Date To",
     "Parent Department": "Parent Department",
     "Departments": "Departments",
+    "Department": "Department",
     "Managers": "Managers",
-    "Accounts": "Accounts"
+    "Accounts": "Accounts",
+    "Name is required": "Name is required",
+    "Company is required": "Company is required"
 }
