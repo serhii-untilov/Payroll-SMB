@@ -33,7 +33,7 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
         // { field: 'id', headerName: t('ID'), type: 'number', width: 70 },
         {
             field: 'name',
-            headerName: t('Name'),
+            headerName: t('Department'),
             type: 'string',
             width: 400,
             sortable: true,
@@ -62,7 +62,7 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
             field: 'parentDepartment',
             headerName: t('Parent Department'),
             type: 'string',
-            width: 280,
+            width: 250,
             sortable: true,
             valueGetter: (params) => {
                 return params.row.parentDepartment?.name || '';

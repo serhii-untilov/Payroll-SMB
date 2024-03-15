@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { TabPanel } from '../../components/layout/TabPanel';
 import { CompanyDepartments } from './CompanyDepartments';
 import { CompanyManagers } from './CompanyManagers';
+import { CompanyAccounts } from './CompanyAccounts';
 
 export type CompanyDetailsProps = {
     companyId: number;
@@ -50,7 +51,7 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
                 <CompanyManagers companyId={companyId} />
             </TabPanel>
             <TabPanel value={value} index={2} sx={{ flex: 1 }}>
-                {/* Item Three */}
+                <CompanyAccounts companyId={companyId} />
             </TabPanel>
         </Box>
     );
