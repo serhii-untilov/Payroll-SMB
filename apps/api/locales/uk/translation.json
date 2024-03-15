@@ -64,5 +64,9 @@
     "Account Number": "Розрахунковий рахунок",
     "Bank": "Банк",
     "Currency": "Валюта",
-    "Description": "Опис"
+    "Description": "Опис",
+    "Add record": "Додати запис",
+    "Delete selected records": "Видалити вибрані записи",
+    "Print": "Друк",
+    "Export": "Експорт"
 }

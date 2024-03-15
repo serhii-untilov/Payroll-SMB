@@ -65,5 +65,9 @@
     "Account Number": "Account Number",
     "Bank": "Bank",
     "Currency": "Currency",
-    "Description": "Description"
+    "Description": "Description",
+    "Add record": "Add record",
+    "Delete selected records": "Delete selected records",
+    "Print": "Print",
+    "Export": "Export"
 }

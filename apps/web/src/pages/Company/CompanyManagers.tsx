@@ -18,7 +18,6 @@ export function CompanyManagers(params: CompanyDetailsProps) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
-    const [checkboxSelection, setCheckboxSelection] = useState(false);
     const [managerId, setManagerId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -105,11 +104,6 @@ export function CompanyManagers(params: CompanyDetailsProps) {
         <>
             <TableToolbar
                 onAdd={onAddManager}
-                onCheckboxSelection={() => {
-                    setCheckboxSelection(!checkboxSelection);
-                    if (!checkboxSelection) setRowSelectionModel([]);
-                }}
-                checkboxSelectionDisabled={false}
                 onDelete={onDeleteManager}
                 deleteDisabled={true}
                 onPrint={onPrint}
@@ -120,7 +114,7 @@ export function CompanyManagers(params: CompanyDetailsProps) {
             <DataGrid
                 rows={[]}
                 columns={columns}
-                checkboxSelection={checkboxSelection}
+                checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);
                 }}
