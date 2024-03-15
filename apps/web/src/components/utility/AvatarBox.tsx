@@ -1,4 +1,4 @@
-import { CameraAltOutlined } from '@mui/icons-material';
+import { CameraAltRounded } from '@mui/icons-material';
 import { Box } from '@mui/material';
 
 export function AvatarBox() {
@@ -22,7 +22,7 @@ export function AvatarBox() {
                 border: '1px solid lightgray',
             }}
         >
-            <CameraAltOutlined />
+            <CameraAltRounded />
         </Box>
     );
 }

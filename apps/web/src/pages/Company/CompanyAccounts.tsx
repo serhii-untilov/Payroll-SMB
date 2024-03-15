@@ -18,7 +18,6 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
-    const [checkboxSelection, setCheckboxSelection] = useState(false);
     const [accountId, setAccountId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -88,11 +87,6 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
         <>
             <TableToolbar
                 onAdd={onAddAccount}
-                onCheckboxSelection={() => {
-                    setCheckboxSelection(!checkboxSelection);
-                    if (!checkboxSelection) setRowSelectionModel([]);
-                }}
-                checkboxSelectionDisabled={false}
                 onDelete={onDeleteAccount}
                 deleteDisabled={true}
                 onPrint={onPrint}
@@ -103,7 +97,7 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
             <DataGrid
                 rows={[]}
                 columns={columns}
-                checkboxSelection={checkboxSelection}
+                checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);
                 }}

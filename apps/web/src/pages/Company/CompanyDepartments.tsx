@@ -24,7 +24,7 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
-    const [checkboxSelection, setCheckboxSelection] = useState(false);
+
     const [departmentId, setDepartmentId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -126,11 +126,6 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
         <>
             <TableToolbar
                 onAdd={onAddDepartment}
-                onCheckboxSelection={() => {
-                    setCheckboxSelection(!checkboxSelection);
-                    if (!checkboxSelection) setRowSelectionModel([]);
-                }}
-                checkboxSelectionDisabled={!departmentList?.length}
                 onDelete={onDeleteDepartment}
                 deleteDisabled={!rowSelectionModel.length}
                 onPrint={onPrint}
@@ -141,7 +136,7 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
             <DataGrid
                 rows={departmentList || []}
                 columns={columns}
-                checkboxSelection={checkboxSelection}
+                checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);
                 }}
