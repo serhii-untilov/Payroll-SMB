@@ -14,3 +14,4 @@ export * from './src/paymentType.interface';
 export * from './src/workSchedule.interface';
 export * from './src/workSchedulePeriod.interface';
 export * from './src/logger.interface';
+export * from './src/manager.interface';

@@ -2,10 +2,10 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import * as React from 'react';
-import { CompanyDepartments } from './CompanyDepartments';
-import { TabPanel } from '../../components/layout/TabPanel';
-import useAppContext from '../../hooks/useAppContext';
 import { useTranslation } from 'react-i18next';
+import { TabPanel } from '../../components/layout/TabPanel';
+import { CompanyDepartments } from './CompanyDepartments';
+import { CompanyManagers } from './CompanyManagers';
 
 export type CompanyDetailsProps = {
     companyId: number;
@@ -47,10 +47,10 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
                 <CompanyDepartments companyId={companyId} />
             </TabPanel>
             <TabPanel value={value} index={1} sx={{ flex: 1 }}>
-                Item Two
+                <CompanyManagers companyId={companyId} />
             </TabPanel>
             <TabPanel value={value} index={2} sx={{ flex: 1 }}>
-                Item Three
+                {/* Item Three */}
             </TabPanel>
         </Box>
     );

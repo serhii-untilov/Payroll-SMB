@@ -48,6 +48,7 @@ export function ListItemButton(props: ListItemButtonProps) {
                         my: [0.3],
                     },
                     transition: 'none',
+                    // border: 'none',
                     height: 40,
                     // opacity: 0.85,
                     py: [0.5],
