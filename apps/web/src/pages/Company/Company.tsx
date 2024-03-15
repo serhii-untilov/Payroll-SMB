@@ -177,7 +177,7 @@ export default function Company() {
                 spacing={2}
                 sx={{ mb: 1 }}
             >
-                <Grid container item xs={12} sm={12} md={8} lg={4} spacing={2}>
+                <Grid container item xs={12} sm={12} md={8} lg={6} spacing={2}>
                     <Grid item xs={12}>
                         <FormTextField
                             control={control}

@@ -62,7 +62,7 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
             field: 'parentDepartment',
             headerName: t('Parent Department'),
             type: 'string',
-            width: 300,
+            width: 280,
             sortable: true,
             valueGetter: (params) => {
                 return params.row.parentDepartment?.name || '';

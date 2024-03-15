@@ -58,5 +58,8 @@
     "Managers": "Managers",
     "Accounts": "Accounts",
     "Name is required": "Name is required",
-    "Company is required": "Company is required"
+    "Company is required": "Company is required",
+    "Full Name": "Full Name",
+    "Position": "Position",
+    "Phone": "Phone"
 }

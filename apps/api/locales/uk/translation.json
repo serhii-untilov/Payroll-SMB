@@ -57,5 +57,8 @@
     "Managers": "Керівники",
     "Accounts": "Розрахункові рахунки",
     "Name is required": "Необхідно вказати назву",
-    "Company is required": "Необхідно вказати підприємство"
+    "Company is required": "Необхідно вказати підприємство",
+    "Full Name": "ПІБ",
+    "Position": "Посада",
+    "Phone": "Телефон"
 }
