@@ -2,7 +2,7 @@ import { ICompany } from './company.interface';
 import { IDepartment } from './department.interface';
 import { ILogger } from './logger.interface';
 
-export interface IManager extends ILogger {
+export interface ICompanyManager extends ILogger {
     id: number;
     firstName: string;
     lastName: string;
@@ -13,10 +13,10 @@ export interface IManager extends ILogger {
     dateFrom?: Date;
     dateTo?: Date;
 
-    parentManager?: IManager | null;
+    parentManager?: ICompanyManager | null;
     parentManagerId?: number | null;
 
-    childManagers?: IManager[];
+    childManagers?: ICompanyManager[];
 
     phone?: string | null;
     email?: string | null;
@@ -25,8 +25,8 @@ export interface IManager extends ILogger {
     departmentId?: number | null;
 }
 
-export type ICreateManager = Omit<
-    IManager,
+export type ICreateCompanyManager = Omit<
+    ICompanyManager,
     | 'id'
     | 'createdDate'
     | 'createdUserId'
@@ -37,4 +37,4 @@ export type ICreateManager = Omit<
     | 'version'
 >;
 
-export type IUpdateManager = Partial<ICreateManager>;
+export type IUpdateCompanyManager = Partial<ICreateCompanyManager>;

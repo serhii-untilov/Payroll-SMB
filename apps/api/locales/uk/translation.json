@@ -60,5 +60,9 @@
     "Company is required": "Необхідно вказати підприємство",
     "Full Name": "ПІБ",
     "Position": "Посада",
-    "Phone": "Телефон"
+    "Phone": "Телефон",
+    "Account Number": "Розрахунковий рахунок",
+    "Bank": "Банк",
+    "Currency": "Валюта",
+    "Description": "Опис"
 }

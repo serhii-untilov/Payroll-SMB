@@ -6,7 +6,7 @@ import {
     GridRowSelectionModel,
     MuiEvent,
 } from '@mui/x-data-grid';
-import { ICompanyManager } from '@repo/shared';
+import { ICompanyAccount } from '@repo/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
@@ -14,82 +14,65 @@ import { DataGrid } from '../../components/data/DataGrid';
 import { TableToolbar } from '../../components/layout/TableToolbar';
 import { CompanyDetailsProps } from './CompanyDetails';
 
-export function CompanyManagers(params: CompanyDetailsProps) {
+export function CompanyAccounts(params: CompanyDetailsProps) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
     const [checkboxSelection, setCheckboxSelection] = useState(false);
-    const [managerId, setManagerId] = useState<number | null>(null);
+    const [accountId, setAccountId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     const columns: GridColDef[] = [
-        // { field: 'id', headerName: t('ID'), type: 'number', width: 70 },
         {
-            field: 'fullName',
-            headerName: t('Full Name'),
+            field: 'bankAccountNumber',
+            headerName: t('Account Number'),
+            type: 'string',
+            width: 240,
+            sortable: true,
+        },
+        {
+            field: 'bank',
+            headerName: t('Bank'),
             type: 'string',
             width: 240,
             sortable: true,
             valueGetter: (params) => {
-                return `${params.row.firstName} ${params.row.lastName}`;
+                return params.row.bank.name;
             },
         },
         {
-            field: 'position',
-            headerName: t('Position'),
-            type: 'string',
-            width: 240,
-            sortable: true,
-            valueGetter: (params) => {
-                return '';
-            },
-        },
-        {
-            field: 'taxId',
-            headerName: t('Tax ID'),
+            field: 'currency',
+            headerName: t('Currency'),
             type: 'string',
             width: 160,
             sortable: true,
             valueGetter: (params) => {
-                return '';
+                return params.row.currency.code;
             },
         },
         {
-            field: 'phone',
-            headerName: t('Phone'),
+            field: 'description',
+            headerName: t('Description'),
             type: 'string',
             width: 160,
             sortable: true,
-            valueGetter: (params) => {
-                return '';
-            },
-        },
-        {
-            field: 'email',
-            headerName: t('Email Address'),
-            type: 'string',
-            width: 160,
-            sortable: true,
-            valueGetter: (params) => {
-                return '';
-            },
         },
     ];
 
-    const onAddManager = () => {
+    const onAddAccount = () => {
         console.log('onAdd');
     };
 
-    const onEditManager = (managerId: number) => {
+    const onEditAccount = (accountId: number) => {
         console.log('onEdit');
     };
 
-    const submitCallback = (data: ICompanyManager) => {
+    const submitCallback = (data: ICompanyAccount) => {
         console.log('submitCallback');
     };
 
-    const onDeleteManager = async () => {
+    const onDeleteAccount = async () => {
         console.log('onDelete');
     };
 
@@ -104,13 +87,13 @@ export function CompanyManagers(params: CompanyDetailsProps) {
     return (
         <>
             <TableToolbar
-                onAdd={onAddManager}
+                onAdd={onAddAccount}
                 onCheckboxSelection={() => {
                     setCheckboxSelection(!checkboxSelection);
                     if (!checkboxSelection) setRowSelectionModel([]);
                 }}
                 checkboxSelectionDisabled={false}
-                onDelete={onDeleteManager}
+                onDelete={onDeleteAccount}
                 deleteDisabled={true}
                 onPrint={onPrint}
                 printDisabled={false}
@@ -131,7 +114,7 @@ export function CompanyManagers(params: CompanyDetailsProps) {
                     details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditManager(params.row.id);
+                        onEditAccount(params.row.id);
                     }
                 }}
                 onRowDoubleClick={(
@@ -139,13 +122,13 @@ export function CompanyManagers(params: CompanyDetailsProps) {
                     event: MuiEvent,
                     details: GridCallbackDetails,
                 ) => {
-                    // onEditManager(params.row.id)
+                    // onEditAccount(params.row.id)
                 }}
             />
-            {/* <ManagerForm
+            {/* <AccountForm
                 open={openForm}
                 setOpen={setOpenForm}
-                managerId={managerId}
+                accountId={accountId}
                 submitCallback={submitCallback}
             /> */}
         </>

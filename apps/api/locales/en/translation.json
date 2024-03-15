@@ -61,5 +61,9 @@
     "Company is required": "Company is required",
     "Full Name": "Full Name",
     "Position": "Position",
-    "Phone": "Phone"
+    "Phone": "Phone",
+    "Account Number": "Account Number",
+    "Bank": "Bank",
+    "Currency": "Currency",
+    "Description": "Description"
 }
