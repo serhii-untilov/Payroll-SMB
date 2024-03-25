@@ -65,6 +65,7 @@ export function TableToolbar(props: TableToolbarProps) {
                             </Box>
                         </Tooltip>
                     )}
+
                     {props.onDelete && (
                         <Tooltip placement="top-start" title={t('Delete selected records')}>
                             <Box sx={{ color: 'action.disabledBackground' }}>
@@ -78,6 +79,7 @@ export function TableToolbar(props: TableToolbarProps) {
                             </Box>
                         </Tooltip>
                     )}
+
                     {props.onPrint && (
                         <Tooltip placement="top-start" title={t('Print')}>
                             <Box sx={{ color: 'action.disabledBackground' }}>

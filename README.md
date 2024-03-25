@@ -175,3 +175,4 @@ openssl rand -base64 60
 - [**React** - React Data Grid](https://adazzle.github.io/react-data-grid/#/common-features)
 - [**l10n** - React MUI Localization](https://www.geeksforgeeks.org/react-mui-localization/)
 - [**i18n** - How to use i18n in your React App](https://medium.com/@devpedrodias/how-to-use-i18n-in-your-react-app-1f26deb2a3d8)
+- [**TypeORM** - How to properly handle decimals with TypeORM](https://medium.com/@matthew.bajorek/how-to-properly-handle-decimals-with-typeorm-f0eb2b79ca9c)

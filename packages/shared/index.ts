@@ -18,3 +18,6 @@ export * from './src/bank.interface';
 export * from './src/currency.interface';
 export * from './src/companyManager.interface';
 export * from './src/companyAccount.interface';
+export * from './src/person.interface';
+export * from './src/position.interface';
+export * from './src/positionHistory.interface';

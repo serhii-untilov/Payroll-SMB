@@ -69,6 +69,7 @@
     "Delete selected records": "Видалити вибрані записи",
     "Print": "Друк",
     "Export": "Експорт",
-    "View deleted": "Переглянути видалені записи",
-    "Restore deleted": "Відновити вибрані записи"
+    "Show deleted": "Переглянути видалені записи",
+    "Restore deleted": "Відновити вибрані записи",
+    "Show history": "Переглянути історію змін"
 }
