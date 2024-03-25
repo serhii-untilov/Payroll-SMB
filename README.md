@@ -175,4 +175,3 @@ openssl rand -base64 60
 - [**React** - React Data Grid](https://adazzle.github.io/react-data-grid/#/common-features)
 - [**l10n** - React MUI Localization](https://www.geeksforgeeks.org/react-mui-localization/)
 - [**i18n** - How to use i18n in your React App](https://medium.com/@devpedrodias/how-to-use-i18n-in-your-react-app-1f26deb2a3d8)
-- [**VS Code** - Reducing VSCode Memory Consumption](https://dev.to/claudiodavi/reducing-vscode-memory-consumption-527k)
