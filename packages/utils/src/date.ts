@@ -69,19 +69,31 @@ export function getPeriodName(date: Date, format: string = 'ym'): string {
     return format.localeCompare('ym') === 0 ? `${year} ${monthName}` : `${monthName} ${year}`;
 }
 
+export function normalizeDate(date: Date): Date {
+    const d = new Date(date);
+    if (d.getTime() < minDate().getTime()) return minDate();
+    if (d.getTime() > maxDate().getTime()) return maxDate();
+    if (d.getFullYear() < 1901) return minDate();
+    if (d.getFullYear() >= 9999) return maxDate();
+    return d;
+}
+
 export function date2view(date: Date): string {
-    date = new Date(date);
-    if (date.getTime() <= minDate().getTime()) {
+    const d = normalizeDate(new Date(date));
+    if (d.getTime() <= minDate().getTime()) {
         return '';
     }
-    if (date.getTime() >= maxDate().getTime()) {
+    if (d.getTime() >= maxDate().getTime()) {
         return '';
     }
-    return formatDate(date);
+    return formatDate(d);
 }
 
 export function view2date(date: string, defaultValue: string | null = null): string {
-    if (date && date.length) return formatDate(new Date(date));
-    if (defaultValue && defaultValue.length) return formatDate(new Date(defaultValue));
+    if (date && date.length) return formatDate(normalizeDate(new Date(date)));
+
+    if (defaultValue && defaultValue.length)
+        return formatDate(normalizeDate(new Date(defaultValue)));
+
     return formatDate(minDate());
 }

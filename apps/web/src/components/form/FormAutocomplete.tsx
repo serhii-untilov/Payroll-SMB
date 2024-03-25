@@ -15,11 +15,6 @@ export type FormAutocompleteProps = OutlinedInputProps & {
 };
 
 export const FormAutocomplete = (props: FormAutocompleteProps) => {
-    const getLabelByValue = (value: any) => {
-        const found = props.options.find((o) => o.value === value);
-        console.log('value', value, found);
-        return found?.label;
-    };
     return (
         <>
             <InputLabel>{props.label}</InputLabel>
@@ -28,40 +23,34 @@ export const FormAutocomplete = (props: FormAutocompleteProps) => {
                 control={props.control}
                 rules={props.rules}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => {
-                    // console.log('value', value, formState);
                     return (
                         <Autocomplete
                             disablePortal
-                            // autoSelect
-                            // autoHighlight
+                            autoSelect
+                            autoHighlight
+                            autoComplete={true}
                             // id={'value'}
                             options={props.options}
-                            value={props.options.find((o) => o.value === value)}
-                            getOptionKey={(option) => option.value || ''}
-                            getOptionLabel={(option) => option.label || ''}
+                            getOptionLabel={(option) => option?.label || ''}
+                            getOptionKey={(option) => option?.value || ''}
+                            value={props.options.find((o) => o.value === value) || null}
                             isOptionEqualToValue={(option, value) => {
-                                console.log('isOptionEqualToValue', option, value);
-                                return option.value === value.value;
+                                return (
+                                    option?.value && value?.value && option?.value === value?.value
+                                );
+                            }}
+                            onChange={(event, item) => {
+                                onChange(item?.value || null);
                             }}
                             renderInput={(params) => {
-                                console.log('params', params);
                                 return (
                                     <TextField
                                         error={error != undefined}
-                                        onChange={(event) => {
-                                            console.log('onChange', event);
-                                            onChange(event);
-                                        }}
-                                        // value={value}
-                                        // {...props}
-                                        {...params}
+                                        variant="outlined"
                                         label=""
+                                        {...params}
                                         size="small"
                                         fullWidth
-                                        inputProps={{
-                                            ...params.inputProps,
-                                            autoComplete: 'disabled', // disable autocomplete and autofill
-                                        }}
                                     />
                                 );
                             }}

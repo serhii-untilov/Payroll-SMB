@@ -1,4 +1,4 @@
-import { InputLabel, OutlinedInput, OutlinedInputProps } from '@mui/material';
+import { Input, InputLabel, OutlinedInput, OutlinedInputProps, TextField } from '@mui/material';
 import { date2view, view2date } from '@repo/utils';
 import { Controller } from 'react-hook-form';
 
@@ -23,17 +23,11 @@ export const FormDateField = (props: FormDateFieldProps) => {
                     <OutlinedInput
                         size="small"
                         error={error != undefined}
-                        onChange={(event) => {
-                            console.log(event);
-                            if (event.target.value === '') {
-                                event.target.value = view2date(
-                                    event.target.value,
-                                    props.defaultValue,
-                                );
-                            }
-                            onChange(event);
+                        onChange={(e) => {
+                            onChange(new Date(view2date(e.target.value, props.defaultValue)));
                         }}
                         value={date2view(value)}
+                        // inputMode="numeric"
                         fullWidth
                         {...props}
                         label=""

@@ -157,13 +157,6 @@ export default function DepartmentForm(params: DepartmentFormParams) {
         // queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
     };
 
-    function getMaxDate() {
-        const md = maxDate();
-        const fd = formatDate(md);
-        console.log('gmd', md, fd);
-        return fd;
-    }
-
     return (
         <Fragment>
             <Dialog
@@ -220,7 +213,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                                 name="dateTo"
                                 id="dateTo"
                                 label={t('Date To')}
-                                defaultValue={getMaxDate()}
+                                defaultValue={formatDate(maxDate())}
                             />
                         </Grid>
 
