@@ -33,16 +33,16 @@ export class Company extends Logger implements ICompany {
     accountingId: number;
 
     @Column({ type: 'date', default: '1970-01-01' })
-    dateFrom?: Date;
+    dateFrom?: Date | null;
 
     @Column({ type: 'date', default: '9999-12-31' })
-    dateTo?: Date;
+    dateTo?: Date | null;
 
     @Column({ type: 'date', default: '1970-01-01' })
-    payPeriod: Date;
+    payPeriod?: Date | null;
 
     @Column({ type: 'date', default: '1970-01-01' })
-    checkDate: Date;
+    checkDate?: Date | null;
 
     @OneToMany(() => Department, (department) => department.company)
     departments?: Department[];

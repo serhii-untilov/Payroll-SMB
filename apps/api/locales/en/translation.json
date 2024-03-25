@@ -69,5 +69,7 @@
     "Add record": "Add record",
     "Delete selected records": "Delete selected records",
     "Print": "Print",
-    "Export": "Export"
+    "Export": "Export",
+    "View deleted": "View deleted",
+    "Restore deleted": "Restore selected records"
 }

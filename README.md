@@ -33,7 +33,8 @@ npm i --workspace @repo/web --save @mui/material @emotion/react @emotion/styled
 npm i --workspace @repo/web --save @fontsource/roboto
 npm i --workspace @repo/web --save @mui/icons-material
 npm i --workspace @repo/web --save @mui/x-data-grid
-npm i --workspace @repo/web --save @mui/x-date-pickers
+# npm i --workspace @repo/web --save @mui/x-date-pickers
+# npm i --workspace @repo/web --save moment
 npm i --workspace @repo/web --save notistack
 npm i --workspace @repo/web --save-dev typescript jest ts-jest @types/jest
 npm i --workspace @repo/web --save avvvatars-react
@@ -44,10 +45,16 @@ npm i --workspace @repo/web --save material-ui-popup-state
 npm i --workspace @repo/web --save i18next-http-backend
 npm i --workspace @repo/web --save-dev rollup-plugin-visualizer
 
-# Init "shared" library
+# Init "shared" library for common types and interfaces
 mkdir packages/shared
 npm i --workspace @repo/shared --save sqlite3 ts-loader typeorm
 npm i --workspace @repo/shared --save-dev ts-node typescript
+
+# Init "utils" shared library for common functions
+mkdir packages/utils
+npm i --workspace @repo/utils --save ts-loader
+npm i --workspace @repo/utils --save-dev ts-node typescript jest
+
 ```
 
 ## Development

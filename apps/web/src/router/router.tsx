@@ -15,7 +15,7 @@ export const SignIn = Loadable(lazy(() => import('../pages/SignIn')));
 const SignUp = Loadable(lazy(() => import('../pages/SignUp')));
 const Dashboard = Loadable(lazy(() => import('../pages/Dashboard')));
 const Welcome = Loadable(lazy(() => import('../pages/Welcome')));
-const Company = Loadable(lazy(() => import('../pages/Company/Company')));
+const Company = Loadable(lazy(() => import('../pages/company/Company')));
 const CompanyList = Loadable(lazy(() => import('../pages/CompanyList')));
 const Employees = Loadable(lazy(() => import('../pages/Employees')));
 const TimeOff = Loadable(lazy(() => import('../pages/TimeOff')));

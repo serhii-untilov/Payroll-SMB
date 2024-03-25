@@ -31,10 +31,10 @@ const formSchema = yup.object().shape({
     lawId: yup.number().positive('Law is required').required(),
     taxId: yup.string(),
     accountingId: yup.number().positive('Accounting is required').required(),
-    dateFrom: yup.date().required('DateFrom is required'),
-    dateTo: yup.date().required('DateTo is required'),
-    payPeriod: yup.date().required('Pay period is required'),
-    checkDate: yup.date().required('Check date is required'),
+    dateFrom: yup.date().nullable(),
+    dateTo: yup.date().nullable(),
+    payPeriod: yup.date().nullable(),
+    checkDate: yup.date().nullable(),
 });
 
 type FormType = yup.InferType<typeof formSchema>;

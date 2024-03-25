@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { IDepartment } from '@repo/shared';
-import { maxDate, minDate } from '@repo/utils';
+import { formatDate, maxDate, minDate } from '@repo/utils';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { Dispatch, Fragment, useEffect } from 'react';
@@ -13,10 +13,9 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import * as yup from 'yup';
-import { FormInputDropdown } from '../../components/form/FormInputDropdown';
+import { FormAutocomplete } from '../../components/form/FormAutocomplete';
 import { FormTextField } from '../../components/form/FormTextField';
 import { Button } from '../../components/layout/Button';
-import { Loading } from '../../components/utility/Loading';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import {
@@ -26,6 +25,7 @@ import {
     updateDepartment,
 } from '../../services/department.service';
 import { getDirtyValues } from '../../services/utils';
+import { FormDateField } from '../../components/form/FormDateField';
 
 export interface DepartmentFormParams {
     open: boolean;
@@ -38,8 +38,8 @@ const formSchema = yup.object().shape({
     id: yup.number().nullable(),
     name: yup.string().required('Name is required'),
     companyId: yup.number().positive('Company is required').required(),
-    dateFrom: yup.date(),
-    dateTo: yup.date(),
+    dateFrom: yup.date().nullable(),
+    dateTo: yup.date().nullable(),
     parentDepartmentId: yup.number().nullable(),
 });
 
@@ -67,7 +67,6 @@ export default function DepartmentForm(params: DepartmentFormParams) {
     const {
         data: department,
         isError: isDepartmentError,
-        isLoading: isDepartmentLoading,
         error: departmentError,
     } = useQuery<FormType, Error>({
         queryKey: ['department', departmentId],
@@ -79,13 +78,11 @@ export default function DepartmentForm(params: DepartmentFormParams) {
             );
         },
         enabled: !!company?.id,
-        // suspense: true,
     });
 
     const {
         data: departmentList,
         isError: isDepartmentListError,
-        isLoading: isDepartmentListLoading,
         error: departmentListError,
     } = useQuery<IDepartment[], Error>({
         queryKey: ['departmentList', company?.id],
@@ -93,13 +90,11 @@ export default function DepartmentForm(params: DepartmentFormParams) {
             return company?.id ? await getDepartmentList(company?.id) : [];
         },
         enabled: !!company?.id,
-        // suspense: true,
     });
 
     const {
         control,
         handleSubmit,
-        watch,
         reset,
         formState: { errors: formErrors },
     } = useForm({
@@ -124,10 +119,6 @@ export default function DepartmentForm(params: DepartmentFormParams) {
             enqueueSnackbar(t(formErrors.dateTo?.message), { variant: 'error' });
     }, [formErrors, t]);
 
-    if (isDepartmentLoading || isDepartmentListLoading) {
-        return <Loading />;
-    }
-
     if (isDepartmentError) {
         return enqueueSnackbar(`${departmentError.name}\n${departmentError.message}`, {
             variant: 'error',
@@ -141,7 +132,10 @@ export default function DepartmentForm(params: DepartmentFormParams) {
     }
 
     const onSubmit: SubmitHandler<FormType> = async (data) => {
-        if (!isDirty) return;
+        if (!isDirty) {
+            reset(department);
+            params.setOpen(false);
+        }
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const department = data.id
@@ -162,6 +156,13 @@ export default function DepartmentForm(params: DepartmentFormParams) {
         params.setOpen(false);
         // queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
     };
+
+    function getMaxDate() {
+        const md = maxDate();
+        const fd = formatDate(md);
+        console.log('gmd', md, fd);
+        return fd;
+    }
 
     return (
         <Fragment>
@@ -192,7 +193,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                         <Grid item xs={12}>
                             <FormTextField
                                 control={control}
-                                autoComplete="given-name"
+                                autoComplete="department-name"
                                 name="name"
                                 id="name"
                                 label={t('Name')}
@@ -202,28 +203,28 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormTextField
+                            <FormDateField
                                 control={control}
-                                autoComplete="given-name"
+                                autoComplete="date-from"
                                 name="dateFrom"
                                 id="dateFrom"
                                 label={t('Date From')}
-                                type="date"
+                                defaultValue={formatDate(minDate())}
                             />
                         </Grid>
 
                         <Grid item xs={6}>
-                            <FormTextField
+                            <FormDateField
                                 control={control}
-                                autoComplete="given-name"
+                                autoComplete="date-to"
                                 name="dateTo"
                                 id="dateTo"
                                 label={t('Date To')}
-                                type="date"
+                                defaultValue={getMaxDate()}
                             />
                         </Grid>
 
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <FormInputDropdown
                                 control={control}
                                 label={t('Parent Department')}
@@ -236,7 +237,23 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                                     }) ?? []
                                 }
                             />
+                        </Grid> */}
+
+                        <Grid item xs={12}>
+                            <FormAutocomplete
+                                control={control}
+                                label={t('Parent Department')}
+                                name="parentDepartmentId"
+                                // autoComplete="parentDepartmentId"
+                                // type="number"
+                                options={
+                                    departmentList?.map((o) => {
+                                        return { label: o.name, value: o.id };
+                                    }) ?? []
+                                }
+                            />
                         </Grid>
+
                         {/* <Grid item xs={12} sx={{ mb: 2 }}>
                             <Grid container spacing={1}>
                                 <Grid item>

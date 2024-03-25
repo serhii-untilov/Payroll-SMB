@@ -1,8 +1,10 @@
 import {
     AddCircleRounded,
+    DeleteRounded,
     DownloadRounded,
     PrintRounded,
     RemoveCircleRounded,
+    RestoreFromTrashRounded,
 } from '@mui/icons-material';
 import { Box, IconButton, Stack, StackProps } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +21,10 @@ export interface TableToolbarProps extends StackProps {
     printDisabled?: boolean;
     onExport?: Func<any>;
     exportDisabled?: boolean;
+    onViewDeleted?: Func<any>;
+    viewDeletedDisabled?: boolean;
+    onRestoreDeleted?: Func<any>;
+    restoreDeletedDisabled?: boolean;
 }
 
 export function TableToolbar(props: TableToolbarProps) {
@@ -33,58 +39,105 @@ export function TableToolbar(props: TableToolbarProps) {
             mx={1}
             // {...props}
         >
-            {props.onAdd && (
-                <Tooltip placement="top" title={t('Add record')}>
-                    <Box sx={{ color: 'action.disabledBackground' }}>
-                        <IconButton
-                            color={props.addDisabled ? 'inherit' : 'primary'}
-                            disabled={props.addDisabled}
-                            onClick={props.onAdd}
-                        >
-                            <AddCircleRounded />
-                        </IconButton>
-                    </Box>
-                </Tooltip>
-            )}
-            {props.onDelete && (
-                <Tooltip placement="top" title={t('Delete selected records')}>
-                    <Box sx={{ color: 'action.disabledBackground' }}>
-                        <IconButton
-                            color={props.deleteDisabled ? 'inherit' : 'error'}
-                            disabled={props.deleteDisabled}
-                            onClick={props.onDelete}
-                        >
-                            <RemoveCircleRounded />
-                        </IconButton>
-                    </Box>
-                </Tooltip>
-            )}
-            {props.onPrint && (
-                <Tooltip placement="top" title={t('Print')}>
-                    <Box sx={{ color: 'action.disabledBackground' }}>
-                        <IconButton
-                            color={props.printDisabled ? 'inherit' : 'primary'}
-                            disabled={props.printDisabled}
-                            onClick={props.onPrint}
-                        >
-                            <PrintRounded />
-                        </IconButton>
-                    </Box>
-                </Tooltip>
-            )}
-            {props.onExport && (
-                <Tooltip placement="top" title={t('Export')}>
-                    <Box sx={{ color: 'action.disabledBackground' }}>
-                        <IconButton
-                            color={props.exportDisabled ? 'inherit' : 'primary'}
-                            disabled={props.exportDisabled}
-                            onClick={props.onExport}
-                        >
-                            <DownloadRounded />
-                        </IconButton>
-                    </Box>
-                </Tooltip>
-            )}
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    flex: 1,
+                }}
+            >
+                <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+                    {props.onAdd && (
+                        <Tooltip placement="top-start" title={t('Add record')}>
+                            <Box sx={{ color: 'action.disabledBackground' }}>
+                                <IconButton
+                                    color={props.addDisabled ? 'inherit' : 'primary'}
+                                    disabled={props.addDisabled}
+                                    onClick={props.onAdd}
+                                >
+                                    <AddCircleRounded />
+                                </IconButton>
+                            </Box>
+                        </Tooltip>
+                    )}
+                    {props.onDelete && (
+                        <Tooltip placement="top-start" title={t('Delete selected records')}>
+                            <Box sx={{ color: 'action.disabledBackground' }}>
+                                <IconButton
+                                    color={props.deleteDisabled ? 'inherit' : 'error'}
+                                    disabled={props.deleteDisabled}
+                                    onClick={props.onDelete}
+                                >
+                                    <RemoveCircleRounded />
+                                </IconButton>
+                            </Box>
+                        </Tooltip>
+                    )}
+                    {props.onPrint && (
+                        <Tooltip placement="top-start" title={t('Print')}>
+                            <Box sx={{ color: 'action.disabledBackground' }}>
+                                <IconButton
+                                    color={props.printDisabled ? 'inherit' : 'primary'}
+                                    disabled={props.printDisabled}
+                                    onClick={props.onPrint}
+                                >
+                                    <PrintRounded />
+                                </IconButton>
+                            </Box>
+                        </Tooltip>
+                    )}
+                    {props.onExport && (
+                        <Tooltip placement="top-start" title={t('Export')}>
+                            <Box sx={{ color: 'action.disabledBackground' }}>
+                                <IconButton
+                                    color={props.exportDisabled ? 'inherit' : 'primary'}
+                                    disabled={props.exportDisabled}
+                                    onClick={props.onExport}
+                                >
+                                    <DownloadRounded />
+                                </IconButton>
+                            </Box>
+                        </Tooltip>
+                    )}
+                </Box>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flex: 1,
+                        justifyContent: 'flex-end',
+                    }}
+                >
+                    {props.onViewDeleted && (
+                        <Tooltip placement="top-end" title={t('View deleted')}>
+                            <Box sx={{ color: 'action.disabledBackground' }}>
+                                <IconButton
+                                    color={props.viewDeletedDisabled ? 'inherit' : 'primary'}
+                                    disabled={props.viewDeletedDisabled}
+                                    onClick={props.onViewDeleted}
+                                >
+                                    <DeleteRounded />
+                                </IconButton>
+                            </Box>
+                        </Tooltip>
+                    )}
+
+                    {props.onRestoreDeleted && (
+                        <Tooltip placement="top-end" title={t('Restore deleted')}>
+                            <Box sx={{ color: 'action.disabledBackground' }}>
+                                <IconButton
+                                    color={props.restoreDeletedDisabled ? 'inherit' : 'primary'}
+                                    disabled={props.restoreDeletedDisabled}
+                                    onClick={props.onRestoreDeleted}
+                                >
+                                    <RestoreFromTrashRounded />
+                                </IconButton>
+                            </Box>
+                        </Tooltip>
+                    )}
+                </Box>
+            </Box>
         </Stack>
     );
 }

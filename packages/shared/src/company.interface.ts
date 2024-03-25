@@ -6,8 +6,8 @@ import { ILogger } from './logger.interface';
 export interface ICompany extends ILogger {
     id: number;
     name: string;
-    dateFrom?: Date;
-    dateTo?: Date;
+    dateFrom?: Date | null;
+    dateTo?: Date | null;
 
     law?: ILaw;
     lawId: number;
@@ -17,8 +17,8 @@ export interface ICompany extends ILogger {
     accounting?: IAccounting;
     accountingId: number;
 
-    payPeriod: Date;
-    checkDate: Date;
+    payPeriod?: Date | null;
+    checkDate?: Date | null;
 
     departments?: IDepartment[];
 }

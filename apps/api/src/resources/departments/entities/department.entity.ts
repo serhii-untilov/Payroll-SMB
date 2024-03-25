@@ -20,10 +20,10 @@ export class Department extends Logger implements IDepartment {
     companyId: number;
 
     @Column({ type: 'date', default: '1970-01-01' })
-    dateFrom?: Date;
+    dateFrom?: Date | null;
 
     @Column({ type: 'date', default: '9999-12-31' })
-    dateTo?: Date;
+    dateTo?: Date | null;
 
     @ManyToOne(() => Department, (department) => department.childDepartments, { nullable: true })
     @JoinColumn()

@@ -8,7 +8,7 @@ import {
     useGridApiContext,
 } from '@mui/x-data-grid';
 import { IDepartment } from '@repo/shared';
-import { dateView } from '@repo/utils';
+import { date2view } from '@repo/utils';
 import { enqueueSnackbar } from 'notistack';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -45,7 +45,7 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
             width: 200,
             sortable: true,
             valueGetter: (params) => {
-                return dateView(params.value);
+                return date2view(params.value);
             },
         },
         {
@@ -55,7 +55,7 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
             width: 200,
             sortable: true,
             valueGetter: (params) => {
-                return dateView(params.value);
+                return date2view(params.value);
             },
         },
         {
@@ -122,6 +122,14 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
         console.log('onExport');
     };
 
+    const onViewDeleted = () => {
+        console.log('onViewDeleted');
+    };
+
+    const onRestoreDeleted = () => {
+        console.log('onRestoreDeleted');
+    };
+
     return (
         <>
             <TableToolbar
@@ -132,6 +140,10 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
                 printDisabled={!departmentList?.length}
                 onExport={onExport}
                 exportDisabled={!departmentList?.length}
+                onViewDeleted={onViewDeleted}
+                viewDeletedDisabled={true}
+                onRestoreDeleted={onRestoreDeleted}
+                restoreDeletedDisabled={true}
             />
             <DataGrid
                 rows={departmentList || []}

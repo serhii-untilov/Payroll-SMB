@@ -69,7 +69,7 @@ export function getPeriodName(date: Date, format: string = 'ym'): string {
     return format.localeCompare('ym') === 0 ? `${year} ${monthName}` : `${monthName} ${year}`;
 }
 
-export function dateView(date: Date): string {
+export function date2view(date: Date): string {
     date = new Date(date);
     if (date.getTime() <= minDate().getTime()) {
         return '';
@@ -78,4 +78,10 @@ export function dateView(date: Date): string {
         return '';
     }
     return formatDate(date);
+}
+
+export function view2date(date: string, defaultValue: string | null = null): string {
+    if (date && date.length) return formatDate(new Date(date));
+    if (defaultValue && defaultValue.length) return formatDate(new Date(defaultValue));
+    return formatDate(minDate());
 }

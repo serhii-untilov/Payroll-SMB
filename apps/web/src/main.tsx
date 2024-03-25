@@ -8,11 +8,9 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
-import './index.css';
-import { ThemeProvider } from '@emotion/react';
-// import { defaultTheme } from './themes/defaultTheme.ts';
 import { LocaleProvider } from './context/LocaleContext.tsx';
-import './i18n.ts'; // ts => import './i18n.ts'
+import './i18n.ts';
+import './index.css';
 
 const queryClient = new QueryClient({
     defaultOptions: {

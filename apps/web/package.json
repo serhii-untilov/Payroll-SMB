@@ -19,7 +19,6 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "@mui/x-data-grid": "^6.19.4",
-    "@mui/x-date-pickers": "^6.19.4",
     "@repo/shared": "*",
     "@repo/utils": "*",
     "axios": "^1.6.7",
