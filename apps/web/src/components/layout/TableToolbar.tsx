@@ -2,6 +2,7 @@ import {
     AddCircleRounded,
     DeleteRounded,
     DownloadRounded,
+    HistoryRounded,
     PrintRounded,
     RemoveCircleRounded,
     RestoreFromTrashRounded,
@@ -21,8 +22,11 @@ export interface TableToolbarProps extends StackProps {
     printDisabled?: boolean;
     onExport?: Func<any>;
     exportDisabled?: boolean;
-    onViewDeleted?: Func<any>;
-    viewDeletedDisabled?: boolean;
+    onShowHistory?: Func<any>;
+    showHistoryDisabled?: boolean;
+    onShowDeleted?: Func<any>;
+    showDeletedDisabled?: boolean;
+
     onRestoreDeleted?: Func<any>;
     restoreDeletedDisabled?: boolean;
 }
@@ -109,13 +113,27 @@ export function TableToolbar(props: TableToolbarProps) {
                         justifyContent: 'flex-end',
                     }}
                 >
-                    {props.onViewDeleted && (
-                        <Tooltip placement="top-end" title={t('View deleted')}>
+                    {props.onShowHistory && (
+                        <Tooltip placement="top-end" title={t('Show history')}>
                             <Box sx={{ color: 'action.disabledBackground' }}>
                                 <IconButton
-                                    color={props.viewDeletedDisabled ? 'inherit' : 'primary'}
-                                    disabled={props.viewDeletedDisabled}
-                                    onClick={props.onViewDeleted}
+                                    color={props.showHistoryDisabled ? 'inherit' : 'primary'}
+                                    disabled={props.showHistoryDisabled}
+                                    onClick={props.onShowHistory}
+                                >
+                                    <HistoryRounded />
+                                </IconButton>
+                            </Box>
+                        </Tooltip>
+                    )}
+
+                    {props.onShowDeleted && (
+                        <Tooltip placement="top-end" title={t('Show deleted')}>
+                            <Box sx={{ color: 'action.disabledBackground' }}>
+                                <IconButton
+                                    color={props.showDeletedDisabled ? 'inherit' : 'primary'}
+                                    disabled={props.showDeletedDisabled}
+                                    onClick={props.onShowDeleted}
                                 >
                                     <DeleteRounded />
                                 </IconButton>

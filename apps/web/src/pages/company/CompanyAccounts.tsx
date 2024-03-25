@@ -93,6 +93,12 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
                 printDisabled={false}
                 onExport={onExport}
                 exportDisabled={false}
+                onShowHistory={() => {}}
+                showHistoryDisabled={true}
+                onShowDeleted={() => {}}
+                showDeletedDisabled={true}
+                onRestoreDeleted={() => {}}
+                restoreDeletedDisabled={true}
             />
             <DataGrid
                 rows={[]}

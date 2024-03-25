@@ -122,8 +122,12 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
         console.log('onExport');
     };
 
-    const onViewDeleted = () => {
-        console.log('onViewDeleted');
+    const onShowHistory = () => {
+        console.log('onShowHistory');
+    };
+
+    const onShowDeleted = () => {
+        console.log('onShowDeleted');
     };
 
     const onRestoreDeleted = () => {
@@ -140,8 +144,10 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
                 printDisabled={!departmentList?.length}
                 onExport={onExport}
                 exportDisabled={!departmentList?.length}
-                onViewDeleted={onViewDeleted}
-                viewDeletedDisabled={true}
+                onShowHistory={onShowHistory}
+                showHistoryDisabled={true}
+                onShowDeleted={onShowDeleted}
+                showDeletedDisabled={true}
                 onRestoreDeleted={onRestoreDeleted}
                 restoreDeletedDisabled={true}
             />
