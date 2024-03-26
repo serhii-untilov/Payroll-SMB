@@ -5,12 +5,14 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany } from '@repo/shared';
+import { ICompany, IPayPeriod } from '@repo/shared';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
 import { defaultTheme } from '../themes/defaultTheme';
 import { getUserCompanyList } from '../services/user.service';
+import { getCurrentPayPeriod, getPayPeriod } from '../services/payPeriod.service';
+import { useQuery } from 'react-query';
 
 export type AppContextType = {
     compactView: boolean;
@@ -21,6 +23,8 @@ export type AppContextType = {
     themeMode: string;
     setThemeMode: Dispatch<string>;
     switchThemeMode: () => void;
+    payPeriod: IPayPeriod | undefined | null;
+    setPayPeriod: Dispatch<IPayPeriod | undefined | null>;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -32,6 +36,8 @@ const AppContext = createContext<AppContextType>({
     themeMode: 'light',
     setThemeMode: () => {},
     switchThemeMode: () => {},
+    payPeriod: undefined,
+    setPayPeriod: () => {},
 });
 
 interface AppProviderProps {
@@ -51,6 +57,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         () => responsiveFontSizes(createTheme(defaultTheme(themeMode), locale.locale)),
         [themeMode, locale],
     );
+    const [payPeriod, setPayPeriod] = useState<IPayPeriod | undefined | null>(null);
 
     useEffect(() => {
         setCompactView(!wideScreen);
@@ -78,6 +85,28 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         localStorage.setItem('themeMode', themeMode);
     }, [themeMode]);
 
+    useEffect(() => {
+        const initPayPeriod = async () => {
+            const current = company ? await getCurrentPayPeriod(company.id) : null;
+            if (!current) {
+                setPayPeriod(null);
+                return;
+            }
+            const currentId = parseInt(localStorage.getItem('currentPayPeriodId') || '0');
+            if (current.id !== currentId) {
+                localStorage.setItem('currentPayPeriodId', current.id.toString());
+                localStorage.setItem('payPeriodId', current.id.toString());
+                setPayPeriod(current);
+                return;
+            }
+            const id = localStorage.getItem('payPeriodId');
+            const payPeriod = id ? await getPayPeriod(company?.id || 0, +id) : null;
+            localStorage.setItem('payPeriodId', (payPeriod?.id || current?.id || 0).toString());
+            return payPeriod || current;
+        };
+        initPayPeriod();
+    }, [company]);
+
     const switchThemeMode = () => {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light');
     };
@@ -93,6 +122,8 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
                 themeMode,
                 setThemeMode,
                 switchThemeMode,
+                payPeriod,
+                setPayPeriod,
             }}
         >
             <ThemeProvider theme={theme}>{children}</ThemeProvider>

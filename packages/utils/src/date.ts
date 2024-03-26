@@ -30,6 +30,20 @@ export function formatDateTime(date: Date): string {
     });
 }
 
+export function formatPeriod(dateFrom: Date, dateTo: Date): string {
+    const d1 = new Date(dateFrom);
+    let month = '' + (d1.getMonth() + 1);
+    const day1 = '' + d1.getDate();
+    const year = d1.getFullYear();
+
+    const d2 = new Date(dateTo);
+    const day2 = '' + d2.getDate();
+
+    if (month.length < 2) month = '0' + month;
+
+    return `${day1} - ${day2}/${month}/${year}`;
+}
+
 export function dateToTime(date: Date): number {
     const d = new Date(date);
     return d.getTime();

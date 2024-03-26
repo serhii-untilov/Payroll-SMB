@@ -19,3 +19,4 @@ export * from './src/companyAccount.interface';
 export * from './src/person.interface';
 export * from './src/position.interface';
 export * from './src/positionHistory.interface';
+export * from './src/payPeriod.interface';

@@ -13,17 +13,18 @@ export interface IPayPeriod extends ILogger {
     company?: ICompany;
     companyId: number;
 
-    dateFrom?: Date | null; // Hire date or date open vacancy
-    dateTo?: Date | null; // Dismiss date or date close vacancy
+    dateFrom: Date;
+    dateTo: Date;
 
     state: string; // See enum PayPeriodState
 
-    accrual: number;
-    deduction: number;
-    tax: number;
-    netPay: number;
-    payment: number;
-    outBalance: number;
+    inBalance?: number;
+    accrual?: number;
+    deduction?: number;
+    tax?: number;
+    netPay?: number;
+    payment?: number;
+    outBalance?: number;
 }
 
 export type ICreatePayPeriod = Omit<

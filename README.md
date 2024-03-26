@@ -119,6 +119,7 @@ npx --workspace @repo/api nest generate resource jobs resources
 npx --workspace @repo/api nest generate resource paymentTypes resources
 npx --workspace @repo/api nest generate resource workNorms resources
 npx --workspace @repo/api nest generate resource workNormPeriods resources
+npx --workspace @repo/api nest generate resource payPeriods resources
 
 ```
 
