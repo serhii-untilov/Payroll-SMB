@@ -4,16 +4,19 @@ import { IPerson } from './person.interface';
 
 export interface IPosition extends ILogger {
     id: number;
-    name: string;
 
     company?: ICompany;
     companyId: number;
 
-    person?: IPerson;
-    personId: number;
+    idNumber: string; // Identity number (Табельний номер)
+    sequenceNumber: number; // Sequence in payroll reports to place managers on top
+    description: string;
 
-    dateFrom?: Date | null;
-    dateTo?: Date | null;
+    person?: IPerson;
+    personId?: number | null; // Vacancy if not defined
+
+    dateFrom?: Date | null; // Hire date or date open vacancy
+    dateTo?: Date | null; // Leave date or date close vacancy
 }
 
 export type ICreatePosition = Omit<
