@@ -1,7 +1,8 @@
-import { FormControl, InputLabel, MenuItem } from '@mui/material';
+import { FormControl, MenuItem } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { supportedLanguages } from '../../context/LocaleContext';
 import useLocale from '../../hooks/useLocale';
+import { InputLabel } from '../layout/InputLabel';
 
 const options = [
     {

@@ -144,34 +144,44 @@ openssl rand -base64 60
 
 ## Domain-specific language (DSL)
 
-| English               |Ukrainian              | Short form            | Description                       |
-|-----------------------|-----------------------|-----------------------|-----------------------------------|
-|Admin                  |Адміністратор          |admin                  |                                   |
-|User                   |Користувач             |user                   |                                   |
-|Owner                  |Власник                |owner                  |                                   |
-|Employer               |Роботодавець           |employer               |                                   |
-|Supervisor             |Керівник               |supervisor             |                                   |
-|Accountant             |Бухгалтер              |accountant             |                                   |
-|Employee               |Працівник              |employee               |                                   |
-|Advisor                |Консультант            |advisor                |                                   |
-|Observer               |Спостерігач            |observer               |                                   |
-|Guest                  |Гість                  |guest                  |                                   |
-|Company                |Підприємство           |company                |                                   |
-|Tax ID                 |Податковий номер       |taxId                  |                                   |
-|Law                    |Законодавство          |law                    |                                   |
-|Accounting             |Вид обліку             |accounting             |                                   |
-|Pay period             |Обліковий період       |payPeriod              | Період за який нараховано  (1С)   |
-|Calc period            |Розрахунковий період   |calcPeriod             | Період в якому розраховано (1С)   |
-|Advance payment date   |Дата виплати авансу    |advanceDate            |                                   |
-|Check date             |Дата виплати зарплати  |checkDate              |                                   |
-|Position               |Штатна позиція         |position               |                                   |
-|Department             |Підрозділ              |department             |                                   |
-|Job                    |Посада                 |job                    |                                   |
-|Vacancy                |Вакансія               |vacancy                |                                   |
-|Working time norm      |Норма робочого часу    |workNorm               |                                   |
-|Working time calendar  |Виробничий календар    |workCalendar           |                                   |
-|Work Schedule          |Графік роботи          |workNorm               |                                   |
-|Work Sheet             |Табель робочого часу   |workSheet              |                                   |
+| English               |Ukrainian              | Short form            | Description                                                      |
+|-----------------------|-----------------------|-----------------------|------------------------------------------------------------------|
+|Admin                  |Адміністратор          |admin                  |                                                                  |
+|User                   |Користувач             |user                   |                                                                  |
+|Owner                  |Власник                |owner                  |                                                                  |
+|Employer               |Роботодавець           |employer               |                                                                  |
+|Supervisor             |Керівник               |supervisor             |                                                                  |
+|Accountant             |Бухгалтер              |accountant             |                                                                  |
+|Collaborator           |Співробітник           |collaborator           |Помічник, асистент (assistant)                                    |
+|Employee               |Працівник              |employee               |Штатний працівник підприємства, співробітник                      |
+|Contractor             |Підрядник              |contractor             |Позаштатний працівник, тимчасовий, не постійний, на разову роботу |
+|Advisor                |Консультант            |advisor                |                                                                  |
+|Observer               |Спостерігач            |observer               |                                                                  |
+|Guest                  |Гість                  |guest                  |                                                                  |
+|Company                |Підприємство           |company                |                                                                  |
+|Tax ID                 |Податковий номер       |taxId                  |                                                                  |
+|Law                    |Законодавство          |law                    |                                                                  |
+|Accounting type        |Вид обліку             |accounting             |                                                                  |
+|Payment schedule       |Розклад виплат         |paymentSchedule        |Every 15th and last day of month                                  |
+|Accounting period      |Обліковий період       |accPeriod              |Період за який нараховано  (1С)                                   |
+|Payment period         |Розрахунковий період   |payPeriod              |Період в якому розраховано (1С)                                   |
+|Check date             |Дата виплати           |checkDate              |                                                                  |
+|Position               |Штатна позиція         |position               |                                                                  |
+|Department             |Підрозділ              |department             |                                                                  |
+|Job                    |Посада                 |job                    |                                                                  |
+|Vacancy                |Вакансія               |vacancy                |                                                                  |
+|Working time norm      |Норма робочого часу    |workNorm               |                                                                  |
+|Working time calendar  |Виробничий календар    |workCalendar           |                                                                  |
+|Work Schedule          |Розклад роботи         |workSchedule           |                                                                  |
+|Work Sheet             |Табель робочого часу   |workSheet              |                                                                  |
+|Work Sheet             |Табель робочого часу   |workSheet              |                                                                  |
+|Incoming balance       |Вхідний залишок        |inBalance              |                                                                  |
+|Accrual                |Нарахування            |accrual                |                                                                  |
+|Deduction              |Утримання              |deduction              |                                                                  |
+|Tax                    |Податок                |tax                    |                                                                  |
+|Net pay                |До виплати             |netPay                 |                                                                  |
+|Payment                |Виплата                |payment                |                                                                  |
+|Outgoing balance       |Вихідний залишок       |outBalance             |                                                                  |
 
 ## References
 
@@ -207,3 +217,4 @@ openssl rand -base64 60
 - [**l10n** - React MUI Localization](https://www.geeksforgeeks.org/react-mui-localization/)
 - [**i18n** - How to use i18n in your React App](https://medium.com/@devpedrodias/how-to-use-i18n-in-your-react-app-1f26deb2a3d8)
 - [**TypeORM** - How to properly handle decimals with TypeORM](https://medium.com/@matthew.bajorek/how-to-properly-handle-decimals-with-typeorm-f0eb2b79ca9c)
+- [**Postgres** - Working with Money in Postgres](https://www.crunchydata.com/blog/working-with-money-in-postgres)

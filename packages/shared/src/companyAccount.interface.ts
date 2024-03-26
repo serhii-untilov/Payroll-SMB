@@ -3,9 +3,16 @@ import { ICompany } from './company.interface';
 import { ICurrency } from './currency.interface';
 import { ILogger } from './logger.interface';
 
+export enum BankAccountType {
+    CHECKING = 'checking',
+}
+
 export interface ICompanyAccount extends ILogger {
     id: number;
-    bankAccountNumber: string;
+
+    accountNumber: string;
+    routingNumber: string;
+    type: string; // See enum BankAccountType
 
     company?: ICompany;
     companyId: number;

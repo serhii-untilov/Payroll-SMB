@@ -24,7 +24,7 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
 
     const columns: GridColDef[] = [
         {
-            field: 'bankAccountNumber',
+            field: 'accountNumber',
             headerName: t('Account Number'),
             type: 'string',
             width: 240,
