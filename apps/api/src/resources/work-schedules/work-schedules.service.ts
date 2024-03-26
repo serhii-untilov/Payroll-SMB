@@ -1,66 +1,66 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateWorkScheduleDto } from './dto/create-work-schedule.dto';
-import { UpdateWorkScheduleDto } from './dto/update-work-schedule.dto';
-import { WorkSchedule } from './entities/work-schedule.entity';
+import { CreateWorkNormDto } from './dto/create-work-schedule.dto';
+import { UpdateWorkNormDto } from './dto/update-work-schedule.dto';
+import { WorkNorm } from './entities/work-schedule.entity';
 
 @Injectable()
-export class WorkSchedulesService {
+export class WorkNormsService {
     constructor(
-        @InjectRepository(WorkSchedule)
-        private workSchedulesRepository: Repository<WorkSchedule>,
+        @InjectRepository(WorkNorm)
+        private workNormsRepository: Repository<WorkNorm>,
     ) {}
 
-    async create(userId: number, WorkSchedule: CreateWorkScheduleDto): Promise<WorkSchedule> {
-        const existing = await this.workSchedulesRepository.findOneBy({ name: WorkSchedule.name });
+    async create(userId: number, WorkNorm: CreateWorkNormDto): Promise<WorkNorm> {
+        const existing = await this.workNormsRepository.findOneBy({ name: WorkNorm.name });
         if (existing) {
-            throw new BadRequestException(`WorkSchedule '${WorkSchedule.name}' already exists.`);
+            throw new BadRequestException(`WorkNorm '${WorkNorm.name}' already exists.`);
         }
-        const newWorkSchedule = await this.workSchedulesRepository.save({
-            ...WorkSchedule,
+        const newWorkNorm = await this.workNormsRepository.save({
+            ...WorkNorm,
             createdUserId: userId,
             updatedUserId: userId,
         });
-        return newWorkSchedule;
+        return newWorkNorm;
     }
 
-    async findAll(): Promise<WorkSchedule[]> {
-        return await this.workSchedulesRepository.find();
+    async findAll(): Promise<WorkNorm[]> {
+        return await this.workNormsRepository.find();
     }
 
-    async findOne(params): Promise<WorkSchedule> {
-        const WorkSchedule = await this.workSchedulesRepository.findOne(params);
-        if (!WorkSchedule) {
-            throw new NotFoundException(`WorkSchedule could not be found.`);
+    async findOne(params): Promise<WorkNorm> {
+        const WorkNorm = await this.workNormsRepository.findOne(params);
+        if (!WorkNorm) {
+            throw new NotFoundException(`WorkNorm could not be found.`);
         }
-        return WorkSchedule;
+        return WorkNorm;
     }
 
-    async update(userId: number, id: number, data: UpdateWorkScheduleDto): Promise<WorkSchedule> {
-        const WorkSchedule = await this.workSchedulesRepository.findOneBy({ id });
-        if (!WorkSchedule) {
-            throw new NotFoundException(`WorkSchedule could not be found.`);
+    async update(userId: number, id: number, data: UpdateWorkNormDto): Promise<WorkNorm> {
+        const WorkNorm = await this.workNormsRepository.findOneBy({ id });
+        if (!WorkNorm) {
+            throw new NotFoundException(`WorkNorm could not be found.`);
         }
-        await this.workSchedulesRepository.save({
+        await this.workNormsRepository.save({
             ...data,
             id,
             updatedUserId: userId,
         });
-        const updated = await this.workSchedulesRepository.findOneOrFail({ where: { id } });
+        const updated = await this.workNormsRepository.findOneOrFail({ where: { id } });
         return updated;
     }
 
-    async remove(userId: number, id: number): Promise<WorkSchedule> {
-        const WorkSchedule = await this.workSchedulesRepository.findOneBy({ id });
-        if (!WorkSchedule) {
-            throw new NotFoundException(`WorkSchedule could not be found.`);
+    async remove(userId: number, id: number): Promise<WorkNorm> {
+        const WorkNorm = await this.workNormsRepository.findOneBy({ id });
+        if (!WorkNorm) {
+            throw new NotFoundException(`WorkNorm could not be found.`);
         }
-        await this.workSchedulesRepository.save({
-            ...WorkSchedule,
+        await this.workNormsRepository.save({
+            ...WorkNorm,
             deletedDate: new Date(),
             deletedUserId: userId,
         });
-        return WorkSchedule;
+        return WorkNorm;
     }
 }

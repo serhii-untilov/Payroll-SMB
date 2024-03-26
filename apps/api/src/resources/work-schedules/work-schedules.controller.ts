@@ -14,34 +14,34 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { WorkSchedulesService } from './work-schedules.service';
-import { CreateWorkScheduleDto } from './dto/create-work-schedule.dto';
-import { UpdateWorkScheduleDto } from './dto/update-work-schedule.dto';
+import { WorkNormsService } from './work-schedules.service';
+import { CreateWorkNormDto } from './dto/create-work-schedule.dto';
+import { UpdateWorkNormDto } from './dto/update-work-schedule.dto';
 
 @Controller('work-schedules')
-export class WorkSchedulesController {
-    constructor(private readonly workSchedulesService: WorkSchedulesService) {}
+export class WorkNormsController {
+    constructor(private readonly workNormsService: WorkNormsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createWorkScheduleDto: CreateWorkScheduleDto) {
+    async create(@Req() req: Request, @Body() createWorkNormDto: CreateWorkNormDto) {
         const userId = req.user['sub'];
-        return await this.workSchedulesService.create(userId, createWorkScheduleDto);
+        return await this.workNormsService.create(userId, createWorkNormDto);
     }
 
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll() {
-        return await this.workSchedulesService.findAll();
+        return await this.workNormsService.findAll();
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.workSchedulesService.findOne({
+        return await this.workNormsService.findOne({
             where: { id },
             relations: {
                 law: true,
@@ -56,10 +56,10 @@ export class WorkSchedulesController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateWorkScheduleDto: UpdateWorkScheduleDto,
+        @Body() updateWorkNormDto: UpdateWorkNormDto,
     ) {
         const userId = req.user['sub'];
-        return await this.workSchedulesService.update(userId, id, updateWorkScheduleDto);
+        return await this.workNormsService.update(userId, id, updateWorkNormDto);
     }
 
     @Delete(':id')
@@ -67,6 +67,6 @@ export class WorkSchedulesController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
-        return await this.workSchedulesService.remove(userId, id);
+        return await this.workNormsService.remove(userId, id);
     }
 }

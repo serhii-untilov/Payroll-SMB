@@ -1,6 +1,6 @@
-import { ICreateWorkSchedule } from '@repo/shared';
+import { ICreateWorkNorm } from '@repo/shared';
 
-export class CreateWorkScheduleDto implements ICreateWorkSchedule {
+export class CreateWorkNormDto implements ICreateWorkNorm {
     id: number;
     name: string;
 

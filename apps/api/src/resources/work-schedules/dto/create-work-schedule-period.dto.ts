@@ -1,7 +1,7 @@
-import { ICreateWorkSchedulePeriod } from '@repo/shared';
-export class CreateWorkSchedulePeriodDto implements ICreateWorkSchedulePeriod {
+import { ICreateWorkNormPeriod } from '@repo/shared';
+export class CreateWorkNormPeriodDto implements ICreateWorkNormPeriod {
     id: number;
-    workScheduleId: number;
+    workNormId: number;
     day: number;
     hours: number;
 }

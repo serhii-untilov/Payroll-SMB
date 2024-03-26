@@ -2,6 +2,7 @@ import { IDepartment } from './department.interface';
 import { IJob } from './job.interface';
 import { ILogger } from './logger.interface';
 import { IPosition } from './position.interface';
+import { IWorkNorm } from './workNorm.interface';
 
 export enum WagePer {
     HOUR = 'hour',
@@ -20,10 +21,13 @@ export interface IPositionHistory extends ILogger {
     dateTo: Date;
 
     department?: IDepartment;
-    departmentId: number;
+    departmentId?: number | null;
 
     job?: IJob;
-    jobId: number;
+    jobId: number | null;
+
+    workNorm?: IWorkNorm;
+    workNormId: number | null;
 
     wage: number;
     wagePer: string;

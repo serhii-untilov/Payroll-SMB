@@ -14,10 +14,10 @@ export class Gen1709918064623 implements MigrationInterface {
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "workScheduleId" integer NOT NULL,
+                "workNormId" integer NOT NULL,
                 "day" integer NOT NULL,
                 "hours" decimal NOT NULL,
-                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workScheduleId") REFERENCES "work_schedule" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workNormId") REFERENCES "work_schedule" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
             )
         `);
         await queryRunner.query(`
@@ -30,7 +30,7 @@ export class Gen1709918064623 implements MigrationInterface {
                     "deletedUserId",
                     "version",
                     "id",
-                    "workScheduleId",
+                    "workNormId",
                     "day",
                     "hours"
                 )
@@ -42,7 +42,7 @@ export class Gen1709918064623 implements MigrationInterface {
                 "deletedUserId",
                 "version",
                 "id",
-                "workScheduleId",
+                "workNormId",
                 "day",
                 "hours"
             FROM "work_schedule_period"
@@ -601,10 +601,10 @@ export class Gen1709918064623 implements MigrationInterface {
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "workScheduleId" integer NOT NULL,
+                "workNormId" integer NOT NULL,
                 "day" integer NOT NULL,
                 "hours" decimal NOT NULL,
-                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workScheduleId") REFERENCES "work_schedule" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workNormId") REFERENCES "work_schedule" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
             )
         `);
         await queryRunner.query(`
@@ -617,7 +617,7 @@ export class Gen1709918064623 implements MigrationInterface {
                     "deletedUserId",
                     "version",
                     "id",
-                    "workScheduleId",
+                    "workNormId",
                     "day",
                     "hours"
                 )
@@ -629,7 +629,7 @@ export class Gen1709918064623 implements MigrationInterface {
                 "deletedUserId",
                 "version",
                 "id",
-                "workScheduleId",
+                "workNormId",
                 "day",
                 "hours"
             FROM "temporary_work_schedule_period"

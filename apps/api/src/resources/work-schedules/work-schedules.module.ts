@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WorkSchedulePeriod } from './entities/work-schedule-period.entity';
-import { WorkSchedule } from './entities/work-schedule.entity';
-import { WorkSchedulesController } from './work-schedules.controller';
-import { WorkSchedulesService } from './work-schedules.service';
+import { WorkNormPeriod } from './entities/work-schedule-period.entity';
+import { WorkNorm } from './entities/work-schedule.entity';
+import { WorkNormsController } from './work-schedules.controller';
+import { WorkNormsService } from './work-schedules.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([WorkSchedule, WorkSchedulePeriod])],
-    controllers: [WorkSchedulesController],
-    providers: [WorkSchedulesService],
-    exports: [WorkSchedulesService],
+    imports: [TypeOrmModule.forFeature([WorkNorm, WorkNormPeriod])],
+    controllers: [WorkNormsController],
+    providers: [WorkNormsService],
+    exports: [WorkNormsService],
 })
-export class WorkSchedulesModule {}
+export class WorkNormsModule {}

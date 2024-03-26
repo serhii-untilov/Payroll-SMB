@@ -1,24 +1,24 @@
 import { ILogger } from './logger.interface';
-import { IWorkSchedulePeriod } from './workSchedulePeriod.interface';
+import { IWorkNormPeriod } from './workNormPeriod.interface';
 
-export enum WorkScheduleType {
+export enum WorkNormType {
     WEEKLY = 'weekly', // Fixed hours per week
     PERIODIC = 'periodic', // Fixed hours in a certain period
     VARIABLE = 'variable', // Variable (hours vary every week)
 }
 
-export interface IWorkSchedule extends ILogger {
+export interface IWorkNorm extends ILogger {
     id: number;
     name: string;
     type: string;
     dateFrom?: Date;
     dateTo?: Date;
 
-    periods?: IWorkSchedulePeriod[];
+    periods?: IWorkNormPeriod[];
 }
 
-export type ICreateWorkSchedule = Omit<
-    IWorkSchedule,
+export type ICreateWorkNorm = Omit<
+    IWorkNorm,
     | 'id'
     | 'periods'
     | 'createdDate'
@@ -30,4 +30,4 @@ export type ICreateWorkSchedule = Omit<
     | 'version'
 >;
 
-export type IUpdateWorkSchedule = Partial<ICreateWorkSchedule>;
+export type IUpdateWorkNorm = Partial<ICreateWorkNorm>;

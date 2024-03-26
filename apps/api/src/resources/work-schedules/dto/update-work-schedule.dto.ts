@@ -1,3 +1,3 @@
-import { IUpdateWorkSchedule } from '@repo/shared';
+import { IUpdateWorkNorm } from '@repo/shared';
 
-export class UpdateWorkScheduleDto implements IUpdateWorkSchedule {}
+export class UpdateWorkNormDto implements IUpdateWorkNorm {}
