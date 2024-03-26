@@ -7,8 +7,6 @@ export * from './src/tokens.interface';
 export * from './src/accounting.interface';
 export * from './src/company.interface';
 export * from './src/department.interface';
-export * from './src/employeeType';
-export * from './src/employmentStatus';
 export * from './src/job.interface';
 export * from './src/paymentType.interface';
 export * from './src/workNorm.interface';

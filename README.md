@@ -144,34 +144,34 @@ openssl rand -base64 60
 
 ## Domain-specific language (DSL)
 
-| English               |Ukrainian              | Short form            | Description                     |
-|-----------------------|-----------------------|-----------------------|---------------------------------|
-|Admin                  |Адміністратор          |admin                  |                                 |
-|User                   |Користувач             |user                   |                                 |
-|Owner                  |Власник                |owner                  |                                 |
-|Employer               |Роботодавець           |employer               |                                 |
-|Supervisor             |Керівник               |supervisor             |                                 |
-|Accountant             |Бухгалтер              |accountant             |                                 |
-|Employee               |Працівник              |employee               |                                 |
-|Advisor                |Консультант            |advisor                |                                 |
-|Observer               |Спостерігач            |observer               |                                 |
-|Guest                  |Гість                  |guest                  |                                 |
-|Company                |Підприємство           |company                |                                 |
-|Tax ID                 |Податковий номер       |taxId                  |                                 |
-|Law                    |Законодавство          |law                    |                                 |
-|Accounting             |Вид обліку             |accounting             |                                 |
-|Pay period             |Обліковий період       |payPeriod              | Період за який нараховано  (1С) |
-|Calc period            |Розрахунковий період   |calcPeriod             | Період в якому розраховано (1С) |
-|Advance payment date   |Дата виплати авансу    |advanceDate            |                                 |
-|Check date             |Дата виплати зарплати  |checkDate              |                                 |
-|Position               |Штатна позиція         |position               |                                 |
-|Department             |Підрозділ              |department             |                                 |
-|Job                    |Посада                 |job                    |                                 |
-|Vacancy                |Вакансія               |vacancy                |                                 |
-|Working time norm      |Норма робочого часу    |workNorm               |                                 |
-|Working time calendar  |Виробничий календар    |workCalendar           |                                 |
-|Work Schedule          |Графік роботи          |workNorm               |                                 |
-|Work Sheet             |Табель робочого часу   |workSheet              |                                 |
+| English               |Ukrainian              | Short form            | Description                       |
+|-----------------------|-----------------------|-----------------------|-----------------------------------|
+|Admin                  |Адміністратор          |admin                  |                                   |
+|User                   |Користувач             |user                   |                                   |
+|Owner                  |Власник                |owner                  |                                   |
+|Employer               |Роботодавець           |employer               |                                   |
+|Supervisor             |Керівник               |supervisor             |                                   |
+|Accountant             |Бухгалтер              |accountant             |                                   |
+|Employee               |Працівник              |employee               |                                   |
+|Advisor                |Консультант            |advisor                |                                   |
+|Observer               |Спостерігач            |observer               |                                   |
+|Guest                  |Гість                  |guest                  |                                   |
+|Company                |Підприємство           |company                |                                   |
+|Tax ID                 |Податковий номер       |taxId                  |                                   |
+|Law                    |Законодавство          |law                    |                                   |
+|Accounting             |Вид обліку             |accounting             |                                   |
+|Pay period             |Обліковий період       |payPeriod              | Період за який нараховано  (1С)   |
+|Calc period            |Розрахунковий період   |calcPeriod             | Період в якому розраховано (1С)   |
+|Advance payment date   |Дата виплати авансу    |advanceDate            |                                   |
+|Check date             |Дата виплати зарплати  |checkDate              |                                   |
+|Position               |Штатна позиція         |position               |                                   |
+|Department             |Підрозділ              |department             |                                   |
+|Job                    |Посада                 |job                    |                                   |
+|Vacancy                |Вакансія               |vacancy                |                                   |
+|Working time norm      |Норма робочого часу    |workNorm               |                                   |
+|Working time calendar  |Виробничий календар    |workCalendar           |                                   |
+|Work Schedule          |Графік роботи          |workNorm               |                                   |
+|Work Sheet             |Табель робочого часу   |workSheet              |                                   |
 
 ## References
 
