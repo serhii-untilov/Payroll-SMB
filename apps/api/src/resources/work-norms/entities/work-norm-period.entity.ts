@@ -1,6 +1,6 @@
 import { IWorkNorm, IWorkNormPeriod } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
-import { WorkNorm } from './work-schedule.entity';
+import { WorkNorm } from './work-norm.entity';
 import { Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn, Entity } from 'typeorm';
 
 @Entity()

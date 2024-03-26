@@ -5,7 +5,7 @@ export class Gen1709918064623 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            CREATE TABLE "temporary_work_schedule_period" (
+            CREATE TABLE "temporary_work_norm_period" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
@@ -17,11 +17,11 @@ export class Gen1709918064623 implements MigrationInterface {
                 "workNormId" integer NOT NULL,
                 "day" integer NOT NULL,
                 "hours" decimal NOT NULL,
-                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workNormId") REFERENCES "work_schedule" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workNormId") REFERENCES "work_norm" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
             )
         `);
         await queryRunner.query(`
-            INSERT INTO "temporary_work_schedule_period"(
+            INSERT INTO "temporary_work_norm_period"(
                     "createdDate",
                     "createdUserId",
                     "updatedDate",
@@ -45,17 +45,17 @@ export class Gen1709918064623 implements MigrationInterface {
                 "workNormId",
                 "day",
                 "hours"
-            FROM "work_schedule_period"
+            FROM "work_norm_period"
         `);
         await queryRunner.query(`
-            DROP TABLE "work_schedule_period"
+            DROP TABLE "work_norm_period"
         `);
         await queryRunner.query(`
-            ALTER TABLE "temporary_work_schedule_period"
-                RENAME TO "work_schedule_period"
+            ALTER TABLE "temporary_work_norm_period"
+                RENAME TO "work_norm_period"
         `);
         await queryRunner.query(`
-            CREATE TABLE "temporary_work_schedule" (
+            CREATE TABLE "temporary_work_norm" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
@@ -71,7 +71,7 @@ export class Gen1709918064623 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
-            INSERT INTO "temporary_work_schedule"(
+            INSERT INTO "temporary_work_norm"(
                     "createdDate",
                     "createdUserId",
                     "updatedDate",
@@ -97,14 +97,14 @@ export class Gen1709918064623 implements MigrationInterface {
                 "type",
                 "dateFrom",
                 "dateTo"
-            FROM "work_schedule"
+            FROM "work_norm"
         `);
         await queryRunner.query(`
-            DROP TABLE "work_schedule"
+            DROP TABLE "work_norm"
         `);
         await queryRunner.query(`
-            ALTER TABLE "temporary_work_schedule"
-                RENAME TO "work_schedule"
+            ALTER TABLE "temporary_work_norm"
+                RENAME TO "work_norm"
         `);
         await queryRunner.query(`
             CREATE TABLE "temporary_department" (
@@ -536,11 +536,11 @@ export class Gen1709918064623 implements MigrationInterface {
             DROP TABLE "temporary_department"
         `);
         await queryRunner.query(`
-            ALTER TABLE "work_schedule"
-                RENAME TO "temporary_work_schedule"
+            ALTER TABLE "work_norm"
+                RENAME TO "temporary_work_norm"
         `);
         await queryRunner.query(`
-            CREATE TABLE "work_schedule" (
+            CREATE TABLE "work_norm" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
@@ -556,7 +556,7 @@ export class Gen1709918064623 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
-            INSERT INTO "work_schedule"(
+            INSERT INTO "work_norm"(
                     "createdDate",
                     "createdUserId",
                     "updatedDate",
@@ -582,17 +582,17 @@ export class Gen1709918064623 implements MigrationInterface {
                 "type",
                 "dateFrom",
                 "dateTo"
-            FROM "temporary_work_schedule"
+            FROM "temporary_work_norm"
         `);
         await queryRunner.query(`
-            DROP TABLE "temporary_work_schedule"
+            DROP TABLE "temporary_work_norm"
         `);
         await queryRunner.query(`
-            ALTER TABLE "work_schedule_period"
-                RENAME TO "temporary_work_schedule_period"
+            ALTER TABLE "work_norm_period"
+                RENAME TO "temporary_work_norm_period"
         `);
         await queryRunner.query(`
-            CREATE TABLE "work_schedule_period" (
+            CREATE TABLE "work_norm_period" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
@@ -604,11 +604,11 @@ export class Gen1709918064623 implements MigrationInterface {
                 "workNormId" integer NOT NULL,
                 "day" integer NOT NULL,
                 "hours" decimal NOT NULL,
-                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workNormId") REFERENCES "work_schedule" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workNormId") REFERENCES "work_norm" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
             )
         `);
         await queryRunner.query(`
-            INSERT INTO "work_schedule_period"(
+            INSERT INTO "work_norm_period"(
                     "createdDate",
                     "createdUserId",
                     "updatedDate",
@@ -632,10 +632,10 @@ export class Gen1709918064623 implements MigrationInterface {
                 "workNormId",
                 "day",
                 "hours"
-            FROM "temporary_work_schedule_period"
+            FROM "temporary_work_norm_period"
         `);
         await queryRunner.query(`
-            DROP TABLE "temporary_work_schedule_period"
+            DROP TABLE "temporary_work_norm_period"
         `);
     }
 }

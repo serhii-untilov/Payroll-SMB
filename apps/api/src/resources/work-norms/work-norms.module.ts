@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WorkNormPeriod } from './entities/work-schedule-period.entity';
-import { WorkNorm } from './entities/work-schedule.entity';
-import { WorkNormsController } from './work-schedules.controller';
-import { WorkNormsService } from './work-schedules.service';
+import { WorkNormPeriod } from './entities/work-norm-period.entity';
+import { WorkNorm } from './entities/work-norm.entity';
+import { WorkNormsController } from './work-norms.controller';
+import { WorkNormsService } from './work-norms.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([WorkNorm, WorkNormPeriod])],

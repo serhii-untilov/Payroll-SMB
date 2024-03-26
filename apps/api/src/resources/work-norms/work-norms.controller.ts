@@ -14,9 +14,9 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { WorkNormsService } from './work-schedules.service';
-import { CreateWorkNormDto } from './dto/create-work-schedule.dto';
-import { UpdateWorkNormDto } from './dto/update-work-schedule.dto';
+import { WorkNormsService } from './work-norms.service';
+import { CreateWorkNormDto } from './dto/create-work-norm.dto';
+import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 
 @Controller('work-schedules')
 export class WorkNormsController {

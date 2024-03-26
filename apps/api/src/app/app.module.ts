@@ -19,7 +19,7 @@ import { AppService } from './app.service';
 import { DepartmentsModule } from '../resources/departments/departments.module';
 import { JobsModule } from 'src/resources/jobs/jobs.module';
 import { PaymentTypesModule } from '../resources/payment-types/payment-types.module';
-import { WorkNormsModule } from '../resources/work-schedules/work-schedules.module';
+import { WorkNormsModule } from '../resources/work-norms/work-norms.module';
 
 @Module({
     imports: [

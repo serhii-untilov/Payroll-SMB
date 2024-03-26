@@ -1,17 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WorkNormsController } from './work-schedules.controller';
-import { WorkNormsService } from './work-schedules.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { WorkNorm } from './entities/work-schedule.entity';
-import { repositoryMockFactory } from '@repo/testing';
+import { MockType, repositoryMockFactory } from '@repo/testing';
+import { Repository } from 'typeorm';
+import { WorkNorm } from './entities/work-norm.entity';
+import { WorkNormsService } from './work-norms.service';
 
-describe('WorkNormsController', () => {
-    let controller: WorkNormsController;
+describe('WorkNormsService', () => {
     let service: WorkNormsService;
+    let repoMock: MockType<Repository<WorkNorm>>;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [WorkNormsController],
             providers: [
                 WorkNormsService,
                 {
@@ -21,12 +20,12 @@ describe('WorkNormsController', () => {
             ],
         }).compile();
 
-        controller = module.get<WorkNormsController>(WorkNormsController);
         service = module.get<WorkNormsService>(WorkNormsService);
+        repoMock = module.get(getRepositoryToken(WorkNorm));
     });
 
     it('should be defined', () => {
-        expect(controller).toBeDefined();
         expect(service).toBeDefined();
+        expect(repoMock).toBeTruthy();
     });
 });

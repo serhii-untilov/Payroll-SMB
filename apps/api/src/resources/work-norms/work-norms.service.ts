@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateWorkNormDto } from './dto/create-work-schedule.dto';
-import { UpdateWorkNormDto } from './dto/update-work-schedule.dto';
-import { WorkNorm } from './entities/work-schedule.entity';
+import { CreateWorkNormDto } from './dto/create-work-norm.dto';
+import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
+import { WorkNorm } from './entities/work-norm.entity';
 
 @Injectable()
 export class WorkNormsService {
