@@ -1,29 +1,26 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Grid, Paper } from '@mui/material';
+import { Grid } from '@mui/material';
 import { IAccounting, ILaw } from '@repo/shared';
+import { maxDate, minDate, monthBegin, monthEnd } from '@repo/utils';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { Button } from '../../components/layout/Button';
 import { FormInputDropdown } from '../../components/form/FormInputDropdown';
 import { FormTextField } from '../../components/form/FormTextField';
+import { Button } from '../../components/layout/Button';
 import PageLayout from '../../components/layout/PageLayout';
 import { Loading } from '../../components/utility/Loading';
+import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { getAccountingList } from '../../services/accounting.service';
 import { createCompany, getCompany, updateCompany } from '../../services/company.service';
 import { getLawList } from '../../services/law.service';
 import { getDirtyValues } from '../../services/utils';
-import * as _ from 'lodash';
-import useAppContext from '../../hooks/useAppContext';
 import CompanyDetails from './CompanyDetails';
-import { CompanyDepartments } from './CompanyDepartments';
-import { maxDate, minDate, monthBegin, monthEnd } from '@repo/utils';
 
 const formSchema = yup.object().shape({
     id: yup.number().nullable(),

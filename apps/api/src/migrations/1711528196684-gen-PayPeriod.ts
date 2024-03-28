@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Gen1709918064623 implements MigrationInterface {
-    name = 'Gen1709918064623';
+export class Gen1711528196684 implements MigrationInterface {
+    name = 'Gen1711528196684';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -16,8 +16,79 @@ export class Gen1709918064623 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "workNormId" integer NOT NULL,
                 "day" integer NOT NULL,
-                "hours" decimal NOT NULL,
-                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workNormId") REFERENCES "work_norm" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+                "hours" decimal NOT NULL
+            )
+        `);
+        await queryRunner.query(`
+            INSERT INTO "temporary_work_norm_period"(
+                    "createdDate",
+                    "createdUserId",
+                    "updatedDate",
+                    "updatedUserId",
+                    "deletedDate",
+                    "deletedUserId",
+                    "version",
+                    "id",
+                    "workNormId",
+                    "day",
+                    "hours"
+                )
+            SELECT "createdDate",
+                "createdUserId",
+                "updatedDate",
+                "updatedUserId",
+                "deletedDate",
+                "deletedUserId",
+                "version",
+                "id",
+                "workNormId",
+                "day",
+                "hours"
+            FROM "work_norm_period"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "work_norm_period"
+        `);
+        await queryRunner.query(`
+            ALTER TABLE "temporary_work_norm_period"
+                RENAME TO "work_norm_period"
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "pay_period" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer NOT NULL,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer NOT NULL,
+                "deletedDate" datetime,
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "companyId" integer NOT NULL,
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
+                "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
+                "state" varchar(10) NOT NULL DEFAULT ('opened'),
+                "inBalance" decimal(15, 2) NOT NULL DEFAULT (0),
+                "accrual" decimal(15, 2) NOT NULL DEFAULT (0),
+                "deduction" decimal(15, 2) NOT NULL DEFAULT (0),
+                "tax" decimal(15, 2) NOT NULL DEFAULT (0),
+                "netPay" decimal(15, 2) NOT NULL DEFAULT (0),
+                "payment" decimal(15, 2) NOT NULL DEFAULT (0),
+                "outBalance" decimal(15, 2) NOT NULL DEFAULT (0)
+            )
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "temporary_work_norm_period" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer NOT NULL,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer NOT NULL,
+                "deletedDate" datetime,
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "workNormId" integer NOT NULL,
+                "day" integer NOT NULL,
+                "hours" decimal NOT NULL
             )
         `);
         await queryRunner.query(`
@@ -57,9 +128,9 @@ export class Gen1709918064623 implements MigrationInterface {
         await queryRunner.query(`
             CREATE TABLE "temporary_work_norm" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "createdUserId" integer,
+                "createdUserId" integer NOT NULL,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedUserId" integer,
+                "updatedUserId" integer NOT NULL,
                 "deletedDate" datetime,
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
@@ -107,11 +178,60 @@ export class Gen1709918064623 implements MigrationInterface {
                 RENAME TO "work_norm"
         `);
         await queryRunner.query(`
+            CREATE TABLE "temporary_payment_type" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer NOT NULL,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer NOT NULL,
+                "deletedDate" datetime,
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "name" varchar(50) NOT NULL,
+                "paymentGroup" varchar(30) NOT NULL,
+                "paymentMethod" varchar(30) NOT NULL
+            )
+        `);
+        await queryRunner.query(`
+            INSERT INTO "temporary_payment_type"(
+                    "createdDate",
+                    "createdUserId",
+                    "updatedDate",
+                    "updatedUserId",
+                    "deletedDate",
+                    "deletedUserId",
+                    "version",
+                    "id",
+                    "name",
+                    "paymentGroup",
+                    "paymentMethod"
+                )
+            SELECT "createdDate",
+                "createdUserId",
+                "updatedDate",
+                "updatedUserId",
+                "deletedDate",
+                "deletedUserId",
+                "version",
+                "id",
+                "name",
+                "paymentGroup",
+                "paymentMethod"
+            FROM "payment_type"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "payment_type"
+        `);
+        await queryRunner.query(`
+            ALTER TABLE "temporary_payment_type"
+                RENAME TO "payment_type"
+        `);
+        await queryRunner.query(`
             CREATE TABLE "temporary_department" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "createdUserId" integer,
+                "createdUserId" integer NOT NULL,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedUserId" integer,
+                "updatedUserId" integer NOT NULL,
                 "deletedDate" datetime,
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
@@ -121,8 +241,8 @@ export class Gen1709918064623 implements MigrationInterface {
                 "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
                 "parentDepartmentId" integer,
-                CONSTRAINT "FK_bbe097728367bd569b5db49db90" FOREIGN KEY ("parentDepartmentId") REFERENCES "department" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
-                CONSTRAINT "FK_1c9f0159b4ae69008bd356bb1ce" FOREIGN KEY ("companyId") REFERENCES "company" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+                CONSTRAINT "FK_1c9f0159b4ae69008bd356bb1ce" FOREIGN KEY ("companyId") REFERENCES "company" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
+                CONSTRAINT "FK_bbe097728367bd569b5db49db90" FOREIGN KEY ("parentDepartmentId") REFERENCES "department" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
             )
         `);
         await queryRunner.query(`
@@ -166,9 +286,9 @@ export class Gen1709918064623 implements MigrationInterface {
         await queryRunner.query(`
             CREATE TABLE "temporary_company" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "createdUserId" integer,
+                "createdUserId" integer NOT NULL,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedUserId" integer,
+                "updatedUserId" integer NOT NULL,
                 "deletedDate" datetime,
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
@@ -228,60 +348,11 @@ export class Gen1709918064623 implements MigrationInterface {
                 RENAME TO "company"
         `);
         await queryRunner.query(`
-            CREATE TABLE "temporary_payment_type" (
-                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "createdUserId" integer,
-                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedUserId" integer,
-                "deletedDate" datetime,
-                "deletedUserId" integer,
-                "version" integer NOT NULL,
-                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "name" varchar(50) NOT NULL,
-                "paymentGroup" varchar(30) NOT NULL,
-                "paymentMethod" varchar(30) NOT NULL
-            )
-        `);
-        await queryRunner.query(`
-            INSERT INTO "temporary_payment_type"(
-                    "createdDate",
-                    "createdUserId",
-                    "updatedDate",
-                    "updatedUserId",
-                    "deletedDate",
-                    "deletedUserId",
-                    "version",
-                    "id",
-                    "name",
-                    "paymentGroup",
-                    "paymentMethod"
-                )
-            SELECT "createdDate",
-                "createdUserId",
-                "updatedDate",
-                "updatedUserId",
-                "deletedDate",
-                "deletedUserId",
-                "version",
-                "id",
-                "name",
-                "paymentGroup",
-                "paymentMethod"
-            FROM "payment_type"
-        `);
-        await queryRunner.query(`
-            DROP TABLE "payment_type"
-        `);
-        await queryRunner.query(`
-            ALTER TABLE "temporary_payment_type"
-                RENAME TO "payment_type"
-        `);
-        await queryRunner.query(`
             CREATE TABLE "temporary_job" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "createdUserId" integer,
+                "createdUserId" integer NOT NULL,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedUserId" integer,
+                "updatedUserId" integer NOT NULL,
                 "deletedDate" datetime,
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
@@ -319,9 +390,255 @@ export class Gen1709918064623 implements MigrationInterface {
             ALTER TABLE "temporary_job"
                 RENAME TO "job"
         `);
+        await queryRunner.query(`
+            CREATE TABLE "temporary_work_norm_period" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer NOT NULL,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer NOT NULL,
+                "deletedDate" datetime,
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "workNormId" integer NOT NULL,
+                "day" integer NOT NULL,
+                "hours" decimal NOT NULL,
+                CONSTRAINT "FK_eae1a1e0e6e8e62aa1f8875ad21" FOREIGN KEY ("workNormId") REFERENCES "work_norm" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            )
+        `);
+        await queryRunner.query(`
+            INSERT INTO "temporary_work_norm_period"(
+                    "createdDate",
+                    "createdUserId",
+                    "updatedDate",
+                    "updatedUserId",
+                    "deletedDate",
+                    "deletedUserId",
+                    "version",
+                    "id",
+                    "workNormId",
+                    "day",
+                    "hours"
+                )
+            SELECT "createdDate",
+                "createdUserId",
+                "updatedDate",
+                "updatedUserId",
+                "deletedDate",
+                "deletedUserId",
+                "version",
+                "id",
+                "workNormId",
+                "day",
+                "hours"
+            FROM "work_norm_period"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "work_norm_period"
+        `);
+        await queryRunner.query(`
+            ALTER TABLE "temporary_work_norm_period"
+                RENAME TO "work_norm_period"
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "temporary_pay_period" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer NOT NULL,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer NOT NULL,
+                "deletedDate" datetime,
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "companyId" integer NOT NULL,
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
+                "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
+                "state" varchar(10) NOT NULL DEFAULT ('opened'),
+                "inBalance" decimal(15, 2) NOT NULL DEFAULT (0),
+                "accrual" decimal(15, 2) NOT NULL DEFAULT (0),
+                "deduction" decimal(15, 2) NOT NULL DEFAULT (0),
+                "tax" decimal(15, 2) NOT NULL DEFAULT (0),
+                "netPay" decimal(15, 2) NOT NULL DEFAULT (0),
+                "payment" decimal(15, 2) NOT NULL DEFAULT (0),
+                "outBalance" decimal(15, 2) NOT NULL DEFAULT (0),
+                CONSTRAINT "FK_584ecbca8afc0629d4283e63d6f" FOREIGN KEY ("companyId") REFERENCES "company" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            )
+        `);
+        await queryRunner.query(`
+            INSERT INTO "temporary_pay_period"(
+                    "createdDate",
+                    "createdUserId",
+                    "updatedDate",
+                    "updatedUserId",
+                    "deletedDate",
+                    "deletedUserId",
+                    "version",
+                    "id",
+                    "companyId",
+                    "dateFrom",
+                    "dateTo",
+                    "state",
+                    "inBalance",
+                    "accrual",
+                    "deduction",
+                    "tax",
+                    "netPay",
+                    "payment",
+                    "outBalance"
+                )
+            SELECT "createdDate",
+                "createdUserId",
+                "updatedDate",
+                "updatedUserId",
+                "deletedDate",
+                "deletedUserId",
+                "version",
+                "id",
+                "companyId",
+                "dateFrom",
+                "dateTo",
+                "state",
+                "inBalance",
+                "accrual",
+                "deduction",
+                "tax",
+                "netPay",
+                "payment",
+                "outBalance"
+            FROM "pay_period"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "pay_period"
+        `);
+        await queryRunner.query(`
+            ALTER TABLE "temporary_pay_period"
+                RENAME TO "pay_period"
+        `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`
+            ALTER TABLE "pay_period"
+                RENAME TO "temporary_pay_period"
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "pay_period" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer NOT NULL,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer NOT NULL,
+                "deletedDate" datetime,
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "companyId" integer NOT NULL,
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
+                "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
+                "state" varchar(10) NOT NULL DEFAULT ('opened'),
+                "inBalance" decimal(15, 2) NOT NULL DEFAULT (0),
+                "accrual" decimal(15, 2) NOT NULL DEFAULT (0),
+                "deduction" decimal(15, 2) NOT NULL DEFAULT (0),
+                "tax" decimal(15, 2) NOT NULL DEFAULT (0),
+                "netPay" decimal(15, 2) NOT NULL DEFAULT (0),
+                "payment" decimal(15, 2) NOT NULL DEFAULT (0),
+                "outBalance" decimal(15, 2) NOT NULL DEFAULT (0)
+            )
+        `);
+        await queryRunner.query(`
+            INSERT INTO "pay_period"(
+                    "createdDate",
+                    "createdUserId",
+                    "updatedDate",
+                    "updatedUserId",
+                    "deletedDate",
+                    "deletedUserId",
+                    "version",
+                    "id",
+                    "companyId",
+                    "dateFrom",
+                    "dateTo",
+                    "state",
+                    "inBalance",
+                    "accrual",
+                    "deduction",
+                    "tax",
+                    "netPay",
+                    "payment",
+                    "outBalance"
+                )
+            SELECT "createdDate",
+                "createdUserId",
+                "updatedDate",
+                "updatedUserId",
+                "deletedDate",
+                "deletedUserId",
+                "version",
+                "id",
+                "companyId",
+                "dateFrom",
+                "dateTo",
+                "state",
+                "inBalance",
+                "accrual",
+                "deduction",
+                "tax",
+                "netPay",
+                "payment",
+                "outBalance"
+            FROM "temporary_pay_period"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "temporary_pay_period"
+        `);
+        await queryRunner.query(`
+            ALTER TABLE "work_norm_period"
+                RENAME TO "temporary_work_norm_period"
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "work_norm_period" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer NOT NULL,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer NOT NULL,
+                "deletedDate" datetime,
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "workNormId" integer NOT NULL,
+                "day" integer NOT NULL,
+                "hours" decimal NOT NULL
+            )
+        `);
+        await queryRunner.query(`
+            INSERT INTO "work_norm_period"(
+                    "createdDate",
+                    "createdUserId",
+                    "updatedDate",
+                    "updatedUserId",
+                    "deletedDate",
+                    "deletedUserId",
+                    "version",
+                    "id",
+                    "workNormId",
+                    "day",
+                    "hours"
+                )
+            SELECT "createdDate",
+                "createdUserId",
+                "updatedDate",
+                "updatedUserId",
+                "deletedDate",
+                "deletedUserId",
+                "version",
+                "id",
+                "workNormId",
+                "day",
+                "hours"
+            FROM "temporary_work_norm_period"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "temporary_work_norm_period"
+        `);
         await queryRunner.query(`
             ALTER TABLE "job"
                 RENAME TO "temporary_job"
@@ -332,7 +649,7 @@ export class Gen1709918064623 implements MigrationInterface {
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "updatedUserId" integer,
-                "deletedDate" datetime DEFAULT ('9999-12-31'),
+                "deletedDate" datetime,
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -366,55 +683,6 @@ export class Gen1709918064623 implements MigrationInterface {
             DROP TABLE "temporary_job"
         `);
         await queryRunner.query(`
-            ALTER TABLE "payment_type"
-                RENAME TO "temporary_payment_type"
-        `);
-        await queryRunner.query(`
-            CREATE TABLE "payment_type" (
-                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "createdUserId" integer,
-                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
-                "updatedUserId" integer,
-                "deletedDate" datetime DEFAULT ('9999-12-31'),
-                "deletedUserId" integer,
-                "version" integer NOT NULL,
-                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "name" varchar(50) NOT NULL,
-                "paymentGroup" varchar(30) NOT NULL,
-                "paymentMethod" varchar(30) NOT NULL
-            )
-        `);
-        await queryRunner.query(`
-            INSERT INTO "payment_type"(
-                    "createdDate",
-                    "createdUserId",
-                    "updatedDate",
-                    "updatedUserId",
-                    "deletedDate",
-                    "deletedUserId",
-                    "version",
-                    "id",
-                    "name",
-                    "paymentGroup",
-                    "paymentMethod"
-                )
-            SELECT "createdDate",
-                "createdUserId",
-                "updatedDate",
-                "updatedUserId",
-                "deletedDate",
-                "deletedUserId",
-                "version",
-                "id",
-                "name",
-                "paymentGroup",
-                "paymentMethod"
-            FROM "temporary_payment_type"
-        `);
-        await queryRunner.query(`
-            DROP TABLE "temporary_payment_type"
-        `);
-        await queryRunner.query(`
             ALTER TABLE "company"
                 RENAME TO "temporary_company"
         `);
@@ -424,7 +692,7 @@ export class Gen1709918064623 implements MigrationInterface {
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "updatedUserId" integer,
-                "deletedDate" datetime DEFAULT ('9999-12-31'),
+                "deletedDate" datetime,
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -488,7 +756,7 @@ export class Gen1709918064623 implements MigrationInterface {
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "updatedUserId" integer,
-                "deletedDate" datetime DEFAULT ('9999-12-31'),
+                "deletedDate" datetime,
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -497,8 +765,8 @@ export class Gen1709918064623 implements MigrationInterface {
                 "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
                 "parentDepartmentId" integer,
-                CONSTRAINT "FK_bbe097728367bd569b5db49db90" FOREIGN KEY ("parentDepartmentId") REFERENCES "department" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
-                CONSTRAINT "FK_1c9f0159b4ae69008bd356bb1ce" FOREIGN KEY ("companyId") REFERENCES "company" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+                CONSTRAINT "FK_1c9f0159b4ae69008bd356bb1ce" FOREIGN KEY ("companyId") REFERENCES "company" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
+                CONSTRAINT "FK_bbe097728367bd569b5db49db90" FOREIGN KEY ("parentDepartmentId") REFERENCES "department" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
             )
         `);
         await queryRunner.query(`
@@ -536,6 +804,55 @@ export class Gen1709918064623 implements MigrationInterface {
             DROP TABLE "temporary_department"
         `);
         await queryRunner.query(`
+            ALTER TABLE "payment_type"
+                RENAME TO "temporary_payment_type"
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "payment_type" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer,
+                "deletedDate" datetime,
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "name" varchar(50) NOT NULL,
+                "paymentGroup" varchar(30) NOT NULL,
+                "paymentMethod" varchar(30) NOT NULL
+            )
+        `);
+        await queryRunner.query(`
+            INSERT INTO "payment_type"(
+                    "createdDate",
+                    "createdUserId",
+                    "updatedDate",
+                    "updatedUserId",
+                    "deletedDate",
+                    "deletedUserId",
+                    "version",
+                    "id",
+                    "name",
+                    "paymentGroup",
+                    "paymentMethod"
+                )
+            SELECT "createdDate",
+                "createdUserId",
+                "updatedDate",
+                "updatedUserId",
+                "deletedDate",
+                "deletedUserId",
+                "version",
+                "id",
+                "name",
+                "paymentGroup",
+                "paymentMethod"
+            FROM "temporary_payment_type"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "temporary_payment_type"
+        `);
+        await queryRunner.query(`
             ALTER TABLE "work_norm"
                 RENAME TO "temporary_work_norm"
         `);
@@ -545,7 +862,7 @@ export class Gen1709918064623 implements MigrationInterface {
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "updatedUserId" integer,
-                "deletedDate" datetime DEFAULT ('9999-12-31'),
+                "deletedDate" datetime,
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -597,7 +914,59 @@ export class Gen1709918064623 implements MigrationInterface {
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "updatedUserId" integer,
-                "deletedDate" datetime DEFAULT ('9999-12-31'),
+                "deletedDate" datetime,
+                "deletedUserId" integer,
+                "version" integer NOT NULL,
+                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                "workNormId" integer NOT NULL,
+                "day" integer NOT NULL,
+                "hours" decimal NOT NULL
+            )
+        `);
+        await queryRunner.query(`
+            INSERT INTO "work_norm_period"(
+                    "createdDate",
+                    "createdUserId",
+                    "updatedDate",
+                    "updatedUserId",
+                    "deletedDate",
+                    "deletedUserId",
+                    "version",
+                    "id",
+                    "workNormId",
+                    "day",
+                    "hours"
+                )
+            SELECT "createdDate",
+                "createdUserId",
+                "updatedDate",
+                "updatedUserId",
+                "deletedDate",
+                "deletedUserId",
+                "version",
+                "id",
+                "workNormId",
+                "day",
+                "hours"
+            FROM "temporary_work_norm_period"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "temporary_work_norm_period"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "pay_period"
+        `);
+        await queryRunner.query(`
+            ALTER TABLE "work_norm_period"
+                RENAME TO "temporary_work_norm_period"
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "work_norm_period" (
+                "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "createdUserId" integer,
+                "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
+                "updatedUserId" integer,
+                "deletedDate" datetime,
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,

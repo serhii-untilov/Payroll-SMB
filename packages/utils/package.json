@@ -4,7 +4,8 @@
     "license": "MIT",
     "private": true,
     "files": [
-        "./dist/index.js"
+        "./dist/index.js",
+        "./dist/src/date.js"
     ],
     "types": "index.ts",
     "scripts": {

@@ -47,11 +47,15 @@ export class PayPeriodsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(
+        @Req() req: Request,
         @Query('companyId', ParseIntPipe) companyId: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
         @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
     ) {
+        const userId = req.user['sub'];
         return await this.payPeriodsService.findAll(
+            userId,
+            companyId,
             fullFieldList
                 ? { companyId, relations: { company: relations } }
                 : { companyId, relations: { company: relations }, ...defaultFieldList },

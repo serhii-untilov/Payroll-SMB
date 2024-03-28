@@ -31,7 +31,7 @@ export class Gen1709910787182 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "name" varchar(50) NOT NULL,
                 "type" varchar(30) NOT NULL,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31')
             )
         `);
@@ -74,7 +74,7 @@ export class Gen1709910787182 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "name" varchar(50) NOT NULL,
                 "companyId" integer NOT NULL,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
                 "parentDepartmentId" integer
             )
@@ -100,10 +100,10 @@ export class Gen1709910787182 implements MigrationInterface {
                 "taxId" varchar(15) NOT NULL DEFAULT (''),
                 "lawId" integer,
                 "accountingId" integer,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
-                "payPeriod" date NOT NULL DEFAULT ('1970-01-01'),
-                "checkDate" date NOT NULL DEFAULT ('1970-01-01')
+                "payPeriod" date NOT NULL DEFAULT ('1900-01-01'),
+                "checkDate" date NOT NULL DEFAULT ('1900-01-01')
             )
         `);
         await queryRunner.query(`
@@ -205,7 +205,7 @@ export class Gen1709910787182 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "name" varchar(50) NOT NULL,
                 "companyId" integer NOT NULL,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
                 "parentDepartmentId" integer,
                 CONSTRAINT "FK_1c9f0159b4ae69008bd356bb1ce" FOREIGN KEY ("companyId") REFERENCES "company" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -269,7 +269,7 @@ export class Gen1709910787182 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "name" varchar(50) NOT NULL,
                 "companyId" integer NOT NULL,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
                 "parentDepartmentId" integer
             )

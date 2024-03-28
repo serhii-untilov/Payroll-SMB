@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PayPeriodsService } from './pay-periods.service';
-import { PayPeriod } from './entities/pay-period.entity';
-import { Repository } from 'typeorm';
-import { MockType, repositoryMockFactory } from '@repo/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../users/entities/user.entity';
-import { Company } from '../companies/entities/company.entity';
+import { MockType, repositoryMockFactory } from '@repo/testing';
+import { Repository } from 'typeorm';
+import { PayPeriod } from './entities/pay-period.entity';
+import { PayPeriodsService } from './pay-periods.service';
+import { UsersService } from '../users/users.service';
+import { CompaniesService } from '../companies/companies.service';
+import { createMock } from '@golevelup/ts-jest';
 
 describe('PayPeriodsService', () => {
     let service: PayPeriodsService;
@@ -19,14 +20,8 @@ describe('PayPeriodsService', () => {
                     provide: getRepositoryToken(PayPeriod),
                     useFactory: repositoryMockFactory,
                 },
-                {
-                    provide: getRepositoryToken(User),
-                    useFactory: repositoryMockFactory,
-                },
-                {
-                    provide: getRepositoryToken(Company),
-                    useFactory: repositoryMockFactory,
-                },
+                { provide: UsersService, useValue: createMock<UsersService>() },
+                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
             ],
         }).compile();
 

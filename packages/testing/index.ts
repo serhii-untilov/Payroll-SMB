@@ -4,6 +4,7 @@ export * from './src/department.factory';
 export * from './src/job.factory';
 export * from './src/law.factory';
 export * from './src/mock-type';
-export * from './src/repo-mock.factory';
+export * from './src/repositoryMock.factory';
 export * from './src/role.factory';
 export * from './src/user.factory';
+export * from './src/serviceMock.factory';

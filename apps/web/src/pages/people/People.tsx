@@ -8,7 +8,7 @@ import { CompanyAccounts } from '../company/CompanyAccounts';
 import { CompanyDepartments } from '../company/CompanyDepartments';
 import { CompanyManagers } from '../company/CompanyManagers';
 import useAppContext from '../../hooks/useAppContext';
-import { PayPeriod } from '../../components/layout/PayPeriod';
+import { SelectPayPeriod } from '../../components/layout/SelectPayPeriod';
 
 export default function People() {
     const { company } = useAppContext();
@@ -34,7 +34,7 @@ export default function People() {
                     }}
                 >
                     <Box>
-                        <PayPeriod />
+                        <SelectPayPeriod />
                     </Box>
                     <Box
                     // sx={{ borderBottom: 0.5, borderColor: 'divider' }}

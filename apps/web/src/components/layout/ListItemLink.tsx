@@ -1,4 +1,4 @@
-import { ListItem } from '@mui/material';
+import { ListItem, ListItemProps } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
@@ -7,7 +7,7 @@ import useAppContext from '../../hooks/useAppContext';
 import { Tooltip } from './Tooltip';
 import { grey } from '@mui/material/colors';
 
-interface ListItemLinkProps {
+interface ListItemLinkProps extends ListItemProps {
     icon?: React.ReactElement;
     primary: string;
     to: string;

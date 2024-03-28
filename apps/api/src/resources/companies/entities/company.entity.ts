@@ -1,4 +1,4 @@
-import { ICompany } from '@repo/shared';
+import { ICompany, PaymentSchedule } from '@repo/shared';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Accounting } from '../../accounting/entities/accounting.entity';
@@ -32,16 +32,19 @@ export class Company extends Logger implements ICompany {
     @Column({ type: 'integer', nullable: true })
     accountingId: number;
 
-    @Column({ type: 'date', default: '1970-01-01' })
+    @Column({ type: 'varchar', length: 10, default: PaymentSchedule.LAST_DAY })
+    paymentSchedule: string;
+
+    @Column({ type: 'date', default: '1900-01-01' })
     dateFrom?: Date | null;
 
     @Column({ type: 'date', default: '9999-12-31' })
     dateTo?: Date | null;
 
-    @Column({ type: 'date', default: '1970-01-01' })
+    @Column({ type: 'date', default: '1900-01-01' })
     payPeriod?: Date | null;
 
-    @Column({ type: 'date', default: '1970-01-01' })
+    @Column({ type: 'date', default: '1900-01-01' })
     checkDate?: Date | null;
 
     @OneToMany(() => Department, (department) => department.company)

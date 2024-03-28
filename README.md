@@ -23,6 +23,8 @@ npm i --workspace @repo/api --save @nestjs/passport @nestjs/jwt passport-jwt
 npm i --workspace @repo/api --save-dev @types/passport-jwt
 npm i --workspace @repo/api --save dotenv
 npm i --workspace @repo/api --save-dev typescript jest ts-jest @types/jest
+npm i --workspace @repo/api --save date-fns
+npm i --workspace @repo/api --save-dev @golevelup/ts-jest
 
 # Init "web" application for front-end
 npm i --workspace @repo/web --save react-query
@@ -44,6 +46,8 @@ npm i --workspace @repo/web --save @hookform/resolvers yup
 npm i --workspace @repo/web --save material-ui-popup-state
 npm i --workspace @repo/web --save i18next-http-backend
 npm i --workspace @repo/web --save-dev rollup-plugin-visualizer
+npm i --workspace @repo/web --save react-error-boundary
+npm i --workspace @repo/web --save date-fns
 
 # Init "shared" library for common types and interfaces
 mkdir packages/shared
@@ -145,44 +149,44 @@ openssl rand -base64 60
 
 ## Domain-specific language (DSL)
 
-| English               |Ukrainian              | Short form            | Description                                                      |
-|-----------------------|-----------------------|-----------------------|------------------------------------------------------------------|
-|Admin                  |Адміністратор          |admin                  |                                                                  |
-|User                   |Користувач             |user                   |                                                                  |
-|Owner                  |Власник                |owner                  |                                                                  |
-|Employer               |Роботодавець           |employer               |                                                                  |
-|Supervisor             |Керівник               |supervisor             |                                                                  |
-|Accountant             |Бухгалтер              |accountant             |                                                                  |
-|Collaborator           |Співробітник           |collaborator           |Помічник, асистент (assistant)                                    |
-|Employee               |Працівник              |employee               |Штатний працівник підприємства, співробітник                      |
-|Contractor             |Підрядник              |contractor             |Позаштатний працівник, тимчасовий, не постійний, на разову роботу |
-|Advisor                |Консультант            |advisor                |                                                                  |
-|Observer               |Спостерігач            |observer               |                                                                  |
-|Guest                  |Гість                  |guest                  |                                                                  |
-|Company                |Підприємство           |company                |                                                                  |
-|Tax ID                 |Податковий номер       |taxId                  |                                                                  |
-|Law                    |Законодавство          |law                    |                                                                  |
-|Accounting type        |Вид обліку             |accounting             |                                                                  |
-|Payment schedule       |Розклад виплат         |paymentSchedule        |Every 15th and last day of month                                  |
-|Accounting period      |Обліковий період       |accPeriod              |Період за який нараховано  (1С)                                   |
-|Payment period         |Розрахунковий період   |payPeriod              |Період в якому розраховано (1С)                                   |
-|Check date             |Дата виплати           |checkDate              |                                                                  |
-|Position               |Штатна позиція         |position               |                                                                  |
-|Department             |Підрозділ              |department             |                                                                  |
-|Job                    |Посада                 |job                    |                                                                  |
-|Vacancy                |Вакансія               |vacancy                |                                                                  |
-|Working time norm      |Норма робочого часу    |workNorm               |                                                                  |
-|Working time calendar  |Виробничий календар    |workCalendar           |                                                                  |
-|Work Schedule          |Розклад роботи         |workSchedule           |                                                                  |
-|Work Sheet             |Табель робочого часу   |workSheet              |                                                                  |
-|Work Sheet             |Табель робочого часу   |workSheet              |                                                                  |
-|Incoming balance       |Вхідний залишок        |inBalance              |                                                                  |
-|Accrual                |Нарахування            |accrual                |                                                                  |
-|Deduction              |Утримання              |deduction              |                                                                  |
-|Tax                    |Податок                |tax                    |                                                                  |
-|Net pay                |До виплати             |netPay                 |                                                                  |
-|Payment                |Виплата                |payment                |                                                                  |
-|Outgoing balance       |Вихідний залишок       |outBalance             |                                                                  |
+| English               |Ukrainian              | Short form            | Description                                                                     |
+|-----------------------|-----------------------|-----------------------|---------------------------------------------------------------------------------|
+|Admin                  |Адміністратор          |admin                  |                                                                                 |
+|User                   |Користувач             |user                   |                                                                                 |
+|Owner                  |Власник                |owner                  |                                                                                 |
+|Employer               |Роботодавець           |employer               |                                                                                 |
+|Supervisor             |Керівник               |supervisor             |                                                                                 |
+|Accountant             |Бухгалтер              |accountant             |                                                                                 |
+|Collaborator           |Співробітник           |collaborator           |Помічник, асистент (assistant)                                                   |
+|Employee               |Працівник              |employee               |Штатний працівник підприємства, співробітник                                     |
+|Contractor             |Підрядник              |contractor             |Позаштатний працівник, тимчасовий, не постійний, на разову роботу                |
+|Advisor                |Консультант            |advisor                |                                                                                 |
+|Observer               |Спостерігач            |observer               |                                                                                 |
+|Guest                  |Гість                  |guest                  |                                                                                 |
+|Company                |Підприємство           |company                |                                                                                 |
+|Tax ID                 |Податковий номер       |taxId                  |                                                                                 |
+|Law                    |Законодавство          |law                    |                                                                                 |
+|Accounting type        |Вид обліку             |accounting             |                                                                                 |
+|Payment schedule       |Розклад виплат         |paymentSchedule        |Every 15th and last day of month, Last day of month, First day of the next month |
+|Accounting period      |Обліковий період       |accPeriod              |Період за який нараховано  (1С)                                                  |
+|Payment period         |Розрахунковий період   |payPeriod              |Період в якому розраховано (1С)                                                  |
+|Check date             |Дата виплати           |checkDate              |                                                                                 |
+|Position               |Штатна позиція         |position               |                                                                                 |
+|Department             |Підрозділ              |department             |                                                                                 |
+|Job                    |Посада                 |job                    |                                                                                 |
+|Vacancy                |Вакансія               |vacancy                |                                                                                 |
+|Working time norm      |Норма робочого часу    |workNorm               |                                                                                 |
+|Working time calendar  |Виробничий календар    |workCalendar           |                                                                                 |
+|Work Schedule          |Розклад роботи         |workSchedule           |                                                                                 |
+|Work Sheet             |Табель робочого часу   |workSheet              |                                                                                 |
+|Work Sheet             |Табель робочого часу   |workSheet              |                                                                                 |
+|Incoming balance       |Вхідний залишок        |inBalance              |                                                                                 |
+|Accrual                |Нарахування            |accrual                |                                                                                 |
+|Deduction              |Утримання              |deduction              |                                                                                 |
+|Tax                    |Податок                |tax                    |                                                                                 |
+|Net pay                |До виплати             |netPay                 |                                                                                 |
+|Payment                |Виплата                |payment                |                                                                                 |
+|Outgoing balance       |Вихідний залишок       |outBalance             |                                                                                 |
 
 ## References
 
@@ -219,3 +223,6 @@ openssl rand -base64 60
 - [**i18n** - How to use i18n in your React App](https://medium.com/@devpedrodias/how-to-use-i18n-in-your-react-app-1f26deb2a3d8)
 - [**TypeORM** - How to properly handle decimals with TypeORM](https://medium.com/@matthew.bajorek/how-to-properly-handle-decimals-with-typeorm-f0eb2b79ca9c)
 - [**Postgres** - Working with Money in Postgres](https://www.crunchydata.com/blog/working-with-money-in-postgres)
+- [**React** - React TypeScript Cheat Sheets](https://react-typescript-cheatsheet.netlify.app/)
+- [**NestJS** - Advanced Testing Strategies with Mocks NestJS - @golevelup/ts-jest](https://trilon.io/blog/advanced-testing-strategies-with-mocks-in-nestjs)
+- [**TypeORM** - PostgreSQL and typeorm — Advanced Querying](https://darraghoriordan.medium.com/postgresql-and-typeorm-advanced-querying-e5d8e4c950d6)

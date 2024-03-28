@@ -16,7 +16,7 @@ export class PayPeriod extends Logger implements IPayPeriod {
     @Column({ type: 'integer' })
     companyId: number;
 
-    @Column({ type: 'date', default: '1970-01-01' })
+    @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;
 
     @Column({ type: 'date', default: '9999-12-31' })

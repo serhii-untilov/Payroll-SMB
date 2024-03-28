@@ -20,6 +20,7 @@ import { DepartmentsModule } from '../resources/departments/departments.module';
 import { JobsModule } from 'src/resources/jobs/jobs.module';
 import { PaymentTypesModule } from '../resources/payment-types/payment-types.module';
 import { WorkNormsModule } from '../resources/work-norms/work-norms.module';
+import { PayPeriodsModule } from '../resources/pay-periods/pay-periods.module';
 
 @Module({
     imports: [
@@ -48,6 +49,7 @@ import { WorkNormsModule } from '../resources/work-norms/work-norms.module';
         JobsModule,
         PaymentTypesModule,
         WorkNormsModule,
+        PayPeriodsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
