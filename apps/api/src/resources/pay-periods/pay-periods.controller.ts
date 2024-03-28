@@ -16,20 +16,10 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { PayPeriodsService } from './pay-periods.service';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
-import { PayPeriodState } from '@repo/shared';
-
-const defaultFieldList = {
-    select: {
-        id: true,
-        companyId: true,
-        dateFrom: true,
-        dateTo: true,
-        state: true,
-    },
-};
+import { defaultFieldList } from './entities/pay-period.entity';
+import { PayPeriodsService } from './pay-periods.service';
 
 @Controller('pay-periods')
 export class PayPeriodsController {
@@ -81,21 +71,17 @@ export class PayPeriodsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findCurrent(
+        @Req() req: Request,
         @Query('companyId', ParseIntPipe) companyId: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
         @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
     ) {
-        return await this.payPeriodsService.findOne(
-            fullFieldList
-                ? {
-                      where: { companyId, state: PayPeriodState.CURRENT },
-                      relations: { company: relations },
-                  }
-                : {
-                      where: { companyId, state: PayPeriodState.CURRENT },
-                      relations: { company: relations },
-                      ...defaultFieldList,
-                  },
+        const userId = req.user['sub'];
+        return await this.payPeriodsService.findCurrent(
+            userId,
+            companyId,
+            relations,
+            fullFieldList,
         );
     }
 

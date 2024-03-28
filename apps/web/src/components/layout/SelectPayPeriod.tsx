@@ -4,8 +4,10 @@ import { formatPeriod } from '@repo/utils';
 import { enqueueSnackbar } from 'notistack';
 import { useQuery } from 'react-query';
 import useAppContext from '../../hooks/useAppContext';
-import { getPayPeriodList } from '../../services/payPeriod.service';
+import { getPayPeriodList, getPayPeriodName } from '../../services/payPeriod.service';
 import { Skeleton } from './Skeleton';
+import useLocale from '../../hooks/useLocale';
+import { isEqual } from 'date-fns';
 
 export type PayPeriodOption = {
     label: string;
@@ -14,6 +16,7 @@ export type PayPeriodOption = {
 
 export function SelectPayPeriod(props: SelectProps) {
     const { company, payPeriod, setPayPeriod } = useAppContext();
+    const { locale } = useLocale();
     const { data, isError, isLoading, error } = useQuery<IPayPeriod[], Error>({
         queryKey: 'payPeriodList',
         queryFn: async () => getPayPeriodList(company?.id || 0),
@@ -39,7 +42,12 @@ export function SelectPayPeriod(props: SelectProps) {
         return data?.map((period: any) => {
             return (
                 <MenuItem key={period.id} value={period.id}>
-                    {formatPeriod(period.dateFrom, period.dateTo)}
+                    {/* {formatPeriod(period.dateFrom, period.dateTo)} */}
+                    {getPayPeriodName(
+                        period,
+                        isEqual(period.dateFrom, company?.payPeriod),
+                        locale.dateLocale,
+                    )}
                 </MenuItem>
             );
         });

@@ -4,8 +4,8 @@ import { IAccounting, ILaw } from '@repo/shared';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/utils';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect } from 'react';
-import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
+import { ChangeEventHandler, FormEventHandler, SyntheticEvent, useEffect } from 'react';
+import { ChangeHandler, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import * as yup from 'yup';
@@ -21,6 +21,8 @@ import { createCompany, getCompany, updateCompany } from '../../services/company
 import { getLawList } from '../../services/law.service';
 import { getDirtyValues } from '../../services/utils';
 import CompanyDetails from './CompanyDetails';
+import { FormDateField } from '../../components/form/FormDateField';
+import { startOfMonth } from 'date-fns';
 
 const formSchema = yup.object().shape({
     id: yup.number().nullable(),
@@ -141,6 +143,10 @@ export default function Company() {
         });
     }
 
+    const onChangePayPeriod = (e: any) => {
+        e.target.value = startOfMonth(e.target.value);
+    };
+
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
@@ -211,7 +217,7 @@ export default function Company() {
                             autoComplete="taxId"
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sm={8} md={6}>
                         <FormInputDropdown
                             control={control}
                             label={t('Accounting')}
@@ -223,6 +229,15 @@ export default function Company() {
                                     return { label: o.name, value: o.id };
                                 }) ?? []
                             }
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={8} md={6}>
+                        <FormDateField
+                            control={control}
+                            label={t('Pay period')}
+                            name="payPeriod"
+                            autoComplete="payPeriod"
+                            onChange={onChangePayPeriod}
                         />
                     </Grid>
                     {(isDirty || !currentCompany) && (

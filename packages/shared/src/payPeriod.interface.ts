@@ -1,12 +1,6 @@
 import { ICompany } from './company.interface';
 import { ILogger } from './logger.interface';
 
-export enum PayPeriodState {
-    OPENED = 'opened',
-    CURRENT = 'current',
-    CLOSED = 'closed',
-}
-
 export interface IPayPeriod extends ILogger {
     id: number;
 
@@ -15,8 +9,6 @@ export interface IPayPeriod extends ILogger {
 
     dateFrom: Date;
     dateTo: Date;
-
-    state: string; // See enum PayPeriodState
 
     inBalance?: number;
     accrual?: number;
