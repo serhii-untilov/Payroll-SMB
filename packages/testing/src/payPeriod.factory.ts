@@ -1,5 +1,5 @@
 import { incrementalNumber } from '@ngneat/falso';
-import { IPayPeriod, PayPeriodState } from '@repo/shared';
+import { IPayPeriod } from '@repo/shared';
 import { maxDate, minDate } from '@repo/utils';
 
 const factory = incrementalNumber();
@@ -12,7 +12,6 @@ export const createMockPayPeriod = (data?: Partial<IPayPeriod>): IPayPeriod => {
         companyId: 1,
         dateFrom: minDate(),
         dateTo: maxDate(),
-        state: PayPeriodState.CURRENT,
         ...data,
     };
 };
