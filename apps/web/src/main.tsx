@@ -14,9 +14,6 @@ import { AuthProvider } from './context/AuthContext.tsx';
 import { LocaleProvider } from './context/LocaleContext.tsx';
 import './i18n.ts';
 import './index.css';
-import { add } from 'math-helpers';
-
-export const c = add(1, 1);
 
 const queryClient = new QueryClient({
     defaultOptions: {
