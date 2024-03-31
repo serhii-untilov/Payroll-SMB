@@ -5,12 +5,10 @@ import {
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
-    useGridApiContext,
 } from '@mui/x-data-grid';
-import { IDepartment } from '@repo/shared';
-import { date2view } from '@repo/utils';
+import { IDepartment, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { DataGrid } from '../../components/data/DataGrid';

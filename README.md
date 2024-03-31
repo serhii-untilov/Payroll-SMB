@@ -58,8 +58,8 @@ npm i --workspace @repo/shared --save-dev ts-node typescript
 
 # Init "utils" shared library for common functions
 mkdir packages/utils
-npm i --workspace @repo/utils --save ts-loader
-npm i --workspace @repo/utils --save-dev ts-node typescript jest
+npm i --workspace @repo/shared --save ts-loader
+npm i --workspace @repo/shared --save-dev ts-node typescript jest
 
 ```
 

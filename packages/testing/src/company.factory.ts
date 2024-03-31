@@ -4,7 +4,7 @@ import { ICompany, PaymentSchedule } from '@repo/shared';
 import { createMockLaw } from './law.factory';
 import { createMockAccounting } from './accounting.factory';
 import { createMockUser } from './user.factory';
-import { maxDate, minDate, monthBegin, monthEnd } from '@repo/utils';
+import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 import { createMockTaxId } from './taxId.factory';
 
 const factory = incrementalNumber();

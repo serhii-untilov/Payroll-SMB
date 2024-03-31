@@ -1,4 +1,4 @@
-import { maxDate, minDate } from '@repo/utils';
+import { maxDate, minDate } from '@repo/shared';
 
 export type FormDateParams = {
     date: Date | undefined | null;

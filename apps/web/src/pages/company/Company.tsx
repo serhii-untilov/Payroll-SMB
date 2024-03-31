@@ -1,7 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { IAccounting, ILaw, PaymentSchedule } from '@repo/shared';
-import { maxDate, minDate, monthBegin, monthEnd } from '@repo/utils';
+import {
+    IAccounting,
+    ILaw,
+    PaymentSchedule,
+    maxDate,
+    minDate,
+    monthBegin,
+    monthEnd,
+} from '@repo/shared';
 import { AxiosError } from 'axios';
 import { startOfDay } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';

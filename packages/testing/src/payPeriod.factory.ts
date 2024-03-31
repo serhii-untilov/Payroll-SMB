@@ -1,6 +1,6 @@
 import { incrementalNumber } from '@ngneat/falso';
 import { IPayPeriod, PayPeriodState } from '@repo/shared';
-import { maxDate, minDate } from '@repo/utils';
+import { maxDate, minDate } from '@repo/shared';
 
 const factory = incrementalNumber();
 

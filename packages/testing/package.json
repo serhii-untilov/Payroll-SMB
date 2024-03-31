@@ -24,8 +24,7 @@
         "sqlite3": "^5.1.7",
         "ts-loader": "^9.5.1",
         "typeorm": "^0.3.20",
-        "@repo/shared": "*",
-        "@repo/utils": "*"
+        "@repo/shared": "*"
     },
     "devDependencies": {
         "@ngneat/falso": "^7.1.1",
