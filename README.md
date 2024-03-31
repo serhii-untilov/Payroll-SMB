@@ -1,4 +1,4 @@
-# Nest a React application inside the Turbo mono-repository
+# Nest React application inside the Turbo mono-repository
 
 ## Initial script
 
