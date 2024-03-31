@@ -22,10 +22,10 @@ export interface ICompany extends ILogger {
     accounting?: IAccounting;
     accountingId: number;
 
-    paymentSchedule?: string; // See PaymentSchedule
+    paymentSchedule: string; // See PaymentSchedule
 
-    payPeriod?: Date | null;
-    checkDate?: Date | null;
+    payPeriod: Date;
+    checkDate: Date;
 
     departments?: IDepartment[];
 }

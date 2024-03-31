@@ -25,6 +25,8 @@ npm i --workspace @repo/api --save dotenv
 npm i --workspace @repo/api --save-dev typescript jest ts-jest @types/jest
 npm i --workspace @repo/api --save date-fns
 npm i --workspace @repo/api --save-dev @golevelup/ts-jest
+npm i --workspace @repo/api --save-dev webpack-node-externals run-script-webpack-plugin webpack
+npm i --workspace @repo/api --save-dev webpack webpack-cli
 
 # Init "web" application for front-end
 npm i --workspace @repo/web --save react-query

@@ -1,17 +1,16 @@
 import { MenuItem, Select, SelectChangeEvent, SelectProps } from '@mui/material';
 import { IPayPeriod } from '@repo/shared';
-import { formatPeriod } from '@repo/utils';
+import { isEqual } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { useQuery } from 'react-query';
 import useAppContext from '../../hooks/useAppContext';
+import useLocale from '../../hooks/useLocale';
 import { getPayPeriodList, getPayPeriodName } from '../../services/payPeriod.service';
 import { Skeleton } from './Skeleton';
-import useLocale from '../../hooks/useLocale';
-import { isEqual } from 'date-fns';
 
 export type PayPeriodOption = {
     label: string;
-    value: number;
+    value: Date;
 };
 
 export function SelectPayPeriod(props: SelectProps) {
@@ -34,10 +33,6 @@ export function SelectPayPeriod(props: SelectProps) {
         return <Skeleton animation={'wave'} />;
     }
 
-    // if (!data || !data.length) {
-    //     return <Skeleton variant="rounded" />;
-    // }
-
     const generateOptions = () => {
         return data?.map((period: any) => {
             return (
@@ -53,8 +48,8 @@ export function SelectPayPeriod(props: SelectProps) {
         });
     };
 
-    const onChange = (event: SelectChangeEvent<unknown>) => {
-        setPayPeriod(data?.find((o) => o.id === event.target.value));
+    const onChange = (event: any) => {
+        setPayPeriod(event.target.value);
     };
 
     return (
@@ -63,7 +58,7 @@ export function SelectPayPeriod(props: SelectProps) {
             margin="none"
             fullWidth
             onChange={onChange}
-            value={payPeriod?.id}
+            value={payPeriod}
             // sx={{ mb: 2 }}
             {...props}
             label={''}

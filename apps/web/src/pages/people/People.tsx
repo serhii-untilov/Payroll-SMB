@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Grid, Select, Tab, Tabs } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PageLayout from '../../components/layout/PageLayout';
@@ -9,6 +9,7 @@ import { CompanyDepartments } from '../company/CompanyDepartments';
 import { CompanyManagers } from '../company/CompanyManagers';
 import useAppContext from '../../hooks/useAppContext';
 import { SelectPayPeriod } from '../../components/layout/SelectPayPeriod';
+import { InputLabel } from '../../components/layout/InputLabel';
 
 export default function People() {
     const { company } = useAppContext();
@@ -25,20 +26,22 @@ export default function People() {
     return (
         <>
             <PageLayout title={t('People')}>
-                <Box
-                    sx={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flexGrow: 1,
-                    }}
-                >
-                    <Box>
-                        <SelectPayPeriod />
-                    </Box>
-                    <Box
-                    // sx={{ borderBottom: 0.5, borderColor: 'divider' }}
-                    >
+                <Grid container spacing={2} sx={{ mb: 1 }}>
+                    <Grid container item spacing={2}>
+                        <Grid item xs={12} sm={8} md={6} lg={4}>
+                            <InputLabel>{t('Pay period')}</InputLabel>
+                            <SelectPayPeriod />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={8} lg={4}>
+                            <InputLabel>{t('Department')}</InputLabel>
+                            <Select size="small" margin="none" fullWidth />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={8} lg={4}>
+                            <InputLabel>{t('Job')}</InputLabel>
+                            <Select size="small" margin="none" fullWidth />
+                        </Grid>
+                    </Grid>
+                    <Grid container item spacing={2}>
                         <Tabs
                             value={value}
                             onChange={handleChange}
@@ -52,7 +55,7 @@ export default function People() {
                             <Tab label={t('Dismissed')} />
                             <Tab label={t('All')} />
                         </Tabs>
-                    </Box>
+                    </Grid>
                     <TabPanel value={value} index={0} sx={{ flex: 1 }}>
                         {/* <CompanyDepartments companyId={company?.id} /> */}
                     </TabPanel>
@@ -62,7 +65,7 @@ export default function People() {
                     <TabPanel value={value} index={2} sx={{ flex: 1 }}>
                         {/* <CompanyAccounts companyId={company?.id} /> */}
                     </TabPanel>
-                </Box>
+                </Grid>
             </PageLayout>
         </>
     );

@@ -7,7 +7,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaymentSchedule } from '@repo/shared';
+import { PayPeriodState, PaymentSchedule } from '@repo/shared';
 import {
     addDays,
     addMonths,
@@ -17,8 +17,17 @@ import {
     max,
     min,
     startOfMonth,
+    startOfYear,
+    subYears,
 } from 'date-fns';
-import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import {
+    FindManyOptions,
+    FindOneOptions,
+    LessThanOrEqual,
+    MoreThanOrEqual,
+    Not,
+    Repository,
+} from 'typeorm';
 import { formatPeriod } from '../../utils/date';
 import { CompaniesService } from '../companies/companies.service';
 import { UsersService } from '../users/users.service';
@@ -75,14 +84,19 @@ export class PayPeriodsService {
         return newPayPeriod;
     }
 
-    async findAll(userId: number, companyId: number, params): Promise<PayPeriod[]> {
-        const resp = await this.repository.find({ order: { dateFrom: 'ASC' }, ...params });
-        if (resp.length) return resp;
-        await this.fill(userId, companyId);
-        return await this.repository.find(params);
+    async findAll(
+        userId: number,
+        companyId: number,
+        params: FindManyOptions<PayPeriod>,
+    ): Promise<PayPeriod[]> {
+        const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
+        const response = await this.repository.find(options);
+        if (response.length) return response;
+        await this.fillPeriods(userId, companyId);
+        return await this.repository.find(options);
     }
 
-    async findOne(params): Promise<PayPeriod> {
+    async findOne(params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
         const PayPeriod = await this.repository.findOne(params);
         if (!PayPeriod) {
             throw new NotFoundException(`PayPeriod could not be found.`);
@@ -127,33 +141,54 @@ export class PayPeriodsService {
         fullFieldList: boolean,
     ) {
         const company = await this.companiesService.findOne({ where: { id: companyId } });
-        const resp = this.findOne({
+        const options = {
             where: { companyId: company.id, dateFrom: company.payPeriod },
-        });
+            relations: { company: relations },
+            ...(fullFieldList ? {} : defaultFieldList),
+        };
+        const resp = this.findOne(options);
         if (resp) return resp;
-        await this.fill(userId, companyId);
-        return this.findOne(
-            fullFieldList
-                ? {
-                      where: { companyId: company.id, dateFrom: company.payPeriod },
-                      relations: { company: relations },
-                  }
-                : {
-                      where: { companyId: company.id, dateFrom: company.payPeriod },
-                      relations: { company: relations },
-                      ...defaultFieldList,
-                  },
-        );
+        await this.fillPeriods(userId, company.id);
+        return this.findOne(options);
     }
 
-    async fill(userId: number, companyId: number) {
+    async fillPeriods(userId: number, companyId: number) {
         const company = await this.companiesService.findOne({ where: { id: companyId } });
+        const dateFrom = getDateFrom(company.payPeriod);
+        const dateTo = getDateTo(company.payPeriod);
         const filler = getFiller(company.paymentSchedule);
-        const dateTo = normalizeDateTo(company.dateTo);
-        const periods = filler(company.id, company.payPeriod, dateTo);
+        const periods = filler(company.id, dateFrom, dateTo);
         if (periods.length) {
-            await this.deleteOpenedPeriods(companyId, company.payPeriod);
-            await this.save(userId, periods);
+            // Delete opened periods
+            await this.repository
+                .createQueryBuilder('deleteOpenedPeriods')
+                .delete()
+                .where({
+                    companyId,
+                    state: PayPeriodState.OPENED,
+                    dateFrom: MoreThanOrEqual(dateFrom),
+                });
+            // Get not opened periods
+            const closed = await this.repository.find({
+                where: {
+                    companyId: company.id,
+                    dateFrom: MoreThanOrEqual(dateFrom),
+                    dateTo: LessThanOrEqual(dateTo),
+                    state: Not(PayPeriodState.OPENED),
+                },
+            });
+            // Save non intersected periods
+            await this.save(
+                userId,
+                periods.filter(
+                    (p) =>
+                        !closed.find(
+                            (c) =>
+                                c.dateFrom.getTime() <= p.dateTo.getTime() &&
+                                c.dateTo.getTime() >= p.dateFrom.getTime(),
+                        ),
+                ),
+            );
         }
     }
 
@@ -169,6 +204,13 @@ export class PayPeriodsService {
             .delete()
             .where({ companyId, dateFrom: MoreThanOrEqual(dateFrom) });
     }
+
+    async generate(paymentSchedule: PaymentSchedule): Promise<PayPeriod[]> {
+        const companyId = null;
+        const payPeriod = startOfMonth(new Date());
+        const filler = getFiller(paymentSchedule);
+        return filler(companyId, getDateFrom(payPeriod), getDateTo(payPeriod));
+    }
 }
 
 function getFiller(paymentSchedule: PaymentSchedule | string) {
@@ -183,44 +225,57 @@ function getFiller(paymentSchedule: PaymentSchedule | string) {
     throw new NotFoundException('PaymentSchedule not defined');
 }
 
-function fillPeriodsLastDay(companyId: number, dateFrom: Date, dateTo: Date): PayPeriod[] {
-    const periods = [];
+function fillPeriodsLastDay(companyId: number | null, dateFrom: Date, dateTo: Date): PayPeriod[] {
+    const periods: PayPeriod[] = [];
     for (let d = dateFrom; d < dateTo; d = addMonths(d, 1)) {
         periods.push({
+            id: null,
             companyId,
             dateFrom: max([dateFrom, startOfMonth(d)]),
             dateTo: endOfMonth(d),
+            state: PayPeriodState.OPENED,
         });
     }
     return periods;
 }
 
-function fillPeriodsEvery15days(companyId: number, dateFrom: Date, dateTo: Date): PayPeriod[] {
-    const periods = [];
+function fillPeriodsEvery15days(
+    companyId: number | null,
+    dateFrom: Date,
+    dateTo: Date,
+): PayPeriod[] {
+    const periods: PayPeriod[] = [];
     for (let d = dateFrom; d < dateTo; d = addMonths(d, 1)) {
         let df = max([dateFrom, startOfMonth(d)]);
         let dt = min([dateTo, addDays(startOfMonth(d), 14)]);
         if (df <= dt) {
             periods.push({
+                id: null,
                 companyId,
                 dateFrom: df,
                 dateTo: dt,
+                state: PayPeriodState.OPENED,
             });
         }
         df = max([dateFrom, addDays(startOfMonth(d), 15)]);
         dt = min([dateTo, endOfMonth(d)]);
         if (df <= dt) {
             periods.push({
+                id: null,
                 companyId,
                 dateFrom: max([dateFrom, startOfMonth(d)]),
                 dateTo: endOfMonth(d),
+                state: PayPeriodState.OPENED,
             });
         }
     }
     return periods;
 }
 
-function normalizeDateTo(dateTo: Date) {
-    const maxPeriod = addYears(endOfYear(new Date()), 1);
-    return min([dateTo, maxPeriod]);
+function getDateFrom(payPeriod: Date) {
+    return subYears(startOfYear(payPeriod), 1);
+}
+
+function getDateTo(payPeriod: Date) {
+    return addYears(endOfYear(payPeriod), 1);
 }

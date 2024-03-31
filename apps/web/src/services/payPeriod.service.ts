@@ -48,6 +48,13 @@ export async function getCurrentPayPeriod(
     return response.data;
 }
 
+export async function getCurrentPayPeriodDateFrom(
+    companyId: number | undefined,
+): Promise<Date | undefined> {
+    const payPeriod = companyId ? await getCurrentPayPeriod(companyId) : null;
+    return payPeriod?.dateFrom;
+}
+
 export async function updatePayPeriod(
     id: number,
     payPeriod: IUpdatePayPeriod,

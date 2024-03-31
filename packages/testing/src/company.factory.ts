@@ -1,6 +1,6 @@
 import { createMockDepartment } from './department.factory';
 import { incrementalNumber, randCompanyName } from '@ngneat/falso';
-import { ICompany } from '@repo/shared';
+import { ICompany, PaymentSchedule } from '@repo/shared';
 import { createMockLaw } from './law.factory';
 import { createMockAccounting } from './accounting.factory';
 import { createMockUser } from './user.factory';
@@ -29,6 +29,8 @@ export const createMockCompany = (data?: Partial<ICompany>): ICompany => {
 
         accounting: accounting,
         accountingId: accounting.id,
+
+        paymentSchedule: PaymentSchedule.LAST_DAY,
 
         payPeriod: monthBegin(currentDate),
         checkDate: monthEnd(currentDate),

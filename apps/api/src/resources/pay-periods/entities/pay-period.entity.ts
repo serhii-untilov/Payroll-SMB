@@ -1,4 +1,4 @@
-import { IPayPeriod } from '@repo/shared';
+import { IPayPeriod, PayPeriodState } from '@repo/shared';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Company } from '../../companies/entities/company.entity';
@@ -30,6 +30,9 @@ export class PayPeriod extends Logger implements IPayPeriod {
 
     @Column({ type: 'date', default: '9999-12-31' })
     dateTo: Date;
+
+    @Column({ type: 'varchar', length: 10, default: PayPeriodState.OPENED })
+    state: string;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     inBalance?: number;

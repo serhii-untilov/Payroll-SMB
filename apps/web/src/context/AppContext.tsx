@@ -11,8 +11,13 @@ import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
 import { defaultTheme } from '../themes/defaultTheme';
 import { getUserCompanyList } from '../services/user.service';
-import { getCurrentPayPeriod, getPayPeriod } from '../services/payPeriod.service';
+import {
+    getCurrentPayPeriod,
+    getCurrentPayPeriodDateFrom,
+    getPayPeriod,
+} from '../services/payPeriod.service';
 import { useQuery } from 'react-query';
+import { format, startOfMonth } from 'date-fns';
 
 export type AppContextType = {
     compactView: boolean;
@@ -23,8 +28,8 @@ export type AppContextType = {
     themeMode: string;
     setThemeMode: Dispatch<string>;
     switchThemeMode: () => void;
-    payPeriod: IPayPeriod | undefined | null;
-    setPayPeriod: Dispatch<IPayPeriod | undefined | null>;
+    payPeriod: Date | undefined | null;
+    setPayPeriod: Dispatch<Date | undefined | null>;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -57,7 +62,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         () => responsiveFontSizes(createTheme(defaultTheme(themeMode), locale.locale)),
         [themeMode, locale],
     );
-    const [payPeriod, setPayPeriod] = useState<IPayPeriod | undefined | null>(null);
+    const [payPeriod, setPayPeriod] = useState<Date | undefined | null>(null);
 
     useEffect(() => {
         setCompactView(!wideScreen);
@@ -87,22 +92,22 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initPayPeriod = async () => {
-            const current = company ? await getCurrentPayPeriod(company.id) : null;
-            if (!current) {
-                setPayPeriod(null);
-                return;
-            }
-            const currentId = parseInt(localStorage.getItem('currentPayPeriodId') || '0');
-            if (current.id !== currentId) {
-                localStorage.setItem('currentPayPeriodId', current.id.toString());
-                localStorage.setItem('payPeriodId', current.id.toString());
+            const current: Date = startOfMonth(
+                (await getCurrentPayPeriodDateFrom(company?.id)) || new Date(),
+            );
+            const lastCurrent: Date = startOfMonth(
+                localStorage.getItem('currentPayPeriod') || new Date(),
+            );
+            if (current.getTime() !== lastCurrent.getTime()) {
+                localStorage.setItem('currentPayPeriod', format(current, 'yyyy-MM-dd'));
+                localStorage.setItem('payPeriod', format(current, 'yyyy-MM-dd'));
                 setPayPeriod(current);
                 return;
             }
-            const id = localStorage.getItem('payPeriodId');
-            const payPeriod = id ? await getPayPeriod(company?.id || 0, +id) : null;
-            localStorage.setItem('payPeriodId', (payPeriod?.id || current?.id || 0).toString());
-            return payPeriod || current;
+            const payPeriod: Date = startOfMonth(localStorage.getItem('payPeriod') || new Date());
+            localStorage.setItem('currentPayPeriod', format(current, 'yyyy-MM-dd'));
+            localStorage.setItem('payPeriod', format(payPeriod, 'yyyy-MM-dd'));
+            setPayPeriod(payPeriod);
         };
         initPayPeriod();
     }, [company]);

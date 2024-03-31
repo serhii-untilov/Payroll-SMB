@@ -6,6 +6,8 @@ export class CreatePayPeriodDto implements ICreatePayPeriod {
     dateFrom: Date;
     dateTo: Date;
 
+    state: string;
+
     inBalance?: number;
     accrual?: number;
     deduction?: number;

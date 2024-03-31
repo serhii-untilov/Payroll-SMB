@@ -20,6 +20,7 @@ import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { defaultFieldList } from './entities/pay-period.entity';
 import { PayPeriodsService } from './pay-periods.service';
+import { PaymentSchedule } from '@repo/shared';
 
 @Controller('pay-periods')
 export class PayPeriodsController {
@@ -43,13 +44,11 @@ export class PayPeriodsController {
         @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
     ) {
         const userId = req.user['sub'];
-        return await this.payPeriodsService.findAll(
-            userId,
-            companyId,
-            fullFieldList
-                ? { companyId, relations: { company: relations } }
-                : { companyId, relations: { company: relations }, ...defaultFieldList },
-        );
+        return await this.payPeriodsService.findAll(userId, companyId, {
+            where: { companyId },
+            relations: { company: relations },
+            ...(fullFieldList ? {} : defaultFieldList),
+        });
     }
 
     @Get(':id')
@@ -60,11 +59,11 @@ export class PayPeriodsController {
         @Query('relations', ParseBoolPipe) relations: boolean,
         @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
     ) {
-        return await this.payPeriodsService.findOne(
-            fullFieldList
-                ? { where: { id }, relations: { company: relations } }
-                : { where: { id }, relations: { company: relations }, ...defaultFieldList },
-        );
+        return await this.payPeriodsService.findOne({
+            where: { id },
+            relations: { company: relations },
+            ...(fullFieldList ? {} : defaultFieldList),
+        });
     }
 
     @Get('current')
@@ -103,5 +102,12 @@ export class PayPeriodsController {
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
         return await this.payPeriodsService.remove(userId, id);
+    }
+
+    @Get('generate')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async generate(@Query('paymentSchedule') paymentSchedule: PaymentSchedule) {
+        return await this.payPeriodsService.generate(paymentSchedule);
     }
 }
