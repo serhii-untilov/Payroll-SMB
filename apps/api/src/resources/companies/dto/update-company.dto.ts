@@ -5,6 +5,7 @@ export class UpdateCompanyDto implements IUpdateCompany {
     lawId: number;
     taxId: string;
     accountingId: number;
+    paymentSchedule: string;
     dateFrom: Date;
     dateTo: Date;
     payPeriod: Date;

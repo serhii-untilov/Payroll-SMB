@@ -1,5 +1,6 @@
-import { InputLabel, MenuItem, Select, SelectProps } from '@mui/material';
+import { MenuItem, Select, SelectProps } from '@mui/material';
 import { Controller } from 'react-hook-form';
+import { InputLabel } from '../layout/InputLabel';
 
 /**
  * {
@@ -23,7 +24,8 @@ export const FormInputDropdown: React.FC<FormInputDropdownProps> = (
     props: FormInputDropdownProps,
 ) => {
     const { options, label } = props;
-    const generateSingleOptions = () => {
+
+    const generateOptions = () => {
         return options.map((option: any) => {
             return (
                 <MenuItem key={option.value} value={option.value}>
@@ -47,11 +49,10 @@ export const FormInputDropdown: React.FC<FormInputDropdownProps> = (
                         error={!!error}
                         onChange={onChange}
                         value={value || ''}
-                        // sx={{ mb: 2 }}
                         {...props}
                         label={''}
                     >
-                        {generateSingleOptions()}
+                        {generateOptions()}
                     </Select>
                 )}
             />

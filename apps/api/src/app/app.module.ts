@@ -19,7 +19,8 @@ import { AppService } from './app.service';
 import { DepartmentsModule } from '../resources/departments/departments.module';
 import { JobsModule } from 'src/resources/jobs/jobs.module';
 import { PaymentTypesModule } from '../resources/payment-types/payment-types.module';
-import { WorkSchedulesModule } from '../resources/work-schedules/work-schedules.module';
+import { WorkNormsModule } from '../resources/work-norms/work-norms.module';
+import { PayPeriodsModule } from '../resources/pay-periods/pay-periods.module';
 
 @Module({
     imports: [
@@ -47,7 +48,8 @@ import { WorkSchedulesModule } from '../resources/work-schedules/work-schedules.
         DepartmentsModule,
         JobsModule,
         PaymentTypesModule,
-        WorkSchedulesModule,
+        WorkNormsModule,
+        PayPeriodsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

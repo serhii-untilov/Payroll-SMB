@@ -9,3 +9,5 @@ out
 *.sqlite
 
 stats.html
+
+*.bak

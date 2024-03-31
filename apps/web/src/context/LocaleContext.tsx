@@ -2,6 +2,8 @@ import { Dispatch, FC, ReactNode, SetStateAction, createContext, useEffect, useS
 import { Localization, enUS, ukUA } from '@mui/material/locale';
 import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/useAuth';
+import { uk as dateUk } from 'date-fns/locale/uk';
+import { enUS as dateEn } from 'date-fns/locale/en-US';
 
 export type supportedLanguages = 'en' | 'uk';
 
@@ -9,11 +11,12 @@ export type Locale = {
     language: supportedLanguages;
     name: string;
     locale: Localization;
+    dateLocale: any;
 };
 
 const supportedLocales: Locale[] = [
-    { language: 'en', name: 'English', locale: enUS },
-    { language: 'uk', name: 'Українська', locale: ukUA },
+    { language: 'en', name: 'English', locale: enUS, dateLocale: dateEn },
+    { language: 'uk', name: 'Українська', locale: ukUA, dateLocale: dateUk },
 ];
 
 export type LocaleContextType = {

@@ -1,29 +1,36 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Grid, Paper } from '@mui/material';
-import { IAccounting, ILaw } from '@repo/shared';
+import { Grid } from '@mui/material';
+import {
+    IAccounting,
+    ILaw,
+    PaymentSchedule,
+    maxDate,
+    minDate,
+    monthBegin,
+    monthEnd,
+} from '@repo/shared';
 import { AxiosError } from 'axios';
+import { startOfDay } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
-import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { Button } from '../../components/layout/Button';
 import { FormInputDropdown } from '../../components/form/FormInputDropdown';
 import { FormTextField } from '../../components/form/FormTextField';
+import { Button } from '../../components/layout/Button';
+import { InputLabel } from '../../components/layout/InputLabel';
 import PageLayout from '../../components/layout/PageLayout';
+import { SelectPayPeriod } from '../../components/layout/SelectPayPeriod';
 import { Loading } from '../../components/utility/Loading';
+import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { getAccountingList } from '../../services/accounting.service';
 import { createCompany, getCompany, updateCompany } from '../../services/company.service';
 import { getLawList } from '../../services/law.service';
 import { getDirtyValues } from '../../services/utils';
-import * as _ from 'lodash';
-import useAppContext from '../../hooks/useAppContext';
 import CompanyDetails from './CompanyDetails';
-import { CompanyDepartments } from './CompanyDepartments';
-import { maxDate, minDate, monthBegin, monthEnd } from '@repo/utils';
 
 const formSchema = yup.object().shape({
     id: yup.number().nullable(),
@@ -31,10 +38,11 @@ const formSchema = yup.object().shape({
     lawId: yup.number().positive('Law is required').required(),
     taxId: yup.string(),
     accountingId: yup.number().positive('Accounting is required').required(),
+    paymentSchedule: yup.string().required(),
     dateFrom: yup.date().nullable(),
     dateTo: yup.date().nullable(),
-    payPeriod: yup.date().nullable(),
-    checkDate: yup.date().nullable(),
+    payPeriod: yup.date().required(),
+    checkDate: yup.date().required(),
 });
 
 type FormType = yup.InferType<typeof formSchema>;
@@ -46,10 +54,11 @@ const defaultValues: FormType = {
     lawId: 0,
     taxId: '',
     accountingId: 0,
+    paymentSchedule: PaymentSchedule.LAST_DAY,
     dateFrom: minDate(),
     dateTo: maxDate(),
     payPeriod: monthBegin(new Date()),
-    checkDate: monthEnd(new Date()),
+    checkDate: startOfDay(monthEnd(new Date())),
 };
 
 export default function Company() {
@@ -144,6 +153,12 @@ export default function Company() {
         });
     }
 
+    // const onChangePayPeriod = (e: any) => {
+    //     console.log(e.target.value);
+    //     e.target.value = format(startOfMonth(new Date(e.target.value)), 'P');
+    //     console.log(e.target.value);
+    // };
+
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
@@ -214,7 +229,7 @@ export default function Company() {
                             autoComplete="taxId"
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sm={8} md={6}>
                         <FormInputDropdown
                             control={control}
                             label={t('Accounting')}
@@ -226,6 +241,27 @@ export default function Company() {
                                     return { label: o.name, value: o.id };
                                 }) ?? []
                             }
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={8} md={6}>
+                        <InputLabel>{t('Pay period')}</InputLabel>
+                        <Controller
+                            name={'payPeriod'}
+                            control={control}
+                            render={({
+                                field: { onChange, value },
+                                fieldState: { error },
+                                formState,
+                            }) => (
+                                <SelectPayPeriod
+                                    label={''}
+                                    name="payPeriod"
+                                    autoComplete="payPeriod"
+                                    error={!!error}
+                                    onChange={onChange}
+                                    value={value || ''}
+                                />
+                            )}
                         />
                     </Grid>
                     {(isDirty || !currentCompany) && (

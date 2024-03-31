@@ -6,7 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserCompany } from '../users/entities/user-company.entity';
 import { User } from '../users/entities/user.entity';
-import { maxDate, minDate, monthBegin, monthEnd } from '@repo/utils';
+import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 
 describe('CompaniesService', () => {
     let service: CompaniesService;

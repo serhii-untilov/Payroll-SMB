@@ -3,7 +3,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     plugins: ['@typescript-eslint/eslint-plugin', 'no-loops', 'prettier'],
     env: { node: true, jest: true },
-    ignorePatterns: ['dist', '.eslintrc.js', 'babel.config.js'],
+    ignorePatterns: ['dist', '.eslintrc.js', 'babel.config.js', 'webpack.config.js'],
     extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended', 'prettier'],
     parserOptions: {
         project: 'tsconfig.json',

@@ -24,7 +24,7 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
 
     const columns: GridColDef[] = [
         {
-            field: 'bankAccountNumber',
+            field: 'accountNumber',
             headerName: t('Account Number'),
             type: 'string',
             width: 240,
@@ -93,6 +93,12 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
                 printDisabled={false}
                 onExport={onExport}
                 exportDisabled={false}
+                onShowHistory={() => {}}
+                showHistoryDisabled={true}
+                onShowDeleted={() => {}}
+                showDeletedDisabled={true}
+                onRestoreDeleted={() => {}}
+                restoreDeletedDisabled={true}
             />
             <DataGrid
                 rows={[]}

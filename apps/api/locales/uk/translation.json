@@ -55,7 +55,7 @@
     "Departments": "Підрозділи",
     "Department": "Підрозділ",
     "Managers": "Керівники",
-    "Accounts": "Розрахункові рахунки",
+    "Accounts": "Розрахунковий рахунок",
     "Name is required": "Необхідно вказати назву",
     "Company is required": "Необхідно вказати підприємство",
     "Full Name": "ПІБ",
@@ -69,6 +69,16 @@
     "Delete selected records": "Видалити вибрані записи",
     "Print": "Друк",
     "Export": "Експорт",
-    "View deleted": "Переглянути видалені записи",
-    "Restore deleted": "Відновити вибрані записи"
+    "Show deleted": "Переглянути видалені записи",
+    "Restore deleted": "Відновити вибрані записи",
+    "Show history": "Переглянути історію змін",
+    "People": "Працівники",
+    "Vacancies": "Вакансії",
+    "Contractors": "Підрядники",
+    "Dismissed": "Звільнені",
+    "Offers": "Кандидати",
+    "All": "Всі",
+    "current": "поточний",
+    "Pay period": "Розрахунковий період",
+    "Job": "Посада"
 }

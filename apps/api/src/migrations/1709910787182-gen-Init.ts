@@ -5,7 +5,7 @@ export class Gen1709910787182 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            CREATE TABLE "work_schedule_period" (
+            CREATE TABLE "work_norm_period" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
@@ -14,13 +14,13 @@ export class Gen1709910787182 implements MigrationInterface {
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "workScheduleId" integer NOT NULL,
+                "workNormId" integer NOT NULL,
                 "day" integer NOT NULL,
                 "hours" decimal NOT NULL
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "work_schedule" (
+            CREATE TABLE "work_norm" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
@@ -31,7 +31,7 @@ export class Gen1709910787182 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "name" varchar(50) NOT NULL,
                 "type" varchar(30) NOT NULL,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31')
             )
         `);
@@ -74,7 +74,7 @@ export class Gen1709910787182 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "name" varchar(50) NOT NULL,
                 "companyId" integer NOT NULL,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
                 "parentDepartmentId" integer
             )
@@ -100,10 +100,10 @@ export class Gen1709910787182 implements MigrationInterface {
                 "taxId" varchar(15) NOT NULL DEFAULT (''),
                 "lawId" integer,
                 "accountingId" integer,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
-                "payPeriod" date NOT NULL DEFAULT ('1970-01-01'),
-                "checkDate" date NOT NULL DEFAULT ('1970-01-01')
+                "payPeriod" date NOT NULL DEFAULT ('1900-01-01'),
+                "checkDate" date NOT NULL DEFAULT ('1900-01-01')
             )
         `);
         await queryRunner.query(`
@@ -144,7 +144,7 @@ export class Gen1709910787182 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "temporary_work_schedule_period" (
+            CREATE TABLE "temporary_work_norm_period" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
@@ -153,14 +153,14 @@ export class Gen1709910787182 implements MigrationInterface {
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "workScheduleId" integer NOT NULL,
+                "workNormId" integer NOT NULL,
                 "day" integer NOT NULL,
                 "hours" decimal NOT NULL,
-                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workScheduleId") REFERENCES "work_schedule" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+                CONSTRAINT "FK_3c4b80ca3177a2927f615f480cc" FOREIGN KEY ("workNormId") REFERENCES "work_norm" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
             )
         `);
         await queryRunner.query(`
-            INSERT INTO "temporary_work_schedule_period"(
+            INSERT INTO "temporary_work_norm_period"(
                     "createdDate",
                     "createdUserId",
                     "updatedDate",
@@ -169,7 +169,7 @@ export class Gen1709910787182 implements MigrationInterface {
                     "deletedUserId",
                     "version",
                     "id",
-                    "workScheduleId",
+                    "workNormId",
                     "day",
                     "hours"
                 )
@@ -181,17 +181,17 @@ export class Gen1709910787182 implements MigrationInterface {
                 "deletedUserId",
                 "version",
                 "id",
-                "workScheduleId",
+                "workNormId",
                 "day",
                 "hours"
-            FROM "work_schedule_period"
+            FROM "work_norm_period"
         `);
         await queryRunner.query(`
-            DROP TABLE "work_schedule_period"
+            DROP TABLE "work_norm_period"
         `);
         await queryRunner.query(`
-            ALTER TABLE "temporary_work_schedule_period"
-                RENAME TO "work_schedule_period"
+            ALTER TABLE "temporary_work_norm_period"
+                RENAME TO "work_norm_period"
         `);
         await queryRunner.query(`
             CREATE TABLE "temporary_department" (
@@ -205,7 +205,7 @@ export class Gen1709910787182 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "name" varchar(50) NOT NULL,
                 "companyId" integer NOT NULL,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
                 "parentDepartmentId" integer,
                 CONSTRAINT "FK_1c9f0159b4ae69008bd356bb1ce" FOREIGN KEY ("companyId") REFERENCES "company" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -269,7 +269,7 @@ export class Gen1709910787182 implements MigrationInterface {
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "name" varchar(50) NOT NULL,
                 "companyId" integer NOT NULL,
-                "dateFrom" date NOT NULL DEFAULT ('1970-01-01'),
+                "dateFrom" date NOT NULL DEFAULT ('1900-01-01'),
                 "dateTo" date NOT NULL DEFAULT ('9999-12-31'),
                 "parentDepartmentId" integer
             )
@@ -309,11 +309,11 @@ export class Gen1709910787182 implements MigrationInterface {
             DROP TABLE "temporary_department"
         `);
         await queryRunner.query(`
-            ALTER TABLE "work_schedule_period"
-                RENAME TO "temporary_work_schedule_period"
+            ALTER TABLE "work_norm_period"
+                RENAME TO "temporary_work_norm_period"
         `);
         await queryRunner.query(`
-            CREATE TABLE "work_schedule_period" (
+            CREATE TABLE "work_norm_period" (
                 "createdDate" datetime NOT NULL DEFAULT (datetime('now')),
                 "createdUserId" integer,
                 "updatedDate" datetime NOT NULL DEFAULT (datetime('now')),
@@ -322,13 +322,13 @@ export class Gen1709910787182 implements MigrationInterface {
                 "deletedUserId" integer,
                 "version" integer NOT NULL,
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "workScheduleId" integer NOT NULL,
+                "workNormId" integer NOT NULL,
                 "day" integer NOT NULL,
                 "hours" decimal NOT NULL
             )
         `);
         await queryRunner.query(`
-            INSERT INTO "work_schedule_period"(
+            INSERT INTO "work_norm_period"(
                     "createdDate",
                     "createdUserId",
                     "updatedDate",
@@ -337,7 +337,7 @@ export class Gen1709910787182 implements MigrationInterface {
                     "deletedUserId",
                     "version",
                     "id",
-                    "workScheduleId",
+                    "workNormId",
                     "day",
                     "hours"
                 )
@@ -349,13 +349,13 @@ export class Gen1709910787182 implements MigrationInterface {
                 "deletedUserId",
                 "version",
                 "id",
-                "workScheduleId",
+                "workNormId",
                 "day",
                 "hours"
-            FROM "temporary_work_schedule_period"
+            FROM "temporary_work_norm_period"
         `);
         await queryRunner.query(`
-            DROP TABLE "temporary_work_schedule_period"
+            DROP TABLE "temporary_work_norm_period"
         `);
         await queryRunner.query(`
             DROP TABLE "job"
@@ -385,10 +385,10 @@ export class Gen1709910787182 implements MigrationInterface {
             DROP TABLE "role"
         `);
         await queryRunner.query(`
-            DROP TABLE "work_schedule"
+            DROP TABLE "work_norm"
         `);
         await queryRunner.query(`
-            DROP TABLE "work_schedule_period"
+            DROP TABLE "work_norm_period"
         `);
     }
 }

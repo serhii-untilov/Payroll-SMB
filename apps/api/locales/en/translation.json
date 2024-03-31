@@ -56,7 +56,7 @@
     "Departments": "Departments",
     "Department": "Department",
     "Managers": "Managers",
-    "Accounts": "Accounts",
+    "Accounts": "Bank account",
     "Name is required": "Name is required",
     "Company is required": "Company is required",
     "Full Name": "Full Name",
@@ -70,6 +70,16 @@
     "Delete selected records": "Delete selected records",
     "Print": "Print",
     "Export": "Export",
-    "View deleted": "View deleted",
-    "Restore deleted": "Restore selected records"
+    "Show deleted": "Show deleted",
+    "Restore deleted": "Restore selected records",
+    "Show history": "Show history",
+    "People": "People",
+    "Vacancies": "Vacancies",
+    "Contractors": "Contractors",
+    "Dismissed": "Dismissed",
+    "Offers": "Offers",
+    "All": "All",
+    "current": "current",
+    "Pay period": "Pay period",
+    "Job": "Job"
 }

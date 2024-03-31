@@ -1,8 +1,8 @@
-import { InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { SelectProps } from '@mui/material/Select';
-import { supportedLanguages } from '../../context/LocaleContext';
-import useLocale from '../../hooks/useLocale';
 import { useTranslation } from 'react-i18next';
+import useLocale from '../../hooks/useLocale';
+import { InputLabel } from '../layout/InputLabel';
 
 export function Language(props: SelectProps<string>) {
     const { locale, setLanguage, supportedLocales } = useLocale();

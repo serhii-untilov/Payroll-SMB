@@ -5,12 +5,10 @@ import {
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
-    useGridApiContext,
 } from '@mui/x-data-grid';
-import { IDepartment } from '@repo/shared';
-import { date2view } from '@repo/utils';
+import { IDepartment, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { DataGrid } from '../../components/data/DataGrid';
@@ -122,8 +120,12 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
         console.log('onExport');
     };
 
-    const onViewDeleted = () => {
-        console.log('onViewDeleted');
+    const onShowHistory = () => {
+        console.log('onShowHistory');
+    };
+
+    const onShowDeleted = () => {
+        console.log('onShowDeleted');
     };
 
     const onRestoreDeleted = () => {
@@ -140,8 +142,10 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
                 printDisabled={!departmentList?.length}
                 onExport={onExport}
                 exportDisabled={!departmentList?.length}
-                onViewDeleted={onViewDeleted}
-                viewDeletedDisabled={true}
+                onShowHistory={onShowHistory}
+                showHistoryDisabled={true}
+                onShowDeleted={onShowDeleted}
+                showDeletedDisabled={true}
                 onRestoreDeleted={onRestoreDeleted}
                 restoreDeletedDisabled={true}
             />

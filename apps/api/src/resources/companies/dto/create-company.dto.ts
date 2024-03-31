@@ -6,6 +6,7 @@ export class CreateCompanyDto extends Logger implements ICreateCompany {
     lawId: number;
     taxId: string;
     accountingId: number;
+    paymentSchedule: string;
     dateFrom: Date;
     dateTo: Date;
     payPeriod: Date;
