@@ -10,6 +10,7 @@ import { CompanyManagers } from '../company/CompanyManagers';
 import useAppContext from '../../hooks/useAppContext';
 import { PayPeriod } from '../../components/layout/PayPeriod';
 import { InputLabel } from '../../components/layout/InputLabel';
+import { PeopleEmployees } from './PeopleEmployees';
 
 export default function People() {
     const { company } = useAppContext();
@@ -28,11 +29,11 @@ export default function People() {
             <PageLayout title={t('People')}>
                 <Grid container spacing={2} sx={{ mb: 1 }}>
                     <Grid container item spacing={2}>
-                        <Grid item xs={12} sm={8} md={6} lg={4}>
+                        <Grid item xs={12} sm={8} md={6} lg={3}>
                             <InputLabel>{t('Pay period')}</InputLabel>
-                            <PayPeriod />
+                            <PayPeriod sx={{ fontWeight: 'bold' }} />
                         </Grid>
-                        <Grid item xs={12} sm={12} md={8} lg={4}>
+                        <Grid item xs={12} sm={12} md={8} lg={5}>
                             <InputLabel>{t('Department')}</InputLabel>
                             <Select size="small" margin="none" fullWidth />
                         </Grid>
@@ -57,7 +58,7 @@ export default function People() {
                         </Tabs>
                     </Grid>
                     <TabPanel value={value} index={0} sx={{ flex: 1 }}>
-                        {/* <CompanyDepartments companyId={company?.id} /> */}
+                        {company?.id && <PeopleEmployees companyId={company?.id} />}
                     </TabPanel>
                     <TabPanel value={value} index={1} sx={{ flex: 1 }}>
                         {/* <CompanyManagers companyId={company?.id} /> */}
