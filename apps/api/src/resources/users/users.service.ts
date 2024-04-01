@@ -64,7 +64,10 @@ export class UsersService {
         return publicUser;
     }
 
-    async getUserCompanyList(id: number): Promise<UserCompany[]> {
-        return await this.userCompanyRepository.findBy({ userId: id });
+    async getUserCompanyList(id: number, relations: boolean): Promise<UserCompany[]> {
+        return await this.userCompanyRepository.find({
+            where: { userId: id },
+            ...(relations ? { relations: { company: true, role: true } } : {}),
+        });
     }
 }

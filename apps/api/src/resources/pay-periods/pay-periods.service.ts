@@ -16,6 +16,7 @@ import {
     endOfYear,
     max,
     min,
+    startOfDay,
     startOfMonth,
     startOfYear,
     subYears,
@@ -136,23 +137,36 @@ export class PayPeriodsService {
 
     async findCurrent(
         userId: number,
-        companyId: number,
+        companyId: number | null,
         relations: boolean,
         fullFieldList: boolean,
-    ) {
+    ): Promise<PayPeriod> {
+        if (!companyId) {
+            return {
+                id: null,
+                companyId: null,
+                dateFrom: startOfMonth(new Date()),
+                dateTo: startOfDay(endOfMonth(new Date())),
+                state: PayPeriodState.OPENED,
+            };
+        }
         const company = await this.companiesService.findOne({ where: { id: companyId } });
         const options = {
             where: { companyId: company.id, dateFrom: company.payPeriod },
             relations: { company: relations },
             ...(fullFieldList ? {} : defaultFieldList),
         };
-        const resp = this.findOne(options);
+        const resp = await this.findOne(options);
         if (resp) return resp;
         await this.fillPeriods(userId, company.id);
-        return this.findOne(options);
+        return await this.findOne(options);
     }
 
-    async fillPeriods(userId: number, companyId: number) {
+    async fillPeriods(userId: number, companyId: number | null): Promise<PayPeriod[]> {
+        if (!companyId) {
+            const filler = getFiller(PaymentSchedule.LAST_DAY);
+            return filler(null, getDateFrom(new Date()), getDateTo(new Date()));
+        }
         const company = await this.companiesService.findOne({ where: { id: companyId } });
         const dateFrom = getDateFrom(company.payPeriod);
         const dateTo = getDateTo(company.payPeriod);
@@ -216,16 +230,16 @@ export class PayPeriodsService {
 function getFiller(paymentSchedule: PaymentSchedule | string) {
     switch (paymentSchedule) {
         case PaymentSchedule.EVERY_15_DAY:
-            return fillPeriodsEvery15days;
+            return fillPeriods_Every15days;
         case PaymentSchedule.LAST_DAY:
-            return fillPeriodsLastDay;
+            return fillPeriods_LastDay;
         case PaymentSchedule.NEXT_MONTH:
-            return fillPeriodsLastDay;
+            return fillPeriods_LastDay;
     }
-    throw new NotFoundException('PaymentSchedule not defined');
+    throw new NotFoundException(`Wrong paymentSchedule: ${paymentSchedule}.`);
 }
 
-function fillPeriodsLastDay(companyId: number | null, dateFrom: Date, dateTo: Date): PayPeriod[] {
+function fillPeriods_LastDay(companyId: number | null, dateFrom: Date, dateTo: Date): PayPeriod[] {
     const periods: PayPeriod[] = [];
     for (let d = dateFrom; d < dateTo; d = addMonths(d, 1)) {
         periods.push({
@@ -239,7 +253,7 @@ function fillPeriodsLastDay(companyId: number | null, dateFrom: Date, dateTo: Da
     return periods;
 }
 
-function fillPeriodsEvery15days(
+function fillPeriods_Every15days(
     companyId: number | null,
     dateFrom: Date,
     dateTo: Date,

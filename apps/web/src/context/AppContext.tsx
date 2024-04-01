@@ -5,7 +5,7 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany, IPayPeriod } from '@repo/shared';
+import { ICompany, IPayPeriod, IUserCompany } from '@repo/shared';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
@@ -18,6 +18,7 @@ import {
 } from '../services/payPeriod.service';
 import { useQuery } from 'react-query';
 import { format, startOfMonth } from 'date-fns';
+import { getCompany } from '../services/company.service';
 
 export type AppContextType = {
     compactView: boolean;
@@ -41,7 +42,7 @@ const AppContext = createContext<AppContextType>({
     themeMode: 'light',
     setThemeMode: () => {},
     switchThemeMode: () => {},
-    payPeriod: undefined,
+    payPeriod: startOfMonth(new Date()),
     setPayPeriod: () => {},
 });
 
@@ -53,7 +54,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     const { children } = props;
     const [compactView, setCompactView] = useState(false);
     const wideScreen = useMediaQuery('(min-width:900px)');
-    const [companyList, setCompanyList] = useState<ICompany[]>([]);
+    const [userCompanyList, setUserCompanyList] = useState<IUserCompany[]>([]);
     const [company, setCompany] = useState<ICompany | null | undefined>(null);
     const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') || 'light');
     const { user } = useAuth();
@@ -70,21 +71,26 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initCompanyList = async () => {
-            const userCompanyList = user?.id ? await getUserCompanyList(user?.id) : [];
-            setCompanyList(userCompanyList);
+            const userCompanyList = user?.id ? await getUserCompanyList(user?.id, true) : [];
+            setUserCompanyList(userCompanyList);
         };
         initCompanyList();
     }, [user]);
 
     useEffect(() => {
-        const initCompany = () => {
+        const initCompany = async () => {
             const companyId = +(localStorage.getItem('company') || 0);
-            if (companyList.length) {
-                setCompany(companyList.find((o) => o.id === companyId) || companyList[0]);
+            if (userCompanyList.length) {
+                const userCompany =
+                    userCompanyList.find((o) => o.companyId === companyId) || userCompanyList[0];
+                const currentCompany = await getCompany(userCompany.companyId);
+                setCompany(currentCompany);
+                // setPayPeriod(company?.payPeriod || startOfMonth(new Date()));
+                localStorage.setItem('company', currentCompany.id.toString());
             }
         };
         initCompany();
-    }, [companyList]);
+    }, [userCompanyList]);
 
     useEffect(() => {
         localStorage.setItem('themeMode', themeMode);

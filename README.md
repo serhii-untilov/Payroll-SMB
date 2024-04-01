@@ -55,6 +55,7 @@ npm i --workspace @repo/web --save date-fns
 mkdir packages/shared
 npm i --workspace @repo/shared --save sqlite3 ts-loader typeorm
 npm i --workspace @repo/shared --save-dev ts-node typescript
+npm i --workspace @repo/shared --save date-fns
 
 # Init "utils" shared library for common functions
 mkdir packages/utils

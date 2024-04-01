@@ -1,16 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import {
-    IAccounting,
-    ILaw,
-    PaymentSchedule,
-    maxDate,
-    minDate,
-    monthBegin,
-    monthEnd,
-} from '@repo/shared';
+import { IAccounting, ILaw, PaymentSchedule, maxDate, minDate } from '@repo/shared';
 import { AxiosError } from 'axios';
-import { startOfDay } from 'date-fns';
+import { endOfMonth, format, startOfDay, startOfMonth } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
@@ -22,7 +14,7 @@ import { FormTextField } from '../../components/form/FormTextField';
 import { Button } from '../../components/layout/Button';
 import { InputLabel } from '../../components/layout/InputLabel';
 import PageLayout from '../../components/layout/PageLayout';
-import { SelectPayPeriod } from '../../components/layout/SelectPayPeriod';
+import { PayPeriod } from '../../components/layout/PayPeriod';
 import { Loading } from '../../components/utility/Loading';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
@@ -57,8 +49,8 @@ const defaultValues: FormType = {
     paymentSchedule: PaymentSchedule.LAST_DAY,
     dateFrom: minDate(),
     dateTo: maxDate(),
-    payPeriod: monthBegin(new Date()),
-    checkDate: startOfDay(monthEnd(new Date())),
+    payPeriod: startOfMonth(new Date()),
+    checkDate: startOfDay(endOfMonth(new Date())),
 };
 
 export default function Company() {
@@ -73,7 +65,7 @@ export default function Company() {
         isLoading: isCompanyLoading,
         error: companyError,
     } = useQuery<FormType, Error>({
-        queryKey: 'company',
+        queryKey: ['company', currentCompany?.id],
         queryFn: async () => {
             return formSchema.cast(
                 currentCompany?.id ? await getCompany(currentCompany?.id) : defaultValues,
@@ -253,13 +245,15 @@ export default function Company() {
                                 fieldState: { error },
                                 formState,
                             }) => (
-                                <SelectPayPeriod
+                                <PayPeriod
                                     label={''}
                                     name="payPeriod"
                                     autoComplete="payPeriod"
                                     error={!!error}
-                                    onChange={onChange}
-                                    value={value || ''}
+                                    onChange={(event: any) =>
+                                        onChange(new Date(event.target.value))
+                                    }
+                                    value={format(value || startOfMonth(new Date()), 'yyyy-MM-dd')}
                                 />
                             )}
                         />

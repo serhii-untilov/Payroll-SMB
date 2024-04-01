@@ -8,7 +8,7 @@ import { CompanyAccounts } from '../company/CompanyAccounts';
 import { CompanyDepartments } from '../company/CompanyDepartments';
 import { CompanyManagers } from '../company/CompanyManagers';
 import useAppContext from '../../hooks/useAppContext';
-import { SelectPayPeriod } from '../../components/layout/SelectPayPeriod';
+import { PayPeriod } from '../../components/layout/PayPeriod';
 import { InputLabel } from '../../components/layout/InputLabel';
 
 export default function People() {
@@ -30,7 +30,7 @@ export default function People() {
                     <Grid container item spacing={2}>
                         <Grid item xs={12} sm={8} md={6} lg={4}>
                             <InputLabel>{t('Pay period')}</InputLabel>
-                            <SelectPayPeriod />
+                            <PayPeriod />
                         </Grid>
                         <Grid item xs={12} sm={12} md={8} lg={4}>
                             <InputLabel>{t('Department')}</InputLabel>

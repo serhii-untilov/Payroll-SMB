@@ -3,6 +3,7 @@ import { endOfMonth, format, isEqual, startOfDay, startOfMonth } from 'date-fns'
 import { t } from 'i18next';
 import { api } from '../api';
 import authHeader from './auth-header';
+import { ObjectSchema, date, number, object, string } from 'yup';
 
 export async function createPayPeriod(payPeriod: ICreatePayPeriod): Promise<IPayPeriod> {
     const response = await api.post(`/api/pay-periods/`, payPeriod, { headers: authHeader() });
@@ -10,12 +11,14 @@ export async function createPayPeriod(payPeriod: ICreatePayPeriod): Promise<IPay
 }
 
 export async function getPayPeriodList(
-    companyId: number,
+    companyId: number | undefined,
     relations: boolean = false,
     fullFieldList: boolean = false,
 ): Promise<IPayPeriod[]> {
     const response = await api.get(
-        `/api/pay-periods/?companyId=${companyId}&relations=${relations}&fullFieldList=${!!fullFieldList}`,
+        companyId
+            ? `/api/pay-periods/?companyId=${companyId}&relations=${relations}&fullFieldList=${!!fullFieldList}`
+            : `/api/pay-periods/`,
         {
             headers: authHeader(),
         },
@@ -24,13 +27,15 @@ export async function getPayPeriodList(
 }
 
 export async function getPayPeriod(
-    companyId: number,
+    companyId: number | undefined,
     id: number,
     relations: boolean = false,
     fullFieldList: boolean = false,
 ): Promise<IPayPeriod> {
     const response = await api.get(
-        `/api/pay-periods/${id}/&companyId=${companyId}&relations=${!!relations}&fullFieldList=${!!fullFieldList}`,
+        companyId
+            ? `/api/pay-periods/${id}/&companyId=${companyId}&relations=${!!relations}&fullFieldList=${!!fullFieldList}`
+            : `/api/pay-periods/${id}`,
         { headers: authHeader() },
     );
     return response.data;
@@ -70,14 +75,18 @@ export async function deletePayPeriod(id: number): Promise<IPayPeriod> {
     return response.data;
 }
 
-export function getPayPeriodName(period: IPayPeriod, isCurrent: boolean, locale: any): string {
-    if (!period) return '';
+export function getPayPeriodName(
+    dateFrom: Date,
+    dateTo: Date,
+    isCurrent: boolean,
+    locale: any,
+): string {
     const state = isCurrent ? `(${t('current')})` : '';
     if (
-        isEqual(startOfDay(period.dateFrom), startOfMonth(period.dateFrom)) &&
-        isEqual(startOfDay(period.dateTo), startOfDay(endOfMonth(period.dateTo)))
+        isEqual(startOfDay(dateFrom), startOfMonth(dateFrom)) &&
+        isEqual(startOfDay(dateTo), startOfDay(endOfMonth(dateTo)))
     ) {
-        return `${format(period.dateFrom, 'Y LLLL', { locale })} ${state}`;
+        return `${format(dateFrom, 'Y LLLL', { locale })} ${state}`;
     }
-    return `${format(period.dateFrom, 'Y LLLL', { locale })} ${format(period.dateFrom, 'd')} - ${format(period.dateTo, 'd')} ${state}`;
+    return `${format(dateFrom, 'Y LLLL', { locale })} ${format(dateFrom, 'd')} - ${format(dateTo, 'd')} ${state}`;
 }
