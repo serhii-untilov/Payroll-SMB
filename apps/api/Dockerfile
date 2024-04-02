@@ -10,7 +10,7 @@ RUN apk update
 WORKDIR /app
 RUN npm i -g turbo
 COPY . .
-RUN turbo prune api --docker
+RUN turbo prune @repo/api --docker
 
 # ---------------------- INSTALL ----------------------------------
 # Add lockfile and package.json's of isolated subworkspace

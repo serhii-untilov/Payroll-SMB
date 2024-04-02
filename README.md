@@ -43,6 +43,7 @@ docker compose down
 ``` bash
 # Build application and push images to the Docker Hub
 npm run build
+docker compose build
 docker compose push
 # Download docker compose script and run docker containers
 curl https://raw.githubusercontent.com/serhii-untilov/nest-react/master/docker-compose.yml >docker-compose.yml
