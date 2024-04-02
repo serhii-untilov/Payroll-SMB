@@ -45,7 +45,7 @@ docker compose down
 npm run build
 docker compose build
 docker compose push
-# Download docker compose script and run docker containers
+# Download docker compose script and containers
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll/master/docker-compose.yml >docker-compose.yml
 docker compose pull
 # Start containers
