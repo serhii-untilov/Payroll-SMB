@@ -1,0 +1,25 @@
+-- Role: payroll
+-- DROP ROLE IF EXISTS payroll;
+CREATE ROLE payroll WITH
+  LOGIN
+  NOSUPERUSER
+  INHERIT
+  NOCREATEDB
+  NOCREATEROLE
+  NOREPLICATION
+  PASSWORD 'TopSecret123';
+
+-- Database: payroll
+-- DROP DATABASE IF EXISTS payroll;
+CREATE DATABASE payroll
+    WITH
+    OWNER = payroll
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'en_US.utf8'
+    LC_CTYPE = 'en_US.utf8'
+    LOCALE_PROVIDER = 'libc'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+GRANT TEMPORARY, CONNECT ON DATABASE payroll TO PUBLIC;
+GRANT ALL ON DATABASE payroll TO payroll;

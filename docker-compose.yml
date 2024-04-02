@@ -7,12 +7,35 @@ services:
       dockerfile: ./apps/api/Dockerfile
     image: untilov/payroll
     restart: always
+    expose:
+      - 3000
     ports:
       - 3000:3000
+    depends_on:
+      db:
+        condition: service_healthy
     env_file:
-      - .env
+      - .env.docker
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - '5532:5432'
     volumes:
-      - ./db.sqlite:./db.sqlite
+      - ./packages/postgres/init.postgres.sql:/docker-entrypoint-initdb.d/init.postgres.sql
+      - ./postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .env.docker
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    # environment:
+    #   POSTGRES_USER: payrolladm
+    #   POSTGRES_PASSWORD: TopSecret123
+    #   POSTGRES_DB_NAMES: payroll
+    #   PGUSER: payrolladm
 
   reverse-proxy:
     container_name: payroll-nginx
@@ -24,3 +47,7 @@ services:
     ports:
       - 80:80
 
+networks:
+  default:
+    name: payroll_network
+    driver: bridge

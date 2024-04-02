@@ -29,7 +29,7 @@ import { PersonsModule } from 'src/resources/persons/persons.module';
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: ['.env.local', '.env'],
+            envFilePath: ['.env.local', '.env', '.env.development', '.env.production'],
             ignoreEnvVars: true,
             // ignoreEnvFile: true,
             load: [appConfig, dbConfig, authConfig, googleConfig],

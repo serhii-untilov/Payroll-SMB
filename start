@@ -1,0 +1,3 @@
+#!/bin/sh
+docker compose rm --force --stop --volumes
+docker compose up --detach --renew-anon-volumes --timestamps

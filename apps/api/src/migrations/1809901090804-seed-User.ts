@@ -35,8 +35,8 @@ const recordList = [
 export class Seed1809901090804 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
-        recordList.forEach(async (record) => {
-            const values = langPipe(lang, record);
+        for (let n = 0; n < recordList.length; n++) {
+            const values = langPipe(lang, recordList[n]);
             const hashedPassword = bcrypt.hashSync(values.password, 10);
             await dataSource
                 .createQueryBuilder()
@@ -45,18 +45,18 @@ export class Seed1809901090804 implements MigrationInterface {
                 .values({ ...values, password: hashedPassword })
                 .orUpdate(['firstName', 'lastName', 'email', 'password'], ['id'])
                 .execute();
-        });
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
-        recordList.forEach(async (record) => {
+        for (let n = 0; n < recordList.length; n++) {
             await dataSource
                 .createQueryBuilder()
                 .delete()
                 .from(entity)
-                .where('id = :id', { id: record.id })
+                .where('id = :id', { id: recordList[n].id })
                 .execute();
-        });
+        }
     }
 }

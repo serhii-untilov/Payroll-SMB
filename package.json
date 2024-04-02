@@ -18,17 +18,17 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm --workspace @repo/api run m:run && turbo run dev",
-    "start": "npm --workspace @repo/api run m:run && npm --workspace @repo/api start",
+    "dev": "./scripts/docker_db && npm --workspace @repo/api run m:run && turbo run dev",
+    "start": "./scripts/docker_db && npm --workspace @repo/api run m:run && npm --workspace @repo/api start",
     "build": "turbo run build",
     "lint": "turbo lint",
     "format": "turbo format",
     "test": "turbo test",
     "deploy": "turbo deploy",
     "m:crt": "turbo run m:crt --filter=@repo/api",
-    "m:gen": "turbo run m:gen --filter=@repo/api",
-    "m:run": "turbo run m:run --filter=@repo/api",
-    "m:revert": "turbo run m:revert --filter=@repo/api"
+    "m:gen": "./scripts/docker_db && turbo run m:gen --filter=@repo/api",
+    "m:run": "./scripts/docker_db && turbo run m:run --filter=@repo/api",
+    "m:revert": "./scripts/docker_db && turbo run m:revert --filter=@repo/api"
   },
   "devDependencies": {
     "eslint-config-prettier": "^9.1.0",

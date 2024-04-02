@@ -16,26 +16,26 @@ const recordList = [
 export class Seed1809290168967 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
-        recordList.forEach(async (record) => {
+        for (let n = 0; n < recordList.length; n++) {
             await dataSource
                 .createQueryBuilder()
                 .insert()
                 .into(entity)
-                .values(langPipe(lang, record))
+                .values(langPipe(lang, recordList[n]))
                 .orUpdate(['name', 'type'], ['id'])
                 .execute();
-        });
+        }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
-        recordList.forEach(async (record) => {
+        for (let n = 0; n < recordList.length; n++) {
             await dataSource
                 .createQueryBuilder()
                 .delete()
                 .from(entity)
-                .where('id = :id', { id: record.id })
+                .where('id = :id', { id: recordList[n].id })
                 .execute();
-        });
+        }
     }
 }

@@ -11,6 +11,7 @@ WORKDIR /app
 RUN npm i -g turbo
 COPY . .
 RUN turbo prune @repo/api --docker
+RUN turbo prune @repo/web --docker
 
 # ---------------------- INSTALL ----------------------------------
 # Add lockfile and package.json's of isolated subworkspace
@@ -19,7 +20,7 @@ RUN apk add --no-cache libc6-compat
 RUN apk update
 WORKDIR /app
 RUN npm i -g turbo
-RUN npm i -g sqlite3
+RUN npm i -g typeorm
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
@@ -29,6 +30,7 @@ RUN npm install
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
+COPY ./apps/api/locales ./locales
 
 # Uncomment and use build args to enable remote caching
 # ARG TURBO_TEAM
@@ -49,6 +51,4 @@ RUN adduser --system --uid 1001 dockeruser
 USER dockeruser
 COPY --from=installer /app .
 
-# COPY ./apps/api/.env.production ./.env
-
-CMD node apps/api/dist/main.js
+CMD npm --workspace @repo/api run m:run && node apps/api/dist/main.js
