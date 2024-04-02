@@ -47,7 +47,11 @@ docker compose build
 docker compose push
 # Download docker compose script and run docker containers
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll/master/docker-compose.yml >docker-compose.yml
+docker compose pull
+# Start containers
 docker compose up --detach
+# Stop containers
+docker compose down
 ```
 
 ## Configuration
