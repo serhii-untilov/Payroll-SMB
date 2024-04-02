@@ -31,7 +31,6 @@ In Development mode frontend and backend applications works on the different por
 
 ``` bash
 # Build and start application
-npm run build
 docker compose build
 docker compose up --detach
 # Stop application
@@ -42,7 +41,6 @@ docker compose down
 
 ``` bash
 # Build application and push images to the Docker Hub
-npm run build
 docker compose build
 docker compose push
 # Download docker compose script and containers
