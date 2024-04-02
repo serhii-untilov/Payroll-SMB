@@ -1,6 +1,17 @@
 {
   "name": "nest-react",
   "description": "Nest React Application inside a Turbo mono repository",
+  "keywords": [
+    "payroll",
+    "smb",
+    "turborepo",
+    "mono-repository",
+    "full-stack",
+    "react",
+    "nestjs",
+    "typeorm",
+    "typescript"
+  ],
   "workspaces": [
     "packages/*",
     "apps/*"
