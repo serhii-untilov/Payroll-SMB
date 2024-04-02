@@ -16,6 +16,11 @@ export class AppController {
         return this.appService.getHello();
     }
 
+    @Get('/title')
+    getTitle(): string {
+        return this.appService.getTitle();
+    }
+
     @Get('/locales/:lang/:ns.json')
     @Header('Content-Type', 'application/json')
     getLocales(@Param() params): StreamableFile {

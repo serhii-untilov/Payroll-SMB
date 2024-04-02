@@ -19,6 +19,7 @@ RUN apk add --no-cache libc6-compat
 RUN apk update
 WORKDIR /app
 RUN npm i -g turbo
+RUN npm i -g sqlite3
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
@@ -47,5 +48,7 @@ RUN addgroup --system --gid 1001 dockeruser
 RUN adduser --system --uid 1001 dockeruser
 USER dockeruser
 COPY --from=installer /app .
+
+# COPY ./apps/api/.env.production ./.env
 
 CMD node apps/api/dist/main.js

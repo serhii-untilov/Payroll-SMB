@@ -9,6 +9,10 @@ services:
     restart: always
     ports:
       - 3000:3000
+    env_file:
+      - .env
+    volumes:
+      - ./db.sqlite:./db.sqlite
 
   reverse-proxy:
     container_name: payroll-nginx
