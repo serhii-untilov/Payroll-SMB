@@ -60,6 +60,47 @@ In **development** mode:
 
 replace environment variables in *.locale files and run the application.
 
+## Domain-specific language (DSL)
+
+| English               |Ukrainian              | Short form            | Description                                                                     |
+|-----------------------|-----------------------|-----------------------|---------------------------------------------------------------------------------|
+|Admin                  |Адміністратор          |admin                  |                                                                                 |
+|User                   |Користувач             |user                   |                                                                                 |
+|Owner                  |Власник                |owner                  |                                                                                 |
+|Employer               |Роботодавець           |employer               |                                                                                 |
+|Supervisor             |Керівник               |supervisor             |                                                                                 |
+|Accountant             |Бухгалтер              |accountant             |                                                                                 |
+|Collaborator           |Співробітник           |collaborator           |Помічник, асистент (assistant)                                                   |
+|Employee               |Працівник              |employee               |Штатний працівник підприємства, співробітник                                     |
+|Contractor             |Підрядник              |contractor             |Позаштатний працівник, тимчасовий, не постійний, на разову роботу                |
+|Advisor                |Консультант            |advisor                |                                                                                 |
+|Observer               |Спостерігач            |observer               |                                                                                 |
+|Guest                  |Гість                  |guest                  |                                                                                 |
+|Company                |Підприємство           |company                |                                                                                 |
+|Tax ID                 |Податковий номер       |taxId                  |                                                                                 |
+|Law                    |Законодавство          |law                    |                                                                                 |
+|Accounting type        |Вид обліку             |accounting             |                                                                                 |
+|Payment schedule       |Розклад виплат         |paymentSchedule        |Every 15th and last day of month, Last day of month, First day of the next month |
+|Accounting period      |Обліковий період       |accPeriod              |Період за який нараховано  (1С)                                                  |
+|Payment period         |Розрахунковий період   |payPeriod              |Період в якому розраховано (1С)                                                  |
+|Check date             |Дата виплати           |checkDate              |                                                                                 |
+|Position               |Штатна позиція         |position               |                                                                                 |
+|Department             |Підрозділ              |department             |                                                                                 |
+|Job                    |Посада                 |job                    |                                                                                 |
+|Vacancy                |Вакансія               |vacancy                |                                                                                 |
+|Working time norm      |Норма робочого часу    |workNorm               |                                                                                 |
+|Working time calendar  |Виробничий календар    |workCalendar           |                                                                                 |
+|Work Schedule          |Розклад роботи         |workSchedule           |                                                                                 |
+|Work Sheet             |Табель робочого часу   |workSheet              |                                                                                 |
+|Work Sheet             |Табель робочого часу   |workSheet              |                                                                                 |
+|Incoming balance       |Вхідний залишок        |inBalance              |                                                                                 |
+|Accrual                |Нарахування            |accrual                |                                                                                 |
+|Deduction              |Утримання              |deduction              |                                                                                 |
+|Tax                    |Податок                |tax                    |                                                                                 |
+|Net pay                |До виплати             |netPay                 |                                                                                 |
+|Payment                |Виплата                |payment                |                                                                                 |
+|Outgoing balance       |Вихідний залишок       |outBalance             |                                                                                 |
+
 ## Development
 
 ### Initial script
@@ -169,47 +210,6 @@ npm run m:revert
 # Generate JWT secret key
 openssl rand -base64 60
 ```
-
-### Domain-specific language (DSL)
-
-| English               |Ukrainian              | Short form            | Description                                                                     |
-|-----------------------|-----------------------|-----------------------|---------------------------------------------------------------------------------|
-|Admin                  |Адміністратор          |admin                  |                                                                                 |
-|User                   |Користувач             |user                   |                                                                                 |
-|Owner                  |Власник                |owner                  |                                                                                 |
-|Employer               |Роботодавець           |employer               |                                                                                 |
-|Supervisor             |Керівник               |supervisor             |                                                                                 |
-|Accountant             |Бухгалтер              |accountant             |                                                                                 |
-|Collaborator           |Співробітник           |collaborator           |Помічник, асистент (assistant)                                                   |
-|Employee               |Працівник              |employee               |Штатний працівник підприємства, співробітник                                     |
-|Contractor             |Підрядник              |contractor             |Позаштатний працівник, тимчасовий, не постійний, на разову роботу                |
-|Advisor                |Консультант            |advisor                |                                                                                 |
-|Observer               |Спостерігач            |observer               |                                                                                 |
-|Guest                  |Гість                  |guest                  |                                                                                 |
-|Company                |Підприємство           |company                |                                                                                 |
-|Tax ID                 |Податковий номер       |taxId                  |                                                                                 |
-|Law                    |Законодавство          |law                    |                                                                                 |
-|Accounting type        |Вид обліку             |accounting             |                                                                                 |
-|Payment schedule       |Розклад виплат         |paymentSchedule        |Every 15th and last day of month, Last day of month, First day of the next month |
-|Accounting period      |Обліковий період       |accPeriod              |Період за який нараховано  (1С)                                                  |
-|Payment period         |Розрахунковий період   |payPeriod              |Період в якому розраховано (1С)                                                  |
-|Check date             |Дата виплати           |checkDate              |                                                                                 |
-|Position               |Штатна позиція         |position               |                                                                                 |
-|Department             |Підрозділ              |department             |                                                                                 |
-|Job                    |Посада                 |job                    |                                                                                 |
-|Vacancy                |Вакансія               |vacancy                |                                                                                 |
-|Working time norm      |Норма робочого часу    |workNorm               |                                                                                 |
-|Working time calendar  |Виробничий календар    |workCalendar           |                                                                                 |
-|Work Schedule          |Розклад роботи         |workSchedule           |                                                                                 |
-|Work Sheet             |Табель робочого часу   |workSheet              |                                                                                 |
-|Work Sheet             |Табель робочого часу   |workSheet              |                                                                                 |
-|Incoming balance       |Вхідний залишок        |inBalance              |                                                                                 |
-|Accrual                |Нарахування            |accrual                |                                                                                 |
-|Deduction              |Утримання              |deduction              |                                                                                 |
-|Tax                    |Податок                |tax                    |                                                                                 |
-|Net pay                |До виплати             |netPay                 |                                                                                 |
-|Payment                |Виплата                |payment                |                                                                                 |
-|Outgoing balance       |Вихідний залишок       |outBalance             |                                                                                 |
 
 ## References
 
