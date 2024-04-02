@@ -10,7 +10,8 @@
     "react",
     "nestjs",
     "typeorm",
-    "typescript"
+    "typescript",
+    "mui"
   ],
   "workspaces": [
     "packages/*",
