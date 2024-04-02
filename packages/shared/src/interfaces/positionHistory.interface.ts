@@ -31,7 +31,7 @@ import { IWorkNorm } from './workNorm.interface';
 export interface IPositionHistory extends ILogger {
     id: number;
 
-    position: IPosition;
+    position?: IPosition;
     positionId: number;
 
     dateFrom: Date;

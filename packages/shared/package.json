@@ -21,12 +21,12 @@
         "test:watch": "NODE_ENV=development jest --watch"
     },
     "dependencies": {
+        "date-fns": "^3.6.0",
         "sqlite3": "^5.1.7",
         "ts-loader": "^9.5.1",
         "typeorm": "^0.3.20"
     },
     "devDependencies": {
-        "jest": "^29.7.0",
         "ts-node": "^10.9.2",
         "typescript": "^5.3.3"
     },

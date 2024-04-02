@@ -11,6 +11,8 @@ import {
     HttpCode,
     HttpStatus,
     Req,
+    ParseBoolPipe,
+    Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -78,7 +80,10 @@ export class UsersController {
     @Get(':id/companies')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async userCompanyList(@Param('id', ParseIntPipe) id: number): Promise<IUserCompany[]> {
-        return await this.usersService.getUserCompanyList(id);
+    async userCompanyList(
+        @Param('id', ParseIntPipe) id: number,
+        @Query('relations', ParseBoolPipe) relations: boolean,
+    ): Promise<IUserCompany[]> {
+        return await this.usersService.getUserCompanyList(id, relations);
     }
 }

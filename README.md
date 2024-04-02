@@ -1,6 +1,68 @@
-# Nest a React application inside the Turbo mono-repository
+# Payroll SMB
 
-## Initial script
+- The Payroll SMB application provides a **solution for employers and employees to calculate salary** and taxes based on laws for chosen country.
+- Nest React application inside the Turbo mono-repository
+
+## Start the application
+
+### In production mode
+
+``` bash
+npm i && npm run build && npm start
+```
+
+In Production mode frontend and backend applications works on the same port:
+
+- Backend URL <http://localhost:3000/api>
+- Frontend URL <http://localhost:3000>
+
+### In development mode
+
+``` bash
+npm i && npm run dev
+```
+
+In Development mode frontend and backend applications works on the different ports:
+
+- Backend URL <http://localhost:3000/api>
+- Frontend URL <http://localhost:5173>
+
+### By Docker
+
+``` bash
+# Build and start application
+npm run build
+docker compose build
+docker compose up --detach
+# Stop application
+docker compose down
+```
+
+### By Docker Hub
+
+``` bash
+# Build application and push images to the Docker Hub
+npm run build
+docker compose push
+# Download docker compose script and run docker containers
+curl https://raw.githubusercontent.com/serhii-untilov/nest-react/master/docker-compose.yml >docker-compose.yml
+docker compose up --detach
+```
+
+## Configuration
+
+On a **production** server, copy .env.production file to .env.locale, replace environment variables in the .env.locale file and start the application.
+
+In **development** mode:
+
+- copy apps/api/.env to apps/api/.env.locale
+- copy apps/web/.env.development to apps/web/.env.locale
+
+replace environment variables in *.locale files and run the application.
+
+## Development
+
+### Initial script
 
 ``` bash
 # Create project
@@ -55,6 +117,7 @@ npm i --workspace @repo/web --save date-fns
 mkdir packages/shared
 npm i --workspace @repo/shared --save sqlite3 ts-loader typeorm
 npm i --workspace @repo/shared --save-dev ts-node typescript
+npm i --workspace @repo/shared --save date-fns
 
 # Init "utils" shared library for common functions
 mkdir packages/utils
@@ -63,52 +126,7 @@ npm i --workspace @repo/shared --save-dev ts-node typescript jest
 
 ```
 
-## Development
-
-``` bash
-npm run dev
-```
-
-In Development mode frontend and backend applications works on the different ports:
-
-- Backend URL <http://localhost:3000/api>
-- Frontend URL <http://localhost:5173>
-
-## Production
-
-``` bash
-npm run build
-npm start
-```
-
-In Production mode frontend and backend applications works on the same port:
-
-- Backend URL <http://localhost:3000/api>
-- Frontend URL <http://localhost:3000>
-
-## Docker
-
-``` bash
-# Build and start application
-npm run build
-docker compose build
-docker compose up --detach
-# Stop application
-docker compose down
-```
-
-## Docker Hub
-
-``` bash
-# Build application and push images to the Docker Hub
-npm run build
-docker compose push
-# Download docker compose script and run docker containers
-curl https://raw.githubusercontent.com/serhii-untilov/nest-react/master/docker-compose.yml >docker-compose.yml
-docker compose up --detach
-```
-
-## Nest JS
+### Nest JS
 
 ``` bash
 # Create resources
@@ -126,10 +144,13 @@ npx --workspace @repo/api nest generate resource paymentTypes resources
 npx --workspace @repo/api nest generate resource workNorms resources
 npx --workspace @repo/api nest generate resource workNormPeriods resources
 npx --workspace @repo/api nest generate resource payPeriods resources
+npx --workspace @repo/api nest generate resource persons resources
+npx --workspace @repo/api nest generate resource positions resources
+npx --workspace @repo/api nest generate resource positionHistory resources
 
 ```
 
-## TypeORM
+### TypeORM
 
 ``` bash
 # Create an empty migration
@@ -142,14 +163,14 @@ npm run m:run
 npm run m:revert
 ```
 
-## JWT
+### JWT
 
 ``` bash
 # Generate JWT secret key
 openssl rand -base64 60
 ```
 
-## Domain-specific language (DSL)
+### Domain-specific language (DSL)
 
 | English               |Ukrainian              | Short form            | Description                                                                     |
 |-----------------------|-----------------------|-----------------------|---------------------------------------------------------------------------------|

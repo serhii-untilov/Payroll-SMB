@@ -3,27 +3,26 @@ import { ILogger } from './logger.interface';
 export enum Sex {
     MALE = 'male',
     FEMALE = 'female',
-    UNDEFINED = 'undefined',
 }
 
 export interface IPerson extends ILogger {
     id: number;
 
     firstName: string;
-    middleName: string;
     lastName: string;
 
-    birthDate?: Date | null;
-    deathDate?: Date | null;
+    middleName?: string | undefined;
 
-    taxId?: string;
+    birthDate?: Date | undefined;
 
-    sex?: string;
+    taxId?: string | undefined;
 
-    phone?: string;
-    email?: string;
+    sex?: string | undefined; // See enum Sex
 
-    photo?: string;
+    phone?: string | undefined;
+    email?: string | undefined;
+
+    photo?: string | undefined;
 }
 
 export type ICreatePerson = Omit<

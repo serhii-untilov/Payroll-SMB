@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AccessTokenStrategy, RefreshTokenStrategy } from './strategies';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/resources/users/entities/user.entity';
+import { User } from '../resources/users/entities/user.entity';
 
 @Module({
     imports: [TypeOrmModule.forFeature([User]), JwtModule.register({})],

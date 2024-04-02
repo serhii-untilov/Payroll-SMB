@@ -1,6 +1,6 @@
 import { MenuItem, Select, SelectChangeEvent, SelectProps } from '@mui/material';
 import { IPayPeriod } from '@repo/shared';
-import { isEqual } from 'date-fns';
+import { format, isEqual, startOfMonth } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { useQuery } from 'react-query';
 import useAppContext from '../../hooks/useAppContext';
@@ -10,23 +10,21 @@ import { Skeleton } from './Skeleton';
 
 export type PayPeriodOption = {
     label: string;
-    value: Date;
+    value: string;
 };
 
-export function SelectPayPeriod(props: SelectProps) {
+export function PayPeriod(props: SelectProps) {
     const { company, payPeriod, setPayPeriod } = useAppContext();
     const { locale } = useLocale();
     const { data, isError, isLoading, error } = useQuery<IPayPeriod[], Error>({
-        queryKey: 'payPeriodList',
-        queryFn: async () => getPayPeriodList(company?.id || 0),
-        enabled: !!company?.id,
+        queryKey: ['payPeriodList', company?.id, company?.payPeriod],
+        queryFn: async () => getPayPeriodList(company?.id),
     });
 
     if (isError) {
         enqueueSnackbar(`${error.name}\n${error.message}`, {
             variant: 'error',
         });
-        return <Skeleton />;
     }
 
     if (isLoading) {
@@ -36,10 +34,13 @@ export function SelectPayPeriod(props: SelectProps) {
     const generateOptions = () => {
         return data?.map((period: any) => {
             return (
-                <MenuItem key={period.id} value={period.id}>
-                    {/* {formatPeriod(period.dateFrom, period.dateTo)} */}
+                <MenuItem
+                    key={format(period.dateFrom, 'yyyy-MM-dd')}
+                    value={format(period.dateFrom, 'yyyy-MM-dd')}
+                >
                     {getPayPeriodName(
-                        period,
+                        period.dateFrom,
+                        period.dateTo,
                         isEqual(period.dateFrom, company?.payPeriod),
                         locale.dateLocale,
                     )}
@@ -49,7 +50,8 @@ export function SelectPayPeriod(props: SelectProps) {
     };
 
     const onChange = (event: any) => {
-        setPayPeriod(event.target.value);
+        setPayPeriod(new Date(event.target.value));
+        localStorage.setItem('payPeriod', event.target.value);
     };
 
     return (
@@ -58,8 +60,7 @@ export function SelectPayPeriod(props: SelectProps) {
             margin="none"
             fullWidth
             onChange={onChange}
-            value={payPeriod}
-            // sx={{ mb: 2 }}
+            value={format(payPeriod || startOfMonth(new Date()), 'yyyy-MM-dd')}
             {...props}
             label={''}
         >

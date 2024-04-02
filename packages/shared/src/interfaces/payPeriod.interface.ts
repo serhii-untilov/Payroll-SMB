@@ -8,10 +8,10 @@ export enum PayPeriodState {
 }
 
 export interface IPayPeriod extends ILogger {
-    id: number;
+    id: number | undefined;
 
     company?: ICompany;
-    companyId: number;
+    companyId: number | undefined;
 
     dateFrom: Date;
     dateTo: Date;
