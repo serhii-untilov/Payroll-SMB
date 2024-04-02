@@ -34,28 +34,8 @@ In Development mode frontend and backend applications works on the different por
 git clone https://github.com/serhii-untilov/Payroll.git
 cd Payroll
 docker compose build
-docker compose up --detach
+./start
 # Stop application
-docker compose down
-```
-
-### By Docker Hub
-
-``` bash
-# Build application and push images to the Docker Hub
-docker compose build
-docker compose push
-# On the server
-cd ~
-mkdir payroll
-cd payroll
-# Download docker compose script and containers
-curl https://raw.githubusercontent.com/serhii-untilov/Payroll/master/docker-compose.yml >docker-compose.yml
-curl https://raw.githubusercontent.com/serhii-untilov/Payroll/master/.env.docker >.env.docker
-docker compose pull
-# Start containers
-docker compose up --detach
-# Stop containers
 docker compose down
 ```
 
