@@ -1,11 +1,11 @@
 # Payroll SMB
 
-- The Payroll SMB application provides a **solution for employers and employees to calculate salary** and taxes based on laws for chosen country.
+- Payroll SMB application provides a **solution for employers and employees to calculate salary** and taxes based on laws for chosen country.
 - Nest React application inside the Turbo mono-repository
 
-## Start the application
+## Start application
 
-### In production mode
+### Production mode
 
 ``` bash
 npm i && npm run build && npm start
@@ -16,7 +16,7 @@ In Production mode frontend and backend applications works on the same port:
 - Backend URL <http://localhost:3000/api>
 - Frontend URL <http://localhost:3000>
 
-### In development mode
+### Development mode
 
 ``` bash
 npm i && npm run dev
@@ -31,6 +31,8 @@ In Development mode frontend and backend applications works on the different por
 
 ``` bash
 # Build and start application
+git clone https://github.com/serhii-untilov/Payroll.git
+cd Payroll
 docker compose build
 docker compose up --detach
 # Stop application
