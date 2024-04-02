@@ -45,8 +45,13 @@ docker compose down
 # Build application and push images to the Docker Hub
 docker compose build
 docker compose push
+# On the server
+cd ~
+mkdir payroll
+cd payroll
 # Download docker compose script and containers
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll/master/docker-compose.yml >docker-compose.yml
+curl https://raw.githubusercontent.com/serhii-untilov/Payroll/master/.env.docker >.env.docker
 docker compose pull
 # Start containers
 docker compose up --detach
