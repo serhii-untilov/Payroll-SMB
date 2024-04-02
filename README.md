@@ -46,7 +46,7 @@ npm run build
 docker compose build
 docker compose push
 # Download docker compose script and run docker containers
-curl https://raw.githubusercontent.com/serhii-untilov/nest-react/master/docker-compose.yml >docker-compose.yml
+curl https://raw.githubusercontent.com/serhii-untilov/Payroll/master/docker-compose.yml >docker-compose.yml
 docker compose up --detach
 ```
 
