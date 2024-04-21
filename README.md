@@ -1,6 +1,6 @@
 # Payroll SMB
 
-- Payroll SMB application provides a **solution for employers and employees to calculate salary** and taxes based on laws for chosen country.
+- The Payroll SMB application provides a solution for employers and employees to calculate salaries and taxes based on the laws of the chosen country.
 - Nest React application inside the Turbo mono-repository
 
 ## Start application
