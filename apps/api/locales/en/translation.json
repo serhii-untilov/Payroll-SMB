@@ -81,5 +81,7 @@
     "All": "All",
     "current": "current",
     "Pay period": "Pay period",
-    "Job": "Job"
+    "Job": "Job",
+    "Card Number": "Card #",
+    "Sequence Number": "Sequence #"
 }

@@ -28,7 +28,6 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     const columns: GridColDef[] = [
-        // { field: 'id', headerName: t('ID'), type: 'number', width: 70 },
         {
             field: 'name',
             headerName: t('Department'),

@@ -22,7 +22,7 @@ export class Position extends Logger implements IPosition {
     companyId: number;
 
     @Column({ type: 'varchar', length: 15 })
-    idNumber: string; // Identity number (Табельний номер)
+    cardNumber: string; // Identity number (Табельний номер)
 
     @Column({ type: 'integer' })
     sequenceNumber: number; // Sequence in payroll reports to place managers on top

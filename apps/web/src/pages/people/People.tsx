@@ -30,7 +30,7 @@ export default function People() {
                 </Grid>
             </Grid>
             <Box
-                id="people__box-tabs"
+                id="people__tabs-box"
                 sx={{
                     width: '100%',
                     display: 'flex',
@@ -39,6 +39,7 @@ export default function People() {
                 }}
             >
                 <Tabs
+                    id="people__tabs"
                     value={value}
                     onChange={handleChange}
                     // textColor={'inherit'}

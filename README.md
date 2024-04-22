@@ -83,6 +83,8 @@ replace environment variables in *.locale files and run the application.
 |Payment period         |Розрахунковий період   |payPeriod              |Період в якому розраховано (1С)                                                  |
 |Check date             |Дата виплати           |checkDate              |                                                                                 |
 |Position               |Штатна позиція         |position               |                                                                                 |
+|Card Number            |Табельний номер        |cardNumber             |Номер картки у зовнішніх системах (кадровий облік, тощо) зберігати окремо        |
+|Sequence Number        |Порядковий номер       |sequenceNumber         |The sequence number in payroll reports to place managers on top                  |
 |Department             |Підрозділ              |department             |                                                                                 |
 |Job                    |Посада                 |job                    |                                                                                 |
 |Vacancy                |Вакансія               |vacancy                |                                                                                 |

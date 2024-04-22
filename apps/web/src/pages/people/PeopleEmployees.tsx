@@ -32,7 +32,13 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     const columns: GridColDef[] = [
-        // { field: 'id', headerName: t('ID'), type: 'number', width: 70 },
+        {
+            field: 'cardNumber',
+            headerName: t('Card Number'),
+            type: 'string',
+            width: 400,
+            sortable: true,
+        },
         {
             field: 'name',
             headerName: t('Position'),

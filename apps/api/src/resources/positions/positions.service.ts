@@ -14,10 +14,10 @@ export class PositionsService {
 
     async create(position: CreatePositionDto): Promise<Position> {
         const existing = this.positionsRepository.findOne({
-            where: { idNumber: position.idNumber },
+            where: { cardNumber: position.cardNumber },
         });
         if (existing) {
-            throw new BadRequestException(`Position '${position.idNumber}' already exists.`);
+            throw new BadRequestException(`Position '${position.cardNumber}' already exists.`);
         }
         return await this.positionsRepository.save(position);
     }
