@@ -45,7 +45,7 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
             field: 'name',
             headerName: t('Position'),
             type: 'string',
-            width: 300,
+            width: 250,
             sortable: true,
         },
         {

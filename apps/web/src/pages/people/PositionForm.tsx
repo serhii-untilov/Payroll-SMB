@@ -196,7 +196,7 @@ export function PositionForm(params: Params) {
                                 label={t('Last Name')}
                                 type="text"
                                 autoFocus
-                                // sx={{ fontWeight: 'bold' }}
+                                sx={{ fontWeight: 'bold' }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -207,7 +207,6 @@ export function PositionForm(params: Params) {
                                 id="firstName"
                                 label={t('First Name')}
                                 type="text"
-                                // sx={{ fontWeight: 'bold' }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -218,8 +217,6 @@ export function PositionForm(params: Params) {
                                 id="middleName"
                                 label={t('Middle Name')}
                                 type="text"
-
-                                // sx={{ fontWeight: 'bold' }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
