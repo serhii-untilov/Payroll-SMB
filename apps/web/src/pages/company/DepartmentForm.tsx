@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { IDepartment, formatDate, maxDate, minDate } from '@repo/shared';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
-import { Dispatch, Fragment, useEffect } from 'react';
+import { Dispatch, Fragment, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
@@ -45,14 +45,14 @@ const formSchema = yup.object().shape({
 type FormType = yup.InferType<typeof formSchema>;
 
 // To prevent Warning: A component is changing an uncontrolled input to be controlled.
-const defaultValues: FormType = {
-    id: null,
-    name: '',
-    companyId: 0,
-    dateFrom: minDate(),
-    dateTo: maxDate(),
-    parentDepartmentId: null,
-};
+// const defaultValues: FormType = {
+//     id: null,
+//     name: '',
+//     companyId: 0,
+//     dateFrom: minDate(),
+//     dateTo: maxDate(),
+//     parentDepartmentId: null,
+// };
 
 export default function DepartmentForm(params: DepartmentFormParams) {
     const { departmentId, submitCallback } = params;
@@ -62,6 +62,18 @@ export default function DepartmentForm(params: DepartmentFormParams) {
     const queryClient = useQueryClient();
 
     useEffect(() => {}, [company]);
+
+    // To prevent Warning: A component is changing an uncontrolled input to be controlled.
+    const defaultValues = useMemo((): FormType => {
+        return {
+            id: null,
+            name: '',
+            companyId: company?.id || 0,
+            dateFrom: minDate(),
+            dateTo: maxDate(),
+            parentDepartmentId: null,
+        };
+    }, [company]);
 
     const {
         data: department,
@@ -143,6 +155,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
             reset(department);
             if (submitCallback) submitCallback(department);
             params.setOpen(false);
+            reset(defaultValues);
             queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
         } catch (e: unknown) {
             const error = e as AxiosError;
@@ -151,10 +164,12 @@ export default function DepartmentForm(params: DepartmentFormParams) {
     };
 
     const onCancel = () => {
-        reset(department);
+        reset(defaultValues);
         params.setOpen(false);
-        // queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
+        queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
     };
+
+    console.log('departmentId', departmentId, department);
 
     return (
         <Fragment>
