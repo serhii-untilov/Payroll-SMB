@@ -5,10 +5,11 @@ import {
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
+    useGridApiRef,
 } from '@mui/x-data-grid';
 import { IDepartment, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { DataGrid } from '../../components/data/DataGrid';
@@ -17,6 +18,7 @@ import { Loading } from '../../components/utility/Loading';
 import { deleteDepartment, getDepartmentList } from '../../services/department.service';
 import { CompanyDetailsProps } from './CompanyDetails';
 import DepartmentForm from './DepartmentForm';
+import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
 
 export function CompanyDepartments(params: CompanyDetailsProps) {
     const { companyId } = params;
@@ -26,6 +28,8 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
     const [departmentId, setDepartmentId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+
+    const gridRef = useGridApiRef();
 
     const columns: GridColDef[] = [
         {
@@ -112,11 +116,11 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
     };
 
     const onPrint = () => {
-        console.log('onPrint');
+        gridRef.current.exportDataAsPrint();
     };
 
     const onExport = () => {
-        console.log('onExport');
+        gridRef.current.exportDataAsCsv();
     };
 
     const onShowHistory = () => {
@@ -149,6 +153,7 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
                 restoreDeletedDisabled={true}
             />
             <DataGrid
+                apiRef={gridRef}
                 rows={departmentList || []}
                 columns={columns}
                 checkboxSelection={true}

@@ -5,6 +5,7 @@ import {
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
+    useGridApiRef,
 } from '@mui/x-data-grid';
 import { IPosition, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
@@ -30,6 +31,8 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
     const [positionId, setPositionId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+
+    const gridRef = useGridApiRef();
 
     const columns: GridColDef[] = [
         {
@@ -120,11 +123,11 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
     };
 
     const onPrint = () => {
-        console.log('onPrint');
+        gridRef.current.exportDataAsPrint();
     };
 
     const onExport = () => {
-        console.log('onExport');
+        gridRef.current.exportDataAsCsv();
     };
 
     const onShowHistory = () => {
@@ -157,6 +160,7 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
                 restoreDeletedDisabled={true}
             />
             <DataGrid
+                apiRef={gridRef}
                 rows={positionList || []}
                 columns={columns}
                 checkboxSelection={true}
