@@ -12,7 +12,6 @@
 - Event-driven calculate processing
 - Automatic documents prepared according to the business process schedule
 
-
 ## Start the application
 
 ### Production mode

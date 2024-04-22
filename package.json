@@ -1,7 +1,6 @@
 {
   "name": "payroll-smb",
   "description": "The Payroll SMB Application",
-  "homepage": "https://payroll.untilov.com.ua",
   "author": "Serhii Untilov <s.untilov@gmail.com> (https://untilov.com.ua/)",
   "keywords": [
     "payroll",
