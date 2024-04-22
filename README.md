@@ -100,6 +100,7 @@ replace environment variables in *.locale files and run the application.
 |Net pay                |До виплати             |netPay                 |                                                                                 |
 |Payment                |Виплата                |payment                |                                                                                 |
 |Outgoing balance       |Вихідний залишок       |outBalance             |                                                                                 |
+|Payment Type           |Вид оплати             |paymentType            |                                                                                 |
 
 ## Development
 

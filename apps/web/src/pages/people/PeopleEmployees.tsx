@@ -39,21 +39,56 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
             field: 'cardNumber',
             headerName: t('Card Number'),
             type: 'string',
-            width: 100,
+            width: 120,
             sortable: true,
         },
         {
             field: 'name',
             headerName: t('Position'),
             type: 'string',
-            width: 400,
+            width: 300,
             sortable: true,
         },
         {
             field: 'job',
             headerName: t('Job'),
             type: 'string',
-            width: 400,
+            width: 200,
+            sortable: true,
+        },
+        {
+            field: 'department',
+            headerName: t('Department'),
+            type: 'string',
+            width: 300,
+            sortable: true,
+        },
+        {
+            field: 'workNorm',
+            headerName: t('Work Norm'),
+            type: 'string',
+            width: 200,
+            sortable: true,
+        },
+        {
+            field: 'paymentType',
+            headerName: t('Payment Type'),
+            type: 'string',
+            width: 200,
+            sortable: true,
+        },
+        {
+            field: 'wage',
+            headerName: t('Wage'),
+            type: 'number',
+            width: 150,
+            sortable: true,
+        },
+        {
+            field: 'rate',
+            headerName: t('Rate'),
+            type: 'number',
+            width: 150,
             sortable: true,
         },
         {
@@ -160,6 +195,12 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
                 restoreDeletedDisabled={true}
             />
             <DataGrid
+                columnVisibilityModel={{
+                    // Hide columns, the other columns will remain visible
+                    department: false,
+                    dateFrom: false,
+                    dateTo: false,
+                }}
                 apiRef={gridRef}
                 rows={positionList || []}
                 columns={columns}

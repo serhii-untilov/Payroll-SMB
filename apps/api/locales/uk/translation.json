@@ -82,5 +82,9 @@
     "Pay period": "Розрахунковий період",
     "Job": "Посада",
     "Card Number": "Таб. №",
-    "Sequence Number": "Порядковий №"
+    "Sequence Number": "Порядковий №",
+    "Work Norm": "Норма",
+    "Payment Type": "Форма оплати",
+    "Wage": "Оклад",
+    "Rate": "Ставка"
 }

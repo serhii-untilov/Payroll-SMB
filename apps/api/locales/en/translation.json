@@ -83,5 +83,9 @@
     "Pay period": "Pay period",
     "Job": "Job",
     "Card Number": "Card #",
-    "Sequence Number": "Sequence #"
+    "Sequence Number": "Sequence #",
+    "Work Norm": "Work Norm",
+    "Payment Type": "Payment Type",
+    "Wage": "Wage",
+    "Rate": "Rate"
 }
