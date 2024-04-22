@@ -3,7 +3,17 @@
 - The Payroll SMB application provides a solution for employers and employees to calculate salaries and taxes based on the laws of the chosen country
 - Nest React application inside the Turbo mono-repository
 
-## Start application
+## Key features
+
+- Multi-tenant architecture
+- Mono-repository
+- JWT authorization
+- Role-based access
+- Event-driven calculate processing
+- Automatic documents prepared according to the business process schedule
+
+
+## Start the application
 
 ### Production mode
 
