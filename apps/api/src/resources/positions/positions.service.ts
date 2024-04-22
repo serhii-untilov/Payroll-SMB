@@ -22,12 +22,12 @@ export class PositionsService {
         return await this.positionsRepository.save(position);
     }
 
-    async findAll(): Promise<Position[]> {
-        return await this.positionsRepository.find();
+    async findAll(params): Promise<Position[]> {
+        return await this.positionsRepository.find(params);
     }
 
-    async findOne(id: number): Promise<Position> {
-        const position = await this.positionsRepository.findOneBy({ id });
+    async findOne(params): Promise<Position> {
+        const position = await this.positionsRepository.findOne(params);
         if (!position) {
             throw new NotFoundException(`Position could not be found.`);
         }

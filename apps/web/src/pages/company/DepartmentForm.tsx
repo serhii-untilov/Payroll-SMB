@@ -169,8 +169,6 @@ export default function DepartmentForm(params: DepartmentFormParams) {
         queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
     };
 
-    console.log('departmentId', departmentId, department);
-
     return (
         <Fragment>
             <Dialog

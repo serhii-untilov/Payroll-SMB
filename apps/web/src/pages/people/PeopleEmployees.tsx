@@ -36,12 +36,19 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
             field: 'cardNumber',
             headerName: t('Card Number'),
             type: 'string',
-            width: 400,
+            width: 100,
             sortable: true,
         },
         {
             field: 'name',
             headerName: t('Position'),
+            type: 'string',
+            width: 400,
+            sortable: true,
+        },
+        {
+            field: 'job',
+            headerName: t('Job'),
             type: 'string',
             width: 400,
             sortable: true,
@@ -64,16 +71,6 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
             sortable: true,
             valueGetter: (params) => {
                 return date2view(params.value);
-            },
-        },
-        {
-            field: 'parentPosition',
-            headerName: t('Parent Position'),
-            type: 'string',
-            width: 250,
-            sortable: true,
-            valueGetter: (params) => {
-                return params.row.parentPosition?.name || '';
             },
         },
     ];

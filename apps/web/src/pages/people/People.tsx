@@ -44,11 +44,17 @@ export default function People() {
                     onChange={handleChange}
                     // textColor={'inherit'}
                     // indicatorColor="primary"
+                    sx={{
+                        '> .Mui-disabled': {
+                            // color: (theme) => theme.palette.grey[500],
+                            color: 'red!important',
+                        },
+                    }}
                 >
                     <Tab label={t('Employees')} />
-                    <Tab label={t('Contractors')} />
+                    <Tab disabled label={t('Contractors')} />
                     <Tab label={t('Vacancies')} />
-                    <Tab label={t('Offers')} />
+                    <Tab disabled label={t('Offers')} />
                     <Tab label={t('Dismissed')} />
                     <Tab label={t('All')} />
                 </Tabs>

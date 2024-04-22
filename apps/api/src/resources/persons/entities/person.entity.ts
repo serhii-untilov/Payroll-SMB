@@ -1,6 +1,14 @@
 import { IPerson } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    AfterInsert,
+    AfterLoad,
+    AfterUpdate,
+    Column,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Position } from '../../positions/entities/position.entity';
 
 @Entity()
@@ -16,6 +24,8 @@ export class Person extends Logger implements IPerson {
 
     @Column({ type: 'varchar', length: 30, default: '' })
     middleName?: string;
+
+    fullName?: string;
 
     @Column({ type: 'date' })
     birthDate?: Date;
@@ -37,4 +47,13 @@ export class Person extends Logger implements IPerson {
 
     @OneToMany(() => Position, (position) => position.person)
     positions?: Position[];
+
+    @AfterLoad()
+    @AfterInsert()
+    @AfterUpdate()
+    generateFullName(): void {
+        this.fullName = `${this.firstName || ''} ${this.middleName || ''} ${this.lastName || ''}`
+            .replace('  ', ' ')
+            .trim();
+    }
 }

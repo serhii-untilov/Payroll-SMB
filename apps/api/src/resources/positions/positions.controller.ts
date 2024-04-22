@@ -10,6 +10,8 @@ import {
     ParseIntPipe,
     HttpCode,
     HttpStatus,
+    Query,
+    ParseBoolPipe,
 } from '@nestjs/common';
 import { PositionsService } from './positions.service';
 import { CreatePositionDto } from './dto/create-position.dto';
@@ -31,15 +33,32 @@ export class PositionsController {
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(): Promise<IPosition[]> {
-        return await this.positionsService.findAll();
+    async findAll(
+        @Query('companyId', ParseIntPipe) companyId: number,
+        @Query('relations', ParseBoolPipe) relations: boolean,
+    ): Promise<IPosition[]> {
+        return await this.positionsService.findAll({
+            companyId,
+            relations: {
+                company: relations,
+                person: relations,
+                history: relations,
+            },
+        });
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(@Param('id', ParseIntPipe) id: number): Promise<IPosition> {
-        return await this.positionsService.findOne(id);
+        return await this.positionsService.findOne({
+            where: { id },
+            relations: {
+                company: true,
+                person: true,
+                history: true,
+            },
+        });
     }
 
     @Patch(':id')

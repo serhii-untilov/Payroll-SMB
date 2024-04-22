@@ -51,21 +51,6 @@ export class PayPeriodsController {
         });
     }
 
-    @Get(':id')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async findOne(
-        @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
-        @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
-    ) {
-        return await this.payPeriodsService.findOne({
-            where: { id },
-            relations: { company: relations },
-            ...(fullFieldList ? {} : defaultFieldList),
-        });
-    }
-
     @Get('current')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
@@ -82,6 +67,21 @@ export class PayPeriodsController {
             relations,
             fullFieldList,
         );
+    }
+
+    @Get(':id')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async findOne(
+        @Param('id', ParseIntPipe) id: number,
+        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
+    ) {
+        return await this.payPeriodsService.findOne({
+            where: { id },
+            relations: { company: relations },
+            ...(fullFieldList ? {} : defaultFieldList),
+        });
     }
 
     @Patch(':id')

@@ -17,6 +17,8 @@ export interface IPosition extends ILogger {
 
     dateFrom?: Date | null; // Hire date or date of open vacancy
     dateTo?: Date | null; // Dismissal date or date of close vacancy
+
+    name?: string | null;
 }
 
 export type ICreatePosition = Omit<

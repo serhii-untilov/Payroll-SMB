@@ -18,21 +18,21 @@ export class DepartmentsService {
         private companyRepository: Repository<Company>,
     ) {}
 
-    async create(userId: number, Department: CreateDepartmentDto): Promise<Department> {
-        const existing = await this.DepartmentsRepository.findOneBy({ name: Department.name });
+    async create(userId: number, department: CreateDepartmentDto): Promise<Department> {
+        const existing = await this.DepartmentsRepository.findOneBy({ name: department.name });
         if (existing) {
-            throw new BadRequestException(`Department '${Department.name}' already exists.`);
+            throw new BadRequestException(`Department '${department.name}' already exists.`);
         }
         const user = await this.userRepository.findOneBy({ id: userId });
         if (!user) {
             throw new BadRequestException(`User '${userId}' not found.`);
         }
-        const company = await this.companyRepository.findOneBy({ id: Department.companyId });
+        const company = await this.companyRepository.findOneBy({ id: department.companyId });
         if (!company) {
-            throw new BadRequestException(`Company '${Department.companyId}' not found.`);
+            throw new BadRequestException(`Company '${department.companyId}' not found.`);
         }
         const newDepartment = await this.DepartmentsRepository.save({
-            ...Department,
+            ...department,
             createdUserId: userId,
             updatedUserId: userId,
         });
@@ -44,25 +44,25 @@ export class DepartmentsService {
     }
 
     async findOne(params): Promise<Department> {
-        const Department = await this.DepartmentsRepository.findOne(params);
-        if (!Department) {
+        const department = await this.DepartmentsRepository.findOne(params);
+        if (!department) {
             throw new NotFoundException(`Department could not be found.`);
         }
-        return Department;
+        return department;
     }
 
     async update(userId: number, id: number, data: UpdateDepartmentDto): Promise<Department> {
-        const Department = await this.DepartmentsRepository.findOneBy({ id });
-        if (!Department) {
+        const department = await this.DepartmentsRepository.findOneBy({ id });
+        if (!department) {
             throw new NotFoundException(`Department could not be found.`);
         }
         const user = await this.userRepository.findOneBy({ id: userId });
         if (!user) {
             throw new BadRequestException(`User '${userId}' not found.`);
         }
-        const company = await this.companyRepository.findOneBy({ id: Department.companyId });
+        const company = await this.companyRepository.findOneBy({ id: department.companyId });
         if (!company) {
-            throw new BadRequestException(`Company '${Department.companyId}' not found.`);
+            throw new BadRequestException(`Company '${department.companyId}' not found.`);
         }
         await this.DepartmentsRepository.save({
             ...data,
