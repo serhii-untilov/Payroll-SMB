@@ -16,7 +16,6 @@ import { DataGrid } from '../../components/data/DataGrid';
 import { TableToolbar } from '../../components/layout/TableToolbar';
 import { Loading } from '../../components/utility/Loading';
 import { deletePosition, getPositionList } from '../../services/position.service';
-// import { CompanyDetailsProps } from './CompanyDetails';
 import { PositionForm } from './PositionForm';
 
 type PeopleEmployeesProps = {

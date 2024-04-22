@@ -44,16 +44,6 @@ const formSchema = yup.object().shape({
 
 type FormType = yup.InferType<typeof formSchema>;
 
-// To prevent Warning: A component is changing an uncontrolled input to be controlled.
-// const defaultValues: FormType = {
-//     id: null,
-//     name: '',
-//     companyId: 0,
-//     dateFrom: minDate(),
-//     dateTo: maxDate(),
-//     parentDepartmentId: null,
-// };
-
 export default function DepartmentForm(params: DepartmentFormParams) {
     const { departmentId, submitCallback } = params;
     const { locale } = useLocale();
