@@ -1,6 +1,6 @@
 # Payroll SMB
 
-The Payroll SMB application provides a solution for employers and employees to calculate salaries and taxes based on the laws of the chosen country
+The Payroll SMB application provides a solution for employers and employees to calculate salaries and taxes based on the laws of the chosen country.
 
 ## Key features
 
