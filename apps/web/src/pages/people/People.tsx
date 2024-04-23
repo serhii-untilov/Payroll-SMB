@@ -1,4 +1,4 @@
-import { Box, Grid, Tab, Tabs } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputLabel } from '../../components/layout/InputLabel';
@@ -7,7 +7,9 @@ import { PayPeriod } from '../../components/layout/PayPeriod';
 import { TabPanel } from '../../components/layout/TabPanel';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
-import { PeopleEmployees } from './PeopleEmployees';
+import { PositionList } from './PositionList';
+import { TabsHorizontal } from '../../components/layout/TabsHorizontal';
+import { Tab } from '../../components/layout/Tab';
 
 export default function People() {
     const { company } = useAppContext();
@@ -38,29 +40,17 @@ export default function People() {
                     flexGrow: 1,
                 }}
             >
-                <Tabs
-                    id="people__tabs"
-                    value={value}
-                    onChange={handleChange}
-                    // textColor={'inherit'}
-                    // indicatorColor="primary"
-                    sx={{
-                        '> .Mui-disabled': {
-                            // color: (theme) => theme.palette.grey[500],
-                            color: 'red!important',
-                        },
-                    }}
-                >
+                <TabsHorizontal id="people__tabs" value={value} onChange={handleChange}>
                     <Tab label={t('Employees')} />
                     <Tab disabled label={t('Contractors')} />
                     <Tab label={t('Vacancies')} />
                     <Tab disabled label={t('Offers')} />
                     <Tab label={t('Dismissed')} />
                     <Tab label={t('All')} />
-                </Tabs>
+                </TabsHorizontal>
 
                 <TabPanel value={value} index={0} sx={{ flex: 1 }}>
-                    {company?.id && <PeopleEmployees companyId={company?.id} />}
+                    {company?.id && <PositionList companyId={company?.id} />}
                 </TabPanel>
                 <TabPanel value={value} index={1} sx={{ flex: 1 }}>
                     {/* <CompanyManagers companyId={company?.id} /> */}

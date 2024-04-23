@@ -66,8 +66,8 @@
     "Bank": "Bank",
     "Currency": "Currency",
     "Description": "Description",
-    "Add record": "Add record",
-    "Delete selected records": "Delete selected records",
+    "Add": "Add",
+    "Delete": "Delete",
     "Print": "Print",
     "Export": "Export",
     "Show deleted": "Show deleted",
@@ -88,5 +88,15 @@
     "Payment Type": "Payment Type",
     "Wage": "Wage",
     "Rate": "Rate",
-    "Middle Name": "Middle Name"
+    "Middle Name": "Middle Name",
+    "New Position": "New Position",
+    "Details": "Details",
+    "History": "History of Changes",
+    "Permanent Accruals": "Permanent Accruals",
+    "Taxes and Deductions": "Taxes and Deductions",
+    "Payment": "Payment Info",
+    "Save": "Save",
+    "Restore": "Restore",
+    "Birth Date": "Birth Date",
+    "Sex": "Sex"
 }

@@ -20,12 +20,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, redirect } from 'react-router-dom';
 import * as yup from 'yup';
-import { FormTextField } from '../components/form/FormTextField';
-import { AppTitle } from '../components/layout/AppTitle';
-import { Copyright } from '../components/layout/Copyright';
-import useAuth from '../hooks/useAuth';
-import useLocale from '../hooks/useLocale';
-import { errorMessage } from '../services/utils';
+import { FormTextField } from '../../components/form/FormTextField';
+import { AppTitle } from '../../components/layout/AppTitle';
+import { Copyright } from '../../components/layout/Copyright';
+import useAuth from '../../hooks/useAuth';
+import useLocale from '../../hooks/useLocale';
+import { errorMessage } from '../../services/utils';
 import { grey } from '@mui/material/colors';
 
 const formSchema = yup.object().shape({

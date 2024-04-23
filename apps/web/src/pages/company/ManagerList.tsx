@@ -11,10 +11,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import { DataGrid } from '../../components/data/DataGrid';
-import { TableToolbar } from '../../components/layout/TableToolbar';
+import { Toolbar } from '../../components/layout/Toolbar';
 import { CompanyDetailsProps } from './CompanyDetails';
 
-export function CompanyManagers(params: CompanyDetailsProps) {
+export function ManagerList(params: CompanyDetailsProps) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
@@ -102,20 +102,14 @@ export function CompanyManagers(params: CompanyDetailsProps) {
 
     return (
         <>
-            <TableToolbar
+            <Toolbar
                 onAdd={onAddManager}
-                onDelete={onDeleteManager}
-                deleteDisabled={true}
+                onDelete={'disabled'}
                 onPrint={onPrint}
-                printDisabled={false}
                 onExport={onExport}
-                exportDisabled={false}
-                onShowHistory={() => {}}
-                showHistoryDisabled={true}
-                onShowDeleted={() => {}}
-                showDeletedDisabled={true}
-                onRestoreDeleted={() => {}}
-                restoreDeletedDisabled={true}
+                onShowHistory={'disabled'}
+                onShowDeleted={'disabled'}
+                onRestoreDeleted={'disabled'}
             />
             <DataGrid
                 rows={[]}

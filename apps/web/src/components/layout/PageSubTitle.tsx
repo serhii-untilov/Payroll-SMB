@@ -1,17 +1,16 @@
 import { Typography } from '@mui/material';
 import { PropsWithChildren } from 'react';
 
-export function PageTitle(props: PropsWithChildren) {
-    const { children } = props;
-
+export function PageSubTitle({ children, ...other }: PropsWithChildren) {
     return (
         <Typography
-            component="h2"
-            color="text.primary"
-            variant="h2"
+            component="h3"
+            color="primary.main"
+            variant="h3"
             noWrap
             // align="center"
-            {...props}
+            mb={{ xs: 1, sm: 2 }}
+            {...other}
         >
             {children}
         </Typography>

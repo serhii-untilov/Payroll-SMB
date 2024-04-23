@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import PageLayout from '../components/layout/PageLayout';
-import useLocale from '../hooks/useLocale';
+import useLocale from '../../hooks/useLocale';
 import { useEffect } from 'react';
 
-export default function Payments() {
+export default function CompanyList() {
     const { locale } = useLocale();
     const { t } = useTranslation();
 
@@ -11,7 +10,7 @@ export default function Payments() {
 
     return (
         <>
-            <PageLayout title={t('Payments')}></PageLayout>
+            <h2>{t('Company list')}</h2>
         </>
     );
 }

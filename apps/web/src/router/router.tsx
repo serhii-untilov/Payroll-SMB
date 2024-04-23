@@ -11,19 +11,20 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
     </Suspense>
 );
 
-export const SignIn = Loadable(lazy(() => import('../pages/SignIn')));
-const SignUp = Loadable(lazy(() => import('../pages/SignUp')));
-const Dashboard = Loadable(lazy(() => import('../pages/Dashboard')));
-const Welcome = Loadable(lazy(() => import('../pages/Welcome')));
+export const SignIn = Loadable(lazy(() => import('../pages/auth/SignIn')));
+const SignUp = Loadable(lazy(() => import('../pages/auth/SignUp')));
+const Dashboard = Loadable(lazy(() => import('../pages/dashboard/Dashboard')));
+const Welcome = Loadable(lazy(() => import('../pages/welcome/Welcome')));
 const Company = Loadable(lazy(() => import('../pages/company/Company')));
-const CompanyList = Loadable(lazy(() => import('../pages/CompanyList')));
+const CompanyList = Loadable(lazy(() => import('../pages/profile/CompanyList')));
 const People = Loadable(lazy(() => import('../pages/people/People')));
-const TimeOff = Loadable(lazy(() => import('../pages/TimeOff')));
-const TimeSheet = Loadable(lazy(() => import('../pages/TimeSheet')));
-const Payroll = Loadable(lazy(() => import('../pages/Payroll')));
-const Payments = Loadable(lazy(() => import('../pages/Payments')));
-const Reports = Loadable(lazy(() => import('../pages/Reports')));
-const Profile = Loadable(lazy(() => import('../pages/Profile')));
+const TimeOff = Loadable(lazy(() => import('../pages/timesheet/TimeOff')));
+const TimeSheet = Loadable(lazy(() => import('../pages/timesheet/TimeSheet')));
+const Payroll = Loadable(lazy(() => import('../pages/payroll/Payroll')));
+const Payments = Loadable(lazy(() => import('../pages/payments/Payments')));
+const Reports = Loadable(lazy(() => import('../pages/reports/Reports')));
+const Profile = Loadable(lazy(() => import('../pages/profile/Profile')));
+const PositionForm = Loadable(lazy(() => import('../pages/people/PositionForm')));
 
 const router: RouteObject[] = [
     {
@@ -61,7 +62,13 @@ const router: RouteObject[] = [
             { index: true, element: <Dashboard /> },
             { path: 'dashboard', element: <Dashboard /> },
             { path: 'company', element: <Company /> },
-            { path: 'people', element: <People /> },
+            {
+                path: 'people',
+                children: [
+                    { index: true, element: <People /> },
+                    { path: 'position', element: <PositionForm /> },
+                ],
+            },
             { path: 'time-off', element: <TimeOff /> },
             { path: 'time-sheet', element: <TimeSheet /> },
             { path: 'payroll', element: <Payroll /> },

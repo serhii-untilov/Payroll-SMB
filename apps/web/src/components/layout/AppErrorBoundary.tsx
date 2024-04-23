@@ -1,8 +1,5 @@
-import { ComponentProps, ErrorInfo, PropsWithChildren } from 'react';
+import { ErrorInfo, PropsWithChildren } from 'react';
 import { ErrorBoundary, FallbackProps, useErrorBoundary } from 'react-error-boundary';
-import { useNavigate } from 'react-router-dom';
-import { Button } from './Button';
-import { Typography } from '@mui/material';
 
 function ErrorFallback(props: FallbackProps) {
     const { error, resetErrorBoundary } = props;

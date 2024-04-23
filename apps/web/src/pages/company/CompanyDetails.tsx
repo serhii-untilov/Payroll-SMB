@@ -1,12 +1,12 @@
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { TabPanel } from '../../components/layout/TabPanel';
-import { CompanyDepartments } from './CompanyDepartments';
-import { CompanyManagers } from './CompanyManagers';
-import { CompanyAccounts } from './CompanyAccounts';
+import { DepartmentList } from './DepartmentList';
+import { ManagerList } from './ManagerList';
+import { AccountList } from './AccountList';
+import { TabsHorizontal } from '../../components/layout/TabsHorizontal';
+import { Tab } from '../../components/layout/Tab';
 
 export type CompanyDetailsProps = {
     companyId: number;
@@ -33,7 +33,7 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
             <Box
             // sx={{ borderBottom: 0.5, borderColor: 'divider' }}
             >
-                <Tabs
+                <TabsHorizontal
                     value={value}
                     onChange={handleChange}
                     // textColor={'inherit'}
@@ -42,16 +42,16 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
                     <Tab label={t('Departments')} />
                     <Tab label={t('Managers')} />
                     <Tab label={t('Accounts')} />
-                </Tabs>
+                </TabsHorizontal>
             </Box>
             <TabPanel value={value} index={0} sx={{ flex: 1 }}>
-                <CompanyDepartments companyId={companyId} />
+                <DepartmentList companyId={companyId} />
             </TabPanel>
             <TabPanel value={value} index={1} sx={{ flex: 1 }}>
-                <CompanyManagers companyId={companyId} />
+                <ManagerList companyId={companyId} />
             </TabPanel>
             <TabPanel value={value} index={2} sx={{ flex: 1 }}>
-                <CompanyAccounts companyId={companyId} />
+                <AccountList companyId={companyId} />
             </TabPanel>
         </Box>
     );

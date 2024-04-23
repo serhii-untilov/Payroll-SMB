@@ -4,7 +4,7 @@ import useAppContext from '../../hooks/useAppContext';
 import { PageTitle } from './PageTitle';
 
 interface PageLayoutProps {
-    title: string;
+    title?: string;
     children?: ReactNode;
 }
 
@@ -23,7 +23,7 @@ const PageLayout: FC<PageLayoutProps> = ({ title, children }) => {
         >
             {compactView && title && (
                 <Box mb={{ xs: 0, lg: 1, xl: 1 }}>
-                    <PageTitle title={title} />
+                    <PageTitle>{title}</PageTitle>
                 </Box>
             )}
             {children}

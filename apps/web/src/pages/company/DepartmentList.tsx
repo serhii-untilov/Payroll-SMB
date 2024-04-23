@@ -13,14 +13,14 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { DataGrid } from '../../components/data/DataGrid';
-import { TableToolbar } from '../../components/layout/TableToolbar';
+import { Toolbar } from '../../components/layout/Toolbar';
 import { Loading } from '../../components/utility/Loading';
 import { deleteDepartment, getDepartmentList } from '../../services/department.service';
 import { CompanyDetailsProps } from './CompanyDetails';
 import DepartmentForm from './DepartmentForm';
 import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
 
-export function CompanyDepartments(params: CompanyDetailsProps) {
+export function DepartmentList(params: CompanyDetailsProps) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
@@ -123,34 +123,16 @@ export function CompanyDepartments(params: CompanyDetailsProps) {
         gridRef.current.exportDataAsCsv();
     };
 
-    const onShowHistory = () => {
-        console.log('onShowHistory');
-    };
-
-    const onShowDeleted = () => {
-        console.log('onShowDeleted');
-    };
-
-    const onRestoreDeleted = () => {
-        console.log('onRestoreDeleted');
-    };
-
     return (
         <>
-            <TableToolbar
+            <Toolbar
                 onAdd={onAddDepartment}
-                onDelete={onDeleteDepartment}
-                deleteDisabled={!rowSelectionModel.length}
-                onPrint={onPrint}
-                printDisabled={!departmentList?.length}
-                onExport={onExport}
-                exportDisabled={!departmentList?.length}
-                onShowHistory={onShowHistory}
-                showHistoryDisabled={true}
-                onShowDeleted={onShowDeleted}
-                showDeletedDisabled={true}
-                onRestoreDeleted={onRestoreDeleted}
-                restoreDeletedDisabled={true}
+                onDelete={rowSelectionModel.length ? onDeleteDepartment : 'disabled'}
+                onPrint={departmentList?.length ? onPrint : 'disabled'}
+                onExport={departmentList?.length ? onExport : 'disabled'}
+                onShowHistory={'disabled'}
+                onShowDeleted={'disabled'}
+                onRestoreDeleted={'disabled'}
             />
             <DataGrid
                 apiRef={gridRef}

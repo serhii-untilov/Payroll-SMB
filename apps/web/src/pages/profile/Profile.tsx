@@ -7,17 +7,17 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import * as Yup from 'yup';
-import { FormInputDropdown } from '../components/form/FormInputDropdown';
-import { FormTextField } from '../components/form/FormTextField';
-import { Button } from '../components/layout/Button';
-import PageLayout from '../components/layout/PageLayout';
-import { AvatarBox } from '../components/utility/AvatarBox';
-import { Loading } from '../components/utility/Loading';
-import { supportedLanguages } from '../context/LocaleContext';
-import useLocale from '../hooks/useLocale';
-import { getCurrentUser } from '../services/auth.service';
-import { updateUser } from '../services/user.service';
-import { getDirtyValues } from '../services/utils';
+import { FormInputDropdown } from '../../components/form/FormInputDropdown';
+import { FormTextField } from '../../components/form/FormTextField';
+import { Button } from '../../components/layout/Button';
+import PageLayout from '../../components/layout/PageLayout';
+import { AvatarBox } from '../../components/utility/AvatarBox';
+import { Loading } from '../../components/utility/Loading';
+import { supportedLanguages } from '../../context/LocaleContext';
+import useLocale from '../../hooks/useLocale';
+import { getCurrentUser } from '../../services/auth.service';
+import { updateUser } from '../../services/user.service';
+import { getDirtyValues } from '../../services/utils';
 
 const formSchema = Yup.object().shape({
     id: Yup.number(),

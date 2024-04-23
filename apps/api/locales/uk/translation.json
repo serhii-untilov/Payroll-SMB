@@ -65,8 +65,8 @@
     "Bank": "Банк",
     "Currency": "Валюта",
     "Description": "Опис",
-    "Add record": "Додати запис",
-    "Delete selected records": "Видалити вибрані записи",
+    "Add": "Додати",
+    "Delete": "Видалити",
     "Print": "Друк",
     "Export": "Експорт",
     "Show deleted": "Переглянути видалені записи",
@@ -87,5 +87,15 @@
     "Payment Type": "Форма оплати",
     "Wage": "Оклад",
     "Rate": "Ставка",
-    "Middle Name": "По батькові"
+    "Middle Name": "По батькові",
+    "New Position": "Нова штатна одиниця",
+    "Details": "Основні відомості",
+    "History": "Історія змін",
+    "Permanent Accruals": "Постійні нарахування",
+    "Taxes and Deductions": "Податки і утримання",
+    "Payment": "Виплата",
+    "Save": "Зберегти",
+    "Restore": "Відновити",
+    "Birth Date": "Дата народження",
+    "Sex": "Стать"
 }

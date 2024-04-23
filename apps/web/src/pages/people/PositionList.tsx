@@ -12,18 +12,18 @@ import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../components/data/DataGrid';
-import { TableToolbar } from '../../components/layout/TableToolbar';
+import { Toolbar } from '../../components/layout/Toolbar';
 import { Loading } from '../../components/utility/Loading';
 import { deletePosition, getPositionList } from '../../services/position.service';
-import { PositionForm } from './PositionForm';
 
-type PeopleEmployeesProps = {
+type Props = {
     companyId: number;
 };
 
-export function PeopleEmployees(params: PeopleEmployeesProps) {
-    const { companyId } = params;
+export function PositionList(props: Props) {
+    const { companyId } = props;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
 
@@ -32,6 +32,8 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     const gridRef = useGridApiRef();
+
+    const navigate = useNavigate();
 
     const columns: GridColDef[] = [
         {
@@ -136,8 +138,9 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
     }
 
     const onAddPosition = () => {
-        setPositionId(null);
-        setOpenForm(true);
+        // setPositionId(null);
+        // setOpenForm(true);
+        navigate('/people/position/');
     };
 
     const onEditPosition = (positionId: number) => {
@@ -178,20 +181,14 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
 
     return (
         <>
-            <TableToolbar
+            <Toolbar
                 onAdd={onAddPosition}
-                onDelete={onDeletePosition}
-                deleteDisabled={!rowSelectionModel.length}
-                onPrint={onPrint}
-                printDisabled={!positionList?.length}
-                onExport={onExport}
-                exportDisabled={!positionList?.length}
-                onShowHistory={onShowHistory}
-                showHistoryDisabled={true}
-                onShowDeleted={onShowDeleted}
-                showDeletedDisabled={true}
-                onRestoreDeleted={onRestoreDeleted}
-                restoreDeletedDisabled={true}
+                onDelete={rowSelectionModel.length ? onDeletePosition : 'disabled'}
+                onPrint={positionList?.length ? onPrint : 'disabled'}
+                onExport={positionList?.length ? onExport : 'disabled'}
+                onShowHistory={'disabled'}
+                onShowDeleted={'disabled'}
+                onRestoreDeleted={'disabled'}
             />
             <DataGrid
                 columnVisibilityModel={{
@@ -223,12 +220,12 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
                     details: GridCallbackDetails,
                 ) => onEditPosition(params.row.id)}
             />
-            <PositionForm
+            {/* <PositionForm
                 open={openForm}
                 setOpen={setOpenForm}
                 positionId={positionId}
                 submitCallback={submitCallback}
-            />
+            /> */}
         </>
     );
 }
