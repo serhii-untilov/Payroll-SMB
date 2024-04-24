@@ -23,6 +23,7 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
 
     return (
         <Box
+            id="company__details_box"
             sx={{
                 width: '100%',
                 display: 'flex',
@@ -30,27 +31,28 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
                 flexGrow: 1,
             }}
         >
-            <Box
+            {/* <Box
             // sx={{ borderBottom: 0.5, borderColor: 'divider' }}
+            > */}
+            <Tabs
+                id="company__details_tabs"
+                value={value}
+                onChange={handleChange}
+                // textColor={'inherit'}
+                // indicatorColor="primary"
             >
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    // textColor={'inherit'}
-                    // indicatorColor="primary"
-                >
-                    <Tab label={t('Departments')} />
-                    <Tab label={t('Managers')} />
-                    <Tab label={t('Accounts')} />
-                </Tabs>
-            </Box>
-            <TabPanel value={value} index={0} sx={{ flex: 1 }}>
+                <Tab label={t('Departments')} />
+                <Tab label={t('Managers')} />
+                <Tab label={t('Accounts')} />
+            </Tabs>
+            {/* </Box> */}
+            <TabPanel value={value} index={0}>
                 <DepartmentList companyId={companyId} />
             </TabPanel>
-            <TabPanel value={value} index={1} sx={{ flex: 1 }}>
+            <TabPanel value={value} index={1}>
                 <ManagerList companyId={companyId} />
             </TabPanel>
-            <TabPanel value={value} index={2} sx={{ flex: 1 }}>
+            <TabPanel value={value} index={2}>
                 <AccountList companyId={companyId} />
             </TabPanel>
         </Box>

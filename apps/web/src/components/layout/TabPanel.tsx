@@ -16,10 +16,11 @@ export function TabPanel(props: TabPanelProps) {
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             sx={{
-                my: 1,
+                // my: 1,
                 // display: 'flex',
                 // flexDirection: 'column',
-                minHeight: 0,
+                // minHeight: 0,
+                flex: 1,
             }}
             {...other}
         >

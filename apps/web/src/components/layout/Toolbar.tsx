@@ -62,6 +62,7 @@ export function Toolbar(props: Props) {
             aria-label="Table toolbar button group"
             // mt={1}
             mx={1}
+            my={1}
             // {...props}
         >
             <Box

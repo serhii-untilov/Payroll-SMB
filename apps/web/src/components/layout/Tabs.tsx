@@ -8,8 +8,15 @@ export function Tabs({ value, onChange, children, ...other }: TabsProps) {
             value={value}
             onChange={onChange}
             // textColor={'inherit'}
-            // indicatorColor="primary"
+            indicatorColor={'primary'}
             sx={{
+                mr: 'auto',
+                my: '1px',
+                borderBottom: 1,
+                borderColor: 'divider',
+                '.MuiTabs-indicator': {
+                    height: '2px',
+                },
                 '.MuiTab-wrapped': {
                     // alignItems: 'self-center',
                     // justifyContent: 'flex-center',
@@ -18,7 +25,8 @@ export function Tabs({ value, onChange, children, ...other }: TabsProps) {
                     fontWeight: 500,
                 },
                 '.Mui-disabled': {
-                    color: (theme) => theme.palette.grey[500],
+                    // color: (theme) => theme.palette.grey[500],
+                    opacity: 0.5,
                 },
                 '.Mui-selected': {
                     // fontWeight: 'bold',

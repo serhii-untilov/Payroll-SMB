@@ -1,5 +1,5 @@
 import { ArrowBackIosNewRounded } from '@mui/icons-material';
-import { Box, IconButton, Tab } from '@mui/material';
+import { IconButton, Tab } from '@mui/material';
 import { IPosition, maxDate, minDate } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { PropsWithChildren, ReactNode, SyntheticEvent, useEffect, useMemo, useState } from 'react';
@@ -9,11 +9,11 @@ import { useNavigate } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageSubTitle } from '../../components/layout/PageSubTitle';
 import { TabPanel } from '../../components/layout/TabPanel';
+import { Tabs } from '../../components/layout/Tabs';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { getPosition } from '../../services/position.service';
 import { JobAndPay } from './details/JobAndPay';
-import { Tabs } from '../../components/layout/Tabs';
 import { Personal } from './details/Personal';
 
 interface Props extends PropsWithChildren {
@@ -98,15 +98,9 @@ export default function Position(props: Props) {
             <TabPanel value={tab} index={1}>
                 <Personal positionId={positionId} />
             </TabPanel>
-            <TabPanel value={tab} index={2}>
-                Item Three
-            </TabPanel>
-            <TabPanel value={tab} index={3}>
-                Item Four
-            </TabPanel>
-            <TabPanel value={tab} index={4}>
-                Item Four
-            </TabPanel>
+            <TabPanel value={tab} index={2}></TabPanel>
+            <TabPanel value={tab} index={3}></TabPanel>
+            <TabPanel value={tab} index={4}></TabPanel>
             {/* </Box> */}
         </PageLayout>
     );

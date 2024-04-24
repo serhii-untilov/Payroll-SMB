@@ -25,7 +25,7 @@ export default function People() {
 
     return (
         <PageLayout title={t('People')}>
-            <Grid container item spacing={2}>
+            <Grid container spacing={2}>
                 <Grid item xs={12} sm={8} md={6} lg={3}>
                     <InputLabel>{t('Pay period')}</InputLabel>
                     <PayPeriod sx={{ fontWeight: 'bold' }} />
@@ -49,13 +49,13 @@ export default function People() {
                     <Tab label={t('All')} />
                 </Tabs>
 
-                <TabPanel value={value} index={0} sx={{ flex: 1 }}>
+                <TabPanel value={value} index={0}>
                     {company?.id && <PositionList companyId={company?.id} />}
                 </TabPanel>
-                <TabPanel value={value} index={1} sx={{ flex: 1 }}>
+                <TabPanel value={value} index={1}>
                     {/* <CompanyManagers companyId={company?.id} /> */}
                 </TabPanel>
-                <TabPanel value={value} index={2} sx={{ flex: 1 }}>
+                <TabPanel value={value} index={2}>
                     {/* <CompanyAccounts companyId={company?.id} /> */}
                 </TabPanel>
             </Box>
