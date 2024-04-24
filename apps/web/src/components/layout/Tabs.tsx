@@ -1,8 +1,8 @@
-import { Tabs, TabsProps } from '@mui/material';
+import { Tabs as MuiTabs, TabsProps } from '@mui/material';
 
-export function TabsHorizontal({ value, onChange, children, ...other }: TabsProps) {
+export function Tabs({ value, onChange, children, ...other }: TabsProps) {
     return (
-        <Tabs
+        <MuiTabs
             variant="scrollable"
             allowScrollButtonsMobile
             value={value}
@@ -27,6 +27,6 @@ export function TabsHorizontal({ value, onChange, children, ...other }: TabsProp
             {...other}
         >
             {children}
-        </Tabs>
+        </MuiTabs>
     );
 }

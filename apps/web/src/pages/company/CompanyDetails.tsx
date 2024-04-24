@@ -5,7 +5,7 @@ import { TabPanel } from '../../components/layout/TabPanel';
 import { DepartmentList } from './DepartmentList';
 import { ManagerList } from './ManagerList';
 import { AccountList } from './AccountList';
-import { TabsHorizontal } from '../../components/layout/TabsHorizontal';
+import { Tabs } from '../../components/layout/Tabs';
 import { Tab } from '../../components/layout/Tab';
 
 export type CompanyDetailsProps = {
@@ -33,7 +33,7 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
             <Box
             // sx={{ borderBottom: 0.5, borderColor: 'divider' }}
             >
-                <TabsHorizontal
+                <Tabs
                     value={value}
                     onChange={handleChange}
                     // textColor={'inherit'}
@@ -42,7 +42,7 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
                     <Tab label={t('Departments')} />
                     <Tab label={t('Managers')} />
                     <Tab label={t('Accounts')} />
-                </TabsHorizontal>
+                </Tabs>
             </Box>
             <TabPanel value={value} index={0} sx={{ flex: 1 }}>
                 <DepartmentList companyId={companyId} />

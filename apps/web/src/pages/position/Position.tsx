@@ -1,4 +1,5 @@
-import { Box, IconButton, Tab, Tabs } from '@mui/material';
+import { ArrowBackIosNewRounded } from '@mui/icons-material';
+import { Box, IconButton, Tab } from '@mui/material';
 import { IPosition, maxDate, minDate } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { PropsWithChildren, ReactNode, SyntheticEvent, useEffect, useMemo, useState } from 'react';
@@ -11,19 +12,19 @@ import { TabPanel } from '../../components/layout/TabPanel';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { getPosition } from '../../services/position.service';
-import { PositionDetails } from './PositionDetails';
-import { TabsVertical, SetTabProps } from '../../components/layout/TabsVertical';
-import { ArrowBackIosNewRounded } from '@mui/icons-material';
+import { JobAndPay } from './details/JobAndPay';
+import { Tabs } from '../../components/layout/Tabs';
+import { Personal } from './details/Personal';
 
 interface Props extends PropsWithChildren {
-    id: number | null;
+    positionId: number | null;
     children?: ReactNode;
     index: number;
     value: number;
 }
 
 export default function Position(props: Props) {
-    const { id, children, value, index, ...other } = props;
+    const { positionId, children, value, index, ...other } = props;
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company } = useAppContext();
@@ -49,9 +50,9 @@ export default function Position(props: Props) {
         isError: isPositionError,
         error: positionError,
     } = useQuery<Partial<IPosition>, Error>({
-        queryKey: ['position', id],
+        queryKey: ['position', positionId],
         queryFn: async () => {
-            return id ? await getPosition(id) : defaultValues;
+            return positionId ? await getPosition(positionId) : defaultValues;
         },
         enabled: !!company?.id,
     });
@@ -66,11 +67,11 @@ export default function Position(props: Props) {
 
     const onCancel = () => {
         navigate(-1);
-        queryClient.invalidateQueries({ queryKey: ['position', id] });
+        queryClient.invalidateQueries({ queryKey: ['position', positionId] });
     };
 
     const generatePageSubTitle = () => {
-        return id ? position?.name : t('New Position');
+        return positionId ? position?.name : t('New Position');
     };
 
     return (
@@ -81,35 +82,32 @@ export default function Position(props: Props) {
                 </IconButton>
                 {generatePageSubTitle()}
             </PageSubTitle>
-            <Box sx={{ flexGrow: 1, display: 'flex', height: 324 }}>
-                <TabsVertical value={tab} onChange={handleChangeTab} sx={{ width: 350 }}>
-                    <Tab label={t('Details')} {...SetTabProps(0)} />
-                    <Tab label={t('History')} {...SetTabProps(1)} />
-                    <Tab disabled label={t('Permanent Accruals')} {...SetTabProps(2)} />
-                    <Tab label={t('Taxes and Deductions')} {...SetTabProps(3)} />
-                    <Tab label={t('Time Off')} {...SetTabProps(4)} />
-                    <Tab label={t('Payroll')} {...SetTabProps(6)} />
-                    <Tab label={t('Payment')} {...SetTabProps(5)} />
-                </TabsVertical>
-                <TabPanel value={tab} index={0}>
-                    <PositionDetails id={id} />
-                </TabPanel>
-                <TabPanel value={tab} index={1}>
-                    Item Two
-                </TabPanel>
-                <TabPanel value={tab} index={2}>
-                    Item Three
-                </TabPanel>
-                <TabPanel value={tab} index={3}>
-                    Item Four
-                </TabPanel>
-                <TabPanel value={tab} index={4}>
-                    Item Five
-                </TabPanel>
-                <TabPanel value={tab} index={5}>
-                    Item Six
-                </TabPanel>
-            </Box>
+            {/* <Box sx={{ flexGrow: 1, display: 'flex', height: 324 }}> */}
+            <Tabs value={tab} onChange={handleChangeTab}>
+                <Tab label={t('Job & Pay')} />
+                {/* <Tab label={t('Additional Earnings')} /> */}
+                {/* <Tab label={t('Taxes and Deductions')} /> */}
+                <Tab label={t('Personal')} />
+                <Tab label={t('Time Off')} />
+                <Tab label={t('Documents')} />
+                <Tab label={t('Notes')} />
+            </Tabs>
+            <TabPanel value={tab} index={0}>
+                <JobAndPay positionId={positionId} />
+            </TabPanel>
+            <TabPanel value={tab} index={1}>
+                <Personal positionId={positionId} />
+            </TabPanel>
+            <TabPanel value={tab} index={2}>
+                Item Three
+            </TabPanel>
+            <TabPanel value={tab} index={3}>
+                Item Four
+            </TabPanel>
+            <TabPanel value={tab} index={4}>
+                Item Four
+            </TabPanel>
+            {/* </Box> */}
         </PageLayout>
     );
 }

@@ -24,7 +24,7 @@ const Payroll = Loadable(lazy(() => import('../pages/payroll/Payroll')));
 const Payments = Loadable(lazy(() => import('../pages/payments/Payments')));
 const Reports = Loadable(lazy(() => import('../pages/reports/Reports')));
 const Profile = Loadable(lazy(() => import('../pages/profile/Profile')));
-const PositionForm = Loadable(lazy(() => import('../pages/people/PositionForm')));
+const PositionForm = Loadable(lazy(() => import('../pages/position/Position')));
 
 const router: RouteObject[] = [
     {

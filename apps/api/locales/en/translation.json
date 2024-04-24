@@ -98,5 +98,10 @@
     "Save": "Save",
     "Restore": "Restore",
     "Birth Date": "Birth Date",
-    "Sex": "Sex"
+    "Sex": "Sex",
+    "Job & Pay": "Job & Pay",
+    "Personal": "Personal",
+    "Documents": "Documents",
+    "Notes": "Notes",
+    "Vacancy": "Vacancy"
 }

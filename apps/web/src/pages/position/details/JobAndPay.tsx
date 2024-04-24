@@ -8,17 +8,17 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import * as yup from 'yup';
-import { FormDateField } from '../../components/form/FormDateField';
-import { FormTextField } from '../../components/form/FormTextField';
-import TabLayout from '../../components/layout/TabLayout';
-import { Toolbar } from '../../components/layout/Toolbar';
-import useAppContext from '../../hooks/useAppContext';
-import useLocale from '../../hooks/useLocale';
-import { createPosition, getPosition, updatePosition } from '../../services/position.service';
-import { getDirtyValues } from '../../services/utils';
+import { FormDateField } from '../../../components/form/FormDateField';
+import { FormTextField } from '../../../components/form/FormTextField';
+import TabLayout from '../../../components/layout/TabLayout';
+import { Toolbar } from '../../../components/layout/Toolbar';
+import useAppContext from '../../../hooks/useAppContext';
+import useLocale from '../../../hooks/useLocale';
+import { createPosition, getPosition, updatePosition } from '../../../services/position.service';
+import { getDirtyValues } from '../../../services/utils';
 
 interface Props {
-    id: number | null;
+    positionId: number | null;
 }
 
 const formSchema = yup.object().shape({
@@ -50,7 +50,7 @@ const formSchema = yup.object().shape({
 
 type FormType = yup.InferType<typeof formSchema>;
 
-export function PositionDetails({ id }: Props) {
+export function JobAndPay({ positionId }: Props) {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company } = useAppContext();
@@ -93,9 +93,9 @@ export function PositionDetails({ id }: Props) {
         isError: isPositionError,
         error: positionError,
     } = useQuery<FormType, Error>({
-        queryKey: ['position', id],
+        queryKey: ['position', positionId],
         queryFn: async () => {
-            return formSchema.cast(id ? await getPosition(id) : defaultValues);
+            return formSchema.cast(positionId ? await getPosition(positionId) : defaultValues);
         },
         enabled: !!company?.id,
     });
@@ -140,7 +140,7 @@ export function PositionDetails({ id }: Props) {
                 ? await updatePosition(data.id, dirtyValues)
                 : await createPosition(data);
             reset(position);
-            queryClient.invalidateQueries({ queryKey: ['position', id] });
+            queryClient.invalidateQueries({ queryKey: ['position', positionId] });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -149,7 +149,7 @@ export function PositionDetails({ id }: Props) {
 
     const onCancel = () => {
         reset(defaultValues);
-        queryClient.invalidateQueries({ queryKey: ['position', id] });
+        queryClient.invalidateQueries({ queryKey: ['position', positionId] });
     };
 
     return (
@@ -166,7 +166,7 @@ export function PositionDetails({ id }: Props) {
                 />
 
                 <Grid container xs={12} spacing={2}>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} md={6}>
                         <FormTextField
                             control={control}
                             autoComplete="full-name"
@@ -176,53 +176,10 @@ export function PositionDetails({ id }: Props) {
                             type="text"
                             autoFocus
                             sx={{ fontWeight: 'bold' }}
+                            placeholder={t('Vacancy')}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={12} md={4}>
-                        <FormTextField
-                            control={control}
-                            name="taxId"
-                            id="taxId"
-                            label={t('Tax ID')}
-                            type="text"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={4}>
-                        <FormDateField
-                            control={control}
-                            name="birthDate"
-                            id="birthDate"
-                            label={t('Birth Date')}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={4}>
-                        <FormTextField
-                            control={control}
-                            name="sex"
-                            id="sex"
-                            label={t('Sex')}
-                            type="text"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormTextField
-                            control={control}
-                            name="phone"
-                            id="phone"
-                            label={t('Phone')}
-                            type="text"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormTextField
-                            control={control}
-                            name="email"
-                            id="email"
-                            label={t('Email')}
-                            type="number"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormTextField
                             control={control}
                             name="cardNumber"
@@ -231,7 +188,7 @@ export function PositionDetails({ id }: Props) {
                             type="text"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormTextField
                             control={control}
                             name="sequenceNumber"
@@ -244,18 +201,18 @@ export function PositionDetails({ id }: Props) {
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="departmentId"
-                            id="departmentId"
-                            label={t('Department')}
+                            name="jobId"
+                            id="jobId"
+                            label={t('Job')}
                             type="text"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="jobId"
-                            id="jobId"
-                            label={t('Job')}
+                            name="departmentId"
+                            id="departmentId"
+                            label={t('Department')}
                             type="text"
                         />
                     </Grid>
@@ -279,7 +236,7 @@ export function PositionDetails({ id }: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormTextField
                             control={control}
                             name="wage"
@@ -288,7 +245,7 @@ export function PositionDetails({ id }: Props) {
                             type="number"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormTextField
                             control={control}
                             name="Rate"
@@ -298,7 +255,7 @@ export function PositionDetails({ id }: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormDateField
                             control={control}
                             name="dateFrom"
@@ -308,7 +265,7 @@ export function PositionDetails({ id }: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormDateField
                             control={control}
                             name="dateTo"

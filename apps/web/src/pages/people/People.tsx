@@ -7,8 +7,8 @@ import { PayPeriod } from '../../components/layout/PayPeriod';
 import { TabPanel } from '../../components/layout/TabPanel';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
-import { PositionList } from './PositionList';
-import { TabsHorizontal } from '../../components/layout/TabsHorizontal';
+import { PositionList } from './details/PositionList';
+import { Tabs } from '../../components/layout/Tabs';
 import { Tab } from '../../components/layout/Tab';
 
 export default function People() {
@@ -40,14 +40,14 @@ export default function People() {
                     flexGrow: 1,
                 }}
             >
-                <TabsHorizontal id="people__tabs" value={value} onChange={handleChange}>
+                <Tabs id="people__tabs" value={value} onChange={handleChange}>
                     <Tab label={t('Employees')} />
                     <Tab disabled label={t('Contractors')} />
                     <Tab label={t('Vacancies')} />
                     <Tab disabled label={t('Offers')} />
                     <Tab label={t('Dismissed')} />
                     <Tab label={t('All')} />
-                </TabsHorizontal>
+                </Tabs>
 
                 <TabPanel value={value} index={0} sx={{ flex: 1 }}>
                     {company?.id && <PositionList companyId={company?.id} />}

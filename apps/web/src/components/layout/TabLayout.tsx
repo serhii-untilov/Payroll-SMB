@@ -15,12 +15,13 @@ const TabLayout: FC<Props> = ({ title, children }) => {
             id="tab-layout"
             // my={{ xs: 0, lg: 1, xl: 1 }}
             mx={{ xs: 1, lg: 2 }}
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                // flexGrow: 1,
-                // flex: 1,
-            }}
+            // sx={{
+            //     display: 'flex',
+            //     flexDirection: 'column',
+            //     justifyContent: 'flex-start',
+            //     // flexGrow: 1,
+            //     // flex: 1,
+            // }}
         >
             {/* {compactView && title && ( */}
             {/* {title && (

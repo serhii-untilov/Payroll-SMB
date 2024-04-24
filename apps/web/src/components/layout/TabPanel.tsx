@@ -7,7 +7,7 @@ export interface TabPanelProps extends BoxProps {
 }
 
 export function TabPanel(props: TabPanelProps) {
-    const { children, value, index } = props;
+    const { children, value, index, ...other } = props;
 
     return (
         <Box
@@ -17,11 +17,11 @@ export function TabPanel(props: TabPanelProps) {
             aria-labelledby={`simple-tab-${index}`}
             sx={{
                 my: 1,
-                display: 'flex',
-                flexDirection: 'column',
+                // display: 'flex',
+                // flexDirection: 'column',
                 minHeight: 0,
             }}
-            {...props}
+            {...other}
         >
             {value === index && (
                 <Box
