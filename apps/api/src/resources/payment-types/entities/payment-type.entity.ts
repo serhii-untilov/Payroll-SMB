@@ -11,6 +11,9 @@ export class PaymentType extends Logger implements IPaymentType {
     name: string;
 
     @Column({ type: 'varchar', length: 30 })
+    paymentPart: string;
+
+    @Column({ type: 'varchar', length: 30 })
     paymentGroup: string;
 
     @Column({ type: 'varchar', length: 30 })

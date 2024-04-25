@@ -1,4 +1,4 @@
-import { PaymentGroup, PaymentMethod } from '@repo/shared';
+import { PaymentGroup, PaymentMethod, PaymentPart } from '@repo/shared';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { PaymentType } from '../resources/payment-types/entities/payment-type.entity';
 import { getAdminId } from '../utils/getAdminId';
@@ -10,6 +10,7 @@ const entity = PaymentType;
 const recordList = [
     {
         name: { en: 'Salary', uk: 'Оплата за окладом' },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.BASIC,
         paymentMethod: PaymentMethod.SALARY,
         description: {
@@ -19,6 +20,7 @@ const recordList = [
     },
     {
         name: { en: 'Wage', uk: 'Оплата за тарифом' },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.BASIC,
         paymentMethod: PaymentMethod.WAGE,
         description: {
@@ -28,6 +30,7 @@ const recordList = [
     },
     {
         name: { en: 'Allowance', uk: 'Надбавка' },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.ADJUSTMENTS,
         paymentMethod: PaymentMethod.ALLOWANCE,
         description: {
@@ -37,6 +40,7 @@ const recordList = [
     },
     {
         name: { en: 'Bonus', uk: 'Премія' },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.BONUSES,
         paymentMethod: PaymentMethod.BONUS,
         description: {
@@ -46,6 +50,7 @@ const recordList = [
     },
     {
         name: { en: 'Paid Vacation', uk: 'Відпустка оплачувана' },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.VACATIONS,
         paymentMethod: PaymentMethod.PAID_VACATION,
         description: {
@@ -55,6 +60,7 @@ const recordList = [
     },
     {
         name: { en: 'Unpaid leave', uk: 'Відпустка неоплачувана, з ініціативи працівника' },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.VACATIONS,
         paymentMethod: PaymentMethod.UNPAID_LEAVE,
         description: {
@@ -68,6 +74,7 @@ const recordList = [
             en: 'Paid sick, from the employer',
             uk: 'Оплачуваний лікарняний, від роботодавця',
         },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.SICKS,
         paymentMethod: PaymentMethod.PAID_SICK_BY_COMPANY,
         description: {
@@ -81,6 +88,7 @@ const recordList = [
             en: 'Paid sick, from the SIF',
             uk: 'Оплачуваний лікарняний, з ФСС',
         },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.SICKS,
         paymentMethod: PaymentMethod.PAID_SICK_PAID_BY_SIF,
         description: {
@@ -91,6 +99,7 @@ const recordList = [
     {
         law: 'ukraine',
         name: { en: 'Unconfirmed sick', uk: 'Непідтверджений лікарняний' },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.SICKS,
         paymentMethod: PaymentMethod.UNCONFIRMED_SICK,
         description: {
@@ -101,6 +110,7 @@ const recordList = [
     {
         law: 'ukraine',
         name: { en: 'Income indexation', uk: 'Індексація доходу' },
+        paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.REFUNDS,
         paymentMethod: PaymentMethod.INCOME_INDEXATION,
         description: {
@@ -110,6 +120,7 @@ const recordList = [
     },
     {
         name: { en: 'Income Tax', uk: 'ПДФО' },
+        paymentPart: PaymentPart.PAYMENT_DEDUCTIONS,
         paymentGroup: PaymentGroup.TAXES,
         paymentMethod: PaymentMethod.INCOME_TAX,
         description: {
@@ -120,6 +131,7 @@ const recordList = [
     {
         law: 'ukraine',
         name: { en: 'Military Tax', uk: 'Військовий збір' },
+        paymentPart: PaymentPart.PAYMENT_DEDUCTIONS,
         paymentGroup: PaymentGroup.TAXES,
         paymentMethod: PaymentMethod.MILITARY_TAX,
         description: {
@@ -130,6 +142,7 @@ const recordList = [
     {
         law: 'ukraine',
         name: { en: 'Advance payment', uk: 'Виплата авансу' },
+        paymentPart: PaymentPart.PAYMENT_DEDUCTIONS,
         paymentGroup: PaymentGroup.PAYMENTS,
         paymentMethod: PaymentMethod.ADVANCED_PAYMENT,
         description: {
@@ -139,6 +152,7 @@ const recordList = [
     },
     {
         name: { en: 'Regular payment', uk: 'Виплата заробітної плати' },
+        paymentPart: PaymentPart.PAYMENT_DEDUCTIONS,
         paymentGroup: PaymentGroup.PAYMENTS,
         paymentMethod: PaymentMethod.REGULAR_PAYMENT,
         description: {

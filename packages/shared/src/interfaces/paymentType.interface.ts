@@ -60,8 +60,9 @@ export enum PaymentMethod {
 export interface IPaymentType extends ILogger {
     id: number;
     name: string;
-    paymentGroup: string;
-    paymentMethod: string;
+    paymentPart: string; // See enum PaymentPart
+    paymentGroup: string; // See enum PaymentGroup
+    paymentMethod: string; // See enum PaymentMethod
     description: string;
 }
 
