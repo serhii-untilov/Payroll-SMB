@@ -8,6 +8,8 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import * as yup from 'yup';
+import { SelectDepartment } from '../../../components/select/SelectDepartment';
+import { SelectJob } from '../../../components/select/SelectJob';
 import { FormDateField } from '../../../components/form/FormDateField';
 import { FormTextField } from '../../../components/form/FormTextField';
 import TabLayout from '../../../components/layout/TabLayout';
@@ -16,6 +18,8 @@ import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { createPosition, getPosition, updatePosition } from '../../../services/position.service';
 import { getDirtyValues } from '../../../services/utils';
+import { SelectWorkNorm } from '../../../components/select/SelectWorkNorm';
+import { SelectPaymentType } from '../../../components/select/SelectPaymentType';
 
 interface Props {
     positionId: number | null;
@@ -81,7 +85,7 @@ export function JobAndPay({ positionId }: Props) {
             workNormId: null,
             paymentTypeId: null,
             wage: null,
-            rate: null,
+            rate: 1,
 
             dateFrom: minDate(),
             dateTo: maxDate(),
@@ -130,6 +134,7 @@ export function JobAndPay({ positionId }: Props) {
             variant: 'error',
         });
     }
+
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) {
             reset(position);
@@ -199,40 +204,40 @@ export function JobAndPay({ positionId }: Props) {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <FormTextField
+                        <SelectJob
+                            companyId={company?.id}
                             control={control}
                             name="jobId"
                             id="jobId"
                             label={t('Job')}
-                            type="text"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <FormTextField
+                        <SelectDepartment
+                            companyId={company?.id}
                             control={control}
                             name="departmentId"
                             id="departmentId"
                             label={t('Department')}
-                            type="text"
                         />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <FormTextField
+                        <SelectWorkNorm
+                            companyId={company?.id}
                             control={control}
                             name="workNormId"
                             id="workNormId"
                             label={t('Work Norm')}
-                            type="text"
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <FormTextField
+                        <SelectPaymentType
+                            companyId={company?.id}
                             control={control}
                             name="paymentTypeId"
                             id="paymentTypeId"
                             label={t('Payment Type')}
-                            type="text"
                         />
                     </Grid>
 

@@ -23,7 +23,9 @@ export async function getPayPeriodList(
             headers: authHeader(),
         },
     );
-    return response.data;
+    return response.data.sort(
+        (a: IPayPeriod, b: IPayPeriod) => a.dateFrom.getTime() - b.dateFrom.getTime(),
+    );
 }
 
 export async function getPayPeriod(

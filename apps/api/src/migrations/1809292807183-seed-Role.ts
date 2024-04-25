@@ -29,11 +29,12 @@ export class Seed1809292807183 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         for (let n = 0; n < recordList.length; n++) {
+            const record = langPipe(lang, recordList[n]);
             await dataSource
                 .createQueryBuilder()
                 .delete()
                 .from(entity)
-                .where('id = :id', { id: recordList[n].id })
+                .where('name = :name', { name: record.name })
                 .execute();
         }
     }

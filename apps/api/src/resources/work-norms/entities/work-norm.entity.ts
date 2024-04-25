@@ -1,4 +1,4 @@
-import { IWorkNorm } from '@repo/shared';
+import { IWorkNorm, WorkNormType } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
 import { Column, PrimaryGeneratedColumn, OneToMany, Entity } from 'typeorm';
 import { WorkNormPeriod } from './work-norm-period.entity';
@@ -11,7 +11,7 @@ export class WorkNorm extends Logger implements IWorkNorm {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @Column({ type: 'varchar', length: 30 })
+    @Column({ type: 'varchar', length: 30, default: WorkNormType.WEEKLY })
     type: string;
 
     @Column({ type: 'date', default: '1900-01-01' })
@@ -20,6 +20,8 @@ export class WorkNorm extends Logger implements IWorkNorm {
     @Column({ type: 'date', default: '9999-12-31' })
     dateTo?: Date;
 
-    @OneToMany(() => WorkNormPeriod, (workNormPeriod) => workNormPeriod.workNorm)
+    @OneToMany(() => WorkNormPeriod, (workNormPeriod) => workNormPeriod.workNorm, {
+        cascade: true,
+    })
     periods?: WorkNormPeriod[];
 }

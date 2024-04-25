@@ -18,7 +18,7 @@ import { WorkNormsService } from './work-norms.service';
 import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 
-@Controller('work-schedules')
+@Controller('work-norms')
 export class WorkNormsController {
     constructor(private readonly workNormsService: WorkNormsService) {}
 
