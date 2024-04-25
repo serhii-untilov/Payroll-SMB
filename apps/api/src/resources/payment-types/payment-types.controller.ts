@@ -9,6 +9,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -33,8 +34,18 @@ export class PaymentTypesController {
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll() {
-        return await this.paymentTypesService.findAll();
+    async findAll(
+        @Query('part') part: string,
+        @Query('groups') groups: string,
+        @Query('methods') methods: string,
+        @Query('ids') ids: string,
+    ) {
+        return await this.paymentTypesService.findAll({
+            part,
+            groups: groups ? JSON.parse(decodeURIComponent(groups)) : null,
+            methods: methods ? JSON.parse(decodeURIComponent(methods)) : null,
+            ids: ids ? JSON.parse(decodeURIComponent(ids)) : null,
+        });
     }
 
     @Get(':id')

@@ -9,23 +9,23 @@ const law = process.env.LAW;
 const entity = PaymentType;
 const recordList = [
     {
-        name: { en: 'Salary', uk: 'Оплата за окладом' },
+        name: { en: 'Salary', uk: 'Місячний оклад' },
         paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.BASIC,
         paymentMethod: PaymentMethod.SALARY,
         description: {
             en: 'Salaries are fixed amounts of money paid to employees regularly, usually weekly, biweekly, or monthly, according to the worked days regardless of the number of hours worked.',
-            uk: 'Оклад - фіксована грошова сума, яка виплачується працівникам регулярно, щомісяця, відповідно до відпрацьованих днів незалежно від кількості відпрацьованих годин.',
+            uk: 'Оплата за місячним окладом - фіксована грошова сума, яка виплачується працівникам регулярно, щомісяця, відповідно до відпрацьованих днів незалежно від кількості відпрацьованих годин.',
         },
     },
     {
-        name: { en: 'Wage', uk: 'Оплата за тарифом' },
+        name: { en: 'Wage', uk: 'Погодинний тариф' },
         paymentPart: PaymentPart.PAYMENT_ACCRUALS,
         paymentGroup: PaymentGroup.BASIC,
         paymentMethod: PaymentMethod.WAGE,
         description: {
             en: 'Wages are typically paid on an hourly basis and are directly tied to the number of hours worked.',
-            uk: `Тариф виплачується на погодинній основі та безпосередньо прив'язаний до кількості відпрацьованих годин.`,
+            uk: `Оплата за погодинним тарифом нараховується на відпрацьовані години.`,
         },
     },
     {

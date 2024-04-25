@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { formatDate, maxDate, minDate } from '@repo/shared';
+import { PaymentGroup, formatDate, maxDate, minDate } from '@repo/shared';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo } from 'react';
@@ -238,6 +238,7 @@ export function JobAndPay({ positionId }: Props) {
                             name="paymentTypeId"
                             id="paymentTypeId"
                             label={t('Payment Type')}
+                            filter={{ groups: [PaymentGroup.BASIC] }}
                         />
                     </Grid>
 
