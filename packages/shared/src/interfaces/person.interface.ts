@@ -13,6 +13,8 @@ export interface IPerson extends ILogger {
 
     middleName?: string | undefined;
 
+    fullName?: string | undefined;
+
     birthDate?: Date | undefined;
 
     taxId?: string | undefined;

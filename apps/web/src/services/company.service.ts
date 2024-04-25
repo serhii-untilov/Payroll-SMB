@@ -9,7 +9,9 @@ export async function createCompany(company: ICreateCompany): Promise<ICompany> 
 
 export async function getCompanyList(): Promise<ICompany[]> {
     const response = await api.get(`/api/companies/`, { headers: authHeader() });
-    return response.data;
+    return response.data.sort((a: ICompany, b: ICompany) =>
+        a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
+    );
 }
 
 export async function getCompany(id: number): Promise<ICompany> {

@@ -210,7 +210,7 @@ export class Gen1712061950419 implements MigrationInterface {
                 "id" SERIAL NOT NULL,
                 "firstName" character varying(30) NOT NULL,
                 "companyId" integer NOT NULL,
-                "idNumber" character varying(15) NOT NULL,
+                "cardNumber" character varying(15) NOT NULL,
                 "sequenceNumber" integer NOT NULL,
                 "description" character varying(260) NOT NULL,
                 "personId" integer,

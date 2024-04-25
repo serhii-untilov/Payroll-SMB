@@ -8,7 +8,7 @@ export class WorkNormPeriod extends Logger implements IWorkNormPeriod {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @ManyToOne(() => WorkNorm, (workNorm) => workNorm.periods)
+    @ManyToOne(() => WorkNorm, (workNorm) => workNorm.periods, { onDelete: 'CASCADE' })
     @JoinColumn()
     workNorm?: IWorkNorm;
 

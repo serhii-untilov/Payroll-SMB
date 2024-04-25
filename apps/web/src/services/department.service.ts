@@ -17,7 +17,9 @@ export async function getDepartmentList(
             headers: authHeader(),
         },
     );
-    return response.data;
+    return response.data.sort((a: IDepartment, b: IDepartment) =>
+        a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
+    );
 }
 
 export async function getDepartment(id: number): Promise<IDepartment> {

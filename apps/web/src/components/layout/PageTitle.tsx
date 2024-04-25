@@ -1,11 +1,8 @@
-import { Typography, TypographyProps } from '@mui/material';
+import { Typography } from '@mui/material';
+import { PropsWithChildren } from 'react';
 
-type PageTitleProps = TypographyProps & {
-    title: string;
-};
-
-export function PageTitle(props: PageTitleProps) {
-    const { title } = props;
+export function PageTitle(props: PropsWithChildren) {
+    const { children } = props;
 
     return (
         <Typography
@@ -16,7 +13,7 @@ export function PageTitle(props: PageTitleProps) {
             // align="center"
             {...props}
         >
-            {title}
+            {children}
         </Typography>
     );
 }

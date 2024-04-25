@@ -7,9 +7,8 @@ export enum PaymentPart {
 
 export enum PaymentGroup {
     // ACCRUAL part
-    BASIC_SALARY = 'basic-salary',
-    ALLOWANCES = 'allowances',
-    SURCHARGES = 'surcharges',
+    BASIC = 'basic',
+    ADJUSTMENTS = 'adjustments',
     BONUSES = 'bonuses',
     VACATIONS = 'vacations',
     SICKS = 'sicks',
@@ -24,33 +23,36 @@ export enum PaymentGroup {
 export enum PaymentMethod {
     // BASIC_SALARY group
     SALARY = 'salary',
-    BY_HOUR = 'by-hour',
+    WAGE = 'wage',
     COMMISSION = 'commission',
-    // ALLOWANCES group
+    // ADJUSTMENTS group
     ALLOWANCE = 'allowance',
-    // SURCHARGES group
-    SURCHARGE = 'surcharge',
+    PAY_EVENING_HOURS = 'pay_evening_hours',
+    PAY_NIGHT_HOURS = 'pay_night_hours',
+    PAY_OVERTIME = 'pay_overtime',
+    PAY_WEEKEND_HOURS = 'pay_weekend_hours',
+    PAY_HOLIDAY_HOURS = 'pay_holiday_hours',
     // BONUSES group
     BONUS = 'bonus',
     // VACATIONS group
     PAID_VACATION = 'paid-vacation',
-    UNPAID_COMPANY_VACATION = 'unpaid-company-vacation',
-    UNPAID_OWN_VACATION = 'unpaid-own-vacation',
+    UNPAID_LEAVE = 'unpaid-leave',
+    UNPAID_LEAVE_COMPANY = 'unpaid-leave-company',
     // SICKS group
     PAID_SICK_BY_COMPANY = 'paid-sick-by-company',
     PAID_SICK_PAID_BY_SIF = 'paid-sick-by-sif',
-    UNPAID_SICK = 'unpaid-sick',
+    UNCONFIRMED_SICK = 'unconfirmed-sick',
     // REFUNDS group
-    INDEXATION = 'indexation',
+    INCOME_INDEXATION = 'income-indexation',
     // ONE_TIME_ACCRUALS group
     ONE_TIME_ACCRUAL = 'one-time-accrual',
     // TAXES group
     INCOME_TAX = 'income-tax',
     MILITARY_TAX = 'military-tax',
     // PAYMENTS group
-    ADVANCE = 'advance',
-    SALARY_PAYMENT = 'salary-payment',
-    ONE_TIME_PAYMENT = 'one-time-payment',
+    ADVANCED_PAYMENT = 'advanced-payment',
+    REGULAR_PAYMENT = 'regular-payment',
+    FAST_PAYMENT = 'fast-payment',
     // DEDUCTIONS group
     ONE_TIME_DEDUCTION = 'one-time-deduction',
 }
@@ -60,6 +62,7 @@ export interface IPaymentType extends ILogger {
     name: string;
     paymentGroup: string;
     paymentMethod: string;
+    description: string;
 }
 
 export type ICreatePaymentType = Omit<

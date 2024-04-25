@@ -1,5 +1,6 @@
 import { Dispatch, FC, ReactNode, SetStateAction, createContext, useEffect, useState } from 'react';
-import { Localization, enUS, ukUA } from '@mui/material/locale';
+import { Localization, enUS } from '@mui/material/locale';
+import { ukUA } from '@mui/x-data-grid/locales';
 import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/useAuth';
 import { uk as dateUk } from 'date-fns/locale/uk';
@@ -10,7 +11,7 @@ export type supportedLanguages = 'en' | 'uk';
 export type Locale = {
     language: supportedLanguages;
     name: string;
-    locale: Localization;
+    locale: any;
     dateLocale: any;
 };
 

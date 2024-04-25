@@ -9,7 +9,9 @@ export async function createAccounting(accounting: ICreateAccounting): Promise<I
 
 export async function getAccountingList(): Promise<IAccounting[]> {
     const response = await api.get(`/api/accounting/`, { headers: authHeader() });
-    return response.data;
+    return response.data.sort((a: IAccounting, b: IAccounting) =>
+        a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
+    );
 }
 
 export async function getAccounting(id: number): Promise<IAccounting> {

@@ -8,8 +8,8 @@ export interface IPosition extends ILogger {
     company?: ICompany;
     companyId: number;
 
-    idNumber: string; // Identity number (Табельний номер)
-    sequenceNumber: number; // Sequence in payroll reports to place managers on top
+    cardNumber: string; // (Табельний номер)
+    sequenceNumber?: number | null; // Sequence in payroll reports to place managers on top (Порядковий номер)
     description?: string | null;
 
     person?: IPerson;
@@ -17,6 +17,8 @@ export interface IPosition extends ILogger {
 
     dateFrom?: Date | null; // Hire date or date of open vacancy
     dateTo?: Date | null; // Dismissal date or date of close vacancy
+
+    name?: string | null;
 }
 
 export type ICreatePosition = Omit<

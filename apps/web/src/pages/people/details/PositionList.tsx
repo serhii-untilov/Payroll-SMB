@@ -5,25 +5,25 @@ import {
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
+    useGridApiRef,
 } from '@mui/x-data-grid';
 import { IPosition, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
-import { DataGrid } from '../../components/data/DataGrid';
-import { TableToolbar } from '../../components/layout/TableToolbar';
-import { Loading } from '../../components/utility/Loading';
-import { deletePosition, getPositionList } from '../../services/position.service';
-// import { CompanyDetailsProps } from './CompanyDetails';
-import { PositionForm } from './PositionForm';
+import { useNavigate } from 'react-router-dom';
+import { DataGrid } from '../../../components/grid/DataGrid';
+import { Toolbar } from '../../../components/layout/Toolbar';
+import { Loading } from '../../../components/utility/Loading';
+import { deletePosition, getPositionList } from '../../../services/position.service';
 
-type PeopleEmployeesProps = {
+type Props = {
     companyId: number;
 };
 
-export function PeopleEmployees(params: PeopleEmployeesProps) {
-    const { companyId } = params;
+export function PositionList(props: Props) {
+    const { companyId } = props;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
 
@@ -31,13 +31,65 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
+    const gridRef = useGridApiRef();
+
+    const navigate = useNavigate();
+
     const columns: GridColDef[] = [
-        // { field: 'id', headerName: t('ID'), type: 'number', width: 70 },
+        {
+            field: 'cardNumber',
+            headerName: t('Card Number'),
+            type: 'string',
+            width: 120,
+            sortable: true,
+        },
         {
             field: 'name',
             headerName: t('Position'),
             type: 'string',
-            width: 400,
+            width: 250,
+            sortable: true,
+        },
+        {
+            field: 'job',
+            headerName: t('Job'),
+            type: 'string',
+            width: 200,
+            sortable: true,
+        },
+        {
+            field: 'department',
+            headerName: t('Department'),
+            type: 'string',
+            width: 300,
+            sortable: true,
+        },
+        {
+            field: 'workNorm',
+            headerName: t('Work Norm'),
+            type: 'string',
+            width: 200,
+            sortable: true,
+        },
+        {
+            field: 'paymentType',
+            headerName: t('Payment Type'),
+            type: 'string',
+            width: 200,
+            sortable: true,
+        },
+        {
+            field: 'wage',
+            headerName: t('Wage'),
+            type: 'number',
+            width: 150,
+            sortable: true,
+        },
+        {
+            field: 'rate',
+            headerName: t('Rate'),
+            type: 'number',
+            width: 150,
             sortable: true,
         },
         {
@@ -58,16 +110,6 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
             sortable: true,
             valueGetter: (params) => {
                 return date2view(params.value);
-            },
-        },
-        {
-            field: 'parentPosition',
-            headerName: t('Parent Position'),
-            type: 'string',
-            width: 250,
-            sortable: true,
-            valueGetter: (params) => {
-                return params.row.parentPosition?.name || '';
             },
         },
     ];
@@ -96,8 +138,9 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
     }
 
     const onAddPosition = () => {
-        setPositionId(null);
-        setOpenForm(true);
+        // setPositionId(null);
+        // setOpenForm(true);
+        navigate('/people/position/');
     };
 
     const onEditPosition = (positionId: number) => {
@@ -117,11 +160,11 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
     };
 
     const onPrint = () => {
-        console.log('onPrint');
+        gridRef.current.exportDataAsPrint();
     };
 
     const onExport = () => {
-        console.log('onExport');
+        gridRef.current.exportDataAsCsv();
     };
 
     const onShowHistory = () => {
@@ -138,22 +181,23 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
 
     return (
         <>
-            <TableToolbar
+            <Toolbar
                 onAdd={onAddPosition}
-                onDelete={onDeletePosition}
-                deleteDisabled={!rowSelectionModel.length}
-                onPrint={onPrint}
-                printDisabled={!positionList?.length}
-                onExport={onExport}
-                exportDisabled={!positionList?.length}
-                onShowHistory={onShowHistory}
-                showHistoryDisabled={true}
-                onShowDeleted={onShowDeleted}
-                showDeletedDisabled={true}
-                onRestoreDeleted={onRestoreDeleted}
-                restoreDeletedDisabled={true}
+                onDelete={rowSelectionModel.length ? onDeletePosition : 'disabled'}
+                onPrint={positionList?.length ? onPrint : 'disabled'}
+                onExport={positionList?.length ? onExport : 'disabled'}
+                onShowHistory={'disabled'}
+                onShowDeleted={'disabled'}
+                onRestoreDeleted={'disabled'}
             />
             <DataGrid
+                columnVisibilityModel={{
+                    // Hide columns, the other columns will remain visible
+                    department: false,
+                    dateFrom: false,
+                    dateTo: false,
+                }}
+                apiRef={gridRef}
                 rows={positionList || []}
                 columns={columns}
                 checkboxSelection={true}
@@ -176,12 +220,12 @@ export function PeopleEmployees(params: PeopleEmployeesProps) {
                     details: GridCallbackDetails,
                 ) => onEditPosition(params.row.id)}
             />
-            <PositionForm
+            {/* <PositionForm
                 open={openForm}
                 setOpen={setOpenForm}
                 positionId={positionId}
                 submitCallback={submitCallback}
-            />
+            /> */}
         </>
     );
 }

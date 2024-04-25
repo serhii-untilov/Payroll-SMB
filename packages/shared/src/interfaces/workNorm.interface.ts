@@ -4,7 +4,8 @@ import { IWorkNormPeriod } from './workNormPeriod.interface';
 export enum WorkNormType {
     WEEKLY = 'weekly', // Fixed hours per week
     PERIODIC = 'periodic', // Fixed hours in a certain period
-    VARIABLE = 'variable', // Variable (hours vary every week)
+    // VARIABLE = 'variable', // Variable (hours vary every week)
+    SHIFT = 'shift', // Shift work schedule
 }
 
 export interface IWorkNorm extends ILogger {

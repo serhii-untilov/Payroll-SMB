@@ -2,11 +2,11 @@ import { Box, Grid, Typography } from '@mui/material';
 import { amber } from '@mui/material/colors';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Greeting } from '../components/layout/Greeting';
-import { Link } from '../components/layout/Link';
-import PageLayout from '../components/layout/PageLayout';
-import { SummaryTodo } from '../components/layout/SummaryTodo';
-import useLocale from '../hooks/useLocale';
+import { Greeting } from '../../components/layout/Greeting';
+import { Link } from '../../components/layout/Link';
+import PageLayout from '../../components/layout/PageLayout';
+import { SummaryTodo } from '../../components/layout/SummaryTodo';
+import useLocale from '../../hooks/useLocale';
 
 export default function Dashboard() {
     const { locale } = useLocale();

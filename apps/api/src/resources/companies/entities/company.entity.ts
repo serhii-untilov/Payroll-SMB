@@ -13,6 +13,7 @@ import { Accounting } from '../../accounting/entities/accounting.entity';
 import { Department } from '../../departments/entities/department.entity';
 import { Law } from '../../laws/entities/law.entity';
 import { endOfMonth, startOfDay, startOfMonth } from 'date-fns';
+import { Position } from '../../positions/entities/position.entity';
 
 @Entity()
 export class Company extends Logger implements ICompany {
@@ -58,6 +59,9 @@ export class Company extends Logger implements ICompany {
 
     @OneToMany(() => Department, (department) => department.company)
     departments?: Department[];
+
+    @OneToMany(() => Position, (position) => position.company)
+    positions?: Position[];
 
     @BeforeInsert()
     beforeInsert() {

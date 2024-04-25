@@ -12,7 +12,7 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import * as yup from 'yup';
-import { FormAutocomplete } from '../../components/form/FormAutocomplete';
+import { SelectDepartment } from '../../components/select/SelectDepartment';
 import { FormDateField } from '../../components/form/FormDateField';
 import { FormTextField } from '../../components/form/FormTextField';
 import { Button } from '../../components/layout/Button';
@@ -21,7 +21,6 @@ import useLocale from '../../hooks/useLocale';
 import {
     createDepartment,
     getDepartment,
-    getDepartmentList,
     updateDepartment,
 } from '../../services/department.service';
 import { getDirtyValues } from '../../services/utils';
@@ -43,16 +42,6 @@ const formSchema = yup.object().shape({
 });
 
 type FormType = yup.InferType<typeof formSchema>;
-
-// To prevent Warning: A component is changing an uncontrolled input to be controlled.
-// const defaultValues: FormType = {
-//     id: null,
-//     name: '',
-//     companyId: 0,
-//     dateFrom: minDate(),
-//     dateTo: maxDate(),
-//     parentDepartmentId: null,
-// };
 
 export default function DepartmentForm(params: DepartmentFormParams) {
     const { departmentId, submitCallback } = params;
@@ -92,18 +81,6 @@ export default function DepartmentForm(params: DepartmentFormParams) {
     });
 
     const {
-        data: departmentList,
-        isError: isDepartmentListError,
-        error: departmentListError,
-    } = useQuery<IDepartment[], Error>({
-        queryKey: ['departmentList', company?.id],
-        queryFn: async () => {
-            return company?.id ? await getDepartmentList(company?.id) : [];
-        },
-        enabled: !!company?.id,
-    });
-
-    const {
         control,
         handleSubmit,
         reset,
@@ -136,12 +113,6 @@ export default function DepartmentForm(params: DepartmentFormParams) {
         });
     }
 
-    if (isDepartmentListError) {
-        return enqueueSnackbar(`${departmentListError.name}\n${departmentListError.message}`, {
-            variant: 'error',
-        });
-    }
-
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) {
             reset(department);
@@ -168,8 +139,6 @@ export default function DepartmentForm(params: DepartmentFormParams) {
         params.setOpen(false);
         queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
     };
-
-    console.log('departmentId', departmentId, department);
 
     return (
         <Fragment>
@@ -231,49 +200,15 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                             />
                         </Grid>
 
-                        {/* <Grid item xs={12}>
-                            <FormInputDropdown
-                                control={control}
-                                label={t('Parent Department')}
-                                name="parentDepartmentId"
-                                autoComplete="parentDepartmentId"
-                                type="number"
-                                options={
-                                    departmentList?.map((o) => {
-                                        return { label: o.name, value: o.id };
-                                    }) ?? []
-                                }
-                            />
-                        </Grid> */}
-
                         <Grid item xs={12}>
-                            <FormAutocomplete
+                            <SelectDepartment
+                                companyId={company?.id}
                                 control={control}
-                                label={t('Parent Department')}
-                                name="parentDepartmentId"
-                                // autoComplete="parentDepartmentId"
-                                // type="number"
-                                options={
-                                    departmentList?.map((o) => {
-                                        return { label: o.name, value: o.id };
-                                    }) ?? []
-                                }
+                                name="departmentId"
+                                id="departmentId"
+                                label={t('Department')}
                             />
                         </Grid>
-
-                        {/* <Grid item xs={12} sx={{ mb: 2 }}>
-                            <Grid container spacing={1}>
-                                <Grid item>
-                                    <Button type="submit" disabled={!isDirty}>
-                                        {t('Update')}
-                                    </Button>
-                                </Grid>
-
-                                <Grid item>
-                                    {isDirty && <Button onClick={onCancel}>{t('Cancel')}</Button>}
-                                </Grid>
-                            </Grid>
-                        </Grid> */}
                     </Grid>
                 </DialogContent>
                 <DialogActions sx={{ mb: 2, mr: 2, pt: 0 }}>

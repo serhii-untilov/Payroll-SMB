@@ -6,72 +6,89 @@ import {
     GridRowSelectionModel,
     MuiEvent,
 } from '@mui/x-data-grid';
-import { ICompanyAccount } from '@repo/shared';
+import { ICompanyManager } from '@repo/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
-import { DataGrid } from '../../components/data/DataGrid';
-import { TableToolbar } from '../../components/layout/TableToolbar';
+import { DataGrid } from '../../components/grid/DataGrid';
+import { Toolbar } from '../../components/layout/Toolbar';
 import { CompanyDetailsProps } from './CompanyDetails';
 
-export function CompanyAccounts(params: CompanyDetailsProps) {
+export function ManagerList(params: CompanyDetailsProps) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
-    const [accountId, setAccountId] = useState<number | null>(null);
+    const [managerId, setManagerId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     const columns: GridColDef[] = [
+        // { field: 'id', headerName: t('ID'), type: 'number', width: 70 },
         {
-            field: 'accountNumber',
-            headerName: t('Account Number'),
-            type: 'string',
-            width: 240,
-            sortable: true,
-        },
-        {
-            field: 'bank',
-            headerName: t('Bank'),
+            field: 'fullName',
+            headerName: t('Full Name'),
             type: 'string',
             width: 240,
             sortable: true,
             valueGetter: (params) => {
-                return params.row.bank.name;
+                return `${params.row.firstName} ${params.row.lastName}`;
             },
         },
         {
-            field: 'currency',
-            headerName: t('Currency'),
+            field: 'position',
+            headerName: t('Position'),
+            type: 'string',
+            width: 240,
+            sortable: true,
+            valueGetter: (params) => {
+                return '';
+            },
+        },
+        {
+            field: 'taxId',
+            headerName: t('Tax ID'),
             type: 'string',
             width: 160,
             sortable: true,
             valueGetter: (params) => {
-                return params.row.currency.code;
+                return '';
             },
         },
         {
-            field: 'description',
-            headerName: t('Description'),
+            field: 'phone',
+            headerName: t('Phone'),
             type: 'string',
             width: 160,
             sortable: true,
+            valueGetter: (params) => {
+                return '';
+            },
+        },
+        {
+            field: 'email',
+            headerName: t('Email Address'),
+            type: 'string',
+            width: 160,
+            sortable: true,
+            valueGetter: (params) => {
+                return '';
+            },
         },
     ];
 
-    const onAddAccount = () => {
+    const onAddManager = () => {
         console.log('onAdd');
     };
 
-    const onEditAccount = (accountId: number) => {
+    const onEditManager = (managerId: number) => {
         console.log('onEdit');
     };
 
-    const submitCallback = (data: ICompanyAccount) => {
+    const submitCallback = (data: ICompanyManager) => {
         console.log('submitCallback');
     };
 
-    const onDeleteAccount = async () => {
+    const onDeleteManager = async () => {
         console.log('onDelete');
     };
 
@@ -85,20 +102,14 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
 
     return (
         <>
-            <TableToolbar
-                onAdd={onAddAccount}
-                onDelete={onDeleteAccount}
-                deleteDisabled={true}
+            <Toolbar
+                onAdd={onAddManager}
+                onDelete={'disabled'}
                 onPrint={onPrint}
-                printDisabled={false}
                 onExport={onExport}
-                exportDisabled={false}
-                onShowHistory={() => {}}
-                showHistoryDisabled={true}
-                onShowDeleted={() => {}}
-                showDeletedDisabled={true}
-                onRestoreDeleted={() => {}}
-                restoreDeletedDisabled={true}
+                onShowHistory={'disabled'}
+                onShowDeleted={'disabled'}
+                onRestoreDeleted={'disabled'}
             />
             <DataGrid
                 rows={[]}
@@ -114,7 +125,7 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
                     details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditAccount(params.row.id);
+                        onEditManager(params.row.id);
                     }
                 }}
                 onRowDoubleClick={(
@@ -122,13 +133,13 @@ export function CompanyAccounts(params: CompanyDetailsProps) {
                     event: MuiEvent,
                     details: GridCallbackDetails,
                 ) => {
-                    // onEditAccount(params.row.id)
+                    // onEditManager(params.row.id)
                 }}
             />
-            {/* <AccountForm
+            {/* <ManagerForm
                 open={openForm}
                 setOpen={setOpenForm}
-                accountId={accountId}
+                managerId={managerId}
                 submitCallback={submitCallback}
             /> */}
         </>

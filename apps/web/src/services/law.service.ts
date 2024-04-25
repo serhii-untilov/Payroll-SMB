@@ -9,7 +9,9 @@ export async function createLaw(law: ICreateLaw): Promise<ILaw> {
 
 export async function getLawList(): Promise<ILaw[]> {
     const response = await api.get(`/api/laws/`, { headers: authHeader() });
-    return response.data;
+    return response.data.sort((a: ILaw, b: ILaw) =>
+        a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
+    );
 }
 
 export async function getLaw(id: number): Promise<ILaw> {

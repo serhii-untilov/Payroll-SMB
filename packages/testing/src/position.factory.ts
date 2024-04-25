@@ -12,7 +12,7 @@ export const createMockPosition = (data?: Partial<IPosition>): IPosition => {
 
         companyId: 1,
 
-        idNumber: factory().toString(), // Identity number (Табельний номер)
+        cardNumber: factory().toString(), // Identity number (Табельний номер)
         sequenceNumber: factory(), // Sequence in payroll reports to place managers on top
         description: '',
 

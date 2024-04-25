@@ -23,7 +23,9 @@ export async function getPayPeriodList(
             headers: authHeader(),
         },
     );
-    return response.data;
+    return response.data.sort(
+        (a: IPayPeriod, b: IPayPeriod) => a.dateFrom.getTime() - b.dateFrom.getTime(),
+    );
 }
 
 export async function getPayPeriod(
@@ -86,7 +88,7 @@ export function getPayPeriodName(
         isEqual(startOfDay(dateFrom), startOfMonth(dateFrom)) &&
         isEqual(startOfDay(dateTo), startOfDay(endOfMonth(dateTo)))
     ) {
-        return `${format(dateFrom, 'Y LLLL', { locale })} ${state}`;
+        return `${format(dateFrom, 'y LLLL', { locale })} ${state}`;
     }
-    return `${format(dateFrom, 'Y LLLL', { locale })} ${format(dateFrom, 'd')} - ${format(dateTo, 'd')} ${state}`;
+    return `${format(dateFrom, 'y LLLL', { locale })} ${format(dateFrom, 'd')} - ${format(dateTo, 'd')} ${state}`;
 }
