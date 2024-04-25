@@ -1,14 +1,15 @@
-import { getAdminId } from '../utils/getAdminId';
-import { MigrationInterface, QueryRunner } from 'typeorm';
-import { langPipe } from '../utils/langPipe';
-import { PaymentType } from 'src/resources/payment-types/entities/payment-type.entity';
 import { PaymentGroup, PaymentMethod } from '@repo/shared';
+import { MigrationInterface, QueryRunner } from 'typeorm';
+import { PaymentType } from '../resources/payment-types/entities/payment-type.entity';
+import { getAdminId } from '../utils/getAdminId';
+import { langPipe } from '../utils/langPipe';
 
 const lang = process.env.LANGUAGE;
+const law = process.env.LAW;
 const entity = PaymentType;
 const recordList = [
     {
-        name: { en: 'Salary', uk: 'Оклад' },
+        name: { en: 'Salary', uk: 'Оплата за окладом' },
         paymentGroup: PaymentGroup.BASIC,
         paymentMethod: PaymentMethod.SALARY,
         description: {
@@ -17,12 +18,12 @@ const recordList = [
         },
     },
     {
-        name: { en: 'Wage', uk: 'Тариф' },
+        name: { en: 'Wage', uk: 'Оплата за тарифом' },
         paymentGroup: PaymentGroup.BASIC,
-        paymentMethod: PaymentMethod.SALARY,
+        paymentMethod: PaymentMethod.WAGE,
         description: {
             en: 'Wages are typically paid on an hourly basis and are directly tied to the number of hours worked.',
-            uk: `Тариф, як правило, виплачується на погодинній основі та безпосередньо прив'язаний до кількості відпрацьованих годин.`,
+            uk: `Тариф виплачується на погодинній основі та безпосередньо прив'язаний до кількості відпрацьованих годин.`,
         },
     },
     {
@@ -62,6 +63,7 @@ const recordList = [
         },
     },
     {
+        law: 'ukraine',
         name: {
             en: 'Paid sick, from the employer',
             uk: 'Оплачуваний лікарняний, від роботодавця',
@@ -74,34 +76,87 @@ const recordList = [
         },
     },
     {
+        law: 'ukraine',
         name: {
             en: 'Paid sick, from the SIF',
             uk: 'Оплачуваний лікарняний, з ФСС',
         },
         paymentGroup: PaymentGroup.SICKS,
-        paymentMethod: PaymentMethod.PAID_SICK_BY_COMPANY,
+        paymentMethod: PaymentMethod.PAID_SICK_PAID_BY_SIF,
         description: {
             en: `"Paid sick leave, from the SIF" refers to a situation where an employee is absent from work due to illness or injury and continues to receive their regular pay from the SIF during the period of absence.`,
             uk: `Оплачуваний лікарняний, з ФСС - у разі коли працівник відсутній на роботі через хворобу або травму та продовжує отримувати свою звичайну зарплату з ФСС протягом періоду відсутності.`,
         },
     },
     {
+        law: 'ukraine',
         name: { en: 'Unconfirmed sick', uk: 'Непідтверджений лікарняний' },
-        paymentGroup: PaymentGroup.VACATIONS,
-        paymentMethod: PaymentMethod.UNPAID_LEAVE,
+        paymentGroup: PaymentGroup.SICKS,
+        paymentMethod: PaymentMethod.UNCONFIRMED_SICK,
         description: {
             en: `Unconfirmed sick leave - in the case when the employee is absent from work due to illness or injury, but has not yet provided the employer with the appropriate document. The employee is not paid a salary during the period of absence until the document is presented to the employer.`,
             uk: `Непідтверджений лікарняний - у випадку, коли працівник відсутній на роботі через хворобу або травму, але ще не надав роботодавцю лікарняний лист. Заробітна плата за час відсутності працівнику не нараховується до пред'явлення роботодавцю лікарняного листа.`,
         },
     },
+    {
+        law: 'ukraine',
+        name: { en: 'Income indexation', uk: 'Індексація доходу' },
+        paymentGroup: PaymentGroup.REFUNDS,
+        paymentMethod: PaymentMethod.INCOME_INDEXATION,
+        description: {
+            en: `Indexation of the monetary income of the population is a mechanism established by laws and other regulatory legal acts to increase the monetary income of the population, which makes it possible to partially or fully compensate for the increase in the price of consumer goods and services.`,
+            uk: `Індексація грошових доходів населення - це встановлений законами та іншими нормативно-правовими актами механізм підвищення грошових доходів населення, що дає можливість частково або повністю відшкодовувати подорожчання споживчих товарів і послуг.`,
+        },
+    },
+    {
+        name: { en: 'Income Tax', uk: 'ПДФО' },
+        paymentGroup: PaymentGroup.TAXES,
+        paymentMethod: PaymentMethod.INCOME_TAX,
+        description: {
+            en: `Income tax - the tax that individuals pay on the income they earn from their employment or other sources of income. It is a tax levied by the government on the earnings of individuals, including wages, salaries, bonuses, commissions, tips, and other forms of compensation.`,
+            uk: `Податок на доходи фізичних осіб - податок, який фізичні особи сплачують на дохід, що вони отримують від своєї роботи або інших джерел доходу. Це податок, що стягується державою з доходів фізичних осіб, включаючи заробітну плату, зарплату, премії, комісійні, чайові та інші форми компенсації.`,
+        },
+    },
+    {
+        law: 'ukraine',
+        name: { en: 'Military Tax', uk: 'Військовий збір' },
+        paymentGroup: PaymentGroup.TAXES,
+        paymentMethod: PaymentMethod.MILITARY_TAX,
+        description: {
+            en: `Military tax - the tax that individuals pay on the income they earn from their employment. It is a tax levied by the government on the earnings of individuals, including wages, salaries, bonuses, commissions, tips, and other forms of compensation.`,
+            uk: `Податок на доходи фізичних осіб - податок, який фізичні особи сплачують на дохід, що вони отримують від своєї роботи або інших джерел доходу. Це податок, що стягується державою з доходів фізичних осіб, включаючи заробітну плату, зарплату, премії, комісійні, чайові та інші форми компенсації.`,
+        },
+    },
+    {
+        law: 'ukraine',
+        name: { en: 'Advance payment', uk: 'Виплата авансу' },
+        paymentGroup: PaymentGroup.PAYMENTS,
+        paymentMethod: PaymentMethod.ADVANCED_PAYMENT,
+        description: {
+            en: `Advanced payment - an employee is paid for work they have not yet completed or for a period that has not yet ended.`,
+            uk: `Аванс - працівник отримує плату за роботу, яку він ще не виконав, або за період, який ще не закінчився.`,
+        },
+    },
+    {
+        name: { en: 'Regular payment', uk: 'Виплата заробітної плати' },
+        paymentGroup: PaymentGroup.PAYMENTS,
+        paymentMethod: PaymentMethod.REGULAR_PAYMENT,
+        description: {
+            en: `Regular payment refers to the standard, recurring compensation that an employee receives for their work regularly, typically according to a predetermined schedule. It encompasses wages, salaries, bonuses, commissions, or other forms of compensation after deducting taxes.`,
+            uk: `Виплата заробітної плати стосується стандартної періодичної винагороди, яку працівник регулярно отримує за свою роботу, як правило, згідно з заздалегідь визначеним графіком. Вона охоплює заробітну плату, бонуси, комісійні або інші форми компенсації після вирахування податків.`,
+        },
+    },
 ];
 
-export class Seed1713973393208 implements MigrationInterface {
+export class Seed1813973393208 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         const user_id = await getAdminId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
+            if (recordList[n].law && recordList[n].law !== law) continue;
             const record = { ...recordList[n], createdUserId: user_id, updatedUserId: user_id };
+            delete record.law;
+            console.log('!!!!!', record);
             await dataSource
                 .createQueryBuilder()
                 .insert()
@@ -115,6 +170,7 @@ export class Seed1713973393208 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         for (let n = 0; n < recordList.length; n++) {
+            if (recordList[n]?.law && recordList[n]?.law !== law) continue;
             const record = langPipe(lang, recordList[n]);
             await dataSource
                 .createQueryBuilder()

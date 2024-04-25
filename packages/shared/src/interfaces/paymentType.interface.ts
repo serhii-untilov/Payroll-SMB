@@ -43,16 +43,16 @@ export enum PaymentMethod {
     PAID_SICK_PAID_BY_SIF = 'paid-sick-by-sif',
     UNCONFIRMED_SICK = 'unconfirmed-sick',
     // REFUNDS group
-    INDEXATION = 'indexation',
+    INCOME_INDEXATION = 'income-indexation',
     // ONE_TIME_ACCRUALS group
     ONE_TIME_ACCRUAL = 'one-time-accrual',
     // TAXES group
     INCOME_TAX = 'income-tax',
     MILITARY_TAX = 'military-tax',
     // PAYMENTS group
-    ADVANCE = 'advance',
-    SALARY_PAYMENT = 'salary-payment',
-    ONE_TIME_PAYMENT = 'one-time-payment',
+    ADVANCED_PAYMENT = 'advanced-payment',
+    REGULAR_PAYMENT = 'regular-payment',
+    FAST_PAYMENT = 'fast-payment',
     // DEDUCTIONS group
     ONE_TIME_DEDUCTION = 'one-time-deduction',
 }
