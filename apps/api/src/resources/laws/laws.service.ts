@@ -13,7 +13,7 @@ export class LawsService {
     ) {}
 
     async create(law: CreateLawDto): Promise<Law> {
-        const existing = this.lawsRepository.findOne({ where: { name: law.name } });
+        const existing = await this.lawsRepository.findOne({ where: { name: law.name } });
         if (existing) {
             throw new BadRequestException(`Law '${law.name}' already exists.`);
         }

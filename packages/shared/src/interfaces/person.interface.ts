@@ -11,20 +11,20 @@ export interface IPerson extends ILogger {
     firstName: string;
     lastName: string;
 
-    middleName?: string | undefined;
+    middleName?: string | null;
 
-    fullName?: string | undefined;
+    fullName?: string | null;
 
-    birthDate?: Date | undefined;
+    birthDate?: Date | null;
 
-    taxId?: string | undefined;
+    taxId?: string | null;
 
-    sex?: string | undefined; // See enum Sex
+    sex?: string | null; // See enum Sex
 
-    phone?: string | undefined;
-    email?: string | undefined;
+    phone?: string | null;
+    email?: string | null;
 
-    photo?: string | undefined;
+    photo?: string | null;
 }
 
 export type ICreatePerson = Omit<

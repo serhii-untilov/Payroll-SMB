@@ -57,11 +57,19 @@ export enum PaymentMethod {
     ONE_TIME_DEDUCTION = 'one-time-deduction',
 }
 
+export interface IPaymentTypeFilter {
+    part?: string;
+    groups?: string[];
+    methods?: string[];
+    ids?: number[];
+}
+
 export interface IPaymentType extends ILogger {
     id: number;
     name: string;
-    paymentGroup: string;
-    paymentMethod: string;
+    paymentPart: string; // See enum PaymentPart
+    paymentGroup: string; // See enum PaymentGroup
+    paymentMethod: string; // See enum PaymentMethod
     description: string;
 }
 

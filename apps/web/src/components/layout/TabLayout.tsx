@@ -14,7 +14,7 @@ const TabLayout: FC<Props> = ({ title, children }) => {
         <Box
             id="tab-layout"
             // my={{ xs: 0, lg: 1, xl: 1 }}
-            mx={{ xs: 1, lg: 2 }}
+            // mx={{ xs: 1, lg: 1 }}
             // sx={{
             //     display: 'flex',
             //     flexDirection: 'column',

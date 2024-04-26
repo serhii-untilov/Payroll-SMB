@@ -28,3 +28,8 @@ export async function deleteWorkNorm(id: number): Promise<IWorkNorm> {
     const response = await api.delete(`/api/work-norms/${id}`, { headers: authHeader() });
     return response.data;
 }
+
+export async function getDefaultWorkNormId(): Promise<number | null> {
+    const workNormList = await getWorkNormList();
+    return workNormList.length === 1 ? workNormList[0].id : null;
+}

@@ -44,3 +44,8 @@ export function getPartOfDay(hours: number) {
 export function capitalizeFirstChar(word: string | undefined | null): string {
     return word ? word.charAt(0).toUpperCase() + word.slice(1) : '';
 }
+
+export function getObjectByType<Type>(data: any): Type {
+    const template: Type = data as Type;
+    return template;
+}

@@ -29,12 +29,12 @@ export class Position extends Logger implements IPosition {
     companyId: number;
 
     @Column({ type: 'varchar', length: 15 })
-    cardNumber: string; // Identity number (Табельний номер)
+    cardNumber: string; // Табельний номер
 
-    @Column({ type: 'integer' })
+    @Column({ type: 'integer', default: 2147483647 })
     sequenceNumber: number; // Sequence in payroll reports to place managers on top
 
-    @Column({ type: 'varchar', length: 260 })
+    @Column({ type: 'varchar', length: 260, default: '' })
     description: string;
 
     @ManyToOne(() => Person, (person) => person.positions)
@@ -42,7 +42,7 @@ export class Position extends Logger implements IPosition {
     person?: Person;
 
     @Column({ type: 'integer', nullable: true })
-    personId?: number | null; // Vacancy if not defined
+    personId?: number | null; // Vacancy, if not defined
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom?: Date | null;

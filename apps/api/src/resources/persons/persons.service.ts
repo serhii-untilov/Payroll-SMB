@@ -26,7 +26,7 @@ export class PersonsService {
                 taxId: person.taxId,
             });
         }
-        const existing = this.personsRepository.findOne({ where });
+        const existing = await this.personsRepository.findOne({ where });
         if (existing) {
             throw new BadRequestException(
                 `Person '${person.firstName} ${person.lastName}' already exists.`,

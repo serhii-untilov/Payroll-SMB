@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IPaymentTypeFilter } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
@@ -25,8 +26,23 @@ export class PaymentTypesService {
         return newPaymentType;
     }
 
-    async findAll(): Promise<PaymentType[]> {
-        return await this.PaymentTypesRepository.find();
+    async findAll(filter: IPaymentTypeFilter | undefined): Promise<PaymentType[]> {
+        return filter?.part || filter?.groups || filter?.methods || filter?.ids
+            ? await this.PaymentTypesRepository.createQueryBuilder('payment_type')
+                  .where(
+                      `${filter?.part ? '"paymentPart" = :part' : '1=1'}` +
+                          `${filter?.groups ? ' AND "paymentGroup" = ANY (:groups)' : ''} ` +
+                          `${filter?.methods ? ' AND "paymentMethod" = ANY (:methods)' : ''} ` +
+                          `${filter?.ids ? ' AND "id" = ANY (:ids)' : ''} `,
+                      {
+                          part: filter?.part,
+                          groups: filter?.groups,
+                          methods: filter?.methods,
+                          ids: filter?.ids,
+                      },
+                  )
+                  .getMany()
+            : await this.PaymentTypesRepository.find();
     }
 
     async findOne(params): Promise<PaymentType> {

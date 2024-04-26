@@ -1,6 +1,6 @@
 import { enqueueSnackbar } from 'notistack';
 import { FormAutocomplete } from '../form/FormAutocomplete';
-import { IPaymentType } from '@repo/shared';
+import { IPaymentType, IPaymentTypeFilter } from '@repo/shared';
 import { getPaymentTypeList } from '../../services/paymentType.service';
 import { useQuery } from 'react-query';
 
@@ -10,17 +10,18 @@ interface Props {
     label?: string;
     id?: string;
     name?: string;
+    filter?: IPaymentTypeFilter;
 }
 
-export function SelectPaymentType({ companyId, control, label, id, name }: Props) {
+export function SelectPaymentType({ companyId, control, label, id, name, filter }: Props) {
     const {
         data: paymentTypeList,
         isError: isPaymentTypeListError,
         error: paymentTypeListError,
     } = useQuery<IPaymentType[], Error>({
-        queryKey: ['paymentTypeList', companyId],
+        queryKey: ['paymentTypeList', companyId, filter],
         queryFn: async () => {
-            return companyId ? await getPaymentTypeList() : [];
+            return companyId ? await getPaymentTypeList(filter) : [];
         },
         enabled: !!companyId,
     });
