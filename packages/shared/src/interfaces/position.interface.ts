@@ -2,13 +2,14 @@ import { ICompany } from './company.interface';
 import { ILogger } from './logger.interface';
 import { IPerson } from './person.interface';
 
+export const MAX_SEQUENCE_NUMBER = 2147483647;
 export interface IPosition extends ILogger {
     id: number;
 
     company?: ICompany;
     companyId: number;
 
-    cardNumber: string; // (Табельний номер)
+    cardNumber?: string | null; // (Табельний номер)
     sequenceNumber?: number | null; // Sequence in payroll reports to place managers on top (Порядковий номер)
     description?: string | null;
 

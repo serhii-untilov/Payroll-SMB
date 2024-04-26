@@ -1,5 +1,5 @@
 import { ArrowBackIosNewRounded } from '@mui/icons-material';
-import { IconButton, Tab } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { IPosition, maxDate, minDate } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { PropsWithChildren, ReactNode, SyntheticEvent, useEffect, useMemo, useState } from 'react';
@@ -15,6 +15,7 @@ import useLocale from '../../hooks/useLocale';
 import { getPosition } from '../../services/position.service';
 import { JobAndPay } from './details/JobAndPay';
 import { Personal } from './details/Personal';
+import { Tab } from '../../components/layout/Tab';
 
 interface Props extends PropsWithChildren {
     positionId: number | null;
@@ -87,8 +88,8 @@ export default function Position(props: Props) {
                 <Tab label={t('Job & Pay')} />
                 {/* <Tab label={t('Additional Earnings')} /> */}
                 {/* <Tab label={t('Taxes and Deductions')} /> */}
-                <Tab label={t('Personal')} />
-                <Tab label={t('Time Off')} />
+                <Tab label={t('Personal')} disabled={!position?.person?.id} />
+                <Tab label={t('Time Off')} disabled={!position?.person?.id} />
                 <Tab label={t('Documents')} />
                 <Tab label={t('Notes')} />
             </Tabs>
@@ -96,7 +97,7 @@ export default function Position(props: Props) {
                 <JobAndPay positionId={positionId} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
-                <Personal positionId={positionId} />
+                <Personal personId={positionId} />
             </TabPanel>
             <TabPanel value={tab} index={2}></TabPanel>
             <TabPanel value={tab} index={3}></TabPanel>

@@ -13,7 +13,9 @@ export class AccountingService {
     ) {}
 
     async create(accounting: CreateAccountingDto): Promise<Accounting> {
-        const existing = this.accountingRepository.findOne({ where: { name: accounting.name } });
+        const existing = await this.accountingRepository.findOne({
+            where: { name: accounting.name },
+        });
         if (existing) {
             throw new BadRequestException(`Accounting '${accounting.name}' already exists.`);
         }

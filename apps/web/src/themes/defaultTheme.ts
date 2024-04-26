@@ -4,6 +4,17 @@ import { paletteLight } from './paletteLight';
 export function defaultTheme(themeMode?: string) {
     return {
         palette: themeMode === 'dark' ? paletteDark() : paletteLight(),
+        breakpoints: {
+            values: {
+                xs: 0,
+                sm: 600,
+                md: 900,
+                lg: 1200,
+                xl: 1536,
+                hd: 1920,
+                hd2: 2560,
+            },
+        },
         components: {
             MuiButtonBase: {
                 defaultProps: {

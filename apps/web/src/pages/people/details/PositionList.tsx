@@ -183,12 +183,12 @@ export function PositionList(props: Props) {
         <>
             <Toolbar
                 onAdd={onAddPosition}
-                onDelete={rowSelectionModel.length ? onDeletePosition : 'disabled'}
                 onPrint={positionList?.length ? onPrint : 'disabled'}
                 onExport={positionList?.length ? onExport : 'disabled'}
-                onShowHistory={'disabled'}
-                onShowDeleted={'disabled'}
+                onDelete={rowSelectionModel.length ? onDeletePosition : 'disabled'}
+                // onShowDeleted={'disabled'}
                 onRestoreDeleted={'disabled'}
+                onShowHistory={'disabled'}
             />
             <DataGrid
                 columnVisibilityModel={{

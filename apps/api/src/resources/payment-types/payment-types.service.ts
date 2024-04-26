@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { IPaymentTypeFilter } from '@repo/shared';
+import { Repository } from 'typeorm';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
 import { PaymentType } from './entities/payment-type.entity';
-import { IPaymentTypeFilter } from '@repo/shared';
 
 @Injectable()
 export class PaymentTypesService {

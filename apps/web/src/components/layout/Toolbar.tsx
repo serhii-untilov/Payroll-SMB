@@ -2,7 +2,10 @@ import {
     AddCircleRounded,
     CheckCircleRounded,
     DeleteRounded,
+    DeleteSweepRounded,
+    DoNotDisturbOnRounded,
     DownloadRounded,
+    HighlightOffRounded,
     HistoryRounded,
     OfflinePinRounded,
     PrintRounded,
@@ -20,14 +23,14 @@ type Func<T> = (value: T) => void;
 export interface Props extends StackProps {
     onAdd?: Func<any> | 'disabled' | undefined;
     onSave?: Func<any> | 'disabled' | undefined;
+    onCancel?: Func<any> | 'disabled' | undefined;
     onSaveAndClose?: Func<any> | 'disabled' | undefined;
-    onRestore?: Func<any> | 'disabled' | undefined;
     onDelete?: Func<any> | 'disabled' | undefined;
     onPrint?: Func<any> | 'disabled' | undefined;
     onExport?: Func<any> | 'disabled' | undefined;
-    onShowHistory?: Func<any> | 'disabled' | undefined;
     onShowDeleted?: Func<any> | 'disabled' | undefined;
     onRestoreDeleted?: Func<any> | 'disabled' | undefined;
+    onShowHistory?: Func<any> | 'disabled' | undefined;
 }
 
 interface ToolbarItemProps extends PropsWithChildren {
@@ -74,11 +77,11 @@ export function Toolbar(props: Props) {
                 }}
             >
                 <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-                    <ToolbarItem item={props?.onAdd} title={t('Add')}>
+                    <ToolbarItem item={props?.onAdd} title={t('Add')} color={'success'}>
                         <AddCircleRounded />
                     </ToolbarItem>
 
-                    <ToolbarItem item={props?.onSave} title={t('Save')}>
+                    <ToolbarItem item={props?.onSave} title={t('Save')} color={'success'}>
                         <CheckCircleRounded />
                     </ToolbarItem>
 
@@ -86,12 +89,12 @@ export function Toolbar(props: Props) {
                         <OfflinePinRounded />
                     </ToolbarItem>
 
-                    <ToolbarItem item={props?.onRestore} title={t('Restore')}>
-                        <UnpublishedRounded />
-                    </ToolbarItem>
-
-                    <ToolbarItem item={props?.onDelete} title={t('Delete')} color={'error'}>
-                        <RemoveCircleRounded />
+                    <ToolbarItem
+                        item={props?.onCancel}
+                        title={t('Cancel changes')}
+                        color={'warning'}
+                    >
+                        <DoNotDisturbOnRounded />
                     </ToolbarItem>
 
                     <ToolbarItem item={props?.onPrint} title={t('Print')}>
@@ -111,16 +114,24 @@ export function Toolbar(props: Props) {
                         justifyContent: 'flex-end',
                     }}
                 >
-                    <ToolbarItem item={props?.onShowHistory} title={t('Show history')}>
-                        <HistoryRounded />
-                    </ToolbarItem>
-
-                    <ToolbarItem item={props?.onShowDeleted} title={t('Show deleted')}>
+                    <ToolbarItem item={props?.onDelete} title={t('Delete')} color={'error'}>
                         <DeleteRounded />
                     </ToolbarItem>
 
-                    <ToolbarItem item={props?.onRestoreDeleted} title={t('Restore deleted')}>
+                    <ToolbarItem item={props?.onShowDeleted} title={t('Show deleted')}>
+                        <DeleteSweepRounded />
+                    </ToolbarItem>
+
+                    <ToolbarItem
+                        item={props?.onRestoreDeleted}
+                        title={t('Restore deleted')}
+                        color={'warning'}
+                    >
                         <RestoreFromTrashRounded />
+                    </ToolbarItem>
+
+                    <ToolbarItem item={props?.onShowHistory} title={t('Show history')}>
+                        <HistoryRounded />
                     </ToolbarItem>
                 </Box>
             </Box>
