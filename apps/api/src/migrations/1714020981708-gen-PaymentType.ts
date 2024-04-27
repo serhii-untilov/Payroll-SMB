@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class Gen1714020981708 implements MigrationInterface {
-    name = 'Gen1714020981708'
+    name = 'Gen1714020981708';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -15,5 +15,4 @@ export class Gen1714020981708 implements MigrationInterface {
             ALTER TABLE "payment_type" DROP COLUMN "description"
         `);
     }
-
 }

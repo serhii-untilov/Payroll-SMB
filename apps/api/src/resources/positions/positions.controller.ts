@@ -40,31 +40,24 @@ export class PositionsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(
+        @Req() req: Request,
         @Query('companyId', ParseIntPipe) companyId: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Query('relations', ParseBoolPipe) relations: boolean = false,
     ): Promise<IPosition[]> {
-        return await this.positionsService.findAll({
-            companyId,
-            relations: {
-                company: relations,
-                person: relations,
-                history: relations,
-            },
-        });
+        const userId = req.user['sub'];
+        return await this.positionsService.findAll({ userId, companyId, relations });
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<IPosition> {
-        return await this.positionsService.findOne({
-            where: { id },
-            relations: {
-                company: true,
-                person: true,
-                history: true,
-            },
-        });
+    async findOne(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Query('relations', ParseBoolPipe) relations: boolean = false,
+    ): Promise<IPosition> {
+        const userId = req.user['sub'];
+        return await this.positionsService.findOne({ userId, id, relations });
     }
 
     @Patch(':id')
