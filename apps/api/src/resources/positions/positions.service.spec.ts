@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import { Position } from './entities/position.entity';
 import { PositionsService } from './positions.service';
+import { CompaniesService } from '../companies/companies.service';
 
 describe('PositionsService', () => {
     let service: PositionsService;
@@ -20,6 +21,7 @@ describe('PositionsService', () => {
                     useFactory: repositoryMockFactory,
                 },
                 { provide: UsersService, useValue: createMock<UsersService>() },
+                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
             ],
         }).compile();
 

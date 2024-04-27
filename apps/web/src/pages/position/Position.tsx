@@ -18,14 +18,14 @@ import { Personal } from './details/Personal';
 import { Tab } from '../../components/layout/Tab';
 
 interface Props extends PropsWithChildren {
-    positionId: number | null;
     children?: ReactNode;
     index: number;
     value: number;
 }
 
 export default function Position(props: Props) {
-    const { positionId } = useParams();
+    const params = useParams();
+    const positionId = Number(params.positionId);
     const { children, value, index, ...other } = props;
     const { locale } = useLocale();
     const { t } = useTranslation();
@@ -54,7 +54,9 @@ export default function Position(props: Props) {
     } = useQuery<Partial<IPosition>, Error>({
         queryKey: ['position', positionId],
         queryFn: async () => {
-            return positionId ? await getPosition(+positionId) : defaultValues;
+            return positionId
+                ? await getPosition({ id: positionId, relations: true })
+                : defaultValues;
         },
         enabled: !!company?.id,
     });
@@ -95,10 +97,10 @@ export default function Position(props: Props) {
                 <Tab label={t('Notes')} />
             </Tabs>
             <TabPanel value={tab} index={0}>
-                <JobAndPay positionId={+positionId} />
+                <JobAndPay positionId={positionId} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
-                <Personal personId={+positionId} />
+                <Personal personId={positionId} />
             </TabPanel>
             <TabPanel value={tab} index={2}></TabPanel>
             <TabPanel value={tab} index={3}></TabPanel>
