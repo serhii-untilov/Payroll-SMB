@@ -70,4 +70,12 @@ export class UsersService {
             ...(relations ? { relations: { company: true, role: true } } : {}),
         });
     }
+
+    async getUserCompanyRole({ userId, companyId }): Promise<string> {
+        const record = await this.userCompanyRepository.findOne({
+            where: { userId, companyId },
+            relations: { role: true },
+        });
+        return record?.role?.type;
+    }
 }

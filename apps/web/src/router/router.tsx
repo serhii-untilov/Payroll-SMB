@@ -24,7 +24,7 @@ const Payroll = Loadable(lazy(() => import('../pages/payroll/Payroll')));
 const Payments = Loadable(lazy(() => import('../pages/payments/Payments')));
 const Reports = Loadable(lazy(() => import('../pages/reports/Reports')));
 const Profile = Loadable(lazy(() => import('../pages/profile/Profile')));
-const PositionForm = Loadable(lazy(() => import('../pages/position/Position')));
+const Position = Loadable(lazy(() => import('../pages/position/Position')));
 
 const router: RouteObject[] = [
     {
@@ -66,7 +66,8 @@ const router: RouteObject[] = [
                 path: 'people',
                 children: [
                     { index: true, element: <People /> },
-                    { path: 'position', element: <PositionForm /> },
+                    { path: 'position', element: <Position /> },
+                    { path: 'position/:positionId', element: <Position /> },
                 ],
             },
             { path: 'time-off', element: <TimeOff /> },

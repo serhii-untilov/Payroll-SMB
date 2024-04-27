@@ -90,7 +90,9 @@ export function JobAndPay({ positionId }: Props) {
     } = useQuery<FormType, Error>({
         queryKey: ['position', positionId, defaultBasePaymentTypeId],
         queryFn: async () => {
-            return formSchema.cast(positionId ? await getPosition(positionId) : defaultValues);
+            return formSchema.cast(
+                positionId ? await getPosition({ id: positionId, relations: true }) : defaultValues,
+            );
         },
         enabled: !!company?.id,
     });

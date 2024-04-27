@@ -1,8 +1,13 @@
-import { CompaniesService } from './../companies/companies.service';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
+import { CompaniesService } from './../companies/companies.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { Position } from './entities/position.entity';
@@ -27,8 +32,6 @@ export class PositionsService {
                 throw new BadRequestException(`Position '${position.cardNumber}' already exists.`);
             }
         }
-        const cardNumber = position?.cardNumber || (await this.nextCardNumber(position.companyId));
-
         const user = await this.usersService.findOne({ where: { id: userId } });
         if (!user) {
             throw new BadRequestException(`User '${userId}' not found.`);
@@ -37,6 +40,17 @@ export class PositionsService {
         if (!company) {
             throw new BadRequestException(`Company '${position.companyId}' not found.`);
         }
+        const role = this.usersService.getUserCompanyRole({
+            userId,
+            companyId: position.companyId,
+        });
+        if (!role) {
+            throw new ForbiddenException(
+                `User doesn't have access to the requested Company's resource.`,
+            );
+        }
+        const cardNumber =
+            position?.cardNumber || (await this.getNextCardNumber(position.companyId));
         return await this.positionsRepository.save({
             ...position,
             cardNumber,
@@ -45,14 +59,51 @@ export class PositionsService {
         });
     }
 
-    async findAll(params): Promise<Position[]> {
-        return await this.positionsRepository.find(params);
+    async findAll({ userId, companyId, relations }): Promise<Position[]> {
+        const user = await this.usersService.findOne({ where: { id: userId } });
+        if (!user) {
+            throw new BadRequestException(`User '${userId}' not found.`);
+        }
+        const role = this.usersService.getUserCompanyRole({ userId, companyId });
+        if (!role) {
+            throw new ForbiddenException(
+                `User doesn't have access to the requested Company's resource.`,
+            );
+        }
+        return await this.positionsRepository.find({
+            where: { companyId },
+            relations: {
+                company: relations,
+                person: relations,
+                history: relations,
+            },
+        });
     }
 
-    async findOne(params): Promise<Position> {
-        const position = await this.positionsRepository.findOne(params);
+    async findOne({ userId, id, relations }): Promise<Position> {
+        const position = await this.positionsRepository.findOne({
+            where: { id },
+            relations: {
+                company: relations,
+                person: relations,
+                history: relations,
+            },
+        });
         if (!position) {
             throw new NotFoundException(`Position could not be found.`);
+        }
+        const user = await this.usersService.findOne({ where: { id: userId } });
+        if (!user) {
+            throw new BadRequestException(`User '${userId}' not found.`);
+        }
+        const role = this.usersService.getUserCompanyRole({
+            userId,
+            companyId: position?.companyId,
+        });
+        if (!role) {
+            throw new ForbiddenException(
+                `User doesn't have access to the requested Company's resource.`,
+            );
         }
         return position;
     }
@@ -88,16 +139,18 @@ export class PositionsService {
         return position;
     }
 
-    async nextCardNumber(companyId: number): Promise<string> {
+    async getNextCardNumber(companyId: number): Promise<string> {
         const result = await this.positionsRepository.query(
             `select coalesce(min(cast(p."cardNumber" as integer)), 0) + 1 "freeNumber"
             from position p
             where p."companyId" = $1
+                and p.deletedUserId is NULL
                 and p."cardNumber" ~ '^[0-9\.]+$' is true
                 and not exists (
                     select null
                     from position p2
                     where p2."companyId" = $2
+                        and p2.deletedUserId is NULL
                         and (p2."cardNumber") ~ '^[0-9\.]+$' is true
                         and cast(p2."cardNumber" as integer) = cast(p."cardNumber" as integer)  + 1
                 )

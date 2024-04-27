@@ -5,7 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 import { PropsWithChildren, ReactNode, SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageSubTitle } from '../../components/layout/PageSubTitle';
 import { TabPanel } from '../../components/layout/TabPanel';
@@ -25,7 +25,8 @@ interface Props extends PropsWithChildren {
 }
 
 export default function Position(props: Props) {
-    const { positionId, children, value, index, ...other } = props;
+    const { positionId } = useParams();
+    const { children, value, index, ...other } = props;
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company } = useAppContext();
@@ -53,7 +54,7 @@ export default function Position(props: Props) {
     } = useQuery<Partial<IPosition>, Error>({
         queryKey: ['position', positionId],
         queryFn: async () => {
-            return positionId ? await getPosition(positionId) : defaultValues;
+            return positionId ? await getPosition(+positionId) : defaultValues;
         },
         enabled: !!company?.id,
     });
@@ -94,10 +95,10 @@ export default function Position(props: Props) {
                 <Tab label={t('Notes')} />
             </Tabs>
             <TabPanel value={tab} index={0}>
-                <JobAndPay positionId={positionId} />
+                <JobAndPay positionId={+positionId} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
-                <Personal personId={positionId} />
+                <Personal personId={+positionId} />
             </TabPanel>
             <TabPanel value={tab} index={2}></TabPanel>
             <TabPanel value={tab} index={3}></TabPanel>

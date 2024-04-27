@@ -25,14 +25,9 @@ type Props = {
 export function PositionList(props: Props) {
     const { companyId } = props;
     const { t } = useTranslation();
-    const [openForm, setOpenForm] = useState(false);
-
-    const [positionId, setPositionId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-
     const gridRef = useGridApiRef();
-
     const navigate = useNavigate();
 
     const columns: GridColDef[] = [
@@ -122,7 +117,7 @@ export function PositionList(props: Props) {
     } = useQuery<IPosition[], Error>({
         queryKey: ['positionList-relations', companyId],
         queryFn: async () => {
-            return await getPositionList(companyId, true);
+            return await getPositionList({ companyId, relations: true });
         },
         enabled: !!companyId,
     });
@@ -138,14 +133,11 @@ export function PositionList(props: Props) {
     }
 
     const onAddPosition = () => {
-        // setPositionId(null);
-        // setOpenForm(true);
         navigate('/people/position/');
     };
 
     const onEditPosition = (positionId: number) => {
-        setPositionId(positionId);
-        setOpenForm(true);
+        navigate(`/people/position/${positionId}`);
     };
 
     const submitCallback = (data: IPosition) => {
@@ -220,12 +212,6 @@ export function PositionList(props: Props) {
                     details: GridCallbackDetails,
                 ) => onEditPosition(params.row.id)}
             />
-            {/* <PositionForm
-                open={openForm}
-                setOpen={setOpenForm}
-                positionId={positionId}
-                submitCallback={submitCallback}
-            /> */}
         </>
     );
 }

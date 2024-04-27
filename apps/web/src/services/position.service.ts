@@ -7,12 +7,13 @@ export async function createPosition(position: ICreatePosition): Promise<IPositi
     return response.data;
 }
 
-export async function getPositionList(
-    companyId: number,
-    relations: boolean = false,
+export async function getPositionList(props: {
+    companyId: number;
+    relations?: boolean;
+}
 ): Promise<IPosition[]> {
     const response = await api.get(
-        `/api/positions/?companyId=${companyId}&relations=${relations}`,
+        `/api/positions/?companyId=${props.companyId}&relations=${!!props.relations}`,
         {
             headers: authHeader(),
         },
@@ -20,8 +21,10 @@ export async function getPositionList(
     return response.data;
 }
 
-export async function getPosition(id: number): Promise<IPosition> {
-    const response = await api.get(`/api/positions/${id}`, { headers: authHeader() });
+export async function getPosition(props: { id: number; relations?: boolean }): Promise<IPosition> {
+    const response = await api.get(`/api/positions/${props.id}?relations=${!!props?.relations}`, {
+        headers: authHeader(),
+    });
     return response.data;
 }
 
