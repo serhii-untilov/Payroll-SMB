@@ -20,4 +20,5 @@ export * from './interfaces/person.interface';
 export * from './interfaces/position.interface';
 export * from './interfaces/positionHistory.interface';
 export * from './interfaces/payPeriod.interface';
+export * from './interfaces/access.interface';
 export * from './date/date';

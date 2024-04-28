@@ -59,7 +59,7 @@ export class PositionsService {
         });
     }
 
-    async findAll({ userId, companyId, relations }): Promise<Position[]> {
+    async findAll(userId, companyId, relations): Promise<Position[]> {
         const user = await this.usersService.findOne({ where: { id: userId } });
         if (!user) {
             throw new BadRequestException(`User '${userId}' not found.`);
@@ -80,7 +80,7 @@ export class PositionsService {
         });
     }
 
-    async findOne({ userId, id, relations }): Promise<Position> {
+    async findOne(userId, id, relations): Promise<Position> {
         const position = await this.positionsRepository.findOne({
             where: { id },
             relations: {
@@ -131,12 +131,13 @@ export class PositionsService {
         if (!user) {
             throw new BadRequestException(`User '${userId}' not found.`);
         }
-        await this.positionsRepository.save({
+        const deleted = {
             ...position,
             deletedDate: new Date(),
             deletedUserId: userId,
-        });
-        return position;
+        } as Position;
+        await this.positionsRepository.save(deleted);
+        return deleted;
     }
 
     async getNextCardNumber(companyId: number): Promise<string> {

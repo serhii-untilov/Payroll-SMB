@@ -170,7 +170,6 @@ export class Seed1813973393208 implements MigrationInterface {
             if (recordList[n].law && recordList[n].law !== law) continue;
             const record = { ...recordList[n], createdUserId: user_id, updatedUserId: user_id };
             delete record.law;
-            console.log('!!!!!', record);
             await dataSource
                 .createQueryBuilder()
                 .insert()
