@@ -4,6 +4,7 @@ The Payroll SMB application provides a solution for employers and employees to c
 
 ## Key features
 
+- UI Responsive Design
 - Multi-tenant architecture
 - Mono-repository
 - JWT authorization
