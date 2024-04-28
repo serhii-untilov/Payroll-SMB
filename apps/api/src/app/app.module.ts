@@ -23,7 +23,8 @@ import { UsersModule } from '../resources/users/users.module';
 import { WorkNormsModule } from '../resources/work-norms/work-norms.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PersonsModule } from 'src/resources/persons/persons.module';
+import { PersonsModule } from '../resources/persons/persons.module';
+import { AccessModule } from '../resources/access/access.module';
 
 @Module({
     imports: [
@@ -56,6 +57,7 @@ import { PersonsModule } from 'src/resources/persons/persons.module';
         PersonsModule,
         PositionsModule,
         PositionHistoryModule,
+        AccessModule,
     ],
     controllers: [AppController],
     providers: [AppService],

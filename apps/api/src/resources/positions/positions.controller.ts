@@ -1,25 +1,25 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
-    UseGuards,
-    ParseIntPipe,
+    Get,
     HttpCode,
     HttpStatus,
-    Query,
+    Param,
     ParseBoolPipe,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
     Req,
+    UseGuards,
 } from '@nestjs/common';
-import { PositionsService } from './positions.service';
+import { IPosition } from '@repo/shared';
+import { Request } from 'express';
+import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
-import { IPosition } from '@repo/shared';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { Request } from 'express';
+import { PositionsService } from './positions.service';
 
 @Controller('positions')
 export class PositionsController {
@@ -45,7 +45,7 @@ export class PositionsController {
         @Query('relations', ParseBoolPipe) relations: boolean = false,
     ): Promise<IPosition[]> {
         const userId = req.user['sub'];
-        return await this.positionsService.findAll({ userId, companyId, relations });
+        return await this.positionsService.findAll(userId, companyId, relations);
     }
 
     @Get(':id')
@@ -57,7 +57,7 @@ export class PositionsController {
         @Query('relations', ParseBoolPipe) relations: boolean = false,
     ): Promise<IPosition> {
         const userId = req.user['sub'];
-        return await this.positionsService.findOne({ userId, id, relations });
+        return await this.positionsService.findOne(userId, id, relations);
     }
 
     @Patch(':id')
