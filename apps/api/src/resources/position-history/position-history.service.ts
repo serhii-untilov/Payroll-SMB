@@ -17,6 +17,7 @@ export class PositionHistoryService {
         private readonly usersService: UsersService,
         private readonly positionsService: PositionsService,
         private readonly accessService: AccessService,
+        public readonly resourceType: ResourceType.POSITION,
     ) {}
 
     async create(userId: number, data: CreatePositionHistoryDto): Promise<PositionHistory> {
@@ -25,7 +26,7 @@ export class PositionHistoryService {
             userId,
             position.companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.CREATE);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.CREATE);
         return await this.positionHistoryRepository.save({
             ...data,
             createdUserId: userId,
@@ -43,7 +44,7 @@ export class PositionHistoryService {
             userId,
             position.companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.ACCESS);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
         return await this.positionHistoryRepository.find({
             where: {
                 positionId,
@@ -81,7 +82,7 @@ export class PositionHistoryService {
             userId,
             position?.companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.ACCESS);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
         return record;
     }
 
@@ -99,7 +100,7 @@ export class PositionHistoryService {
             userId,
             position.companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.UPDATE);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.UPDATE);
         await this.positionHistoryRepository.save({ id, ...data });
         return await this.positionHistoryRepository.findOneOrFail({ where: { id } });
     }
@@ -114,7 +115,7 @@ export class PositionHistoryService {
             userId,
             position.companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.DELETE);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.DELETE);
         const deleted = {
             ...record,
             deletedDate: new Date(),

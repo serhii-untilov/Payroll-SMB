@@ -82,7 +82,7 @@
     "current": "поточний",
     "Pay period": "Розрахунковий період",
     "Job": "Посада",
-    "Card Number": "Табельний №",
+    "Card Number": "Таб. №",
     "Sequence Number": "Порядковий №",
     "Work Norm": "Норма робочого часу",
     "Payment Type": "Форма оплати",
@@ -103,5 +103,6 @@
     "Personal": "Персональні відомості",
     "Documents": "Документи",
     "Notes": "Нотатки",
-    "Vacancy": "Вакансія"
+    "Vacancy": "Вакансія",
+    "Positions": "Штатні одиниці"
 }

@@ -15,6 +15,7 @@ export class PositionsService {
         private positionsRepository: Repository<Position>,
         private readonly usersService: UsersService,
         private readonly accessService: AccessService,
+        public readonly resourceType: ResourceType.POSITION,
     ) {}
 
     async create(userId: number, data: CreatePositionDto): Promise<Position> {
@@ -32,7 +33,7 @@ export class PositionsService {
             userId,
             data.companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.CREATE);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.CREATE);
         const cardNumber = data?.cardNumber || (await this.getNextCardNumber(data.companyId));
         return await this.positionsRepository.save({
             ...data,
@@ -42,18 +43,29 @@ export class PositionsService {
         });
     }
 
-    async findAll(userId, companyId, relations): Promise<Position[]> {
+    async findAll(
+        userId: number,
+        companyId: number,
+        relations: boolean = false,
+    ): Promise<Position[]> {
         const roleType = await this.usersService.getUserCompanyRoleTypeOrException(
             userId,
             companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.ACCESS);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
         return await this.positionsRepository.find({
             where: { companyId },
             relations: {
                 company: relations,
                 person: relations,
-                history: relations,
+                history: relations
+                    ? {
+                          department: true,
+                          job: true,
+                          workNorm: true,
+                          paymentType: true,
+                      }
+                    : false,
             },
         });
     }
@@ -64,7 +76,14 @@ export class PositionsService {
             relations: {
                 company: relations,
                 person: relations,
-                history: relations,
+                history: relations
+                    ? {
+                          department: true,
+                          job: true,
+                          workNorm: true,
+                          paymentType: true,
+                      }
+                    : false,
             },
         });
         if (!record) {
@@ -74,7 +93,7 @@ export class PositionsService {
             userId,
             record.companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.ACCESS);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
         return record;
     }
 
@@ -87,7 +106,7 @@ export class PositionsService {
             userId,
             record.companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.UPDATE);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.UPDATE);
         await this.positionsRepository.save({ ...data, id, updatedUserId: userId });
         return await this.positionsRepository.findOneOrFail({ where: { id } });
     }
@@ -101,7 +120,7 @@ export class PositionsService {
             userId,
             record.companyId,
         );
-        this.accessService.availableOrException(roleType, ResourceType.POSITION, AccessType.DELETE);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.DELETE);
         const deleted = {
             ...record,
             deletedDate: new Date(),

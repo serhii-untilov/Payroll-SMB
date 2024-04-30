@@ -11,8 +11,8 @@ const recordList = [
     {
         id: 1,
         name: {
-            en: 'Full Time (5 days, 40 hours per week)',
-            uk: 'Повний робочий день (5 днів, 40 годин на тиждень)',
+            en: '5 days, 40 hours per week',
+            uk: '5 днів, 40 годин на тиждень',
         },
         type: WorkNormType.WEEKLY,
         dateFrom: '2024-04-22',

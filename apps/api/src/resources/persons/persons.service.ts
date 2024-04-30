@@ -4,15 +4,21 @@ import { UpdatePersonDto } from './dto/update-person.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Person } from './entities/person.entity';
 import { Repository } from 'typeorm';
+import { UsersService } from '../users/users.service';
+import { AccessService } from '../access/access.service';
+import { AccessType, ResourceType } from '@repo/shared';
 
 @Injectable()
 export class PersonsService {
     constructor(
         @InjectRepository(Person)
         private personsRepository: Repository<Person>,
+        private readonly usersService: UsersService,
+        private readonly accessService: AccessService,
+        public readonly resourceType: ResourceType.PERSON,
     ) {}
 
-    async create(person: CreatePersonDto): Promise<Person> {
+    async create(userId: number, person: CreatePersonDto): Promise<Person> {
         const where: UpdatePersonDto[] = [
             {
                 firstName: person.firstName,
@@ -32,14 +38,20 @@ export class PersonsService {
                 `Person '${person.firstName} ${person.lastName}' already exists.`,
             );
         }
+        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.CREATE);
         return await this.personsRepository.save(person);
     }
 
-    async findAll(): Promise<Person[]> {
+    async findAll(userId: number): Promise<Person[]> {
+        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
         return await this.personsRepository.find();
     }
 
-    async findOne(id: number): Promise<Person> {
+    async findOne(userId: number, id: number): Promise<Person> {
+        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
         const person = await this.personsRepository.findOneBy({ id });
         if (!person) {
             throw new NotFoundException(`Person could not be found.`);
@@ -47,7 +59,9 @@ export class PersonsService {
         return person;
     }
 
-    async update(id: number, data: UpdatePersonDto): Promise<Person> {
+    async update(userId: number, id: number, data: UpdatePersonDto): Promise<Person> {
+        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.UPDATE);
         const person = await this.personsRepository.findOneBy({ id });
         if (!person) {
             throw new NotFoundException(`Person could not be found.`);
@@ -57,12 +71,19 @@ export class PersonsService {
         return updated;
     }
 
-    async remove(id: number): Promise<Person> {
+    async remove(userId: number, id: number): Promise<Person> {
+        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
+        this.accessService.availableOrException(roleType, this.resourceType, AccessType.DELETE);
         const person = await this.personsRepository.findOneBy({ id });
         if (!person) {
             throw new NotFoundException(`Person could not be found.`);
         }
-        await this.personsRepository.remove(person);
-        return person;
+        const deleted = {
+            ...person,
+            deletedDate: new Date(),
+            deletedUserId: userId,
+        } as Person;
+        await this.personsRepository.save(deleted);
+        return deleted;
     }
 }

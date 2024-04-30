@@ -1,12 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import {
-    IPerson,
+    ICreatePosition,
     IPosition,
     IPositionHistory,
     PaymentGroup,
     formatDate,
-    getMinDate,
     maxDate,
     minDate,
 } from '@repo/shared';
@@ -27,16 +26,13 @@ import { SelectPaymentType } from '../../../components/select/SelectPaymentType'
 import { SelectWorkNorm } from '../../../components/select/SelectWorkNorm';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
-import { getPerson } from '../../../services/person.service';
 import { createPosition, getPosition, updatePosition } from '../../../services/position.service';
 import {
     createPositionHistory,
-    getPositionHistoryOnDate,
     updatePositionHistory,
 } from '../../../services/positionHistory.service';
-import { getDirtyValues, getObjectByType } from '../../../services/utils';
-import { getDefaultWorkNormId } from '../../../services/workNorm.service';
-import { getDefaultBasicPaymentTypeId } from '../../../services/paymentType.service';
+import { getDirtyValues } from '../../../services/utils';
+import { FormAutocomplete } from '../../../components/form/FormAutocomplete';
 
 const formSchema = yup.object().shape({
     // Position
@@ -51,6 +47,7 @@ const formSchema = yup.object().shape({
     deletedUserId: yup.number().nullable(),
     name: yup.string().nullable(),
     // A PositionHistory record actual on the current PayPeriod
+    positionHistoryId: yup.number().nullable(),
     departmentId: yup.number().nullable(),
     jobId: yup.number().nullable(),
     workNormId: yup.number().nullable(),
@@ -63,54 +60,17 @@ type FormType = yup.InferType<typeof formSchema>;
 
 interface Props {
     positionId: number | null | undefined;
+    onSubmitCallback?: () => void;
 }
 
-export function JobAndPay({ positionId }: Props) {
+export function JobAndPay({ positionId, onSubmitCallback }: Props) {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company, payPeriod } = useAppContext();
     const queryClient = useQueryClient();
     const [position, setPosition] = useState<Partial<IPosition>>({});
-    const [positionHistory, setPositionHistory] = useState<Partial<IPositionHistory>>({});
-    const [person, setPerson] = useState<Partial<IPerson>>({});
-    const [defaultFormData, setDefaultFormData] = useState<Partial<FormType>>({});
 
     useEffect(() => {}, [company]);
-
-    const getFormData = async (positionId) => {
-        if (positionId) {
-            const position = await getPosition({ id: positionId, relations: true });
-            setPosition(position);
-            const positionHistory =
-                (await getPositionHistoryOnDate({
-                    positionId,
-                    relations: true,
-                    onDate: getMinDate(position.dateTo as Date, payPeriod as Date),
-                })) || {};
-            setPositionHistory(positionHistory);
-            const person = position?.personId ? (await getPerson(position?.personId)) || {} : {};
-            setPerson(person);
-            const defaultPosition = {
-                ...positionHistory,
-                ...position,
-            };
-            setDefaultFormData(defaultPosition);
-            return formSchema.cast(defaultPosition);
-        } else {
-            const workNormId = await getDefaultWorkNormId();
-            const paymentTypeId = await getDefaultBasicPaymentTypeId();
-            const defaultPosition = {
-                companyId: company?.id,
-                workNormId,
-                paymentTypeId,
-                rate: 1,
-                dateFrom: minDate(),
-                dateTo: maxDate(),
-            };
-            setDefaultFormData(defaultPosition);
-            return formSchema.cast(defaultPosition);
-        }
-    };
 
     const {
         data: formData,
@@ -119,9 +79,13 @@ export function JobAndPay({ positionId }: Props) {
     } = useQuery<FormType, Error>({
         queryKey: ['Job & Pay', positionId],
         queryFn: async () => {
-            return await getFormData(positionId);
+            const position = positionId
+                ? await getPosition({ id: positionId, relations: true })
+                : { companyId: company?.id, dateFrom: minDate(), dateTo: maxDate(), rate: 1 };
+            setPosition(position);
+            return formSchema.cast({ ...position_formData(position, payPeriod || new Date()) });
         },
-        enabled: !!company && !!payPeriod && !!defaultFormData,
+        enabled: !!company && !!payPeriod,
     });
 
     const {
@@ -164,11 +128,9 @@ export function JobAndPay({ positionId }: Props) {
         if (!formData) {
             return;
         }
+        if (onSubmitCallback) onSubmitCallback();
         const positionData = formData_Position(data);
-        const positionHistoryData = {
-            ...positionHistory,
-            ...formData_PositionHistory(data),
-        };
+        const positionHistoryData = formData_PositionHistory(data);
         const positionDirtyValues = getDirtyValues(dirtyFields, positionData);
         const positionHistoryDirtyValues = getDirtyValues(dirtyFields, positionHistoryData);
         try {
@@ -182,18 +144,21 @@ export function JobAndPay({ positionId }: Props) {
                 if (!pos.id) {
                     throw Error('positionId not defined');
                 }
-                positionHistory.id
-                    ? await updatePositionHistory(positionHistory.id, positionHistoryDirtyValues)
+                formData.positionHistoryId
+                    ? await updatePositionHistory(
+                          formData.positionHistoryId,
+                          positionHistoryDirtyValues,
+                      )
                     : await createPositionHistory({
                           positionId: pos.id,
-                          dateFrom: minDate(),
-                          dateTo: maxDate(),
+                          dateFrom: pos.dateFrom,
+                          dateTo: pos.dateTo,
                           ...positionHistoryDirtyValues,
                       });
             }
-            reset(await getFormData(formData.id));
-            positionId = formData.id;
+            // reset(await getFormData(formData.id));
             queryClient.invalidateQueries({ queryKey: ['Job & Pay', positionId] });
+            positionId = pos.id;
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -205,7 +170,7 @@ export function JobAndPay({ positionId }: Props) {
     };
 
     const onCancel = () => {
-        // reset(defaultPosition);
+        reset(formSchema.cast({ ...position_formData(position, payPeriod || new Date()) }));
         queryClient.invalidateQueries({ queryKey: ['Job & Pay', positionId] });
     };
 
@@ -240,7 +205,7 @@ export function JobAndPay({ positionId }: Props) {
 
                 <Grid container xs={12} spacing={2}>
                     <Grid item xs={12} md={6}>
-                        <FormTextField
+                        {/* <FormTextField
                             control={control}
                             autoComplete="full-name"
                             name="name"
@@ -250,6 +215,18 @@ export function JobAndPay({ positionId }: Props) {
                             autoFocus
                             sx={{ fontWeight: 'bold' }}
                             placeholder={t('Vacancy')}
+                        /> */}
+                        <FormAutocomplete
+                            control={control}
+                            autoComplete="full-name"
+                            name="name"
+                            id="name"
+                            label={t('Full Name')}
+                            type="text"
+                            autoFocus
+                            sx={{ fontWeight: 'bold' }}
+                            placeholder={t('Vacancy')}
+                            options={[]}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
@@ -322,10 +299,11 @@ export function JobAndPay({ positionId }: Props) {
                     <Grid item xs={12} sm={6} md={3}>
                         <FormTextField
                             control={control}
-                            name="Rate"
-                            id="Rate"
+                            name="rate"
+                            id="rate"
                             label={t('Rate')}
                             type="number"
+                            defaultValue={'1'}
                         />
                     </Grid>
 
@@ -354,7 +332,7 @@ export function JobAndPay({ positionId }: Props) {
     );
 }
 
-function formData_Position(formData: FormType): IPosition {
+function position_formData(position: Partial<IPosition>, onDate: Date): Partial<FormType> {
     const {
         id,
         companyId,
@@ -366,9 +344,46 @@ function formData_Position(formData: FormType): IPosition {
         dateTo,
         deletedUserId,
         name,
+    } = position;
+    const positionHistory: Partial<IPositionHistory> =
+        position?.history?.find((o) => o.dateFrom <= onDate && o.dateTo >= onDate) || {};
+    const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = positionHistory;
+    return {
+        // Position fields
+        id,
+        companyId,
+        cardNumber,
+        sequenceNumber,
+        description,
+        personId,
+        dateFrom: dateFrom || minDate(),
+        dateTo: dateTo || maxDate(),
+        deletedUserId,
+        name: position?.personId ? position?.person?.fullName : '',
+        // Position history fields
+        positionHistoryId: positionHistory?.id,
+        departmentId,
+        jobId,
+        workNormId,
+        paymentTypeId,
+        wage,
+        rate,
+    };
+}
+
+function formData_Position(formData: FormType): Partial<IPosition> {
+    const {
+        companyId,
+        cardNumber,
+        sequenceNumber,
+        description,
+        personId,
+        dateFrom,
+        dateTo,
+        deletedUserId,
+        name,
     } = formData;
     return {
-        id,
         companyId,
         cardNumber,
         sequenceNumber,
@@ -383,5 +398,12 @@ function formData_Position(formData: FormType): IPosition {
 
 function formData_PositionHistory(data: FormType): Partial<IPositionHistory> {
     const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = data;
-    return { departmentId, jobId, workNormId, paymentTypeId, wage, rate };
+    return {
+        departmentId,
+        jobId,
+        workNormId,
+        paymentTypeId,
+        wage,
+        rate,
+    };
 }

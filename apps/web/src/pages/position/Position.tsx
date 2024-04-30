@@ -75,7 +75,17 @@ export default function Position(props: Props) {
     };
 
     const generatePageSubTitle = () => {
-        return positionId ? position?.name : t('New Position');
+        return positionId
+            ? position?.personId
+                ? position?.person?.fullName || ''
+                : t('Vacancy')
+            : t('New Position');
+    };
+
+    const onSubmitCallback = () => {
+        console.log('onDetailSubmit');
+        queryClient.invalidateQueries({ queryKey: ['position', positionId] });
+        queryClient.invalidateQueries({ queryKey: ['positionList-relations', company?.id] });
     };
 
     return (
@@ -97,7 +107,7 @@ export default function Position(props: Props) {
                 <Tab label={t('Notes')} />
             </Tabs>
             <TabPanel value={tab} index={0}>
-                <JobAndPay positionId={positionId} />
+                <JobAndPay positionId={positionId} onSubmitCallback={onSubmitCallback} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
                 <Personal personId={positionId} />

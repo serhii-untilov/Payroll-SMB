@@ -7,18 +7,17 @@ export async function createPerson(person: ICreatePerson): Promise<IPerson> {
     return response.data;
 }
 
-export async function getPersonList(
-    companyId: number,
-    relations: boolean = false,
-): Promise<IPerson[]> {
-    const response = await api.get(`/api/persons/?companyId=${companyId}&relations=${relations}`, {
+export async function getPersonList(relations: boolean = false): Promise<IPerson[]> {
+    const response = await api.get(`/api/persons/?relations=${relations}`, {
         headers: authHeader(),
     });
     return response.data;
 }
 
-export async function getPerson(id: number): Promise<IPerson> {
-    const response = await api.get(`/api/persons/${id}`, { headers: authHeader() });
+export async function getPerson(id: number, relations: boolean = false): Promise<IPerson> {
+    const response = await api.get(`/api/persons/${id}/?relations=${relations}`, {
+        headers: authHeader(),
+    });
     return response.data;
 }
 

@@ -41,7 +41,7 @@ export default function People() {
                 }}
             >
                 <Tabs id="people__tabs" value={value} onChange={handleChange}>
-                    <Tab label={t('Employees')} />
+                    <Tab label={t('Positions')} />
                     <Tab disabled label={t('Contractors')} />
                     <Tab label={t('Vacancies')} />
                     <Tab disabled label={t('Offers')} />

@@ -29,7 +29,7 @@ import { IWorkNorm } from './workNorm.interface';
 // }
 
 export interface IPositionHistory extends ILogger {
-    id: number;
+    id: number | undefined | null;
 
     position?: IPosition;
     positionId: number;

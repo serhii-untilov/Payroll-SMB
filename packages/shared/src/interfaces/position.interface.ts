@@ -1,3 +1,4 @@
+import { IPositionHistory } from '@repo/shared';
 import { ICompany } from './company.interface';
 import { ILogger } from './logger.interface';
 import { IPerson } from './person.interface';
@@ -20,6 +21,8 @@ export interface IPosition extends ILogger {
     dateTo?: Date; // Dismissal date or date of close vacancy
 
     name?: string | null;
+
+    history?: IPositionHistory[];
 }
 
 export type ICreatePosition = Omit<
