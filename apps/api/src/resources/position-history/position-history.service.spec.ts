@@ -7,6 +7,7 @@ import { UsersService } from '../users/users.service';
 import { PositionHistory } from './entities/position-history.entity';
 import { PositionHistoryService } from './position-history.service';
 import { PositionsService } from '../positions/positions.service';
+import { AccessService } from '../access/access.service';
 
 describe('PositionHistoryService', () => {
     let service: PositionHistoryService;
@@ -22,6 +23,7 @@ describe('PositionHistoryService', () => {
                 },
                 { provide: UsersService, useValue: createMock<UsersService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPublicUserData, IUser } from '@repo/shared';
 import * as _ from 'lodash';
@@ -46,8 +46,7 @@ export class UsersService {
         }
         await this.usersRepository.save({ id, ...data });
         // re-query the database so that the updated record is returned
-        const updated = await this.usersRepository.findOneOrFail({ where: { id } });
-        return updated;
+        return await this.usersRepository.findOneOrFail({ where: { id } });
     }
 
     async remove(id: number): Promise<User> {
@@ -64,6 +63,22 @@ export class UsersService {
         return publicUser;
     }
 
+    async getUserRoleType(id: number): Promise<string> {
+        const user = await this.usersRepository.findOne({
+            where: { id },
+            relations: { role: true },
+        });
+        return user?.role?.type;
+    }
+
+    async getUserRoleTypeOrException(id: number): Promise<string> {
+        const roleType = await this.getUserRoleType(id);
+        if (!roleType) {
+            throw new ForbiddenException(`User doesn't have access to the requested resource.`);
+        }
+        return roleType;
+    }
+
     async getUserCompanyList(id: number, relations: boolean): Promise<UserCompany[]> {
         return await this.userCompanyRepository.find({
             where: { userId: id },
@@ -71,11 +86,21 @@ export class UsersService {
         });
     }
 
-    async getUserCompanyRole({ userId, companyId }): Promise<string> {
+    async getUserCompanyRoleType(userId: number, companyId: number): Promise<string> {
         const record = await this.userCompanyRepository.findOne({
             where: { userId, companyId },
             relations: { role: true },
         });
         return record?.role?.type;
+    }
+
+    async getUserCompanyRoleTypeOrException(userId: number, companyId: number): Promise<string> {
+        const roleType = await this.getUserCompanyRoleType(userId, companyId);
+        if (!roleType) {
+            throw new ForbiddenException(
+                `User doesn't have access to the requested Company's resource.`,
+            );
+        }
+        return roleType;
     }
 }

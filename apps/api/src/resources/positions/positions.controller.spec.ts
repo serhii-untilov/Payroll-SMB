@@ -1,18 +1,18 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { repositoryMockFactory } from '@repo/testing';
+import { AccessService } from '../access/access.service';
+import { UsersService } from '../users/users.service';
+import { Position } from './entities/position.entity';
 import { PositionsController } from './positions.controller';
 import { PositionsService } from './positions.service';
-import { UsersService } from '../users/users.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Position } from './entities/position.entity';
-import { repositoryMockFactory } from '@repo/testing';
-import { createMock } from '@golevelup/ts-jest';
-import { CompaniesService } from '../companies/companies.service';
 
 describe('PositionsController', () => {
     let controller: PositionsController;
     let service: PositionsService;
     let usersService: UsersService;
-    let companiesService: CompaniesService;
+    let accessService: AccessService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -24,20 +24,20 @@ describe('PositionsController', () => {
                     useFactory: repositoryMockFactory,
                 },
                 { provide: UsersService, useValue: createMock<UsersService>() },
-                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 
         controller = module.get<PositionsController>(PositionsController);
         service = module.get<PositionsService>(PositionsService);
         usersService = module.get<UsersService>(UsersService);
-        companiesService = module.get<CompaniesService>(CompaniesService);
+        accessService = module.get<AccessService>(AccessService);
     });
 
     it('should be defined', () => {
         expect(controller).toBeDefined();
         expect(service).toBeDefined();
         expect(usersService).toBeDefined();
-        expect(companiesService).toBeDefined();
+        expect(accessService).toBeDefined();
     });
 });

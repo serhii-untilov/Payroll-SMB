@@ -45,10 +45,10 @@ export class Position extends Logger implements IPosition {
     personId?: number | null; // Vacancy, if not defined
 
     @Column({ type: 'date', default: '1900-01-01' })
-    dateFrom?: Date | null;
+    dateFrom?: Date;
 
     @Column({ type: 'date', default: '9999-12-31' })
-    dateTo?: Date | null;
+    dateTo?: Date;
 
     @OneToMany(() => PositionHistory, (history) => history.position)
     history?: PositionHistory[];

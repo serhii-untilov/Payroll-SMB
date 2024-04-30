@@ -8,10 +8,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
+import { AvailableAccessDto } from './dto/available-access.dto';
 import { CreateAccessDto } from './dto/create-access.dto';
 import { UpdateAccessDto } from './dto/update-access.dto';
 import { Access } from './entities/access.entity';
-import { AvailableAccessDto } from './dto/available-access.dto';
 
 @Injectable()
 export class AccessService {
@@ -22,25 +22,11 @@ export class AccessService {
     ) {}
 
     async create(userId: number, data: CreateAccessDto): Promise<Access> {
-        if (!this.exists(data.roleType, data.resourceType, data.accessType)) {
+        if (this.exists(data)) {
             throw new BadRequestException(`Access record already exists.`);
         }
-        const user = await this.usersService.findOne({
-            where: { id: userId },
-            relations: { role: true },
-        });
-        if (!user) {
-            throw new BadRequestException(`User '${userId}' not found.`);
-        }
-        if (
-            !this.available({
-                roleType: user.role.type,
-                resourceType: ResourceType.ACCESS,
-                accessType: AccessType.CREATE,
-            })
-        ) {
-            throw new ForbiddenException(`User doesn't have access to the requested resource.`);
-        }
+        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
+        this.availableOrException(roleType, ResourceType.ACCESS, AccessType.CREATE);
         return await this.accessRepository.save(data);
     }
 
@@ -55,66 +41,48 @@ export class AccessService {
         return await this.accessRepository.findOne({ where: { id } });
     }
 
-    async update(userId: number, id: number, data: UpdateAccessDto) {
-        if (!this.exists(data.roleType, data.resourceType, data.accessType)) {
+    async update(userId: number, id: number, data: UpdateAccessDto): Promise<Access> {
+        const record = this.accessRepository.findOneBy({ id });
+        if (!record) {
             throw new NotFoundException(`Access record could not be found.`);
         }
-        const user = await this.usersService.findOne({
-            where: { id: userId },
-            relations: { role: true },
-        });
-        if (!user) {
-            throw new BadRequestException(`User '${userId}' not found.`);
-        }
-        if (
-            !this.available({
-                roleType: user.role.type,
-                resourceType: ResourceType.ACCESS,
-                accessType: AccessType.UPDATE,
-            })
-        ) {
-            throw new ForbiddenException(`User doesn't have access to the requested resource.`);
-        }
+        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
+        this.availableOrException(roleType, ResourceType.ACCESS, AccessType.UPDATE);
         await this.accessRepository.save({ ...data, id, updatedUserId: userId });
-        const updated = await this.accessRepository.findOneOrFail({ where: { id } });
-        return updated;
+        return await this.accessRepository.save({ id, ...data });
     }
 
     async remove(userId: number, id: number) {
-        const data = await this.accessRepository.findOne({ where: { id } });
-        if (!data) {
+        const record = await this.accessRepository.findOne({ where: { id } });
+        if (!record) {
             throw new NotFoundException(`Access record could not be found.`);
         }
-        const user = await this.usersService.findOne({
-            where: { id: userId },
-            relations: { role: true },
-        });
-        if (!user) {
-            throw new BadRequestException(`User '${userId}' not found.`);
-        }
-        if (
-            !this.available({
-                roleType: user.role.type,
-                resourceType: ResourceType.ACCESS,
-                accessType: AccessType.DELETE,
-            })
-        ) {
-            throw new ForbiddenException(`User doesn't have access to the requested resource.`);
-        }
-        const deleted = { ...data, id, deletedDate: new Date(), deletedUserId: userId };
+        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
+        this.availableOrException(roleType, ResourceType.ACCESS, AccessType.DELETE);
+        const deleted = { ...record, id, deletedDate: new Date(), deletedUserId: userId };
         await this.accessRepository.save(deleted);
         return deleted;
     }
 
-    async exists(roleType: string, resourceType: string, accessType: string) {
+    async exists(params: AvailableAccessDto) {
         return await this.accessRepository.exists({
-            where: { roleType, resourceType, accessType },
+            where: params,
         });
     }
 
-    async available(availableAccessDto: AvailableAccessDto) {
+    async available(params: AvailableAccessDto): Promise<boolean> {
         return await this.accessRepository.exists({
-            where: availableAccessDto,
+            where: params,
         });
+    }
+
+    async availableOrException(
+        roleType: string,
+        resourceType: string,
+        accessType: string,
+    ): Promise<void> {
+        if (!this.available({ roleType, resourceType, accessType })) {
+            throw new ForbiddenException(`User doesn't have access to the requested resource.`);
+        }
     }
 }

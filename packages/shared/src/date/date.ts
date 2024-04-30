@@ -140,3 +140,15 @@ export function view2date(date: string, defaultValue: string | null = null): str
 
     return formatDate(minDate());
 }
+
+export function getMinDate(date1: Date, date2: Date): Date {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getTime() < d2.getTime() ? d1 : d2;
+}
+
+export function getMaxDate(date1: Date, date2: Date): Date {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getTime() > d2.getTime() ? d1 : d2;
+}

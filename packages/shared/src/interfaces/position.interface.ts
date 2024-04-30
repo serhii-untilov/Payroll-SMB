@@ -4,7 +4,7 @@ import { IPerson } from './person.interface';
 
 export const MAX_SEQUENCE_NUMBER = 2147483647;
 export interface IPosition extends ILogger {
-    id: number;
+    id?: number | undefined | null;
 
     company?: ICompany;
     companyId: number;
@@ -16,8 +16,8 @@ export interface IPosition extends ILogger {
     person?: IPerson;
     personId?: number | null; // Vacancy if not defined
 
-    dateFrom?: Date | null; // Hire date or date of open vacancy
-    dateTo?: Date | null; // Dismissal date or date of close vacancy
+    dateFrom?: Date; // Hire date or date of open vacancy
+    dateTo?: Date; // Dismissal date or date of close vacancy
 
     name?: string | null;
 }

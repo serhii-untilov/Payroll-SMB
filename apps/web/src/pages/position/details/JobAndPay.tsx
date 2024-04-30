@@ -1,9 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { IPosition, PaymentGroup, formatDate, maxDate, minDate } from '@repo/shared';
+import {
+    IPerson,
+    IPosition,
+    IPositionHistory,
+    PaymentGroup,
+    formatDate,
+    getMinDate,
+    maxDate,
+    minDate,
+} from '@repo/shared';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
@@ -18,83 +27,101 @@ import { SelectPaymentType } from '../../../components/select/SelectPaymentType'
 import { SelectWorkNorm } from '../../../components/select/SelectWorkNorm';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
-import { getDefaultBasicPaymentTypeId } from '../../../services/paymentType.service';
+import { getPerson } from '../../../services/person.service';
 import { createPosition, getPosition, updatePosition } from '../../../services/position.service';
+import {
+    createPositionHistory,
+    getPositionHistoryOnDate,
+    updatePositionHistory,
+} from '../../../services/positionHistory.service';
 import { getDirtyValues, getObjectByType } from '../../../services/utils';
 import { getDefaultWorkNormId } from '../../../services/workNorm.service';
-
-interface Props {
-    positionId: number | null;
-}
+import { getDefaultBasicPaymentTypeId } from '../../../services/paymentType.service';
 
 const formSchema = yup.object().shape({
+    // Position
     id: yup.number().nullable(),
     companyId: yup.number().positive('Company is required').required(),
-
     cardNumber: yup.string().nullable(),
     sequenceNumber: yup.number().nullable(),
-
+    description: yup.string().nullable(),
+    personId: yup.number().nullable(),
+    dateFrom: yup.date().required(),
+    dateTo: yup.date().required(),
+    deletedUserId: yup.number().nullable(),
+    name: yup.string().nullable(),
+    // A PositionHistory record actual on the current PayPeriod
     departmentId: yup.number().nullable(),
     jobId: yup.number().nullable(),
     workNormId: yup.number().nullable(),
     paymentTypeId: yup.number().nullable(),
     wage: yup.number().nullable(),
     rate: yup.number().nullable(),
-
-    personId: yup.number().nullable(),
-
-    dateFrom: yup.date().required(),
-    dateTo: yup.date().required(),
-
-    deletedUserId: yup.number().nullable(),
-
-    name: yup.string().nullable(),
 });
 
 type FormType = yup.InferType<typeof formSchema>;
 
+interface Props {
+    positionId: number | null | undefined;
+}
+
 export function JobAndPay({ positionId }: Props) {
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { company } = useAppContext();
+    const { company, payPeriod } = useAppContext();
     const queryClient = useQueryClient();
-    const [defaultBasePaymentTypeId, setDefaultBasePaymentTypeId] = useState<number | undefined>();
-    const [defaultWorkNormId, setDefaultWorkNormId] = useState<number | null>();
+    const [position, setPosition] = useState<Partial<IPosition>>({});
+    const [positionHistory, setPositionHistory] = useState<Partial<IPositionHistory>>({});
+    const [person, setPerson] = useState<Partial<IPerson>>({});
+    const [defaultFormData, setDefaultFormData] = useState<Partial<FormType>>({});
 
     useEffect(() => {}, [company]);
 
-    useEffect(() => {
-        const fetchDefault = async () => {
-            setDefaultBasePaymentTypeId(await getDefaultBasicPaymentTypeId());
-            setDefaultWorkNormId(await getDefaultWorkNormId());
-        };
-        fetchDefault();
-    }, []);
-
-    // To prevent Warning: A component is changing an uncontrolled input to be controlled.
-    const defaultValues = useMemo((): FormType => {
-        return {
-            companyId: company?.id || 0,
-            workNormId: defaultWorkNormId,
-            paymentTypeId: defaultBasePaymentTypeId,
-            rate: 1,
-            dateFrom: minDate(),
-            dateTo: maxDate(),
-        };
-    }, [company, defaultBasePaymentTypeId, defaultWorkNormId]);
+    const getFormData = async (positionId) => {
+        if (positionId) {
+            const position = await getPosition({ id: positionId, relations: true });
+            setPosition(position);
+            const positionHistory =
+                (await getPositionHistoryOnDate({
+                    positionId,
+                    relations: true,
+                    onDate: getMinDate(position.dateTo as Date, payPeriod as Date),
+                })) || {};
+            setPositionHistory(positionHistory);
+            const person = position?.personId ? (await getPerson(position?.personId)) || {} : {};
+            setPerson(person);
+            const defaultPosition = {
+                ...positionHistory,
+                ...position,
+            };
+            setDefaultFormData(defaultPosition);
+            return formSchema.cast(defaultPosition);
+        } else {
+            const workNormId = await getDefaultWorkNormId();
+            const paymentTypeId = await getDefaultBasicPaymentTypeId();
+            const defaultPosition = {
+                companyId: company?.id,
+                workNormId,
+                paymentTypeId,
+                rate: 1,
+                dateFrom: minDate(),
+                dateTo: maxDate(),
+            };
+            setDefaultFormData(defaultPosition);
+            return formSchema.cast(defaultPosition);
+        }
+    };
 
     const {
-        data: position,
-        isError: isPositionError,
-        error: positionError,
+        data: formData,
+        isError: isFormError,
+        error: formError,
     } = useQuery<FormType, Error>({
-        queryKey: ['position', positionId, defaultBasePaymentTypeId],
+        queryKey: ['Job & Pay', positionId],
         queryFn: async () => {
-            return formSchema.cast(
-                positionId ? await getPosition({ id: positionId, relations: true }) : defaultValues,
-            );
+            return await getFormData(positionId);
         },
-        enabled: !!company?.id,
+        enabled: !!company && !!payPeriod && !!defaultFormData,
     });
 
     const {
@@ -103,13 +130,15 @@ export function JobAndPay({ positionId }: Props) {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: position || defaultValues,
-        values: position || defaultValues,
+        defaultValues: formData,
+        values: formData,
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
 
-    const { dirtyFields, isDirty } = useFormState({ control });
+    const { dirtyFields, isDirty } = useFormState({
+        control,
+    });
 
     useEffect(() => {}, [locale]);
 
@@ -122,25 +151,49 @@ export function JobAndPay({ positionId }: Props) {
             enqueueSnackbar(t(formErrors.dateTo?.message), { variant: 'error' });
     }, [formErrors, t]);
 
-    if (isPositionError) {
-        return enqueueSnackbar(`${positionError.name}\n${positionError.message}`, {
+    if (isFormError) {
+        return enqueueSnackbar(`${formError.name}\n${formError.message}`, {
             variant: 'error',
         });
     }
 
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) {
-            reset(position);
+            reset(formData);
         }
-
-        const positionData: IPosition = getObjectByType<IPosition>(data);
-        const dirtyValues = getDirtyValues(dirtyFields, positionData);
+        if (!formData) {
+            return;
+        }
+        const positionData = formData_Position(data);
+        const positionHistoryData = {
+            ...positionHistory,
+            ...formData_PositionHistory(data),
+        };
+        const positionDirtyValues = getDirtyValues(dirtyFields, positionData);
+        const positionHistoryDirtyValues = getDirtyValues(dirtyFields, positionHistoryData);
         try {
-            const position = data.id
-                ? await updatePosition(data.id, dirtyValues)
-                : await createPosition(data);
-            reset(formSchema.cast(position));
-            queryClient.invalidateQueries({ queryKey: ['position', positionId] });
+            let pos = position;
+            if (Object.keys(positionDirtyValues).length) {
+                pos = positionData.id
+                    ? await updatePosition(positionData.id, positionDirtyValues)
+                    : await createPosition(positionData);
+            }
+            if (Object.keys(positionHistoryDirtyValues).length) {
+                if (!pos.id) {
+                    throw Error('positionId not defined');
+                }
+                positionHistory.id
+                    ? await updatePositionHistory(positionHistory.id, positionHistoryDirtyValues)
+                    : await createPositionHistory({
+                          positionId: pos.id,
+                          dateFrom: minDate(),
+                          dateTo: maxDate(),
+                          ...positionHistoryDirtyValues,
+                      });
+            }
+            reset(await getFormData(formData.id));
+            positionId = formData.id;
+            queryClient.invalidateQueries({ queryKey: ['Job & Pay', positionId] });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -152,8 +205,8 @@ export function JobAndPay({ positionId }: Props) {
     };
 
     const onCancel = () => {
-        reset(defaultValues);
-        queryClient.invalidateQueries({ queryKey: ['position', positionId] });
+        // reset(defaultPosition);
+        queryClient.invalidateQueries({ queryKey: ['Job & Pay', positionId] });
     };
 
     const onDelete = () => {
@@ -178,10 +231,10 @@ export function JobAndPay({ positionId }: Props) {
                 <Toolbar
                     onSave={isDirty ? handleSubmit(onSubmit) : 'disabled'}
                     onCancel={isDirty ? onCancel : 'disabled'}
-                    onDelete={position?.id ? onDelete : 'disabled'}
-                    onRestoreDeleted={position?.deletedUserId ? onRestoreDeleted : 'disabled'}
-                    onPrint={position?.id ? onPrint : 'disabled'}
-                    onExport={position?.id ? onExport : 'disabled'}
+                    onDelete={formData?.id ? onDelete : 'disabled'}
+                    onRestoreDeleted={formData?.deletedUserId ? onRestoreDeleted : 'disabled'}
+                    onPrint={formData?.id ? onPrint : 'disabled'}
+                    onExport={formData?.id ? onExport : 'disabled'}
                     onShowHistory={'disabled'}
                 />
 
@@ -299,4 +352,36 @@ export function JobAndPay({ positionId }: Props) {
             </TabLayout>
         </>
     );
+}
+
+function formData_Position(formData: FormType): IPosition {
+    const {
+        id,
+        companyId,
+        cardNumber,
+        sequenceNumber,
+        description,
+        personId,
+        dateFrom,
+        dateTo,
+        deletedUserId,
+        name,
+    } = formData;
+    return {
+        id,
+        companyId,
+        cardNumber,
+        sequenceNumber,
+        description,
+        personId,
+        dateFrom,
+        dateTo,
+        deletedUserId,
+        name,
+    };
+}
+
+function formData_PositionHistory(data: FormType): Partial<IPositionHistory> {
+    const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = data;
+    return { departmentId, jobId, workNormId, paymentTypeId, wage, rate };
 }

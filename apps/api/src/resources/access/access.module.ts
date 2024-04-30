@@ -9,5 +9,6 @@ import { Access } from './entities/access.entity';
     imports: [TypeOrmModule.forFeature([Access]), UsersModule],
     controllers: [AccessController],
     providers: [AccessService],
+    exports: [AccessService],
 })
 export class AccessModule {}

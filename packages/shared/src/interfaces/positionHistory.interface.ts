@@ -41,28 +41,30 @@ export interface IPositionHistory extends ILogger {
     departmentId?: number | null;
 
     job?: IJob;
-    jobId: number | null;
+    jobId: number | null | undefined;
 
     workNorm?: IWorkNorm;
-    workNormId: number;
+    workNormId: number | null | undefined;
 
     paymentType?: IPaymentType;
-    paymentTypeId: number;
+    paymentTypeId: number | null | undefined;
 
-    wage: number;
-    rate: number;
+    wage: number | null | undefined;
+    rate: number | null | undefined;
 }
 
-export type ICreatePositionHistory = Omit<
-    IPositionHistory,
-    | 'id'
-    | 'createdDate'
-    | 'createdUserId'
-    | 'updatedDate'
-    | 'updatedUserId'
-    | 'deletedDate'
-    | 'deletedUserId'
-    | 'version'
+export type ICreatePositionHistory = Partial<
+    Omit<
+        IPositionHistory,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+        | 'version'
+    >
 >;
 
 export type IUpdatePositionHistory = Partial<ICreatePositionHistory>;

@@ -1,23 +1,27 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
-    UseGuards,
-    ParseIntPipe,
+    Get,
     HttpCode,
     HttpStatus,
+    Param,
+    ParseBoolPipe,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
+    Req,
+    UseGuards,
 } from '@nestjs/common';
-import { PositionHistoryService } from './position-history.service';
+import { IPositionHistory } from '@repo/shared';
+import { Request } from 'express';
+import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
-import { IPositionHistory } from '@repo/shared';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { PositionHistoryService } from './position-history.service';
 
-@Controller('positionHistory')
+@Controller('position-history')
 export class PositionHistoryController {
     constructor(private readonly positionHistoryService: PositionHistoryService) {}
 
@@ -25,39 +29,57 @@ export class PositionHistoryController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(
+        @Req() req: Request,
         @Body() createPositionHistoryDto: CreatePositionHistoryDto,
     ): Promise<IPositionHistory> {
-        return await this.positionHistoryService.create(createPositionHistoryDto);
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.create(userId, createPositionHistoryDto);
     }
 
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(): Promise<IPositionHistory[]> {
-        return await this.positionHistoryService.findAll();
+    async findAll(
+        @Req() req: Request,
+        @Query('positionId', ParseIntPipe) positionId: number,
+        @Query('relations', ParseBoolPipe) relations: boolean = false,
+    ): Promise<IPositionHistory[]> {
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.findAll(userId, positionId, relations);
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<IPositionHistory> {
-        return await this.positionHistoryService.findOne(id);
+    async findOne(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Query('relations', ParseBoolPipe) relations: boolean = false,
+    ): Promise<IPositionHistory> {
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.findOne(userId, id, relations);
     }
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async update(
+        @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Body() updatePositionHistoryDto: UpdatePositionHistoryDto,
     ): Promise<IPositionHistory> {
-        return await this.positionHistoryService.update(id, updatePositionHistoryDto);
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.update(userId, id, updatePositionHistoryDto);
     }
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async remove(@Param('id', ParseIntPipe) id: number): Promise<IPositionHistory> {
-        return await this.positionHistoryService.remove(id);
+    async remove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+    ): Promise<IPositionHistory> {
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.remove(userId, id);
     }
 }

@@ -6,9 +6,9 @@ The Payroll SMB application provides a solution for employers and employees to c
 
 - UI Responsive Design
 - Multi-tenant architecture
-- Mono-repository
-- JWT authorization
-- Role-based access
+- Mono-repository, shared types libs between back-end and front-end apps
+- REST API documented in Open API by Swagger
+- Role-based access, JWT authorization
 - Event-driven calculate processing
 - Automatic documents prepared according to the business process schedule
 
