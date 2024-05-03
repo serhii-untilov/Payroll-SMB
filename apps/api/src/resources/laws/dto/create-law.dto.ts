@@ -1,6 +1,7 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ICreateLaw } from '@repo/shared';
 
 export class CreateLawDto implements ICreateLaw {
-    name: string;
-    type: string;
+    @ApiProperty() name: string;
+    @ApiProperty() type: string;
 }

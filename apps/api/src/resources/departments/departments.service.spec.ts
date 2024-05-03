@@ -1,11 +1,11 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
+import { AccessService } from '../access/access.service';
 import { DepartmentsService } from './departments.service';
 import { Department } from './entities/department.entity';
-import { User } from '../users/entities/user.entity';
-import { Company } from '../companies/entities/company.entity';
 
 describe('DepartmentsService', () => {
     let service: DepartmentsService;
@@ -15,18 +15,8 @@ describe('DepartmentsService', () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 DepartmentsService,
-                {
-                    provide: getRepositoryToken(Department),
-                    useFactory: repositoryMockFactory,
-                },
-                {
-                    provide: getRepositoryToken(User),
-                    useFactory: repositoryMockFactory,
-                },
-                {
-                    provide: getRepositoryToken(Company),
-                    useFactory: repositoryMockFactory,
-                },
+                { provide: getRepositoryToken(Department), useFactory: repositoryMockFactory },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 

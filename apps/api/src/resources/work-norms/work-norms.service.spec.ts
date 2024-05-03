@@ -1,7 +1,9 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
+import { AccessService } from './../access/access.service';
 import { WorkNorm } from './entities/work-norm.entity';
 import { WorkNormsService } from './work-norms.service';
 
@@ -13,10 +15,8 @@ describe('WorkNormsService', () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 WorkNormsService,
-                {
-                    provide: getRepositoryToken(WorkNorm),
-                    useFactory: repositoryMockFactory,
-                },
+                { provide: getRepositoryToken(WorkNorm), useFactory: repositoryMockFactory },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 

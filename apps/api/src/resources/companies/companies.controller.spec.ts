@@ -1,11 +1,13 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '@repo/testing';
+import { AccessService } from '../access/access.service';
+import { UsersCompanyService } from '../users/users-company.service';
+import { UsersService } from '../users/users.service';
 import { CompaniesController } from './companies.controller';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
-import { UserCompany } from '../users/entities/user-company.entity';
-import { User } from '../users/entities/user.entity';
 
 describe('CompaniesController', () => {
     let controller: CompaniesController;
@@ -16,18 +18,10 @@ describe('CompaniesController', () => {
             controllers: [CompaniesController],
             providers: [
                 CompaniesService,
-                {
-                    provide: getRepositoryToken(Company),
-                    useFactory: repositoryMockFactory,
-                },
-                {
-                    provide: getRepositoryToken(UserCompany),
-                    useFactory: repositoryMockFactory,
-                },
-                {
-                    provide: getRepositoryToken(User),
-                    useFactory: repositoryMockFactory,
-                },
+                { provide: getRepositoryToken(Company), useFactory: repositoryMockFactory },
+                { provide: UsersService, useValue: createMock<UsersService>() },
+                { provide: UsersCompanyService, useValue: createMock<UsersCompanyService>() },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 

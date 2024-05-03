@@ -1,5 +1,5 @@
 import {
-    BadRequestException,
+    ConflictException,
     Inject,
     Injectable,
     Logger,
@@ -7,7 +7,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PayPeriodState, PaymentSchedule } from '@repo/shared';
+import { AccessType, PayPeriodState, PaymentSchedule, ResourceType } from '@repo/shared';
 import {
     addDays,
     addMonths,
@@ -30,8 +30,8 @@ import {
     Repository,
 } from 'typeorm';
 import { formatPeriod } from '../../utils/date';
+import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
-import { UsersService } from '../users/users.service';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
@@ -39,13 +39,15 @@ import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
 @Injectable()
 export class PayPeriodsService {
     private logger: Logger = new Logger(PayPeriodsService.name);
+    public readonly resourceType = ResourceType.PAY_PERIOD;
+
     constructor(
         @InjectRepository(PayPeriod)
         private repository: Repository<PayPeriod>,
-        @Inject(forwardRef(() => UsersService))
-        private usersService: UsersService,
         @Inject(forwardRef(() => CompaniesService))
         private companiesService: CompaniesService,
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
     ) {}
 
     async create(userId: number, payload: CreatePayPeriodDto): Promise<PayPeriod> {
@@ -55,7 +57,7 @@ export class PayPeriodsService {
             dateTo: payload.dateTo,
         });
         if (existing) {
-            throw new BadRequestException(
+            throw new ConflictException(
                 `Pay period '${formatPeriod(payload.dateFrom, payload.dateTo)}' already exists.`,
             );
         }
@@ -65,18 +67,16 @@ export class PayPeriodsService {
             dateTo: MoreThanOrEqual(payload.dateFrom),
         });
         if (intersection) {
-            throw new BadRequestException(
+            throw new ConflictException(
                 `Pay period '${formatPeriod(payload.dateFrom, payload.dateTo)}' intersects with period '${formatPeriod(intersection.dateFrom, intersection.dateTo)}'.`,
             );
         }
-        const user = await this.usersService.findOne({ where: { id: userId } });
-        if (!user) {
-            throw new BadRequestException(`User '${userId}' not found.`);
-        }
-        const company = await this.companiesService.findOne({ where: { id: payload.companyId } });
-        if (!company) {
-            throw new BadRequestException(`Company '${payload.companyId}' not found.`);
-        }
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            payload.companyId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
         const newPayPeriod = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -90,49 +90,50 @@ export class PayPeriodsService {
         companyId: number,
         params: FindManyOptions<PayPeriod>,
     ): Promise<PayPeriod[]> {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
         const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
-        const response = await this.repository.find(options);
-        if (response.length) return response;
+        const payPeriodList = await this.repository.find(options);
+        if (payPeriodList.length) return payPeriodList;
         await this.fillPeriods(userId, companyId);
         return await this.repository.find(options);
     }
 
-    async findOne(params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
-        const PayPeriod = await this.repository.findOne(params);
-        if (!PayPeriod) {
-            throw new NotFoundException(`PayPeriod could not be found.`);
-        }
-        return PayPeriod;
+    async findOne(userId: number, params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
+        const payPeriod = await this.repository.findOneOrFail(params);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            payPeriod.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        return payPeriod;
     }
 
     async update(userId: number, id: number, data: UpdatePayPeriodDto): Promise<PayPeriod> {
-        const PayPeriod = await this.repository.findOneBy({ id });
-        if (!PayPeriod) {
-            throw new NotFoundException(`PayPeriod could not be found.`);
-        }
-        const user = await this.usersService.findOne({ where: { id: userId } });
-        await this.companiesService.findOne({ where: { id: PayPeriod.companyId } });
-        await this.repository.save({
-            ...data,
-            id,
-            updatedUserId: user.id,
-        });
-        const updated = await this.repository.findOneOrFail({ where: { id } });
-        return updated;
+        const payPeriod = await this.repository.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            payPeriod.companyId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+        return await this.repository.save({ ...data, id, updatedUserId: userId });
     }
 
     async remove(userId: number, id: number): Promise<PayPeriod> {
-        const PayPeriod = await this.repository.findOneBy({ id });
-        if (!PayPeriod) {
-            throw new NotFoundException(`PayPeriod could not be found.`);
-        }
-        const user = await this.usersService.findOne({ where: { id: userId } });
-        await this.repository.save({
-            ...PayPeriod,
-            deletedDate: new Date(),
-            deletedUserId: user.id,
-        });
-        return PayPeriod;
+        const payPeriod = await this.repository.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            payPeriod.companyId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+        return await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
     }
 
     async findCurrent(
@@ -150,16 +151,22 @@ export class PayPeriodsService {
                 state: PayPeriodState.OPENED,
             };
         }
-        const company = await this.companiesService.findOne({ where: { id: companyId } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        const company = await this.companiesService.findOne(userId, companyId);
         const options = {
             where: { companyId: company.id, dateFrom: company.payPeriod },
             relations: { company: relations },
             ...(fullFieldList ? {} : defaultFieldList),
         };
-        const resp = await this.findOne(options);
+        const resp = await this.findOne(userId, options);
         if (resp) return resp;
         await this.fillPeriods(userId, company.id);
-        return await this.findOne(options);
+        return await this.findOne(userId, options);
     }
 
     async fillPeriods(userId: number, companyId: number | null): Promise<PayPeriod[]> {
@@ -167,7 +174,7 @@ export class PayPeriodsService {
             const filler = getFiller(PaymentSchedule.LAST_DAY);
             return filler(null, getDateFrom(new Date()), getDateTo(new Date()));
         }
-        const company = await this.companiesService.findOne({ where: { id: companyId } });
+        const company = await this.companiesService.findOne(userId, companyId);
         const dateFrom = getDateFrom(company.payPeriod);
         const dateTo = getDateTo(company.payPeriod);
         const filler = getFiller(company.paymentSchedule);

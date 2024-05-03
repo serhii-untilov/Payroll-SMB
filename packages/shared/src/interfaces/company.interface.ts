@@ -2,6 +2,8 @@ import { IAccounting } from './accounting.interface';
 import { IDepartment } from './department.interface';
 import { ILaw } from './law.interface';
 import { ILogger } from './logger.interface';
+import { IPosition } from './position.interface';
+import { IUserCompany } from './user-company.interface';
 
 export enum PaymentSchedule {
     EVERY_15_DAY = 'every-15-day', // Every 15th and last day of month
@@ -28,6 +30,8 @@ export interface ICompany extends ILogger {
     checkDate: Date;
 
     departments?: IDepartment[];
+    positions?: IPosition[];
+    users?: IUserCompany[];
 }
 
 export type ICreateCompany = Omit<
@@ -36,6 +40,8 @@ export type ICreateCompany = Omit<
     | 'law'
     | 'accounting'
     | 'departments'
+    | 'positions'
+    | 'users'
     | 'createdDate'
     | 'createdUser'
     | 'createdUserId'

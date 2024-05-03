@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import {
     ICreatePosition,
+    IPerson,
     IPosition,
     IPositionHistory,
     PaymentGroup,
@@ -33,6 +34,7 @@ import {
 } from '../../../services/positionHistory.service';
 import { getDirtyValues } from '../../../services/utils';
 import { FormAutocomplete } from '../../../components/form/FormAutocomplete';
+import { SelectOrCreatePerson } from '../../../components/select/SelectOrCreatePerson';
 
 const formSchema = yup.object().shape({
     // Position
@@ -63,12 +65,15 @@ interface Props {
     onSubmitCallback?: () => void;
 }
 
-export function JobAndPay({ positionId, onSubmitCallback }: Props) {
+export function JobAndPay(props: Props) {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company, payPeriod } = useAppContext();
     const queryClient = useQueryClient();
+    const [positionId, setPositionId] = useState(props.positionId);
     const [position, setPosition] = useState<Partial<IPosition>>({});
+    const [positionHistory, setPositionHistory] = useState<Partial<IPositionHistory>>({});
+    const [person, setPerson] = useState<Partial<IPerson>>({});
 
     useEffect(() => {}, [company]);
 
@@ -83,6 +88,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                 ? await getPosition({ id: positionId, relations: true })
                 : { companyId: company?.id, dateFrom: minDate(), dateTo: maxDate(), rate: 1 };
             setPosition(position);
+            const positionHistory = positionId ? getPositionHistoryOnDate() : {};
             return formSchema.cast({ ...position_formData(position, payPeriod || new Date()) });
         },
         enabled: !!company && !!payPeriod,
@@ -216,20 +222,20 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             sx={{ fontWeight: 'bold' }}
                             placeholder={t('Vacancy')}
                         /> */}
-                        <FormAutocomplete
+                        <SelectOrCreatePerson
                             control={control}
-                            autoComplete="full-name"
-                            name="name"
-                            id="name"
+                            // autoComplete="full-name"
+                            name="personId"
+                            // id="name"
                             label={t('Full Name')}
-                            type="text"
-                            autoFocus
-                            sx={{ fontWeight: 'bold' }}
-                            placeholder={t('Vacancy')}
-                            options={[]}
+                            autofocus
+                            // type="text"
+                            // autoFocus
+                            // sx={{ fontWeight: 'bold' }}
+                            // placeholder={t('Vacancy')}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <FormTextField
                             control={control}
                             name="cardNumber"
@@ -238,7 +244,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             type="text"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <FormTextField
                             control={control}
                             name="sequenceNumber"
@@ -268,15 +274,6 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <SelectWorkNorm
-                            companyId={company?.id}
-                            control={control}
-                            name="workNormId"
-                            id="workNormId"
-                            label={t('Work Norm')}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
                         <SelectPaymentType
                             companyId={company?.id}
                             control={control}
@@ -284,6 +281,15 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             id="paymentTypeId"
                             label={t('Payment Type')}
                             filter={{ groups: [PaymentGroup.BASIC] }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <SelectWorkNorm
+                            companyId={company?.id}
+                            control={control}
+                            name="workNormId"
+                            id="workNormId"
+                            label={t('Work Norm')}
                         />
                     </Grid>
 
@@ -307,7 +313,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <FormDateField
                             control={control}
                             name="dateFrom"
@@ -317,7 +323,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <FormDateField
                             control={control}
                             name="dateTo"
@@ -343,7 +349,6 @@ function position_formData(position: Partial<IPosition>, onDate: Date): Partial<
         dateFrom,
         dateTo,
         deletedUserId,
-        name,
     } = position;
     const positionHistory: Partial<IPositionHistory> =
         position?.history?.find((o) => o.dateFrom <= onDate && o.dateTo >= onDate) || {};
@@ -371,7 +376,7 @@ function position_formData(position: Partial<IPosition>, onDate: Date): Partial<
     };
 }
 
-function formData_Position(formData: FormType): Partial<IPosition> {
+function formData_Position(formData: FormType): IPosition {
     const {
         companyId,
         cardNumber,
@@ -392,13 +397,13 @@ function formData_Position(formData: FormType): Partial<IPosition> {
         dateFrom,
         dateTo,
         deletedUserId,
-        name,
     };
 }
 
 function formData_PositionHistory(data: FormType): Partial<IPositionHistory> {
     const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = data;
     return {
+        id: data.positionHistoryId,
         departmentId,
         jobId,
         workNormId,

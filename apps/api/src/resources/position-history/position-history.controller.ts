@@ -20,6 +20,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistoryService } from './position-history.service';
+import { FindPositionHistoryDto } from './dto/find-position-history.dto';
 
 @Controller('position-history')
 export class PositionHistoryController {
@@ -81,5 +82,16 @@ export class PositionHistoryController {
     ): Promise<IPositionHistory> {
         const userId = req.user['sub'];
         return await this.positionHistoryService.remove(userId, id);
+    }
+
+    @Post('find')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async find(
+        @Req() req: Request,
+        @Body() params: FindPositionHistoryDto,
+    ): Promise<IPositionHistory | null> {
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.find(userId, params);
     }
 }

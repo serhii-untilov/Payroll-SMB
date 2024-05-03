@@ -5,23 +5,35 @@ import { Controller } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import { getPersonList } from '../../services/person.service';
 import { InputLabel } from '../layout/InputLabel';
+import { useMemo } from 'react';
 
 export interface Props {
     name: string;
     control: any;
     label: string;
+    autofocus?: boolean;
 }
 
 export const SelectOrCreatePerson = (props: Props) => {
-    const { data, isError, error } = useQuery<IPerson[], Error>({
+    const {
+        data: personList,
+        isError,
+        error,
+    } = useQuery<IPerson[], Error>({
         queryKey: ['personList'],
         queryFn: async () => {
-            const personList = await getPersonList();
-            return personList.map((o) => {
-                return { label: o.fullName, value: o.id };
-            });
+            return await getPersonList();
         },
     });
+
+    // const selectedValues = React.useMemo(() => allValues.filter((v) => v.selected), [allValues]);
+    const options = useMemo(
+        () =>
+            personList?.map((o) => {
+                return { label: o.fullName, value: o.id };
+            }) || [],
+        [personList],
+    );
 
     if (isError) {
         return enqueueSnackbar(`${error.name}\n${error.message}`, {
@@ -38,23 +50,26 @@ export const SelectOrCreatePerson = (props: Props) => {
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => {
                     return (
                         <Autocomplete
+                            freeSolo
+                            selectOnFocus
+                            // disableCloseOnSelect
                             disablePortal
                             autoSelect
                             autoHighlight
-                            autoComplete={true}
-                            // id={'value'}
-                            options={data}
-                            getOptionLabel={(option) => option?.label || ''}
-                            getOptionKey={(option) => option?.value || ''}
-                            value={data.find((o) => o.value === value) || null}
-                            isOptionEqualToValue={(option, value) => {
-                                return (
-                                    option?.value && value?.value && option?.value === value?.value
-                                );
-                            }}
-                            onChange={(event, item) => {
-                                onChange(item?.value || null);
-                            }}
+                            autoComplete
+                            id={'value'}
+                            options={options}
+                            // getOptionLabel={(option) => option?.label || ''}
+                            // getOptionKey={(option) => option?.value || ''}
+                            value={options.find((o) => o.value === value) || null}
+                            // isOptionEqualToValue={(option, value) => {
+                            //     return (
+                            //         option?.value && value?.value && option?.value === value?.value
+                            //     );
+                            // }}
+                            // onChange={(event, item) => {
+                            //     onChange(item?.value || null);
+                            // }}
                             renderInput={(params) => {
                                 return (
                                     <TextField

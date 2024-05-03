@@ -6,17 +6,19 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { WorkNormsService } from './work-norms.service';
 import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
+import { WorkNormsService } from './work-norms.service';
 
 @Controller('work-norms')
 export class WorkNormsController {
@@ -33,21 +35,18 @@ export class WorkNormsController {
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll() {
-        return await this.workNormsService.findAll();
+    async findAll(@Query('relations', ParseBoolPipe) relations: boolean) {
+        return await this.workNormsService.findAll(relations);
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.workNormsService.findOne({
-            where: { id },
-            relations: {
-                law: true,
-                accounting: true,
-            },
-        });
+    async findOne(
+        @Param('id', ParseIntPipe) id: number,
+        @Query('relations', ParseBoolPipe) relations: boolean,
+    ) {
+        return await this.workNormsService.findOne(id, relations);
     }
 
     @Patch(':id')

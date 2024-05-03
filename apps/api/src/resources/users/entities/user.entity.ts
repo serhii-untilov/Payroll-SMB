@@ -1,9 +1,10 @@
 import { IRole, IUser } from '@repo/shared';
 import { Role } from '../../roles/entities/role.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Logger } from '../../../resources/abstract/logger.abstract';
 
 @Entity()
-export class User implements IUser {
+export class User extends Logger implements IUser {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

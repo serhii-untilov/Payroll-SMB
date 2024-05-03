@@ -32,3 +32,4 @@ export type ICreatePerson = Omit<
 >;
 
 export type IUpdatePerson = Partial<ICreatePerson>;
+export type IFindPerson = Partial<IPerson>;

@@ -67,4 +67,8 @@ export type ICreatePositionHistory = Partial<
     >
 >;
 
-export type IUpdatePositionHistory = Partial<ICreatePositionHistory>;
+export type IUpdatePositionHistory = ICreatePositionHistory;
+export interface IFindPositionHistory extends Partial<IPositionHistory> {
+    onDate?: Date;
+    onPayPeriodDate?: Date;
+}

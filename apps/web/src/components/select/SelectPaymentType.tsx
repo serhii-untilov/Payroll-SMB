@@ -1,8 +1,8 @@
-import { enqueueSnackbar } from 'notistack';
-import { FormAutocomplete } from '../form/FormAutocomplete';
 import { IPaymentType, IPaymentTypeFilter } from '@repo/shared';
-import { getPaymentTypeList } from '../../services/paymentType.service';
+import { enqueueSnackbar } from 'notistack';
 import { useQuery } from 'react-query';
+import { getPaymentTypeList } from '../../services/paymentType.service';
+import { FormAutocomplete } from '../form/FormAutocomplete';
 
 interface Props {
     companyId: number | undefined;

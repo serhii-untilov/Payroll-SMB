@@ -15,9 +15,9 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { PaymentTypesService } from './payment-types.service';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
+import { PaymentTypesService } from './payment-types.service';
 
 @Controller('payment-types')
 export class PaymentTypesController {

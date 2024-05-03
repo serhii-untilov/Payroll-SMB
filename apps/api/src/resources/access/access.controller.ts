@@ -16,9 +16,13 @@ import { IAccess } from '@repo/shared';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { AccessService } from './access.service';
+import {
+    AvailableAccessDto,
+    AvailableAccessUserCompanyDto,
+    AvailableAccessUserDto,
+} from './dto/available-access.dto';
 import { CreateAccessDto } from './dto/create-access.dto';
 import { UpdateAccessDto } from './dto/update-access.dto';
-import { AvailableAccessDto } from './dto/available-access.dto';
 
 @Controller('access')
 export class AccessController {
@@ -45,7 +49,7 @@ export class AccessController {
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IAccess> {
+    async findOne(@Param('id', ParseIntPipe) id: number): Promise<IAccess> {
         return await this.accessService.findOne(id);
     }
 
@@ -69,8 +73,18 @@ export class AccessController {
         return await this.accessService.remove(userId, id);
     }
 
-    @Get('available')
-    async available(@Body() availableAccessDto: AvailableAccessDto): Promise<boolean> {
-        return await this.accessService.available(availableAccessDto);
+    @Post('available')
+    async available(@Body() payload: AvailableAccessDto): Promise<boolean> {
+        return await this.accessService.available(payload);
+    }
+
+    @Post('available-user')
+    async availableForUser(@Body() payload: AvailableAccessUserDto) {
+        return await this.accessService.availableForUser(payload);
+    }
+
+    @Post('available-user-company')
+    async availableForUserCompany(@Body() payload: AvailableAccessUserCompanyDto) {
+        return await this.accessService.availableForUserCompany(payload);
     }
 }

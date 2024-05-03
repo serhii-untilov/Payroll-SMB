@@ -1,42 +1,46 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@repo/shared';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
-import { UsersService } from '../users/users.service';
+import { PayPeriodsService } from './../pay-periods/pay-periods.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { Position } from './entities/position.entity';
 
 @Injectable()
 export class PositionsService {
+    public readonly resourceType = ResourceType.POSITION;
+
     constructor(
         @InjectRepository(Position)
-        private positionsRepository: Repository<Position>,
-        private readonly usersService: UsersService,
-        private readonly accessService: AccessService,
-        public readonly resourceType: ResourceType.POSITION,
+        private repository: Repository<Position>,
+        @Inject(forwardRef(() => PayPeriodsService))
+        private readonly payPeriodsService: PayPeriodsService,
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
     ) {}
 
-    async create(userId: number, data: CreatePositionDto): Promise<Position> {
-        if (data?.cardNumber) {
-            const existing = data?.cardNumber
-                ? await this.positionsRepository.findOne({
-                      where: { cardNumber: data.cardNumber },
+    async create(userId: number, payload: CreatePositionDto): Promise<Position> {
+        if (payload?.cardNumber) {
+            const existing = payload?.cardNumber
+                ? await this.repository.findOne({
+                      where: { cardNumber: payload.cardNumber },
                   })
                 : null;
             if (existing) {
-                throw new BadRequestException(`Position '${data.cardNumber}' already exists.`);
+                throw new BadRequestException(`Position '${payload.cardNumber}' already exists.`);
             }
         }
-        const roleType = await this.usersService.getUserCompanyRoleTypeOrException(
+        await this.accessService.availableForUserCompanyOrFail(
             userId,
-            data.companyId,
+            payload.companyId,
+            this.resourceType,
+            AccessType.CREATE,
         );
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.CREATE);
-        const cardNumber = data?.cardNumber || (await this.getNextCardNumber(data.companyId));
-        return await this.positionsRepository.save({
-            ...data,
+        const cardNumber = payload?.cardNumber || (await this.getNextCardNumber(payload.companyId));
+        return await this.repository.save({
+            ...payload,
             cardNumber,
             createdUserId: userId,
             updatedUserId: userId,
@@ -46,92 +50,125 @@ export class PositionsService {
     async findAll(
         userId: number,
         companyId: number,
-        relations: boolean = false,
+        relations: boolean,
+        onDate: Date,
     ): Promise<Position[]> {
-        const roleType = await this.usersService.getUserCompanyRoleTypeOrException(
+        await this.accessService.availableForUserCompanyOrFail(
             userId,
             companyId,
+            this.resourceType,
+            AccessType.ACCESS,
         );
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
-        return await this.positionsRepository.find({
-            where: { companyId },
+        const payPeriod = onDate
+            ? await this.payPeriodsService.findOne(userId, {
+                  where: {
+                      companyId,
+                      dateFrom: LessThanOrEqual(onDate),
+                      dateTo: MoreThanOrEqual(onDate),
+                  },
+              })
+            : null;
+        return await this.repository.find({
             relations: {
                 company: relations,
                 person: relations,
-                history: relations
+                history:
+                    relations && payPeriod
+                        ? { department: true, job: true, workNorm: true, paymentType: true }
+                        : false,
+            },
+            where: {
+                companyId,
+                ...(payPeriod ? { dateFrom: LessThanOrEqual(payPeriod.dateTo) } : {}),
+                ...(payPeriod ? { dateTo: MoreThanOrEqual(payPeriod.dateFrom) } : {}),
+                ...(relations && payPeriod
                     ? {
-                          department: true,
-                          job: true,
-                          workNorm: true,
-                          paymentType: true,
+                          history: {
+                              dateTo: MoreThanOrEqual(payPeriod.dateFrom),
+                              dateFrom: LessThanOrEqual(payPeriod.dateTo),
+                          },
                       }
-                    : false,
+                    : {}),
             },
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean = false): Promise<Position> {
-        const record = await this.positionsRepository.findOne({
+    async findOne(
+        userId: number,
+        id: number,
+        relations: boolean = null,
+        onDate: Date = null,
+    ): Promise<Position> {
+        const position = await this.repository.findOneOrFail({
             where: { id },
             relations: {
                 company: relations,
                 person: relations,
-                history: relations
-                    ? {
-                          department: true,
-                          job: true,
-                          workNorm: true,
-                          paymentType: true,
-                      }
-                    : false,
             },
         });
-        if (!record) {
-            throw new NotFoundException(`Position could not be found.`);
-        }
-        const roleType = await this.usersService.getUserCompanyRoleTypeOrException(
+        await this.accessService.availableForUserCompanyOrFail(
             userId,
-            record.companyId,
+            position.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
         );
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
-        return record;
+        if (!(onDate && relations)) {
+            return position;
+        }
+        const payPeriod = await this.payPeriodsService.findOne(userId, {
+            where: {
+                companyId: position.companyId,
+                dateFrom: LessThanOrEqual(onDate),
+                dateTo: MoreThanOrEqual(onDate),
+            },
+        });
+        return await this.repository.findOneOrFail({
+            relations: {
+                company: relations,
+                person: relations,
+                history:
+                    relations && payPeriod
+                        ? { department: true, job: true, workNorm: true, paymentType: true }
+                        : false,
+            },
+            where: {
+                id,
+                ...(relations && payPeriod
+                    ? {
+                          history: {
+                              dateTo: MoreThanOrEqual(payPeriod.dateFrom),
+                              dateFrom: LessThanOrEqual(payPeriod.dateTo),
+                          },
+                      }
+                    : {}),
+            },
+        });
     }
 
-    async update(userId: number, id: number, data: UpdatePositionDto): Promise<Position> {
-        const record = await this.positionsRepository.findOneBy({ id });
-        if (!record) {
-            throw new NotFoundException(`Position could not be found.`);
-        }
-        const roleType = await this.usersService.getUserCompanyRoleTypeOrException(
+    async update(userId: number, id: number, payload: UpdatePositionDto): Promise<Position> {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
             userId,
             record.companyId,
+            this.resourceType,
+            AccessType.UPDATE,
         );
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.UPDATE);
-        await this.positionsRepository.save({ ...data, id, updatedUserId: userId });
-        return await this.positionsRepository.findOneOrFail({ where: { id } });
+        return await this.repository.save({ ...payload, id, updatedUserId: userId });
     }
 
     async remove(userId: number, id: number): Promise<Position> {
-        const record = await this.positionsRepository.findOneBy({ id });
-        if (!record) {
-            throw new NotFoundException(`Position could not be found.`);
-        }
-        const roleType = await this.usersService.getUserCompanyRoleTypeOrException(
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
             userId,
             record.companyId,
+            this.resourceType,
+            AccessType.DELETE,
         );
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.DELETE);
-        const deleted = {
-            ...record,
-            deletedDate: new Date(),
-            deletedUserId: userId,
-        } as Position;
-        await this.positionsRepository.save(deleted);
-        return deleted;
+        return await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
     }
 
     async getNextCardNumber(companyId: number): Promise<string> {
-        const result = await this.positionsRepository.query(
+        const result = await this.repository.query(
             `select coalesce(min(cast(p."cardNumber" as integer)), 0) + 1 "freeNumber"
             from position p
             where p."companyId" = $1

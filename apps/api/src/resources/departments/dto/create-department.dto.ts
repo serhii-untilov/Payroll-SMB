@@ -1,11 +1,10 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ICreateDepartment, IDepartment } from '@repo/shared';
 
 export class CreateDepartmentDto implements ICreateDepartment {
-    id: number;
-    companyId: number;
-    name: string;
-    dateFrom: Date;
-    dateTo: Date;
-
-    parent: IDepartment;
+    @ApiProperty() companyId: number;
+    @ApiProperty() name: string;
+    @ApiProperty() dateFrom: Date;
+    @ApiProperty() dateTo: Date;
+    @ApiProperty() parent: IDepartment;
 }

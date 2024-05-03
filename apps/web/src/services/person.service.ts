@@ -1,4 +1,4 @@
-import { IPerson, ICreatePerson, IUpdatePerson } from '@repo/shared';
+import { IPerson, ICreatePerson, IUpdatePerson, IFindPerson } from '@repo/shared';
 import { api } from '../api';
 import authHeader from './auth-header';
 
@@ -30,5 +30,10 @@ export async function updatePerson(id: number, person: IUpdatePerson): Promise<I
 
 export async function deletePerson(id: number): Promise<IPerson> {
     const response = await api.delete(`/api/persons/${id}`, { headers: authHeader() });
+    return response.data;
+}
+
+export async function findPerson(person: IFindPerson): Promise<IPerson | null> {
+    const response = await api.post(`/api/persons/find`, person, { headers: authHeader() });
     return response.data;
 }

@@ -1,14 +1,15 @@
 import { ICreateCompany } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCompanyDto extends Logger implements ICreateCompany {
-    name: string;
-    lawId: number;
-    taxId: string;
-    accountingId: number;
-    paymentSchedule: string;
-    dateFrom: Date;
-    dateTo: Date;
-    payPeriod: Date;
-    checkDate: Date;
+    @ApiProperty() name: string;
+    @ApiProperty() lawId: number;
+    @ApiProperty() taxId: string;
+    @ApiProperty() accountingId: number;
+    @ApiProperty() paymentSchedule: string;
+    @ApiProperty() dateFrom: Date;
+    @ApiProperty() dateTo: Date;
+    @ApiProperty() payPeriod: Date;
+    @ApiProperty() checkDate: Date;
 }

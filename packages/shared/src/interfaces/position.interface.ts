@@ -20,7 +20,7 @@ export interface IPosition extends ILogger {
     dateFrom?: Date; // Hire date or date of open vacancy
     dateTo?: Date; // Dismissal date or date of close vacancy
 
-    name?: string | null;
+    // name?: string | null;
 
     history?: IPositionHistory[];
 }

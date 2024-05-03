@@ -1,14 +1,12 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ICreatePosition } from '@repo/shared';
 
 export class CreatePositionDto implements ICreatePosition {
-    companyId: number;
-
-    cardNumber?: string; // Identity number (Табельний номер)
-    sequenceNumber?: number; // Sequence in payroll reports to place managers on top
-    description?: string;
-
-    personId?: number | null; // Vacancy if not defined
-
-    dateFrom?: Date; // Hire date or date of open vacancy
-    dateTo?: Date; // Dismissal date or date of close vacancy
+    @ApiProperty() companyId: number;
+    @ApiProperty() cardNumber?: string; // Identity number (Табельний номер)
+    @ApiProperty() sequenceNumber?: number; // Sequence in payroll reports to place managers on top
+    @ApiProperty() description?: string;
+    @ApiProperty() personId?: number | null; // Vacancy if not defined
+    @ApiProperty() dateFrom?: Date; // Hire date or date of open vacancy
+    @ApiProperty() dateTo?: Date; // Dismissal date or date of close vacancy
 }

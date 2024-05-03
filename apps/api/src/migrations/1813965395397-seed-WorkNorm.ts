@@ -1,4 +1,4 @@
-import { getAdminId } from '../utils/getAdminId';
+import { getSystemUserId } from '../utils/getSystemUserId';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { WorkNorm } from '../resources/work-norms/entities/work-norm.entity';
 import { langPipe } from '../utils/langPipe';
@@ -9,7 +9,6 @@ const lang = process.env.LANGUAGE;
 const entity = WorkNorm;
 const recordList = [
     {
-        id: 1,
         name: {
             en: '5 days, 40 hours per week',
             uk: '5 днів, 40 годин на тиждень',
@@ -28,52 +27,66 @@ const recordList = [
             { day: 6, hours: 0 },
         ],
     },
-    // {
-    //     id: 2,
-    //     name: {
-    //         en: 'Full Time (6 days, 40 hours per week)',
-    //         uk: 'Повний робочий день (6 днів, 40 годин на тиждень)',
-    //     },
-    //     type: WorkNormType.WEEKLY,
-    //     dateFrom: '2024-04-22',
-    //     dateTo: '9999-12-31',
-    // },
-    // {
-    //     id: 3,
-    //     name: {
-    //         en: 'Part-Time (5 days, 35 hours per week)',
-    //         uk: 'Неповний робочий день (5 днів, 35 годин на тиждень)',
-    //     },
-    //     type: WorkNormType.WEEKLY,
-    //     dateFrom: '2024-04-22',
-    //     dateTo: '9999-12-31',
-    // },
-    // {
-    //     id: 4,
-    //     name: {
-    //         en: 'Shift (one day - work, three days - rest)',
-    //         uk: 'Зміна (один день - робота, три дні - відпочинок)',
-    //     },
-    //     type: WorkNormType.SHIFT,
-    //     dateFrom: '2024-04-22',
-    //     dateTo: '9999-12-31',
-    // },
-    // {
-    //     id: 5,
-    //     name: {
-    //         en: 'Variable (hours vary every week)',
-    //         uk: 'Змінна (години змінюються щотижня)',
-    //     },
-    //     type: WorkNormType.VARIABLE,
-    //     dateFrom: '2024-04-22',
-    //     dateTo: '9999-12-31',
-    // },
+    {
+        id: 2,
+        name: {
+            en: '6 days, 40 hours per week',
+            uk: '6 днів, 40 годин на тиждень',
+        },
+        type: WorkNormType.WEEKLY,
+        dateFrom: '2024-04-22',
+        dateTo: '9999-12-31',
+        workNormPeriod: [
+            { day: 0, hours: 7 },
+            { day: 1, hours: 7 },
+            { day: 2, hours: 7 },
+            { day: 3, hours: 7 },
+            { day: 4, hours: 7 },
+            { day: 5, hours: 5 },
+            { day: 6, hours: 0 },
+        ],
+    },
+    {
+        id: 3,
+        name: {
+            en: '5 days, 35 hours per week',
+            uk: '5 днів, 35 годин на тиждень',
+        },
+        type: WorkNormType.WEEKLY,
+        dateFrom: '2024-04-22',
+        dateTo: '9999-12-31',
+        workNormPeriod: [
+            { day: 0, hours: 7 },
+            { day: 1, hours: 7 },
+            { day: 2, hours: 7 },
+            { day: 3, hours: 7 },
+            { day: 4, hours: 7 },
+            { day: 5, hours: 0 },
+            { day: 6, hours: 0 },
+        ],
+    },
+    {
+        id: 4,
+        name: {
+            en: 'Shifted (one day - work, three days - rest)',
+            uk: 'Змінна (один день - робота, три - відпочинок)',
+        },
+        type: WorkNormType.SHIFTED,
+        dateFrom: '2024-04-22',
+        dateTo: '9999-12-31',
+        workNormPeriod: [
+            { day: 0, hours: 24 },
+            { day: 1, hours: 0 },
+            { day: 2, hours: 0 },
+            { day: 3, hours: 0 },
+        ],
+    },
 ];
 
 export class Seed1813965395397 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
-        const userId = await getAdminId(dataSource);
+        const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
             const workNorm = {
                 ...recordList[n],
@@ -108,13 +121,14 @@ export class Seed1813965395397 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
+        const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
             const record = langPipe(lang, recordList[n]);
             await dataSource
                 .createQueryBuilder()
                 .delete()
                 .from(entity)
-                .where('name = :name', { name: record.name })
+                .where('name = :name and createdUserId = :userId', { name: record.name, userId })
                 .execute();
         }
     }

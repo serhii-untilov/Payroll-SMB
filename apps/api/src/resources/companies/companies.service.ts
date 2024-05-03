@@ -1,38 +1,55 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Inject,
+    Injectable,
+    NotFoundException,
+    forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AccessType, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
+import { AccessService } from '../access/access.service';
+import { UsersCompanyService } from '../users/users-company.service';
+import { UsersService } from '../users/users.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
-import { UserCompany } from '../users/entities/user-company.entity';
-import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class CompaniesService {
+    public readonly resourceType = ResourceType.COMPANY;
+
     constructor(
         @InjectRepository(Company)
-        private companiesRepository: Repository<Company>,
-        @InjectRepository(UserCompany)
-        private userCompaniesRepository: Repository<UserCompany>,
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
+        private repository: Repository<Company>,
+        @Inject(forwardRef(() => UsersService))
+        private usersService: UsersService,
+        @Inject(forwardRef(() => UsersCompanyService))
+        private usersCompanyService: UsersCompanyService,
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
     ) {}
 
-    async create(userId: number, company: CreateCompanyDto): Promise<Company> {
-        const existing = await this.companiesRepository.findOneBy({ name: company.name });
+    async create(userId: number, payload: CreateCompanyDto): Promise<Company> {
+        const existing = await this.repository.findOneBy({ name: payload.name });
         if (existing) {
-            throw new BadRequestException(`Company '${company.name}' already exists.`);
+            throw new BadRequestException(`Company '${payload.name}' already exists.`);
         }
-        const user = await this.userRepository.findOneBy({ id: userId });
-        if (!user) {
-            throw new BadRequestException(`User '${userId}' not found.`);
-        }
-        const newCompany = await this.companiesRepository.save({
-            ...company,
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+        const newCompany = await this.repository.save({
+            ...payload,
             createdUserId: userId,
             updatedUserId: userId,
         });
-        await this.userCompaniesRepository.save({
+        const user = await this.usersService.findOneOrFail({ where: { id: userId } });
+        if (!user || !user.roleId) {
+            throw new NotFoundException('User or Role not found.');
+        }
+        await this.usersCompanyService.create(userId, {
             userId,
             companyId: newCompany.id,
             roleId: user.roleId,
@@ -40,46 +57,77 @@ export class CompaniesService {
         return newCompany;
     }
 
-    async findAll(): Promise<Company[]> {
-        return await this.companiesRepository.find();
+    async findAll(userId: number, relations: boolean): Promise<Company[]> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        return await this.repository.find({
+            relations: {
+                law: relations,
+                accounting: relations,
+                users: true,
+            },
+            where: {
+                users: { userId },
+            },
+        });
     }
 
-    async findOne(params): Promise<Company> {
-        const company = await this.companiesRepository.findOne(params);
+    async findOne(userId: number, id: number, relations: boolean = false): Promise<Company | null> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        const company = await this.repository.findOne({
+            relations: {
+                law: !!relations,
+                accounting: !!relations,
+                users: true,
+            },
+            where: {
+                id,
+                users: { userId },
+            },
+        });
+        return company;
+    }
+
+    async findOneOrFail(userId: number, id: number, relations: boolean = false): Promise<Company> {
+        const company = await this.findOne(userId, id, relations);
         if (!company) {
-            throw new NotFoundException(`Company could not be found.`);
+            throw new NotFoundException(`Company could not be found or user doesn't have access.`);
         }
         return company;
     }
 
-    async update(userId: number, id: number, data: UpdateCompanyDto): Promise<Company> {
-        const company = await this.companiesRepository.findOneBy({ id });
-        if (!company) {
-            throw new NotFoundException(`Company could not be found.`);
-        }
-        const user = await this.userRepository.findOneBy({ id: userId });
-        if (!user) {
-            throw new BadRequestException(`User '${userId}' not found.`);
-        }
-        await this.companiesRepository.save({
-            ...data,
+    async update(userId: number, id: number, payload: UpdateCompanyDto): Promise<Company> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+        await this.usersCompanyService.getUserCompanyRoleTypeOrException(userId, id);
+        return await this.repository.save({
+            ...payload,
             id,
             updatedUserId: userId,
         });
-        const updated = await this.companiesRepository.findOneOrFail({ where: { id } });
-        return updated;
     }
 
     async remove(userId: number, id: number): Promise<Company> {
-        const company = await this.companiesRepository.findOneBy({ id });
-        if (!company) {
-            throw new NotFoundException(`Company could not be found.`);
-        }
-        await this.companiesRepository.save({
-            ...company,
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+        await this.usersCompanyService.getUserCompanyRoleTypeOrException(userId, id);
+        return await this.repository.save({
+            id,
             deletedDate: new Date(),
             deletedUserId: userId,
         });
-        return company;
     }
 }

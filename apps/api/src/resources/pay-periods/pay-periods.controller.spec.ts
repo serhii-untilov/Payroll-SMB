@@ -7,12 +7,14 @@ import { CompaniesService } from '../companies/companies.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { PayPeriod } from './entities/pay-period.entity';
 import { repositoryMockFactory } from '@repo/testing';
+import { AccessService } from '../access/access.service';
 
 describe('PayPeriodsController', () => {
     let controller: PayPeriodsController;
     let service: PayPeriodsService;
     let usersService: UsersService;
     let companiesService: CompaniesService;
+    let accessService: AccessService;
 
     beforeEach(async () => {
         const module = await Test.createTestingModule({
@@ -25,6 +27,7 @@ describe('PayPeriodsController', () => {
                 },
                 { provide: UsersService, useValue: createMock<UsersService>() },
                 { provide: CompaniesService, useValue: createMock<CompaniesService>() },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 
@@ -32,6 +35,7 @@ describe('PayPeriodsController', () => {
         service = module.get<PayPeriodsService>(PayPeriodsService);
         usersService = module.get<UsersService>(UsersService);
         companiesService = module.get<CompaniesService>(CompaniesService);
+        accessService = module.get<AccessService>(AccessService);
     });
 
     it('should be defined', () => {
@@ -39,5 +43,6 @@ describe('PayPeriodsController', () => {
         expect(service).toBeDefined();
         expect(usersService).toBeDefined();
         expect(companiesService).toBeDefined();
+        expect(accessService).toBeDefined();
     });
 });

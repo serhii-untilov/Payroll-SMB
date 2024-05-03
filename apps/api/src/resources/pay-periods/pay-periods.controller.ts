@@ -73,11 +73,13 @@ export class PayPeriodsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(
+        @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
         @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
     ) {
-        return await this.payPeriodsService.findOne({
+        const userId = req.user['sub'];
+        return await this.payPeriodsService.findOne(userId, {
             where: { id },
             relations: { company: relations },
             ...(fullFieldList ? {} : defaultFieldList),

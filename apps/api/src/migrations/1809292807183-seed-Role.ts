@@ -6,10 +6,11 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 const lang = process.env.LANGUAGE;
 const entity = Role;
 const recordList = [
-    { id: 1, name: { en: 'Admin', uk: 'Адміністратор' }, type: RoleType.ADMIN },
-    { id: 2, name: { en: 'Employer', uk: 'Роботодавець' }, type: RoleType.EMPLOYER },
-    { id: 3, name: { en: 'Employee', uk: 'Працівник' }, type: RoleType.EMPLOYEE },
-    { id: 4, name: { en: 'Guest', uk: 'Гість' }, type: RoleType.GUEST },
+    { name: { en: 'System', uk: 'Система' }, type: RoleType.SYSTEM },
+    { name: { en: 'Admin', uk: 'Адміністратор' }, type: RoleType.ADMIN },
+    { name: { en: 'Employer', uk: 'Роботодавець' }, type: RoleType.EMPLOYER },
+    { name: { en: 'Employee', uk: 'Працівник' }, type: RoleType.EMPLOYEE },
+    { name: { en: 'Guest', uk: 'Гість' }, type: RoleType.GUEST },
 ];
 
 export class Seed1809292807183 implements MigrationInterface {
@@ -21,7 +22,7 @@ export class Seed1809292807183 implements MigrationInterface {
                 .insert()
                 .into(entity)
                 .values(langPipe(lang, recordList[n]))
-                .orUpdate(['name', 'type'], ['id'])
+                // .orUpdate(['name', 'type'], ['id'])
                 .execute();
         }
     }

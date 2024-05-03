@@ -1,6 +1,7 @@
+import { ILogger } from './logger.interface';
 import { IRole } from './role.interface';
 
-export interface IUser {
+export interface IUser extends ILogger {
     id: number;
     firstName: string;
     lastName: string;
@@ -14,5 +15,5 @@ export interface IUser {
 }
 
 export type ICreateUser = Pick<IUser, 'firstName' | 'lastName' | 'email' | 'password'>;
-export type IUpdateUser = Partial<ICreateUser>;
+export type IUpdateUser = Partial<Omit<IUser, 'id'>>;
 export type IPublicUserData = Partial<Omit<IUser, 'password' | 'refreshToken'>>;

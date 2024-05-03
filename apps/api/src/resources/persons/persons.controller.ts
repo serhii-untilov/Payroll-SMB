@@ -6,11 +6,9 @@ import {
     HttpCode,
     HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -18,6 +16,7 @@ import { IPerson } from '@repo/shared';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePersonDto } from './dto/create-person.dto';
+import { FindPersonDto } from './dto/find-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { PersonsService } from './persons.service';
 
@@ -67,5 +66,13 @@ export class PersonsController {
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
         const userId = req.user['sub'];
         return await this.personsService.remove(userId, id);
+    }
+
+    @Post('find')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async find(@Req() req: Request, @Body() person: FindPersonDto): Promise<IPerson | null> {
+        const userId = req.user['sub'];
+        return await this.personsService.find(userId, person);
     }
 }

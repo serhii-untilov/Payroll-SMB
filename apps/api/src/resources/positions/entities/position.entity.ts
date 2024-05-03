@@ -1,15 +1,5 @@
 import { IPosition } from '@repo/shared';
-import {
-    AfterInsert,
-    AfterLoad,
-    AfterUpdate,
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Company } from '../../companies/entities/company.entity';
 import { Person } from '../../persons/entities/person.entity';
@@ -52,13 +42,4 @@ export class Position extends Logger implements IPosition {
 
     @OneToMany(() => PositionHistory, (history) => history.position)
     history?: PositionHistory[];
-
-    name: string;
-
-    @AfterLoad()
-    @AfterInsert()
-    @AfterUpdate()
-    generateName(): void {
-        this.name = this.person?.id ? this.person.fullName : 'Vacancy';
-    }
 }

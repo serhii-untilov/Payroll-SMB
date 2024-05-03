@@ -11,33 +11,15 @@ export async function createPositionHistory(
     return response.data;
 }
 
-export type GetListParams = {
-    positionId: number;
-    relations?: boolean;
-    onDate?: Date;
-};
-
-export async function getPositionHistoryList({
-    positionId,
-    relations,
-    onDate,
-}: GetListParams): Promise<IPositionHistory[]> {
+export async function getPositionHistoryList(
+    positionId: number,
+    relations: boolean,
+): Promise<IPositionHistory[]> {
     const response = await api.get(
-        `/api/position-history/?position=${positionId}&relations=${!!relations}` + onDate
-            ? `&onDate=${onDate}`
-            : '',
-        {
-            headers: authHeader(),
-        },
+        `/api/position-history/?position=${positionId}&relations=${!!relations}`,
+        { headers: authHeader() },
     );
     return response.data;
-}
-
-export async function getPositionHistoryOnDate(
-    params: GetListParams,
-): Promise<IPositionHistory | null> {
-    const list = await getPositionHistoryList(params);
-    return list.length ? list[0] : null;
 }
 
 export async function getPositionHistory(
@@ -62,5 +44,18 @@ export async function updatePositionHistory(
 
 export async function deletePositionHistory(id: number): Promise<IPositionHistory> {
     const response = await api.delete(`/api/position-history/${id}`, { headers: authHeader() });
+    return response.data;
+}
+
+export async function getPositionHistoryOnDate(
+    positionId: number,
+    onDate: Date,
+    relations: boolean,
+): Promise<IPositionHistory | null> {
+    const response = await api.post(
+        `/api/position-history/`,
+        { positionId, onDate, relations },
+        { headers: authHeader() },
+    );
     return response.data;
 }

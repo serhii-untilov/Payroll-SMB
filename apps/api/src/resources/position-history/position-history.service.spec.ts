@@ -3,11 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
-import { UsersService } from '../users/users.service';
+import { AccessService } from '../access/access.service';
+import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PositionsService } from '../positions/positions.service';
 import { PositionHistory } from './entities/position-history.entity';
 import { PositionHistoryService } from './position-history.service';
-import { PositionsService } from '../positions/positions.service';
-import { AccessService } from '../access/access.service';
 
 describe('PositionHistoryService', () => {
     let service: PositionHistoryService;
@@ -21,8 +21,8 @@ describe('PositionHistoryService', () => {
                     provide: getRepositoryToken(PositionHistory),
                     useFactory: repositoryMockFactory,
                 },
-                { provide: UsersService, useValue: createMock<UsersService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
+                { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();

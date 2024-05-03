@@ -1,89 +1,106 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreatePersonDto } from './dto/create-person.dto';
-import { UpdatePersonDto } from './dto/update-person.dto';
+import {
+    BadRequestException,
+    Inject,
+    Injectable,
+    NotFoundException,
+    forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Person } from './entities/person.entity';
-import { Repository } from 'typeorm';
-import { UsersService } from '../users/users.service';
-import { AccessService } from '../access/access.service';
 import { AccessType, ResourceType } from '@repo/shared';
+import { Repository } from 'typeorm';
+import { AccessService } from '../access/access.service';
+import { CreatePersonDto } from './dto/create-person.dto';
+import { FindPersonDto } from './dto/find-person.dto';
+import { UpdatePersonDto } from './dto/update-person.dto';
+import { Person } from './entities/person.entity';
 
 @Injectable()
 export class PersonsService {
+    public readonly resourceType = ResourceType.PERSON;
+
     constructor(
         @InjectRepository(Person)
-        private personsRepository: Repository<Person>,
-        private readonly usersService: UsersService,
-        private readonly accessService: AccessService,
-        public readonly resourceType: ResourceType.PERSON,
+        private repository: Repository<Person>,
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
     ) {}
 
-    async create(userId: number, person: CreatePersonDto): Promise<Person> {
-        const where: UpdatePersonDto[] = [
+    async create(userId: number, payload: CreatePersonDto): Promise<Person> {
+        const where: FindPersonDto[] = [
             {
-                firstName: person.firstName,
-                lastName: person.lastName,
-                ...(person.middleName ? { middleName: person.middleName } : {}),
-                ...(person.birthDate ? { birthDate: person.birthDate } : {}),
+                firstName: payload.firstName,
+                lastName: payload.lastName,
+                ...(payload.middleName ? { middleName: payload.middleName } : {}),
+                ...(payload.birthDate ? { birthDate: payload.birthDate } : {}),
+                ...(payload.taxId ? { taxId: payload.taxId } : {}),
             },
         ];
-        if (person.taxId) {
-            where.push({
-                taxId: person.taxId,
-            });
-        }
-        const existing = await this.personsRepository.findOne({ where });
-        if (existing) {
+        const exists = await this.repository.findOne({ where });
+        if (exists) {
             throw new BadRequestException(
-                `Person '${person.firstName} ${person.lastName}' already exists.`,
+                `Person '${payload.firstName} ${payload.lastName}' already exists.`,
             );
         }
-        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.CREATE);
-        return await this.personsRepository.save(person);
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+        return await this.repository.save({
+            ...payload,
+            createdUserId: userId,
+            updatedUserId: userId,
+        });
     }
 
     async findAll(userId: number): Promise<Person[]> {
-        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
-        return await this.personsRepository.find();
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        return await this.repository.find();
     }
 
     async findOne(userId: number, id: number): Promise<Person> {
-        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.ACCESS);
-        const person = await this.personsRepository.findOneBy({ id });
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        const person = await this.repository.findOneBy({ id });
         if (!person) {
             throw new NotFoundException(`Person could not be found.`);
         }
         return person;
     }
 
-    async update(userId: number, id: number, data: UpdatePersonDto): Promise<Person> {
-        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.UPDATE);
-        const person = await this.personsRepository.findOneBy({ id });
-        if (!person) {
-            throw new NotFoundException(`Person could not be found.`);
-        }
-        await this.personsRepository.save({ id, ...data });
-        const updated = await this.personsRepository.findOneOrFail({ where: { id } });
-        return updated;
+    async update(userId: number, id: number, payload: UpdatePersonDto): Promise<Person> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+        await this.repository.findOneOrFail({ where: { id } });
+        return await this.repository.save({ ...payload, id, updatedUser: userId });
     }
 
     async remove(userId: number, id: number): Promise<Person> {
-        const roleType = await this.usersService.getUserRoleTypeOrException(userId);
-        this.accessService.availableOrException(roleType, this.resourceType, AccessType.DELETE);
-        const person = await this.personsRepository.findOneBy({ id });
-        if (!person) {
-            throw new NotFoundException(`Person could not be found.`);
-        }
-        const deleted = {
-            ...person,
-            deletedDate: new Date(),
-            deletedUserId: userId,
-        } as Person;
-        await this.personsRepository.save(deleted);
-        return deleted;
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+        await this.repository.findOneOrFail({ where: { id } });
+        return await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
+    }
+
+    async find(userId: number, params: FindPersonDto): Promise<Person | null> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        return await this.repository.findOne({ where: params });
     }
 }

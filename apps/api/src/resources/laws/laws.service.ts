@@ -1,55 +1,26 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateLawDto } from './dto/create-law.dto';
-import { UpdateLawDto } from './dto/update-law.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Law } from './entities/law.entity';
+import { ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
+import { Law } from './entities/law.entity';
 
 @Injectable()
 export class LawsService {
+    public readonly resourceType = ResourceType.LAW;
     constructor(
         @InjectRepository(Law)
-        private lawsRepository: Repository<Law>,
+        private repository: Repository<Law>,
     ) {}
 
-    async create(law: CreateLawDto): Promise<Law> {
-        const existing = await this.lawsRepository.findOne({ where: { name: law.name } });
-        if (existing) {
-            throw new BadRequestException(`Law '${law.name}' already exists.`);
-        }
-        const { name } = law;
-        const newLaw = await this.lawsRepository.save({ name });
-        return newLaw;
-    }
-
     async findAll(): Promise<Law[]> {
-        return await this.lawsRepository.find();
+        return await this.repository.find();
     }
 
     async findOne(id: number): Promise<Law> {
-        const law = await this.lawsRepository.findOneBy({ id });
+        const law = await this.repository.findOneBy({ id });
         if (!law) {
             throw new NotFoundException(`Law could not be found.`);
         }
-        return law;
-    }
-
-    async update(id: number, data: UpdateLawDto): Promise<Law> {
-        const law = await this.lawsRepository.findOneBy({ id });
-        if (!law) {
-            throw new NotFoundException(`Law could not be found.`);
-        }
-        await this.lawsRepository.save({ id, ...data });
-        const updated = await this.lawsRepository.findOneOrFail({ where: { id } });
-        return updated;
-    }
-
-    async remove(id: number): Promise<Law> {
-        const law = await this.lawsRepository.findOneBy({ id });
-        if (!law) {
-            throw new NotFoundException(`Law could not be found.`);
-        }
-        await this.lawsRepository.remove(law);
         return law;
     }
 }

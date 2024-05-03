@@ -1,5 +1,7 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { RoleType } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
+import { getRoleIdByType } from 'src/utils/getSystemRoleId';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 import { User } from '../resources/users/entities/user.entity';
 import { langPipe } from '../utils/langPipe';
 
@@ -7,28 +9,39 @@ const lang = process.env.LANGUAGE;
 const entity = User;
 const recordList = [
     {
-        id: 1,
+        firstName: { en: 'System', uk: 'Система' },
+        lastName: '',
+        email: 'system@payroll.smb',
+        password: null, // To prevent this user from logging in.
+        roleType: RoleType.SYSTEM || 'system',
+    },
+    {
         firstName: { en: 'Admin', uk: 'Адміністратор' },
         lastName: '',
-        email: 'admin@mail.com',
+        email: 'admin@payroll.smb',
         password: 'admin',
-        roleId: 1,
+        roleType: RoleType.ADMIN || 'admin',
     },
     {
-        id: 2,
         firstName: { en: 'User', uk: 'Користувач' },
         lastName: '',
-        email: 'user@mail.com',
+        email: 'user@payroll.smb',
         password: 'user',
-        roleId: 2,
+        roleType: RoleType.EMPLOYER || 'employer',
     },
     {
-        id: 3,
+        firstName: { en: 'User', uk: 'Працівник' },
+        lastName: '',
+        email: 'employee@payroll.smb',
+        password: 'employee',
+        roleType: RoleType.EMPLOYEE || 'employee',
+    },
+    {
         firstName: { en: 'Guest', uk: 'Гість' },
         lastName: '',
-        email: 'guest@mail.com',
+        email: 'guest@payroll.smb',
         password: 'guest',
-        roleId: 4,
+        roleType: RoleType.GUEST || 'guest',
     },
 ];
 
@@ -38,12 +51,15 @@ export class Seed1809901090804 implements MigrationInterface {
         for (let n = 0; n < recordList.length; n++) {
             const values = langPipe(lang, recordList[n]);
             const hashedPassword = bcrypt.hashSync(values.password, 10);
+            const roleId = await getRoleIdByType(dataSource, values);
+            delete values.roleType;
+            values['roleId'] = roleId;
             await dataSource
                 .createQueryBuilder()
                 .insert()
                 .into(entity)
                 .values({ ...values, password: hashedPassword })
-                .orUpdate(['firstName', 'lastName', 'email', 'password'], ['id'])
+                .orUpdate(['firstName', 'lastName', 'password'], ['email'])
                 .execute();
         }
     }
@@ -56,7 +72,7 @@ export class Seed1809901090804 implements MigrationInterface {
                 .createQueryBuilder()
                 .delete()
                 .from(entity)
-                .where('firstName = :firstName', { firstName: record.firstName })
+                .where('email = :email', { email: record.email })
                 .execute();
         }
     }

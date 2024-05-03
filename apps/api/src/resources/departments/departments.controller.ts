@@ -36,25 +36,24 @@ export class DepartmentsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(
+        @Req() req: Request,
         @Query('companyId', ParseIntPipe) companyId: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
     ) {
-        return await this.departmentsService.findAll({
-            companyId,
-            relations: { parentDepartment: relations },
-        });
+        const userId = req.user['sub'];
+        return await this.departmentsService.findAll(userId, companyId, relations);
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.departmentsService.findOne({
-            where: { id },
-            relations: {
-                parentDepartment: true,
-            },
-        });
+    async findOne(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Query('relations', ParseBoolPipe) relations: boolean,
+    ) {
+        const userId = req.user['sub'];
+        return await this.departmentsService.findOne(userId, id, relations);
     }
 
     @Patch(':id')
