@@ -45,7 +45,7 @@ const recordList = [
     ...generateAccess_ReadOnly(RoleType.EMPLOYER, ResourceType.ROLE_ACCESS),
     ...generateAccess_ReadOnly(RoleType.EMPLOYER, ResourceType.USER_ACCESS),
     ...generateAccess_ReadOnly(RoleType.EMPLOYER, ResourceType.ROLE),
-    ...generateAccess_ReadOnly(RoleType.EMPLOYER, ResourceType.USER),
+    ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.USER),
     ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.PROFILE),
     ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.DASHBOARD),
     ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.COMPANY),
