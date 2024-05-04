@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     ConflictException,
     ForbiddenException,
     Inject,
@@ -7,14 +8,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-    AccessType,
-    IPublicUserData,
-    IUser,
-    ResourceType,
-    RoleType,
-    canCreateUser,
-} from '@repo/shared';
+import { AccessType, IPublicUserData, IUser, ResourceType, RoleType } from '@repo/shared';
 import * as _ from 'lodash';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
@@ -36,21 +30,34 @@ export class UsersService {
         private rolesService: RolesService,
     ) {}
 
-    async create(userId: number | null, payload: CreateUserDto): Promise<User> {
+    async register(payload: CreateUserDto): Promise<User> {
         const exists = await this.repository.findOneBy({ email: payload.email });
         if (exists) {
             throw new ConflictException('User already exists.');
         }
-        if (userId) {
-            await this.accessService.availableForUserOrFail(
-                userId,
-                this.resourceType,
-                AccessType.CREATE,
-            );
+        if (!payload.roleId) {
+            throw new BadRequestException(`Role should be defined.`);
         }
-        const parentRoleType = await this.getUserRoleTypeOrException(userId);
-        const childRoleType = await this.rolesService.getRoleType(payload.roleId);
-        if (!canCreateUser(parentRoleType, childRoleType)) {
+        const roleType = await this.rolesService.getRoleType(payload.roleId);
+        if (!this.accessService.canRegisterUserByRoleType(roleType)) {
+            throw new BadRequestException(`An invalid role for user registration.`);
+        }
+        return await this.repository.save(payload);
+    }
+
+    async create(userId: number, payload: CreateUserDto): Promise<User> {
+        const exists = await this.repository.findOneBy({ email: payload.email });
+        if (exists) {
+            throw new ConflictException('User already exists.');
+        }
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+        const currentRoleType = await this.getUserRoleTypeOrFail(userId);
+        const newRoleType = await this.rolesService.getRoleType(payload.roleId);
+        if (!this.accessService.canOperateRoleType(currentRoleType, newRoleType)) {
             throw new ForbiddenException(`User doesn't have access to the requested operation.`);
         }
         return await this.repository.save({
@@ -82,23 +89,22 @@ export class UsersService {
     }
 
     async update(userId: number, id: number, payload: UpdateUserDto): Promise<User> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-        const user = await this.repository.findOneOrFail({ where: { id } });
-        const parentRoleType = await this.getUserRoleTypeOrException(userId);
-        let childRoleType = await this.rolesService.getRoleType(user.roleId);
-        if (!canCreateUser(parentRoleType, childRoleType)) {
-            throw new ForbiddenException(`User doesn't have access to the requested operation.`);
+        if (userId !== id) {
+            await this.accessService.availableForUserOrFail(
+                userId,
+                this.resourceType,
+                AccessType.UPDATE,
+            );
         }
         if (payload?.roleId) {
-            childRoleType = await this.rolesService.getRoleType(payload.roleId);
-            if (!canCreateUser(parentRoleType, childRoleType)) {
-                throw new ForbiddenException(
-                    `User doesn't have access to the requested operation.`,
-                );
+            const userRoleType = await this.getUserRoleTypeOrFail(userId);
+            const updateRoleType = await this.rolesService.getRoleType(payload.roleId);
+            if (userId !== id || userRoleType != updateRoleType) {
+                if (!this.accessService.canOperateRoleType(userRoleType, updateRoleType)) {
+                    throw new ForbiddenException(
+                        `User doesn't have access to the requested operation.`,
+                    );
+                }
             }
         }
         return await this.repository.save({ id, ...payload, updatedUserId: userId });
@@ -111,9 +117,9 @@ export class UsersService {
             AccessType.DELETE,
         );
         const user = await this.repository.findOneOrFail({ where: { id } });
-        const parentRoleType = await this.getUserRoleTypeOrException(userId);
-        const childRoleType = await this.rolesService.getRoleType(user.roleId);
-        if (!canCreateUser(parentRoleType, childRoleType)) {
+        const userRoleType = await this.getUserRoleTypeOrFail(userId);
+        const deleteRoleType = await this.rolesService.getRoleType(user.roleId);
+        if (userId !== id && !this.accessService.canOperateRoleType(userRoleType, deleteRoleType)) {
             throw new ForbiddenException(`User doesn't have access to the requested operation.`);
         }
         return await this.repository.save({
@@ -136,7 +142,7 @@ export class UsersService {
         return user?.role?.type;
     }
 
-    async getUserRoleTypeOrException(id: number): Promise<string> {
+    async getUserRoleTypeOrFail(id: number): Promise<string> {
         const roleType = await this.getUserRoleType(id);
         if (!roleType) {
             throw new ForbiddenException(`User doesn't have access to the requested resource.`);

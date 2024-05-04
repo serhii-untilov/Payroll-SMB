@@ -43,24 +43,24 @@ export class UsersController {
     @HttpCode(HttpStatus.OK)
     async findAll(
         @Req() req: Request,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPublicUserData[]> {
         const userId: number = req.user['sub'];
-        const users = await this.usersService.findAll(userId, { relations: { role: relations } });
+        const users = await this.usersService.findAll(userId, { relations: { role: !!relations } });
         return users.map((user) => UsersService.toPublic(user));
     }
 
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(AccessTokenGuard)
     @Get('user')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     async getCurrentUser(
         @Req() req: Request,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPublicUserData> {
         const id: number = req.user['sub'];
         const user = await this.usersService.findOne({
             where: { id },
-            relations: { role: relations },
+            relations: { role: !!relations },
         });
         return UsersService.toPublic(user);
     }
@@ -71,11 +71,11 @@ export class UsersController {
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations?: boolean,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations?: boolean,
     ): Promise<IPublicUserData> {
         const user = await this.usersService.findOne({
             where: { id },
-            relations: { role: relations },
+            relations: { role: !!relations },
         });
         return UsersService.toPublic(user);
     }
@@ -111,9 +111,9 @@ export class UsersController {
     async userCompanyList(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IUserCompany[]> {
         const userId = req.user['sub'];
-        return await this.usersCompanyService.getUserCompanyList(userId, id, relations);
+        return await this.usersCompanyService.getUserCompanyList(userId, id, !!relations);
     }
 }

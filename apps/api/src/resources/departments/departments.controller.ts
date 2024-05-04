@@ -41,7 +41,7 @@ export class DepartmentsController {
         @Query('relations', ParseBoolPipe) relations: boolean,
     ) {
         const userId = req.user['sub'];
-        return await this.departmentsService.findAll(userId, companyId, relations);
+        return await this.departmentsService.findAll(userId, companyId, !!relations);
     }
 
     @Get(':id')
@@ -50,10 +50,10 @@ export class DepartmentsController {
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ) {
         const userId = req.user['sub'];
-        return await this.departmentsService.findOne(userId, id, relations);
+        return await this.departmentsService.findOne(userId, id, !!relations);
     }
 
     @Patch(':id')

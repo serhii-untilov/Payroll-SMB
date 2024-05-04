@@ -43,10 +43,10 @@ export class PositionHistoryController {
     async findAll(
         @Req() req: Request,
         @Query('positionId', ParseIntPipe) positionId: number,
-        @Query('relations', ParseBoolPipe) relations: boolean = false,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPositionHistory[]> {
         const userId = req.user['sub'];
-        return await this.positionHistoryService.findAll(userId, positionId, relations);
+        return await this.positionHistoryService.findAll(userId, positionId, !!relations);
     }
 
     @Get(':id')
@@ -55,10 +55,10 @@ export class PositionHistoryController {
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean = false,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPositionHistory> {
         const userId = req.user['sub'];
-        return await this.positionHistoryService.findOne(userId, id, relations);
+        return await this.positionHistoryService.findOne(userId, id, !!relations);
     }
 
     @Patch(':id')

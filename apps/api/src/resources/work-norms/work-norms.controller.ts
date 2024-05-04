@@ -35,8 +35,8 @@ export class WorkNormsController {
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(@Query('relations', ParseBoolPipe) relations: boolean) {
-        return await this.workNormsService.findAll(relations);
+    async findAll(@Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean) {
+        return await this.workNormsService.findAll(!!relations);
     }
 
     @Get(':id')
@@ -44,9 +44,9 @@ export class WorkNormsController {
     @HttpCode(HttpStatus.OK)
     async findOne(
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ) {
-        return await this.workNormsService.findOne(id, relations);
+        return await this.workNormsService.findOne(id, !!relations);
     }
 
     @Patch(':id')

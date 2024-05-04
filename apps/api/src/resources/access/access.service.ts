@@ -7,7 +7,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType, RoleType } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import {
@@ -103,7 +103,7 @@ export class AccessService {
     }
 
     async availableForUser(params: AvailableAccessUserDto): Promise<boolean> {
-        const roleType = await this.usersService.getUserRoleTypeOrException(params.userId);
+        const roleType = await this.usersService.getUserRoleTypeOrFail(params.userId);
         return this.available({
             roleType,
             resourceType: params.resourceType,
@@ -150,5 +150,31 @@ export class AccessService {
                 `User doesn't have access to the requested Company's resource.`,
             );
         }
+    }
+
+    canRegisterUserByRoleType(roleType: string): boolean {
+        const canRegister = [RoleType.EMPLOYER, RoleType.EMPLOYEE, RoleType.GUEST];
+        return canRegister.includes(roleType as RoleType);
+    }
+
+    canOperateRoleType(parentUserRoleType: string, childUserRoleType: string) {
+        const whoMadeWho = [
+            // ADMIN
+            { parent: RoleType.ADMIN, child: RoleType.ADMIN },
+            { parent: RoleType.ADMIN, child: RoleType.EMPLOYER },
+            { parent: RoleType.ADMIN, child: RoleType.OBSERVER },
+            { parent: RoleType.ADMIN, child: RoleType.EMPLOYEE },
+            { parent: RoleType.ADMIN, child: RoleType.GUEST },
+            // EMPLOYER
+            { parent: RoleType.EMPLOYER, child: RoleType.EMPLOYEE },
+            { parent: RoleType.EMPLOYER, child: RoleType.OBSERVER },
+            { parent: RoleType.EMPLOYER, child: RoleType.EMPLOYEE },
+            { parent: RoleType.EMPLOYER, child: RoleType.GUEST },
+        ];
+        return (
+            whoMadeWho.findIndex(
+                (o) => o.parent === parentUserRoleType && o.child === childUserRoleType,
+            ) >= 0
+        );
     }
 }

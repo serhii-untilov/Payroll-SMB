@@ -30,6 +30,7 @@ import useLocale from '../../../hooks/useLocale';
 import { createPosition, getPosition, updatePosition } from '../../../services/position.service';
 import {
     createPositionHistory,
+    getPositionHistoryOnDate,
     updatePositionHistory,
 } from '../../../services/positionHistory.service';
 import { getDirtyValues } from '../../../services/utils';
@@ -88,7 +89,10 @@ export function JobAndPay(props: Props) {
                 ? await getPosition({ id: positionId, relations: true })
                 : { companyId: company?.id, dateFrom: minDate(), dateTo: maxDate(), rate: 1 };
             setPosition(position);
-            const positionHistory = positionId ? getPositionHistoryOnDate() : {};
+            const onDate = new Date(); // TODO
+            const positionHistory = positionId
+                ? getPositionHistoryOnDate(positionId, onDate, true)
+                : {};
             return formSchema.cast({ ...position_formData(position, payPeriod || new Date()) });
         },
         enabled: !!company && !!payPeriod,

@@ -19,21 +19,3 @@ export interface IRole {
 
 export type ICreateRole = Omit<IRole, 'id'>;
 export type IUpdateRole = Partial<ICreateRole>;
-
-export function canCreateUser(parentUserRoleType: string, childUserRoleType: string) {
-    const whoMadeWho = [
-        // ADMIN
-        { parent: RoleType.ADMIN, child: RoleType.ADMIN },
-        { parent: RoleType.ADMIN, child: RoleType.EMPLOYER },
-        { parent: RoleType.ADMIN, child: RoleType.EMPLOYEE },
-        { parent: RoleType.ADMIN, child: RoleType.GUEST },
-        // EMPLOYER
-        { parent: RoleType.EMPLOYER, child: RoleType.EMPLOYEE },
-        { parent: RoleType.EMPLOYER, child: RoleType.GUEST },
-    ];
-    return (
-        whoMadeWho.findIndex(
-            (o) => o.parent === parentUserRoleType && o.child === childUserRoleType,
-        ) >= 0
-    );
-}
