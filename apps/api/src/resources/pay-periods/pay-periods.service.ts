@@ -7,7 +7,13 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, PayPeriodState, PaymentSchedule, ResourceType } from '@repo/shared';
+import {
+    AccessType,
+    PayPeriodState,
+    PaymentSchedule,
+    ResourceType,
+    formatPeriod,
+} from '@repo/shared';
 import {
     addDays,
     addMonths,
@@ -29,7 +35,6 @@ import {
     Not,
     Repository,
 } from 'typeorm';
-import { formatPeriod } from '../../utils/date';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
@@ -58,7 +63,7 @@ export class PayPeriodsService {
         });
         if (existing) {
             throw new ConflictException(
-                `Pay period '${formatPeriod(payload.dateFrom, payload.dateTo)}' already exists.`,
+                `Pay Period '${formatPeriod(payload.dateFrom, payload.dateTo)}' already exists.`,
             );
         }
         const intersection = await this.repository.findOneBy({
@@ -68,7 +73,7 @@ export class PayPeriodsService {
         });
         if (intersection) {
             throw new ConflictException(
-                `Pay period '${formatPeriod(payload.dateFrom, payload.dateTo)}' intersects with period '${formatPeriod(intersection.dateFrom, intersection.dateTo)}'.`,
+                `Pay Period '${formatPeriod(payload.dateFrom, payload.dateTo)}' intersects with period '${formatPeriod(intersection.dateFrom, intersection.dateTo)}'.`,
             );
         }
         await this.accessService.availableForUserCompanyOrFail(

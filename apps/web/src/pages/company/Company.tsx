@@ -1,6 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageTitle } from '../../components/layout/PageTitle';
 import { Tab } from '../../components/layout/Tab';
@@ -9,16 +9,33 @@ import { Tabs } from '../../components/layout/Tabs';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { AccountList } from './details/AccountList';
-import { AccountingDetails } from './details/CompanyDetails';
+import { CompanyDetails } from './details/CompanyDetails';
 import { DepartmentList } from './details/DepartmentList';
 import { ManagerList } from './details/ManagerList';
+import { getCompany } from '../../services/company.service';
+import { ICompany } from '@repo/shared';
+import { IconButton } from '@mui/material';
+import { ArrowBackIosNewRounded } from '@mui/icons-material';
 
-export default function Company() {
+type Props = {
+    showGoBack: boolean;
+};
+
+export default function Company(props: Props) {
+    const { companyId } = useParams();
     const [value, setValue] = useState(0);
     const { t } = useTranslation();
-    const { company } = useAppContext();
+    const [company, setCompany] = useState<ICompany | null>();
     const { locale } = useLocale();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchCompany = async () => {
+            const company = companyId ? await getCompany(+companyId) : null;
+            setCompany(company);
+        };
+        fetchCompany();
+    }, [companyId, setCompany]);
 
     useEffect(() => {}, [company, locale]);
 
@@ -26,7 +43,7 @@ export default function Company() {
         return company?.id ? company?.name || '' : t('New Company');
     };
 
-    const onCancel = () => {
+    const onGoBack = () => {
         navigate(-1);
     };
 
@@ -37,34 +54,35 @@ export default function Company() {
     return (
         <PageLayout>
             <PageTitle>
-                {/* <IconButton aria-label="Go Back" color="primary" sx={{ mr: 1 }} onClick={onCancel}>
-                    <ArrowBackIosNewRounded />
-                </IconButton> */}
+                {companyId ? null : (
+                    <IconButton
+                        aria-label="Go Back"
+                        color="primary"
+                        sx={{ mr: 1 }}
+                        onClick={onGoBack}
+                    >
+                        <ArrowBackIosNewRounded />
+                    </IconButton>
+                )}
                 {generatePageTitle()}
             </PageTitle>
-            <Tabs
-                id="company__details_tabs"
-                value={value}
-                onChange={handleChange}
-                // textColor={'inherit'}
-                // indicatorColor="primary"
-            >
+            <Tabs id="company__details_tabs" value={value} onChange={handleChange}>
                 <Tab label={t('Accounting Details')} />
                 <Tab label={t('Departments')} disabled={!company?.id} />
                 <Tab label={t('Managers')} disabled={!company?.id} />
                 <Tab label={t('Accounts')} disabled={!company?.id} />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <AccountingDetails companyId={company?.id} />
+                <CompanyDetails companyId={Number(companyId)} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <DepartmentList companyId={company?.id} />
+                <DepartmentList companyId={Number(companyId)} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <ManagerList companyId={company?.id} />
+                <ManagerList companyId={Number(companyId)} />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <AccountList companyId={company?.id} />
+                <AccountList companyId={Number(companyId)} />
             </TabPanel>
         </PageLayout>
     );

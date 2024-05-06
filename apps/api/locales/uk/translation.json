@@ -80,7 +80,7 @@
     "Offers": "Кандидати",
     "All": "Всі",
     "current": "поточний",
-    "Pay period": "Розрахунковий період",
+    "Pay Period": "Розрахунковий період",
     "Job": "Посада",
     "Card Number": "Таб. №",
     "Sequence Number": "Порядковий №",
@@ -105,5 +105,8 @@
     "Notes": "Нотатки",
     "Vacancy": "Вакансія",
     "Positions": "Штатні одиниці",
-    "Accounting Details": "Параметри обліку"
+    "Accounting Details": "Параметри обліку",
+    "Role": "Роль",
+    "User Role": "Роль користувача",
+    "New Company": "Нове підприємство"
 }

@@ -29,7 +29,7 @@ export default function People() {
             <PageTitle>{t('People')}</PageTitle>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
-                    <InputLabel>{t('Pay period')}</InputLabel>
+                    <InputLabel>{t('Pay Period')}</InputLabel>
                     <PayPeriod sx={{ fontWeight: 'bold' }} />
                 </Grid>
             </Grid>

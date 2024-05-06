@@ -2,8 +2,7 @@ import axios from 'axios';
 import { redirect } from 'react-router-dom';
 import { getUserRefreshToken, removeUserTokens, saveUserTokens } from '../services/token.service';
 import authHeader from '../services/auth-header';
-import { parseISO } from 'date-fns';
-import { handleDates, isIsoDateString, isShortDateString } from '@repo/shared';
+import { objectStringDateToDate } from '@repo/shared';
 
 export type ApiError = {
     error?: string;
@@ -90,6 +89,6 @@ function getApiError(apiError: ApiError): ApiError {
 // https://stackoverflow.com/questions/65692061/casting-dates-properly-from-an-api-response-in-typescript
 
 api.interceptors.response.use((originalResponse) => {
-    handleDates(originalResponse.data);
+    objectStringDateToDate(originalResponse.data);
     return originalResponse;
 });

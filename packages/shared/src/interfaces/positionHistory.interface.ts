@@ -71,4 +71,13 @@ export type IUpdatePositionHistory = ICreatePositionHistory;
 export interface IFindPositionHistory extends Partial<IPositionHistory> {
     onDate?: Date;
     onPayPeriodDate?: Date;
+    relations?: boolean;
+}
+
+export function castAsPositionHistory(obj: any): IPositionHistory {
+    const ret = { ...obj };
+    delete ret.relations;
+    delete ret.onDate;
+    delete ret.onPayPeriodDate;
+    return ret;
 }

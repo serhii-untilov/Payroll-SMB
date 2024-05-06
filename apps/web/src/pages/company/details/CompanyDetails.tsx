@@ -57,12 +57,15 @@ type Props = {
     companyId: number | undefined;
 };
 
-export function AccountingDetails(props: Props) {
+export function CompanyDetails(props: Props) {
+    // const { companyId } = props;
     const [companyId, setCompanyId] = useState(props.companyId);
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const { locale } = useLocale();
     const { t } = useTranslation();
     const queryClient = useQueryClient();
+
+    useEffect(() => {});
 
     const {
         data: company,
@@ -74,7 +77,7 @@ export function AccountingDetails(props: Props) {
         queryFn: async () => {
             return formSchema.cast(companyId ? await getCompany(companyId) : defaultValues);
         },
-        enabled: !!companyId,
+        // enabled: !!companyId,
     });
 
     const {
@@ -130,7 +133,7 @@ export function AccountingDetails(props: Props) {
     }
 
     if (isCompanyError) {
-        setCurrentCompany(null);
+        // setCurrentCompany(null);
         return enqueueSnackbar(`${companyError.name}\n${companyError.message}`, {
             variant: 'error',
         });
@@ -246,7 +249,7 @@ export function AccountingDetails(props: Props) {
                         />
                     </Grid>
                     <Grid item xs={12} sm={8} md={6}>
-                        <InputLabel>{t('Pay period')}</InputLabel>
+                        <InputLabel>{t('Pay Period')}</InputLabel>
                         <Controller
                             name={'payPeriod'}
                             control={control}

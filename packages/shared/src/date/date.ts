@@ -12,7 +12,7 @@ export function isShortDateString(value: any): boolean {
 }
 
 // Convert strings to dates in given object
-export function handleDates(obj: any) {
+export function objectStringDateToDate<T>(obj: T): T {
     if (obj === null || obj === undefined || typeof obj !== 'object') return obj;
 
     for (const key of Object.keys(obj)) {
@@ -22,9 +22,25 @@ export function handleDates(obj: any) {
         } else if (isShortDateString(value)) {
             obj[key] = new Date(value);
         } else if (typeof value === 'object') {
-            handleDates(value);
+            objectStringDateToDate(value);
         }
     }
+    return obj;
+}
+
+// Convert strings to dates in given object
+export function objectStringDateToShort<T>(obj: T): T {
+    if (obj === null || obj === undefined || typeof obj !== 'object') return obj;
+
+    for (const key of Object.keys(obj)) {
+        const value = obj[key];
+        if (isIsoDateString(value)) {
+            obj[key] = formatDate(parseISO(value));
+        } else if (typeof value === 'object') {
+            objectStringDateToDate(value);
+        }
+    }
+    return obj;
 }
 
 export function monthBegin(date: Date): Date {

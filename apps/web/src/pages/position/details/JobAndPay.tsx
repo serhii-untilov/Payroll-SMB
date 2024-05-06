@@ -30,12 +30,13 @@ import useLocale from '../../../hooks/useLocale';
 import { createPosition, getPosition, updatePosition } from '../../../services/position.service';
 import {
     createPositionHistory,
-    getPositionHistoryOnDate,
+    findLastPositionHistoryOnPayPeriodDate,
     updatePositionHistory,
 } from '../../../services/positionHistory.service';
 import { getDirtyValues } from '../../../services/utils';
 import { FormAutocomplete } from '../../../components/form/FormAutocomplete';
 import { SelectOrCreatePerson } from '../../../components/select/SelectOrCreatePerson';
+import { getPerson } from '../../../services/person.service';
 
 const formSchema = yup.object().shape({
     // Position
@@ -74,7 +75,6 @@ export function JobAndPay(props: Props) {
     const [positionId, setPositionId] = useState(props.positionId);
     const [position, setPosition] = useState<Partial<IPosition>>({});
     const [positionHistory, setPositionHistory] = useState<Partial<IPositionHistory>>({});
-    const [person, setPerson] = useState<Partial<IPerson>>({});
 
     useEffect(() => {}, [company]);
 
@@ -87,13 +87,20 @@ export function JobAndPay(props: Props) {
         queryFn: async () => {
             const position = positionId
                 ? await getPosition({ id: positionId, relations: true })
-                : { companyId: company?.id, dateFrom: minDate(), dateTo: maxDate(), rate: 1 };
+                : {
+                      companyId: company?.id,
+                      dateFrom: minDate(),
+                      dateTo: maxDate(),
+                      rate: 1,
+                      personId: null,
+                  };
             setPosition(position);
-            const onDate = new Date(); // TODO
-            const positionHistory = positionId
-                ? getPositionHistoryOnDate(positionId, onDate, true)
-                : {};
-            return formSchema.cast({ ...position_formData(position, payPeriod || new Date()) });
+            const positionHistory =
+                positionId && payPeriod
+                    ? findLastPositionHistoryOnPayPeriodDate(positionId, payPeriod, true)
+                    : {};
+            setPositionHistory(positionHistory);
+            return formSchema.cast({ ...position_formData(position, positionHistory) });
         },
         enabled: !!company && !!payPeriod,
     });
@@ -138,7 +145,7 @@ export function JobAndPay(props: Props) {
         if (!formData) {
             return;
         }
-        if (onSubmitCallback) onSubmitCallback();
+        if (props.onSubmitCallback) props.onSubmitCallback();
         const positionData = formData_Position(data);
         const positionHistoryData = formData_PositionHistory(data);
         const positionDirtyValues = getDirtyValues(dirtyFields, positionData);
@@ -168,7 +175,7 @@ export function JobAndPay(props: Props) {
             }
             // reset(await getFormData(formData.id));
             queryClient.invalidateQueries({ queryKey: ['Job & Pay', positionId] });
-            positionId = pos.id;
+            setPositionId(pos.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -180,7 +187,7 @@ export function JobAndPay(props: Props) {
     };
 
     const onCancel = () => {
-        reset(formSchema.cast({ ...position_formData(position, payPeriod || new Date()) }));
+        reset(formSchema.cast({ ...position_formData(position, positionHistory) }));
         queryClient.invalidateQueries({ queryKey: ['Job & Pay', positionId] });
     };
 
@@ -342,7 +349,10 @@ export function JobAndPay(props: Props) {
     );
 }
 
-function position_formData(position: Partial<IPosition>, onDate: Date): Partial<FormType> {
+function position_formData(
+    position: Partial<IPosition>,
+    positionHistory: Partial<IPositionHistory>,
+): Partial<FormType> {
     const {
         id,
         companyId,
@@ -354,8 +364,6 @@ function position_formData(position: Partial<IPosition>, onDate: Date): Partial<
         dateTo,
         deletedUserId,
     } = position;
-    const positionHistory: Partial<IPositionHistory> =
-        position?.history?.find((o) => o.dateFrom <= onDate && o.dateTo >= onDate) || {};
     const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = positionHistory;
     return {
         // Position fields

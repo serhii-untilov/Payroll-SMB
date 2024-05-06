@@ -1,4 +1,9 @@
-import { ICreatePositionHistory, IPositionHistory, IUpdatePositionHistory } from '@repo/shared';
+import {
+    ICreatePositionHistory,
+    IFindPositionHistory,
+    IPositionHistory,
+    IUpdatePositionHistory,
+} from '@repo/shared';
 import { api } from '../api';
 import authHeader from './auth-header';
 
@@ -47,15 +52,14 @@ export async function deletePositionHistory(id: number): Promise<IPositionHistor
     return response.data;
 }
 
-export async function getPositionHistoryOnDate(
+export async function findLastPositionHistoryOnPayPeriodDate(
     positionId: number,
-    onDate: Date,
+    date: Date,
     relations: boolean,
 ): Promise<IPositionHistory | null> {
-    const response = await api.post(
-        `/api/position-history/`,
-        { positionId, onDate, relations },
-        { headers: authHeader() },
-    );
+    const params: IFindPositionHistory = { positionId, onPayPeriodDate: date, relations };
+    const response = await api.post(`/api/position-history/find-last`, params, {
+        headers: authHeader(),
+    });
     return response.data;
 }

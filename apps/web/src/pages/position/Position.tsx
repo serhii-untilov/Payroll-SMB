@@ -17,16 +17,9 @@ import { getPosition } from '../../services/position.service';
 import { JobAndPay } from './details/JobAndPay';
 import { Personal } from './details/Personal';
 
-interface Props extends PropsWithChildren {
-    children?: ReactNode;
-    index: number;
-    value: number;
-}
-
-export default function Position(props: Props) {
+export default function Position() {
     const params = useParams();
     const positionId = Number(params.positionId);
-    const { children, value, index, ...other } = props;
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company } = useAppContext();
@@ -114,7 +107,6 @@ export default function Position(props: Props) {
             <TabPanel value={tab} index={2}></TabPanel>
             <TabPanel value={tab} index={3}></TabPanel>
             <TabPanel value={tab} index={4}></TabPanel>
-            {/* </Box> */}
         </PageLayout>
     );
 }

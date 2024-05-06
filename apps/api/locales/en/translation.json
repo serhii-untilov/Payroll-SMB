@@ -81,7 +81,7 @@
     "Offers": "Offers",
     "All": "All",
     "current": "current",
-    "Pay period": "Pay period",
+    "Pay Period": "Pay Period",
     "Job": "Job",
     "Card Number": "Card #",
     "Sequence Number": "Sequence #",
@@ -106,5 +106,8 @@
     "Notes": "Notes",
     "Vacancy": "Vacancy",
     "Positions": "Positions",
-    "Accounting Details": "Accounting Details"
+    "Accounting Details": "Accounting Details",
+    "Role": "Role",
+    "User Role": "User Role",
+    "New Company": "New Company"
 }

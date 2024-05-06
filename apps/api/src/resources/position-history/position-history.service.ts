@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType, castAsPositionHistory } from '@repo/shared';
 import { FindOptionsWhere, Repository, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { PositionsService } from '../positions/positions.service';
@@ -9,6 +9,7 @@ import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistory } from './entities/position-history.entity';
 import { FindPositionHistoryDto } from './dto/find-position-history.dto';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { add, sub } from 'date-fns';
 
 @Injectable()
 export class PositionHistoryService {
@@ -33,11 +34,13 @@ export class PositionHistoryService {
             this.resourceType,
             AccessType.CREATE,
         );
-        return await this.repository.save({
+        const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
             updatedUserId: userId,
         });
+        await this.normalizeAfterCreateOrUpdate(userId, created);
+        return created;
     }
 
     async findAll(
@@ -107,7 +110,9 @@ export class PositionHistoryService {
             this.resourceType,
             AccessType.UPDATE,
         );
-        return await this.repository.save({ ...payload, id, updatedUserId: userId });
+        const updated = await this.repository.save({ ...payload, id, updatedUserId: userId });
+        await this.normalizeAfterCreateOrUpdate(userId, updated);
+        return updated;
     }
 
     async remove(userId: number, id: number): Promise<PositionHistory> {
@@ -119,14 +124,16 @@ export class PositionHistoryService {
             this.resourceType,
             AccessType.DELETE,
         );
-        return await this.repository.save({
+        const deleted = await this.repository.save({
             id,
             deletedUserId: userId,
             deletedDate: new Date(),
         });
+        await this.normalizeAfterDeleted(userId, deleted);
+        return deleted;
     }
 
-    async find(userId: number, params: FindPositionHistoryDto): Promise<PositionHistory | null> {
+    async find(userId: number, params: FindPositionHistoryDto): Promise<PositionHistory[]> {
         const position = await this.positionsService.findOne(userId, params.positionId);
         await this.accessService.availableForUserCompanyOrFail(
             userId,
@@ -134,8 +141,7 @@ export class PositionHistoryService {
             this.resourceType,
             AccessType.ACCESS,
         );
-        const where: FindOptionsWhere<PositionHistory> =
-            params as FindOptionsWhere<PositionHistory>;
+        const where: FindOptionsWhere<PositionHistory> = castAsPositionHistory(params);
         if (params.onDate) {
             where.dateFrom = LessThanOrEqual(params.onDate);
             where.dateTo = MoreThanOrEqual(params.onDate);
@@ -150,15 +156,88 @@ export class PositionHistoryService {
             where.dateFrom = LessThanOrEqual(payPeriod.dateTo);
             where.dateTo = MoreThanOrEqual(payPeriod.dateFrom);
         }
-        return this.repository.findOne({
+        return this.repository.find({
             where,
             relations: {
-                position: true,
-                department: true,
-                job: true,
-                workNorm: true,
-                paymentType: true,
+                position: !!params.relations,
+                department: !!params.relations,
+                job: !!params.relations,
+                workNorm: !!params.relations,
+                paymentType: !!params.relations,
             },
         });
+    }
+
+    async normalizeAfterCreateOrUpdate(userId: number, record: PositionHistory): Promise<void> {
+        const position = await this.positionsService.findOne(userId, record.positionId);
+        if (!position) {
+            throw new NotFoundException('Position not found.');
+        }
+        const list = (
+            await this.repository.find({ where: { positionId: record.positionId } })
+        ).sort((a, b) => (a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0));
+        // Delete out of position's period
+        for (const id of list
+            .filter((o) => o.id !== record.id)
+            .filter((o) => o.dateFrom > position.dateTo || o.dateTo < position.dateFrom)
+            .map((o) => o.id)) {
+            await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
+        }
+        // Delete in record period
+        for (const id of list
+            .filter((o) => o.id !== record.id)
+            .filter((o) => o.dateFrom >= record.dateFrom && o.dateTo <= record.dateTo)
+            .map((o) => o.id)) {
+            await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
+        }
+        // Shift dateTo
+        for (const id of list
+            .filter((o) => o.id !== record.id)
+            .filter((o) => o.dateFrom < record.dateFrom && o.dateTo >= record.dateFrom)
+            .map((o) => o.id)) {
+            const dateTo = sub(record.dateFrom, { days: -1 });
+            await this.repository.save({ id, dateTo, updatedUserId: userId });
+        }
+        // Shift dateFrom
+        for (const id of list
+            .filter((o) => o.id !== record.id)
+            .filter((o) => o.dateFrom <= record.dateTo && o.dateTo > record.dateTo)
+            .map((o) => o.id)) {
+            const dateFrom = add(record.dateTo, { days: 1 });
+            await this.repository.save({ id, dateFrom, updatedUserId: userId });
+        }
+    }
+
+    async normalizeAfterDeleted(userId: number, record: PositionHistory): Promise<void> {
+        const position = await this.positionsService.findOne(userId, record.positionId);
+        if (!position) {
+            throw new NotFoundException('Position not found.');
+        }
+        const list = (
+            await this.repository.find({ where: { positionId: record.positionId } })
+        ).sort((a, b) => (a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0));
+        // Delete out of position's period
+        for (const id of list
+            .filter((o) => o.id !== record.id)
+            .filter((o) => o.dateFrom > position.dateTo || o.dateTo < position.dateFrom)
+            .map((o) => o.id)) {
+            await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
+        }
+        // Shift dateTo
+        const dateTo = sub(record.dateFrom, { days: -1 });
+        for (const id of list
+            .filter((o) => o.id !== record.id)
+            .filter((o) => o.dateFrom < record.dateFrom && o.dateTo === dateTo)
+            .map((o) => o.id)) {
+            await this.repository.save({ id, dateTo: record.dateTo, updatedUserId: userId });
+        }
+        // Shift dateFrom
+        const dateFrom = add(record.dateTo, { days: 1 });
+        for (const id of list
+            .filter((o) => o.id !== record.id)
+            .filter((o) => o.dateFrom === dateFrom && o.dateTo > record.dateTo)
+            .map((o) => o.id)) {
+            await this.repository.save({ id, dateFrom: record.dateFrom, updatedUserId: userId });
+        }
     }
 }

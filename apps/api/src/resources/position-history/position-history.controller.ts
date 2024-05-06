@@ -14,7 +14,7 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
-import { IPositionHistory } from '@repo/shared';
+import { IPositionHistory, objectStringDateToShort } from '@repo/shared';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
@@ -31,10 +31,13 @@ export class PositionHistoryController {
     @HttpCode(HttpStatus.OK)
     async create(
         @Req() req: Request,
-        @Body() createPositionHistoryDto: CreatePositionHistoryDto,
+        @Body() payload: CreatePositionHistoryDto,
     ): Promise<IPositionHistory> {
         const userId = req.user['sub'];
-        return await this.positionHistoryService.create(userId, createPositionHistoryDto);
+        return await this.positionHistoryService.create(
+            userId,
+            objectStringDateToShort<CreatePositionHistoryDto>(payload),
+        );
     }
 
     @Get()
@@ -67,10 +70,14 @@ export class PositionHistoryController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updatePositionHistoryDto: UpdatePositionHistoryDto,
+        @Body() payload: UpdatePositionHistoryDto,
     ): Promise<IPositionHistory> {
         const userId = req.user['sub'];
-        return await this.positionHistoryService.update(userId, id, updatePositionHistoryDto);
+        return await this.positionHistoryService.update(
+            userId,
+            id,
+            objectStringDateToShort<UpdatePositionHistoryDto>(payload),
+        );
     }
 
     @Delete(':id')
@@ -84,14 +91,22 @@ export class PositionHistoryController {
         return await this.positionHistoryService.remove(userId, id);
     }
 
-    @Post('find')
+    @Post('find-last')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async find(
+    async findLast(
         @Req() req: Request,
         @Body() params: FindPositionHistoryDto,
     ): Promise<IPositionHistory | null> {
         const userId = req.user['sub'];
-        return await this.positionHistoryService.find(userId, params);
+        const positionList = await this.positionHistoryService.find(
+            userId,
+            objectStringDateToShort<FindPositionHistoryDto>(params),
+        );
+        // Will return the last positionHistory record or null
+        positionList.sort((a, b) =>
+            a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0,
+        );
+        return positionList.length ? positionList[positionList.length - 1] : null;
     }
 }
