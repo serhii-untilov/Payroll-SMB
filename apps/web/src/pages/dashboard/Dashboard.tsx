@@ -7,6 +7,7 @@ import { Link } from '../../components/layout/Link';
 import PageLayout from '../../components/layout/PageLayout';
 import { SummaryTodo } from '../../components/layout/SummaryTodo';
 import useLocale from '../../hooks/useLocale';
+import { PageTitle } from '../../components/layout/PageTitle';
 
 export default function Dashboard() {
     const { locale } = useLocale();
@@ -16,7 +17,7 @@ export default function Dashboard() {
 
     return (
         <>
-            <PageLayout title={''}>
+            <PageLayout>
                 <Grid container flexDirection="column" spacing={2} sx={{ height: '100%' }}>
                     <Grid item>
                         <Typography component="h2" variant="h1" textAlign={'center'}>

@@ -9,18 +9,20 @@ import {
 } from '@mui/x-data-grid';
 import { IDepartment, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
-import { DataGrid } from '../../components/grid/DataGrid';
-import { Toolbar } from '../../components/layout/Toolbar';
-import { Loading } from '../../components/utility/Loading';
-import { deleteDepartment, getDepartmentList } from '../../services/department.service';
-import { CompanyDetailsProps } from './CompanyDetails';
-import DepartmentForm from './DepartmentForm';
-import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
+import { DataGrid } from '../../../components/grid/DataGrid';
+import { Toolbar } from '../../../components/layout/Toolbar';
+import { Loading } from '../../../components/utility/Loading';
+import { deleteDepartment, getDepartmentList } from '../../../services/department.service';
+import DepartmentForm from '../../department/DepartmentForm';
 
-export function DepartmentList(params: CompanyDetailsProps) {
+type Props = {
+    companyId: number | undefined;
+};
+
+export function DepartmentList(params: Props) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
@@ -79,7 +81,7 @@ export function DepartmentList(params: CompanyDetailsProps) {
     } = useQuery<IDepartment[], Error>({
         queryKey: ['departmentList-relations', companyId],
         queryFn: async () => {
-            return await getDepartmentList(companyId, true);
+            return companyId ? await getDepartmentList(companyId, true) : [];
         },
         enabled: !!companyId,
     });

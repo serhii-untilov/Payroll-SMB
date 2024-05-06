@@ -18,6 +18,7 @@ import useLocale from '../../hooks/useLocale';
 import { getCurrentUser } from '../../services/auth.service';
 import { updateUser } from '../../services/user.service';
 import { getDirtyValues } from '../../services/utils';
+import { PageTitle } from '../../components/layout/PageTitle';
 
 const formSchema = Yup.object().shape({
     id: Yup.number(),
@@ -108,7 +109,8 @@ export default function Profile() {
     };
 
     return (
-        <PageLayout title={t('User Profile')}>
+        <PageLayout>
+            <PageTitle>{t('User Profile')}</PageTitle>
             <Grid
                 container
                 component="form"

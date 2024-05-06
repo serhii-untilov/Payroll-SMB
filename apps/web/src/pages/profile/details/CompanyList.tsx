@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import useLocale from '../../hooks/useLocale';
+import useLocale from '../../../hooks/useLocale';
 import { useEffect } from 'react';
 
 export default function CompanyList() {

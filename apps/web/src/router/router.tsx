@@ -16,7 +16,7 @@ const SignUp = Loadable(lazy(() => import('../pages/auth/SignUp')));
 const Dashboard = Loadable(lazy(() => import('../pages/dashboard/Dashboard')));
 const Welcome = Loadable(lazy(() => import('../pages/welcome/Welcome')));
 const Company = Loadable(lazy(() => import('../pages/company/Company')));
-const CompanyList = Loadable(lazy(() => import('../pages/profile/CompanyList')));
+const CompanyList = Loadable(lazy(() => import('../pages/profile/details/CompanyList')));
 const People = Loadable(lazy(() => import('../pages/people/People')));
 const TimeOff = Loadable(lazy(() => import('../pages/timesheet/TimeOff')));
 const TimeSheet = Loadable(lazy(() => import('../pages/timesheet/TimeSheet')));

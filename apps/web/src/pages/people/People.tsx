@@ -10,6 +10,7 @@ import useLocale from '../../hooks/useLocale';
 import { PositionList } from './details/PositionList';
 import { Tabs } from '../../components/layout/Tabs';
 import { Tab } from '../../components/layout/Tab';
+import { PageTitle } from '../../components/layout/PageTitle';
 
 export default function People() {
     const { company } = useAppContext();
@@ -24,9 +25,10 @@ export default function People() {
     };
 
     return (
-        <PageLayout title={t('People')}>
+        <PageLayout>
+            <PageTitle>{t('People')}</PageTitle>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={8} md={6} lg={3}>
+                <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
                     <InputLabel>{t('Pay period')}</InputLabel>
                     <PayPeriod sx={{ fontWeight: 'bold' }} />
                 </Grid>

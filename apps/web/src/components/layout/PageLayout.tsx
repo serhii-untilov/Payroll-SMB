@@ -1,13 +1,10 @@
 import { Box, BoxProps } from '@mui/material';
-import { FC, PropsWithChildren, ReactNode } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import useAppContext from '../../hooks/useAppContext';
-import { PageTitle } from './PageTitle';
 
-interface Props extends BoxProps, PropsWithChildren {
-    title?: string;
-}
+interface Props extends BoxProps, PropsWithChildren {}
 
-const PageLayout: FC<Props> = ({ title, children, ...other }) => {
+const PageLayout: FC<Props> = ({ children, ...other }) => {
     const { compactView } = useAppContext();
     return (
         <Box
@@ -21,11 +18,11 @@ const PageLayout: FC<Props> = ({ title, children, ...other }) => {
             }}
             {...other}
         >
-            {compactView && title && (
-                <Box mb={{ xs: 0, lg: 1, xl: 1 }}>
-                    <PageTitle>{title}</PageTitle>
-                </Box>
-            )}
+            {/* {compactView && title && ( */}
+            {/* <Box mb={{ xs: 0, lg: 1, xl: 1 }}> */}
+            {/* <PageTitle>{title}</PageTitle> */}
+            {/* </Box> */}
+            {/* )} */}
             {children}
         </Box>
     );
