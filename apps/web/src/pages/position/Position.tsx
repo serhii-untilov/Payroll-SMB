@@ -1,10 +1,10 @@
 import { ArrowBackIosNewRounded } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { IPosition, maxDate, minDate } from '@repo/shared';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
-import { PropsWithChildren, ReactNode, SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageTitle } from '../../components/layout/PageTitle';
@@ -80,7 +80,6 @@ export default function Position() {
     const onSubmitCallback = () => {
         console.log('onDetailSubmit');
         queryClient.invalidateQueries({ queryKey: ['position'] });
-        queryClient.invalidateQueries({ queryKey: ['positionList'] });
     };
 
     return (

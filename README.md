@@ -138,7 +138,8 @@ npm i --workspace @repo/api --save-dev webpack-node-externals run-script-webpack
 npm i --workspace @repo/api --save-dev webpack webpack-cli
 
 # Init "web" application for front-end
-npm i --workspace @repo/web --save react-query
+#npm i --workspace @repo/web --save react-query
+npm --workspace @repo/web i @tanstack/react-query
 npm i --workspace @repo/web --save axios
 npm i --workspace @repo/web --save react-router-dom
 npm i --workspace @repo/web --save react-hook-form

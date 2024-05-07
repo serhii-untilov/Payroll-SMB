@@ -11,7 +11,7 @@ import { IPosition, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
@@ -162,7 +162,7 @@ export function PositionList(props: Props) {
         isLoading: isPositionListLoading,
         error: positionListError,
     } = useQuery<IPosition[], Error>({
-        queryKey: ['positionList', { companyId, relations: true }],
+        queryKey: ['position', 'list', { companyId, relations: true }],
         queryFn: async () => {
             return await getPositionList({
                 companyId,
@@ -192,16 +192,14 @@ export function PositionList(props: Props) {
     };
 
     const submitCallback = (data: IPosition) => {
-        queryClient.invalidateQueries({ queryKey: ['positionList'] });
+        queryClient.invalidateQueries({ queryKey: ['position'] });
     };
 
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
             await deletePosition(+id);
         }
-        queryClient.invalidateQueries({
-            queryKey: ['positionList', { companyId, relations: true }],
-        });
+        queryClient.invalidateQueries({ queryKey: ['position'] });
     };
 
     const onPrint = () => {

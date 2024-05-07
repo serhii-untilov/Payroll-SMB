@@ -5,7 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { FormDateField } from '../../../components/form/FormDateField';
 import { FormTextField } from '../../../components/form/FormTextField';
@@ -64,7 +64,7 @@ export function Personal({ personId }: Props) {
         isError: isPersonError,
         error: personError,
     } = useQuery<FormType, Error>({
-        queryKey: ['person', personId],
+        queryKey: ['person', { personId }],
         queryFn: async () => {
             return formSchema.cast(personId ? await getPerson(personId) : defaultValues);
         },
@@ -109,7 +109,7 @@ export function Personal({ personId }: Props) {
                 ? await updatePerson(data.id, dirtyValues)
                 : await createPerson(data);
             reset(person);
-            queryClient.invalidateQueries({ queryKey: ['person', personId] });
+            queryClient.invalidateQueries({ queryKey: ['person'] });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -122,7 +122,7 @@ export function Personal({ personId }: Props) {
 
     const onCancel = () => {
         reset(defaultValues);
-        queryClient.invalidateQueries({ queryKey: ['person', personId] });
+        queryClient.invalidateQueries({ queryKey: ['person'] });
     };
 
     const onPrint = () => {

@@ -13,7 +13,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { FormDateField } from '../../../components/form/FormDateField';
 import { FormTextField } from '../../../components/form/FormTextField';
@@ -173,9 +173,8 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                       });
             }
             reset(await getFormData(formData.id));
-            await queryClient.invalidateQueries({ queryKey: ['Job & Pay'] });
-            await queryClient.invalidateQueries({ queryKey: ['position'] });
-            await queryClient.invalidateQueries({ queryKey: ['positionList'] });
+            await queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'active' });
+            await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'active' });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -184,7 +183,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
 
     const onCancel = async () => {
         reset(await getFormData(formData?.id));
-        queryClient.invalidateQueries({ queryKey: ['Job & Pay'] });
+        queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'active' });
     };
 
     const onDelete = () => {

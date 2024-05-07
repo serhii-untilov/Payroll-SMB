@@ -2,7 +2,7 @@ import { enqueueSnackbar } from 'notistack';
 import { FormAutocomplete } from '../form/FormAutocomplete';
 import { IWorkNorm } from '@repo/shared';
 import { getWorkNormList } from '../../services/workNorm.service';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 interface Props {
     companyId: number | undefined;
@@ -18,7 +18,7 @@ export function SelectWorkNorm({ companyId, control, label, id, name }: Props) {
         isError: isWorkNormListError,
         error: workNormListError,
     } = useQuery<IWorkNorm[], Error>({
-        queryKey: ['workNormList', companyId],
+        queryKey: ['workNorm', 'list', { companyId }],
         queryFn: async () => {
             return companyId ? await getWorkNormList() : [];
         },

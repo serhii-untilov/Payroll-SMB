@@ -1,19 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { IAccounting, ILaw, PaymentSchedule, maxDate, minDate } from '@repo/shared';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { endOfMonth, format, startOfDay, startOfMonth } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
 import * as yup from 'yup';
 import { FormInputDropdown } from '../../../components/form/FormInputDropdown';
 import { FormTextField } from '../../../components/form/FormTextField';
-import { Button } from '../../../components/layout/Button';
 import { InputLabel } from '../../../components/layout/InputLabel';
-import PageLayout from '../../../components/layout/PageLayout';
+import { Toolbar } from '../../../components/layout/Toolbar';
 import { SelectPayPeriod } from '../../../components/select/SelectPayPeriod';
 import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
@@ -22,7 +21,6 @@ import { getAccountingList } from '../../../services/accounting.service';
 import { createCompany, getCompany, updateCompany } from '../../../services/company.service';
 import { getLawList } from '../../../services/law.service';
 import { getDirtyValues } from '../../../services/utils';
-import { Toolbar } from '../../../components/layout/Toolbar';
 
 const formSchema = yup.object().shape({
     id: yup.number().nullable(),
@@ -73,7 +71,7 @@ export function CompanyDetails(props: Props) {
         isLoading: isCompanyLoading,
         error: companyError,
     } = useQuery<FormType, Error>({
-        queryKey: ['company', companyId],
+        queryKey: ['company', { companyId }],
         queryFn: async () => {
             return formSchema.cast(companyId ? await getCompany(companyId) : defaultValues);
         },
@@ -85,8 +83,11 @@ export function CompanyDetails(props: Props) {
         isError: isLawListError,
         isLoading: isLawListLoading,
         error: lawListError,
-    } = useQuery<ILaw[], Error>('lawList', async () => {
-        return getLawList();
+    } = useQuery<ILaw[], Error>({
+        queryKey: ['lawList'],
+        queryFn: async () => {
+            return getLawList();
+        },
     });
 
     const {
@@ -94,8 +95,11 @@ export function CompanyDetails(props: Props) {
         isError: isAccountingListError,
         isLoading: isAccountingListLoading,
         error: accountingListError,
-    } = useQuery<IAccounting[], Error>('accountingList', async () => {
-        return getAccountingList();
+    } = useQuery<IAccounting[], Error>({
+        queryKey: ['accounting', 'list'],
+        queryFn: async () => {
+            return getAccountingList();
+        },
     });
 
     const {

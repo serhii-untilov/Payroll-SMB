@@ -2,7 +2,7 @@ import { Autocomplete, AutocompleteProps, TextField } from '@mui/material';
 import { IPerson } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { Controller } from 'react-hook-form';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getPersonList } from '../../services/person.service';
 import { InputLabel } from '../layout/InputLabel';
 import { useMemo } from 'react';
@@ -20,7 +20,7 @@ export const SelectOrCreatePerson = (props: Props) => {
         isError,
         error,
     } = useQuery<IPerson[], Error>({
-        queryKey: ['personList'],
+        queryKey: ['person', 'list'],
         queryFn: async () => {
             return await getPersonList();
         },

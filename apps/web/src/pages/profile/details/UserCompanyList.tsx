@@ -11,7 +11,7 @@ import { ICompany, IUserCompany, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
@@ -95,7 +95,7 @@ export function UserCompanyList(params: Props) {
         isLoading,
         error: error,
     } = useQuery<IUserCompany[], Error>({
-        queryKey: ['user-company', userId],
+        queryKey: ['userCompany', 'list', { userId }],
         queryFn: async () => {
             return userId ? await getUserCompanyList(userId, true) : [];
         },
@@ -125,14 +125,14 @@ export function UserCompanyList(params: Props) {
     };
 
     const submitCallback = (data: ICompany) => {
-        queryClient.invalidateQueries({ queryKey: ['user-company', userId] });
+        queryClient.invalidateQueries({ queryKey: ['userCompany'] });
     };
 
     const onDeleteCompany = async () => {
         // for (const id of rowSelectionModel) {
         //     await deleteCompany(+id);
         // }
-        // queryClient.invalidateQueries({ queryKey: ['user-company', userId] });
+        // queryClient.invalidateQueries({ queryKey: ['userCompany'] });
         console.log('onDeleteCompany');
     };
 

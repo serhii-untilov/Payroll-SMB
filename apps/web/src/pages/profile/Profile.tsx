@@ -1,16 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
+import { IUpdateUser } from '@repo/shared';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from 'react-query';
 import * as Yup from 'yup';
-import { FormInputDropdown } from '../../components/form/FormInputDropdown';
-import { FormTextField } from '../../components/form/FormTextField';
-import { Button } from '../../components/layout/Button';
 import PageLayout from '../../components/layout/PageLayout';
+import { PageTitle } from '../../components/layout/PageTitle';
+import { Tab } from '../../components/layout/Tab';
+import { TabPanel } from '../../components/layout/TabPanel';
+import { Tabs } from '../../components/layout/Tabs';
 import { AvatarBox } from '../../components/utility/AvatarBox';
 import { Loading } from '../../components/utility/Loading';
 import { supportedLanguages } from '../../context/LocaleContext';
@@ -18,13 +19,10 @@ import useLocale from '../../hooks/useLocale';
 import { getCurrentUser } from '../../services/auth.service';
 import { updateUser } from '../../services/user.service';
 import { getDirtyValues } from '../../services/utils';
-import { PageTitle } from '../../components/layout/PageTitle';
-import { Tabs } from '../../components/layout/Tabs';
-import { Tab } from '../../components/layout/Tab';
-import { TabPanel } from '../../components/layout/TabPanel';
 import { UserCompanyList } from './details/UserCompanyList';
 import { UserDetails } from './details/UserDetails';
-import { IUpdateUser } from '@repo/shared';
+import useAppContext from '../../hooks/useAppContext';
+import useAuth from '../../hooks/useAuth';
 
 const formSchema = Yup.object().shape({
     id: Yup.number(),
@@ -50,14 +48,18 @@ export default function Profile() {
     const { supportedLocales, setLanguage } = useLocale();
     const { locale } = useLocale();
     const { t } = useTranslation();
+    const { user: currentUser } = useAuth();
 
     const {
         data: user,
         isError: isQueryError,
         isLoading,
         error: queryError,
-    } = useQuery<FormType, Error>('user-profile', async () => {
-        return formSchema.cast(await getCurrentUser());
+    } = useQuery<FormType, Error>({
+        queryKey: ['user', { id: currentUser?.id }],
+        queryFn: async () => {
+            return formSchema.cast(await getCurrentUser());
+        },
     });
 
     const {

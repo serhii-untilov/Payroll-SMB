@@ -1,5 +1,5 @@
 import { IDepartment } from '@repo/shared';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getDepartmentList } from '../../services/department.service';
 import { enqueueSnackbar } from 'notistack';
 import { FormAutocomplete } from '../form/FormAutocomplete';
@@ -18,7 +18,7 @@ export function SelectDepartment({ companyId, control, label, id, name }: Props)
         isError: isDepartmentListError,
         error: departmentListError,
     } = useQuery<IDepartment[], Error>({
-        queryKey: ['departmentList', companyId],
+        queryKey: ['department', 'list', { companyId }],
         queryFn: async () => {
             return companyId ? await getDepartmentList(companyId) : [];
         },

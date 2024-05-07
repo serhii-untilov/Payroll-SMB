@@ -11,7 +11,7 @@ import { IDepartment, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
@@ -79,7 +79,7 @@ export function DepartmentList(params: Props) {
         isLoading: isDepartmentListLoading,
         error: departmentListError,
     } = useQuery<IDepartment[], Error>({
-        queryKey: ['departmentList-relations', companyId],
+        queryKey: ['department', 'list', { companyId, relations: true }],
         queryFn: async () => {
             return companyId ? await getDepartmentList(companyId, true) : [];
         },
@@ -107,14 +107,14 @@ export function DepartmentList(params: Props) {
     };
 
     const submitCallback = (data: IDepartment) => {
-        queryClient.invalidateQueries({ queryKey: ['departmentList-relations', companyId] });
+        queryClient.invalidateQueries({ queryKey: ['department'] });
     };
 
     const onDeleteDepartment = async () => {
         for (const id of rowSelectionModel) {
             await deleteDepartment(+id);
         }
-        queryClient.invalidateQueries({ queryKey: ['departmentList-relations', companyId] });
+        queryClient.invalidateQueries({ queryKey: ['department'] });
     };
 
     const onPrint = () => {

@@ -1,6 +1,6 @@
 import { IPaymentType, IPaymentTypeFilter } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getPaymentTypeList } from '../../services/paymentType.service';
 import { FormAutocomplete } from '../form/FormAutocomplete';
 
@@ -19,7 +19,7 @@ export function SelectPaymentType({ companyId, control, label, id, name, filter 
         isError: isPaymentTypeListError,
         error: paymentTypeListError,
     } = useQuery<IPaymentType[], Error>({
-        queryKey: ['paymentTypeList', companyId, filter],
+        queryKey: ['paymentType', 'list', { companyId, filter }],
         queryFn: async () => {
             return companyId ? await getPaymentTypeList(filter) : [];
         },

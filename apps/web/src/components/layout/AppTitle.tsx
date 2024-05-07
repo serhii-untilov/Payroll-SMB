@@ -1,12 +1,11 @@
 import { Typography, TypographyProps } from '@mui/material';
-import useLocale from '../../hooks/useLocale';
-import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { useQuery } from 'react-query';
+import { useTranslation } from 'react-i18next';
+import useLocale from '../../hooks/useLocale';
 import { getAppTitle } from '../../services/app.service';
 
 export function AppTitle(props: TypographyProps) {
-    // const title = import.meta.env['VITE_APP_TITLE'] || import.meta.env['TITLE'];
     const { locale } = useLocale();
     const { t } = useTranslation();
 

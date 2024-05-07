@@ -1,23 +1,23 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
+import { IUpdateUser } from '@repo/shared';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from 'react-query';
 import * as Yup from 'yup';
 import { FormInputDropdown } from '../../../components/form/FormInputDropdown';
 import { FormTextField } from '../../../components/form/FormTextField';
-import { Button } from '../../../components/layout/Button';
+import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
 import { supportedLanguages } from '../../../context/LocaleContext';
+import useAuth from '../../../hooks/useAuth';
 import useLocale from '../../../hooks/useLocale';
 import { getCurrentUser } from '../../../services/auth.service';
 import { updateUser } from '../../../services/user.service';
 import { getDirtyValues } from '../../../services/utils';
-import { Toolbar } from '../../../components/layout/Toolbar';
-import { IUpdateUser } from '@repo/shared';
 
 type Props = {
     userId: number | undefined;
@@ -46,14 +46,18 @@ export function UserDetails(props: Props) {
     const { supportedLocales, setLanguage } = useLocale();
     const { locale } = useLocale();
     const { t } = useTranslation();
+    const { user: currentUser } = useAuth();
 
     const {
         data: user,
         isError: isQueryError,
         isLoading,
         error: queryError,
-    } = useQuery<FormType, Error>('user-profile', async () => {
-        return formSchema.cast(await getCurrentUser());
+    } = useQuery<FormType, Error>({
+        queryKey: ['user', 'current', { id: currentUser?.id }],
+        queryFn: async () => {
+            return formSchema.cast(await getCurrentUser());
+        },
     });
 
     const {
@@ -116,17 +120,8 @@ export function UserDetails(props: Props) {
             <Toolbar
                 onSave={isDirty ? handleSubmit(onSubmit) : 'disabled'}
                 onCancel={isDirty ? onCancel : 'disabled'}
-                // onDelete={'disabled'}
-                // onRestoreDeleted={'disabled'}
-                // onShowHistory={'disabled'}
             />
-            <Grid
-                container
-                component="form"
-                // onSubmit={handleSubmit(onSubmit)}
-                noValidate
-                spacing={2}
-            >
+            <Grid container component="form" noValidate spacing={2}>
                 <Grid container item xs={12} sm={7} md={6} lg={4} spacing={2}>
                     <Grid item xs={12}>
                         <FormTextField
