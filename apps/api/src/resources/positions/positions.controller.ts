@@ -44,6 +44,7 @@ export class PositionsController {
         @Query('companyId', ParseIntPipe) companyId: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
         @Query('onDate') onDate: Date,
+        @Query('onPayPeriodDate') onPayPeriodDate: Date,
     ): Promise<IPosition[]> {
         const userId = req.user['sub'];
         return await this.positionsService.findAll(
@@ -51,6 +52,7 @@ export class PositionsController {
             companyId,
             !!relations,
             onDate ? new Date(onDate) : null,
+            onPayPeriodDate ? new Date(onPayPeriodDate) : null,
         );
     }
 

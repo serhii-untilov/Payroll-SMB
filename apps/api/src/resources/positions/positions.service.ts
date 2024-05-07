@@ -1,7 +1,13 @@
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@repo/shared';
-import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import {
+    FindManyOptions,
+    FindOneOptions,
+    LessThanOrEqual,
+    MoreThanOrEqual,
+    Repository,
+} from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from './../pay-periods/pay-periods.service';
 import { CreatePositionDto } from './dto/create-position.dto';
@@ -52,6 +58,7 @@ export class PositionsService {
         companyId: number,
         relations: boolean,
         onDate: Date,
+        onPayPeriodDate: Date,
     ): Promise<Position[]> {
         await this.accessService.availableForUserCompanyOrFail(
             userId,
@@ -59,51 +66,82 @@ export class PositionsService {
             this.resourceType,
             AccessType.ACCESS,
         );
-        const payPeriod = onDate
-            ? await this.payPeriodsService.findOne(userId, {
-                  where: {
-                      companyId,
-                      dateFrom: LessThanOrEqual(onDate),
-                      dateTo: MoreThanOrEqual(onDate),
-                  },
-              })
-            : null;
-        return await this.repository.find({
+        const options: FindManyOptions<Partial<Position>> = {
             relations: {
-                company: relations,
-                person: relations,
-                history:
-                    relations && payPeriod
-                        ? { department: true, job: true, workNorm: true, paymentType: true }
-                        : false,
-            },
-            where: {
-                companyId,
-                ...(payPeriod ? { dateFrom: LessThanOrEqual(payPeriod.dateTo) } : {}),
-                ...(payPeriod ? { dateTo: MoreThanOrEqual(payPeriod.dateFrom) } : {}),
-                ...(relations && payPeriod
+                company: !!relations,
+                person: !!relations,
+                history: !!relations
                     ? {
-                          history: {
-                              dateTo: MoreThanOrEqual(payPeriod.dateFrom),
-                              dateFrom: LessThanOrEqual(payPeriod.dateTo),
-                          },
+                          department: true,
+                          job: true,
+                          workNorm: true,
+                          paymentType: true,
                       }
-                    : {}),
+                    : false,
             },
-        });
+            where: { companyId },
+        };
+        if (onDate) {
+            options.where['dateFrom'] = LessThanOrEqual(onDate);
+            options.where['dateTo'] = MoreThanOrEqual(onDate);
+            if (relations) {
+                options.relations['history'] = {
+                    department: true,
+                    job: true,
+                    workNorm: true,
+                    paymentType: true,
+                };
+                options.where['history'] = {
+                    dateTo: MoreThanOrEqual(onDate),
+                    dateFrom: LessThanOrEqual(onDate),
+                };
+            }
+        }
+        if (onPayPeriodDate) {
+            const payPeriod = await this.payPeriodsService.findOne(userId, {
+                where: {
+                    companyId,
+                    dateFrom: onPayPeriodDate,
+                },
+            });
+            options.where['dateFrom'] = LessThanOrEqual(payPeriod.dateTo);
+            options.where['dateTo'] = MoreThanOrEqual(payPeriod.dateFrom);
+            if (relations) {
+                options.relations['history'] = {
+                    department: true,
+                    job: true,
+                    workNorm: true,
+                    paymentType: true,
+                };
+                options.where['history'] = {
+                    dateTo: MoreThanOrEqual(payPeriod.dateFrom),
+                    dateFrom: LessThanOrEqual(payPeriod.dateTo),
+                };
+            }
+        }
+        return await this.repository.find(options);
     }
 
     async findOne(
         userId: number,
         id: number,
-        relations: boolean = null,
-        onDate: Date = null,
+        relations?: boolean,
+        onDate?: Date,
+        onPayPeriodDate?: Date,
     ): Promise<Position> {
         const position = await this.repository.findOneOrFail({
             where: { id },
             relations: {
-                company: relations,
-                person: relations,
+                company: !!relations,
+                person: !!relations,
+                history: !!relations
+                    ? {
+                          department: true,
+                          job: true,
+                          workNorm: true,
+                          paymentType: true,
+                      }
+                    : false,
             },
         });
         await this.accessService.availableForUserCompanyOrFail(
@@ -112,37 +150,43 @@ export class PositionsService {
             this.resourceType,
             AccessType.ACCESS,
         );
-        if (!(onDate && relations)) {
+        if (!(onDate || onPayPeriodDate)) {
             return position;
         }
-        const payPeriod = await this.payPeriodsService.findOne(userId, {
-            where: {
-                companyId: position.companyId,
-                dateFrom: LessThanOrEqual(onDate),
-                dateTo: MoreThanOrEqual(onDate),
-            },
-        });
-        return await this.repository.findOneOrFail({
+        const options: FindOneOptions<Partial<Position>> = {
             relations: {
-                company: relations,
-                person: relations,
-                history:
-                    relations && payPeriod
-                        ? { department: true, job: true, workNorm: true, paymentType: true }
-                        : false,
-            },
-            where: {
-                id,
-                ...(relations && payPeriod
+                company: true,
+                person: !!relations,
+                history: !!relations
                     ? {
-                          history: {
-                              dateTo: MoreThanOrEqual(payPeriod.dateFrom),
-                              dateFrom: LessThanOrEqual(payPeriod.dateTo),
-                          },
+                          department: true,
+                          job: true,
+                          workNorm: true,
+                          paymentType: true,
                       }
-                    : {}),
+                    : false,
             },
-        });
+            where: { id },
+        };
+        if (onDate && relations) {
+            options.where['history'] = {
+                dateTo: MoreThanOrEqual(onDate),
+                dateFrom: LessThanOrEqual(onDate),
+            };
+        }
+        if (onPayPeriodDate && relations) {
+            const payPeriod = await this.payPeriodsService.findOne(userId, {
+                where: {
+                    companyId: position.companyId,
+                    dateFrom: onPayPeriodDate,
+                },
+            });
+            options.where['history'] = {
+                dateTo: MoreThanOrEqual(payPeriod.dateFrom),
+                dateFrom: LessThanOrEqual(payPeriod.dateTo),
+            };
+        }
+        return await this.repository.findOneOrFail(options);
     }
 
     async update(userId: number, id: number, payload: UpdatePositionDto): Promise<Position> {

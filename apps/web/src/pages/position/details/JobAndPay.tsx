@@ -173,9 +173,9 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                       });
             }
             reset(await getFormData(formData.id));
-            queryClient.invalidateQueries({ queryKey: ['Job & Pay'] });
-            queryClient.invalidateQueries({ queryKey: ['position'] });
-            queryClient.invalidateQueries({ queryKey: ['positionList'] });
+            await queryClient.invalidateQueries({ queryKey: ['Job & Pay'] });
+            await queryClient.invalidateQueries({ queryKey: ['position'] });
+            await queryClient.invalidateQueries({ queryKey: ['positionList'] });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
