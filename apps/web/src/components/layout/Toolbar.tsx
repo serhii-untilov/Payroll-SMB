@@ -56,16 +56,7 @@ export function Toolbar(props: Props) {
     const { t } = useTranslation();
 
     return (
-        <Stack
-            direction="row"
-            spacing={1}
-            aria-label="Table toolbar button group"
-            // mt={1}
-            // mx={1}
-            my={1}
-            // sx={{ backgroundColor: 'background.paper' }}
-            // {...props}
-        >
+        <Stack direction="row" spacing={1} aria-label="Table toolbar button group" my={1}>
             <Box
                 sx={{
                     display: 'flex',

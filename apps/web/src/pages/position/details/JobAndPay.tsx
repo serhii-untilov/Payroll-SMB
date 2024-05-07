@@ -172,7 +172,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                           ...positionHistoryDirtyValues,
                       });
             }
-            reset(await getFormData(formData.id));
+            reset(await getFormData(pos?.id));
             await queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
         } catch (e: unknown) {

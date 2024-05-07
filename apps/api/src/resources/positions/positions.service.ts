@@ -212,6 +212,8 @@ export class PositionsService {
     }
 
     async getNextCardNumber(companyId: number): Promise<string> {
+        const first = await this.repository.findOneBy({ companyId, cardNumber: '1' });
+        if (!first) return '1';
         const result = await this.repository.query(
             `select coalesce(min(cast(p."cardNumber" as integer)), 0) + 1 "freeNumber"
             from position p
