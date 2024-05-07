@@ -162,7 +162,7 @@ export function PositionList(props: Props) {
         isLoading: isPositionListLoading,
         error: positionListError,
     } = useQuery<IPosition[], Error>({
-        queryKey: ['positionList-relations', companyId],
+        queryKey: ['positionList', { companyId, relations: true }],
         queryFn: async () => {
             return await getPositionList({ companyId, relations: true });
         },
@@ -188,14 +188,18 @@ export function PositionList(props: Props) {
     };
 
     const submitCallback = (data: IPosition) => {
-        queryClient.invalidateQueries({ queryKey: ['positionList-relations', companyId] });
+        queryClient.invalidateQueries({
+            queryKey: ['positionList', { companyId, relations: true }],
+        });
     };
 
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
             await deletePosition(+id);
         }
-        queryClient.invalidateQueries({ queryKey: ['positionList-relations', companyId] });
+        queryClient.invalidateQueries({
+            queryKey: ['positionList', { companyId, relations: true }],
+        });
     };
 
     const onPrint = () => {

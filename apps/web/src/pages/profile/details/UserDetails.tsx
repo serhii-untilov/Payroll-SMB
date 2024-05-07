@@ -116,9 +116,9 @@ export function UserDetails(props: Props) {
             <Toolbar
                 onSave={isDirty ? handleSubmit(onSubmit) : 'disabled'}
                 onCancel={isDirty ? onCancel : 'disabled'}
-                onDelete={'disabled'}
-                onRestoreDeleted={'disabled'}
-                onShowHistory={'disabled'}
+                // onDelete={'disabled'}
+                // onRestoreDeleted={'disabled'}
+                // onShowHistory={'disabled'}
             />
             <Grid
                 container

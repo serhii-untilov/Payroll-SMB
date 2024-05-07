@@ -1,8 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import {
-    ICreatePosition,
-    IPerson,
     IPosition,
     IPositionHistory,
     PaymentGroup,
@@ -12,7 +10,7 @@ import {
 } from '@repo/shared';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
@@ -23,6 +21,7 @@ import TabLayout from '../../../components/layout/TabLayout';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { SelectDepartment } from '../../../components/select/SelectDepartment';
 import { SelectJob } from '../../../components/select/SelectJob';
+import { SelectOrCreatePerson } from '../../../components/select/SelectOrCreatePerson';
 import { SelectPaymentType } from '../../../components/select/SelectPaymentType';
 import { SelectWorkNorm } from '../../../components/select/SelectWorkNorm';
 import useAppContext from '../../../hooks/useAppContext';
@@ -34,9 +33,6 @@ import {
     updatePositionHistory,
 } from '../../../services/positionHistory.service';
 import { getDirtyValues } from '../../../services/utils';
-import { FormAutocomplete } from '../../../components/form/FormAutocomplete';
-import { SelectOrCreatePerson } from '../../../components/select/SelectOrCreatePerson';
-import { getPerson } from '../../../services/person.service';
 
 const formSchema = yup.object().shape({
     // Position
@@ -67,40 +63,43 @@ interface Props {
     onSubmitCallback?: () => void;
 }
 
-export function JobAndPay(props: Props) {
+export function JobAndPay({ positionId, onSubmitCallback }: Props) {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company, payPeriod } = useAppContext();
     const queryClient = useQueryClient();
-    const [positionId, setPositionId] = useState(props.positionId);
-    const [position, setPosition] = useState<Partial<IPosition>>({});
-    const [positionHistory, setPositionHistory] = useState<Partial<IPositionHistory>>({});
 
     useEffect(() => {}, [company]);
+
+    const getDefaultPosition = () => {
+        return {
+            companyId: company?.id,
+            dateFrom: minDate(),
+            dateTo: maxDate(),
+            rate: 1,
+            personId: null,
+        };
+    };
+
+    const getFormData = async (positionId: number | null | undefined): Promise<FormType> => {
+        const position = positionId
+            ? await getPosition({ id: positionId, relations: true })
+            : getDefaultPosition();
+        const positionHistory =
+            positionId && payPeriod
+                ? (await findLastPositionHistoryOnPayPeriodDate(positionId, payPeriod, true)) || {}
+                : {};
+        return formSchema.cast({ ...position_formData(position, positionHistory) });
+    };
 
     const {
         data: formData,
         isError: isFormError,
         error: formError,
     } = useQuery<FormType, Error>({
-        queryKey: ['Job & Pay', positionId],
-        queryFn: async () => {
-            const position = positionId
-                ? await getPosition({ id: positionId, relations: true })
-                : {
-                      companyId: company?.id,
-                      dateFrom: minDate(),
-                      dateTo: maxDate(),
-                      rate: 1,
-                      personId: null,
-                  };
-            setPosition(position);
-            const positionHistory =
-                positionId && payPeriod
-                    ? findLastPositionHistoryOnPayPeriodDate(positionId, payPeriod, true)
-                    : {};
-            setPositionHistory(positionHistory);
-            return formSchema.cast({ ...position_formData(position, positionHistory) });
+        queryKey: ['Job & Pay', { positionId }],
+        queryFn: () => {
+            return getFormData(positionId);
         },
         enabled: !!company && !!payPeriod,
     });
@@ -145,13 +144,13 @@ export function JobAndPay(props: Props) {
         if (!formData) {
             return;
         }
-        if (props.onSubmitCallback) props.onSubmitCallback();
+        if (onSubmitCallback) onSubmitCallback();
         const positionData = formData_Position(data);
         const positionHistoryData = formData_PositionHistory(data);
         const positionDirtyValues = getDirtyValues(dirtyFields, positionData);
         const positionHistoryDirtyValues = getDirtyValues(dirtyFields, positionHistoryData);
         try {
-            let pos = position;
+            let pos: any;
             if (Object.keys(positionDirtyValues).length) {
                 pos = positionData.id
                     ? await updatePosition(positionData.id, positionDirtyValues)
@@ -173,22 +172,19 @@ export function JobAndPay(props: Props) {
                           ...positionHistoryDirtyValues,
                       });
             }
-            // reset(await getFormData(formData.id));
-            queryClient.invalidateQueries({ queryKey: ['Job & Pay', positionId] });
-            setPositionId(pos.id);
+            reset(await getFormData(formData.id));
+            queryClient.invalidateQueries({ queryKey: ['Job & Pay'] });
+            queryClient.invalidateQueries({ queryKey: ['position'] });
+            queryClient.invalidateQueries({ queryKey: ['positionList'] });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
         }
     };
 
-    const onSave = () => {
-        handleSubmit(onSubmit);
-    };
-
-    const onCancel = () => {
-        reset(formSchema.cast({ ...position_formData(position, positionHistory) }));
-        queryClient.invalidateQueries({ queryKey: ['Job & Pay', positionId] });
+    const onCancel = async () => {
+        reset(await getFormData(formData?.id));
+        queryClient.invalidateQueries({ queryKey: ['Job & Pay'] });
     };
 
     const onDelete = () => {
@@ -213,11 +209,11 @@ export function JobAndPay(props: Props) {
                 <Toolbar
                     onSave={isDirty ? handleSubmit(onSubmit) : 'disabled'}
                     onCancel={isDirty ? onCancel : 'disabled'}
-                    onDelete={formData?.id ? onDelete : 'disabled'}
-                    onRestoreDeleted={formData?.deletedUserId ? onRestoreDeleted : 'disabled'}
-                    onPrint={formData?.id ? onPrint : 'disabled'}
-                    onExport={formData?.id ? onExport : 'disabled'}
-                    onShowHistory={'disabled'}
+                    // onDelete={formData?.id ? onDelete : 'disabled'}
+                    // onRestoreDeleted={formData?.deletedUserId ? onRestoreDeleted : 'disabled'}
+                    // onPrint={formData?.id ? onPrint : 'disabled'}
+                    // onExport={formData?.id ? onExport : 'disabled'}
+                    // onShowHistory={'disabled'}
                 />
 
                 <Grid container xs={12} spacing={2}>
@@ -246,7 +242,7 @@ export function JobAndPay(props: Props) {
                             // placeholder={t('Vacancy')}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={2}>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
                         <FormTextField
                             control={control}
                             name="cardNumber"
@@ -255,7 +251,7 @@ export function JobAndPay(props: Props) {
                             type="text"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={2}>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
                         <FormTextField
                             control={control}
                             name="sequenceNumber"
@@ -324,7 +320,7 @@ export function JobAndPay(props: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={2}>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
                         <FormDateField
                             control={control}
                             name="dateFrom"
@@ -334,7 +330,7 @@ export function JobAndPay(props: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={2}>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
                         <FormDateField
                             control={control}
                             name="dateTo"
@@ -390,6 +386,7 @@ function position_formData(
 
 function formData_Position(formData: FormType): IPosition {
     const {
+        id,
         companyId,
         cardNumber,
         sequenceNumber,
@@ -401,6 +398,7 @@ function formData_Position(formData: FormType): IPosition {
         name,
     } = formData;
     return {
+        id,
         companyId,
         cardNumber,
         sequenceNumber,

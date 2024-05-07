@@ -6,14 +6,14 @@ import { useQuery } from 'react-query';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { getPayPeriodList, getPayPeriodName } from '../../services/payPeriod.service';
-import { Skeleton } from './Skeleton';
+import { Skeleton } from '../layout/Skeleton';
 
 export type PayPeriodOption = {
     label: string;
     value: string;
 };
 
-export function PayPeriod(props: SelectProps) {
+export function SelectPayPeriod(props: SelectProps) {
     const { company, payPeriod, setPayPeriod } = useAppContext();
     const { locale } = useLocale();
     const { data, isError, isLoading, error } = useQuery<IPayPeriod[], Error>({

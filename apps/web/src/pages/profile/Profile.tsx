@@ -46,7 +46,7 @@ const defaultValues: FormType = {
 };
 
 export default function Profile() {
-    const [value, setValue] = useState(0);
+    const [tab, setTab] = useState(Number(localStorage.getItem('profile-tab-index')));
     const { supportedLocales, setLanguage } = useLocale();
     const { locale } = useLocale();
     const { t } = useTranslation();
@@ -121,21 +121,22 @@ export default function Profile() {
     };
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+        setTab(newValue);
+        localStorage.setItem('profile-tab-index', newValue.toString());
     };
 
     return (
         <PageLayout>
             <PageTitle>{generateTitle()}</PageTitle>
             <AvatarBox />
-            <Tabs id="user__details_tabs" value={value} onChange={handleChange}>
+            <Tabs id="user__details_tabs" value={tab} onChange={handleChange}>
                 <Tab label={t('User Profile')} />
                 <Tab label={t('Companies')} disabled={!user?.id} />
             </Tabs>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={tab} index={0}>
                 <UserDetails userId={user?.id} />
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={tab} index={1}>
                 <UserCompanyList userId={user?.id} />
             </TabPanel>
         </PageLayout>

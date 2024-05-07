@@ -30,7 +30,7 @@ export function AccountList(params: Props) {
             field: 'accountNumber',
             headerName: t('Account Number'),
             type: 'string',
-            width: 240,
+            width: 280,
             sortable: true,
         },
         {

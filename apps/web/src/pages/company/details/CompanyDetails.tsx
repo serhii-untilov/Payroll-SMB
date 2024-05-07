@@ -14,7 +14,7 @@ import { FormTextField } from '../../../components/form/FormTextField';
 import { Button } from '../../../components/layout/Button';
 import { InputLabel } from '../../../components/layout/InputLabel';
 import PageLayout from '../../../components/layout/PageLayout';
-import { PayPeriod } from '../../../components/layout/PayPeriod';
+import { SelectPayPeriod } from '../../../components/select/SelectPayPeriod';
 import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
@@ -185,9 +185,9 @@ export function CompanyDetails(props: Props) {
             <Toolbar
                 onSave={isDirty || !currentCompany ? handleSubmit(onSubmit) : 'disabled'}
                 onCancel={isDirty || !currentCompany ? onCancel : 'disabled'}
-                onDelete={'disabled'}
-                onRestoreDeleted={'disabled'}
-                onShowHistory={'disabled'}
+                // onDelete={'disabled'}
+                // onRestoreDeleted={'disabled'}
+                // onShowHistory={'disabled'}
             />
             <Grid
                 container
@@ -258,7 +258,7 @@ export function CompanyDetails(props: Props) {
                                 fieldState: { error },
                                 formState,
                             }) => (
-                                <PayPeriod
+                                <SelectPayPeriod
                                     label={''}
                                     name="payPeriod"
                                     autoComplete="payPeriod"

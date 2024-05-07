@@ -23,7 +23,7 @@ type Props = {
 
 export default function Company(props: Props) {
     const { companyId } = useParams();
-    const [value, setValue] = useState(0);
+    const [tab, setTab] = useState(Number(localStorage.getItem('company-tab-index')));
     const { t } = useTranslation();
     const [company, setCompany] = useState<ICompany | null>();
     const { locale } = useLocale();
@@ -48,7 +48,8 @@ export default function Company(props: Props) {
     };
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+        setTab(newValue);
+        localStorage.setItem('company-tab-index', newValue.toString());
     };
 
     return (
@@ -66,22 +67,22 @@ export default function Company(props: Props) {
                 )}
                 {generatePageTitle()}
             </PageTitle>
-            <Tabs id="company__details_tabs" value={value} onChange={handleChange}>
+            <Tabs id="company__details_tabs" value={tab} onChange={handleChange}>
                 <Tab label={t('Accounting Details')} />
                 <Tab label={t('Departments')} disabled={!company?.id} />
                 <Tab label={t('Managers')} disabled={!company?.id} />
                 <Tab label={t('Accounts')} disabled={!company?.id} />
             </Tabs>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={tab} index={0}>
                 <CompanyDetails companyId={Number(companyId)} />
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={tab} index={1}>
                 <DepartmentList companyId={Number(companyId)} />
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={tab} index={2}>
                 <ManagerList companyId={Number(companyId)} />
             </TabPanel>
-            <TabPanel value={value} index={3}>
+            <TabPanel value={tab} index={3}>
                 <AccountList companyId={Number(companyId)} />
             </TabPanel>
         </PageLayout>

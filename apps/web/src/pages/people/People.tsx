@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputLabel } from '../../components/layout/InputLabel';
 import PageLayout from '../../components/layout/PageLayout';
-import { PayPeriod } from '../../components/layout/PayPeriod';
+import { SelectPayPeriod } from '../../components/select/SelectPayPeriod';
 import { TabPanel } from '../../components/layout/TabPanel';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
@@ -15,13 +15,14 @@ import { PageTitle } from '../../components/layout/PageTitle';
 export default function People() {
     const { company } = useAppContext();
     const { locale } = useLocale();
-    const [value, setValue] = useState(0);
+    const [tab, setTab] = useState(Number(localStorage.getItem('people-tab-index')));
     const { t } = useTranslation();
 
     useEffect(() => {}, [locale]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+        setTab(newValue);
+        localStorage.setItem('people-tab-index', newValue.toString());
     };
 
     return (
@@ -30,7 +31,7 @@ export default function People() {
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
                     <InputLabel>{t('Pay Period')}</InputLabel>
-                    <PayPeriod sx={{ fontWeight: 'bold' }} />
+                    <SelectPayPeriod sx={{ fontWeight: 'bold' }} />
                 </Grid>
             </Grid>
             <Box
@@ -42,7 +43,7 @@ export default function People() {
                     flexGrow: 1,
                 }}
             >
-                <Tabs id="people__tabs" value={value} onChange={handleChange}>
+                <Tabs id="people__tabs" value={tab} onChange={handleChange}>
                     <Tab label={t('Positions')} />
                     <Tab disabled label={t('Contractors')} />
                     <Tab label={t('Vacancies')} />
@@ -51,13 +52,13 @@ export default function People() {
                     <Tab label={t('All')} />
                 </Tabs>
 
-                <TabPanel value={value} index={0}>
+                <TabPanel value={tab} index={0}>
                     {company?.id && <PositionList companyId={company?.id} />}
                 </TabPanel>
-                <TabPanel value={value} index={1}>
+                <TabPanel value={tab} index={1}>
                     {/* <CompanyManagers companyId={company?.id} /> */}
                 </TabPanel>
-                <TabPanel value={value} index={2}>
+                <TabPanel value={tab} index={2}>
                     {/* <CompanyAccounts companyId={company?.id} /> */}
                 </TabPanel>
             </Box>

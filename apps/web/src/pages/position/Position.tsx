@@ -25,9 +25,11 @@ export default function Position() {
     const { company } = useAppContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(Number(localStorage.getItem('position-tab-index')));
+
     const handleChangeTab = (event: SyntheticEvent, newValue: number) => {
         setTab(newValue);
+        localStorage.setItem('position-tab-index', newValue.toString());
     };
 
     useEffect(() => {}, [company, locale]);
@@ -45,7 +47,7 @@ export default function Position() {
         isError: isPositionError,
         error: positionError,
     } = useQuery<Partial<IPosition>, Error>({
-        queryKey: ['position', positionId],
+        queryKey: ['position', { positionId, relations: true }],
         queryFn: async () => {
             return positionId
                 ? await getPosition({ id: positionId, relations: true })
@@ -64,7 +66,7 @@ export default function Position() {
 
     const onCancel = () => {
         navigate(-1);
-        queryClient.invalidateQueries({ queryKey: ['position', positionId] });
+        queryClient.invalidateQueries({ queryKey: ['position'] });
     };
 
     const generatePageTitle = () => {
@@ -77,8 +79,8 @@ export default function Position() {
 
     const onSubmitCallback = () => {
         console.log('onDetailSubmit');
-        queryClient.invalidateQueries({ queryKey: ['position', positionId] });
-        queryClient.invalidateQueries({ queryKey: ['positionList-relations', company?.id] });
+        queryClient.invalidateQueries({ queryKey: ['position'] });
+        queryClient.invalidateQueries({ queryKey: ['positionList'] });
     };
 
     return (

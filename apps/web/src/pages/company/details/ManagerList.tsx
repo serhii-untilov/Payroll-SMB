@@ -31,15 +31,25 @@ export function ManagerList(params: Props) {
             field: 'fullName',
             headerName: t('Full Name'),
             type: 'string',
-            width: 240,
+            width: 290,
             sortable: true,
             valueGetter: (params) => {
                 return `${params.row.firstName} ${params.row.lastName}`;
             },
         },
         {
-            field: 'position',
-            headerName: t('Position'),
+            field: 'job',
+            headerName: t('Job'),
+            type: 'string',
+            width: 240,
+            sortable: true,
+            valueGetter: (params) => {
+                return '';
+            },
+        },
+        {
+            field: 'department',
+            headerName: t('Department'),
             type: 'string',
             width: 240,
             sortable: true,
@@ -51,7 +61,7 @@ export function ManagerList(params: Props) {
             field: 'taxId',
             headerName: t('Tax ID'),
             type: 'string',
-            width: 160,
+            width: 220,
             sortable: true,
             valueGetter: (params) => {
                 return '';
@@ -71,7 +81,7 @@ export function ManagerList(params: Props) {
             field: 'email',
             headerName: t('Email Address'),
             type: 'string',
-            width: 160,
+            width: 220,
             sortable: true,
             valueGetter: (params) => {
                 return '';

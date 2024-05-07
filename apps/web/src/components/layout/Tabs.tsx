@@ -13,7 +13,7 @@ export function Tabs({ value, onChange, children, sx, ...other }: TabsProps) {
                 ...{
                     mr: 'auto',
                     my: '1px',
-                    borderBottom: 1,
+                    borderBottom: 0.5,
                     borderColor: 'divider',
                     '.MuiTabs-indicator': {
                         height: '2px',

@@ -8,7 +8,7 @@ const PageLayout: FC<Props> = ({ children, ...other }) => {
     const { compactView } = useAppContext();
     return (
         <Box
-            my={{ xs: 0, lg: 1, xl: 1 }}
+            mb={{ xs: 0, lg: 1, xl: 1 }}
             mx={{ xs: 0, lg: 1, xl: 1 }}
             sx={{
                 display: 'flex',
