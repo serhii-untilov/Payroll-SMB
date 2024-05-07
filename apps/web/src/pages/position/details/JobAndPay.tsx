@@ -173,8 +173,8 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                       });
             }
             reset(await getFormData(formData.id));
-            await queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'active' });
-            await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'active' });
+            await queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
+            await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -183,7 +183,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
 
     const onCancel = async () => {
         reset(await getFormData(formData?.id));
-        queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'active' });
+        queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
     };
 
     const onDelete = () => {

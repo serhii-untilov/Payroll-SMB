@@ -164,11 +164,19 @@ export function PositionList(props: Props) {
     } = useQuery<IPosition[], Error>({
         queryKey: ['position', 'list', { companyId, relations: true }],
         queryFn: async () => {
-            return await getPositionList({
-                companyId,
-                relations: true,
-                onPayPeriodDate: payPeriod || new Date(),
-            });
+            return (
+                await getPositionList({
+                    companyId,
+                    relations: true,
+                    onPayPeriodDate: payPeriod || new Date(),
+                })
+            ).sort((a, b) =>
+                (Number(a.cardNumber) || 2147483647) < (Number(b.cardNumber) || 2147483647)
+                    ? -1
+                    : (Number(a.cardNumber) || 2147483647) > (Number(b.cardNumber) || 2147483647)
+                      ? 1
+                      : 0,
+            );
         },
         enabled: !!companyId && !!payPeriod,
     });
