@@ -109,7 +109,7 @@ export function Personal({ personId }: Props) {
                 ? await updatePerson(data.id, dirtyValues)
                 : await createPerson(data);
             reset(person);
-            queryClient.invalidateQueries({ queryKey: ['person'] });
+            queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -122,7 +122,7 @@ export function Personal({ personId }: Props) {
 
     const onCancel = () => {
         reset(defaultValues);
-        queryClient.invalidateQueries({ queryKey: ['person'] });
+        queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
     };
 
     const onPrint = () => {

@@ -8,12 +8,12 @@ import {
     maxDate,
     minDate,
 } from '@repo/shared';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { FormDateField } from '../../../components/form/FormDateField';
 import { FormTextField } from '../../../components/form/FormTextField';
@@ -91,7 +91,6 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                 : {};
         return formSchema.cast({ ...position_formData(position, positionHistory) });
     };
-
     const {
         data: formData,
         isError: isFormError,
@@ -208,11 +207,6 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                 <Toolbar
                     onSave={isDirty ? handleSubmit(onSubmit) : 'disabled'}
                     onCancel={isDirty ? onCancel : 'disabled'}
-                    // onDelete={formData?.id ? onDelete : 'disabled'}
-                    // onRestoreDeleted={formData?.deletedUserId ? onRestoreDeleted : 'disabled'}
-                    // onPrint={formData?.id ? onPrint : 'disabled'}
-                    // onExport={formData?.id ? onExport : 'disabled'}
-                    // onShowHistory={'disabled'}
                 />
 
                 <Grid container xs={12} spacing={2}>

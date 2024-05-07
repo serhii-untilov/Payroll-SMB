@@ -127,7 +127,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
             if (submitCallback) submitCallback(department);
             params.setOpen(false);
             reset(defaultValues);
-            queryClient.invalidateQueries({ queryKey: ['department'] });
+            queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -137,7 +137,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
     const onCancel = () => {
         reset(defaultValues);
         params.setOpen(false);
-        queryClient.invalidateQueries({ queryKey: ['department'] });
+        queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
 
     return (
@@ -148,7 +148,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                 onClose={() => {
                     params.setOpen(false);
                     reset(department);
-                    queryClient.invalidateQueries({ queryKey: ['department'] });
+                    queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
                 }}
                 // PaperProps={{
                 //     component: 'form',

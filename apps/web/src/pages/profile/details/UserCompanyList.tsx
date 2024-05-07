@@ -125,14 +125,14 @@ export function UserCompanyList(params: Props) {
     };
 
     const submitCallback = (data: ICompany) => {
-        queryClient.invalidateQueries({ queryKey: ['userCompany'] });
+        queryClient.invalidateQueries({ queryKey: ['userCompany'], refetchType: 'all' });
     };
 
     const onDeleteCompany = async () => {
         // for (const id of rowSelectionModel) {
         //     await deleteCompany(+id);
         // }
-        // queryClient.invalidateQueries({ queryKey: ['userCompany'] });
+        // queryClient.invalidateQueries({ queryKey: ['userCompany'], refetchType: 'all' });
         console.log('onDeleteCompany');
     };
 

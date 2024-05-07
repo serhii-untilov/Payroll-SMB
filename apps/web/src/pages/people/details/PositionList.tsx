@@ -200,14 +200,14 @@ export function PositionList(props: Props) {
     };
 
     const submitCallback = (data: IPosition) => {
-        queryClient.invalidateQueries({ queryKey: ['position'] });
+        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
             await deletePosition(+id);
         }
-        queryClient.invalidateQueries({ queryKey: ['position'] });
+        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const onPrint = () => {

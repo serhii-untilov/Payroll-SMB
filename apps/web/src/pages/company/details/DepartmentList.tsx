@@ -107,14 +107,14 @@ export function DepartmentList(params: Props) {
     };
 
     const submitCallback = (data: IDepartment) => {
-        queryClient.invalidateQueries({ queryKey: ['department'] });
+        queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
 
     const onDeleteDepartment = async () => {
         for (const id of rowSelectionModel) {
             await deleteDepartment(+id);
         }
-        queryClient.invalidateQueries({ queryKey: ['department'] });
+        queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
 
     const onPrint = () => {

@@ -169,7 +169,7 @@ export function CompanyDetails(props: Props) {
                 ? await updateCompany(data.id, dirtyValues)
                 : await createCompany(data);
             reset(company);
-            queryClient.invalidateQueries({ queryKey: ['company'] });
+            queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
             if (!currentCompany || currentCompany.id === company.id) {
                 setCurrentCompany(company);
             }
@@ -181,7 +181,7 @@ export function CompanyDetails(props: Props) {
 
     const onCancel = () => {
         reset(company);
-        queryClient.invalidateQueries({ queryKey: ['company'] });
+        queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
     };
 
     return (

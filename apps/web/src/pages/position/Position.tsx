@@ -66,7 +66,7 @@ export default function Position() {
 
     const onCancel = () => {
         navigate(-1);
-        queryClient.invalidateQueries({ queryKey: ['position'] });
+        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const generatePageTitle = () => {
@@ -79,7 +79,7 @@ export default function Position() {
 
     const onSubmitCallback = () => {
         console.log('onDetailSubmit');
-        queryClient.invalidateQueries({ queryKey: ['position'] });
+        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     return (
