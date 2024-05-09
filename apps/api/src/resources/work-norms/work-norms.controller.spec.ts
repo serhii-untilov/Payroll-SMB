@@ -4,6 +4,8 @@ import { WorkNormsService } from './work-norms.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { WorkNorm } from './entities/work-norm.entity';
 import { repositoryMockFactory } from '@repo/testing';
+import { AccessService } from '../access/access.service';
+import { createMock } from '@golevelup/ts-jest';
 
 describe('WorkNormsController', () => {
     let controller: WorkNormsController;
@@ -14,10 +16,8 @@ describe('WorkNormsController', () => {
             controllers: [WorkNormsController],
             providers: [
                 WorkNormsService,
-                {
-                    provide: getRepositoryToken(WorkNorm),
-                    useFactory: repositoryMockFactory,
-                },
+                { provide: getRepositoryToken(WorkNorm), useFactory: repositoryMockFactory },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 

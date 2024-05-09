@@ -42,10 +42,18 @@ export class PositionsController {
     async findAll(
         @Req() req: Request,
         @Query('companyId', ParseIntPipe) companyId: number,
-        @Query('relations', ParseBoolPipe) relations: boolean = false,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+        @Query('onDate') onDate: Date,
+        @Query('onPayPeriodDate') onPayPeriodDate: Date,
     ): Promise<IPosition[]> {
         const userId = req.user['sub'];
-        return await this.positionsService.findAll(userId, companyId, relations);
+        return await this.positionsService.findAll(
+            userId,
+            companyId,
+            !!relations,
+            onDate ? new Date(onDate) : null,
+            onPayPeriodDate ? new Date(onPayPeriodDate) : null,
+        );
     }
 
     @Get(':id')
@@ -54,10 +62,16 @@ export class PositionsController {
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean = false,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+        @Query('onDate') onDate: Date,
     ): Promise<IPosition> {
         const userId = req.user['sub'];
-        return await this.positionsService.findOne(userId, id, relations);
+        return await this.positionsService.findOne(
+            userId,
+            id,
+            !!relations,
+            onDate ? new Date(onDate) : null,
+        );
     }
 
     @Patch(':id')

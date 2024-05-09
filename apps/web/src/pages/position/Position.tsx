@@ -1,13 +1,14 @@
 import { ArrowBackIosNewRounded } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { IPosition, maxDate, minDate } from '@repo/shared';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
-import { PropsWithChildren, ReactNode, SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
-import { PageSubTitle } from '../../components/layout/PageSubTitle';
+import { PageTitle } from '../../components/layout/PageTitle';
+import { Tab } from '../../components/layout/Tab';
 import { TabPanel } from '../../components/layout/TabPanel';
 import { Tabs } from '../../components/layout/Tabs';
 import useAppContext from '../../hooks/useAppContext';
@@ -15,29 +16,23 @@ import useLocale from '../../hooks/useLocale';
 import { getPosition } from '../../services/position.service';
 import { JobAndPay } from './details/JobAndPay';
 import { Personal } from './details/Personal';
-import { Tab } from '../../components/layout/Tab';
 
-interface Props extends PropsWithChildren {
-    children?: ReactNode;
-    index: number;
-    value: number;
-}
-
-export default function Position(props: Props) {
+export default function Position() {
     const params = useParams();
     const positionId = Number(params.positionId);
-    const { children, value, index, ...other } = props;
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { company } = useAppContext();
+    const { company, payPeriod } = useAppContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(Number(localStorage.getItem('position-tab-index')));
+
     const handleChangeTab = (event: SyntheticEvent, newValue: number) => {
         setTab(newValue);
+        localStorage.setItem('position-tab-index', newValue.toString());
     };
 
-    useEffect(() => {}, [company]);
+    useEffect(() => {}, [company, locale]);
 
     const defaultValues = useMemo((): Partial<IPosition> => {
         return {
@@ -52,13 +47,17 @@ export default function Position(props: Props) {
         isError: isPositionError,
         error: positionError,
     } = useQuery<Partial<IPosition>, Error>({
-        queryKey: ['position', positionId],
+        queryKey: ['position', { positionId, relations: true }],
         queryFn: async () => {
             return positionId
-                ? await getPosition({ id: positionId, relations: true })
+                ? await getPosition({
+                      id: positionId,
+                      relations: true,
+                      onPayPeriodDate: payPeriod,
+                  })
                 : defaultValues;
         },
-        enabled: !!company?.id,
+        enabled: !!company?.id && !!payPeriod,
     });
 
     useEffect(() => {}, [locale]);
@@ -71,22 +70,32 @@ export default function Position(props: Props) {
 
     const onCancel = () => {
         navigate(-1);
-        queryClient.invalidateQueries({ queryKey: ['position', positionId] });
+        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
-    const generatePageSubTitle = () => {
-        return positionId ? position?.name : t('New Position');
+    const generatePageTitle = () => {
+        const positionName = positionId
+            ? position?.personId
+                ? position?.person?.fullName || ''
+                : t('Vacancy')
+            : t('New Position');
+        const jobName = (position?.history?.[0]?.job?.name || '').toLocaleLowerCase();
+        return `${positionName}` + (jobName ? `, ${jobName}` : '');
+    };
+
+    const onSubmitCallback = () => {
+        console.log('onDetailSubmit');
+        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     return (
         <PageLayout>
-            <PageSubTitle>
+            <PageTitle>
                 <IconButton aria-label="Go Back" color="primary" sx={{ mr: 1 }} onClick={onCancel}>
                     <ArrowBackIosNewRounded />
                 </IconButton>
-                {generatePageSubTitle()}
-            </PageSubTitle>
-            {/* <Box sx={{ flexGrow: 1, display: 'flex', height: 324 }}> */}
+                {generatePageTitle()}
+            </PageTitle>
             <Tabs value={tab} onChange={handleChangeTab}>
                 <Tab label={t('Job & Pay')} />
                 {/* <Tab label={t('Additional Earnings')} /> */}
@@ -97,7 +106,7 @@ export default function Position(props: Props) {
                 <Tab label={t('Notes')} />
             </Tabs>
             <TabPanel value={tab} index={0}>
-                <JobAndPay positionId={positionId} />
+                <JobAndPay positionId={positionId} onSubmitCallback={onSubmitCallback} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
                 <Personal personId={positionId} />
@@ -105,7 +114,6 @@ export default function Position(props: Props) {
             <TabPanel value={tab} index={2}></TabPanel>
             <TabPanel value={tab} index={3}></TabPanel>
             <TabPanel value={tab} index={4}></TabPanel>
-            {/* </Box> */}
         </PageLayout>
     );
 }

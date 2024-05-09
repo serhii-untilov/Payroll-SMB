@@ -3,16 +3,13 @@ import {
     CheckCircleRounded,
     DeleteRounded,
     DeleteSweepRounded,
-    DoNotDisturbOnRounded,
     DownloadRounded,
-    HighlightOffRounded,
     HistoryRounded,
     OfflinePinRounded,
     PrintRounded,
-    RemoveCircleRounded,
     RestoreFromTrashRounded,
-    UnpublishedRounded,
 } from '@mui/icons-material';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { Box, IconButton, Stack, StackProps } from '@mui/material';
 import { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,9 +22,9 @@ export interface Props extends StackProps {
     onSave?: Func<any> | 'disabled' | undefined;
     onCancel?: Func<any> | 'disabled' | undefined;
     onSaveAndClose?: Func<any> | 'disabled' | undefined;
-    onDelete?: Func<any> | 'disabled' | undefined;
     onPrint?: Func<any> | 'disabled' | undefined;
     onExport?: Func<any> | 'disabled' | undefined;
+    onDelete?: Func<any> | 'disabled' | undefined;
     onShowDeleted?: Func<any> | 'disabled' | undefined;
     onRestoreDeleted?: Func<any> | 'disabled' | undefined;
     onShowHistory?: Func<any> | 'disabled' | undefined;
@@ -59,15 +56,7 @@ export function Toolbar(props: Props) {
     const { t } = useTranslation();
 
     return (
-        <Stack
-            direction="row"
-            spacing={1}
-            aria-label="Table toolbar button group"
-            // mt={1}
-            mx={1}
-            my={1}
-            // {...props}
-        >
+        <Stack direction="row" spacing={1} aria-label="Table toolbar button group" my={1}>
             <Box
                 sx={{
                     display: 'flex',
@@ -94,7 +83,7 @@ export function Toolbar(props: Props) {
                         title={t('Cancel changes')}
                         color={'warning'}
                     >
-                        <DoNotDisturbOnRounded />
+                        <CancelIcon />
                     </ToolbarItem>
 
                     <ToolbarItem item={props?.onPrint} title={t('Print')}>

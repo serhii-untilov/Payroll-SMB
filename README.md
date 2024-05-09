@@ -6,9 +6,9 @@ The Payroll SMB application provides a solution for employers and employees to c
 
 - UI Responsive Design
 - Multi-tenant architecture
-- Mono-repository
-- JWT authorization
-- Role-based access
+- Mono-repository, shared types libs between back-end and front-end apps
+- REST API documented in Open API by Swagger
+- Role-based access, JWT authorization
 - Event-driven calculate processing
 - Automatic documents prepared according to the business process schedule
 
@@ -138,7 +138,8 @@ npm i --workspace @repo/api --save-dev webpack-node-externals run-script-webpack
 npm i --workspace @repo/api --save-dev webpack webpack-cli
 
 # Init "web" application for front-end
-npm i --workspace @repo/web --save react-query
+#npm i --workspace @repo/web --save react-query
+npm --workspace @repo/web i @tanstack/react-query
 npm i --workspace @repo/web --save axios
 npm i --workspace @repo/web --save react-router-dom
 npm i --workspace @repo/web --save react-hook-form
@@ -257,3 +258,5 @@ openssl rand -base64 60
 - [**NestJS** - Advanced Testing Strategies with Mocks NestJS - @golevelup/ts-jest](https://trilon.io/blog/advanced-testing-strategies-with-mocks-in-nestjs)
 - [**TypeORM** - PostgreSQL and typeorm — Advanced Querying](https://darraghoriordan.medium.com/postgresql-and-typeorm-advanced-querying-e5d8e4c950d6)
 - [**NestJS** - Inject NestJS Service from Another Module](https://tiloid.com/p/inject-nestjs-service-from-another-module)
+- [**Mocking** - Mocking Express Request with Jest and Typescript using correct types](https://stackoverflow.com/questions/57964299/mocking-express-request-with-jest-and-typescript-using-correct-types)
+

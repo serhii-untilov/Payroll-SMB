@@ -1,4 +1,5 @@
 import { ICompany, PaymentSchedule } from '@repo/shared';
+import { endOfMonth, startOfDay, startOfMonth } from 'date-fns';
 import {
     BeforeInsert,
     BeforeUpdate,
@@ -8,11 +9,11 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
+import { UserCompany } from '../../../resources/users/entities/user-company.entity';
 import { Logger } from '../../abstract/logger.abstract';
 import { Accounting } from '../../accounting/entities/accounting.entity';
 import { Department } from '../../departments/entities/department.entity';
 import { Law } from '../../laws/entities/law.entity';
-import { endOfMonth, startOfDay, startOfMonth } from 'date-fns';
 import { Position } from '../../positions/entities/position.entity';
 
 @Entity()
@@ -62,6 +63,9 @@ export class Company extends Logger implements ICompany {
 
     @OneToMany(() => Position, (position) => position.company)
     positions?: Position[];
+
+    @OneToMany(() => UserCompany, (userCompany) => userCompany.company)
+    users?: UserCompany[];
 
     @BeforeInsert()
     beforeInsert() {

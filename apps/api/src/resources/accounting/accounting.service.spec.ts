@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AccountingService } from './accounting.service';
-import { Accounting } from './entities/accounting.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
+import { AccountingService } from './accounting.service';
+import { Accounting } from './entities/accounting.entity';
 
 describe('AccountingService', () => {
     let service: AccountingService;

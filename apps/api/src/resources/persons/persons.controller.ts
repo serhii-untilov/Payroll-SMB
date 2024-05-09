@@ -1,21 +1,24 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
-    UseGuards,
-    ParseIntPipe,
+    Get,
     HttpCode,
     HttpStatus,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Req,
+    UseGuards,
 } from '@nestjs/common';
-import { PersonsService } from './persons.service';
-import { CreatePersonDto } from './dto/create-person.dto';
-import { UpdatePersonDto } from './dto/update-person.dto';
 import { IPerson } from '@repo/shared';
+import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { CreatePersonDto } from './dto/create-person.dto';
+import { FindPersonDto } from './dto/find-person.dto';
+import { UpdatePersonDto } from './dto/update-person.dto';
+import { PersonsService } from './persons.service';
 
 @Controller('persons')
 export class PersonsController {
@@ -24,38 +27,52 @@ export class PersonsController {
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Body() createPersonDto: CreatePersonDto): Promise<IPerson> {
-        return await this.personsService.create(createPersonDto);
+    async create(@Req() req: Request, @Body() person: CreatePersonDto): Promise<IPerson> {
+        const userId = req.user['sub'];
+        return await this.personsService.create(userId, person);
     }
 
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(): Promise<IPerson[]> {
-        return await this.personsService.findAll();
+    async findAll(@Req() req: Request): Promise<IPerson[]> {
+        const userId = req.user['sub'];
+        return await this.personsService.findAll(userId);
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<IPerson> {
-        return await this.personsService.findOne(id);
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
+        const userId = req.user['sub'];
+        return await this.personsService.findOne(userId, id);
     }
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async update(
+        @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updatePersonDto: UpdatePersonDto,
+        @Body() person: UpdatePersonDto,
     ): Promise<IPerson> {
-        return await this.personsService.update(id, updatePersonDto);
+        const userId = req.user['sub'];
+        return await this.personsService.update(userId, id, person);
     }
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async remove(@Param('id', ParseIntPipe) id: number): Promise<IPerson> {
-        return await this.personsService.remove(id);
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
+        const userId = req.user['sub'];
+        return await this.personsService.remove(userId, id);
+    }
+
+    @Post('find')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async find(@Req() req: Request, @Body() person: FindPersonDto): Promise<IPerson | null> {
+        const userId = req.user['sub'];
+        return await this.personsService.find(userId, person);
     }
 }

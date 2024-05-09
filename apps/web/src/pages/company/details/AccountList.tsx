@@ -9,12 +9,15 @@ import {
 import { ICompanyAccount } from '@repo/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
-import { DataGrid } from '../../components/grid/DataGrid';
-import { Toolbar } from '../../components/layout/Toolbar';
-import { CompanyDetailsProps } from './CompanyDetails';
+import { useQueryClient } from '@tanstack/react-query';
+import { DataGrid } from '../../../components/grid/DataGrid';
+import { Toolbar } from '../../../components/layout/Toolbar';
 
-export function AccountList(params: CompanyDetailsProps) {
+type Props = {
+    companyId: number | undefined;
+};
+
+export function AccountList(params: Props) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
@@ -27,7 +30,7 @@ export function AccountList(params: CompanyDetailsProps) {
             field: 'accountNumber',
             headerName: t('Account Number'),
             type: 'string',
-            width: 240,
+            width: 280,
             sortable: true,
         },
         {

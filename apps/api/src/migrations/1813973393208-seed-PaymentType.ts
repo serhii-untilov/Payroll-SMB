@@ -1,7 +1,7 @@
 import { PaymentGroup, PaymentMethod, PaymentPart } from '@repo/shared';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { PaymentType } from '../resources/payment-types/entities/payment-type.entity';
-import { getAdminId } from '../utils/getAdminId';
+import { getSystemUserId } from '../utils/getSystemUserId';
 import { langPipe } from '../utils/langPipe';
 
 const lang = process.env.LANGUAGE;
@@ -165,10 +165,10 @@ const recordList = [
 export class Seed1813973393208 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
-        const user_id = await getAdminId(dataSource);
+        const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
             if (recordList[n].law && recordList[n].law !== law) continue;
-            const record = { ...recordList[n], createdUserId: user_id, updatedUserId: user_id };
+            const record = { ...recordList[n], createdUserId: userId, updatedUserId: userId };
             delete record.law;
             await dataSource
                 .createQueryBuilder()
@@ -182,6 +182,7 @@ export class Seed1813973393208 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
+        const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
             if (recordList[n]?.law && recordList[n]?.law !== law) continue;
             const record = langPipe(lang, recordList[n]);
@@ -189,7 +190,7 @@ export class Seed1813973393208 implements MigrationInterface {
                 .createQueryBuilder()
                 .delete()
                 .from(entity)
-                .where('name = :name', { name: record.name })
+                .where('name = :name and createdUserId = :userId', { name: record.name, userId })
                 .execute();
         }
     }

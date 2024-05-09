@@ -41,13 +41,7 @@ export class JobsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.jobsService.findOne({
-            where: { id },
-            relations: {
-                law: true,
-                accounting: true,
-            },
-        });
+        return await this.jobsService.findOne(id);
     }
 
     @Patch(':id')

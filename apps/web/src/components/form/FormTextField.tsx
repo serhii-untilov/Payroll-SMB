@@ -9,6 +9,7 @@ export type FormTextFieldProps = OutlinedInputProps & {
     control: any;
     label: string;
     rules?: any;
+    autoFocus?: boolean;
 };
 
 export const FormTextField = (props: FormTextFieldProps) => {
@@ -22,6 +23,7 @@ export const FormTextField = (props: FormTextFieldProps) => {
                 rules={props.rules}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                     <OutlinedInput
+                        autoFocus={props?.autoFocus}
                         size="small"
                         error={error != undefined}
                         onChange={onChange}

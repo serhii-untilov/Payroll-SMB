@@ -2,13 +2,13 @@
 
 export interface ILogger {
     createdDate?: Date;
-    createdUserId?: number;
+    createdUserId?: number | null;
 
     updatedDate?: Date;
-    updatedUserId?: number;
+    updatedUserId?: number | null;
 
     deletedDate?: Date | null;
     deletedUserId?: number | null;
 
-    version?: number;
+    version?: number | null;
 }

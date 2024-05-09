@@ -1,16 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
+import { IUpdateUser } from '@repo/shared';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from 'react-query';
 import * as Yup from 'yup';
-import { FormInputDropdown } from '../../components/form/FormInputDropdown';
-import { FormTextField } from '../../components/form/FormTextField';
-import { Button } from '../../components/layout/Button';
 import PageLayout from '../../components/layout/PageLayout';
+import { PageTitle } from '../../components/layout/PageTitle';
+import { Tab } from '../../components/layout/Tab';
+import { TabPanel } from '../../components/layout/TabPanel';
+import { Tabs } from '../../components/layout/Tabs';
 import { AvatarBox } from '../../components/utility/AvatarBox';
 import { Loading } from '../../components/utility/Loading';
 import { supportedLanguages } from '../../context/LocaleContext';
@@ -18,6 +19,10 @@ import useLocale from '../../hooks/useLocale';
 import { getCurrentUser } from '../../services/auth.service';
 import { updateUser } from '../../services/user.service';
 import { getDirtyValues } from '../../services/utils';
+import { UserCompanyList } from './details/UserCompanyList';
+import { UserDetails } from './details/UserDetails';
+import useAppContext from '../../hooks/useAppContext';
+import useAuth from '../../hooks/useAuth';
 
 const formSchema = Yup.object().shape({
     id: Yup.number(),
@@ -39,17 +44,22 @@ const defaultValues: FormType = {
 };
 
 export default function Profile() {
+    const [tab, setTab] = useState(Number(localStorage.getItem('profile-tab-index')));
     const { supportedLocales, setLanguage } = useLocale();
     const { locale } = useLocale();
     const { t } = useTranslation();
+    const { user: currentUser } = useAuth();
 
     const {
         data: user,
         isError: isQueryError,
         isLoading,
         error: queryError,
-    } = useQuery<FormType, Error>('user-profile', async () => {
-        return formSchema.cast(await getCurrentUser());
+    } = useQuery<FormType, Error>({
+        queryKey: ['user', { id: currentUser?.id }],
+        queryFn: async () => {
+            return formSchema.cast(await getCurrentUser());
+        },
     });
 
     const {
@@ -94,7 +104,7 @@ export default function Profile() {
         }
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const user = await updateUser(data.id, dirtyValues);
+            const user = await updateUser(data.id, dirtyValues as IUpdateUser);
             reset(user);
             user.language && setLanguage(user.language as supportedLanguages);
         } catch (e: unknown) {
@@ -107,87 +117,30 @@ export default function Profile() {
         reset(user);
     };
 
+    const generateTitle = () => {
+        const userName = `${user?.firstName} ${user?.lastName}`.trim();
+        return user?.id ? userName || user?.email || t('Profile') : t('New user');
+    };
+
+    const handleChange = (event: SyntheticEvent, newValue: number) => {
+        setTab(newValue);
+        localStorage.setItem('profile-tab-index', newValue.toString());
+    };
+
     return (
-        <PageLayout title={t('User Profile')}>
-            <Grid
-                container
-                component="form"
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-                spacing={2}
-            >
-                <Grid item>
-                    <AvatarBox />
-                </Grid>
-                <Grid container item xs={12} sm={7} md={6} lg={4} spacing={2}>
-                    <Grid item xs={12}>
-                        <FormTextField
-                            control={control}
-                            autoComplete="given-name"
-                            name="firstName"
-                            id="firstName"
-                            label={t('First Name')}
-                            type="text"
-                            autoFocus
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormTextField
-                            control={control}
-                            id="lastName"
-                            label={t('Last Name')}
-                            name="lastName"
-                            type="text"
-                            autoComplete="family-name"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormTextField
-                            control={control}
-                            required
-                            label={t('Email Address')}
-                            name="email"
-                            type="email"
-                            autoComplete="email"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormInputDropdown
-                            control={control}
-                            label={t('Language')}
-                            name="language"
-                            autoComplete="language"
-                            type="text"
-                            options={
-                                supportedLocales?.map((o) => {
-                                    return { label: o.name, value: o.language as string };
-                                }) || []
-                            }
-                        />
-                    </Grid>
-                    {isDirty && (
-                        <Grid item xs={12}>
-                            <Grid container spacing={1}>
-                                <Grid item>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        disabled={!isDirty}
-                                    >
-                                        {t('Update')}
-                                    </Button>
-                                </Grid>
-                                <Grid item>
-                                    <Button onClick={onCancel} variant="contained" color="warning">
-                                        {t('Cancel')}
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    )}
-                </Grid>
-            </Grid>
+        <PageLayout>
+            <PageTitle>{generateTitle()}</PageTitle>
+            <AvatarBox />
+            <Tabs id="user__details_tabs" value={tab} onChange={handleChange}>
+                <Tab label={t('User Profile')} />
+                <Tab label={t('Companies')} disabled={!user?.id} />
+            </Tabs>
+            <TabPanel value={tab} index={0}>
+                <UserDetails userId={user?.id} />
+            </TabPanel>
+            <TabPanel value={tab} index={1}>
+                <UserCompanyList userId={user?.id} />
+            </TabPanel>
         </PageLayout>
     );
 }

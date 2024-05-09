@@ -1,3 +1,5 @@
+import { ILogger } from './logger.interface';
+
 export enum AccountingType {
     GENERIC = 'generic',
     KINDERGARTEN = 'kindergarten',
@@ -5,11 +7,11 @@ export enum AccountingType {
     TRADE = 'trade',
     CUSTOM = 'custom',
 }
-export interface IAccounting {
+export interface IAccounting extends ILogger {
     id: number;
     name: string;
     type: string;
 }
 
-export type ICreateAccounting = Omit<IAccounting, 'id'>;
-export type IUpdateAccounting = Partial<Omit<IAccounting, 'id'>>;
+export type ICreateAccounting = Pick<IAccounting, 'name' | 'type'>;
+export type IUpdateAccounting = Partial<ICreateAccounting>;

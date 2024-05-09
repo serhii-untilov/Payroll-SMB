@@ -9,6 +9,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -34,18 +35,21 @@ export class CompaniesController {
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll() {
-        return await this.companiesService.findAll();
+    async findAll(@Req() req: Request, @Query() relations: boolean) {
+        const userId = req.user['sub'];
+        return await this.companiesService.findAll(userId, relations);
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.companiesService.findOne({
-            where: { id },
-            relations: { law: true, accounting: true },
-        });
+    async findOne(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Query() relations: boolean,
+    ) {
+        const userId = req.user['sub'];
+        return await this.companiesService.findOne(userId, id, relations);
     }
 
     @Patch(':id')

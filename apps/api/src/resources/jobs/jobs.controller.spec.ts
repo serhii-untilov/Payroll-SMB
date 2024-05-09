@@ -4,6 +4,8 @@ import { repositoryMockFactory } from '@repo/testing';
 import { Job } from './entities/job.entity';
 import { JobsController } from './jobs.controller';
 import { JobsService } from './jobs.service';
+import { AccessService } from '../access/access.service';
+import { createMock } from '@golevelup/ts-jest';
 
 describe('JobsController', () => {
     let controller: JobsController;
@@ -18,6 +20,7 @@ describe('JobsController', () => {
                     provide: getRepositoryToken(Job),
                     useFactory: repositoryMockFactory,
                 },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 

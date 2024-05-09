@@ -2,22 +2,22 @@ import { MenuItem, Select, SelectChangeEvent, SelectProps } from '@mui/material'
 import { IPayPeriod } from '@repo/shared';
 import { format, isEqual, startOfMonth } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { getPayPeriodList, getPayPeriodName } from '../../services/payPeriod.service';
-import { Skeleton } from './Skeleton';
+import { Skeleton } from '../layout/Skeleton';
 
 export type PayPeriodOption = {
     label: string;
     value: string;
 };
 
-export function PayPeriod(props: SelectProps) {
+export function SelectPayPeriod(props: SelectProps) {
     const { company, payPeriod, setPayPeriod } = useAppContext();
     const { locale } = useLocale();
     const { data, isError, isLoading, error } = useQuery<IPayPeriod[], Error>({
-        queryKey: ['payPeriodList', company?.id, company?.payPeriod],
+        queryKey: ['payPeriod', 'list', { companyId: company?.id, payPeriod: company?.payPeriod }],
         queryFn: async () => getPayPeriodList(company?.id),
     });
 

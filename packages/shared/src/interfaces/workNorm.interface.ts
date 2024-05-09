@@ -5,7 +5,7 @@ export enum WorkNormType {
     WEEKLY = 'weekly', // Fixed hours per week
     PERIODIC = 'periodic', // Fixed hours in a certain period
     // VARIABLE = 'variable', // Variable (hours vary every week)
-    SHIFT = 'shift', // Shift work schedule
+    SHIFTED = 'shifted', // Shifted work schedule
 }
 
 export interface IWorkNorm extends ILogger {

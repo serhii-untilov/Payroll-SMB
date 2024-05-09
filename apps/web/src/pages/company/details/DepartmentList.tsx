@@ -9,18 +9,20 @@ import {
 } from '@mui/x-data-grid';
 import { IDepartment, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
-import { DataGrid } from '../../components/grid/DataGrid';
-import { Toolbar } from '../../components/layout/Toolbar';
-import { Loading } from '../../components/utility/Loading';
-import { deleteDepartment, getDepartmentList } from '../../services/department.service';
-import { CompanyDetailsProps } from './CompanyDetails';
-import DepartmentForm from './DepartmentForm';
-import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { DataGrid } from '../../../components/grid/DataGrid';
+import { Toolbar } from '../../../components/layout/Toolbar';
+import { Loading } from '../../../components/utility/Loading';
+import { deleteDepartment, getDepartmentList } from '../../../services/department.service';
+import DepartmentForm from '../../department/DepartmentForm';
 
-export function DepartmentList(params: CompanyDetailsProps) {
+type Props = {
+    companyId: number | undefined;
+};
+
+export function DepartmentList(params: Props) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
@@ -77,9 +79,9 @@ export function DepartmentList(params: CompanyDetailsProps) {
         isLoading: isDepartmentListLoading,
         error: departmentListError,
     } = useQuery<IDepartment[], Error>({
-        queryKey: ['departmentList-relations', companyId],
+        queryKey: ['department', 'list', { companyId, relations: true }],
         queryFn: async () => {
-            return await getDepartmentList(companyId, true);
+            return companyId ? await getDepartmentList(companyId, true) : [];
         },
         enabled: !!companyId,
     });
@@ -105,14 +107,14 @@ export function DepartmentList(params: CompanyDetailsProps) {
     };
 
     const submitCallback = (data: IDepartment) => {
-        queryClient.invalidateQueries({ queryKey: ['departmentList-relations', companyId] });
+        queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
 
     const onDeleteDepartment = async () => {
         for (const id of rowSelectionModel) {
             await deleteDepartment(+id);
         }
-        queryClient.invalidateQueries({ queryKey: ['departmentList-relations', companyId] });
+        queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
 
     const onPrint = () => {

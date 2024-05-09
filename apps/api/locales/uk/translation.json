@@ -80,9 +80,9 @@
     "Offers": "Кандидати",
     "All": "Всі",
     "current": "поточний",
-    "Pay period": "Розрахунковий період",
+    "Pay Period": "Розрахунковий період",
     "Job": "Посада",
-    "Card Number": "Табельний №",
+    "Card Number": "Таб. №",
     "Sequence Number": "Порядковий №",
     "Work Norm": "Норма робочого часу",
     "Payment Type": "Форма оплати",
@@ -103,5 +103,13 @@
     "Personal": "Персональні відомості",
     "Documents": "Документи",
     "Notes": "Нотатки",
-    "Vacancy": "Вакансія"
+    "Vacancy": "Вакансія",
+    "Positions": "Штатні одиниці",
+    "Accounting Details": "Параметри обліку",
+    "Role": "Роль",
+    "User Role": "Роль користувача",
+    "New Company": "Нове підприємство",
+    "Upload photo": "Завантажити фото",
+    "Add a new person": "Додати нового працівника",
+    "Employee not yet registered? Please add.": "Працівник ще не зареєстрований? Будь ласка, додайте."
 }

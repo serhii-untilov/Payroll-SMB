@@ -1,6 +1,6 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ICreateJob } from '@repo/shared';
 
 export class CreateJobDto implements ICreateJob {
-    id: number;
-    name: string;
+    @ApiProperty() name: string;
 }

@@ -1,88 +1,110 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AccessType, ResourceType } from '@repo/shared';
+import { Repository } from 'typeorm';
+import { AccessService } from '../access/access.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Department } from './entities/department.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '../users/entities/user.entity';
-import { Company } from '../companies/entities/company.entity';
 
 @Injectable()
 export class DepartmentsService {
+    public readonly resourceType = ResourceType.DEPARTMENT;
+
     constructor(
         @InjectRepository(Department)
-        private departmentsRepository: Repository<Department>,
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
-        @InjectRepository(Company)
-        private companyRepository: Repository<Company>,
+        private repository: Repository<Department>,
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
     ) {}
 
-    async create(userId: number, department: CreateDepartmentDto): Promise<Department> {
-        const existing = await this.departmentsRepository.findOneBy({ name: department.name });
+    async create(userId: number, payload: CreateDepartmentDto): Promise<Department> {
+        const existing = await this.repository.findOneBy({
+            companyId: payload.companyId,
+            name: payload.name,
+        });
         if (existing) {
-            throw new BadRequestException(`Department '${department.name}' already exists.`);
+            throw new ConflictException(`Department '${payload.name}' already exists.`);
         }
-        const user = await this.userRepository.findOneBy({ id: userId });
-        if (!user) {
-            throw new BadRequestException(`User '${userId}' not found.`);
-        }
-        const company = await this.companyRepository.findOneBy({ id: department.companyId });
-        if (!company) {
-            throw new BadRequestException(`Company '${department.companyId}' not found.`);
-        }
-        const newDepartment = await this.departmentsRepository.save({
-            ...department,
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            payload.companyId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+        return await this.repository.save({
+            ...payload,
             createdUserId: userId,
             updatedUserId: userId,
         });
-        return newDepartment;
     }
 
-    async findAll(params): Promise<Department[]> {
-        return await this.departmentsRepository.find(params);
+    async findAll(
+        userId: number,
+        companyId: number,
+        relations: boolean = false,
+    ): Promise<Department[]> {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        return await this.repository.find({
+            relations: {
+                company: relations,
+                parentDepartment: relations,
+                childDepartments: relations,
+            },
+            where: { companyId },
+        });
     }
 
-    async findOne(params): Promise<Department> {
-        const department = await this.departmentsRepository.findOne(params);
-        if (!department) {
-            throw new NotFoundException(`Department could not be found.`);
-        }
+    async findOne(userId: number, id: number, relations: boolean = false): Promise<Department> {
+        const department = await this.repository.findOneOrFail({
+            relations: {
+                company: relations,
+                parentDepartment: relations,
+                childDepartments: relations,
+            },
+            where: { id },
+        });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            department.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
         return department;
     }
 
-    async update(userId: number, id: number, data: UpdateDepartmentDto): Promise<Department> {
-        const department = await this.departmentsRepository.findOneBy({ id });
-        if (!department) {
-            throw new NotFoundException(`Department could not be found.`);
-        }
-        const user = await this.userRepository.findOneBy({ id: userId });
-        if (!user) {
-            throw new BadRequestException(`User '${userId}' not found.`);
-        }
-        await this.departmentsRepository.save({
-            ...data,
+    async update(userId: number, id: number, payload: UpdateDepartmentDto): Promise<Department> {
+        const department = await this.repository.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            department.companyId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+        return await this.repository.save({
+            ...payload,
             id,
             updatedUserId: userId,
         });
-        const updated = await this.departmentsRepository.findOneOrFail({ where: { id } });
-        return updated;
     }
 
     async remove(userId: number, id: number): Promise<Department> {
-        const department = await this.departmentsRepository.findOneBy({ id });
-        if (!department) {
-            throw new NotFoundException(`Department could not be found.`);
-        }
-        const user = await this.userRepository.findOneBy({ id: userId });
-        if (!user) {
-            throw new BadRequestException(`User '${userId}' not found.`);
-        }
-        await this.departmentsRepository.save({
-            ...department,
-            deletedDate: new Date(),
+        const department = await this.repository.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            department.companyId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+        return await this.repository.save({
+            id,
             deletedUserId: userId,
+            deletedDate: new Date(),
         });
-        return department;
     }
 }

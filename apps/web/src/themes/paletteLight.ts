@@ -1,7 +1,11 @@
 import { PaletteOptions } from '@mui/material';
 import { rgba } from '../services/utils';
 
-export function paletteLight(): PaletteOptions {
+export interface ExtPaletteOptions extends PaletteOptions {
+    tabsBorder: string;
+}
+
+export function paletteLight(): ExtPaletteOptions {
     return {
         mode: 'light',
         common: {
@@ -10,6 +14,7 @@ export function paletteLight(): PaletteOptions {
         },
         primary: {
             main: '#1976d2',
+            // main: '#0071e3', // Apple
             light: '#42a5f5',
             dark: '#1565c0',
             contrastText: '#fff',
@@ -69,10 +74,12 @@ export function paletteLight(): PaletteOptions {
         tonalOffset: 0.2,
         text: {
             primary: rgba(0, 0, 0, 0.87),
+            // primary: '#1d1d1f', // Apple
             secondary: rgba(0, 0, 0, 0.6),
             disabled: rgba(0, 0, 0, 0.38),
         },
         divider: '#bdbdbd', // rgba(0, 0, 0, 0.12),
+        // divider: '#e8e8ed', // Apple
         background: {
             paper: '#f9f9f9', // '#fff',
             default: '#fff',
@@ -90,5 +97,6 @@ export function paletteLight(): PaletteOptions {
             focusOpacity: 0.12,
             activatedOpacity: 0.12,
         },
+        tabsBorder: '#e8e8ed', // Apple
     };
 }

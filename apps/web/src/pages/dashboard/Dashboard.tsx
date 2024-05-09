@@ -16,9 +16,9 @@ export default function Dashboard() {
 
     return (
         <>
-            <PageLayout title={''}>
+            <PageLayout>
                 <Grid container flexDirection="column" spacing={2} sx={{ height: '100%' }}>
-                    <Grid item>
+                    <Grid item sx={{ mt: 2 }}>
                         <Typography component="h2" variant="h1" textAlign={'center'}>
                             <Greeting />
                         </Typography>

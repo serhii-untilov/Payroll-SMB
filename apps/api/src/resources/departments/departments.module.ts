@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AccessModule } from '../access/access.module';
 import { DepartmentsController } from './departments.controller';
 import { DepartmentsService } from './departments.service';
 import { Department } from './entities/department.entity';
-import { User } from '../users/entities/user.entity';
-import { Company } from '../companies/entities/company.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Department, User, Company])],
+    imports: [TypeOrmModule.forFeature([Department]), AccessModule],
     controllers: [DepartmentsController],
     providers: [DepartmentsService],
     exports: [DepartmentsService],

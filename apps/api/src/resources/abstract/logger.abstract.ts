@@ -11,21 +11,21 @@ export abstract class Logger implements ILogger {
     @CreateDateColumn()
     createdDate?: Date;
 
-    @Column({ type: 'integer' })
-    createdUserId?: number;
+    @Column({ type: 'integer', nullable: true })
+    createdUserId?: number | null;
 
     @UpdateDateColumn()
     updatedDate?: Date;
 
-    @Column({ type: 'integer' })
-    updatedUserId?: number;
+    @Column({ type: 'integer', nullable: true })
+    updatedUserId?: number | null;
 
     @DeleteDateColumn({ nullable: true })
     deletedDate?: Date | null;
 
     @Column({ type: 'integer', nullable: true })
-    deletedUserId?: number;
+    deletedUserId?: number | null;
 
-    @VersionColumn()
-    version?: number;
+    @VersionColumn({ default: 1, nullable: true })
+    version?: number | null;
 }

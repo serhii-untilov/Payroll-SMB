@@ -1,8 +1,9 @@
 import { AccountingType, IAccounting } from '@repo/shared';
+import { Logger } from '../../../resources/abstract/logger.abstract';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Accounting implements IAccounting {
+export class Accounting extends Logger implements IAccounting {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

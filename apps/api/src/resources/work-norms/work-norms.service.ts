@@ -1,66 +1,68 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AccessType, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
+import { AccessService } from '../access/access.service';
 import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNorm } from './entities/work-norm.entity';
 
 @Injectable()
 export class WorkNormsService {
+    public readonly resourceType = ResourceType.WORK_NORM;
+
     constructor(
         @InjectRepository(WorkNorm)
-        private workNormsRepository: Repository<WorkNorm>,
+        private repository: Repository<WorkNorm>,
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
     ) {}
 
-    async create(userId: number, WorkNorm: CreateWorkNormDto): Promise<WorkNorm> {
-        const existing = await this.workNormsRepository.findOneBy({ name: WorkNorm.name });
+    async create(userId: number, payload: CreateWorkNormDto): Promise<WorkNorm> {
+        const existing = await this.repository.findOneBy({ name: payload.name });
         if (existing) {
-            throw new BadRequestException(`WorkNorm '${WorkNorm.name}' already exists.`);
+            throw new ConflictException(`WorkNorm '${payload.name}' already exists.`);
         }
-        const newWorkNorm = await this.workNormsRepository.save({
-            ...WorkNorm,
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+        return await this.repository.save({
+            ...payload,
             createdUserId: userId,
             updatedUserId: userId,
         });
-        return newWorkNorm;
     }
 
-    async findAll(): Promise<WorkNorm[]> {
-        return await this.workNormsRepository.find();
+    async findAll(relations: boolean): Promise<WorkNorm[]> {
+        return await this.repository.find({ relations: { periods: relations } });
     }
 
-    async findOne(params): Promise<WorkNorm> {
-        const WorkNorm = await this.workNormsRepository.findOne(params);
-        if (!WorkNorm) {
-            throw new NotFoundException(`WorkNorm could not be found.`);
-        }
-        return WorkNorm;
-    }
-
-    async update(userId: number, id: number, data: UpdateWorkNormDto): Promise<WorkNorm> {
-        const WorkNorm = await this.workNormsRepository.findOneBy({ id });
-        if (!WorkNorm) {
-            throw new NotFoundException(`WorkNorm could not be found.`);
-        }
-        await this.workNormsRepository.save({
-            ...data,
-            id,
-            updatedUserId: userId,
+    async findOne(id: number, relations: boolean): Promise<WorkNorm> {
+        return await this.repository.findOneOrFail({
+            relations: { periods: relations },
+            where: { id },
         });
-        const updated = await this.workNormsRepository.findOneOrFail({ where: { id } });
-        return updated;
+    }
+
+    async update(userId: number, id: number, payload: UpdateWorkNormDto): Promise<WorkNorm> {
+        await this.repository.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+        return await this.repository.save({ ...payload, id, updatedUserId: userId });
     }
 
     async remove(userId: number, id: number): Promise<WorkNorm> {
-        const WorkNorm = await this.workNormsRepository.findOneBy({ id });
-        if (!WorkNorm) {
-            throw new NotFoundException(`WorkNorm could not be found.`);
-        }
-        await this.workNormsRepository.save({
-            ...WorkNorm,
-            deletedDate: new Date(),
-            deletedUserId: userId,
-        });
-        return WorkNorm;
+        await this.repository.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+        return await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
     }
 }

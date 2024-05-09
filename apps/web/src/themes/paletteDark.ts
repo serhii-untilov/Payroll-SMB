@@ -1,7 +1,8 @@
 import { PaletteOptions } from '@mui/material';
 import { rgba } from '../services/utils';
+import { ExtPaletteOptions } from './paletteLight';
 
-export function paletteDark(): PaletteOptions {
+export function paletteDark(): ExtPaletteOptions {
     return {
         mode: 'dark',
         common: {
@@ -91,5 +92,6 @@ export function paletteDark(): PaletteOptions {
             focusOpacity: 0.12,
             activatedOpacity: 0.24,
         },
+        tabsBorder: '#424242',
     };
 }

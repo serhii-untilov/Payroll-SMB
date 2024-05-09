@@ -26,10 +26,13 @@ export const FormAutocomplete = (props: FormAutocompleteProps) => {
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => {
                     return (
                         <Autocomplete
+                            selectOnFocus
+                            clearOnEscape
+                            handleHomeEndKeys
                             disablePortal
-                            autoSelect
-                            autoHighlight
-                            autoComplete={true}
+                            // autoSelect !!!
+                            // autoHighlight !!!
+                            autoComplete
                             // id={'value'}
                             options={props.options}
                             getOptionLabel={(option) => option?.label || ''}

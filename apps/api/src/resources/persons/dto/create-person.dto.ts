@@ -1,19 +1,14 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ICreatePerson } from '@repo/shared';
 
 export class CreatePersonDto implements ICreatePerson {
-    firstName: string;
-    lastName: string;
-
-    middleName?: string | undefined;
-
-    birthDate?: Date | undefined;
-
-    taxId?: string | undefined;
-
-    sex?: string | undefined; // See enum Sex
-
-    phone?: string | undefined;
-    email?: string | undefined;
-
-    photo?: string | undefined;
+    @ApiProperty() firstName: string;
+    @ApiProperty() lastName: string;
+    @ApiProperty() middleName?: string | undefined;
+    @ApiProperty() birthDate?: Date | undefined;
+    @ApiProperty() taxId?: string | undefined;
+    @ApiProperty() sex?: string | undefined; // See enum Sex
+    @ApiProperty() phone?: string | undefined;
+    @ApiProperty() email?: string | undefined;
+    @ApiProperty() photo?: string | undefined;
 }

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { JobsService } from './jobs.service';
-import { JobsController } from './jobs.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from '../users/users.module';
+import { AccessModule } from '../access/access.module';
 import { Job } from './entities/job.entity';
+import { JobsController } from './jobs.controller';
+import { JobsService } from './jobs.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Job]), UsersModule],
+    imports: [TypeOrmModule.forFeature([Job]), AccessModule],
     controllers: [JobsController],
     providers: [JobsService],
     exports: [JobsService],

@@ -46,8 +46,8 @@ export class PayPeriodsController {
         const userId = req.user['sub'];
         return await this.payPeriodsService.findAll(userId, companyId, {
             where: { companyId },
-            relations: { company: relations },
-            ...(fullFieldList ? {} : defaultFieldList),
+            relations: { company: !!relations },
+            ...(!!fullFieldList ? {} : defaultFieldList),
         });
     }
 
@@ -64,8 +64,8 @@ export class PayPeriodsController {
         return await this.payPeriodsService.findCurrent(
             userId,
             companyId,
-            relations,
-            fullFieldList,
+            !!relations,
+            !!fullFieldList,
         );
     }
 
@@ -73,14 +73,16 @@ export class PayPeriodsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(
+        @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
-        @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
+        @Query('fullFieldList', new ParseBoolPipe({ optional: true })) fullFieldList: boolean,
     ) {
-        return await this.payPeriodsService.findOne({
+        const userId = req.user['sub'];
+        return await this.payPeriodsService.findOne(userId, {
             where: { id },
-            relations: { company: relations },
-            ...(fullFieldList ? {} : defaultFieldList),
+            relations: { company: !!relations },
+            ...(!!fullFieldList ? {} : defaultFieldList),
         });
     }
 

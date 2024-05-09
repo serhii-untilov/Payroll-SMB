@@ -1,9 +1,11 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PaymentTypesService } from './payment-types.service';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
+import { AccessService } from '../access/access.service';
 import { PaymentType } from './entities/payment-type.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { PaymentTypesService } from './payment-types.service';
 
 describe('PaymentTypesService', () => {
     let service: PaymentTypesService;
@@ -13,10 +15,8 @@ describe('PaymentTypesService', () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 PaymentTypesService,
-                {
-                    provide: getRepositoryToken(PaymentType),
-                    useFactory: repositoryMockFactory,
-                },
+                { provide: getRepositoryToken(PaymentType), useFactory: repositoryMockFactory },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 

@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UsersService } from '../users/users.service';
 import { createMock } from '@golevelup/ts-jest';
+import { UsersCompanyService } from '../users/users-company.service';
 
 describe('AccessService', () => {
     let service: AccessService;
@@ -20,6 +21,7 @@ describe('AccessService', () => {
                     useFactory: repositoryMockFactory,
                 },
                 { provide: UsersService, useValue: createMock<UsersService>() },
+                { provide: UsersCompanyService, useValue: createMock<UsersCompanyService>() },
             ],
         }).compile();
 

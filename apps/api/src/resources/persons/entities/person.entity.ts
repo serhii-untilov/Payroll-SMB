@@ -27,7 +27,7 @@ export class Person extends Logger implements IPerson {
 
     fullName?: string;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'date', nullable: true })
     birthDate?: Date;
 
     @Column({ type: 'varchar', length: 15, default: '' })
@@ -52,7 +52,7 @@ export class Person extends Logger implements IPerson {
     @AfterInsert()
     @AfterUpdate()
     generateFullName(): void {
-        this.fullName = `${this.firstName || ''} ${this.middleName || ''} ${this.lastName || ''}`
+        this.fullName = `${this.lastName || ''} ${this.firstName || ''} ${this.middleName || ''}`
             .replace('  ', ' ')
             .trim();
     }

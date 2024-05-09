@@ -37,8 +37,8 @@ export function ListItemLink(props: ListItemLinkProps) {
                             theme.palette.mode === 'light'
                                 ? theme.palette.common.white
                                 : theme.palette.common.black,
-                        bgcolor: (theme) =>
-                            theme.palette.mode === 'light' ? '#1976d2' : '#1976d2',
+                        // bgcolor: (theme) => theme.palette.mode === 'light' ? '#1976d2' : '#1976d2',
+                        bgcolor: 'primary.main',
                         opacity: 1,
                         borderRadius: '3px',
                         py: [0.5],

@@ -1,13 +1,5 @@
+import { PartialType } from '@nestjs/swagger';
 import { IUpdateCompany } from '@repo/shared';
+import { CreateCompanyDto } from './create-company.dto';
 
-export class UpdateCompanyDto implements IUpdateCompany {
-    name: string;
-    lawId: number;
-    taxId: string;
-    accountingId: number;
-    paymentSchedule: string;
-    dateFrom: Date;
-    dateTo: Date;
-    payPeriod: Date;
-    checkDate: Date;
-}
+export class UpdateCompanyDto extends PartialType(CreateCompanyDto) implements IUpdateCompany {}

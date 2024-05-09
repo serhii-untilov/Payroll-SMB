@@ -20,41 +20,63 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { IPublicUserData, IUserCompany } from '@repo/shared';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { Request } from 'express';
+import { UsersCompanyService } from './users-company.service';
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {}
-
-    @Get()
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async findAll(): Promise<IPublicUserData[]> {
-        const users = await this.usersService.findAll();
-        return users.map((user) => UsersService.toPublic(user));
-    }
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly usersCompanyService: UsersCompanyService,
+    ) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Body() createUserDto: CreateUserDto): Promise<IPublicUserData> {
-        const user = await this.usersService.create(createUserDto);
+    async create(@Req() req: Request, @Body() payload: CreateUserDto): Promise<IPublicUserData> {
+        const userId: number = req.user['sub'];
+        const user = await this.usersService.create(userId, payload);
         return UsersService.toPublic(user);
     }
 
-    @HttpCode(HttpStatus.OK)
+    @Get()
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async findAll(
+        @Req() req: Request,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+    ): Promise<IPublicUserData[]> {
+        const userId: number = req.user['sub'];
+        const users = await this.usersService.findAll(userId, { relations: { role: !!relations } });
+        return users.map((user) => UsersService.toPublic(user));
+    }
+
     @Get('user')
-    async getCurrentUser(@Req() req: Request): Promise<IPublicUserData> {
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async getCurrentUser(
+        @Req() req: Request,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+    ): Promise<IPublicUserData> {
         const id: number = req.user['sub'];
-        const user = await this.usersService.findOne({ where: { id } });
+        const user = await this.usersService.findOne({
+            where: { id },
+            relations: { role: !!relations },
+        });
         return UsersService.toPublic(user);
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<IPublicUserData> {
-        const user = await this.usersService.findOne({ where: { id } });
+    async findOne(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations?: boolean,
+    ): Promise<IPublicUserData> {
+        const user = await this.usersService.findOne({
+            where: { id },
+            relations: { role: !!relations },
+        });
         return UsersService.toPublic(user);
     }
 
@@ -62,18 +84,24 @@ export class UsersController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async update(
+        @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateUserDto: UpdateUserDto,
+        @Body() payload: UpdateUserDto,
     ): Promise<IPublicUserData> {
-        const user = await this.usersService.update(id, updateUserDto);
+        const userId = req.user['sub'];
+        const user = await this.usersService.update(userId, id, payload);
         return UsersService.toPublic(user);
     }
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async remove(@Param('id', ParseIntPipe) id: number): Promise<IPublicUserData> {
-        const user = await this.usersService.remove(id);
+    async remove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+    ): Promise<IPublicUserData> {
+        const userId = req.user['sub'];
+        const user = await this.usersService.remove(userId, id);
         return UsersService.toPublic(user);
     }
 
@@ -81,9 +109,11 @@ export class UsersController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async userCompanyList(
+        @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IUserCompany[]> {
-        return await this.usersService.getUserCompanyList(id, relations);
+        const userId = req.user['sub'];
+        return await this.usersCompanyService.getUserCompanyList(userId, id, !!relations);
     }
 }

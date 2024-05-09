@@ -9,12 +9,15 @@ import {
 import { ICompanyManager } from '@repo/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
-import { DataGrid } from '../../components/grid/DataGrid';
-import { Toolbar } from '../../components/layout/Toolbar';
-import { CompanyDetailsProps } from './CompanyDetails';
+import { useQueryClient } from '@tanstack/react-query';
+import { DataGrid } from '../../../components/grid/DataGrid';
+import { Toolbar } from '../../../components/layout/Toolbar';
 
-export function ManagerList(params: CompanyDetailsProps) {
+type Props = {
+    companyId: number | undefined;
+};
+
+export function ManagerList(params: Props) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
@@ -28,15 +31,25 @@ export function ManagerList(params: CompanyDetailsProps) {
             field: 'fullName',
             headerName: t('Full Name'),
             type: 'string',
-            width: 240,
+            width: 290,
             sortable: true,
             valueGetter: (params) => {
                 return `${params.row.firstName} ${params.row.lastName}`;
             },
         },
         {
-            field: 'position',
-            headerName: t('Position'),
+            field: 'job',
+            headerName: t('Job'),
+            type: 'string',
+            width: 240,
+            sortable: true,
+            valueGetter: (params) => {
+                return '';
+            },
+        },
+        {
+            field: 'department',
+            headerName: t('Department'),
             type: 'string',
             width: 240,
             sortable: true,
@@ -48,7 +61,7 @@ export function ManagerList(params: CompanyDetailsProps) {
             field: 'taxId',
             headerName: t('Tax ID'),
             type: 'string',
-            width: 160,
+            width: 220,
             sortable: true,
             valueGetter: (params) => {
                 return '';
@@ -68,7 +81,7 @@ export function ManagerList(params: CompanyDetailsProps) {
             field: 'email',
             headerName: t('Email Address'),
             type: 'string',
-            width: 160,
+            width: 220,
             sortable: true,
             valueGetter: (params) => {
                 return '';

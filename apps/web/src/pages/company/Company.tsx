@@ -1,281 +1,90 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
-import { IAccounting, ILaw, PaymentSchedule, maxDate, minDate } from '@repo/shared';
-import { AxiosError } from 'axios';
-import { endOfMonth, format, startOfDay, startOfMonth } from 'date-fns';
-import { enqueueSnackbar } from 'notistack';
-import { useEffect } from 'react';
-import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
-import * as yup from 'yup';
-import { FormInputDropdown } from '../../components/form/FormInputDropdown';
-import { FormTextField } from '../../components/form/FormTextField';
-import { Button } from '../../components/layout/Button';
-import { InputLabel } from '../../components/layout/InputLabel';
+import { useNavigate, useParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
-import { PayPeriod } from '../../components/layout/PayPeriod';
-import { Loading } from '../../components/utility/Loading';
+import { PageTitle } from '../../components/layout/PageTitle';
+import { Tab } from '../../components/layout/Tab';
+import { TabPanel } from '../../components/layout/TabPanel';
+import { Tabs } from '../../components/layout/Tabs';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
-import { getAccountingList } from '../../services/accounting.service';
-import { createCompany, getCompany, updateCompany } from '../../services/company.service';
-import { getLawList } from '../../services/law.service';
-import { getDirtyValues } from '../../services/utils';
-import CompanyDetails from './CompanyDetails';
+import { AccountList } from './details/AccountList';
+import { CompanyDetails } from './details/CompanyDetails';
+import { DepartmentList } from './details/DepartmentList';
+import { ManagerList } from './details/ManagerList';
+import { getCompany } from '../../services/company.service';
+import { ICompany } from '@repo/shared';
+import { IconButton } from '@mui/material';
+import { ArrowBackIosNewRounded } from '@mui/icons-material';
 
-const formSchema = yup.object().shape({
-    id: yup.number().nullable(),
-    name: yup.string().required('Name is required'),
-    lawId: yup.number().positive('Law is required').required(),
-    taxId: yup.string(),
-    accountingId: yup.number().positive('Accounting is required').required(),
-    paymentSchedule: yup.string().required(),
-    dateFrom: yup.date().nullable(),
-    dateTo: yup.date().nullable(),
-    payPeriod: yup.date().required(),
-    checkDate: yup.date().required(),
-});
-
-type FormType = yup.InferType<typeof formSchema>;
-
-// To prevent Warning: A component is changing an uncontrolled input to be controlled.
-const defaultValues: FormType = {
-    id: null,
-    name: '',
-    lawId: 0,
-    taxId: '',
-    accountingId: 0,
-    paymentSchedule: PaymentSchedule.LAST_DAY,
-    dateFrom: minDate(),
-    dateTo: maxDate(),
-    payPeriod: startOfMonth(new Date()),
-    checkDate: startOfDay(endOfMonth(new Date())),
+type Props = {
+    showGoBack: boolean;
 };
 
-export default function Company() {
-    const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
-    const { locale } = useLocale();
+export default function Company(props: Props) {
+    const { companyId } = useParams();
+    const [tab, setTab] = useState(Number(localStorage.getItem('company-tab-index')));
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
-
-    const {
-        data: company,
-        isError: isCompanyError,
-        isLoading: isCompanyLoading,
-        error: companyError,
-    } = useQuery<FormType, Error>({
-        queryKey: ['company', currentCompany?.id],
-        queryFn: async () => {
-            return formSchema.cast(
-                currentCompany?.id ? await getCompany(currentCompany?.id) : defaultValues,
-            );
-        },
-        enabled: !!currentCompany?.id,
-    });
-
-    const {
-        data: lawList,
-        isError: isLawListError,
-        isLoading: isLawListLoading,
-        error: lawListError,
-    } = useQuery<ILaw[], Error>('lawList', async () => {
-        return getLawList();
-    });
-
-    const {
-        data: accountingList,
-        isError: isAccountingListError,
-        isLoading: isAccountingListLoading,
-        error: accountingListError,
-    } = useQuery<IAccounting[], Error>('accountingList', async () => {
-        return getAccountingList();
-    });
-
-    const {
-        control,
-        handleSubmit,
-        watch,
-        reset,
-        formState: { errors: formErrors },
-    } = useForm({
-        defaultValues: company || defaultValues,
-        values: company || defaultValues,
-        resolver: yupResolver<FormType>(formSchema),
-        shouldFocusError: true,
-    });
-
-    const { dirtyFields, isDirty } = useFormState({ control });
-
-    useEffect(() => {}, [locale]);
+    const [company, setCompany] = useState<ICompany | null>();
+    const { locale } = useLocale();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        formErrors.name?.message &&
-            enqueueSnackbar(t(formErrors.name?.message), { variant: 'error' });
-        formErrors.lawId?.message &&
-            enqueueSnackbar(t(formErrors.lawId?.message), { variant: 'error' });
-        formErrors.accountingId?.message &&
-            enqueueSnackbar(t(formErrors.accountingId?.message), { variant: 'error' });
-        formErrors.payPeriod?.message &&
-            enqueueSnackbar(t(formErrors.payPeriod?.message), { variant: 'error' });
-        formErrors.checkDate?.message &&
-            enqueueSnackbar(t(formErrors.checkDate?.message), { variant: 'error' });
-    }, [formErrors, t]);
+        const fetchCompany = async () => {
+            const company = companyId ? await getCompany(+companyId) : null;
+            setCompany(company);
+        };
+        fetchCompany();
+    }, [companyId, setCompany]);
 
-    if (isCompanyLoading || isLawListLoading || isAccountingListLoading) {
-        return <Loading />;
-    }
+    useEffect(() => {}, [company, locale]);
 
-    if (isCompanyError) {
-        setCurrentCompany(null);
-        return enqueueSnackbar(`${companyError.name}\n${companyError.message}`, {
-            variant: 'error',
-        });
-    }
-
-    if (isLawListError) {
-        return enqueueSnackbar(`${lawListError.name}\n${lawListError.message}`, {
-            variant: 'error',
-        });
-    }
-
-    if (isAccountingListError) {
-        return enqueueSnackbar(`${accountingListError.name}\n${accountingListError.message}`, {
-            variant: 'error',
-        });
-    }
-
-    // const onChangePayPeriod = (e: any) => {
-    //     console.log(e.target.value);
-    //     e.target.value = format(startOfMonth(new Date(e.target.value)), 'P');
-    //     console.log(e.target.value);
-    // };
-
-    const onSubmit: SubmitHandler<FormType> = async (data) => {
-        if (!isDirty) return;
-        const dirtyValues = getDirtyValues(dirtyFields, data);
-        try {
-            const company = data.id
-                ? await updateCompany(data.id, dirtyValues)
-                : await createCompany(data);
-            reset(company);
-            queryClient.invalidateQueries({ queryKey: ['company'] });
-            if (!currentCompany || currentCompany.id === company.id) {
-                setCurrentCompany(company);
-            }
-        } catch (e: unknown) {
-            const error = e as AxiosError;
-            enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
-        }
+    const generatePageTitle = () => {
+        return company?.id ? company?.name || '' : t('New Company');
     };
 
-    const onCancel = () => {
-        reset(company);
-        queryClient.invalidateQueries({ queryKey: ['company'] });
+    const onGoBack = () => {
+        navigate(-1);
+    };
+
+    const handleChange = (event: SyntheticEvent, newValue: number) => {
+        setTab(newValue);
+        localStorage.setItem('company-tab-index', newValue.toString());
     };
 
     return (
-        <PageLayout title={t('Company')}>
-            <Grid
-                container
-                component="form"
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-                spacing={2}
-                sx={{ mb: 1 }}
-            >
-                <Grid container item xs={12} sm={12} md={8} lg={6} spacing={2}>
-                    <Grid item xs={12}>
-                        <FormTextField
-                            control={control}
-                            autoComplete="given-name"
-                            name="name"
-                            id="name"
-                            label={t('Name')}
-                            type="text"
-                            autoFocus
-                            sx={{ fontWeight: 'bold' }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={8} md={6}>
-                        <FormInputDropdown
-                            control={control}
-                            label={t('Law')}
-                            name="lawId"
-                            autoComplete="lawId"
-                            type="number"
-                            options={
-                                lawList?.map((o) => {
-                                    return { label: o.name, value: o.id };
-                                }) ?? []
-                            }
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={8} md={6}>
-                        <FormTextField
-                            control={control}
-                            required
-                            label={t('Tax ID')}
-                            name="taxId"
-                            type="text"
-                            autoComplete="taxId"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={8} md={6}>
-                        <FormInputDropdown
-                            control={control}
-                            label={t('Accounting')}
-                            name="accountingId"
-                            autoComplete="accountingId"
-                            type="number"
-                            options={
-                                accountingList?.map((o) => {
-                                    return { label: o.name, value: o.id };
-                                }) ?? []
-                            }
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={8} md={6}>
-                        <InputLabel>{t('Pay period')}</InputLabel>
-                        <Controller
-                            name={'payPeriod'}
-                            control={control}
-                            render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                                formState,
-                            }) => (
-                                <PayPeriod
-                                    label={''}
-                                    name="payPeriod"
-                                    autoComplete="payPeriod"
-                                    error={!!error}
-                                    onChange={(event: any) =>
-                                        onChange(new Date(event.target.value))
-                                    }
-                                    value={format(value || startOfMonth(new Date()), 'yyyy-MM-dd')}
-                                />
-                            )}
-                        />
-                    </Grid>
-                    {(isDirty || !currentCompany) && (
-                        <Grid item xs={12} sx={{ mb: 1 }}>
-                            <Grid container spacing={1}>
-                                <Grid item>
-                                    <Button type="submit">{t('Update')}</Button>
-                                </Grid>
-
-                                <Grid item>
-                                    <Button color="secondary" onClick={onCancel}>
-                                        {t('Cancel')}
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    )}
-                </Grid>
-            </Grid>
-            {currentCompany && <CompanyDetails companyId={currentCompany.id} />}
+        <PageLayout>
+            <PageTitle>
+                {companyId ? null : (
+                    <IconButton
+                        aria-label="Go Back"
+                        color="primary"
+                        sx={{ mr: 1 }}
+                        onClick={onGoBack}
+                    >
+                        <ArrowBackIosNewRounded />
+                    </IconButton>
+                )}
+                {generatePageTitle()}
+            </PageTitle>
+            <Tabs id="company__details_tabs" value={tab} onChange={handleChange}>
+                <Tab label={t('Accounting Details')} />
+                <Tab label={t('Departments')} disabled={!company?.id} />
+                <Tab label={t('Managers')} disabled={!company?.id} />
+                <Tab label={t('Accounts')} disabled={!company?.id} />
+            </Tabs>
+            <TabPanel value={tab} index={0}>
+                <CompanyDetails companyId={Number(companyId)} />
+            </TabPanel>
+            <TabPanel value={tab} index={1}>
+                <DepartmentList companyId={Number(companyId)} />
+            </TabPanel>
+            <TabPanel value={tab} index={2}>
+                <ManagerList companyId={Number(companyId)} />
+            </TabPanel>
+            <TabPanel value={tab} index={3}>
+                <AccountList companyId={Number(companyId)} />
+            </TabPanel>
         </PageLayout>
     );
 }

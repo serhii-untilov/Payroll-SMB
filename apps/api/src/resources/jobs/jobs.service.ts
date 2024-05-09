@@ -1,67 +1,78 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Inject,
+    Injectable,
+    NotFoundException,
+    forwardRef,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AccessType, ResourceType } from '@repo/shared';
+import { Repository } from 'typeorm';
+import { AccessService } from '../access/access.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Job } from './entities/job.entity';
-import { IUser } from '@repo/shared';
 
 @Injectable()
 export class JobsService {
+    public readonly resourceType = ResourceType.JOB;
     constructor(
         @InjectRepository(Job)
-        private jobsRepository: Repository<Job>,
+        private repository: Repository<Job>,
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
     ) {}
 
-    async create(user: IUser, Job: CreateJobDto): Promise<Job> {
-        const existing = await this.jobsRepository.findOneBy({ name: Job.name });
+    async create(userId: number, payload: CreateJobDto): Promise<Job> {
+        const existing = await this.repository.findOneBy({ name: payload.name });
         if (existing) {
-            throw new BadRequestException(`Job '${Job.name}' already exists.`);
+            throw new BadRequestException(`Job '${payload.name}' already exists.`);
         }
-        const newJob = await this.jobsRepository.save({
-            ...Job,
-            createdUser: user,
-            updatedUser: user,
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+        return await this.repository.save({
+            ...payload,
+            createdUserId: userId,
+            updatedUserId: userId,
         });
-        return newJob;
     }
 
     async findAll(): Promise<Job[]> {
-        return await this.jobsRepository.find();
+        return await this.repository.find();
     }
 
-    async findOne(params): Promise<Job> {
-        const Job = await this.jobsRepository.findOne(params);
+    async findOne(id: number): Promise<Job> {
+        const Job = await this.repository.findOneBy({ id });
         if (!Job) {
             throw new NotFoundException(`Job could not be found.`);
         }
         return Job;
     }
 
-    async update(user: IUser, id: number, data: UpdateJobDto): Promise<Job> {
-        const Job = await this.jobsRepository.findOneBy({ id });
-        if (!Job) {
-            throw new NotFoundException(`Job could not be found.`);
-        }
-        await this.jobsRepository.save({
-            ...data,
+    async update(userId: number, id: number, payload: UpdateJobDto): Promise<Job> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+        await this.repository.findOneOrFail({ where: { id } });
+        return await this.repository.save({ ...payload, id, updatedUser: userId });
+    }
+
+    async remove(userId: number, id: number): Promise<Job> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+        await this.repository.findOneOrFail({ where: { id } });
+        return await this.repository.save({
             id,
-            updatedUser: user,
-        });
-        const updated = await this.jobsRepository.findOneOrFail({ where: { id } });
-        return updated;
-    }
-
-    async remove(user: IUser, id: number): Promise<Job> {
-        const Job = await this.jobsRepository.findOneBy({ id });
-        if (!Job) {
-            throw new NotFoundException(`Job could not be found.`);
-        }
-        await this.jobsRepository.save({
-            ...Job,
+            deletedUserId: userId,
             deletedDate: new Date(),
-            deletedUser: user,
         });
-        return Job;
     }
 }

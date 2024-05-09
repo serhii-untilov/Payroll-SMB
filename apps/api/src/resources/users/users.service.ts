@@ -1,62 +1,132 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    ConflictException,
+    ForbiddenException,
+    Inject,
+    Injectable,
+    NotFoundException,
+    forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IPublicUserData, IUser } from '@repo/shared';
+import { AccessType, IPublicUserData, IUser, ResourceType, RoleType } from '@repo/shared';
 import * as _ from 'lodash';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { AccessService } from '../access/access.service';
+import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserCompany } from './entities/user-company.entity';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
+    public readonly resourceType = ResourceType.USER;
+
     constructor(
         @InjectRepository(User)
-        private usersRepository: Repository<User>,
-        @InjectRepository(UserCompany)
-        private userCompanyRepository: Repository<UserCompany>,
+        private repository: Repository<User>,
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
+        @Inject(forwardRef(() => RolesService))
+        private rolesService: RolesService,
     ) {}
 
-    async create(user: CreateUserDto): Promise<User> {
-        return await this.usersRepository.save(user);
+    async register(payload: CreateUserDto): Promise<User> {
+        const exists = await this.repository.findOneBy({ email: payload.email });
+        if (exists) {
+            throw new ConflictException('User already exists.');
+        }
+        if (!payload.roleId) {
+            throw new BadRequestException(`Role should be defined.`);
+        }
+        const roleType = await this.rolesService.getRoleType(payload.roleId);
+        if (!this.accessService.canRegisterUserByRoleType(roleType)) {
+            throw new BadRequestException(`An invalid role for user registration.`);
+        }
+        return await this.repository.save(payload);
     }
 
-    async findAll(): Promise<User[]> {
-        return await this.usersRepository.find();
+    async create(userId: number, payload: CreateUserDto): Promise<User> {
+        const exists = await this.repository.findOneBy({ email: payload.email });
+        if (exists) {
+            throw new ConflictException('User already exists.');
+        }
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+        const currentRoleType = await this.getUserRoleTypeOrFail(userId);
+        const newRoleType = await this.rolesService.getRoleType(payload.roleId);
+        if (!this.accessService.canOperateRoleType(currentRoleType, newRoleType)) {
+            throw new ForbiddenException(`User doesn't have access to the requested operation.`);
+        }
+        return await this.repository.save({
+            ...payload,
+            ...(userId ? { createdUserId: userId } : {}),
+            ...(userId ? { updatedUserId: userId } : {}),
+        });
     }
 
-    async findOne(params): Promise<User> {
-        const user = this.usersRepository.findOne(params);
+    async findAll(userId: number, params: FindManyOptions<User>): Promise<User[]> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        return await this.repository.find(params);
+    }
+
+    async findOne(params: FindOneOptions<User>): Promise<User> {
+        return await this.repository.findOne(params);
+    }
+
+    async findOneOrFail(params: FindOneOptions<User>): Promise<User> {
+        const user = await this.findOne(params);
         if (!user) {
-            throw new NotFoundException(`User could not be found.`);
+            throw new NotFoundException('User not found.');
         }
         return user;
     }
 
-    async findOneBy(
-        where: FindOptionsWhere<User> | FindOptionsWhere<User>[],
-    ): Promise<User | null> {
-        return this.usersRepository.findOneBy(where);
+    async update(userId: number, id: number, payload: UpdateUserDto): Promise<User> {
+        if (userId !== id) {
+            await this.accessService.availableForUserOrFail(
+                userId,
+                this.resourceType,
+                AccessType.UPDATE,
+            );
+        }
+        if (payload?.roleId) {
+            const userRoleType = await this.getUserRoleTypeOrFail(userId);
+            const updateRoleType = await this.rolesService.getRoleType(payload.roleId);
+            if (userId !== id || userRoleType != updateRoleType) {
+                if (!this.accessService.canOperateRoleType(userRoleType, updateRoleType)) {
+                    throw new ForbiddenException(
+                        `User doesn't have access to the requested operation.`,
+                    );
+                }
+            }
+        }
+        return await this.repository.save({ id, ...payload, updatedUserId: userId });
     }
 
-    async update(id: number, data: UpdateUserDto): Promise<User> {
-        const user = await this.usersRepository.findOneBy({ id });
-        if (!user) {
-            throw new NotFoundException(`User could not be found.`);
+    async remove(userId: number, id: number): Promise<User> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+        const user = await this.repository.findOneOrFail({ where: { id } });
+        const userRoleType = await this.getUserRoleTypeOrFail(userId);
+        const deleteRoleType = await this.rolesService.getRoleType(user.roleId);
+        if (userId !== id && !this.accessService.canOperateRoleType(userRoleType, deleteRoleType)) {
+            throw new ForbiddenException(`User doesn't have access to the requested operation.`);
         }
-        await this.usersRepository.save({ id, ...data });
-        // re-query the database so that the updated record is returned
-        const updated = await this.usersRepository.findOneOrFail({ where: { id } });
-        return updated;
-    }
-
-    async remove(id: number): Promise<User> {
-        const user = await this.usersRepository.findOneBy({ id });
-        if (!user) {
-            throw new NotFoundException(`User could not be found.`);
-        }
-        await this.usersRepository.remove(user);
-        return user;
+        return await this.repository.save({
+            ...user,
+            deletedUserId: userId,
+            deletedDate: new Date(),
+        });
     }
 
     public static toPublic(user: IUser): IPublicUserData {
@@ -64,18 +134,28 @@ export class UsersService {
         return publicUser;
     }
 
-    async getUserCompanyList(id: number, relations: boolean): Promise<UserCompany[]> {
-        return await this.userCompanyRepository.find({
-            where: { userId: id },
-            ...(relations ? { relations: { company: true, role: true } } : {}),
-        });
-    }
-
-    async getUserCompanyRole({ userId, companyId }): Promise<string> {
-        const record = await this.userCompanyRepository.findOne({
-            where: { userId, companyId },
+    async getUserRoleType(id: number): Promise<string> {
+        const user = await this.repository.findOne({
+            where: { id },
             relations: { role: true },
         });
-        return record?.role?.type;
+        return user?.role?.type;
+    }
+
+    async getUserRoleTypeOrFail(id: number): Promise<string> {
+        const roleType = await this.getUserRoleType(id);
+        if (!roleType) {
+            throw new ForbiddenException(`User doesn't have access to the requested resource.`);
+        }
+        return roleType;
+    }
+
+    async getSystemUserId(): Promise<number> {
+        const user = await this.repository.findOne({
+            select: { id: true },
+            relations: { role: true },
+            where: { role: { type: RoleType.SYSTEM } },
+        });
+        return user.id;
     }
 }

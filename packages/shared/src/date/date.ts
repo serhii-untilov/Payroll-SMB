@@ -12,7 +12,7 @@ export function isShortDateString(value: any): boolean {
 }
 
 // Convert strings to dates in given object
-export function handleDates(obj: any) {
+export function objectStringDateToDate<T>(obj: T): T {
     if (obj === null || obj === undefined || typeof obj !== 'object') return obj;
 
     for (const key of Object.keys(obj)) {
@@ -22,9 +22,25 @@ export function handleDates(obj: any) {
         } else if (isShortDateString(value)) {
             obj[key] = new Date(value);
         } else if (typeof value === 'object') {
-            handleDates(value);
+            objectStringDateToDate(value);
         }
     }
+    return obj;
+}
+
+// Convert strings to dates in given object
+export function objectStringDateToShort<T>(obj: T): T {
+    if (obj === null || obj === undefined || typeof obj !== 'object') return obj;
+
+    for (const key of Object.keys(obj)) {
+        const value = obj[key];
+        if (isIsoDateString(value)) {
+            obj[key] = formatDate(parseISO(value));
+        } else if (typeof value === 'object') {
+            objectStringDateToDate(value);
+        }
+    }
+    return obj;
 }
 
 export function monthBegin(date: Date): Date {
@@ -121,7 +137,7 @@ export function normalizeDate(date: Date): Date {
     return d;
 }
 
-export function date2view(date: Date): string {
+export function date2view(date: Date): string | null {
     const d = normalizeDate(new Date(date));
     if (d.getTime() <= minDate().getTime()) {
         return '';
@@ -139,4 +155,16 @@ export function view2date(date: string, defaultValue: string | null = null): str
         return formatDate(normalizeDate(new Date(defaultValue)));
 
     return formatDate(minDate());
+}
+
+export function getMinDate(date1: Date, date2: Date): Date {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getTime() < d2.getTime() ? d1 : d2;
+}
+
+export function getMaxDate(date1: Date, date2: Date): Date {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getTime() > d2.getTime() ? d1 : d2;
 }

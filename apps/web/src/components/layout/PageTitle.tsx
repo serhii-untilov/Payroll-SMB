@@ -1,19 +1,14 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { PropsWithChildren } from 'react';
 
 export function PageTitle(props: PropsWithChildren) {
-    const { children } = props;
+    const { children, ...other } = props;
 
     return (
-        <Typography
-            component="h2"
-            color="text.primary"
-            variant="h2"
-            noWrap
-            // align="center"
-            {...props}
-        >
-            {children}
-        </Typography>
+        <Box sx={{ height: 48, display: 'flex', alignItems: 'center' }}>
+            <Typography component="h2" color="primary.main" variant="h2" noWrap {...other}>
+                {children}
+            </Typography>
+        </Box>
     );
 }

@@ -1,23 +1,28 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
-    UseGuards,
-    ParseIntPipe,
+    Get,
     HttpCode,
     HttpStatus,
+    Param,
+    ParseBoolPipe,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
+    Req,
+    UseGuards,
 } from '@nestjs/common';
-import { PositionHistoryService } from './position-history.service';
+import { IPositionHistory, objectStringDateToShort } from '@repo/shared';
+import { Request } from 'express';
+import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
-import { IPositionHistory } from '@repo/shared';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { PositionHistoryService } from './position-history.service';
+import { FindPositionHistoryDto } from './dto/find-position-history.dto';
 
-@Controller('positionHistory')
+@Controller('position-history')
 export class PositionHistoryController {
     constructor(private readonly positionHistoryService: PositionHistoryService) {}
 
@@ -25,39 +30,83 @@ export class PositionHistoryController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(
-        @Body() createPositionHistoryDto: CreatePositionHistoryDto,
+        @Req() req: Request,
+        @Body() payload: CreatePositionHistoryDto,
     ): Promise<IPositionHistory> {
-        return await this.positionHistoryService.create(createPositionHistoryDto);
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.create(
+            userId,
+            objectStringDateToShort<CreatePositionHistoryDto>(payload),
+        );
     }
 
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(): Promise<IPositionHistory[]> {
-        return await this.positionHistoryService.findAll();
+    async findAll(
+        @Req() req: Request,
+        @Query('positionId', ParseIntPipe) positionId: number,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+    ): Promise<IPositionHistory[]> {
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.findAll(userId, positionId, !!relations);
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<IPositionHistory> {
-        return await this.positionHistoryService.findOne(id);
+    async findOne(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+    ): Promise<IPositionHistory> {
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.findOne(userId, id, !!relations);
     }
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async update(
+        @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updatePositionHistoryDto: UpdatePositionHistoryDto,
+        @Body() payload: UpdatePositionHistoryDto,
     ): Promise<IPositionHistory> {
-        return await this.positionHistoryService.update(id, updatePositionHistoryDto);
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.update(
+            userId,
+            id,
+            objectStringDateToShort<UpdatePositionHistoryDto>(payload),
+        );
     }
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async remove(@Param('id', ParseIntPipe) id: number): Promise<IPositionHistory> {
-        return await this.positionHistoryService.remove(id);
+    async remove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+    ): Promise<IPositionHistory> {
+        const userId = req.user['sub'];
+        return await this.positionHistoryService.remove(userId, id);
+    }
+
+    @Post('find-last')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async findLast(
+        @Req() req: Request,
+        @Body() params: FindPositionHistoryDto,
+    ): Promise<IPositionHistory | null> {
+        const userId = req.user['sub'];
+        const positionList = await this.positionHistoryService.find(
+            userId,
+            objectStringDateToShort<FindPositionHistoryDto>(params),
+        );
+        // Will return the last positionHistory record or null
+        positionList.sort((a, b) =>
+            a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0,
+        );
+        return positionList.length ? positionList[positionList.length - 1] : null;
     }
 }

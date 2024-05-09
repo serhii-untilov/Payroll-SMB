@@ -10,7 +10,7 @@ import { enqueueSnackbar } from 'notistack';
 import { Dispatch, Fragment, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { SelectDepartment } from '../../components/select/SelectDepartment';
 import { FormDateField } from '../../components/form/FormDateField';
@@ -25,7 +25,7 @@ import {
 } from '../../services/department.service';
 import { getDirtyValues } from '../../services/utils';
 
-export interface DepartmentFormParams {
+export interface Params {
     open: boolean;
     setOpen: Dispatch<boolean>;
     departmentId: number | null;
@@ -43,7 +43,7 @@ const formSchema = yup.object().shape({
 
 type FormType = yup.InferType<typeof formSchema>;
 
-export default function DepartmentForm(params: DepartmentFormParams) {
+export default function DepartmentForm(params: Params) {
     const { departmentId, submitCallback } = params;
     const { locale } = useLocale();
     const { t } = useTranslation();
@@ -69,7 +69,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
         isError: isDepartmentError,
         error: departmentError,
     } = useQuery<FormType, Error>({
-        queryKey: ['department', departmentId],
+        queryKey: ['department', { departmentId }],
         queryFn: async () => {
             return formSchema.cast(
                 departmentId
@@ -127,7 +127,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
             if (submitCallback) submitCallback(department);
             params.setOpen(false);
             reset(defaultValues);
-            queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
+            queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -137,7 +137,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
     const onCancel = () => {
         reset(defaultValues);
         params.setOpen(false);
-        queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
+        queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
 
     return (
@@ -148,7 +148,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                 onClose={() => {
                     params.setOpen(false);
                     reset(department);
-                    queryClient.invalidateQueries({ queryKey: ['department', departmentId] });
+                    queryClient.invalidateQueries({ queryKey: ['department'] });
                 }}
                 // PaperProps={{
                 //     component: 'form',
@@ -185,7 +185,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                                 name="dateFrom"
                                 id="dateFrom"
                                 label={t('Date From')}
-                                defaultValue={formatDate(minDate())}
+                                // defaultValue={formatDate(minDate())}
                             />
                         </Grid>
 
@@ -196,7 +196,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                                 name="dateTo"
                                 id="dateTo"
                                 label={t('Date To')}
-                                defaultValue={formatDate(maxDate())}
+                                // defaultValue={formatDate(maxDate())}
                             />
                         </Grid>
 

@@ -7,23 +7,15 @@ export enum Sex {
 
 export interface IPerson extends ILogger {
     id: number;
-
     firstName: string;
     lastName: string;
-
     middleName?: string | null;
-
     fullName?: string | null;
-
     birthDate?: Date | null;
-
     taxId?: string | null;
-
     sex?: string | null; // See enum Sex
-
     phone?: string | null;
     email?: string | null;
-
     photo?: string | null;
 }
 
@@ -40,3 +32,4 @@ export type ICreatePerson = Omit<
 >;
 
 export type IUpdatePerson = Partial<ICreatePerson>;
+export type IFindPerson = Partial<IPerson>;

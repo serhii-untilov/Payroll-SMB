@@ -17,13 +17,13 @@ export function MainMenu() {
     const { t } = useTranslation();
     const { company } = useAppContext();
 
-    useEffect(() => {}, [locale]);
+    useEffect(() => {}, [company, locale]);
 
     return (
         <List component="nav" sx={{ mx: ['auto'] }}>
             <ListItemLink to="/dashboard" primary={t('Dashboard')} icon={<DashboardOutlined />} />
             <ListItemLink
-                to={'/company/'}
+                to={`/company/${company?.id || ''}`}
                 primary={t('Company')}
                 icon={<BusinessCenterOutlined />}
             />

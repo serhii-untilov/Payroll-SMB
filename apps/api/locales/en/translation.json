@@ -81,7 +81,7 @@
     "Offers": "Offers",
     "All": "All",
     "current": "current",
-    "Pay period": "Pay period",
+    "Pay Period": "Pay Period",
     "Job": "Job",
     "Card Number": "Card #",
     "Sequence Number": "Sequence #",
@@ -104,5 +104,13 @@
     "Personal": "Personal",
     "Documents": "Documents",
     "Notes": "Notes",
-    "Vacancy": "Vacancy"
+    "Vacancy": "Vacancy",
+    "Positions": "Positions",
+    "Accounting Details": "Accounting Details",
+    "Role": "Role",
+    "User Role": "User Role",
+    "New Company": "New Company",
+    "Upload photo": "Upload photo",
+    "Add a new person": "Add a new person",
+    "Employee not yet registered? Please add.": "Employee not yet registered? Please add."
 }

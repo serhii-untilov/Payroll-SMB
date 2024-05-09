@@ -11,12 +11,13 @@ import { IPosition, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
 import { deletePosition, getPositionList } from '../../../services/position.service';
+import useAppContext from '../../../hooks/useAppContext';
 
 type Props = {
     companyId: number;
@@ -29,6 +30,7 @@ export function PositionList(props: Props) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
+    const { payPeriod } = useAppContext();
 
     const columns: GridColDef[] = [
         {
@@ -44,6 +46,9 @@ export function PositionList(props: Props) {
             type: 'string',
             width: 250,
             sortable: true,
+            valueGetter: (params) => {
+                return params.row?.personId ? params.row?.person?.fullName || '' : t('Vacancy');
+            },
         },
         {
             field: 'job',
@@ -51,6 +56,13 @@ export function PositionList(props: Props) {
             type: 'string',
             width: 200,
             sortable: true,
+            valueGetter: (params) => {
+                return payPeriod
+                    ? params.row?.history?.find(
+                          (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
+                      )?.job?.name || ''
+                    : '';
+            },
         },
         {
             field: 'department',
@@ -58,13 +70,27 @@ export function PositionList(props: Props) {
             type: 'string',
             width: 300,
             sortable: true,
+            valueGetter: (params) => {
+                return payPeriod
+                    ? params.row?.history?.find(
+                          (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
+                      )?.department?.name || ''
+                    : '';
+            },
         },
         {
             field: 'workNorm',
             headerName: t('Work Norm'),
             type: 'string',
-            width: 200,
+            width: 250,
             sortable: true,
+            valueGetter: (params) => {
+                return payPeriod
+                    ? params.row?.history?.find(
+                          (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
+                      )?.workNorm?.name || ''
+                    : '';
+            },
         },
         {
             field: 'paymentType',
@@ -72,20 +98,41 @@ export function PositionList(props: Props) {
             type: 'string',
             width: 200,
             sortable: true,
+            valueGetter: (params) => {
+                return payPeriod
+                    ? params.row?.history?.find(
+                          (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
+                      )?.paymentType?.name || ''
+                    : '';
+            },
         },
         {
             field: 'wage',
             headerName: t('Wage'),
             type: 'number',
-            width: 150,
+            width: 130,
             sortable: true,
+            valueGetter: (params) => {
+                return payPeriod
+                    ? params.row?.history?.find(
+                          (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
+                      )?.wage || ''
+                    : '';
+            },
         },
         {
             field: 'rate',
             headerName: t('Rate'),
             type: 'number',
-            width: 150,
+            width: 130,
             sortable: true,
+            valueGetter: (params) => {
+                return payPeriod
+                    ? params.row?.history?.find(
+                          (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
+                      )?.rate || ''
+                    : '';
+            },
         },
         {
             field: 'dateFrom',
@@ -115,11 +162,23 @@ export function PositionList(props: Props) {
         isLoading: isPositionListLoading,
         error: positionListError,
     } = useQuery<IPosition[], Error>({
-        queryKey: ['positionList-relations', companyId],
+        queryKey: ['position', 'list', { companyId, relations: true }],
         queryFn: async () => {
-            return await getPositionList({ companyId, relations: true });
+            return (
+                await getPositionList({
+                    companyId,
+                    relations: true,
+                    onPayPeriodDate: payPeriod || new Date(),
+                })
+            ).sort((a, b) =>
+                (Number(a.cardNumber) || 2147483647) < (Number(b.cardNumber) || 2147483647)
+                    ? -1
+                    : (Number(a.cardNumber) || 2147483647) > (Number(b.cardNumber) || 2147483647)
+                      ? 1
+                      : 0,
+            );
         },
-        enabled: !!companyId,
+        enabled: !!companyId && !!payPeriod,
     });
 
     if (isPositionListLoading) {
@@ -141,14 +200,14 @@ export function PositionList(props: Props) {
     };
 
     const submitCallback = (data: IPosition) => {
-        queryClient.invalidateQueries({ queryKey: ['positionList-relations', companyId] });
+        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
             await deletePosition(+id);
         }
-        queryClient.invalidateQueries({ queryKey: ['positionList-relations', companyId] });
+        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const onPrint = () => {
