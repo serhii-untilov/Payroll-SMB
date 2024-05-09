@@ -45,6 +45,7 @@ export function PositionList(props: Props) {
             headerName: t('Position'),
             type: 'string',
             width: 250,
+            resizable: true,
             sortable: true,
             valueGetter: (params) => {
                 return params.row?.personId ? params.row?.person?.fullName || '' : t('Vacancy');

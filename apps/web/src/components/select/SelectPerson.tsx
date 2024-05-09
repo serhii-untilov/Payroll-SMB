@@ -100,7 +100,7 @@ export const SelectPerson = (props: Props) => {
                                 clearOnEscape
                                 handleHomeEndKeys
                                 disablePortal
-                                // autoSelect
+                                // autoSelect !!!
                                 // autoHighlight !!!
                                 autoComplete
                                 options={options || []}
