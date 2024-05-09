@@ -30,7 +30,7 @@ export const FormAutocomplete = (props: FormAutocompleteProps) => {
                             clearOnEscape
                             handleHomeEndKeys
                             disablePortal
-                            // autoSelect
+                            // autoSelect !!!
                             // autoHighlight !!!
                             autoComplete
                             // id={'value'}
