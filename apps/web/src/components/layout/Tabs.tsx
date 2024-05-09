@@ -14,9 +14,9 @@ export function Tabs({ value, onChange, children, sx, ...other }: TabsProps) {
                     mr: 'auto',
                     my: '1px',
                     borderBottom: 0.5,
-                    borderColor: 'divider',
+                    borderColor: 'tabsBorder',
                     '.MuiTabs-indicator': {
-                        height: '2px',
+                        height: '3px',
                     },
                     '.MuiTab-wrapped': {
                         // alignItems: 'self-center',

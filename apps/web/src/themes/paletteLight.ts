@@ -1,7 +1,11 @@
 import { PaletteOptions } from '@mui/material';
 import { rgba } from '../services/utils';
 
-export function paletteLight(): PaletteOptions {
+export interface ExtPaletteOptions extends PaletteOptions {
+    tabsBorder: string;
+}
+
+export function paletteLight(): ExtPaletteOptions {
     return {
         mode: 'light',
         common: {
@@ -93,5 +97,6 @@ export function paletteLight(): PaletteOptions {
             focusOpacity: 0.12,
             activatedOpacity: 0.12,
         },
+        tabsBorder: '#e8e8ed', // Apple
     };
 }

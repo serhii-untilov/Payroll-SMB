@@ -28,8 +28,8 @@ export const FormAutocomplete = (props: FormAutocompleteProps) => {
                         <Autocomplete
                             disablePortal
                             autoSelect
-                            autoHighlight
-                            autoComplete={true}
+                            // autoHighlight !!!
+                            autoComplete
                             // id={'value'}
                             options={props.options}
                             getOptionLabel={(option) => option?.label || ''}

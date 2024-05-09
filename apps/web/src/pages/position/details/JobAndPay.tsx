@@ -21,7 +21,7 @@ import TabLayout from '../../../components/layout/TabLayout';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { SelectDepartment } from '../../../components/select/SelectDepartment';
 import { SelectJob } from '../../../components/select/SelectJob';
-import { SelectOrCreatePerson } from '../../../components/select/SelectOrCreatePerson';
+import { SelectPerson } from '../../../components/select/SelectPerson';
 import { SelectPaymentType } from '../../../components/select/SelectPaymentType';
 import { SelectWorkNorm } from '../../../components/select/SelectWorkNorm';
 import useAppContext from '../../../hooks/useAppContext';
@@ -42,6 +42,7 @@ const formSchema = yup.object().shape({
     sequenceNumber: yup.number().nullable(),
     description: yup.string().nullable(),
     personId: yup.number().nullable(),
+    fullName: yup.string().nullable(),
     dateFrom: yup.date().required(),
     dateTo: yup.date().required(),
     deletedUserId: yup.number().nullable(),
@@ -91,11 +92,8 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                 : {};
         return formSchema.cast({ ...position_formData(position, positionHistory) });
     };
-    const {
-        data: formData,
-        isError: isFormError,
-        error: formError,
-    } = useQuery<FormType, Error>({
+
+    const { data, isError, error, isLoading } = useQuery<FormType, Error>({
         queryKey: ['Job & Pay', { positionId }],
         queryFn: () => {
             return getFormData(positionId);
@@ -108,9 +106,10 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
         handleSubmit,
         reset,
         formState: { errors: formErrors },
+        watch,
     } = useForm({
-        defaultValues: formData,
-        values: formData,
+        defaultValues: data,
+        values: data,
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -130,17 +129,23 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
             enqueueSnackbar(t(formErrors.dateTo?.message), { variant: 'error' });
     }, [formErrors, t]);
 
-    if (isFormError) {
-        return enqueueSnackbar(`${formError.name}\n${formError.message}`, {
+    if (isLoading) {
+        return <></>;
+    }
+
+    if (isError) {
+        return enqueueSnackbar(`${error.name}\n${error.message}`, {
             variant: 'error',
         });
     }
 
+    console.log('watch(personId)', watch('personId'));
+
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) {
-            reset(formData);
+            reset(data);
         }
-        if (!formData) {
+        if (!data) {
             return;
         }
         if (onSubmitCallback) onSubmitCallback();
@@ -159,9 +164,9 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                 if (!pos.id) {
                     throw Error('positionId not defined');
                 }
-                formData.positionHistoryId
+                data.positionHistoryId
                     ? await updatePositionHistory(
-                          formData.positionHistoryId,
+                          data.positionHistoryId,
                           positionHistoryDirtyValues,
                       )
                     : await createPositionHistory({
@@ -181,7 +186,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
     };
 
     const onCancel = async () => {
-        reset(await getFormData(formData?.id));
+        reset(await getFormData(data?.id));
         queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
     };
 
@@ -207,9 +212,13 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                 <Toolbar
                     onSave={isDirty ? handleSubmit(onSubmit) : 'disabled'}
                     onCancel={isDirty ? onCancel : 'disabled'}
+                    // onDelete={!!data?.id && !data?.deletedUserId ? onDelete : 'disabled'}
+                    // onRestoreDeleted={
+                    //     !!data?.id && data?.deletedUserId ? onRestoreDeleted : 'disabled'
+                    // }
                 />
 
-                <Grid container xs={12} spacing={2}>
+                <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
                         {/* <FormTextField
                             control={control}
@@ -222,20 +231,14 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             sx={{ fontWeight: 'bold' }}
                             placeholder={t('Vacancy')}
                         /> */}
-                        <SelectOrCreatePerson
+                        <SelectPerson
                             control={control}
-                            // autoComplete="full-name"
                             name="personId"
-                            // id="name"
                             label={t('Full Name')}
-                            autofocus
-                            // type="text"
-                            // autoFocus
-                            // sx={{ fontWeight: 'bold' }}
-                            // placeholder={t('Vacancy')}
+                            autoFocus={!data?.personId}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    {/* <Grid item xs={12} sm={6} md={3} lg={2}>
                         <FormTextField
                             control={control}
                             name="cardNumber"
@@ -300,6 +303,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             id="wage"
                             label={t('Wage')}
                             type="number"
+                            autoFocus={!!data?.personId}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
@@ -309,7 +313,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             id="rate"
                             label={t('Rate')}
                             type="number"
-                            defaultValue={'1'}
+                            // defaultValue={'1'}
                         />
                     </Grid>
 
@@ -319,7 +323,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             name="dateFrom"
                             id="dateFrom"
                             label={t('Date From')}
-                            defaultValue={formatDate(minDate())}
+                            // defaultValue={formatDate(minDate())}
                         />
                     </Grid>
 
@@ -329,9 +333,9 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             name="dateTo"
                             id="dateTo"
                             label={t('Date To')}
-                            defaultValue={formatDate(maxDate())}
+                            // defaultValue={formatDate(maxDate())}
                         />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </TabLayout>
         </>
@@ -362,6 +366,7 @@ function position_formData(
         sequenceNumber,
         description,
         personId,
+        fullName: position?.person?.fullName || '',
         dateFrom: dateFrom || minDate(),
         dateTo: dateTo || maxDate(),
         deletedUserId,

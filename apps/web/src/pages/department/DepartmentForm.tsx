@@ -25,7 +25,7 @@ import {
 } from '../../services/department.service';
 import { getDirtyValues } from '../../services/utils';
 
-export interface DepartmentFormParams {
+export interface Params {
     open: boolean;
     setOpen: Dispatch<boolean>;
     departmentId: number | null;
@@ -43,7 +43,7 @@ const formSchema = yup.object().shape({
 
 type FormType = yup.InferType<typeof formSchema>;
 
-export default function DepartmentForm(params: DepartmentFormParams) {
+export default function DepartmentForm(params: Params) {
     const { departmentId, submitCallback } = params;
     const { locale } = useLocale();
     const { t } = useTranslation();
@@ -185,7 +185,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                                 name="dateFrom"
                                 id="dateFrom"
                                 label={t('Date From')}
-                                defaultValue={formatDate(minDate())}
+                                // defaultValue={formatDate(minDate())}
                             />
                         </Grid>
 
@@ -196,7 +196,7 @@ export default function DepartmentForm(params: DepartmentFormParams) {
                                 name="dateTo"
                                 id="dateTo"
                                 label={t('Date To')}
-                                defaultValue={formatDate(maxDate())}
+                                // defaultValue={formatDate(maxDate())}
                             />
                         </Grid>
 

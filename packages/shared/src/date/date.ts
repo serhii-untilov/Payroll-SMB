@@ -137,7 +137,7 @@ export function normalizeDate(date: Date): Date {
     return d;
 }
 
-export function date2view(date: Date): string {
+export function date2view(date: Date): string | null {
     const d = normalizeDate(new Date(date));
     if (d.getTime() <= minDate().getTime()) {
         return '';
