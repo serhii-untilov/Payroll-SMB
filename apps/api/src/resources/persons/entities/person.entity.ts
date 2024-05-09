@@ -52,7 +52,7 @@ export class Person extends Logger implements IPerson {
     @AfterInsert()
     @AfterUpdate()
     generateFullName(): void {
-        this.fullName = `${this.firstName || ''} ${this.middleName || ''} ${this.lastName || ''}`
+        this.fullName = `${this.lastName || ''} ${this.firstName || ''} ${this.middleName || ''}`
             .replace('  ', ' ')
             .trim();
     }

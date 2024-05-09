@@ -110,5 +110,7 @@
     "Role": "Role",
     "User Role": "User Role",
     "New Company": "New Company",
-    "Upload photo": "Upload photo"
+    "Upload photo": "Upload photo",
+    "Add a new person": "Add a new person",
+    "Employee not yet registered? Please add.": "Employee not yet registered? Please add."
 }

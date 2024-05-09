@@ -238,7 +238,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             autoFocus={!data?.personId}
                         />
                     </Grid>
-                    {/* <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
                         <FormTextField
                             control={control}
                             name="cardNumber"
@@ -335,7 +335,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             label={t('Date To')}
                             // defaultValue={formatDate(maxDate())}
                         />
-                    </Grid> */}
+                    </Grid>
                 </Grid>
             </TabLayout>
         </>

@@ -148,7 +148,7 @@ export default function DepartmentForm(params: Params) {
                 onClose={() => {
                     params.setOpen(false);
                     reset(department);
-                    queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
+                    queryClient.invalidateQueries({ queryKey: ['department'] });
                 }}
                 // PaperProps={{
                 //     component: 'form',

@@ -28,7 +28,7 @@ export async function getPosition(params: {
     id: number;
     relations?: boolean;
     onDate?: Date;
-    onPayPeriodDate?: Date;
+    onPayPeriodDate?: Date | null | undefined;
 }): Promise<IPosition> {
     const response = await api.get(
         `/api/positions/${params.id}?relations=${!!params.relations}` +

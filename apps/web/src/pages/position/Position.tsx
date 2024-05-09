@@ -22,7 +22,7 @@ export default function Position() {
     const positionId = Number(params.positionId);
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { company } = useAppContext();
+    const { company, payPeriod } = useAppContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [tab, setTab] = useState(Number(localStorage.getItem('position-tab-index')));
@@ -50,10 +50,14 @@ export default function Position() {
         queryKey: ['position', { positionId, relations: true }],
         queryFn: async () => {
             return positionId
-                ? await getPosition({ id: positionId, relations: true })
+                ? await getPosition({
+                      id: positionId,
+                      relations: true,
+                      onPayPeriodDate: payPeriod,
+                  })
                 : defaultValues;
         },
-        enabled: !!company?.id,
+        enabled: !!company?.id && !!payPeriod,
     });
 
     useEffect(() => {}, [locale]);
@@ -70,11 +74,13 @@ export default function Position() {
     };
 
     const generatePageTitle = () => {
-        return positionId
+        const positionName = positionId
             ? position?.personId
                 ? position?.person?.fullName || ''
                 : t('Vacancy')
             : t('New Position');
+        const jobName = (position?.history?.[0]?.job?.name || '').toLocaleLowerCase();
+        return `${positionName}` + (jobName ? `, ${jobName}` : '');
     };
 
     const onSubmitCallback = () => {

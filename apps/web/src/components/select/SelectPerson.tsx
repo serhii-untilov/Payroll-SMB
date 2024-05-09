@@ -6,6 +6,8 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    Grid,
+    OutlinedInput,
     TextField,
     createFilterOptions,
 } from '@mui/material';
@@ -102,6 +104,7 @@ export const SelectPerson = (props: Props) => {
                                 // autoHighlight !!!
                                 autoComplete
                                 options={options || []}
+                                defaultValue={null}
                                 getOptionLabel={(option) => {
                                     // Value selected with enter, right from the input
                                     if (typeof option === 'string') {
@@ -163,7 +166,7 @@ export const SelectPerson = (props: Props) => {
                                     if (inputValue !== '' && !isExisting) {
                                         filtered.push({
                                             inputValue,
-                                            label: `Add "${inputValue}"`,
+                                            label: `${t('Add')} "${inputValue}"`,
                                             value: null,
                                         });
                                     }
@@ -186,7 +189,7 @@ export const SelectPerson = (props: Props) => {
                                     );
                                 }}
                             />
-                            <Dialog open={open} onClose={handleClose}>
+                            <Dialog open={open} onClose={handleClose} disableRestoreFocus>
                                 <form
                                     onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
                                         event.preventDefault();
@@ -208,102 +211,124 @@ export const SelectPerson = (props: Props) => {
                                         handleClose();
                                     }}
                                 >
-                                    <DialogTitle>Add a new film</DialogTitle>
+                                    <DialogTitle>{t('Add a new person')}</DialogTitle>
                                     <DialogContent>
-                                        <DialogContentText>
-                                            Did you miss any film in our list? Please, add it!
+                                        <DialogContentText sx={{ mb: 2, pt: 0 }}>
+                                            {t('Employee not yet registered? Please add.')}
                                         </DialogContentText>
-                                        <TextField
-                                            autoFocus
-                                            margin="dense"
-                                            id="lastName"
-                                            value={dialogValue.lastName}
-                                            onChange={(event) =>
-                                                setDialogValue({
-                                                    ...dialogValue,
-                                                    lastName: event.target.value,
-                                                })
-                                            }
-                                            label={t('Last Name')}
-                                            type="text"
-                                            variant="standard"
-                                        />
-                                        <TextField
-                                            autoFocus
-                                            margin="dense"
-                                            id="firstName"
-                                            value={dialogValue.firstName}
-                                            onChange={(event) =>
-                                                setDialogValue({
-                                                    ...dialogValue,
-                                                    firstName: event.target.value,
-                                                })
-                                            }
-                                            label={t('First Name')}
-                                            type="text"
-                                            variant="standard"
-                                        />
-                                        <TextField
-                                            autoFocus
-                                            margin="dense"
-                                            id="middleName"
-                                            value={dialogValue.middleName}
-                                            onChange={(event) =>
-                                                setDialogValue({
-                                                    ...dialogValue,
-                                                    middleName: event.target.value,
-                                                })
-                                            }
-                                            label={t('Middle Name')}
-                                            type="text"
-                                            variant="standard"
-                                        />
-                                        <TextField
-                                            autoFocus
-                                            margin="dense"
-                                            id="taxId"
-                                            value={dialogValue.taxId}
-                                            onChange={(event) =>
-                                                setDialogValue({
-                                                    ...dialogValue,
-                                                    taxId: event.target.value,
-                                                })
-                                            }
-                                            label={t('Tax ID')}
-                                            type="text"
-                                            variant="standard"
-                                        />
-                                        <TextField
-                                            margin="dense"
-                                            id="birthDate"
-                                            value={dialogValue.birthDate}
-                                            onChange={(event) =>
-                                                setDialogValue({
-                                                    ...dialogValue,
-                                                    birthDate: event.target.value,
-                                                })
-                                            }
-                                            label={t('Birth Date')}
-                                            type="date"
-                                            variant="standard"
-                                        />
-                                        <TextField
-                                            autoFocus
-                                            margin="dense"
-                                            id="sex"
-                                            value={dialogValue.sex}
-                                            onChange={(event) =>
-                                                setDialogValue({
-                                                    ...dialogValue,
-                                                    sex: event.target.value,
-                                                })
-                                            }
-                                            label={t('Sex')}
-                                            type="text"
-                                            variant="standard"
-                                        />
+                                        <Grid container item xs={12} spacing={2}>
+                                            <Grid item xs={12}>
+                                                <InputLabel>{t('Last Name')}</InputLabel>
+                                                <OutlinedInput
+                                                    autoFocus
+                                                    size="small"
+                                                    fullWidth
+                                                    id="lastName"
+                                                    name="lastName"
+                                                    label=""
+                                                    value={dialogValue.lastName}
+                                                    onChange={(event) =>
+                                                        setDialogValue({
+                                                            ...dialogValue,
+                                                            lastName: event.target.value,
+                                                        })
+                                                    }
+                                                    type="text"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <InputLabel>{t('First Name')}</InputLabel>
+                                                <OutlinedInput
+                                                    size="small"
+                                                    fullWidth
+                                                    name="lastName"
+                                                    label=""
+                                                    id="firstName"
+                                                    value={dialogValue.firstName}
+                                                    onChange={(event) =>
+                                                        setDialogValue({
+                                                            ...dialogValue,
+                                                            firstName: event.target.value,
+                                                        })
+                                                    }
+                                                    type="text"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <InputLabel>{t('Middle Name')}</InputLabel>
+                                                <OutlinedInput
+                                                    size="small"
+                                                    fullWidth
+                                                    name="lastName"
+                                                    label=""
+                                                    id="middleName"
+                                                    value={dialogValue.middleName}
+                                                    onChange={(event) =>
+                                                        setDialogValue({
+                                                            ...dialogValue,
+                                                            middleName: event.target.value,
+                                                        })
+                                                    }
+                                                    type="text"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <InputLabel>{t('Tax ID')}</InputLabel>
+                                                <OutlinedInput
+                                                    size="small"
+                                                    fullWidth
+                                                    label=""
+                                                    name="taxId"
+                                                    id="taxId"
+                                                    value={dialogValue.taxId}
+                                                    onChange={(event) =>
+                                                        setDialogValue({
+                                                            ...dialogValue,
+                                                            taxId: event.target.value,
+                                                        })
+                                                    }
+                                                    type="text"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <InputLabel>{t('Birth Date')}</InputLabel>
+                                                <OutlinedInput
+                                                    size="small"
+                                                    fullWidth
+                                                    label=""
+                                                    name="birthDate"
+                                                    id="birthDate"
+                                                    value={dialogValue.birthDate}
+                                                    onChange={(event) =>
+                                                        setDialogValue({
+                                                            ...dialogValue,
+                                                            birthDate: event.target.value,
+                                                        })
+                                                    }
+                                                    type="date"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <InputLabel>{t('Sex')}</InputLabel>
+                                                <OutlinedInput
+                                                    size="small"
+                                                    fullWidth
+                                                    label=""
+                                                    name="sex"
+                                                    id="sex"
+                                                    value={dialogValue.sex}
+                                                    onChange={(event) =>
+                                                        setDialogValue({
+                                                            ...dialogValue,
+                                                            sex: event.target.value,
+                                                        })
+                                                    }
+                                                    type="text"
+                                                />
+                                            </Grid>
+                                        </Grid>
                                     </DialogContent>
-                                    <DialogActions>
+                                    <DialogActions sx={{ mb: 2, mr: 2, pt: 0 }}>
                                         <Button type="submit">{t('Add')}</Button>
                                         <Button color="secondary" onClick={handleClose}>
                                             {t('Cancel')}
