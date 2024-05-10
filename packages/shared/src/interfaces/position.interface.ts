@@ -38,3 +38,14 @@ export type ICreatePosition = Omit<
 >;
 
 export type IUpdatePosition = Partial<ICreatePosition>;
+
+export type IFindPosition = {
+    companyId: number;
+    onDate?: Date;
+    onPayPeriodDate?: Date;
+    relations?: boolean;
+    vacanciesOnly?: boolean;
+    dismissedOnly?: boolean;
+    deletedOnly?: boolean;
+    includeDeleted?: boolean;
+};
