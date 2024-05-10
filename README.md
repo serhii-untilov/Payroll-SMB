@@ -106,6 +106,8 @@ replace environment variables in *.locale files and run the application.
 |Recurring Reimbursement|Періодичне відшкодування|reimbursement     |Компенсація податку, мобільного зв'язку, проживання, тощо.                      |
 |Additional Earnings    |Додатковий заробіток    |additionalEarnings|Надбавки, премії, доплати, приробіток                                           |
 |Job & Pay              |Робота і оплата         |jobAndPay         |                                                                                |
+|Start Date             |Дата прийому на роботу  |dateFrom          |                                                                                |
+|Dismissal Date         |Дата звільнення         |dateTo            |                                                                                |
 
 ## Development
 
