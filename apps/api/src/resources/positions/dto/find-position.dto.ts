@@ -7,6 +7,7 @@ export class FindPositionDto extends PartialType(Position) implements IFindPosit
     @ApiProperty() onDate?: Date;
     @ApiProperty() onPayPeriodDate?: Date;
     @ApiProperty() relations?: boolean;
+    @ApiProperty() employeesOnly?: boolean;
     @ApiProperty() vacanciesOnly?: boolean;
     @ApiProperty() dismissedOnly?: boolean;
     @ApiProperty() deletedOnly?: boolean;

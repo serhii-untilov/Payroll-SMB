@@ -64,6 +64,7 @@ export class PositionsService {
             onDate,
             onPayPeriodDate,
             relations,
+            employeesOnly,
             vacanciesOnly,
             dismissedOnly,
             deletedOnly,
@@ -92,10 +93,13 @@ export class PositionsService {
         };
         if (deletedOnly) {
             options['withDeleted'] = true;
-            options.where['deletedDate'] = Not('null');
+            options.where['deletedDate'] = Not(IsNull());
         }
         if (includeDeleted) {
             options['withDeleted'] = true;
+        }
+        if (employeesOnly) {
+            options.where['personId'] = Not(IsNull());
         }
         if (vacanciesOnly) {
             options.where['personId'] = IsNull();

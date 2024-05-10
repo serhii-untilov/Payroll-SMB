@@ -46,6 +46,7 @@ export default function People() {
             >
                 <Tabs id="people__tabs" value={tab} onChange={handleChange}>
                     <Tab label={t('Positions')} />
+                    <Tab label={t('Employees')} />
                     <Tab disabled label={t('Contractors')} />
                     <Tab label={t('Vacancies')} />
                     <Tab disabled label={t('Offers')} />
@@ -62,7 +63,17 @@ export default function People() {
                         />
                     )}
                 </TabPanel>
-                <TabPanel value={tab} index={2}>
+                <TabPanel value={tab} index={1}>
+                    {company?.id && (
+                        <PositionList
+                            companyId={company?.id}
+                            employeesOnly={true}
+                            relations={true}
+                            onPayPeriodDate={payPeriod || new Date()}
+                        />
+                    )}
+                </TabPanel>
+                <TabPanel value={tab} index={3}>
                     {company?.id && (
                         <PositionList
                             companyId={company?.id}
@@ -72,13 +83,23 @@ export default function People() {
                         />
                     )}
                 </TabPanel>
-                <TabPanel value={tab} index={4}>
+                <TabPanel value={tab} index={5}>
                     {company?.id && (
                         <PositionList
                             companyId={company?.id}
+                            employeesOnly={true}
                             dismissedOnly={true}
                             relations={true}
                             onPayPeriodDate={payPeriod || new Date()}
+                        />
+                    )}
+                </TabPanel>
+                <TabPanel value={tab} index={6}>
+                    {company?.id && (
+                        <PositionList
+                            companyId={company?.id}
+                            includeDeleted={true}
+                            relations={true}
                         />
                     )}
                 </TabPanel>
