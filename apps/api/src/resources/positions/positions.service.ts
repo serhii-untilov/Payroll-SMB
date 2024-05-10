@@ -4,6 +4,7 @@ import { AccessType, ResourceType } from '@repo/shared';
 import {
     FindManyOptions,
     FindOneOptions,
+    IsNull,
     LessThanOrEqual,
     MoreThanOrEqual,
     Repository,
@@ -59,6 +60,7 @@ export class PositionsService {
         relations: boolean,
         onDate: Date,
         onPayPeriodDate: Date,
+        vacanciesOnly: boolean,
     ): Promise<Position[]> {
         await this.accessService.availableForUserCompanyOrFail(
             userId,
@@ -81,6 +83,9 @@ export class PositionsService {
             },
             where: { companyId },
         };
+        if (vacanciesOnly) {
+            options.where['personId'] = IsNull();
+        }
         if (onDate) {
             options.where['dateFrom'] = LessThanOrEqual(onDate);
             options.where['dateTo'] = MoreThanOrEqual(onDate);

@@ -11,6 +11,7 @@ import { PositionList } from './details/PositionList';
 import { Tabs } from '../../components/layout/Tabs';
 import { Tab } from '../../components/layout/Tab';
 import { PageTitle } from '../../components/layout/PageTitle';
+import { VacanciesList } from './details/VacanciesList';
 
 export default function People() {
     const { company } = useAppContext();
@@ -59,7 +60,7 @@ export default function People() {
                     {/* <CompanyManagers companyId={company?.id} /> */}
                 </TabPanel>
                 <TabPanel value={tab} index={2}>
-                    {/* <CompanyAccounts companyId={company?.id} /> */}
+                    {company?.id && <VacanciesList companyId={company?.id} />}
                 </TabPanel>
             </Box>
         </PageLayout>

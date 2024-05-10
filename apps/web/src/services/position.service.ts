@@ -24,6 +24,23 @@ export async function getPositionList(params: {
     return response.data;
 }
 
+export async function getVacanciesList(params: {
+    companyId: number;
+    relations?: boolean;
+    onDate?: Date;
+    onPayPeriodDate?: Date;
+}): Promise<IPosition[]> {
+    const response = await api.get(
+        `/api/positions/?vacanciesOnly=true&companyId=${params.companyId}&relations=${!!params.relations}` +
+            (params?.onDate ? `&onDate=${params?.onDate}` : '') +
+            (params?.onPayPeriodDate ? `&onPayPeriodDate=${params?.onPayPeriodDate}` : ''),
+        {
+            headers: authHeader(),
+        },
+    );
+    return response.data;
+}
+
 export async function getPosition(params: {
     id: number;
     relations?: boolean;
