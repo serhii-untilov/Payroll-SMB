@@ -14,12 +14,13 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
-import { IPosition } from '@repo/shared';
+import { IPosition, objectStringDateToShort } from '@repo/shared';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionsService } from './positions.service';
+import { FindPositionDto } from './dto/find-position.dto';
 
 @Controller('positions')
 export class PositionsController {
@@ -36,25 +37,14 @@ export class PositionsController {
         return await this.positionsService.create(userId, createPositionDto);
     }
 
-    @Get()
+    @Post('find-all')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(
-        @Req() req: Request,
-        @Query('companyId', ParseIntPipe) companyId: number,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
-        @Query('onDate') onDate: Date,
-        @Query('onPayPeriodDate') onPayPeriodDate: Date,
-        @Query('vacanciesOnly', new ParseBoolPipe({ optional: true })) vacanciesOnly: boolean,
-    ): Promise<IPosition[]> {
+    async findAll(@Req() req: Request, @Body() payload: FindPositionDto): Promise<IPosition[]> {
         const userId = req.user['sub'];
         return await this.positionsService.findAll(
             userId,
-            companyId,
-            !!relations,
-            onDate ? new Date(onDate) : null,
-            onPayPeriodDate ? new Date(onPayPeriodDate) : null,
-            vacanciesOnly,
+            objectStringDateToShort<FindPositionDto>(payload),
         );
     }
 

@@ -1,12 +1,16 @@
+import { FindPositionDto } from './dto/find-position.dto';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType, maxDate } from '@repo/shared';
 import {
+    And,
     FindManyOptions,
     FindOneOptions,
     IsNull,
+    LessThan,
     LessThanOrEqual,
     MoreThanOrEqual,
+    Not,
     Repository,
 } from 'typeorm';
 import { AccessService } from '../access/access.service';
@@ -54,15 +58,18 @@ export class PositionsService {
         });
     }
 
-    async findAll(
-        userId: number,
-        companyId: number,
-        relations: boolean,
-        onDate: Date,
-        onPayPeriodDate: Date,
-        vacanciesOnly: boolean,
-    ): Promise<Position[]> {
-        await this.accessService.availableForUserCompanyOrFail(
+    async findAll(userId: number, payload: FindPositionDto): Promise<Position[]> {
+        const {
+            companyId,
+            onDate,
+            onPayPeriodDate,
+            relations,
+            vacanciesOnly,
+            dismissedOnly,
+            deletedOnly,
+            includeDeleted,
+        } = payload;
+        this.accessService.availableForUserCompanyOrFail(
             userId,
             companyId,
             this.resourceType,
@@ -83,6 +90,13 @@ export class PositionsService {
             },
             where: { companyId },
         };
+        if (deletedOnly) {
+            options['withDeleted'] = true;
+            options.where['deletedDate'] = Not('null');
+        }
+        if (includeDeleted) {
+            options['withDeleted'] = true;
+        }
         if (vacanciesOnly) {
             options.where['personId'] = IsNull();
         }
@@ -123,6 +137,11 @@ export class PositionsService {
                     dateFrom: LessThanOrEqual(payPeriod.dateTo),
                 };
             }
+        }
+        if (dismissedOnly) {
+            options.where['dateTo'] = options.where['dateTo']
+                ? And(LessThan(maxDate()))
+                : LessThan(maxDate());
         }
         return await this.repository.find(options);
     }

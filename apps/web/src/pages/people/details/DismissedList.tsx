@@ -8,22 +8,22 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { IPosition, date2view } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
-import useAppContext from '../../../hooks/useAppContext';
 import { deletePosition, getPositionList } from '../../../services/position.service';
+import useAppContext from '../../../hooks/useAppContext';
 
 type Props = {
     companyId: number;
 };
 
-export function VacanciesList(props: Props) {
+export function DismissedList(props: Props) {
     const { companyId } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
@@ -163,12 +163,12 @@ export function VacanciesList(props: Props) {
         isLoading: isPositionListLoading,
         error: positionListError,
     } = useQuery<IPosition[], Error>({
-        queryKey: ['position', 'vacanciesList', { companyId, relations: true }],
+        queryKey: ['position', 'dismissedList', { companyId, relations: true }],
         queryFn: async () => {
             return (
                 await getPositionList({
                     companyId,
-                    vacanciesOnly: true,
+                    dismissedOnly: true,
                     relations: true,
                     onPayPeriodDate: payPeriod || new Date(),
                 })
