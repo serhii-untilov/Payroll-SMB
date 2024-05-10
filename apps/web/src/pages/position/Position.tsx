@@ -16,6 +16,7 @@ import useLocale from '../../hooks/useLocale';
 import { getPosition } from '../../services/position.service';
 import { JobAndPay } from './details/JobAndPay';
 import { Personal } from './details/Personal';
+import { PositionHistory } from './details/PositionHistory';
 
 export default function Position() {
     const params = useParams();
@@ -101,6 +102,7 @@ export default function Position() {
                 {/* <Tab label={t('Additional Earnings')} /> */}
                 {/* <Tab label={t('Taxes and Deductions')} /> */}
                 <Tab label={t('Personal')} disabled={!position?.person?.id} />
+                {/* <Tab label={t('Assignments')} /> */}
                 <Tab label={t('Time Off')} disabled={!position?.person?.id} />
                 <Tab label={t('Documents')} />
                 <Tab label={t('Notes')} />
@@ -109,8 +111,11 @@ export default function Position() {
                 <JobAndPay positionId={positionId} onSubmitCallback={onSubmitCallback} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
-                <Personal personId={positionId} />
+                {position?.personId && <Personal personId={position.personId} />}
             </TabPanel>
+            {/* <TabPanel value={tab} index={2}>
+                <PositionHistory positionId={positionId} />
+            </TabPanel> */}
             <TabPanel value={tab} index={2}></TabPanel>
             <TabPanel value={tab} index={3}></TabPanel>
             <TabPanel value={tab} index={4}></TabPanel>

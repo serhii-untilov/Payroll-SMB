@@ -48,7 +48,7 @@ export class PaymentTypesService {
                   .where(
                       `${filter?.part ? '"paymentPart" = :part' : '1=1'}` +
                           `${filter?.groups ? ' AND "paymentGroup" = ANY (:groups)' : ''} ` +
-                          `${filter?.methods ? ' AND "paymentMethod" = ANY (:methods)' : ''} ` +
+                          `${filter?.methods ? ' AND "calcMethod" = ANY (:methods)' : ''} ` +
                           `${filter?.ids ? ' AND "id" = ANY (:ids)' : ''} `,
                       {
                           part: filter?.part,

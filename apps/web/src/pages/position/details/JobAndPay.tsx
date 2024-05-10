@@ -1,13 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
-import {
-    IPosition,
-    IPositionHistory,
-    PaymentGroup,
-    formatDate,
-    maxDate,
-    minDate,
-} from '@repo/shared';
+import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
+import { Button, Grid } from '@mui/material';
+import { IPosition, IPositionHistory, PaymentGroup, maxDate, minDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
@@ -21,8 +15,8 @@ import TabLayout from '../../../components/layout/TabLayout';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { SelectDepartment } from '../../../components/select/SelectDepartment';
 import { SelectJob } from '../../../components/select/SelectJob';
-import { SelectPerson } from '../../../components/select/SelectPerson';
 import { SelectPaymentType } from '../../../components/select/SelectPaymentType';
+import { SelectPerson } from '../../../components/select/SelectPerson';
 import { SelectWorkNorm } from '../../../components/select/SelectWorkNorm';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
@@ -218,7 +212,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                     // }
                 />
 
-                <Grid container spacing={2}>
+                <Grid container md={12} lg={10} xl={8} spacing={2}>
                     <Grid item xs={12} md={6}>
                         {/* <FormTextField
                             control={control}
@@ -238,7 +232,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             autoFocus={!data?.personId}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={3}>
                         <FormTextField
                             control={control}
                             name="cardNumber"
@@ -247,7 +241,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             type="text"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={3}>
                         <FormTextField
                             control={control}
                             name="sequenceNumber"
@@ -317,7 +311,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormDateField
                             control={control}
                             name="dateFrom"
@@ -327,7 +321,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormDateField
                             control={control}
                             name="dateTo"
@@ -337,6 +331,25 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                         />
                     </Grid>
                 </Grid>
+                {positionId && data?.personId && (
+                    <Grid container sx={{ mt: 2 }}>
+                        <Grid item xs={12}>
+                            <Button startIcon={<HistoryRounded />}>
+                                {t('Assignments History')}
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button startIcon={<AddCircleRounded />}>
+                                {t('Add Additional Earning Type')}
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button startIcon={<AddCircleRounded />}>
+                                {t('Add Additional Deduction Type')}
+                            </Button>
+                        </Grid>
+                    </Grid>
+                )}
             </TabLayout>
         </>
     );

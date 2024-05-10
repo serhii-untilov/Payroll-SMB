@@ -21,7 +21,7 @@ export async function getPositionHistoryList(
     relations: boolean,
 ): Promise<IPositionHistory[]> {
     const response = await api.get(
-        `/api/position-history/?position=${positionId}&relations=${!!relations}`,
+        `/api/position-history/?positionId=${positionId}&relations=${!!relations}`,
         { headers: authHeader() },
     );
     return response.data;

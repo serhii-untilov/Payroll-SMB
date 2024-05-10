@@ -4,6 +4,6 @@ export class CreatePaymentTypeDto implements ICreatePaymentType {
     @ApiProperty() name: string;
     @ApiProperty() paymentPart: string;
     @ApiProperty() paymentGroup: string;
-    @ApiProperty() paymentMethod: string;
+    @ApiProperty() calcMethod: string;
     @ApiProperty() description: string;
 }

@@ -3,11 +3,11 @@ import { PropsWithChildren } from 'react';
 
 export function PageSubTitle({ children, ...other }: PropsWithChildren) {
     return (
-        <Box sx={{ height: 48 }}>
+        <Box>
             <Typography
                 component="h3"
                 color="primary.main"
-                variant="h3"
+                variant="h4"
                 noWrap
                 // align="center"
                 mb={{ xs: 1, sm: 2 }}

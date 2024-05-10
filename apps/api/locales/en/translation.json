@@ -112,5 +112,13 @@
     "New Company": "New Company",
     "Upload photo": "Upload photo",
     "Add a new person": "Add a new person",
-    "Employee not yet registered? Please add.": "Employee not yet registered? Please add."
+    "Employee not yet registered? Please add.": "Employee not yet registered? Please add.",
+    "Assignments": "Assignments",
+    "Payment methods": "Payment methods",
+    "Payment method": "Payment method",
+    "Add tax exemption": "Add tax exemption",
+    "Add payment method": "Add payment method",
+    "Assignments History": "Assignments History",
+    "Add Additional Earning Type": "Add Additional Earning Type",
+    "Add Additional Deduction Type": "Add Additional Deduction Type"
 }

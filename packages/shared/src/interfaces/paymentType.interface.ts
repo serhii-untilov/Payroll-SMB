@@ -20,7 +20,7 @@ export enum PaymentGroup {
     DEDUCTIONS = 'deductions',
 }
 
-export enum PaymentMethod {
+export enum CalcMethod {
     // BASIC_SALARY group
     SALARY = 'salary',
     WAGE = 'wage',
@@ -69,7 +69,7 @@ export interface IPaymentType extends ILogger {
     name: string;
     paymentPart: string; // See enum PaymentPart
     paymentGroup: string; // See enum PaymentGroup
-    paymentMethod: string; // See enum PaymentMethod
+    calcMethod: string; // See enum CalcMethod
     description: string;
 }
 

@@ -4,7 +4,7 @@ import {
     IUpdatePaymentType,
     IPaymentTypeFilter,
     PaymentGroup,
-    PaymentMethod,
+    CalcMethod,
 } from '@repo/shared';
 import { api } from '../api';
 import authHeader from './auth-header';
@@ -54,6 +54,6 @@ export async function deletePaymentType(id: number): Promise<IPaymentType> {
 }
 
 export async function getDefaultBasicPaymentTypeId(): Promise<number> {
-    const basic: IPaymentType[] = await getPaymentTypeList({ methods: [PaymentMethod.SALARY] });
+    const basic: IPaymentType[] = await getPaymentTypeList({ methods: [CalcMethod.SALARY] });
     return Math.min(...basic.map((o) => o.id));
 }

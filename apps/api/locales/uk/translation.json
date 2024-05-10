@@ -100,7 +100,7 @@
     "Birth Date": "Дата народження",
     "Sex": "Стать",
     "Job & Pay": "Робота і оплата",
-    "Personal": "Персональні відомості",
+    "Personal": "Персональні дані",
     "Documents": "Документи",
     "Notes": "Нотатки",
     "Vacancy": "Вакансія",
@@ -111,5 +111,13 @@
     "New Company": "Нове підприємство",
     "Upload photo": "Завантажити фото",
     "Add a new person": "Додати нового працівника",
-    "Employee not yet registered? Please add.": "Працівник ще не зареєстрований? Будь ласка, додайте."
+    "Employee not yet registered? Please add.": "Працівник ще не зареєстрований? Будь ласка, додайте.",
+    "Assignments": "Призначення",
+    "Payment methods": "Методи виплати",
+    "Payment method": "Метод виплати",
+    "Add tax exemption": "Додати податкову пільгу",
+    "Add payment method": "Додати метод виплати",
+    "Assignments History": "Історія призначень",
+    "Add Additional Earning Type": "Додатковий вид нарахування",
+    "Add Additional Deduction Type": "Додатковий вид утримання"
 }
