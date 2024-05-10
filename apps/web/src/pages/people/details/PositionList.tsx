@@ -7,7 +7,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IFindPosition, IPosition, date2view } from '@repo/shared';
+import { IFindPosition, IPosition, date2view, maxDate } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -221,6 +221,16 @@ export function PositionList(props: IFindPosition) {
         console.log('onRestoreDeleted');
     };
 
+    const getRowStatus = (params: any): string => {
+        return params.row?.deletedDate
+            ? 'Deleted'
+            : params.row?.dateTo < maxDate()
+              ? 'Dismissed'
+              : !params.row?.personId
+                ? 'Vacancy'
+                : 'Normal';
+    };
+
     return (
         <>
             <Toolbar
@@ -233,6 +243,7 @@ export function PositionList(props: IFindPosition) {
                 onShowHistory={'disabled'}
             />
             <DataGrid
+                getRowStatus={getRowStatus}
                 columnVisibilityModel={{
                     // Hide columns, the other columns will remain visible
                     department: false,

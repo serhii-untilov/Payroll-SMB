@@ -1,9 +1,195 @@
-import { DataGridProps, GridToolbar } from '@mui/x-data-grid';
-import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';
+import { darken, lighten, styled } from '@mui/material/styles';
+import { DataGridProps, DataGrid as MuiDataGrid } from '@mui/x-data-grid';
 
-export function DataGrid(props: DataGridProps) {
+const extraColorCoefficient = 0.2;
+
+const getBackgroundColor = (color: string, mode: string) =>
+    mode === 'dark'
+        ? darken(color, 0.7 + extraColorCoefficient)
+        : lighten(color, 0.7 + extraColorCoefficient);
+
+const getHoverBackgroundColor = (color: string, mode: string) =>
+    mode === 'dark'
+        ? darken(color, 0.6 + extraColorCoefficient)
+        : lighten(color, 0.6 + extraColorCoefficient);
+
+const getSelectedBackgroundColor = (color: string, mode: string) =>
+    mode === 'dark'
+        ? darken(color, 0.5 + extraColorCoefficient)
+        : lighten(color, 0.5 + extraColorCoefficient);
+
+const getSelectedHoverBackgroundColor = (color: string, mode: string) =>
+    mode === 'dark'
+        ? darken(color, 0.4 + extraColorCoefficient)
+        : lighten(color, 0.4 + extraColorCoefficient);
+
+const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
+    '& .row-status--Normal': {
+        backgroundColor: theme.palette.background.default,
+        '&:hover': {
+            backgroundColor: theme.palette.grey['200'],
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.background.default,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.background.paper,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--Vacancy': {
+        backgroundColor: getBackgroundColor(theme.palette.success.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(
+                theme.palette.success.main,
+                theme.palette.mode,
+            ),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.success.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.success.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--Dismissed': {
+        backgroundColor: getBackgroundColor(theme.palette.warning.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(
+                theme.palette.warning.main,
+                theme.palette.mode,
+            ),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.warning.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.warning.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--Deleted': {
+        backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.error.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.error.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--Open': {
+        backgroundColor: getBackgroundColor(theme.palette.info.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.info.main, theme.palette.mode),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.info.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.info.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--Filled': {
+        backgroundColor: getBackgroundColor(theme.palette.success.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(
+                theme.palette.success.main,
+                theme.palette.mode,
+            ),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.success.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.success.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--PartiallyFilled': {
+        backgroundColor: getBackgroundColor(theme.palette.warning.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(
+                theme.palette.warning.main,
+                theme.palette.mode,
+            ),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.warning.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.warning.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--Rejected': {
+        backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.error.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.error.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+}));
+
+type Props = DataGridProps & {
+    getRowStatus?: (params: any) => string;
+};
+
+export function DataGrid(props: Props) {
+    const { getRowStatus, ...other } = props;
     return (
-        <MuiDataGrid
+        <StyledDataGrid //MuiDataGrid
             // slots={{ toolbar: GridToolbar }}
             // slotProps={{ toolbar: { csvOptions } }}
             // slotProps={{ toolbar: { printOptions: { disableToolbarButton: true } } }}
@@ -39,20 +225,24 @@ export function DataGrid(props: DataGridProps) {
                     height: 40,
                     minHeight: 40,
                 },
-                '& .MuiDataGrid-row': {
-                    // border: 0.5,
-                    // borderColor: 'divider',
-                },
+                // '& .MuiDataGrid-row': {
+                //     // border: 0.5,
+                //     // borderColor: 'divider',
+                // },
                 '& .MuiDataGrid-cell': {
                     fontSize: '1rem',
                     borderColor: 'divider',
                 },
 
-                '& .MuiDataGrid-row:hover': {
-                    backgroundColor: 'background.paper',
-                },
+                // '& .MuiDataGrid-row:hover': {
+                //     backgroundColor: 'background.paper',
+                // },
             }}
-            {...props}
+            {...other}
+            getRowClassName={(params) => {
+                const status = getRowStatus ? getRowStatus(params) : 'Normal';
+                return `row-status--${status}`;
+            }}
         />
     );
 }
