@@ -3,22 +3,21 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputLabel } from '../../components/layout/InputLabel';
 import PageLayout from '../../components/layout/PageLayout';
-import { SelectPayPeriod } from '../../components/select/SelectPayPeriod';
+import { PageTitle } from '../../components/layout/PageTitle';
+import { Tab } from '../../components/layout/Tab';
 import { TabPanel } from '../../components/layout/TabPanel';
+import { Tabs } from '../../components/layout/Tabs';
+import { SelectPayPeriod } from '../../components/select/SelectPayPeriod';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { PositionList } from './details/PositionList';
-import { Tabs } from '../../components/layout/Tabs';
-import { Tab } from '../../components/layout/Tab';
-import { PageTitle } from '../../components/layout/PageTitle';
-import { VacanciesList } from './details/VacanciesList';
-import { DismissedList } from './details/DismissedList';
 
 export default function People() {
     const { company } = useAppContext();
     const { locale } = useLocale();
     const [tab, setTab] = useState(Number(localStorage.getItem('people-tab-index')));
     const { t } = useTranslation();
+    const { payPeriod } = useAppContext();
 
     useEffect(() => {}, [locale]);
 
@@ -47,6 +46,7 @@ export default function People() {
             >
                 <Tabs id="people__tabs" value={tab} onChange={handleChange}>
                     <Tab label={t('Positions')} />
+                    <Tab label={t('Employees')} />
                     <Tab disabled label={t('Contractors')} />
                     <Tab label={t('Vacancies')} />
                     <Tab disabled label={t('Offers')} />
@@ -55,16 +55,53 @@ export default function People() {
                 </Tabs>
 
                 <TabPanel value={tab} index={0}>
-                    {company?.id && <PositionList companyId={company?.id} />}
+                    {company?.id && (
+                        <PositionList
+                            companyId={company?.id}
+                            relations={true}
+                            onPayPeriodDate={payPeriod || new Date()}
+                        />
+                    )}
                 </TabPanel>
                 <TabPanel value={tab} index={1}>
-                    {/* <CompanyManagers companyId={company?.id} /> */}
+                    {company?.id && (
+                        <PositionList
+                            companyId={company?.id}
+                            employeesOnly={true}
+                            relations={true}
+                            onPayPeriodDate={payPeriod || new Date()}
+                        />
+                    )}
                 </TabPanel>
-                <TabPanel value={tab} index={2}>
-                    {company?.id && <VacanciesList companyId={company?.id} />}
+                <TabPanel value={tab} index={3}>
+                    {company?.id && (
+                        <PositionList
+                            companyId={company?.id}
+                            vacanciesOnly={true}
+                            relations={true}
+                            onPayPeriodDate={payPeriod || new Date()}
+                        />
+                    )}
                 </TabPanel>
-                <TabPanel value={tab} index={4}>
-                    {company?.id && <DismissedList companyId={company?.id} />}
+                <TabPanel value={tab} index={5}>
+                    {company?.id && (
+                        <PositionList
+                            companyId={company?.id}
+                            employeesOnly={true}
+                            dismissedOnly={true}
+                            relations={true}
+                            onPayPeriodDate={payPeriod || new Date()}
+                        />
+                    )}
+                </TabPanel>
+                <TabPanel value={tab} index={6}>
+                    {company?.id && (
+                        <PositionList
+                            companyId={company?.id}
+                            includeDeleted={true}
+                            relations={true}
+                        />
+                    )}
                 </TabPanel>
             </Box>
         </PageLayout>

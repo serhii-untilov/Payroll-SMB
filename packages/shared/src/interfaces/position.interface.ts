@@ -44,6 +44,7 @@ export type IFindPosition = {
     onDate?: Date;
     onPayPeriodDate?: Date;
     relations?: boolean;
+    employeesOnly?: boolean;
     vacanciesOnly?: boolean;
     dismissedOnly?: boolean;
     deletedOnly?: boolean;

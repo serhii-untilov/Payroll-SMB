@@ -7,7 +7,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IPosition, date2view } from '@repo/shared';
+import { IFindPosition, IPosition, date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,11 +19,7 @@ import { Loading } from '../../../components/utility/Loading';
 import { deletePosition, getPositionList } from '../../../services/position.service';
 import useAppContext from '../../../hooks/useAppContext';
 
-type Props = {
-    companyId: number;
-};
-
-export function PositionList(props: Props) {
+export function PositionList(props: IFindPosition) {
     const { companyId } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
@@ -163,15 +159,9 @@ export function PositionList(props: Props) {
         isLoading: isPositionListLoading,
         error: positionListError,
     } = useQuery<IPosition[], Error>({
-        queryKey: ['position', 'list', { companyId, relations: true }],
+        queryKey: ['position', 'list', props],
         queryFn: async () => {
-            return (
-                await getPositionList({
-                    companyId,
-                    relations: true,
-                    onPayPeriodDate: payPeriod || new Date(),
-                })
-            ).sort((a, b) =>
+            return (await getPositionList(props)).sort((a, b) =>
                 (Number(a.cardNumber) || 2147483647) < (Number(b.cardNumber) || 2147483647)
                     ? -1
                     : (Number(a.cardNumber) || 2147483647) > (Number(b.cardNumber) || 2147483647)
