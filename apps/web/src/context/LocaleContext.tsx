@@ -23,7 +23,7 @@ const supportedLocales: Locale[] = [
 export type LocaleContextType = {
     locale: Locale;
     setLocale: Dispatch<SetStateAction<Locale>>;
-    setLanguage: Dispatch<string>;
+    setLanguage: (language?: string | null) => void;
     supportedLocales: typeof supportedLocales;
 };
 
@@ -70,8 +70,8 @@ export const LocaleProvider: FC<LocaleProviderProps> = (props) => {
         };
     }, [changeLanguage]);
 
-    function setLanguage(language: string): void {
-        const locale = supportedLocales.find((o) => o.language.startsWith(language));
+    function setLanguage(language: string | null): void {
+        const locale = getLocale(language);
         if (locale) {
             setLocale(locale);
             changeLanguage(locale.language);
@@ -84,6 +84,11 @@ export const LocaleProvider: FC<LocaleProviderProps> = (props) => {
         </LocaleContext.Provider>
     );
 };
+
+function getLocale(language: string | null) {
+    if (!language) return getBrowserLocale();
+    return supportedLocales.find((o) => o.language.startsWith(language)) || getBrowserLocale();
+}
 
 function getBrowserLocale(): Locale | undefined {
     const currentLang = navigator.language.replace('-', '');
