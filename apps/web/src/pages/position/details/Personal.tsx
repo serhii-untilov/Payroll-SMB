@@ -1,11 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid } from '@mui/material';
+import { AddCircleRounded } from '@mui/icons-material';
+import { Button, Grid } from '@mui/material';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { FormDateField } from '../../../components/form/FormDateField';
 import { FormTextField } from '../../../components/form/FormTextField';
@@ -13,12 +14,11 @@ import TabLayout from '../../../components/layout/TabLayout';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
-import { getPerson } from '../../../services/person.service';
-import { createPerson, updatePerson } from '../../../services/person.service';
+import { createPerson, getPerson, updatePerson } from '../../../services/person.service';
 import { getDirtyValues } from '../../../services/utils';
 
 interface Props {
-    personId: number | null;
+    personId: number;
 }
 
 const formSchema = yup.object().shape({
@@ -66,9 +66,9 @@ export function Personal({ personId }: Props) {
     } = useQuery<FormType, Error>({
         queryKey: ['person', { personId }],
         queryFn: async () => {
-            return formSchema.cast(personId ? await getPerson(personId) : defaultValues);
+            return formSchema.cast(await getPerson(personId, true));
         },
-        enabled: !!company?.id,
+        enabled: !!personId,
     });
 
     const {
@@ -147,13 +147,13 @@ export function Personal({ personId }: Props) {
                 <Toolbar
                     onSave={isDirty ? onSave : 'disabled'}
                     onCancel={isDirty ? onCancel : 'disabled'}
-                    onPrint={person?.id ? onPrint : 'disabled'}
-                    onExport={person?.id ? onExport : 'disabled'}
-                    onDelete={person?.id ? onDelete : 'disabled'}
-                    onRestoreDeleted={person?.deletedUserId ? onRestoreDeleted : 'disabled'}
+                    onPrint={'disabled'}
+                    onExport={'disabled'}
+                    // onDelete={'disabled'}
+                    // onRestoreDeleted={'disabled'}
                 />
 
-                <Grid container xs={12} spacing={2}>
+                <Grid container md={12} lg={10} xl={8} spacing={2}>
                     <Grid item xs={12} md={4}>
                         <FormTextField
                             control={control}
@@ -163,7 +163,7 @@ export function Personal({ personId }: Props) {
                             label={t('Last Name')}
                             type="text"
                             autoFocus
-                            sx={{ fontWeight: 'bold' }}
+                            // sx={{ fontWeight: 'bold' }}
                         />
                     </Grid>
                     <Grid item xs={12} md={4}>
@@ -174,8 +174,8 @@ export function Personal({ personId }: Props) {
                             id="firstName"
                             label={t('First Name')}
                             type="text"
-                            autoFocus
-                            sx={{ fontWeight: 'bold' }}
+
+                            // sx={{ fontWeight: 'bold' }}
                         />
                     </Grid>
                     <Grid item xs={12} md={4}>
@@ -186,8 +186,8 @@ export function Personal({ personId }: Props) {
                             id="middleName"
                             label={t('Middle Name')}
                             type="text"
-                            autoFocus
-                            sx={{ fontWeight: 'bold' }}
+
+                            // sx={{ fontWeight: 'bold' }}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12} md={4}>
@@ -231,8 +231,16 @@ export function Personal({ personId }: Props) {
                             name="email"
                             id="email"
                             label={t('Email')}
-                            type="number"
+                            type="text"
                         />
+                    </Grid>
+                </Grid>
+                <Grid container sx={{ mt: 2 }}>
+                    <Grid item xs={12}>
+                        <Button startIcon={<AddCircleRounded />}>{t('Add payment method')}</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button startIcon={<AddCircleRounded />}>{t('Add tax exemption')}</Button>
                     </Grid>
                 </Grid>
             </TabLayout>
