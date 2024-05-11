@@ -42,10 +42,7 @@ export class PositionsController {
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() payload: FindPositionDto): Promise<IPosition[]> {
         const userId = req.user['sub'];
-        return await this.positionsService.findAll(
-            userId,
-            objectStringDateToShort<FindPositionDto>(payload),
-        );
+        return await this.positionsService.findAll(userId, objectStringDateToShort(payload));
     }
 
     @Get(':id')

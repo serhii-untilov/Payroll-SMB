@@ -8,14 +8,15 @@ import { TabPanel } from '../../components/layout/TabPanel';
 import { Tabs } from '../../components/layout/Tabs';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
-import { AccountList } from './details/AccountList';
+import { CompanyAccounts } from './details/CompanyAccounts';
 import { CompanyDetails } from './details/CompanyDetails';
-import { DepartmentList } from './details/DepartmentList';
-import { ManagerList } from './details/ManagerList';
+import { CompanyDepartments } from './details/CompanyDepartments';
+import { CompanyManagers } from './details/CompanyManagers';
 import { getCompany } from '../../services/company.service';
 import { ICompany } from '@repo/shared';
 import { IconButton } from '@mui/material';
 import { ArrowBackIosNewRounded } from '@mui/icons-material';
+import { CompanyPayPeriods } from './details/CompanyPayPeriods';
 
 type Props = {
     showGoBack: boolean;
@@ -69,6 +70,7 @@ export default function Company(props: Props) {
             </PageTitle>
             <Tabs id="company__details_tabs" value={tab} onChange={handleChange}>
                 <Tab label={t('Accounting Details')} />
+                <Tab label={t('Pay Periods')} disabled={!company?.id} />
                 <Tab label={t('Departments')} disabled={!company?.id} />
                 <Tab label={t('Managers')} disabled={!company?.id} />
                 <Tab label={t('Accounts')} disabled={!company?.id} />
@@ -77,13 +79,16 @@ export default function Company(props: Props) {
                 <CompanyDetails companyId={Number(companyId)} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
-                <DepartmentList companyId={Number(companyId)} />
+                <CompanyPayPeriods companyId={Number(companyId)} />
             </TabPanel>
             <TabPanel value={tab} index={2}>
-                <ManagerList companyId={Number(companyId)} />
+                <CompanyDepartments companyId={Number(companyId)} />
             </TabPanel>
             <TabPanel value={tab} index={3}>
-                <AccountList companyId={Number(companyId)} />
+                <CompanyManagers companyId={Number(companyId)} />
+            </TabPanel>
+            <TabPanel value={tab} index={4}>
+                <CompanyAccounts companyId={Number(companyId)} />
             </TabPanel>
         </PageLayout>
     );

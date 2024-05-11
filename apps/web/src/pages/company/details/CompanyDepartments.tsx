@@ -22,7 +22,7 @@ type Props = {
     companyId: number | undefined;
 };
 
-export function DepartmentList(params: Props) {
+export function CompanyDepartments(params: Props) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);

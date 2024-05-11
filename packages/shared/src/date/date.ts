@@ -12,34 +12,72 @@ export function isShortDateString(value: any): boolean {
 }
 
 // Convert strings to dates in given object
-export function objectStringDateToDate<T>(obj: T): T {
-    if (obj === null || obj === undefined || typeof obj !== 'object') return obj;
-
-    for (const key of Object.keys(obj)) {
-        const value = obj[key];
-        if (isIsoDateString(value)) {
-            obj[key] = parseISO(value);
-        } else if (isShortDateString(value)) {
-            obj[key] = new Date(value);
-        } else if (typeof value === 'object') {
-            objectStringDateToDate(value);
-        }
+export function objectStringDateToDate(obj: any): any {
+    if (obj === null || obj === undefined) {
+        return obj;
     }
+
+    if (Array.isArray(obj)) {
+        for (let i = 0; i < obj.length; i++) {
+            objectStringDateToDate(obj[i]);
+        }
+        return obj;
+    }
+
+    if (typeof obj === 'object') {
+        for (const key of Object.keys(obj)) {
+            const value = obj[key];
+            if (isIsoDateString(value)) {
+                obj[key] = parseISO(value);
+            } else if (isShortDateString(value)) {
+                obj[key] = new Date(value);
+            } else if (typeof value === 'object') {
+                objectStringDateToDate(value);
+            }
+        }
+        return obj;
+    }
+
+    if (isIsoDateString(obj)) {
+        return parseISO(obj);
+    }
+
+    if (isShortDateString(obj)) {
+        return new Date(obj);
+    }
+
     return obj;
 }
 
 // Convert strings to dates in given object
-export function objectStringDateToShort<T>(obj: T): T {
-    if (obj === null || obj === undefined || typeof obj !== 'object') return obj;
-
-    for (const key of Object.keys(obj)) {
-        const value = obj[key];
-        if (isIsoDateString(value)) {
-            obj[key] = formatDate(parseISO(value));
-        } else if (typeof value === 'object') {
-            objectStringDateToDate(value);
-        }
+export function objectStringDateToShort(obj: any): any {
+    if (obj === null || obj === undefined) {
+        return obj;
     }
+
+    if (Array.isArray(obj)) {
+        for (let i = 0; i < obj.length; i++) {
+            objectStringDateToShort(obj[i]);
+        }
+        return obj;
+    }
+
+    if (typeof obj === 'object') {
+        for (const key of Object.keys(obj)) {
+            const value = obj[key];
+            if (isIsoDateString(value)) {
+                obj[key] = formatDate(parseISO(value));
+            } else if (typeof value === 'object') {
+                objectStringDateToShort(value);
+            }
+        }
+        return obj;
+    }
+
+    if (isIsoDateString(obj)) {
+        return formatDate(parseISO(obj));
+    }
+
     return obj;
 }
 

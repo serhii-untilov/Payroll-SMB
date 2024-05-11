@@ -56,7 +56,7 @@
     "Departments": "Підрозділи",
     "Department": "Підрозділ",
     "Managers": "Керівники",
-    "Accounts": "Розрахунковий рахунок",
+    "Accounts": "Розрахункові рахунки",
     "Name is required": "Необхідно вказати назву",
     "Company is required": "Необхідно вказати підприємство",
     "Full Name": "Прізвище Ім'я по Батькові",
@@ -120,5 +120,15 @@
     "Assignments History": "Історія призначень",
     "Add Additional Earning Type": "Додатковий вид нарахування",
     "Add Additional Deduction Type": "Додатковий вид утримання",
-    "System Language": "Мова системи"
+    "System Language": "Системна",
+    "Pay Periods": "Розрахункові періоди",
+    "Close": "Закрити",
+    "Open": "Відкрити",
+    "In Balance": "Вхідне сальдо",
+    "Accruals": "Нараховано",
+    "Deductions": "Утримано",
+    "Taxes": "Податки",
+    "Net Pay": "До виплати",
+    "Payments Sum": "Виплачено",
+    "Out Balance": "Вихідне сальдо"
 }

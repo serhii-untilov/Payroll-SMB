@@ -34,10 +34,7 @@ export class PositionHistoryController {
         @Body() payload: CreatePositionHistoryDto,
     ): Promise<IPositionHistory> {
         const userId = req.user['sub'];
-        return await this.positionHistoryService.create(
-            userId,
-            objectStringDateToShort<CreatePositionHistoryDto>(payload),
-        );
+        return await this.positionHistoryService.create(userId, objectStringDateToShort(payload));
     }
 
     @Get()
@@ -76,7 +73,7 @@ export class PositionHistoryController {
         return await this.positionHistoryService.update(
             userId,
             id,
-            objectStringDateToShort<UpdatePositionHistoryDto>(payload),
+            objectStringDateToShort(payload),
         );
     }
 
@@ -101,7 +98,7 @@ export class PositionHistoryController {
         const userId = req.user['sub'];
         const positionList = await this.positionHistoryService.find(
             userId,
-            objectStringDateToShort<FindPositionHistoryDto>(params),
+            objectStringDateToShort(params),
         );
         // Will return the last positionHistory record or null
         positionList.sort((a, b) =>

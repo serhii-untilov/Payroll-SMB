@@ -7,7 +7,9 @@ import {
     HistoryRounded,
     OfflinePinRounded,
     PrintRounded,
+    RedoRounded,
     RestoreFromTrashRounded,
+    UndoRounded,
 } from '@mui/icons-material';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Box, IconButton, Stack, StackProps } from '@mui/material';
@@ -22,6 +24,8 @@ export interface Props extends StackProps {
     onSave?: Func<any> | 'disabled' | undefined;
     onCancel?: Func<any> | 'disabled' | undefined;
     onSaveAndClose?: Func<any> | 'disabled' | undefined;
+    onClose?: Func<any> | 'disabled' | undefined;
+    onOpen?: Func<any> | 'disabled' | undefined;
     onPrint?: Func<any> | 'disabled' | undefined;
     onExport?: Func<any> | 'disabled' | undefined;
     onDelete?: Func<any> | 'disabled' | undefined;
@@ -84,6 +88,14 @@ export function Toolbar(props: Props) {
                         color={'warning'}
                     >
                         <CancelIcon />
+                    </ToolbarItem>
+
+                    <ToolbarItem item={props?.onClose} title={t('Close')} color={'success'}>
+                        <RedoRounded />
+                    </ToolbarItem>
+
+                    <ToolbarItem item={props?.onOpen} title={t('Open')} color={'warning'}>
+                        <UndoRounded />
                     </ToolbarItem>
 
                     <ToolbarItem item={props?.onPrint} title={t('Print')}>
