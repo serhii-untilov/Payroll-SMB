@@ -116,8 +116,8 @@
     "Assignments": "Assignments",
     "Payment methods": "Payment methods",
     "Payment method": "Payment method",
-    "Add tax exemption": "Add tax exemption",
-    "Add payment method": "Add payment method",
+    "Add Tax Exemption": "Add tax exemption",
+    "Add Payment Method": "Add payment method",
     "Assignments History": "Assignments History",
     "Add Additional Earning Type": "Add Additional Earning Type",
     "Add Additional Deduction Type": "Add Additional Deduction Type",
@@ -132,5 +132,7 @@
     "Net Pay": "Net Pay",
     "Payments Sum": "Payments",
     "Out Balance": "Out Balance",
-    "Calculate": "Calculate"
+    "Calculate": "Calculate",
+    "Add Work Address": "Add Work Address",
+    "Add Home Address": "Add Home Address"
 }

@@ -348,6 +348,11 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                                 {t('Add Additional Deduction Type')}
                             </Button>
                         </Grid>
+                        <Grid item xs={12}>
+                            <Button startIcon={<AddCircleRounded />}>
+                                {t('Add Work Address')}
+                            </Button>
+                        </Grid>
                     </Grid>
                 )}
             </TabLayout>

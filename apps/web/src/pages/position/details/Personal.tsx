@@ -237,10 +237,13 @@ export function Personal({ personId }: Props) {
                 </Grid>
                 <Grid container sx={{ mt: 2 }}>
                     <Grid item xs={12}>
-                        <Button startIcon={<AddCircleRounded />}>{t('Add payment method')}</Button>
+                        <Button startIcon={<AddCircleRounded />}>{t('Add Payment Method')}</Button>
                     </Grid>
                     <Grid item xs={12}>
-                        <Button startIcon={<AddCircleRounded />}>{t('Add tax exemption')}</Button>
+                        <Button startIcon={<AddCircleRounded />}>{t('Add Tax Exemption')}</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button startIcon={<AddCircleRounded />}>{t('Add Home Address')}</Button>
                     </Grid>
                 </Grid>
             </TabLayout>
