@@ -1,5 +1,6 @@
 import {
     AddCircleRounded,
+    CalculateRounded,
     CheckCircleRounded,
     DeleteRounded,
     DeleteSweepRounded,
@@ -24,6 +25,7 @@ export interface Props extends StackProps {
     onSave?: Func<any> | 'disabled' | undefined;
     onCancel?: Func<any> | 'disabled' | undefined;
     onSaveAndClose?: Func<any> | 'disabled' | undefined;
+    onCalculate?: Func<any> | 'disabled' | undefined;
     onClose?: Func<any> | 'disabled' | undefined;
     onOpen?: Func<any> | 'disabled' | undefined;
     onPrint?: Func<any> | 'disabled' | undefined;
@@ -88,6 +90,10 @@ export function Toolbar(props: Props) {
                         color={'warning'}
                     >
                         <CancelIcon />
+                    </ToolbarItem>
+
+                    <ToolbarItem item={props?.onCalculate} title={t('Calculate')}>
+                        <CalculateRounded />
                     </ToolbarItem>
 
                     <ToolbarItem item={props?.onClose} title={t('Close')} color={'success'}>

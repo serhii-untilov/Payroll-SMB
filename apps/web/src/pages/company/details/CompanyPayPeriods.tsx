@@ -155,6 +155,10 @@ export function CompanyPayPeriods(params: Props) {
         gridRef.current.exportDataAsCsv();
     };
 
+    const onCalculate = () => {
+        console.log('onCalculate');
+    };
+
     const onClose = () => {
         console.log('onClose');
     };
@@ -166,6 +170,7 @@ export function CompanyPayPeriods(params: Props) {
     return (
         <>
             <Toolbar
+                onCalculate={onCalculate}
                 onClose={onClose}
                 onOpen={onOpen}
                 onPrint={data?.length ? onPrint : 'disabled'}
