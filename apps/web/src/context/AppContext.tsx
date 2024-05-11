@@ -93,9 +93,8 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initPayPeriod = async () => {
-            const current: Date = startOfMonth(
-                (await getCurrentPayPeriodDateFrom(company?.id)) || new Date(),
-            );
+            const current: Date =
+                (await getCurrentPayPeriodDateFrom(company?.id)) || startOfMonth(new Date());
             const lastCurrent: Date = startOfMonth(
                 localStorage.getItem('currentPayPeriod') || new Date(),
             );

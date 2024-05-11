@@ -190,11 +190,11 @@ export function DataGrid(props: Props) {
     const { getRowStatus, ...other } = props;
     return (
         <StyledDataGrid //MuiDataGrid
+            rowSelection={true}
             // slots={{ toolbar: GridToolbar }}
             // slotProps={{ toolbar: { csvOptions } }}
             // slotProps={{ toolbar: { printOptions: { disableToolbarButton: true } } }}
             autoPageSize={true}
-            rowSelection={true}
             density={'standard'}
             editMode={'row'}
             ignoreDiacritics={true}

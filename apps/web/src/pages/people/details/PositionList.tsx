@@ -110,11 +110,12 @@ export function PositionList(props: IFindPosition) {
             width: 130,
             sortable: true,
             valueGetter: (params) => {
-                return payPeriod
+                const wage = payPeriod
                     ? params.row?.history?.find(
                           (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
                       )?.wage || ''
                     : '';
+                return Number(wage) === 0 ? '' : wage;
             },
         },
         {

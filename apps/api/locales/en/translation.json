@@ -57,7 +57,7 @@
     "Departments": "Departments",
     "Department": "Department",
     "Managers": "Managers",
-    "Accounts": "Bank account",
+    "Accounts": "Bank accounts",
     "Name is required": "Name is required",
     "Company is required": "Company is required",
     "Full Name": "Full Name",
@@ -121,5 +121,16 @@
     "Assignments History": "Assignments History",
     "Add Additional Earning Type": "Add Additional Earning Type",
     "Add Additional Deduction Type": "Add Additional Deduction Type",
-    "System Language": "System Language"
+    "System Language": "System",
+    "Pay Periods": "Pay Periods",
+    "Close": "Close",
+    "Open": "Open",
+    "In Balance": "In Balance",
+    "Accruals": "Accruals",
+    "Deductions": "Deductions",
+    "Taxes": "Taxes",
+    "Net Pay": "Net Pay",
+    "Payments Sum": "Payments",
+    "Out Balance": "Out Balance",
+    "Calculate": "Calculate"
 }

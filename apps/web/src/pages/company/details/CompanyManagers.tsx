@@ -6,7 +6,7 @@ import {
     GridRowSelectionModel,
     MuiEvent,
 } from '@mui/x-data-grid';
-import { ICompanyAccount } from '@repo/shared';
+import { ICompanyManager } from '@repo/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,64 +17,91 @@ type Props = {
     companyId: number | undefined;
 };
 
-export function AccountList(params: Props) {
+export function CompanyManagers(params: Props) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
-    const [accountId, setAccountId] = useState<number | null>(null);
+    const [managerId, setManagerId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     const columns: GridColDef[] = [
+        // { field: 'id', headerName: t('ID'), type: 'number', width: 70 },
         {
-            field: 'accountNumber',
-            headerName: t('Account Number'),
+            field: 'fullName',
+            headerName: t('Full Name'),
             type: 'string',
-            width: 280,
+            width: 290,
             sortable: true,
+            valueGetter: (params) => {
+                return `${params.row.firstName} ${params.row.lastName}`;
+            },
         },
         {
-            field: 'bank',
-            headerName: t('Bank'),
+            field: 'job',
+            headerName: t('Job'),
             type: 'string',
             width: 240,
             sortable: true,
             valueGetter: (params) => {
-                return params.row.bank.name;
+                return '';
             },
         },
         {
-            field: 'currency',
-            headerName: t('Currency'),
+            field: 'department',
+            headerName: t('Department'),
+            type: 'string',
+            width: 240,
+            sortable: true,
+            valueGetter: (params) => {
+                return '';
+            },
+        },
+        {
+            field: 'taxId',
+            headerName: t('Tax ID'),
+            type: 'string',
+            width: 220,
+            sortable: true,
+            valueGetter: (params) => {
+                return '';
+            },
+        },
+        {
+            field: 'phone',
+            headerName: t('Phone'),
             type: 'string',
             width: 160,
             sortable: true,
             valueGetter: (params) => {
-                return params.row.currency.code;
+                return '';
             },
         },
         {
-            field: 'description',
-            headerName: t('Description'),
+            field: 'email',
+            headerName: t('Email Address'),
             type: 'string',
-            width: 160,
+            width: 220,
             sortable: true,
+            valueGetter: (params) => {
+                return '';
+            },
         },
     ];
 
-    const onAddAccount = () => {
+    const onAddManager = () => {
         console.log('onAdd');
     };
 
-    const onEditAccount = (accountId: number) => {
+    const onEditManager = (managerId: number) => {
         console.log('onEdit');
     };
 
-    const submitCallback = (data: ICompanyAccount) => {
+    const submitCallback = (data: ICompanyManager) => {
         console.log('submitCallback');
     };
 
-    const onDeleteAccount = async () => {
+    const onDeleteManager = async () => {
         console.log('onDelete');
     };
 
@@ -89,7 +116,7 @@ export function AccountList(params: Props) {
     return (
         <>
             <Toolbar
-                onAdd={onAddAccount}
+                onAdd={onAddManager}
                 onDelete={'disabled'}
                 onPrint={onPrint}
                 onExport={onExport}
@@ -111,7 +138,7 @@ export function AccountList(params: Props) {
                     details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditAccount(params.row.id);
+                        onEditManager(params.row.id);
                     }
                 }}
                 onRowDoubleClick={(
@@ -119,13 +146,13 @@ export function AccountList(params: Props) {
                     event: MuiEvent,
                     details: GridCallbackDetails,
                 ) => {
-                    // onEditAccount(params.row.id)
+                    // onEditManager(params.row.id)
                 }}
             />
-            {/* <AccountForm
+            {/* <ManagerForm
                 open={openForm}
                 setOpen={setOpenForm}
-                accountId={accountId}
+                managerId={managerId}
                 submitCallback={submitCallback}
             /> */}
         </>
