@@ -71,7 +71,7 @@ export function Toolbar(props: Props) {
                     flex: 1,
                 }}
             >
-                <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, gap: 1 }}>
                     <ToolbarItem item={props?.onAdd} title={t('Add')} color={'success'}>
                         <AddCircleRounded />
                     </ToolbarItem>
@@ -119,6 +119,7 @@ export function Toolbar(props: Props) {
                         flexDirection: 'row',
                         flex: 1,
                         justifyContent: 'flex-end',
+                        gap: 1,
                     }}
                 >
                     <ToolbarItem item={props?.onDelete} title={t('Delete')} color={'error'}>

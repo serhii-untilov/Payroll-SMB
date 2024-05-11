@@ -331,30 +331,31 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                         />
                     </Grid>
                 </Grid>
-                {positionId && data?.personId && (
-                    <Grid container sx={{ mt: 2 }}>
+
+                <Grid container sx={{ mt: 2 }}>
+                    {positionId && data?.personId && (
                         <Grid item xs={12}>
                             <Button startIcon={<HistoryRounded />}>
                                 {t('Assignments History')}
                             </Button>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Button startIcon={<AddCircleRounded />}>
-                                {t('Add Additional Earning Type')}
-                            </Button>
-                        </Grid>
+                    )}
+                    <Grid item xs={12}>
+                        <Button startIcon={<AddCircleRounded />}>
+                            {t('Add Additional Earning Type')}
+                        </Button>
+                    </Grid>
+                    {positionId && data?.personId && (
                         <Grid item xs={12}>
                             <Button startIcon={<AddCircleRounded />}>
                                 {t('Add Additional Deduction Type')}
                             </Button>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Button startIcon={<AddCircleRounded />}>
-                                {t('Add Work Address')}
-                            </Button>
-                        </Grid>
+                    )}
+                    <Grid item xs={12}>
+                        <Button startIcon={<AddCircleRounded />}>{t('Add Work Address')}</Button>
                     </Grid>
-                )}
+                </Grid>
             </TabLayout>
         </>
     );
