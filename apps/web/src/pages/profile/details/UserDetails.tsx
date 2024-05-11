@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { IUpdateUser } from '@repo/shared';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
@@ -47,6 +47,7 @@ export function UserDetails(props: Props) {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { user: currentUser } = useAuth();
+    const queryClient = useQueryClient();
 
     const {
         data: user,
@@ -54,7 +55,7 @@ export function UserDetails(props: Props) {
         isLoading,
         error: queryError,
     } = useQuery<FormType, Error>({
-        queryKey: ['user', 'current', { id: currentUser?.id }],
+        queryKey: ['user', 'current', currentUser],
         queryFn: async () => {
             return formSchema.cast(await getCurrentUser());
         },
@@ -102,13 +103,14 @@ export function UserDetails(props: Props) {
         }
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const user = await updateUser(data.id, dirtyValues as IUpdateUser);
+            const user = await updateUser(data.id, dirtyValues);
             reset(user);
-            user.language && setLanguage(user.language as supportedLanguages);
+            setLanguage(user?.language || null);
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
         }
+        queryClient.invalidateQueries({ queryKey: ['user', 'current'], refetchType: 'all' });
     };
 
     const onCancel = () => {
@@ -161,11 +163,12 @@ export function UserDetails(props: Props) {
                             name="language"
                             autoComplete="language"
                             type="text"
-                            options={
-                                supportedLocales?.map((o) => {
+                            options={[
+                                { label: t('System Language'), value: 'sys' },
+                                ...(supportedLocales?.map((o) => {
                                     return { label: o.name, value: o.language as string };
-                                }) || []
-                            }
+                                }) || []),
+                            ]}
                         />
                     </Grid>
                 </Grid>
