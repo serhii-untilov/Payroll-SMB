@@ -72,7 +72,7 @@ export default function Company(props: Props) {
                 <Tab label={t('Accounting Details')} />
                 <Tab label={t('Pay Periods')} disabled={!company?.id} />
                 <Tab label={t('Departments')} disabled={!company?.id} />
-                <Tab label={t('Managers')} disabled={!company?.id} />
+                <Tab label={t('Company Managers')} disabled={!company?.id} />
                 <Tab label={t('Accounts')} disabled={!company?.id} />
             </Tabs>
             <TabPanel value={tab} index={0}>

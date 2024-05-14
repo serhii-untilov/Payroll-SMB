@@ -61,59 +61,74 @@ replace environment variables in *.locale files and run the application.
 
 ## Domain-specific language (DSL)
 
-| English               |Ukrainian                | Short form        | Description                                                                    |
-|-----------------------|-------------------------|-------------------|--------------------------------------------------------------------------------|
-|Admin                  |Адміністратор            |admin              |                                                                                |
-|User                   |Користувач               |user               |                                                                                |
-|Owner                  |Власник                  |owner              |                                                                                |
-|Employer               |Роботодавець             |employer           |                                                                                |
-|Supervisor             |Керівник                 |supervisor         |                                                                                |
-|Accountant             |Бухгалтер                |accountant         |                                                                                |
-|Collaborator           |Співробітник             |collaborator       |Помічник, асистент (assistant)                                                  |
-|Employee               |Працівник                |employee           |Штатний працівник підприємства, співробітник                                    |
-|Contractor             |Підрядник                |contractor         |Позаштатний працівник, тимчасовий, не постійний, на разову роботу               |
-|Advisor                |Консультант              |advisor            |                                                                                |
-|Observer               |Спостерігач              |observer           |                                                                                |
-|Guest                  |Гість                    |guest              |                                                                                |
-|Company                |Підприємство             |company            |                                                                                |
-|Tax ID                 |Податковий номер         |taxId              |                                                                                |
-|Law                    |Законодавство            |law                |                                                                                |
-|Accounting type        |Вид обліку               |accounting         |                                                                                |
-|Payment schedule       |Розклад виплат           |paymentSchedule    |Every 15th and last day of month, Last day of month, First day of the next month|
-|Accounting period      |Обліковий період         |accPeriod          |Період за який нараховано  (1С)                                                 |
-|Payment period         |Розрахунковий період     |payPeriod          |Період в якому розраховано (1С)                                                 |
-|Check date             |Дата виплати             |checkDate          |                                                                                |
-|Position               |Штатна одиниця           |position           |                                                                                |
-|Placement              |Призначення              |placement          |Призначення на посаду, окладу, і т.і.                                           |
-|Card Number            |Табельний номер          |cardNumber         |Номер картки у зовнішніх системах (кадровий облік, тощо) зберігати окремо       |
-|Sequence Number        |Порядковий номер         |sequenceNumber     |The sequence number in payroll reports to place managers on top                 |
-|Department             |Підрозділ                |department         |                                                                                |
-|Job                    |Посада                   |job                |                                                                                |
-|Vacancy                |Вакансія                 |vacancy            |                                                                                |
-|Working time norm      |Норма робочого часу      |workNorm           |                                                                                |
-|Working time calendar  |Виробничий календар      |workCalendar       |                                                                                |
-|Work Schedule          |Розклад роботи           |workSchedule       |                                                                                |
-|Work Sheet             |Табель робочого часу     |workSheet          |                                                                                |
-|Work Sheet             |Табель робочого часу     |workSheet          |                                                                                |
-|Incoming balance       |Вхідний залишок          |inBalance          |                                                                                |
-|Accrual                |Нарахування              |accrual            |                                                                                |
-|Deduction              |Утримання                |deduction          |                                                                                |
-|Tax                    |Податок                  |tax                |                                                                                |
-|Net pay                |До виплати               |netPay             |                                                                                |
-|Payment                |Виплата                  |payment            |                                                                                |
-|Outgoing balance       |Вихідний залишок         |outBalance         |                                                                                |
-|Payment Type           |Вид оплати               |paymentType        |                                                                                |
-|Recurring Reimbursement|Періодичне відшкодування |reimbursement      |Компенсація податку, мобільного зв'язку, проживання, тощо.                      |
-|Additional Earnings    |Додатковий заробіток     |additionalEarnings |Надбавки, премії, доплати, приробіток                                           |
-|Job & Pay              |Робота і оплата          |jobAndPay          |                                                                                |
-|Start Date             |Дата прийому на роботу   |dateFrom           |                                                                                |
-|Dismissal Date         |Дата звільнення          |dateTo             |                                                                                |
-|Assignment             |Призначення              |assignment         |Призначення працівника на посаду, призначення окладу, тощо.                     |
-|Assignments History    |Історія призначень       |assignmentsHistory |                                                                                |
-|Additional Earning     |Додаткове нарахування    |additionalEarning  |                                                                                |
-|Additional Deduction   |Додаткове утримання      |additionalDeduction|                                                                                |
-|Tax exemption          |Податкова пільга         |taxExemption       |                                                                                |
-|Deferred income        |Доходи майбутніх періодів|deferredIncome     |                                                                                |
+| English               |Ukrainian                 | Short form        | Description                                                                    |
+|-----------------------|--------------------------|-------------------|--------------------------------------------------------------------------------|
+|Admin                  |Адміністратор             |admin              |                                                                                |
+|User                   |Користувач                |user               |                                                                                |
+|Owner                  |Власник                   |owner              |                                                                                |
+|Employer               |Роботодавець              |employer           |                                                                                |
+|Supervisor             |Керівник                  |supervisor         |                                                                                |
+|Accountant             |Бухгалтер                 |accountant         |                                                                                |
+|Collaborator           |Співробітник              |collaborator       |Помічник, асистент (assistant)                                                  |
+|Employee               |Працівник                 |employee           |Штатний працівник підприємства, співробітник                                    |
+|Contractor             |Підрядник                 |contractor         |Позаштатний працівник, тимчасовий, не постійний, на разову роботу               |
+|Advisor                |Консультант               |advisor            |                                                                                |
+|Observer               |Спостерігач               |observer           |                                                                                |
+|Guest                  |Гість                     |guest              |                                                                                |
+|Company                |Підприємство              |company            |                                                                                |
+|Tax ID                 |Податковий номер          |taxId              |                                                                                |
+|Law                    |Законодавство             |law                |                                                                                |
+|Accounting type        |Вид обліку                |accounting         |                                                                                |
+|Payment schedule       |Розклад виплат            |paymentSchedule    |Every 15th and last day of month, Last day of month, First day of the next month|
+|Accounting period      |Обліковий період          |accPeriod          |Період за який нараховано  (1С)                                                 |
+|Payment period         |Розрахунковий період      |payPeriod          |Період в якому розраховано (1С)                                                 |
+|Check date             |Дата виплати              |checkDate          |                                                                                |
+|Position               |Штатна одиниця            |position           |                                                                                |
+|Placement              |Призначення               |placement          |Призначення на посаду, окладу, і т.і.                                           |
+|Card Number            |Табельний номер           |cardNumber         |Номер картки у зовнішніх системах (кадровий облік, тощо) зберігати окремо       |
+|Sequence Number        |Порядковий номер          |sequenceNumber     |The sequence number in payroll reports to place managers on top                 |
+|Department             |Підрозділ                 |department         |                                                                                |
+|Job                    |Посада                    |job                |                                                                                |
+|Vacancy                |Вакансія                  |vacancy            |                                                                                |
+|Working time norm      |Норма робочого часу       |workNorm           |                                                                                |
+|Working time calendar  |Виробничий календар       |workCalendar       |                                                                                |
+|Work Schedule          |Розклад роботи            |workSchedule       |                                                                                |
+|Work Sheet             |Табель робочого часу      |workSheet          |                                                                                |
+|Work Sheet             |Табель робочого часу      |workSheet          |                                                                                |
+|Incoming balance       |Вхідний залишок           |inBalance          |                                                                                |
+|Accrual                |Нарахування               |accrual            |                                                                                |
+|Deduction              |Утримання                 |deduction          |                                                                                |
+|Tax                    |Податок                   |tax                |                                                                                |
+|Net pay                |До виплати                |netPay             |                                                                                |
+|Payment                |Виплата                   |payment            |                                                                                |
+|Outgoing balance       |Вихідний залишок          |outBalance         |                                                                                |
+|Compensation           |Основна зарплата          |compensation       |                                                                                |
+|Additional Earnings    |Додаткова зарплата        |additionalEarnings |                                                                                |
+|Bonus                  |Премія                    |bonus              |                                                                                |
+|Commission             |Винагорода                |commission         |Винагорода по завершенню робіт                                                  |
+|Payment Type           |Вид оплати                |paymentType        |                                                                                |
+|Calculate Method       |Метод розрахунку          |calcMethod         |                                                                                |
+|Payment Method         |Метод виплати             |paymentMethod      | Direct Deposit (Банк)                                                          |
+|Recurring Reimbursement|Періодичне відшкодування  |reimbursement      |Компенсація податку, мобільного зв'язку, проживання, тощо.                      |
+|Garnishment            |Штраф, арешт на зарплату  |garnishment        |Обов'язкове відшкодування за рішенням суду, тощо.                               |
+|Custom deduction       |Відрахування              |customDeduction    |Відрахування із заробітної плати за бажанням працівника                         |
+|Withholding            |Утримання                 |withholding        |Утримання із зарплати за рішенням або за умовами роботодавця, додатковий податок|
+|Additional Earnings    |Додатковий заробіток      |additionalEarnings |Надбавки, премії, доплати, приробіток                                           |
+|Job & Pay              |Робота і оплата           |jobAndPay          |                                                                                |
+|Start Date             |Дата прийому на роботу    |dateFrom           |                                                                                |
+|Dismissal Date         |Дата звільнення           |dateTo             |                                                                                |
+|Assignment             |Призначення               |assignment         |Призначення працівника на посаду, призначення окладу, тощо.                     |
+|Assignments History    |Історія призначень        |assignmentsHistory |                                                                                |
+|Additional Earning     |Додаткове нарахування     |additionalEarning  |                                                                                |
+|Additional Deduction   |Додаткове утримання       |additionalDeduction|                                                                                |
+|Tax exemption          |Податкова пільга          |taxExemption       |                                                                                |
+|Deferred income        |Доходи майбутніх періодів |deferredIncome     |                                                                                |
+|Account Number         |Розрахунковий рахунок     |accountNumber      |Розрахунковий рахунок у банку                                                   |
+|Routing Number         |Код банку                 |routingNumber      |Код банку                                                                       |
+|Account Type           |Тип розрахункового рахунку|accountType        |Поточний                                                                        |
+|Checking account       |Поточний рахунок          |checkingAccount    |Поточний розрахунковий рахунок                                                  |
+|Total Earned           |Разом нараховано          |totalEarned        |                                                                                |
+|Total Deducted         |Разом утримано            |totalDeducted      |                                                                                |
 
 ## Development
 
@@ -168,6 +183,7 @@ npm i --workspace @repo/web --save i18next-http-backend
 npm i --workspace @repo/web --save-dev rollup-plugin-visualizer
 npm i --workspace @repo/web --save react-error-boundary
 npm i --workspace @repo/web --save date-fns
+npm i --workspace @repo/web --save react-number-format
 
 # Init "shared" library for common types and interfaces
 mkdir packages/shared

@@ -86,3 +86,10 @@ export type ICreatePaymentType = Omit<
 >;
 
 export type IUpdatePaymentType = Partial<ICreatePaymentType>;
+
+export function getUnitByCalcMethod(calcMethod: string) {
+    if (calcMethod === CalcMethod.WAGE) {
+        return 'hour';
+    }
+    return 'month';
+}
