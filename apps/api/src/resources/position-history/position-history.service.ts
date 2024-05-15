@@ -1,4 +1,10 @@
-import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
+import {
+    ConflictException,
+    Inject,
+    Injectable,
+    NotFoundException,
+    forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType, castAsPositionHistory } from '@repo/shared';
 import { FindOptionsWhere, Repository, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
@@ -110,6 +116,11 @@ export class PositionHistoryService {
             this.resourceType,
             AccessType.UPDATE,
         );
+        if (payload.version !== record.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
+            );
+        }
         const updated = await this.repository.save({ ...payload, id, updatedUserId: userId });
         await this.normalizeAfterCreateOrUpdate(userId, updated);
         return updated;

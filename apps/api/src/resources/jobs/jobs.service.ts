@@ -1,5 +1,6 @@
 import {
     BadRequestException,
+    ConflictException,
     Inject,
     Injectable,
     NotFoundException,
@@ -64,7 +65,6 @@ export class JobsService {
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-
         return await this.repository.save({ ...payload, id, updatedUser: userId });
     }
 

@@ -1,4 +1,10 @@
-import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import {
+    BadRequestException,
+    ConflictException,
+    Inject,
+    Injectable,
+    forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
@@ -115,6 +121,11 @@ export class PayrollsService {
                 position.companyId,
                 this.resourceType,
                 AccessType.ELEVATED,
+            );
+        }
+        if (payload.version !== payroll.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
         return await this.repository.save({ ...payload, id, updatedUserId: userId });
