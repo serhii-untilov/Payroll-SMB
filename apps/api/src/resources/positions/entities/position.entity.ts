@@ -4,7 +4,6 @@ import { Logger } from '../../abstract/logger.abstract';
 import { Company } from '../../companies/entities/company.entity';
 import { Person } from '../../persons/entities/person.entity';
 import { PositionHistory } from '../../position-history/entities/position-history.entity';
-import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 
 @Entity()
 export class Position extends Logger implements IPosition {
@@ -43,7 +42,4 @@ export class Position extends Logger implements IPosition {
 
     @OneToMany(() => PositionHistory, (history) => history.position)
     history?: PositionHistory[];
-
-    @OneToMany(() => Payroll, (payroll) => payroll.position)
-    payroll?: Payroll[];
 }
