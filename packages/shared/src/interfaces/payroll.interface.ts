@@ -42,8 +42,31 @@ export interface IPayroll extends ILogger {
     factHoursByDay?: HoursByDay;
 }
 
-export type ICreatePayroll = Omit<IPayroll, 'id'>;
-export type IUpdatePayroll = Partial<ICreatePayroll>;
+export type ICreatePayroll = Omit<
+    IPayroll,
+    | 'id'
+    | 'createdDate'
+    | 'createdUserId'
+    | 'updatedDate'
+    | 'updatedUserId'
+    | 'deletedDate'
+    | 'deletedUserId'
+    | 'version'
+>;
+
+export type IUpdatePayroll = Partial<
+    Omit<
+        IPayroll,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;
+
 export type IFindPayroll = Partial<IPayroll> & {
     companyId?: number;
     relations?: boolean;

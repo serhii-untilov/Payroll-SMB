@@ -1,5 +1,6 @@
 import {
     BadRequestException,
+    ConflictException,
     Inject,
     Injectable,
     NotFoundException,
@@ -75,7 +76,12 @@ export class PaymentTypesService {
             this.resourceType,
             AccessType.UPDATE,
         );
-        await this.repository.findOneOrFail({ where: { id } });
+        const paymentType = await this.repository.findOneOrFail({ where: { id } });
+        if (payload.version !== paymentType.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
+            );
+        }
         return await this.repository.save({
             ...payload,
             id,

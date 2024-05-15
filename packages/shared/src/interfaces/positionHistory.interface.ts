@@ -30,25 +30,18 @@ import { IWorkNorm } from './workNorm.interface';
 
 export interface IPositionHistory extends ILogger {
     id: number | undefined | null;
-
     position?: IPosition;
     positionId: number;
-
     dateFrom: Date;
     dateTo: Date;
-
     department?: IDepartment;
     departmentId?: number | null;
-
     job?: IJob;
     jobId: number | null | undefined;
-
     workNorm?: IWorkNorm;
     workNormId: number | null | undefined;
-
     paymentType?: IPaymentType;
     paymentTypeId: number | null | undefined;
-
     wage: number | null | undefined;
     rate: number | null | undefined;
 }
@@ -67,7 +60,19 @@ export type ICreatePositionHistory = Partial<
     >
 >;
 
-export type IUpdatePositionHistory = ICreatePositionHistory;
+export type IUpdatePositionHistory = Partial<
+    Omit<
+        IPositionHistory,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;
+
 export interface IFindPositionHistory extends Partial<IPositionHistory> {
     onDate?: Date;
     onPayPeriodDate?: Date;

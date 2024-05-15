@@ -140,4 +140,14 @@ export class PayrollsService {
         }
         return await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
     }
+
+    async calculateCompany(userId: number, companyId: number): Promise<Payroll[]> {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            companyId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+        return [];
+    }
 }

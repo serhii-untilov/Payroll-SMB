@@ -119,13 +119,18 @@ export class PayPeriodsService {
     }
 
     async update(userId: number, id: number, payload: UpdatePayPeriodDto): Promise<PayPeriod> {
-        const payPeriod = await this.repository.findOneOrFail({ where: { id } });
+        const record = await this.repository.findOneOrFail({ where: { id } });
         await this.accessService.availableForUserCompanyOrFail(
             userId,
-            payPeriod.companyId,
+            record.companyId,
             this.resourceType,
             AccessType.UPDATE,
         );
+        if (payload.version !== record.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
+            );
+        }
         return await this.repository.save({ ...payload, id, updatedUserId: userId });
     }
 

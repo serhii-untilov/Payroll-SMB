@@ -1,7 +1,17 @@
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { IUpdateDepartment } from '@repo/shared';
-import { CreateDepartmentDto } from './create-department.dto';
-import { PartialType } from '@nestjs/mapped-types';
+import { Department } from '../entities/department.entity';
 
 export class UpdateDepartmentDto
-    extends PartialType(CreateDepartmentDto)
+    extends PartialType(
+        OmitType(Department, [
+            'id',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+        ]),
+    )
     implements IUpdateDepartment {}

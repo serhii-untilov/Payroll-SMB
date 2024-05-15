@@ -14,7 +14,6 @@ export interface IWorkNorm extends ILogger {
     type: string;
     dateFrom?: Date;
     dateTo?: Date;
-
     periods?: IWorkNormPeriod[];
 }
 
@@ -31,4 +30,16 @@ export type ICreateWorkNorm = Omit<
     | 'version'
 >;
 
-export type IUpdateWorkNorm = Partial<ICreateWorkNorm>;
+export type IUpdateWorkNorm = Partial<
+    Omit<
+        IWorkNorm,
+        | 'id'
+        | 'periods'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;

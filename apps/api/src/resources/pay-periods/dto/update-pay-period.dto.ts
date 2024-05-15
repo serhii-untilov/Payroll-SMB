@@ -1,7 +1,17 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { IUpdatePayPeriod } from '@repo/shared';
-import { CreatePayPeriodDto } from './create-pay-period.dto';
+import { PayPeriod } from '../entities/pay-period.entity';
 
 export class UpdatePayPeriodDto
-    extends PartialType(CreatePayPeriodDto)
+    extends PartialType(
+        OmitType(PayPeriod, [
+            'id',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+        ]),
+    )
     implements IUpdatePayPeriod {}

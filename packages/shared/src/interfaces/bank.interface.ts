@@ -3,10 +3,8 @@ import { ILogger } from './logger.interface';
 export interface IBank extends ILogger {
     id: number;
     name: string;
-
     bankIdCode?: string | null;
     companyIdCode?: string | null;
-
     dateFrom?: Date;
     dateTo?: Date;
 }
@@ -23,4 +21,15 @@ export type ICreateBank = Omit<
     | 'version'
 >;
 
-export type IUpdateBank = Partial<ICreateBank>;
+export type IUpdateBank = Partial<
+    Omit<
+        IBank,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;

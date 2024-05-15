@@ -158,5 +158,6 @@
     "Company Managers": "Керівники підприємства",
     "Fund USC": "ЄСВ",
     "Total": "Разом",
-    "Company Expenses": "Витрати підприємства"
+    "Company Expenses": "Витрати підприємства",
+    "The record has been updated by another user. Try to edit it after reloading.": "Запис оновлено іншим користувачем. Спробуйте відредагувати його після перезавантаження."
 }

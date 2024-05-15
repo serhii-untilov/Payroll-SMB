@@ -15,20 +15,14 @@ export interface ICompany extends ILogger {
     name: string;
     dateFrom?: Date | null;
     dateTo?: Date | null;
-
     law?: ILaw;
     lawId: number;
-
     taxId?: string;
-
     accounting?: IAccounting;
     accountingId: number;
-
     paymentSchedule: string; // See PaymentSchedule
-
     payPeriod: Date;
     checkDate: Date;
-
     departments?: IDepartment[];
     positions?: IPosition[];
     users?: IUserCompany[];
@@ -54,4 +48,23 @@ export type ICreateCompany = Omit<
     | 'version'
 >;
 
-export type IUpdateCompany = Partial<ICreateCompany>;
+export type IUpdateCompany = Partial<
+    Omit<
+        ICompany,
+        | 'id'
+        | 'law'
+        | 'accounting'
+        | 'departments'
+        | 'positions'
+        | 'users'
+        | 'createdDate'
+        | 'createdUser'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUser'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUser'
+        | 'deletedUserId'
+    >
+>;

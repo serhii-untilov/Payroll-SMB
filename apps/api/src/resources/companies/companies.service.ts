@@ -1,5 +1,6 @@
 import {
     BadRequestException,
+    ConflictException,
     Inject,
     Injectable,
     NotFoundException,
@@ -110,6 +111,12 @@ export class CompaniesService {
             AccessType.UPDATE,
         );
         await this.usersCompanyService.getUserCompanyRoleTypeOrException(userId, id);
+        const company = await this.repository.findOneOrFail({ where: { id } });
+        if (payload.version !== company.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
+            );
+        }
         return await this.repository.save({
             ...payload,
             id,
