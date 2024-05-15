@@ -13,7 +13,7 @@ export enum PaymentGroup {
     VACATIONS = 'vacations',
     SICKS = 'sicks',
     REFUNDS = 'refunds',
-    ONE_TIME_ACCRUALS = 'one-time-accruals',
+    EARNINGS = 'earnings',
     // DEDUCTION part
     TAXES = 'taxes',
     PAYMENTS = 'payments',
@@ -86,3 +86,10 @@ export type ICreatePaymentType = Omit<
 >;
 
 export type IUpdatePaymentType = Partial<ICreatePaymentType>;
+
+export function getUnitByCalcMethod(calcMethod: string) {
+    if (calcMethod === CalcMethod.WAGE) {
+        return 'hour';
+    }
+    return 'month';
+}

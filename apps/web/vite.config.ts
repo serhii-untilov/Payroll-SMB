@@ -14,7 +14,7 @@ export default defineConfig(({ command, mode }) => {
         base: env.VITE_APP_URL,
         server: {
             strictPort: true,
-            open: mode === 'development',
+            // open: mode === 'development',
             proxy: {
                 '/api': {
                     target: mode === 'development' ? env.VITE_API_URL : env.VITE_APP_URL, // local NestJS application

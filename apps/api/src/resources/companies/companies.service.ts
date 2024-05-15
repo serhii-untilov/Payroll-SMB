@@ -81,7 +81,7 @@ export class CompaniesService {
             this.resourceType,
             AccessType.ACCESS,
         );
-        const company = await this.repository.findOne({
+        const company = await this.repository.findOneOrFail({
             relations: {
                 law: !!relations,
                 accounting: !!relations,
