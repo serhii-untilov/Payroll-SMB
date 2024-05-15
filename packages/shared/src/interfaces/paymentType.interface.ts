@@ -13,7 +13,7 @@ export enum PaymentGroup {
     VACATIONS = 'vacations',
     SICKS = 'sicks',
     REFUNDS = 'refunds',
-    ONE_TIME_ACCRUALS = 'one-time-accruals',
+    EARNINGS = 'earnings',
     // DEDUCTION part
     TAXES = 'taxes',
     PAYMENTS = 'payments',

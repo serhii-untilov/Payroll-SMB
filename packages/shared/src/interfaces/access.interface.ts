@@ -1,8 +1,11 @@
 export enum AccessType {
+    // Standard operations
     CREATE = 'create',
     UPDATE = 'update',
     DELETE = 'delete',
     ACCESS = 'access',
+    // Extra operations
+    ELEVATED = 'elevated', // Elevated access rights. Can modify closed documents or not current pay periods. This mode is temporary and is not used in regular routines.
 }
 
 export enum ResourceType {

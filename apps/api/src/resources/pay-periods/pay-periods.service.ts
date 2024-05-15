@@ -82,12 +82,11 @@ export class PayPeriodsService {
             this.resourceType,
             AccessType.CREATE,
         );
-        const newPayPeriod = await this.repository.save({
+        return await this.repository.save({
             ...payload,
             createdUserId: userId,
             updatedUserId: userId,
         });
-        return newPayPeriod;
     }
 
     async findAll(
@@ -119,7 +118,7 @@ export class PayPeriodsService {
         return payPeriod;
     }
 
-    async update(userId: number, id: number, data: UpdatePayPeriodDto): Promise<PayPeriod> {
+    async update(userId: number, id: number, payload: UpdatePayPeriodDto): Promise<PayPeriod> {
         const payPeriod = await this.repository.findOneOrFail({ where: { id } });
         await this.accessService.availableForUserCompanyOrFail(
             userId,
@@ -127,7 +126,7 @@ export class PayPeriodsService {
             this.resourceType,
             AccessType.UPDATE,
         );
-        return await this.repository.save({ ...data, id, updatedUserId: userId });
+        return await this.repository.save({ ...payload, id, updatedUserId: userId });
     }
 
     async remove(userId: number, id: number): Promise<PayPeriod> {

@@ -294,6 +294,43 @@ export function SalaryReport(props: IFindPosition) {
                 );
             },
         },
+        {
+            field: 'companyExpenses',
+            headerName: t('Company Expenses'),
+            type: 'number',
+            width: 240,
+            sortable: true,
+            valueGetter: (params) => {
+                const wage = payPeriod
+                    ? params.row?.history?.find(
+                          (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
+                      )?.wage || ''
+                    : '';
+                return Number(wage) === 0 ? '' : wage;
+            },
+            renderCell: (params) => {
+                const fundUSC = 10000;
+                const companyExpensesTotal = 10000;
+                return (
+                    <Box sx={{ width: '100%' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography>{t('Fund USC')}</Typography>
+                            <Typography sx={{ textAlign: 'right' }}>
+                                {numericFormatter(fundUSC.toFixed(2), { thousandSeparator: ' ' })}
+                            </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography>{t('Total')}</Typography>
+                            <Typography sx={{ textAlign: 'right' }}>
+                                {numericFormatter(companyExpensesTotal.toFixed(2), {
+                                    thousandSeparator: ' ',
+                                })}
+                            </Typography>
+                        </Box>
+                    </Box>
+                );
+            },
+        },
     ];
 
     const {
