@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { AccessType, ResourceType } from '@repo/shared';
-import { WorkNormsService } from 'src/resources/work-norms/work-norms.service';
+import { WorkNormsService } from '../../resources/work-norms/work-norms.service';
 import { LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { AccessService } from '../../resources/access/access.service';
 import { CompaniesService } from '../../resources/companies/companies.service';

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { GlobalSubscriber } from '../subscribers/global.subscriber';
+// import { GlobalSubscriber } from '../subscribers/global.subscriber';
 
 @Injectable()
 export class TypeormConfigService implements TypeOrmOptionsFactory {
@@ -26,7 +26,7 @@ export class TypeormConfigService implements TypeOrmOptionsFactory {
             synchronize: dbConfig.synchronize,
             logging: dbConfig.logging,
             autoLoadEntities: true,
-            subscribers: [GlobalSubscriber],
+            // subscribers: [GlobalSubscriber],
         };
     }
 }
