@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@repo/shared';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PositionsService } from '../positions/positions.service';
@@ -40,7 +40,7 @@ export class PayrollsService {
             AccessType.CREATE,
         );
         const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payload.payPeriod !== company.payPeriod) {
+        if (payload.payPeriod.getTime() !== company.payPeriod.getTime()) {
             await this.accessService.availableForUserCompanyOrFail(
                 userId,
                 position.companyId,
@@ -82,6 +82,32 @@ export class PayrollsService {
                 ...other,
                 ...(positionId ? { positionId } : {}),
                 ...(companyId ? { position: { companyId } } : {}),
+            },
+            relations: {
+                position: relations,
+                paymentType: relations,
+            },
+        });
+    }
+
+    async findBetween(
+        userId: number,
+        positionId: number,
+        dateFrom: Date,
+        dateTo: Date,
+        relations?: boolean,
+    ): Promise<Payroll[]> {
+        const position = await this.positionsService.findOne(userId, positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        return await this.repository.find({
+            where: {
+                positionId,
+                accPeriod: Between(dateFrom, dateTo),
             },
             relations: {
                 position: relations,

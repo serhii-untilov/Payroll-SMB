@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Position } from '../../positions/entities/position.entity';
 import { Department } from '../../departments/entities/department.entity';
 import { Job } from '../../jobs/entities/job.entity';
@@ -58,4 +58,10 @@ export class PositionHistory extends Logger implements IPositionHistory {
 
     @Column({ type: 'decimal', precision: 4, scale: 2, default: 1 })
     rate: number;
+
+    @AfterLoad()
+    transform() {
+        this.dateFrom = new Date(this.dateFrom);
+        this.dateTo = new Date(this.dateTo);
+    }
 }

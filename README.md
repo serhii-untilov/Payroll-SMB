@@ -222,7 +222,7 @@ npx --workspace @repo/api nest generate resource positions resources
 npx --workspace @repo/api nest generate resource positionHistory resources
 npx --workspace @repo/api nest generate resource access resources
 npx --workspace @repo/api nest generate resource payroll resources
-npx --workspace @repo/api nest generate service calculate resources
+npx --workspace @repo/api nest generate resource processor resources
 
 ```
 

@@ -1,6 +1,6 @@
 import { IWorkNorm, WorkNormType } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
-import { Column, PrimaryGeneratedColumn, OneToMany, Entity } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, OneToMany, Entity, AfterLoad } from 'typeorm';
 import { WorkNormPeriod } from './work-norm-period.entity';
 
 @Entity()
@@ -24,4 +24,10 @@ export class WorkNorm extends Logger implements IWorkNorm {
         cascade: true,
     })
     periods?: WorkNormPeriod[];
+
+    @AfterLoad()
+    transform() {
+        this.dateFrom = new Date(this.dateFrom);
+        this.dateTo = new Date(this.dateTo);
+    }
 }

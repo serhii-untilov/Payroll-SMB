@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { PayrollsService } from './payrolls.service';
 import { PayrollsController } from './payrolls.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,9 +8,14 @@ import { AccessModule } from '../access/access.module';
 import { CompaniesModule } from '../companies/companies.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Payroll]), PositionsModule, CompaniesModule, AccessModule],
+    imports: [
+        TypeOrmModule.forFeature([Payroll]),
+        forwardRef(() => PositionsModule),
+        forwardRef(() => CompaniesModule),
+        forwardRef(() => AccessModule),
+    ],
     controllers: [PayrollsController],
     providers: [PayrollsService],
     exports: [PayrollsService],
 })
-export class PayrollModule {}
+export class PayrollsModule {}

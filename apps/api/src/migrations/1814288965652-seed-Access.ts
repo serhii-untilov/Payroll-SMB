@@ -1,7 +1,8 @@
-import { AccessType, ICreateAccess, ResourceType, RoleType } from '@repo/shared';
+import { ResourceType, RoleType } from '@repo/shared';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Access } from '../resources/access/entities/access.entity';
 import { getSystemUserId } from '../utils/getSystemUserId';
+import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/access';
 
 // Default access rules by Role Type.
 // This table is read only for all role types. Changes for this table available only by migrations.
@@ -180,14 +181,4 @@ export class Seed1814288965652 implements MigrationInterface {
                 .execute();
         }
     }
-}
-
-function generateAccess_Full(roleType: RoleType, resourceType: ResourceType): ICreateAccess[] {
-    return Object.keys(AccessType).map((key) => {
-        return { roleType, resourceType, accessType: AccessType[key] };
-    });
-}
-
-function generateAccess_ReadOnly(roleType: RoleType, resourceType: ResourceType): ICreateAccess[] {
-    return [{ roleType, resourceType, accessType: AccessType.ACCESS }];
 }

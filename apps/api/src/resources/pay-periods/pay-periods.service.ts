@@ -152,13 +152,13 @@ export class PayPeriodsService {
         fullFieldList: boolean,
     ): Promise<PayPeriod> {
         if (!companyId) {
-            return {
+            return Object.assign(new PayPeriod(), {
                 id: null,
                 companyId: null,
                 dateFrom: startOfMonth(new Date()),
                 dateTo: startOfDay(endOfMonth(new Date())),
                 state: PayPeriodState.OPENED,
-            };
+            });
         }
         await this.accessService.availableForUserCompanyOrFail(
             userId,
@@ -258,13 +258,15 @@ function getFiller(paymentSchedule: PaymentSchedule | string) {
 function fillPeriods_LastDay(companyId: number | null, dateFrom: Date, dateTo: Date): PayPeriod[] {
     const periods: PayPeriod[] = [];
     for (let d = dateFrom; d < dateTo; d = addMonths(d, 1)) {
-        periods.push({
-            id: null,
-            companyId,
-            dateFrom: max([dateFrom, startOfMonth(d)]),
-            dateTo: endOfMonth(d),
-            state: PayPeriodState.OPENED,
-        });
+        periods.push(
+            Object.assign(new PayPeriod(), {
+                id: null,
+                companyId,
+                dateFrom: max([dateFrom, startOfMonth(d)]),
+                dateTo: endOfMonth(d),
+                state: PayPeriodState.OPENED,
+            }),
+        );
     }
     return periods;
 }
@@ -279,24 +281,28 @@ function fillPeriods_Every15days(
         let df = max([dateFrom, startOfMonth(d)]);
         let dt = min([dateTo, addDays(startOfMonth(d), 14)]);
         if (df <= dt) {
-            periods.push({
-                id: null,
-                companyId,
-                dateFrom: df,
-                dateTo: dt,
-                state: PayPeriodState.OPENED,
-            });
+            periods.push(
+                Object.assign(new PayPeriod(), {
+                    id: null,
+                    companyId,
+                    dateFrom: df,
+                    dateTo: dt,
+                    state: PayPeriodState.OPENED,
+                }),
+            );
         }
         df = max([dateFrom, addDays(startOfMonth(d), 15)]);
         dt = min([dateTo, endOfMonth(d)]);
         if (df <= dt) {
-            periods.push({
-                id: null,
-                companyId,
-                dateFrom: max([dateFrom, startOfMonth(d)]),
-                dateTo: endOfMonth(d),
-                state: PayPeriodState.OPENED,
-            });
+            periods.push(
+                Object.assign(new PayPeriod(), {
+                    id: null,
+                    companyId,
+                    dateFrom: max([dateFrom, startOfMonth(d)]),
+                    dateTo: endOfMonth(d),
+                    state: PayPeriodState.OPENED,
+                }),
+            );
         }
     }
     return periods;

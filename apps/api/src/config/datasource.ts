@@ -21,7 +21,7 @@ export const dbConfig = {
             : process.env['DATABASE_NAME'],
     entities: ['./src/resources/**/*entity.ts'],
     migrations: ['./src/migrations/**/*.ts'],
-    subscribers: ['./src/resources/**/*subscriber.ts'],
+    subscribers: ['./src/subscribers/*subscriber.ts', './src/resources/**/*subscriber.ts'],
 };
 
 export const AppDataSource = new DataSource({

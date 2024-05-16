@@ -24,7 +24,7 @@ export class Payroll extends Logger implements IPayroll {
 
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
     @JoinColumn()
-    paymentType: PaymentType;
+    paymentType?: PaymentType;
 
     @Column({ type: 'integer' })
     paymentTypeId: number;
@@ -38,13 +38,13 @@ export class Payroll extends Logger implements IPayroll {
     @Column({ type: 'varchar', length: 10 })
     sourceType: string;
 
-    @Column({ type: 'integer' })
+    @Column({ type: 'integer', nullable: true })
     sourceId?: number;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'date', nullable: true })
     dateBegin?: Date;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'date', nullable: true })
     dateEnd?: Date;
 
     @Column({ type: 'integer', default: 0 })
@@ -80,9 +80,9 @@ export class Payroll extends Logger implements IPayroll {
     @Column({ type: 'bigint', default: 0 })
     fixedFlags?: number;
 
-    @Column({ type: 'jsonb' })
+    @Column({ type: 'jsonb', nullable: true })
     planHoursByDay: HoursByDay;
 
-    @Column({ type: 'jsonb' })
+    @Column({ type: 'jsonb', nullable: true })
     factHoursByDay: HoursByDay;
 }
