@@ -2,17 +2,6 @@ import { ILogger } from './logger.interface';
 import { IPaymentType } from './paymentType.interface';
 import { IPosition } from './position.interface';
 
-export enum SourceType {
-    AUTO = 'auto',
-    HAND = 'hand',
-    IMPORT = 'import',
-    ACCRUAL = 'accrual',
-    DEDUCTION = 'deduction',
-    TIME_SHEET = 'time_sheet',
-    DOCUMENT = 'document',
-    PAYMENT = 'payment',
-}
-
 export interface IPayroll extends ILogger {
     id: number;
     position?: IPosition;
@@ -23,7 +12,7 @@ export interface IPayroll extends ILogger {
     paymentTypeId: number;
     dateFrom: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
     dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
-    sourceType: string; // See enum SourceType
+    sourceType?: string; // See enum ResourceType
     sourceId?: number; // Depends on sourceType
     dateBegin?: Date; // Start date of Vacation, Sick, etc.
     dateEnd?: Date; // Finish date of Vacation, Sick, etc.
@@ -40,6 +29,7 @@ export interface IPayroll extends ILogger {
     fixedFlags?: number;
     planHoursByDay?: HoursByDay;
     factHoursByDay?: HoursByDay;
+    parentId?: number; // Link to fully or partially cancelled record, etc.
 }
 
 export type ICreatePayroll = Omit<
@@ -76,6 +66,7 @@ export const enum RecordFlags {
     AUTO = 0x00001,
     HAND = 0x00002,
     IMPORT = 0x00004,
+    CANCEL = 0x00008, // Сторно
 }
 
 export type HoursByDay = {

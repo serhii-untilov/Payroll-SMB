@@ -100,6 +100,7 @@ export class PayPeriodsService {
             this.resourceType,
             AccessType.ACCESS,
         );
+        params['where']['companyId'] = companyId;
         const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
         const payPeriodList = await this.repository.find(options);
         if (payPeriodList.length) return payPeriodList;

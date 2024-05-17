@@ -130,6 +130,7 @@ replace environment variables in *.locale files and run the application.
 |Total Earned               |Разом нараховано          |totalEarned        |                                                                                |
 |Total Deducted             |Разом утримано            |totalDeducted      |                                                                                |
 |Unified Social Contribution|Єдиний соціальний внесок  |fundUSC            |                                                                                |
+|Cancel                     |Сторно                    |cancel, cancelId   |Cancelled - сторновано, скасовано                                               |
 
 ## Development
 

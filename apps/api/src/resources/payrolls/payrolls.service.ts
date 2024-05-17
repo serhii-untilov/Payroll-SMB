@@ -141,7 +141,7 @@ export class PayrollsService {
             AccessType.ACCESS,
         );
         const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payroll.payPeriod !== company.payPeriod) {
+        if (payroll.payPeriod.getTime() !== company.payPeriod.getTime()) {
             await this.accessService.availableForUserCompanyOrFail(
                 userId,
                 position.companyId,
@@ -167,7 +167,7 @@ export class PayrollsService {
             AccessType.ACCESS,
         );
         const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payroll.payPeriod !== company.payPeriod) {
+        if (payroll.payPeriod.getTime() !== company.payPeriod.getTime()) {
             await this.accessService.availableForUserCompanyOrFail(
                 userId,
                 position.companyId,
@@ -178,13 +178,24 @@ export class PayrollsService {
         return await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
     }
 
-    async calculateCompany(userId: number, companyId: number): Promise<Payroll[]> {
+    async delete(userId: number, id: number) {
+        const payroll = await this.repository.findOneOrFail({ where: { id } });
+        const position = await this.positionsService.findOne(userId, payroll.positionId);
         await this.accessService.availableForUserCompanyOrFail(
             userId,
-            companyId,
+            position.companyId,
             this.resourceType,
-            AccessType.CREATE,
+            AccessType.ACCESS,
         );
-        return [];
+        const company = await this.companiesService.findOne(userId, position.companyId);
+        if (payroll.payPeriod.getTime() !== company.payPeriod.getTime()) {
+            await this.accessService.availableForUserCompanyOrFail(
+                userId,
+                position.companyId,
+                this.resourceType,
+                AccessType.ELEVATED,
+            );
+        }
+        return await this.repository.delete(id);
     }
 }

@@ -8,7 +8,7 @@ export class CreatePayrollDto implements ICreatePayroll {
     @ApiProperty() paymentTypeId: number;
     @ApiProperty() dateFrom: Date;
     @ApiProperty() dateTo: Date;
-    @ApiProperty() sourceType: string;
+    @ApiProperty() sourceType?: string;
     @ApiProperty() sourceId?: number;
     @ApiProperty() dateBegin?: Date;
     @ApiProperty() dateEnd?: Date;
@@ -23,6 +23,7 @@ export class CreatePayrollDto implements ICreatePayroll {
     @ApiProperty() mask2?: number;
     @ApiProperty() recordFlags?: number;
     @ApiProperty() fixedFlags?: number;
-    @ApiProperty() planHoursByDay: HoursByDay;
-    @ApiProperty() factHoursByDay: HoursByDay;
+    @ApiProperty() planHoursByDay?: HoursByDay;
+    @ApiProperty() factHoursByDay?: HoursByDay;
+    @ApiProperty() parentId?: number;
 }

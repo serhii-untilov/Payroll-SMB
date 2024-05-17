@@ -1,6 +1,6 @@
 import {
+    PaymentGroup,
     RecordFlags,
-    SourceType,
     WorkNormFact,
     WorkNormPlan,
     getMaxDate,
@@ -10,21 +10,24 @@ import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.en
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PositionHistory } from '../../../resources/position-history/entities/position-history.entity';
 import { SalaryCalculationService } from '../salary-calculation.service';
+import { getFact, getPlan } from '../workingTime/workingTime';
 
-export async function calcBasics(ctx: SalaryCalculationService, result: Payroll[]) {
+export function calcBasics(ctx: SalaryCalculationService) {
     for (const accPeriod of ctx.accPeriods) {
         const assignments = ctx.position.history.filter(
             (o) =>
                 o.dateFrom.getTime() <= accPeriod.dateTo.getTime() &&
                 o.dateTo.getTime() >= accPeriod.dateFrom.getTime(),
         );
+        const payrolls: Payroll[] = [];
         for (const assignment of assignments) {
             const dateFrom = getMaxDate(accPeriod.dateFrom, ctx.position.dateFrom);
             const dateTo = getMinDate(accPeriod.dateTo, ctx.position.dateTo);
-            const plan = await ctx.workNormsService.getPlan(assignment.workNormId, dateFrom);
-            const fact = ctx.workNormsService.getFact(plan, dateFrom, dateTo);
-            result.push(calcBasic(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact));
+            const plan = getPlan(ctx, assignment.workNormId, dateFrom);
+            const fact = getFact(plan, dateFrom, dateTo);
+            payrolls.push(calcBasic(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact));
         }
+        ctx.merge(PaymentGroup.BASIC, accPeriod, payrolls);
     }
 }
 
@@ -37,15 +40,14 @@ function calcBasic(
     plan: WorkNormPlan,
     fact: WorkNormFact,
 ): Payroll {
-    return {
-        id: ctx.getNextId(),
+    return Object.assign({
+        id: ctx.getNextPayrollId(),
         positionId: ctx.position.id,
         payPeriod: ctx.payPeriod.dateFrom,
         accPeriod: accPeriod.dateFrom,
         paymentTypeId: assignment.paymentTypeId,
         dateFrom,
         dateTo,
-        sourceType: SourceType.AUTO,
         planDays: plan.days,
         planHours: plan.hours,
         planSum: assignment.wage,
@@ -59,5 +61,5 @@ function calcBasic(
         recordFlags: RecordFlags.AUTO,
         planHoursByDay: plan.hoursByDay,
         factHoursByDay: fact.hoursByDay,
-    };
+    });
 }

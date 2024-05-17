@@ -74,15 +74,4 @@ export class PayrollsController {
         const userId = req.user['sub'];
         return await this.payrollsService.findAll(userId, objectStringDateToShort(params));
     }
-
-    @Get('calculate-company/:id')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async calculateCompany(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
-    ): Promise<Payroll[]> {
-        const userId = req.user['sub'];
-        return await this.payrollsService.calculateCompany(userId, id);
-    }
 }
