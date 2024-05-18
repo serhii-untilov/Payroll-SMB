@@ -18,8 +18,8 @@ import { calculateBasics } from './calcMethods/calculateBasic';
 import { getPayrollUnionCancel } from './utils/payrollsData';
 
 @Injectable({ scope: Scope.REQUEST })
-export class SalaryCalculationService {
-    private _logger: Logger = new Logger(SalaryCalculationService.name);
+export class PayrollCalculationService {
+    private _logger: Logger = new Logger(PayrollCalculationService.name);
     private _userId: number;
     private _company: Company;
     private _paymentTypes: PaymentType[];
