@@ -11,14 +11,15 @@ import { Payroll } from '../../resources/payrolls/entities/payroll.entity';
 import { PayrollsService } from '../../resources/payrolls/payrolls.service';
 import { Position } from '../../resources/positions/entities/position.entity';
 import { PositionsService } from '../../resources/positions/positions.service';
-import { WorkNormsService } from '../../resources/work-norms/work-norms.service';
-import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { calcBasics } from './calcMethods/calcBasic';
 import { WorkNorm } from '../../resources/work-norms/entities/work-norm.entity';
+import { WorkNormsService } from '../../resources/work-norms/work-norms.service';
+import { PayPeriod } from '../../resources/pay-periods/entities/pay-period.entity';
+import { calculateBasics } from './calcMethods/calculateBasic';
+import { getPayrollUnionCancel } from './utils/payrollsData';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SalaryCalculationService {
-    private logger: Logger = new Logger(SalaryCalculationService.name);
+    private _logger: Logger = new Logger(SalaryCalculationService.name);
     private _userId: number;
     private _company: Company;
     private _paymentTypes: PaymentType[];
@@ -48,6 +49,9 @@ export class SalaryCalculationService {
         public workNormsService: WorkNormsService,
     ) {}
 
+    public get logger() {
+        return this._logger;
+    }
     public get userId() {
         return this._userId;
     }
@@ -72,24 +76,8 @@ export class SalaryCalculationService {
     public get payrolls() {
         return this._payrolls;
     }
-    public get toInsert() {
-        return this._toInsert;
-    }
-    public get toDeleteIds() {
-        return this._toDeleteIds;
-    }
 
-    public getNextPayrollId(): number {
-        this._payrollId++;
-        return this._payrollId;
-    }
-
-    private async loadResources() {
-        this._paymentTypes = await this.paymentTypesService.findAll(null);
-        this._workNorms = await this.workNormsService.findAll(true);
-    }
-
-    async calculateCompany(userId: number, companyId: number) {
+    public async calculateCompany(userId: number, companyId: number) {
         this.logger.log(`calculateCompany: ${companyId}, userId: ${userId}`);
         await this.accessService.availableForUserCompanyOrFail(
             userId,
@@ -101,11 +89,11 @@ export class SalaryCalculationService {
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
         this._payPeriod = await this.payPeriodsService.findOne(userId, {
-            where: { companyId: this._company.id, dateFrom: this._company.payPeriod },
+            where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         const positions = await this.positionsService.findAll(userId, {
             companyId,
-            onPayPeriodDate: this._company.payPeriod,
+            onPayPeriodDate: this.company.payPeriod,
             employeesOnly: true,
             relations: true,
         });
@@ -115,57 +103,30 @@ export class SalaryCalculationService {
         }
     }
 
-    async calculatePosition(userId: number, positionId: number) {
+    public async calculatePosition(userId: number, positionId: number) {
         this.logger.log(`calculatePosition: ${positionId}, userId: ${userId}`);
         this._position = await this.positionsService.findOne(userId, positionId, true);
         await this.accessService.availableForUserCompanyOrFail(
             userId,
-            this._position.companyId,
+            this.position.companyId,
             ResourceType.COMPANY,
             AccessType.UPDATE,
         );
         this._userId = userId;
-        this._company = await this.companiesService.findOne(userId, this._position.companyId);
+        this._company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
         this._payPeriod = await this.payPeriodsService.findOne(userId, {
-            where: { companyId: this._company.id, dateFrom: this._company.payPeriod },
+            where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculatePosition();
     }
 
-    async _calculatePosition() {
-        this._toInsert = [];
-        this._accPeriods = await this.payPeriodsService.findAll(this.userId, this._company.id, {
-            where: {
-                dateFrom: MoreThanOrEqual(await this.getMinCalculateDate(this._payPeriod.dateFrom)),
-                dateTo: LessThanOrEqual(await this.getMaxCalculateDate(this._payPeriod.dateTo)),
-            },
-        });
-        const dateFrom = await this.getMinCalculateDate(this._payPeriod.dateFrom);
-        const dateTo = await this.getMaxCalculateDate(this._payPeriod.dateTo);
-        this._payrolls = await this.payrollsService.findBetween(
-            this.userId,
-            this.position.id,
-            dateFrom,
-            dateTo,
-            true,
-        );
-        calcBasics(this); // Base salary (wage)
-        await this.save();
-        this._toInsert = [];
+    public getNextPayrollId(): number {
+        this._payrollId++;
+        return this._payrollId;
     }
 
-    async getMinCalculateDate(payPeriodDateFrom: Date): Promise<Date> {
-        // TODO
-        return payPeriodDateFrom;
-    }
-
-    async getMaxCalculateDate(payPeriodDateTo: Date): Promise<Date> {
-        // TODO
-        return payPeriodDateTo;
-    }
-
-    merge(paymentGroup: PaymentGroup, accPeriod: PayPeriod, payrolls: Payroll[]): void {
+    public merge(paymentGroup: PaymentGroup, accPeriod: PayPeriod, payrolls: Payroll[]): void {
         const toInsert: Payroll[] = [];
         const toDeleteIds: number[] = [];
         const processedIds: number[] = [];
@@ -175,12 +136,33 @@ export class SalaryCalculationService {
         // - put additional cancel record for this.payrolls.record in the result
         // - put payrolls.record in the result
         for (const record of payrolls) {
-            const found = this.payrolls.find((o) => o.paymentTypeId === record.paymentTypeId);
+            const found = this.payrolls.find(
+                (o) =>
+                    o.paymentTypeId === record.paymentTypeId &&
+                    o.payPeriod.getTime() === record.payPeriod.getTime() &&
+                    o.accPeriod.getTime() === record.accPeriod.getTime() &&
+                    o.dateFrom.getTime() === record.dateFrom.getTime() &&
+                    o.dateTo.getTime() === record.dateTo.getTime() &&
+                    (o.recordFlags & RecordFlags.CANCEL) === 0,
+            );
             if (!found) {
                 toInsert.push(Object.assign({ ...record, id: this.getNextPayrollId() }));
             } else {
                 processedIds.push(found.id); // memorize to avoid cancelling the found record
-                if (record.factSum === found.factSum) {
+                const foundUnionCancel = getPayrollUnionCancel(
+                    found,
+                    this.payrolls,
+                    this.payPeriod,
+                );
+                if (
+                    (record.factSum || 0) === (foundUnionCancel.factSum || 0) &&
+                    (record.factDays || 0) === (foundUnionCancel.factDays || 0) &&
+                    (record.factHours || 0) === (foundUnionCancel.factHours || 0) &&
+                    (record.rate || 0) === (foundUnionCancel.rate || 0) &&
+                    (record.planSum || 0) === (foundUnionCancel.planSum || 0) &&
+                    (record.planDays || 0) === (foundUnionCancel.planDays || 0) &&
+                    (record.planHours || 0) === (foundUnionCancel.planHours || 0)
+                ) {
                     // skip record
                 } else {
                     if (
@@ -206,9 +188,9 @@ export class SalaryCalculationService {
                             recordFlags: RecordFlags.AUTO | RecordFlags.CANCEL,
                             fixedFlags: 0,
                             parentId: found.id,
-                            factSum: -found.factSum,
-                            factDays: -found.factDays,
-                            factHours: -found.factHours,
+                            factSum: -foundUnionCancel.factSum,
+                            factDays: -foundUnionCancel.factDays,
+                            factHours: -foundUnionCancel.factHours,
                         });
 
                         // - put additional cancel record for this.payrolls.record in the result
@@ -234,6 +216,7 @@ export class SalaryCalculationService {
                 o.accPeriod.getTime() >= accPeriod.dateFrom.getTime() &&
                 o.accPeriod.getTime() <= accPeriod.dateTo.getTime() &&
                 o.payPeriod.getTime() <= this.payPeriod.dateTo.getTime() &&
+                !(o.recordFlags & RecordFlags.CANCEL) &&
                 paymentTypeIds.includes(o.paymentTypeId) &&
                 !processedIds.includes(o.id),
         );
@@ -245,6 +228,11 @@ export class SalaryCalculationService {
             ) {
                 toDeleteIds.push(record.id);
             } else {
+                const recordUnionCancel = getPayrollUnionCancel(
+                    record,
+                    this.payrolls,
+                    this.payPeriod,
+                );
                 toInsert.push(
                     Object.assign({
                         ...record,
@@ -255,27 +243,78 @@ export class SalaryCalculationService {
                         recordFlags: RecordFlags.AUTO | RecordFlags.CANCEL,
                         fixedFlags: 0,
                         parentId: record.id,
-                        factSum: -record.factSum,
-                        factDays: -record.factDays,
-                        factHours: -record.factHours,
+                        factSum: -recordUnionCancel.factSum,
+                        factDays: -recordUnionCancel.factDays,
+                        factHours: -recordUnionCancel.factHours,
                     }),
                 );
             }
         }
-        this.toInsert.push(...toInsert);
-        this.toDeleteIds.push(...toDeleteIds);
+        this._toInsert.push(...toInsert);
+        this._toDeleteIds.push(...toDeleteIds);
     }
 
-    pushResult(payrolls: Payroll[]) {
-        this._toInsert.push(...payrolls);
+    private async loadResources() {
+        this._paymentTypes = await this.paymentTypesService.findAll(null);
+        this._workNorms = await this.workNormsService.findAll(true);
     }
 
-    async save() {
-        for (let i = 0; i < this.toDeleteIds.length; ++i) {
-            await this.payrollsService.delete(this.userId, this.toDeleteIds[i]);
+    private initNextPayrollId() {
+        this._payrollId = this.payrolls.reduce((a, b) => Math.max(a, b.id), 0);
+    }
+
+    private async _calculatePosition() {
+        this._toInsert = [];
+        this._toDeleteIds = [];
+        const dateFrom = await this.getMinCalculateDate(this.payPeriod.dateFrom);
+        const dateTo = await this.getMaxCalculateDate(this.payPeriod.dateTo);
+        this._accPeriods = await this.payPeriodsService.findAll(this.userId, this.company.id, {
+            where: {
+                dateFrom: MoreThanOrEqual(dateFrom),
+                dateTo: LessThanOrEqual(dateTo),
+            },
+        });
+        this._payrolls = await this.payrollsService.findBetween(
+            this.userId,
+            this.position.id,
+            dateFrom,
+            dateTo,
+            true,
+        );
+        this.initNextPayrollId();
+        calculateBasics(this); // Base salary (wage)
+        await this.save();
+        this._toInsert = [];
+        this._toDeleteIds = [];
+    }
+
+    private async getMinCalculateDate(payPeriodDateFrom: Date): Promise<Date> {
+        // TODO
+        return payPeriodDateFrom;
+    }
+
+    private async getMaxCalculateDate(payPeriodDateTo: Date): Promise<Date> {
+        // TODO
+        return payPeriodDateTo;
+    }
+
+    private async save() {
+        for (let i = 0; i < this._toDeleteIds.length; ++i) {
+            this.logger.log(`PositionId: ${this.position.id}, Delete: ${this._toDeleteIds[i]}`);
+            await this.payrollsService.delete(this.userId, this._toDeleteIds[i]);
         }
+        const map = {};
+        this._toInsert.sort((a, b) => (a.parentId || 0) - (b.parentId || 0));
         for (const record of this._toInsert) {
-            await this.payrollsService.create(this.userId, record);
+            const id = record.id;
+            delete record.id;
+            const parentId = record.parentId
+                ? map[record.parentId.toString()] || record.parentId
+                : record.parentId;
+            const created = await this.payrollsService.create(this.userId, { ...record, parentId });
+            this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
+
+            map[id.toString()] = created.id;
         }
     }
 }

@@ -63,5 +63,7 @@ export class PositionHistory extends Logger implements IPositionHistory {
     transform() {
         this.dateFrom = new Date(this.dateFrom);
         this.dateTo = new Date(this.dateTo);
+        this.wage = Number(this.wage);
+        this.rate = Number(this.rate);
     }
 }

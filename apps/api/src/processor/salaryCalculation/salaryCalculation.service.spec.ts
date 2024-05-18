@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SalaryCalculationService } from './salary-calculation.service';
+import { SalaryCalculationService } from './salaryCalculation.service';
 import { AccessService } from '../../resources/access/access.service';
 import { CompaniesService } from '../../resources/companies/companies.service';
 import { PayPeriodsService } from '../../resources/pay-periods/pay-periods.service';

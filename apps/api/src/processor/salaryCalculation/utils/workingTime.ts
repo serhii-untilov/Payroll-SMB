@@ -7,7 +7,7 @@ import {
     monthEnd,
     setBit,
 } from '@repo/shared';
-import { SalaryCalculationService } from '../salary-calculation.service';
+import { SalaryCalculationService } from '../salaryCalculation.service';
 import { WorkNorm } from '../../../resources/work-norms/entities/work-norm.entity';
 import { add } from 'date-fns';
 import { ConflictException } from '@nestjs/common';

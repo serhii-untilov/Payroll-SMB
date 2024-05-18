@@ -9,10 +9,10 @@ import {
 import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.entity';
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PositionHistory } from '../../../resources/position-history/entities/position-history.entity';
-import { SalaryCalculationService } from '../salary-calculation.service';
-import { getFact, getPlan } from '../workingTime/workingTime';
+import { SalaryCalculationService } from '../salaryCalculation.service';
+import { getFact, getPlan } from '../utils/workingTime';
 
-export function calcBasics(ctx: SalaryCalculationService) {
+export function calculateBasics(ctx: SalaryCalculationService) {
     for (const accPeriod of ctx.accPeriods) {
         const assignments = ctx.position.history.filter(
             (o) =>

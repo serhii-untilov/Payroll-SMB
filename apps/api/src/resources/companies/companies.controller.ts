@@ -18,7 +18,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { SalaryCalculationService } from '../../processor/salaryCalculation/salary-calculation.service';
+import { SalaryCalculationService } from '../../processor/salaryCalculation/salaryCalculation.service';
 
 @Controller('companies')
 export class CompaniesController {

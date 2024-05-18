@@ -59,5 +59,12 @@ export class PayPeriod extends Logger implements IPayPeriod {
     transform() {
         this.dateFrom = new Date(this.dateFrom);
         this.dateTo = new Date(this.dateTo);
+        this.inBalance = Number(this.inBalance);
+        this.accrual = Number(this.accrual);
+        this.deduction = Number(this.deduction);
+        this.tax = Number(this.tax);
+        this.netPay = Number(this.netPay);
+        this.payment = Number(this.payment);
+        this.outBalance = Number(this.outBalance);
     }
 }
