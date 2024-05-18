@@ -117,6 +117,10 @@ export function CompanyDepartments(params: Props) {
         queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
 
+    const onTreeView = () => {
+        console.log('onTreeView');
+    };
+
     const onPrint = () => {
         gridRef.current.exportDataAsPrint();
     };
@@ -130,6 +134,7 @@ export function CompanyDepartments(params: Props) {
             <Toolbar
                 onAdd={onAddDepartment}
                 onDelete={rowSelectionModel.length ? onDeleteDepartment : 'disabled'}
+                onTreeView={onTreeView}
                 onPrint={departmentList?.length ? onPrint : 'disabled'}
                 onExport={departmentList?.length ? onExport : 'disabled'}
                 onShowHistory={'disabled'}

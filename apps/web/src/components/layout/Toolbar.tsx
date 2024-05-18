@@ -1,4 +1,5 @@
 import {
+    AccountTreeRounded,
     AddCircleRounded,
     CalculateRounded,
     CheckCircleRounded,
@@ -21,6 +22,7 @@ import { Tooltip } from './Tooltip';
 type Func<T> = (value: T) => void;
 
 export interface Props extends StackProps {
+    // Left side
     onAdd?: Func<any> | 'disabled' | undefined;
     onSave?: Func<any> | 'disabled' | undefined;
     onCancel?: Func<any> | 'disabled' | undefined;
@@ -28,8 +30,10 @@ export interface Props extends StackProps {
     onCalculate?: Func<any> | 'disabled' | undefined;
     onClose?: Func<any> | 'disabled' | undefined;
     onOpen?: Func<any> | 'disabled' | undefined;
+    onTreeView?: Func<any> | 'disabled' | undefined;
     onPrint?: Func<any> | 'disabled' | undefined;
     onExport?: Func<any> | 'disabled' | undefined;
+    // Right side
     onDelete?: Func<any> | 'disabled' | undefined;
     onShowDeleted?: Func<any> | 'disabled' | undefined;
     onRestoreDeleted?: Func<any> | 'disabled' | undefined;
@@ -102,6 +106,10 @@ export function Toolbar(props: Props) {
 
                     <ToolbarItem item={props?.onOpen} title={t('Open')} color={'warning'}>
                         <UndoRounded />
+                    </ToolbarItem>
+
+                    <ToolbarItem item={props?.onTreeView} title={t('Tree View')}>
+                        <AccountTreeRounded />
                     </ToolbarItem>
 
                     <ToolbarItem item={props?.onPrint} title={t('Print')}>

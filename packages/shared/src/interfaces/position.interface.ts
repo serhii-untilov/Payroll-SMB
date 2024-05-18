@@ -1,9 +1,10 @@
-import { IPositionHistory } from '@repo/shared';
+import { IPositionBalance, IPositionHistory } from '@repo/shared';
 import { ICompany } from './company.interface';
 import { ILogger } from './logger.interface';
 import { IPerson } from './person.interface';
 
 export const MAX_SEQUENCE_NUMBER = 2147483647;
+
 export interface IPosition extends ILogger {
     id?: number | undefined | null;
     company?: ICompany;
@@ -16,6 +17,7 @@ export interface IPosition extends ILogger {
     dateFrom?: Date; // Hire date or date of open vacancy
     dateTo?: Date; // Dismissal date or date of close vacancy
     history?: IPositionHistory[];
+    balance?: IPositionBalance[];
 }
 
 export type ICreatePosition = Omit<

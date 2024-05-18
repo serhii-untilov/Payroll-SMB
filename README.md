@@ -131,6 +131,8 @@ replace environment variables in *.locale files and run the application.
 |Total Deducted             |Разом утримано            |totalDeducted      |                                                                                |
 |Unified Social Contribution|Єдиний соціальний внесок  |fundUSC            |                                                                                |
 |Cancel                     |Сторно                    |cancel, cancelId   |Cancelled - сторновано, скасовано                                               |
+|Company Debt               |Борг підприємства         |companyDebt        |                                                                                |
+|Employee Debt              |Борг працівника           |employeeDebt       |                                                                                |
 
 ## Development
 
@@ -223,7 +225,8 @@ npx --workspace @repo/api nest generate resource positions resources
 npx --workspace @repo/api nest generate resource positionHistory resources
 npx --workspace @repo/api nest generate resource access resources
 npx --workspace @repo/api nest generate resource payroll resources
-npx --workspace @repo/api nest generate resource processor resources
+npx --workspace @repo/api nest generate resource processor
+npx --workspace @repo/api nest generate service summaryCalculation processor
 
 ```
 

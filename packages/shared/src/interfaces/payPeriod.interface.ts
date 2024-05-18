@@ -15,12 +15,11 @@ export interface IPayPeriod extends ILogger {
     dateTo: Date;
     state: string; // See PayPeriodState
     inBalance?: number;
-    accrual?: number;
-    deduction?: number;
-    tax?: number;
-    netPay?: number;
-    payment?: number;
+    inCompanyDebt?: number;
+    inEmployeeDebt?: number;
     outBalance?: number;
+    outCompanyDebt?: number;
+    outEmployeeDebt?: number;
 }
 
 export type ICreatePayPeriod = Omit<

@@ -25,6 +25,7 @@ import {
     startOfDay,
     startOfMonth,
     startOfYear,
+    sub,
     subYears,
 } from 'date-fns';
 import {
@@ -40,6 +41,7 @@ import { CompaniesService } from '../companies/companies.service';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
+import { PayrollsService } from '../payrolls/payrolls.service';
 
 @Injectable()
 export class PayPeriodsService {
@@ -53,6 +55,8 @@ export class PayPeriodsService {
         private companiesService: CompaniesService,
         @Inject(forwardRef(() => AccessService))
         private accessService: AccessService,
+        @Inject(forwardRef(() => PayrollsService))
+        private payrollsService: PayrollsService,
     ) {}
 
     async create(userId: number, payload: CreatePayPeriodDto): Promise<PayPeriod> {
@@ -241,6 +245,38 @@ export class PayPeriodsService {
         const payPeriod = startOfMonth(new Date());
         const filler = getFiller(paymentSchedule);
         return filler(companyId, getDateFrom(payPeriod), getDateTo(payPeriod));
+    }
+
+    async calculatePayPeriod(id: number): Promise<PayPeriod> {
+        const payPeriod = await this.repository.findOneOrFail({ where: { id } });
+
+        // Calculate In Balance
+        const prevPayPeriod = await this.repository.findOne({
+            where: { companyId: payPeriod.companyId, dateTo: sub(payPeriod.dateFrom, { days: 1 }) },
+        });
+        const inBalance = prevPayPeriod.outBalance;
+        const inCompanyDebt = prevPayPeriod.outCompanyDebt;
+        const inEmployeeDebt = prevPayPeriod.outEmployeeDebt;
+
+        // Calculate PayPeriodPaymentGroup
+        // TODO
+
+        // Calculate Out Balance
+        const accrualsSum = 0; // await this.payrollsService.getAccrualsSum(payPeriod.companyId, payPeriod.dateFrom, payPeriod.dateTo);
+
+        const deductionsSum = 0;
+        const outBalance = inBalance + accrualsSum - deductionsSum;
+        const outCompanyDebt = 0;
+        const outEmployeeDebt = 0;
+        return await this.repository.save({
+            ...payPeriod,
+            inBalance,
+            inCompanyDebt,
+            inEmployeeDebt,
+            outBalance,
+            outCompanyDebt,
+            outEmployeeDebt,
+        });
     }
 }
 

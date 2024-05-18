@@ -8,6 +8,7 @@ import { UsersService } from '../users/users.service';
 import { CompaniesService } from '../companies/companies.service';
 import { createMock } from '@golevelup/ts-jest';
 import { AccessService } from '../access/access.service';
+import { PayrollsService } from '../payrolls/payrolls.service';
 
 describe('PayPeriodsService', () => {
     let service: PayPeriodsService;
@@ -24,6 +25,7 @@ describe('PayPeriodsService', () => {
                 { provide: UsersService, useValue: createMock<UsersService>() },
                 { provide: CompaniesService, useValue: createMock<CompaniesService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: PayrollsService, useValue: createMock<PayrollsService>() },
             ],
         }).compile();
 

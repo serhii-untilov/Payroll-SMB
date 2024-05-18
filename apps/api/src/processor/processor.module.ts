@@ -7,6 +7,7 @@ import { PositionsModule } from '../resources/positions/positions.module';
 import { PayrollCalculationService } from './payrollCalculation/payrollCalculation.service';
 import { WorkNormsModule } from 'src/resources/work-norms/work-norms.module';
 import { PaymentTypesModule } from 'src/resources/payment-types/payment-types.module';
+import { SummaryCalculationService } from './summaryCalculation/summaryCalculation.service';
 
 @Module({
     imports: [
@@ -19,7 +20,7 @@ import { PaymentTypesModule } from 'src/resources/payment-types/payment-types.mo
         forwardRef(() => WorkNormsModule),
     ],
     controllers: [],
-    providers: [PayrollCalculationService],
-    exports: [PayrollCalculationService],
+    providers: [PayrollCalculationService, SummaryCalculationService],
+    exports: [PayrollCalculationService, SummaryCalculationService],
 })
 export class ProcessorModule {}

@@ -1,5 +1,14 @@
+import { PayPeriodPaymentGroup } from './pay-period-payment-group.entity';
 import { IPayPeriod, PayPeriodState } from '@repo/shared';
-import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Company } from '../../companies/entities/company.entity';
 
@@ -38,33 +47,35 @@ export class PayPeriod extends Logger implements IPayPeriod {
     inBalance?: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    accrual?: number;
+    inCompanyDebt?: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    deduction?: number;
-
-    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    tax?: number;
-
-    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    netPay?: number;
-
-    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    payment?: number;
+    inEmployeeDebt?: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     outBalance?: number;
+
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    outCompanyDebt?: number;
+
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    outEmployeeDebt?: number;
+
+    @OneToMany(
+        () => PayPeriodPaymentGroup,
+        (payPeriodPaymentGroup) => payPeriodPaymentGroup.payPeriod,
+    )
+    paymentGroups?: PayPeriodPaymentGroup[];
 
     @AfterLoad()
     transform() {
         this.dateFrom = new Date(this.dateFrom);
         this.dateTo = new Date(this.dateTo);
         this.inBalance = Number(this.inBalance);
-        this.accrual = Number(this.accrual);
-        this.deduction = Number(this.deduction);
-        this.tax = Number(this.tax);
-        this.netPay = Number(this.netPay);
-        this.payment = Number(this.payment);
+        this.inCompanyDebt = Number(this.inCompanyDebt);
+        this.inEmployeeDebt = Number(this.inEmployeeDebt);
         this.outBalance = Number(this.outBalance);
+        this.outCompanyDebt = Number(this.outCompanyDebt);
+        this.outEmployeeDebt = Number(this.outEmployeeDebt);
     }
 }

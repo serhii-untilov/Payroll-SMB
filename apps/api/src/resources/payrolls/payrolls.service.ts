@@ -198,4 +198,13 @@ export class PayrollsService {
         }
         return await this.repository.delete(id);
     }
+
+    // async getSummaryByPayPeriod(
+    //     companyId: number,
+    //     payPeriodDateFrom: Date,
+    //     payPeriodDateTo: Date,
+    // ): Promise<number> {
+    //     const accrualsSum = 0;
+    //     const deductionsSum = 0;
+    // }
 }
