@@ -12,13 +12,15 @@ export function rgba(r: number, g: number, b: number, a: number): string {
 // Get only the dirty field values
 // Modified: https://github.com/orgs/react-hook-form/discussions/1991#discussioncomment-6318535
 export function getDirtyValues<
-    DirtyFields extends Record<string, unknown>,
+    DirtyFields extends Record<string, any>,
     // Values extends Record<keyof DirtyFields, unknown>,
-    Values extends Partial<Record<keyof DirtyFields, unknown>>,
+    Values extends Partial<Record<keyof DirtyFields, any>>,
 >(dirtyFields: DirtyFields, values: Values): Partial<typeof values> {
+    const hasOwnProperty = Object.prototype.hasOwnProperty;
     const dirtyValues = Object.keys(dirtyFields).reduce((prev, key) => {
         // Unsure when RFH sets this to `false`, but omit the field if so.
         if (!dirtyFields[key]) return prev;
+        if (!hasOwnProperty?.call(values, key)) return prev;
 
         return {
             ...prev,

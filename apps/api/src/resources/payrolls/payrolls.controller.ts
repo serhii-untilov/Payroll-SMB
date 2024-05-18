@@ -21,6 +21,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { Request } from 'express';
 import { objectStringDateToShort } from '@repo/shared';
 import { FindPayrollDto } from './dto/find-payroll.dto';
+import { Payroll } from './entities/payroll.entity';
 
 @Controller('payroll')
 export class PayrollsController {
@@ -29,17 +30,9 @@ export class PayrollsController {
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() payload: CreatePayrollDto) {
+    async create(@Req() req: Request, @Body() payload: CreatePayrollDto): Promise<Payroll> {
         const userId = req.user['sub'];
         return await this.payrollsService.create(userId, objectStringDateToShort(payload));
-    }
-
-    @Post('find-all')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async findAll(@Req() req: Request, @Body() params: FindPayrollDto) {
-        const userId = req.user['sub'];
-        return await this.payrollsService.findAll(userId, objectStringDateToShort(params));
     }
 
     @Get(':id')
@@ -49,7 +42,7 @@ export class PayrollsController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
-    ) {
+    ): Promise<Payroll> {
         const userId = req.user['sub'];
         return await this.payrollsService.findOne(userId, id, relations);
     }
@@ -61,7 +54,7 @@ export class PayrollsController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Body() updatePayrollDto: UpdatePayrollDto,
-    ) {
+    ): Promise<Payroll> {
         const userId = req.user['sub'];
         return await this.payrollsService.update(userId, id, updatePayrollDto);
     }
@@ -69,8 +62,16 @@ export class PayrollsController {
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Payroll> {
         const userId = req.user['sub'];
         return await this.payrollsService.remove(userId, id);
+    }
+
+    @Post('find-all')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async findAll(@Req() req: Request, @Body() params: FindPayrollDto): Promise<Payroll[]> {
+        const userId = req.user['sub'];
+        return await this.payrollsService.findAll(userId, objectStringDateToShort(params));
     }
 }

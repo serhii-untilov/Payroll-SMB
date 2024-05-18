@@ -41,6 +41,7 @@ const formSchema = yup.object().shape({
     dateTo: yup.date().required(),
     deletedUserId: yup.number().nullable(),
     name: yup.string().nullable(),
+    version: yup.number().nullable(),
     // A PositionHistory record actual on the current PayPeriod
     positionHistoryId: yup.number().nullable(),
     departmentId: yup.number().nullable(),
@@ -49,6 +50,7 @@ const formSchema = yup.object().shape({
     paymentTypeId: yup.number().nullable(),
     wage: yup.number().nullable(),
     rate: yup.number().nullable(),
+    positionHistoryVersion: yup.number().nullable(),
 });
 
 type FormType = yup.InferType<typeof formSchema>;
@@ -148,10 +150,13 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
         const positionDirtyValues = getDirtyValues(dirtyFields, positionData);
         const positionHistoryDirtyValues = getDirtyValues(dirtyFields, positionHistoryData);
         try {
-            let pos: any;
+            let pos = positionData;
             if (Object.keys(positionDirtyValues).length) {
                 pos = positionData.id
-                    ? await updatePosition(positionData.id, positionDirtyValues)
+                    ? await updatePosition(positionData.id, {
+                          ...positionDirtyValues,
+                          version: positionData.version,
+                      })
                     : await createPosition(positionData);
             }
             if (Object.keys(positionHistoryDirtyValues).length) {
@@ -159,10 +164,10 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                     throw Error('positionId not defined');
                 }
                 data.positionHistoryId
-                    ? await updatePositionHistory(
-                          data.positionHistoryId,
-                          positionHistoryDirtyValues,
-                      )
+                    ? await updatePositionHistory(data.positionHistoryId, {
+                          ...positionHistoryDirtyValues,
+                          version: positionHistoryData.version,
+                      })
                     : await createPositionHistory({
                           positionId: pos.id,
                           dateFrom: pos.dateFrom,
@@ -375,6 +380,7 @@ function position_formData(
         dateFrom,
         dateTo,
         deletedUserId,
+        version,
     } = position;
     const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = positionHistory;
     return {
@@ -389,7 +395,7 @@ function position_formData(
         dateFrom: dateFrom || minDate(),
         dateTo: dateTo || maxDate(),
         deletedUserId,
-        name: position?.personId ? position?.person?.fullName : '',
+        version,
         // Position history fields
         positionHistoryId: positionHistory?.id,
         departmentId,
@@ -398,6 +404,7 @@ function position_formData(
         paymentTypeId,
         wage,
         rate,
+        positionHistoryVersion: positionHistory?.version,
     };
 }
 
@@ -412,7 +419,7 @@ function formData_Position(formData: FormType): IPosition {
         dateFrom,
         dateTo,
         deletedUserId,
-        name,
+        version,
     } = formData;
     return {
         id,
@@ -424,6 +431,7 @@ function formData_Position(formData: FormType): IPosition {
         dateFrom,
         dateTo,
         deletedUserId,
+        version,
     };
 }
 
@@ -437,5 +445,6 @@ function formData_PositionHistory(data: FormType): Partial<IPositionHistory> {
         paymentTypeId,
         wage,
         rate,
+        version: data.positionHistoryVersion,
     };
 }

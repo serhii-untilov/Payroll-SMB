@@ -1,7 +1,13 @@
-import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import {
+    BadRequestException,
+    ConflictException,
+    Inject,
+    Injectable,
+    forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@repo/shared';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PositionsService } from '../positions/positions.service';
@@ -34,7 +40,7 @@ export class PayrollsService {
             AccessType.CREATE,
         );
         const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payload.payPeriod !== company.payPeriod) {
+        if (payload.payPeriod.getTime() !== company.payPeriod.getTime()) {
             await this.accessService.availableForUserCompanyOrFail(
                 userId,
                 position.companyId,
@@ -84,6 +90,32 @@ export class PayrollsService {
         });
     }
 
+    async findBetween(
+        userId: number,
+        positionId: number,
+        dateFrom: Date,
+        dateTo: Date,
+        relations?: boolean,
+    ): Promise<Payroll[]> {
+        const position = await this.positionsService.findOne(userId, positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        return await this.repository.find({
+            where: {
+                positionId,
+                accPeriod: Between(dateFrom, dateTo),
+            },
+            relations: {
+                position: relations,
+                paymentType: relations,
+            },
+        });
+    }
+
     async findOne(userId: number, id: number, relations: boolean): Promise<Payroll> {
         const payroll = await this.repository.findOneOrFail({
             where: { id },
@@ -109,12 +141,17 @@ export class PayrollsService {
             AccessType.ACCESS,
         );
         const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payroll.payPeriod !== company.payPeriod) {
+        if (payroll.payPeriod.getTime() !== company.payPeriod.getTime()) {
             await this.accessService.availableForUserCompanyOrFail(
                 userId,
                 position.companyId,
                 this.resourceType,
                 AccessType.ELEVATED,
+            );
+        }
+        if (payload.version !== payroll.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
         return await this.repository.save({ ...payload, id, updatedUserId: userId });
@@ -130,7 +167,7 @@ export class PayrollsService {
             AccessType.ACCESS,
         );
         const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payroll.payPeriod !== company.payPeriod) {
+        if (payroll.payPeriod.getTime() !== company.payPeriod.getTime()) {
             await this.accessService.availableForUserCompanyOrFail(
                 userId,
                 position.companyId,
@@ -139,5 +176,26 @@ export class PayrollsService {
             );
         }
         return await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
+    }
+
+    async delete(userId: number, id: number) {
+        const payroll = await this.repository.findOneOrFail({ where: { id } });
+        const position = await this.positionsService.findOne(userId, payroll.positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+        const company = await this.companiesService.findOne(userId, position.companyId);
+        if (payroll.payPeriod.getTime() !== company.payPeriod.getTime()) {
+            await this.accessService.availableForUserCompanyOrFail(
+                userId,
+                position.companyId,
+                this.resourceType,
+                AccessType.ELEVATED,
+            );
+        }
+        return await this.repository.delete(id);
     }
 }

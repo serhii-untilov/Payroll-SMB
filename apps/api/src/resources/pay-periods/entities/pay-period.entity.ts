@@ -1,5 +1,5 @@
 import { IPayPeriod, PayPeriodState } from '@repo/shared';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Company } from '../../companies/entities/company.entity';
 
@@ -54,4 +54,17 @@ export class PayPeriod extends Logger implements IPayPeriod {
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     outBalance?: number;
+
+    @AfterLoad()
+    transform() {
+        this.dateFrom = new Date(this.dateFrom);
+        this.dateTo = new Date(this.dateTo);
+        this.inBalance = Number(this.inBalance);
+        this.accrual = Number(this.accrual);
+        this.deduction = Number(this.deduction);
+        this.tax = Number(this.tax);
+        this.netPay = Number(this.netPay);
+        this.payment = Number(this.payment);
+        this.outBalance = Number(this.outBalance);
+    }
 }

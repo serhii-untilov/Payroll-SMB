@@ -9,10 +9,10 @@ export const dbConfig = registerAs('db', () => ({
     path: process.env['DATABASE_PATH'],
     username: process.env['DATABASE_USERNAME'],
     migrationsRun: process.env['DATABASE_MIGRATIONS_RUN'] === 'true',
-    synchronize: process.env['DATABASE_SYNCHRONIZE'] === 'true',
+    synchronize: process.env['DATABASE_SYNCHRONIZE'] === 'false',
     logging: process.env['DATABASE_LOGGING_ENABLED'] === 'true',
 
     entities: ['./src/resources/**/*entity.ts'],
     migrations: ['./src/migrations/**/*.ts'],
-    subscribers: ['./src/resources/**/*subscriber.ts'],
+    subscribers: ['./src/subscribers/*subscriber.ts', './src/resources/**/*subscriber.ts'],
 }));

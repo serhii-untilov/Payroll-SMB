@@ -19,6 +19,7 @@ import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { getPayPeriodList, getPayPeriodName } from '../../../services/payPeriod.service';
+import { salaryCalculate } from '../../../services/company.service';
 
 type Props = {
     companyId: number | undefined;
@@ -155,8 +156,12 @@ export function CompanyPayPeriods(params: Props) {
         gridRef.current.exportDataAsCsv();
     };
 
-    const onCalculate = () => {
+    const onCalculate = async () => {
         console.log('onCalculate');
+        if (companyId) {
+            await salaryCalculate(companyId);
+            queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
+        }
     };
 
     const onClose = () => {

@@ -17,4 +17,15 @@ export type ICreateJob = Omit<
     | 'version'
 >;
 
-export type IUpdateJob = Partial<ICreateJob>;
+export type IUpdateJob = Partial<
+    Omit<
+        IJob,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;

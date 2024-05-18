@@ -1,6 +1,7 @@
 import { ICompany, PaymentSchedule } from '@repo/shared';
 import { endOfMonth, startOfDay, startOfMonth } from 'date-fns';
 import {
+    AfterLoad,
     BeforeInsert,
     BeforeUpdate,
     Column,
@@ -74,6 +75,14 @@ export class Company extends Logger implements ICompany {
     @BeforeUpdate()
     beforeUpdate() {
         normalize(this);
+    }
+
+    @AfterLoad()
+    transform() {
+        this.dateFrom = new Date(this.dateFrom);
+        this.dateTo = new Date(this.dateTo);
+        this.payPeriod = new Date(this.payPeriod);
+        this.checkDate = new Date(this.checkDate);
     }
 }
 

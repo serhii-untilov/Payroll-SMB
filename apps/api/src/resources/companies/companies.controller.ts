@@ -18,10 +18,14 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { SalaryCalculationService } from '../../processor/salaryCalculation/salaryCalculation.service';
 
 @Controller('companies')
 export class CompaniesController {
-    constructor(private readonly companiesService: CompaniesService) {}
+    constructor(
+        private readonly companiesService: CompaniesService,
+        private readonly salaryCalculateService: SalaryCalculationService,
+    ) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
@@ -70,5 +74,13 @@ export class CompaniesController {
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
         return await this.companiesService.remove(userId, id);
+    }
+
+    @Get(':id/salary-calculate')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async salaryCalculate(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+        const userId = req.user['sub'];
+        return await this.salaryCalculateService.calculateCompany(userId, id);
     }
 }

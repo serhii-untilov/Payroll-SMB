@@ -1,7 +1,7 @@
 import { IWorkNorm, IWorkNormPeriod } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
 import { WorkNorm } from './work-norm.entity';
-import { Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn, Entity } from 'typeorm';
+import { Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn, Entity, AfterLoad } from 'typeorm';
 
 @Entity()
 export class WorkNormPeriod extends Logger implements IWorkNormPeriod {
@@ -18,6 +18,11 @@ export class WorkNormPeriod extends Logger implements IWorkNormPeriod {
     @Column({ type: 'integer' })
     day: number;
 
-    @Column({ type: 'decimal' })
+    @Column({ type: 'decimal', precision: 5, scale: 2 })
     hours: number;
+
+    @AfterLoad()
+    transform() {
+        this.hours = Number(this.hours);
+    }
 }

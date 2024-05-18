@@ -1,5 +1,18 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateWorkNormDto } from './create-work-norm.dto';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { IUpdateWorkNorm } from '@repo/shared';
+import { WorkNorm } from '../entities/work-norm.entity';
 
-export class UpdateWorkNormDto extends PartialType(CreateWorkNormDto) implements IUpdateWorkNorm {}
+export class UpdateWorkNormDto
+    extends PartialType(
+        OmitType(WorkNorm, [
+            'id',
+            'periods',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+        ]),
+    )
+    implements IUpdateWorkNorm {}

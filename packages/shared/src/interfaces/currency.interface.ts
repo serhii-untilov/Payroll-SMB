@@ -18,4 +18,15 @@ export type ICreateCurrency = Omit<
     | 'version'
 >;
 
-export type IUpdateCurrency = Partial<ICreateCurrency>;
+export type IUpdateCurrency = Partial<
+    Omit<
+        ICurrency,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;

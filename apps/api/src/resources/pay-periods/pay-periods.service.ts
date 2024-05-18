@@ -100,6 +100,7 @@ export class PayPeriodsService {
             this.resourceType,
             AccessType.ACCESS,
         );
+        params['where']['companyId'] = companyId;
         const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
         const payPeriodList = await this.repository.find(options);
         if (payPeriodList.length) return payPeriodList;
@@ -119,13 +120,18 @@ export class PayPeriodsService {
     }
 
     async update(userId: number, id: number, payload: UpdatePayPeriodDto): Promise<PayPeriod> {
-        const payPeriod = await this.repository.findOneOrFail({ where: { id } });
+        const record = await this.repository.findOneOrFail({ where: { id } });
         await this.accessService.availableForUserCompanyOrFail(
             userId,
-            payPeriod.companyId,
+            record.companyId,
             this.resourceType,
             AccessType.UPDATE,
         );
+        if (payload.version !== record.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
+            );
+        }
         return await this.repository.save({ ...payload, id, updatedUserId: userId });
     }
 
@@ -147,13 +153,13 @@ export class PayPeriodsService {
         fullFieldList: boolean,
     ): Promise<PayPeriod> {
         if (!companyId) {
-            return {
+            return Object.assign(new PayPeriod(), {
                 id: null,
                 companyId: null,
                 dateFrom: startOfMonth(new Date()),
                 dateTo: startOfDay(endOfMonth(new Date())),
                 state: PayPeriodState.OPENED,
-            };
+            });
         }
         await this.accessService.availableForUserCompanyOrFail(
             userId,
@@ -253,13 +259,15 @@ function getFiller(paymentSchedule: PaymentSchedule | string) {
 function fillPeriods_LastDay(companyId: number | null, dateFrom: Date, dateTo: Date): PayPeriod[] {
     const periods: PayPeriod[] = [];
     for (let d = dateFrom; d < dateTo; d = addMonths(d, 1)) {
-        periods.push({
-            id: null,
-            companyId,
-            dateFrom: max([dateFrom, startOfMonth(d)]),
-            dateTo: endOfMonth(d),
-            state: PayPeriodState.OPENED,
-        });
+        periods.push(
+            Object.assign(new PayPeriod(), {
+                id: null,
+                companyId,
+                dateFrom: max([dateFrom, startOfMonth(d)]),
+                dateTo: endOfMonth(d),
+                state: PayPeriodState.OPENED,
+            }),
+        );
     }
     return periods;
 }
@@ -274,24 +282,28 @@ function fillPeriods_Every15days(
         let df = max([dateFrom, startOfMonth(d)]);
         let dt = min([dateTo, addDays(startOfMonth(d), 14)]);
         if (df <= dt) {
-            periods.push({
-                id: null,
-                companyId,
-                dateFrom: df,
-                dateTo: dt,
-                state: PayPeriodState.OPENED,
-            });
+            periods.push(
+                Object.assign(new PayPeriod(), {
+                    id: null,
+                    companyId,
+                    dateFrom: df,
+                    dateTo: dt,
+                    state: PayPeriodState.OPENED,
+                }),
+            );
         }
         df = max([dateFrom, addDays(startOfMonth(d), 15)]);
         dt = min([dateTo, endOfMonth(d)]);
         if (df <= dt) {
-            periods.push({
-                id: null,
-                companyId,
-                dateFrom: max([dateFrom, startOfMonth(d)]),
-                dateTo: endOfMonth(d),
-                state: PayPeriodState.OPENED,
-            });
+            periods.push(
+                Object.assign(new PayPeriod(), {
+                    id: null,
+                    companyId,
+                    dateFrom: max([dateFrom, startOfMonth(d)]),
+                    dateTo: endOfMonth(d),
+                    state: PayPeriodState.OPENED,
+                }),
+            );
         }
     }
     return periods;

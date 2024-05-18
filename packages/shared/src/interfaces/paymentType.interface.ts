@@ -85,7 +85,18 @@ export type ICreatePaymentType = Omit<
     | 'version'
 >;
 
-export type IUpdatePaymentType = Partial<ICreatePaymentType>;
+export type IUpdatePaymentType = Partial<
+    Omit<
+        IPaymentType,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;
 
 export function getUnitByCalcMethod(calcMethod: string) {
     if (calcMethod === CalcMethod.WAGE) {

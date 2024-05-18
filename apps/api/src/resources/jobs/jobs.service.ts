@@ -1,5 +1,6 @@
 import {
     BadRequestException,
+    ConflictException,
     Inject,
     Injectable,
     NotFoundException,
@@ -58,7 +59,12 @@ export class JobsService {
             this.resourceType,
             AccessType.UPDATE,
         );
-        await this.repository.findOneOrFail({ where: { id } });
+        const job = await this.repository.findOneOrFail({ where: { id } });
+        if (payload.version !== job.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
+            );
+        }
         return await this.repository.save({ ...payload, id, updatedUser: userId });
     }
 

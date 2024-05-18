@@ -1,3 +1,4 @@
+import { HoursByDay } from '@repo/shared';
 import { ILogger } from './logger.interface';
 import { IWorkNormPeriod } from './workNormPeriod.interface';
 
@@ -14,7 +15,6 @@ export interface IWorkNorm extends ILogger {
     type: string;
     dateFrom?: Date;
     dateTo?: Date;
-
     periods?: IWorkNormPeriod[];
 }
 
@@ -31,4 +31,25 @@ export type ICreateWorkNorm = Omit<
     | 'version'
 >;
 
-export type IUpdateWorkNorm = Partial<ICreateWorkNorm>;
+export type IUpdateWorkNorm = Partial<
+    Omit<
+        IWorkNorm,
+        | 'id'
+        | 'periods'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;
+
+export type WorkNormPlan = {
+    days: number;
+    hours: number;
+    mask: number;
+    hoursByDay: HoursByDay;
+};
+
+export type WorkNormFact = WorkNormPlan;

@@ -9,15 +9,11 @@ export enum PayPeriodState {
 
 export interface IPayPeriod extends ILogger {
     id: number | undefined;
-
     company?: ICompany;
     companyId: number | undefined;
-
     dateFrom: Date;
     dateTo: Date;
-
     state: string; // See PayPeriodState
-
     inBalance?: number;
     accrual?: number;
     deduction?: number;
@@ -39,4 +35,15 @@ export type ICreatePayPeriod = Omit<
     | 'version'
 >;
 
-export type IUpdatePayPeriod = Partial<ICreatePayPeriod>;
+export type IUpdatePayPeriod = Partial<
+    Omit<
+        IPayPeriod,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;

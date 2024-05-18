@@ -86,6 +86,11 @@ export class DepartmentsService {
             this.resourceType,
             AccessType.UPDATE,
         );
+        if (payload.version !== department.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
+            );
+        }
         return await this.repository.save({
             ...payload,
             id,

@@ -31,5 +31,16 @@ export type ICreatePerson = Omit<
     | 'version'
 >;
 
-export type IUpdatePerson = Partial<ICreatePerson>;
+export type IUpdatePerson = Partial<
+    Omit<
+        IPerson,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;
 export type IFindPerson = Partial<IPerson>;

@@ -1,11 +1,22 @@
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import {
+    AccessType,
+    HoursByDay,
+    ResourceType,
+    WorkNormFact,
+    WorkNormPlan,
+    WorkNormType,
+    monthBegin,
+    monthEnd,
+    setBit,
+} from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNorm } from './entities/work-norm.entity';
+import { add } from 'date-fns';
 
 @Injectable()
 export class WorkNormsService {
@@ -47,12 +58,17 @@ export class WorkNormsService {
     }
 
     async update(userId: number, id: number, payload: UpdateWorkNormDto): Promise<WorkNorm> {
-        await this.repository.findOneOrFail({ where: { id } });
+        const record = await this.repository.findOneOrFail({ where: { id } });
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
             AccessType.UPDATE,
         );
+        if (payload.version !== record.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
+            );
+        }
         return await this.repository.save({ ...payload, id, updatedUserId: userId });
     }
 

@@ -28,3 +28,7 @@ export async function deleteCompany(id: number): Promise<ICompany> {
     const response = await api.delete(`/api/companies/${id}`, { headers: authHeader() });
     return response.data;
 }
+
+export async function salaryCalculate(id: number) {
+    await api.get(`/api/companies/${id}/salary-calculate`, { headers: authHeader() });
+}

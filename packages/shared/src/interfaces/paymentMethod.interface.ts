@@ -4,13 +4,10 @@ import { IPerson } from './person.interface';
 
 export interface IPaymentMethod extends ILogger {
     id: number;
-
     person?: IPerson;
     personId: number;
-
     bank?: IBank;
     bankId: number;
-
     accountNumber: string;
 }
 
@@ -26,4 +23,15 @@ export type ICreatePaymentMethod = Omit<
     | 'version'
 >;
 
-export type IUpdatePaymentMethod = Partial<ICreatePaymentMethod>;
+export type IUpdatePaymentMethod = Partial<
+    Omit<
+        IPaymentMethod,
+        | 'id'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;

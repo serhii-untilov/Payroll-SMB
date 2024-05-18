@@ -1,10 +1,17 @@
 import { IPosition } from '@repo/shared';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Company } from '../../companies/entities/company.entity';
 import { Person } from '../../persons/entities/person.entity';
 import { PositionHistory } from '../../position-history/entities/position-history.entity';
-import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 
 @Entity()
 export class Position extends Logger implements IPosition {
@@ -44,6 +51,9 @@ export class Position extends Logger implements IPosition {
     @OneToMany(() => PositionHistory, (history) => history.position)
     history?: PositionHistory[];
 
-    @OneToMany(() => Payroll, (payroll) => payroll.position)
-    payroll?: Payroll[];
+    @AfterLoad()
+    transform() {
+        this.dateFrom = new Date(this.dateFrom);
+        this.dateTo = new Date(this.dateTo);
+    }
 }

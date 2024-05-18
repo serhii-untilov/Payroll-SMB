@@ -22,4 +22,5 @@ export * from './interfaces/positionHistory.interface';
 export * from './interfaces/payPeriod.interface';
 export * from './interfaces/access.interface';
 export * from './interfaces/payroll.interface';
-export * from './date/date';
+export * from './utils/date';
+export * from './utils/bitwise';

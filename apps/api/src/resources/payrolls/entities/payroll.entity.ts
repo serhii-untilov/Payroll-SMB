@@ -1,7 +1,7 @@
 import { HoursByDay, IPayroll } from '@repo/shared';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from '../../../resources/abstract/logger.abstract';
 
 @Entity()
@@ -24,7 +24,7 @@ export class Payroll extends Logger implements IPayroll {
 
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
     @JoinColumn()
-    paymentType: PaymentType;
+    paymentType?: PaymentType;
 
     @Column({ type: 'integer' })
     paymentTypeId: number;
@@ -35,16 +35,16 @@ export class Payroll extends Logger implements IPayroll {
     @Column({ type: 'date' })
     dateTo: Date;
 
-    @Column({ type: 'varchar', length: 10 })
-    sourceType: string;
+    @Column({ type: 'varchar', length: 10, nullable: true })
+    sourceType?: string; // See enum ResourceType
 
-    @Column({ type: 'integer' })
+    @Column({ type: 'integer', nullable: true })
     sourceId?: number;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'date', nullable: true })
     dateBegin?: Date;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'date', nullable: true })
     dateEnd?: Date;
 
     @Column({ type: 'integer', default: 0 })
@@ -80,9 +80,27 @@ export class Payroll extends Logger implements IPayroll {
     @Column({ type: 'bigint', default: 0 })
     fixedFlags?: number;
 
-    @Column({ type: 'jsonb' })
+    @Column({ type: 'jsonb', nullable: true })
     planHoursByDay: HoursByDay;
 
-    @Column({ type: 'jsonb' })
+    @Column({ type: 'jsonb', nullable: true })
     factHoursByDay: HoursByDay;
+
+    @Column({ type: 'integer', nullable: true })
+    parentId?: number;
+
+    @AfterLoad()
+    transform() {
+        this.payPeriod = new Date(this.payPeriod);
+        this.accPeriod = new Date(this.accPeriod);
+        this.dateFrom = new Date(this.dateFrom);
+        this.dateTo = new Date(this.dateTo);
+        if (this.dateBegin) this.dateBegin = new Date(this.dateBegin);
+        if (this.dateEnd) this.dateEnd = new Date(this.dateEnd);
+        if (this.planHours) this.planHours = Number(this.planHours);
+        if (this.planSum) this.planSum = Number(this.planSum);
+        if (this.rate) this.rate = Number(this.rate);
+        if (this.factHours) this.factHours = Number(this.factHours);
+        if (this.factSum) this.factSum = Number(this.factSum);
+    }
 }
