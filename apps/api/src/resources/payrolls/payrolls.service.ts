@@ -238,7 +238,7 @@ export class PayrollsService {
         return {
             ...defaultPaymentGroupsTotal,
             ...records.reduce((a, b) => {
-                a[b.paymentPart] = Number(b.factSum);
+                a[b.paymentGroup] = Number(b.factSum);
                 return a;
             }, {}),
         };

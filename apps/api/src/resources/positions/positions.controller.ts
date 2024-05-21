@@ -92,6 +92,10 @@ export class PositionsController {
         @Body() payload: FindAllPositionBalanceDto,
     ): Promise<IPosition[]> {
         const userId = req.user['sub'];
-        return await this.positionsService.findAllBalance(userId, deepStringToShortDate(payload));
+        const response = await this.positionsService.findAllBalance(
+            userId,
+            deepStringToShortDate(payload),
+        );
+        return response;
     }
 }

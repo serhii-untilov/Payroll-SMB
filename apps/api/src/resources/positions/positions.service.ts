@@ -353,7 +353,9 @@ export class PositionsService {
                 pb."basic", pb."adjustments", pb."bonuses", pb."vacations", pb."sicks", pb."refunds", pb."other_accruals",
                 pb."taxes", pb."payments", pb."other_deductions",
                 pb."outBalance",
-                p."cardNumber", p."sequenceNumber", p."dateFrom", p."dateTo",
+                p."cardNumber", p."sequenceNumber",
+                to_char(p."dateFrom", 'yyyy-mm-dd') "dateFrom",
+                to_char(p."dateTo", 'yyyy-mm-dd') "dateTo",
                 p."personId", p2."firstName", p2."lastName", p2."middleName", p2."taxId",
                 ph."departmentId", d."name" "departmentName",
                 ph."jobId", j."name" "jobName",
@@ -383,6 +385,8 @@ export class PositionsService {
             [params.companyId, payPeriod.dateTo, payPeriod.dateFrom],
         );
         result.forEach((o) => {
+            o.dateFrom = new Date(o.dateFrom);
+            o.dateTo = new Date(o.dateTo);
             o.accruals = Number(o.accruals);
             o.adjustments = Number(o.adjustments);
             o.basic = Number(o.basic);
