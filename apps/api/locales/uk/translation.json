@@ -136,7 +136,7 @@
     "Add Home Address": "Додати домашню адресу",
     "Summary Report": "Зведена відомість",
     "Salary Report": "Розрахункова відомість",
-    "Employer Expenses": "Нарахування на зарплату",
+    "Employer Expenses": "Витрати роботодавця",
     "Accounting Entries": "Бухгалтерські проводки",
     "hour": "годину",
     "month": "місяць",
@@ -162,5 +162,6 @@
     "The record has been updated by another user. Try to edit it after reloading.": "Запис оновлено іншим користувачем. Спробуйте відредагувати його після перезавантаження.",
     "Tree View": "Ієрархічна структура",
     "Debt": "Залишок",
-    "Adjustments": "Доплати"
+    "Adjustments": "Доплати",
+    "Working Time": "Робочий час"
 }

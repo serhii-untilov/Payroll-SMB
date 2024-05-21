@@ -6,7 +6,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, PaymentPart, ResourceType, maxDate } from '@repo/shared';
+import { AccessType, BalanceWorkingTime, PaymentPart, ResourceType, maxDate } from '@repo/shared';
 import { sub } from 'date-fns';
 import {
     And,
@@ -27,10 +27,7 @@ import { FindPositionDto } from './dto/find-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionBalance } from './entities/position-balance.entity';
 import { Position } from './entities/position.entity';
-import {
-    FindAllPositionBalanceDto,
-    PositionBalanceExtended,
-} from './dto/position-balance.dto copy';
+import { FindAllPositionBalanceDto, PositionBalanceExtended } from './dto/position-balance.dto';
 
 @Injectable()
 export class PositionsService {
@@ -289,7 +286,11 @@ export class PositionsService {
         return result[0].freeNumber.toString();
     }
 
-    async updateBalance(positionId: number, payPeriod: Date) {
+    async calculateBalance(
+        positionId: number,
+        payPeriod: Date,
+        balanceWorkingTime: BalanceWorkingTime,
+    ) {
         const position = await this.repositoryPosition.findOneByOrFail({ id: positionId });
         const prevPayPeriod = await this.payPeriodsService.find({
             where: {
@@ -320,6 +321,7 @@ export class PositionsService {
             positionId,
             payPeriod,
             inBalance,
+            ...balanceWorkingTime,
             ...paymentParts,
             ...paymentGroups,
             outBalance:
@@ -361,7 +363,9 @@ export class PositionsService {
                 ph."jobId", j."name" "jobName",
                 ph."workNormId", wn."name" "workNormName",
                 ph."paymentTypeId", pt."name" "paymentTypeName", pt."calcMethod",
-                ph.wage, ph.rate
+                ph.wage, ph.rate,
+                pb."planDays", pb."planHours",
+                pb."factDays", pb."factHours"
             from position_balance pb
             inner join "position" p on p.id = pb."positionId" and p."companyId" = $1
             inner join person p2 on p2.id = p."personId"
@@ -403,6 +407,10 @@ export class PositionsService {
             o.taxes = Number(o.taxes);
             o.vacations = Number(o.vacations);
             o.wage = Number(o.wage);
+            o.planDays = Number(o.planDays);
+            o.planHours = Number(o.planHours);
+            o.factDays = Number(o.factDays);
+            o.factHours = Number(o.factHours);
         });
         return result;
     }

@@ -36,7 +36,11 @@ export function MainMenu() {
                 <ListItemLink to="/time-sheet" primary={t('Time Sheet')} icon={<Schedule />} />
             )}
             {company && (
-                <ListItemLink to="/payroll" primary={t('Payroll')} icon={<CalculateOutlined />} />
+                <ListItemLink
+                    to="/payroll"
+                    primary={t('Salary Report')}
+                    icon={<CalculateOutlined />}
+                />
             )}
             {company && (
                 <ListItemLink to="/payments" primary={t('Payments')} icon={<CreditScore />} />

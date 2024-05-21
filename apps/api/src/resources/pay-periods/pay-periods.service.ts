@@ -1,4 +1,3 @@
-import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
 import {
     ConflictException,
     Inject,
@@ -44,6 +43,7 @@ import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
+import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
 import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
 
 @Injectable()
@@ -273,6 +273,7 @@ export class PayPeriodsService {
         const inBalance = prevPayPeriod.outBalance;
         const inCompanyDebt = prevPayPeriod.outCompanyDebt;
         const inEmployeeDebt = prevPayPeriod.outEmployeeDebt;
+
         // Calculate parts totals
         const paymentParts = await this.payrollsService.payrollCompanyPaymentParts(
             payPeriod.companyId,

@@ -53,7 +53,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             resizable: true,
             sortable: true,
             renderCell: (params) => {
-                const unit = getUnitByCalcMethod(params.row.paymentType?.calcMethod || '');
+                const unit = getUnitByCalcMethod(params.row?.calcMethod || '');
                 const unitName = unit === 'month' ? '' : ` / ${t(unit)}`;
                 const fullName = getFullName(
                     params.row.lastName,
@@ -90,7 +90,7 @@ export function SalaryReport(props: IFindPositionBalance) {
         },
         {
             field: 'hoursWorked',
-            headerName: t('Hours Worked'),
+            headerName: t('Working Time'),
             type: 'number',
             width: 160,
             sortable: true,
@@ -98,14 +98,17 @@ export function SalaryReport(props: IFindPositionBalance) {
                 return Number(params.value) === 0 ? '' : params.value;
             },
             renderCell: (params) => {
-                const planHours = 168;
-                const factHours = 168;
+                const unit = getUnitByCalcMethod(params.row?.calcMethod || '');
+                const planDays = params.row.planDays || 0;
+                const planHours = params.row.planHours || 0;
+                const factDays = params.row.factDays || 0;
+                const factHours = params.row.factHours || 0;
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Plan')}</Typography>
                             <Typography sx={{ textAlign: 'right' }}>
-                                {planHours.toFixed(2) || ''}
+                                {(unit === 'hour' ? planHours.toFixed(2) : planDays) || ''}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -120,7 +123,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                                           : ''
                                 }
                             >
-                                {factHours.toFixed(2) || ''}
+                                {unit === 'hour' ? factHours.toFixed(2) : factDays || ''}
                             </Typography>
                         </Box>
                     </Box>
@@ -243,35 +246,59 @@ export function SalaryReport(props: IFindPositionBalance) {
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Income Tax')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {incomeTax
-                                    ? numericFormatter(incomeTax.toFixed(2), {
-                                          thousandSeparator: ' ',
-                                      })
-                                    : ''}
+                            <Typography
+                                color={!params.row.accruals && !incomeTax ? 'disabled' : ''}
+                            >
+                                {t('Income Tax')}
+                            </Typography>
+                            <Typography
+                                sx={{ textAlign: 'right' }}
+                                color={
+                                    params.row.accruals > 0 && incomeTax <= 0
+                                        ? 'warning.main'
+                                        : !params.row.accruals && !incomeTax
+                                          ? 'disabled'
+                                          : ''
+                                }
+                            >
+                                {numericFormatter(incomeTax.toFixed(2), {
+                                    thousandSeparator: ' ',
+                                })}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Military Tax')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {militaryTax
-                                    ? numericFormatter(militaryTax.toFixed(2), {
-                                          thousandSeparator: ' ',
-                                      })
-                                    : ''}
+                            <Typography
+                                color={!params.row.accruals && !militaryTax ? 'disabled' : ''}
+                            >
+                                {t('Military Tax')}
+                            </Typography>
+                            <Typography
+                                sx={{ textAlign: 'right' }}
+                                color={
+                                    params.row.accruals > 0 && militaryTax <= 0
+                                        ? 'warning.main'
+                                        : !params.row.accruals && !militaryTax
+                                          ? 'disabled'
+                                          : ''
+                                }
+                            >
+                                {numericFormatter(militaryTax.toFixed(2), {
+                                    thousandSeparator: ' ',
+                                })}
                             </Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Other Deductions')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {otherDeductions
-                                    ? numericFormatter(otherDeductions.toFixed(2), {
-                                          thousandSeparator: ' ',
-                                      })
-                                    : ''}
-                            </Typography>
-                        </Box>
+                        {otherDeductions ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography>{t('Other Deductions')}</Typography>
+                                <Typography sx={{ textAlign: 'right' }}>
+                                    {otherDeductions
+                                        ? numericFormatter(otherDeductions.toFixed(2), {
+                                              thousandSeparator: ' ',
+                                          })
+                                        : ''}
+                                </Typography>
+                            </Box>
+                        ) : null}
                     </Box>
                 );
             },
@@ -338,8 +365,8 @@ export function SalaryReport(props: IFindPositionBalance) {
             },
         },
         {
-            field: 'companyExpenses',
-            headerName: t('Company Expenses'),
+            field: 'employerExpenses',
+            headerName: t('Employer Expenses'),
             type: 'number',
             width: 240,
             sortable: true,
@@ -355,7 +382,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                                 sx={{ textAlign: 'right' }}
                                 color={
                                     accruals > 0 && fundUSC <= 0
-                                        ? 'error.main'
+                                        ? 'warning.main'
                                         : !fundUSC
                                           ? 'divider'
                                           : ''
@@ -495,14 +522,14 @@ export function SalaryReport(props: IFindPositionBalance) {
                     details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditPosition(params.row.id);
+                        onEditPosition(params.row.positionId);
                     }
                 }}
                 onRowDoubleClick={(
                     params: GridRowParams,
                     event: MuiEvent,
                     details: GridCallbackDetails,
-                ) => onEditPosition(params.row.id)}
+                ) => onEditPosition(params.row.positionId)}
             />
         </>
     );

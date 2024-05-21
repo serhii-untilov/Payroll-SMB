@@ -6,7 +6,17 @@ import {
     IPositionHistory,
 } from '@repo/shared';
 
-export interface IPositionBalance extends IPaymentPartsTotal, IPaymentGroupsTotal {
+export type BalanceWorkingTime = {
+    planDays?: number;
+    planHours?: number;
+    factDays?: number;
+    factHours?: number;
+};
+
+export interface IPositionBalance
+    extends IPaymentPartsTotal,
+        IPaymentGroupsTotal,
+        BalanceWorkingTime {
     id?: number | undefined | null;
     position?: IPosition;
     positionId: number;

@@ -20,6 +20,18 @@ export class PositionBalance implements IPositionBalance {
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     inBalance?: number;
 
+    @Column({ type: 'integer', default: 0 })
+    planDays?: number;
+
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    planHours?: number;
+
+    @Column({ type: 'integer', default: 0 })
+    factDays?: number;
+
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    factHours?: number;
+
     // See enum PaymentParts
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     accruals?: number;
