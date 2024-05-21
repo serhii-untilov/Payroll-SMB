@@ -11,7 +11,6 @@ import { SelectPayPeriod } from '../../components/select/SelectPayPeriod';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { SalaryReport } from './details/SalaryReport';
-// import { PositionList } from './details/PositionList';
 
 export default function Payroll() {
     const { company } = useAppContext();
@@ -55,11 +54,7 @@ export default function Payroll() {
 
                 <TabPanel value={tab} index={0}>
                     {company?.id && (
-                        <SalaryReport
-                            companyId={company?.id}
-                            relations={true}
-                            onPayPeriodDate={payPeriod || new Date()}
-                        />
+                        <SalaryReport companyId={company?.id} payPeriod={payPeriod || new Date()} />
                     )}
                 </TabPanel>
                 <TabPanel value={tab} index={1}>

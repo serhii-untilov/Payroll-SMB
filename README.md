@@ -227,6 +227,7 @@ npx --workspace @repo/api nest generate resource access resources
 npx --workspace @repo/api nest generate resource payroll resources
 npx --workspace @repo/api nest generate resource processor
 npx --workspace @repo/api nest generate service summaryCalculation processor
+npx --workspace @repo/api nest generate service balanceCalculation processor
 
 ```
 

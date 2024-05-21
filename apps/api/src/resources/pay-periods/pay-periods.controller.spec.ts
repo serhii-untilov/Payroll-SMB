@@ -9,6 +9,8 @@ import { PayPeriod } from './entities/pay-period.entity';
 import { repositoryMockFactory } from '@repo/testing';
 import { AccessService } from '../access/access.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
+import { PositionsService } from '../positions/positions.service';
+import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
 
 describe('PayPeriodsController', () => {
     let controller: PayPeriodsController;
@@ -23,9 +25,14 @@ describe('PayPeriodsController', () => {
                     provide: getRepositoryToken(PayPeriod),
                     useFactory: repositoryMockFactory,
                 },
+                {
+                    provide: getRepositoryToken(PayPeriodCalcMethod),
+                    useFactory: repositoryMockFactory,
+                },
                 { provide: UsersService, useValue: createMock<UsersService>() },
-                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
+                { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
             ],
         }).compile();

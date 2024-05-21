@@ -1,14 +1,13 @@
+import { IPayPeriodCalcMethod } from '@repo/shared';
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PayPeriod } from './pay-period.entity';
-import { IPayPeriodPaymentGroup } from '@repo/shared';
 
 @Entity()
-export class PayPeriodPaymentGroup implements IPayPeriodPaymentGroup {
+export class PayPeriodCalcMethod implements IPayPeriodCalcMethod {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @ManyToOne(() => PayPeriod, (payPeriod) => payPeriod.paymentGroups)
-    // @ManyToOne(() => PayPeriod, { createForeignKeyConstraints: false })
+    @ManyToOne(() => PayPeriod, (payPeriod) => payPeriod.calcMethods)
     @JoinColumn()
     payPeriod?: PayPeriod;
 
@@ -16,7 +15,7 @@ export class PayPeriodPaymentGroup implements IPayPeriodPaymentGroup {
     payPeriodId: number;
 
     @Column({ type: 'varchar', length: 30 })
-    paymentGroup: string;
+    calcMethod: string; // See enum CalcMethod
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     factSum: number;

@@ -11,15 +11,15 @@ export function isShortDateString(value: any): boolean {
     return value && typeof value === 'string' && shortDateFormat.test(value);
 }
 
-// Convert strings to dates in given object
-export function objectStringDateToDate(obj: any): any {
+// Convert strings to dates in a given object
+export function deepStringToDate(obj: any): any {
     if (obj === null || obj === undefined) {
         return obj;
     }
 
     if (Array.isArray(obj)) {
         for (let i = 0; i < obj.length; i++) {
-            objectStringDateToDate(obj[i]);
+            deepStringToDate(obj[i]);
         }
         return obj;
     }
@@ -32,7 +32,7 @@ export function objectStringDateToDate(obj: any): any {
             } else if (isShortDateString(value)) {
                 obj[key] = new Date(value);
             } else if (typeof value === 'object') {
-                objectStringDateToDate(value);
+                deepStringToDate(value);
             }
         }
         return obj;
@@ -49,15 +49,15 @@ export function objectStringDateToDate(obj: any): any {
     return obj;
 }
 
-// Convert strings to dates in given object
-export function objectStringDateToShort(obj: any): any {
+// Convert strings to a short dates (YYYY-MM-DD) in a given object
+export function deepStringToShortDate(obj: any): any {
     if (obj === null || obj === undefined) {
         return obj;
     }
 
     if (Array.isArray(obj)) {
         for (let i = 0; i < obj.length; i++) {
-            objectStringDateToShort(obj[i]);
+            deepStringToShortDate(obj[i]);
         }
         return obj;
     }
@@ -68,7 +68,7 @@ export function objectStringDateToShort(obj: any): any {
             if (isIsoDateString(value)) {
                 obj[key] = formatDate(parseISO(value));
             } else if (typeof value === 'object') {
-                objectStringDateToShort(value);
+                deepStringToShortDate(value);
             }
         }
         return obj;

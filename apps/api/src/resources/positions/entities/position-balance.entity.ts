@@ -8,7 +8,6 @@ export class PositionBalance implements IPositionBalance {
     id: number;
 
     @ManyToOne(() => Position, (position) => position.balance)
-    // @ManyToOne(() => Position, { createForeignKeyConstraints: false })
     @JoinColumn()
     position?: Position;
 
@@ -21,11 +20,33 @@ export class PositionBalance implements IPositionBalance {
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     inBalance?: number;
 
+    // See enum PaymentParts
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    accrualsSum?: number;
+    accruals?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    deductions?: number;
 
+    // See enum PaymentGroups
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    deductionsSum?: number;
+    basic?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    adjustments?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    bonuses?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    vacations?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    sicks?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    refunds?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    other_accruals?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    taxes?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    payments?: number;
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    other_deductions?: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     outBalance?: number;
@@ -34,8 +55,18 @@ export class PositionBalance implements IPositionBalance {
     transform() {
         this.payPeriod = new Date(this.payPeriod);
         this.inBalance = Number(this.inBalance);
-        this.accrualsSum = Number(this.accrualsSum);
-        this.deductionsSum = Number(this.deductionsSum);
+        this.accruals = Number(this.accruals);
+        this.deductions = Number(this.deductions);
+        this.basic = Number(this.basic);
+        this.adjustments = Number(this.adjustments);
+        this.bonuses = Number(this.bonuses);
+        this.vacations = Number(this.vacations);
+        this.sicks = Number(this.sicks);
+        this.refunds = Number(this.refunds);
+        this.other_accruals = Number(this.other_accruals);
+        this.taxes = Number(this.taxes);
+        this.payments = Number(this.payments);
+        this.other_deductions = Number(this.other_deductions);
         this.outBalance = Number(this.outBalance);
     }
 }

@@ -6,7 +6,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, IPaymentGroupsTotal, IPaymentPartsTotal, ResourceType } from '@repo/shared';
 import { Between, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
@@ -15,6 +15,7 @@ import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { FindPayrollDto } from './dto/find-payroll.dto';
 import { UpdatePayrollDto } from './dto/update-payroll.dto';
 import { Payroll } from './entities/payroll.entity';
+import { defaultPaymentPartsTotal, defaultPaymentGroupsTotal } from '@repo/shared';
 
 @Injectable()
 export class PayrollsService {
@@ -23,10 +24,10 @@ export class PayrollsService {
     constructor(
         @InjectRepository(Payroll)
         private repository: Repository<Payroll>,
-        @Inject(forwardRef(() => PositionsService))
-        private positionsService: PositionsService,
         @Inject(forwardRef(() => AccessService))
         private accessService: AccessService,
+        @Inject(forwardRef(() => PositionsService))
+        private positionsService: PositionsService,
         @Inject(forwardRef(() => CompaniesService))
         private companiesService: CompaniesService,
     ) {}
@@ -199,12 +200,109 @@ export class PayrollsService {
         return await this.repository.delete(id);
     }
 
-    // async getSummaryByPayPeriod(
-    //     companyId: number,
-    //     payPeriodDateFrom: Date,
-    //     payPeriodDateTo: Date,
-    // ): Promise<number> {
-    //     const accrualsSum = 0;
-    //     const deductionsSum = 0;
-    // }
+    async payrollPositionPaymentParts(
+        positionId: number,
+        payPeriod: Date,
+    ): Promise<IPaymentPartsTotal> {
+        const records = await this.repository
+            .createQueryBuilder('payroll')
+            .select('paymentType.paymentPart', 'paymentPart')
+            .addSelect('SUM(payroll.factSum)', 'factSum')
+            .innerJoin('payroll.paymentType', 'paymentType')
+            .where('payroll.positionId = :positionId', { positionId })
+            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('paymentType.paymentPart')
+            .getRawMany();
+        return {
+            ...defaultPaymentPartsTotal,
+            ...records.reduce((a, b) => {
+                a[b.paymentPart] = Number(b.factSum);
+                return a;
+            }, {}),
+        };
+    }
+
+    async payrollPositionPaymentGroups(
+        positionId: number,
+        payPeriod: Date,
+    ): Promise<IPaymentGroupsTotal> {
+        const records = await this.repository
+            .createQueryBuilder('payroll')
+            .select('paymentType.paymentGroup', 'paymentGroup')
+            .addSelect('SUM(payroll.factSum)', 'factSum')
+            .innerJoin('payroll.paymentType', 'paymentType')
+            .where('payroll.positionId = :positionId', { positionId })
+            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('paymentType.paymentGroup')
+            .getRawMany();
+        return {
+            ...defaultPaymentGroupsTotal,
+            ...records.reduce((a, b) => {
+                a[b.paymentPart] = Number(b.factSum);
+                return a;
+            }, {}),
+        };
+    }
+
+    async payrollCompanyPaymentParts(
+        companyId: number,
+        payPeriod: Date,
+    ): Promise<IPaymentPartsTotal> {
+        const records = await this.repository
+            .createQueryBuilder('payroll')
+            .select('paymentType.paymentPart', 'paymentPart')
+            .addSelect('SUM(payroll.factSum)', 'factSum')
+            .innerJoin('payroll.paymentType', 'paymentType')
+            .innerJoin('payroll.position', 'position')
+            .where('position.companyId = :companyId', { companyId })
+            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('paymentType.paymentPart')
+            .getRawMany();
+        return {
+            ...defaultPaymentPartsTotal,
+            ...records.reduce((a, b) => {
+                a[b.paymentPart] = Number(b.factSum);
+                return a;
+            }, {}),
+        };
+    }
+
+    async payrollCompanyPaymentGroups(
+        companyId: number,
+        payPeriod: Date,
+    ): Promise<IPaymentGroupsTotal> {
+        const records = await this.repository
+            .createQueryBuilder('payroll')
+            .select('paymentType.paymentGroup', 'paymentGroup')
+            .addSelect('SUM(payroll.factSum)', 'factSum')
+            .innerJoin('payroll.paymentType', 'paymentType')
+            .innerJoin('payroll.position', 'position')
+            .where('position.companyId = :companyId', { companyId })
+            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('paymentType.paymentGroup')
+            .getRawMany();
+        return {
+            ...defaultPaymentGroupsTotal,
+            ...records.reduce((a, b) => {
+                a[b.paymentGroup] = Number(b.factSum);
+                return a;
+            }, {}),
+        };
+    }
+
+    async payrollCompanyCalcMethods(
+        companyId: number,
+        payPeriod: Date,
+    ): Promise<{ calcMethod: string; factSum: number }[]> {
+        return await this.repository
+            .createQueryBuilder('payroll')
+            .select('paymentType.calcMethod', 'calcMethod')
+            .addSelect('SUM(payroll.factSum)', 'factSum')
+            .innerJoin('payroll.paymentType', 'paymentType')
+            .innerJoin('payroll.position', 'position')
+            .where('position.companyId = :companyId', { companyId })
+            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('paymentType.calcMethod')
+            .getRawMany();
+    }
 }

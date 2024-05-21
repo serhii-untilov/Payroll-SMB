@@ -1,3 +1,4 @@
+import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
 import {
     ConflictException,
     Inject,
@@ -10,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
     AccessType,
     PayPeriodState,
+    PaymentPart,
     PaymentSchedule,
     ResourceType,
     formatPeriod,
@@ -38,10 +40,11 @@ import {
 } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
+import { PayrollsService } from '../payrolls/payrolls.service';
+import { PositionsService } from '../positions/positions.service';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
-import { PayrollsService } from '../payrolls/payrolls.service';
 
 @Injectable()
 export class PayPeriodsService {
@@ -50,17 +53,21 @@ export class PayPeriodsService {
 
     constructor(
         @InjectRepository(PayPeriod)
-        private repository: Repository<PayPeriod>,
-        @Inject(forwardRef(() => CompaniesService))
-        private companiesService: CompaniesService,
+        private repositoryPayPeriod: Repository<PayPeriod>,
+        @InjectRepository(PayPeriodCalcMethod)
+        private repositoryPayPeriodCalcMethod: Repository<PayPeriodCalcMethod>,
         @Inject(forwardRef(() => AccessService))
         private accessService: AccessService,
+        @Inject(forwardRef(() => CompaniesService))
+        private companiesService: CompaniesService,
+        @Inject(forwardRef(() => PositionsService))
+        private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService))
         private payrollsService: PayrollsService,
     ) {}
 
     async create(userId: number, payload: CreatePayPeriodDto): Promise<PayPeriod> {
-        const existing = await this.repository.findOneBy({
+        const existing = await this.repositoryPayPeriod.findOneBy({
             companyId: payload.companyId,
             dateFrom: payload.dateFrom,
             dateTo: payload.dateTo,
@@ -70,7 +77,7 @@ export class PayPeriodsService {
                 `Pay Period '${formatPeriod(payload.dateFrom, payload.dateTo)}' already exists.`,
             );
         }
-        const intersection = await this.repository.findOneBy({
+        const intersection = await this.repositoryPayPeriod.findOneBy({
             companyId: payload.companyId,
             dateFrom: LessThanOrEqual(payload.dateTo),
             dateTo: MoreThanOrEqual(payload.dateFrom),
@@ -86,7 +93,7 @@ export class PayPeriodsService {
             this.resourceType,
             AccessType.CREATE,
         );
-        return await this.repository.save({
+        return await this.repositoryPayPeriod.save({
             ...payload,
             createdUserId: userId,
             updatedUserId: userId,
@@ -106,14 +113,14 @@ export class PayPeriodsService {
         );
         params['where']['companyId'] = companyId;
         const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
-        const payPeriodList = await this.repository.find(options);
+        const payPeriodList = await this.repositoryPayPeriod.find(options);
         if (payPeriodList.length) return payPeriodList;
         await this.fillPeriods(userId, companyId);
-        return await this.repository.find(options);
+        return await this.repositoryPayPeriod.find(options);
     }
 
     async findOne(userId: number, params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
-        const payPeriod = await this.repository.findOneOrFail(params);
+        const payPeriod = await this.repositoryPayPeriod.findOneOrFail(params);
         await this.accessService.availableForUserCompanyOrFail(
             userId,
             payPeriod.companyId,
@@ -123,8 +130,12 @@ export class PayPeriodsService {
         return payPeriod;
     }
 
+    async find(params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
+        return await this.repositoryPayPeriod.findOne(params);
+    }
+
     async update(userId: number, id: number, payload: UpdatePayPeriodDto): Promise<PayPeriod> {
-        const record = await this.repository.findOneOrFail({ where: { id } });
+        const record = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
         await this.accessService.availableForUserCompanyOrFail(
             userId,
             record.companyId,
@@ -136,18 +147,22 @@ export class PayPeriodsService {
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        return await this.repository.save({ ...payload, id, updatedUserId: userId });
+        return await this.repositoryPayPeriod.save({ ...payload, id, updatedUserId: userId });
     }
 
     async remove(userId: number, id: number): Promise<PayPeriod> {
-        const payPeriod = await this.repository.findOneOrFail({ where: { id } });
+        const payPeriod = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
         await this.accessService.availableForUserCompanyOrFail(
             userId,
             payPeriod.companyId,
             this.resourceType,
             AccessType.DELETE,
         );
-        return await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
+        return await this.repositoryPayPeriod.save({
+            id,
+            deletedDate: new Date(),
+            deletedUserId: userId,
+        });
     }
 
     async findCurrent(
@@ -195,7 +210,7 @@ export class PayPeriodsService {
         const periods = filler(company.id, dateFrom, dateTo);
         if (periods.length) {
             // Delete opened periods
-            await this.repository
+            await this.repositoryPayPeriod
                 .createQueryBuilder('deleteOpenedPeriods')
                 .delete()
                 .where({
@@ -204,7 +219,7 @@ export class PayPeriodsService {
                     dateFrom: MoreThanOrEqual(dateFrom),
                 });
             // Get not opened periods
-            const closed = await this.repository.find({
+            const closed = await this.repositoryPayPeriod.find({
                 where: {
                     companyId: company.id,
                     dateFrom: MoreThanOrEqual(dateFrom),
@@ -234,7 +249,7 @@ export class PayPeriodsService {
     }
 
     async deleteOpenedPeriods(companyId: number, dateFrom: Date) {
-        await this.repository
+        await this.repositoryPayPeriod
             .createQueryBuilder('deleteOpenedPeriods')
             .delete()
             .where({ companyId, dateFrom: MoreThanOrEqual(dateFrom) });
@@ -247,36 +262,77 @@ export class PayPeriodsService {
         return filler(companyId, getDateFrom(payPeriod), getDateTo(payPeriod));
     }
 
-    async calculatePayPeriod(id: number): Promise<PayPeriod> {
-        const payPeriod = await this.repository.findOneOrFail({ where: { id } });
-
+    async updateBalance(id: number): Promise<PayPeriod> {
+        const payPeriod: PayPeriod = await this.repositoryPayPeriod.findOneOrFail({
+            where: { id },
+        });
         // Calculate In Balance
-        const prevPayPeriod = await this.repository.findOne({
+        const prevPayPeriod = await this.repositoryPayPeriod.findOne({
             where: { companyId: payPeriod.companyId, dateTo: sub(payPeriod.dateFrom, { days: 1 }) },
         });
         const inBalance = prevPayPeriod.outBalance;
         const inCompanyDebt = prevPayPeriod.outCompanyDebt;
         const inEmployeeDebt = prevPayPeriod.outEmployeeDebt;
-
-        // Calculate PayPeriodPaymentGroup
-        // TODO
-
+        // Calculate parts totals
+        const paymentParts = await this.payrollsService.payrollCompanyPaymentParts(
+            payPeriod.companyId,
+            payPeriod.dateFrom,
+        );
+        // Calculate groups totals
+        const paymentGroups = await this.payrollsService.payrollCompanyPaymentGroups(
+            payPeriod.companyId,
+            payPeriod.dateFrom,
+        );
         // Calculate Out Balance
-        const accrualsSum = 0; // await this.payrollsService.getAccrualsSum(payPeriod.companyId, payPeriod.dateFrom, payPeriod.dateTo);
-
-        const deductionsSum = 0;
-        const outBalance = inBalance + accrualsSum - deductionsSum;
-        const outCompanyDebt = 0;
-        const outEmployeeDebt = 0;
-        return await this.repository.save({
+        const outBalance =
+            inBalance + paymentParts[PaymentPart.ACCRUALS] - paymentParts[PaymentPart.DEDUCTIONS];
+        const outCompanyDebt = await this.positionsService.calcCompanyDebt(
+            payPeriod.companyId,
+            payPeriod.dateFrom,
+        );
+        const outEmployeeDebt = await this.positionsService.calcEmployeeDebt(
+            payPeriod.companyId,
+            payPeriod.dateFrom,
+        );
+        return await this.repositoryPayPeriod.save({
             ...payPeriod,
             inBalance,
             inCompanyDebt,
             inEmployeeDebt,
+            ...paymentParts,
+            ...paymentGroups,
             outBalance,
             outCompanyDebt,
             outEmployeeDebt,
         });
+    }
+
+    async updateCalcMethods(id: number): Promise<PayPeriodCalcMethod[]> {
+        const payPeriod: PayPeriod = await this.repositoryPayPeriod.findOneOrFail({
+            where: { id },
+        });
+        const calculatedRecords = await this.payrollsService.payrollCompanyCalcMethods(
+            payPeriod.companyId,
+            payPeriod.dateFrom,
+        );
+        const records = await this.repositoryPayPeriodCalcMethod.find({
+            where: { payPeriodId: payPeriod.id },
+        });
+        const toDeleteIds: number[] = records
+            .filter((record) => !calculatedRecords.find((o) => o.calcMethod === record.calcMethod))
+            .map((o) => o.id);
+        for (id of toDeleteIds) {
+            await this.repositoryPayPeriodCalcMethod.delete(id);
+        }
+        for (const calculated of calculatedRecords) {
+            const record = records.find((o) => o.calcMethod === calculated.calcMethod) || {};
+            await this.repositoryPayPeriodCalcMethod.save({
+                ...record,
+                ...calculated,
+                payPeriodId: id,
+            });
+        }
+        return this.repositoryPayPeriodCalcMethod.find({ where: { payPeriodId: id } });
     }
 }
 

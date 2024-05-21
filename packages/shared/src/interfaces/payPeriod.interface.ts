@@ -14,9 +14,27 @@ export interface IPayPeriod extends ILogger {
     dateFrom: Date;
     dateTo: Date;
     state: string; // See PayPeriodState
+
     inBalance?: number;
     inCompanyDebt?: number;
     inEmployeeDebt?: number;
+
+    // See enum PaymentPart
+    accruals?: number;
+    deductions?: number;
+
+    // See enum PaymentGroup
+    basic?: number;
+    adjustments?: number;
+    bonuses?: number;
+    vacations?: number;
+    sicks?: number;
+    refunds?: number;
+    other_accruals?: number;
+    taxes?: number;
+    payments?: number;
+    other_deductions?: number;
+
     outBalance?: number;
     outCompanyDebt?: number;
     outEmployeeDebt?: number;

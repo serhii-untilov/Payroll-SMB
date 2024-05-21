@@ -1,4 +1,4 @@
-import { IPerson } from '@repo/shared';
+import { IPerson, getFullName } from '@repo/shared';
 import { Logger } from '../../abstract/logger.abstract';
 import {
     AfterInsert,
@@ -51,9 +51,12 @@ export class Person extends Logger implements IPerson {
     @AfterLoad()
     @AfterInsert()
     @AfterUpdate()
-    generateFullName(): void {
-        this.fullName = `${this.lastName || ''} ${this.firstName || ''} ${this.middleName || ''}`
-            .replace('  ', ' ')
-            .trim();
+    // generateFullName(): void {
+    //     this.fullName = `${this.lastName || ''} ${this.firstName || ''} ${this.middleName || ''}`
+    //         .replace('  ', ' ')
+    //         .trim();
+    // }
+    transform() {
+        this.fullName = getFullName(this.lastName, this.firstName, this.middleName);
     }
 }

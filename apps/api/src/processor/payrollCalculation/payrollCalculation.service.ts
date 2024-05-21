@@ -101,6 +101,8 @@ export class PayrollCalculationService {
             this._position = position;
             await this._calculatePosition();
         }
+        await this.payPeriodsService.updateBalance(this.payPeriod.id);
+        await this.payPeriodsService.updateCalcMethods(this.payPeriod.id);
     }
 
     public async calculatePosition(userId: number, positionId: number) {
@@ -119,6 +121,8 @@ export class PayrollCalculationService {
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculatePosition();
+        await this.payPeriodsService.updateBalance(this.payPeriod.id);
+        await this.payPeriodsService.updateCalcMethods(this.payPeriod.id);
     }
 
     public getNextPayrollId(): number {
@@ -284,6 +288,7 @@ export class PayrollCalculationService {
         this.initNextPayrollId();
         calculateBasics(this); // Base salary (wage)
         await this.save();
+        await this.positionsService.updateBalance(this.position.id, this.payPeriod.dateFrom);
         this._toInsert = [];
         this._toDeleteIds = [];
     }

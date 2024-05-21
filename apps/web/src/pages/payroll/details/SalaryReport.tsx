@@ -9,9 +9,9 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import {
-    IFindPosition,
+    IFindPositionBalance,
     IPosition,
-    IPositionHistory,
+    getFullName,
     getUnitByCalcMethod,
     maxDate,
 } from '@repo/shared';
@@ -26,9 +26,9 @@ import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
-import { deletePosition, getPositionList } from '../../../services/position.service';
+import { deletePosition, getPositionsBalance } from '../../../services/position.service';
 
-export function SalaryReport(props: IFindPosition) {
+export function SalaryReport(props: IFindPositionBalance) {
     const { companyId } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
@@ -53,36 +53,34 @@ export function SalaryReport(props: IFindPosition) {
             resizable: true,
             sortable: true,
             renderCell: (params) => {
-                const positionHistory = payPeriod
-                    ? params.row?.history?.find(
-                          (o: IPositionHistory) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                      )
-                    : {};
-                const unit = getUnitByCalcMethod(positionHistory.paymentType.calcMethod);
+                const unit = getUnitByCalcMethod(params.row.paymentType?.calcMethod || '');
                 const unitName = unit === 'month' ? '' : ` / ${t(unit)}`;
+                const fullName = getFullName(
+                    params.row.lastName,
+                    params.row.firstName,
+                    params.row.middleName,
+                );
                 return (
                     <div style={{ width: '100%' }}>
                         <Typography
                             sx={{ fontSize: '1rem', fontWeight: 'medium' }}
                             color={'primary'}
                         >
-                            {params?.row?.person?.fullName || ''}
+                            {fullName}
                         </Typography>
-                        <Typography color="textSecondary">
-                            {positionHistory?.job?.name || ''}
-                        </Typography>
+                        <Typography color="textSecondary">{params.row?.jobName || ''}</Typography>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography
                                 color="textSecondary"
                                 sx={{ fontSize: '1rem', fontWeight: 'medium' }}
                             >
-                                {positionHistory?.wage
-                                    ? `${numericFormatter(positionHistory?.wage, { thousandSeparator: ' ' })} ${unitName}`
+                                {params.row?.wage
+                                    ? `${numericFormatter(params.row?.wage?.toFixed(2), { thousandSeparator: ' ' })} ${unitName}`
                                     : ''}
                             </Typography>
-                            {Number(positionHistory?.rate) !== 1 && (
+                            {Number(params.row?.rate) !== 1 && (
                                 <Typography sx={{ textAlign: 'right' }} color="warning.main">
-                                    {positionHistory?.rate || ''}
+                                    {params.row?.rate || ''}
                                 </Typography>
                             )}
                         </Box>
@@ -127,20 +125,15 @@ export function SalaryReport(props: IFindPosition) {
             width: 180,
             sortable: true,
             valueGetter: (params) => {
-                const compensation = params?.value || 0;
+                const compensation = params.row?.basic || 0;
                 return numericFormatter(compensation.toFixed(2), {
                     thousandSeparator: ' ',
                 });
             },
             renderCell: (params) => {
-                const positionHistory = payPeriod
-                    ? params.row?.history?.find(
-                          (o: IPositionHistory) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                      )
-                    : {};
-                const inBalance: number = 0;
-                const wage = Number(positionHistory?.wage || 0);
-                const compensation = Number(params?.value || 0);
+                const inBalance = params.row?.inBalance || 0;
+                const wage = params.row?.wage || 0;
+                const compensation = params.row?.basic || 0;
                 return (
                     <Box sx={{ width: '100%' }}>
                         {!!inBalance && (
@@ -175,9 +168,9 @@ export function SalaryReport(props: IFindPosition) {
             width: 230,
             sortable: true,
             renderCell: (params) => {
-                const bonus = 1000;
-                const commission = 2000;
-                const otherEarnings = 3000;
+                const bonus = params.row?.bonus || 0;
+                const commission = 0;
+                const otherEarnings = params.row?.other_accruals;
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -213,9 +206,9 @@ export function SalaryReport(props: IFindPosition) {
             width: 230,
             sortable: true,
             renderCell: (params) => {
-                const incomeTax = 1000;
-                const militaryTax = 2000;
-                const otherDeductions = 3000;
+                const incomeTax = params.row?.taxes;
+                const militaryTax = 0;
+                const otherDeductions = params.row?.other_deductions;
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -251,17 +244,15 @@ export function SalaryReport(props: IFindPosition) {
             width: 240,
             sortable: true,
             valueGetter: (params) => {
-                const wage = payPeriod
-                    ? params.row?.history?.find(
-                          (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                      )?.wage || ''
-                    : '';
-                return Number(wage) === 0 ? '' : wage;
+                return params.row?.wage || '';
             },
             renderCell: (params) => {
-                const grossPay = 1000;
-                const paid = 2000;
-                const outBalance = 3000;
+                const grossPay =
+                    (params.row?.inBalance || 0) +
+                    (params.row?.accruals || 0) -
+                    ((params.row?.deductions || 0) - (params.row?.payments || 0));
+                const paid = params.row?.payments || 0;
+                const outBalance = params.row?.outBalance || 0;
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -300,17 +291,9 @@ export function SalaryReport(props: IFindPosition) {
             type: 'number',
             width: 240,
             sortable: true,
-            valueGetter: (params) => {
-                const wage = payPeriod
-                    ? params.row?.history?.find(
-                          (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                      )?.wage || ''
-                    : '';
-                return Number(wage) === 0 ? '' : wage;
-            },
             renderCell: (params) => {
-                const fundUSC = 10000;
-                const companyExpensesTotal = 10000;
+                const fundUSC = 0;
+                const companyExpensesTotal = 0;
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -341,7 +324,7 @@ export function SalaryReport(props: IFindPosition) {
     } = useQuery<IPosition[], Error>({
         queryKey: ['position', 'list', props],
         queryFn: async () => {
-            return (await getPositionList(props)).sort((a, b) =>
+            return (await getPositionsBalance(props)).sort((a, b) =>
                 (Number(a.cardNumber) || 2147483647) < (Number(b.cardNumber) || 2147483647)
                     ? -1
                     : (Number(a.cardNumber) || 2147483647) > (Number(b.cardNumber) || 2147483647)

@@ -1,5 +1,5 @@
 import { RecordFlags } from '@repo/shared';
-import { PayPeriod } from 'src/resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.entity';
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 
 export function getPayrollUnionCancel(
