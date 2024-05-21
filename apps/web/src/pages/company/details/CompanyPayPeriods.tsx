@@ -20,6 +20,8 @@ import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { getPayPeriodList, getPayPeriodName } from '../../../services/payPeriod.service';
 import { salaryCalculate } from '../../../services/company.service';
+import { numericFormatter } from 'react-number-format';
+import { sumFormatter } from '../../../services/utils';
 
 type Props = {
     companyId: number | undefined;
@@ -68,7 +70,7 @@ export function CompanyPayPeriods(params: Props) {
             width: 170,
             sortable: true,
             valueGetter: (params) => {
-                return Number(params.value) === 0 ? '' : params.value;
+                return sumFormatter(params.value);
             },
         },
         {
@@ -78,7 +80,7 @@ export function CompanyPayPeriods(params: Props) {
             width: 170,
             sortable: true,
             valueGetter: (params) => {
-                return Number(params.value) === 0 ? '' : params.value;
+                return sumFormatter(params.value);
             },
         },
         {
@@ -88,7 +90,7 @@ export function CompanyPayPeriods(params: Props) {
             width: 170,
             sortable: true,
             valueGetter: (params) => {
-                return Number(params.value) === 0 ? '' : params.value;
+                return sumFormatter(params.value);
             },
         },
         {
@@ -102,7 +104,7 @@ export function CompanyPayPeriods(params: Props) {
                     Number(params.row.inBalance) +
                     Number(params.row.accruals) -
                     (Number(params.row.deductions) - Number(params.row.payments));
-                return netPay === 0 ? '' : netPay;
+                return sumFormatter(netPay);
             },
         },
         {
@@ -112,7 +114,7 @@ export function CompanyPayPeriods(params: Props) {
             width: 170,
             sortable: true,
             valueGetter: (params) => {
-                return Number(params.value) === 0 ? '' : params.value;
+                return sumFormatter(params.value);
             },
         },
         {
@@ -122,7 +124,7 @@ export function CompanyPayPeriods(params: Props) {
             width: 190,
             sortable: true,
             valueGetter: (params) => {
-                return Number(params.value) === 0 ? '' : params.value;
+                return sumFormatter(params.value);
             },
         },
     ];
@@ -189,6 +191,10 @@ export function CompanyPayPeriods(params: Props) {
                 apiRef={gridRef}
                 rows={data || []}
                 columns={columns}
+                columnVisibilityModel={{
+                    // Hide columns, the other columns will remain visible
+                    taxes: false,
+                }}
                 checkboxSelection={false}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);

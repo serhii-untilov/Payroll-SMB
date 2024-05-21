@@ -305,4 +305,22 @@ export class PayrollsService {
             .groupBy('paymentType.calcMethod')
             .getRawMany();
     }
+
+    async payrollCompanyCalcMethodsByPositions(
+        companyId: number,
+        payPeriod: Date,
+    ): Promise<{ positionId: number; calcMethod: string; factSum: number }[]> {
+        return await this.repository
+            .createQueryBuilder('payroll')
+            .select('payroll.positionId', 'positionId')
+            .addSelect('paymentType.calcMethod', 'calcMethod')
+            .addSelect('SUM(payroll.factSum)', 'factSum')
+            .innerJoin('payroll.paymentType', 'paymentType')
+            .innerJoin('payroll.position', 'position')
+            .where('position.companyId = :companyId', { companyId })
+            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('payroll.positionId')
+            .addGroupBy('paymentType.calcMethod')
+            .getRawMany();
+    }
 }

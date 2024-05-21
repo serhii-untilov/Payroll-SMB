@@ -388,6 +388,10 @@ export class PositionsService {
                 and pb."payPeriod" = $3`,
             [params.companyId, payPeriod.dateTo, payPeriod.dateFrom],
         );
+        const calcMethodBalance = await this.payrollsService.payrollCompanyCalcMethodsByPositions(
+            params.companyId,
+            payPeriod.dateFrom,
+        );
         result.forEach((o) => {
             o.dateFrom = new Date(o.dateFrom);
             o.dateTo = new Date(o.dateTo);
@@ -411,6 +415,11 @@ export class PositionsService {
             o.planHours = Number(o.planHours);
             o.factDays = Number(o.factDays);
             o.factHours = Number(o.factHours);
+            o.calcMethodBalance = calcMethodBalance
+                .filter((b) => b.positionId === o.positionId)
+                .map((b) => {
+                    return { calcMethod: b.calcMethod, factSum: Number(b.factSum) };
+                });
         });
         return result;
     }
