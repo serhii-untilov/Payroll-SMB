@@ -110,7 +110,16 @@ export function SalaryReport(props: IFindPositionBalance) {
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Fact')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
+                            <Typography
+                                sx={{ textAlign: 'right' }}
+                                color={
+                                    factHours > planHours
+                                        ? 'error.main'
+                                        : factHours < planHours
+                                          ? 'warning.main'
+                                          : ''
+                                }
+                            >
                                 {factHours.toFixed(2) || ''}
                             </Typography>
                         </Box>
@@ -126,9 +135,11 @@ export function SalaryReport(props: IFindPositionBalance) {
             sortable: true,
             valueGetter: (params) => {
                 const compensation = params.row?.basic || 0;
-                return numericFormatter(compensation.toFixed(2), {
-                    thousandSeparator: ' ',
-                });
+                return compensation
+                    ? numericFormatter(compensation.toFixed(2), {
+                          thousandSeparator: ' ',
+                      })
+                    : '';
             },
             renderCell: (params) => {
                 const inBalance = params.row?.inBalance || 0;
@@ -136,25 +147,31 @@ export function SalaryReport(props: IFindPositionBalance) {
                 const compensation = params.row?.basic || 0;
                 return (
                     <Box sx={{ width: '100%' }}>
-                        {!!inBalance && (
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography>{t('In Balance')}</Typography>
-                                <Typography sx={{ textAlign: 'right' }} color="warning.main">
-                                    {numericFormatter(inBalance.toFixed(2), {
-                                        thousandSeparator: ' ',
-                                    })}
-                                </Typography>
-                            </Box>
-                        )}
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography color={inBalance ? 'warning.main' : 'divider'}>
+                                {t('Debt')}
+                            </Typography>
+                            <Typography
+                                sx={{ textAlign: 'right' }}
+                                color={inBalance ? 'warning.main' : 'divider'}
+                            >
+                                {numericFormatter(inBalance.toFixed(2), {
+                                    thousandSeparator: ' ',
+                                })}
+                            </Typography>
+                        </Box>
+
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Compensation')}</Typography>
                             <Typography
                                 sx={{ textAlign: 'right' }}
                                 color={wage === compensation ? 'text.primary' : 'warning.main'}
                             >
-                                {numericFormatter(compensation.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                                {compensation
+                                    ? numericFormatter(compensation.toFixed(2), {
+                                          thousandSeparator: ' ',
+                                      })
+                                    : ''}
                             </Typography>
                         </Box>
                     </Box>
@@ -168,33 +185,47 @@ export function SalaryReport(props: IFindPositionBalance) {
             width: 230,
             sortable: true,
             renderCell: (params) => {
+                const adjustments = params.row?.adjustments;
                 const bonus = params.row?.bonus || 0;
-                const commission = 0;
                 const otherEarnings = params.row?.other_accruals;
                 return (
                     <Box sx={{ width: '100%' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Bonus')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {numericFormatter(bonus.toFixed(2), { thousandSeparator: ' ' })}
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Commission')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {numericFormatter(commission.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Other Earnings')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {numericFormatter(otherEarnings.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
-                            </Typography>
-                        </Box>
+                        {adjustments ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography>{t('Adjustments')}</Typography>
+                                <Typography sx={{ textAlign: 'right' }}>
+                                    {adjustments
+                                        ? numericFormatter(adjustments.toFixed(2), {
+                                              thousandSeparator: ' ',
+                                          })
+                                        : ''}
+                                </Typography>
+                            </Box>
+                        ) : null}
+                        {bonus ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography>{t('Bonus')}</Typography>
+                                <Typography sx={{ textAlign: 'right' }}>
+                                    {bonus
+                                        ? numericFormatter(bonus.toFixed(2), {
+                                              thousandSeparator: ' ',
+                                          })
+                                        : ''}
+                                </Typography>
+                            </Box>
+                        ) : null}
+                        {otherEarnings ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography>{t('Other Earnings')}</Typography>
+                                <Typography sx={{ textAlign: 'right' }}>
+                                    {otherEarnings
+                                        ? numericFormatter(otherEarnings.toFixed(2), {
+                                              thousandSeparator: ' ',
+                                          })
+                                        : ''}
+                                </Typography>
+                            </Box>
+                        ) : null}
                     </Box>
                 );
             },
@@ -207,30 +238,38 @@ export function SalaryReport(props: IFindPositionBalance) {
             sortable: true,
             renderCell: (params) => {
                 const incomeTax = params.row?.taxes;
-                const militaryTax = 0;
+                const militaryTax: number = 0;
                 const otherDeductions = params.row?.other_deductions;
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Income Tax')}</Typography>
                             <Typography sx={{ textAlign: 'right' }}>
-                                {numericFormatter(incomeTax.toFixed(2), { thousandSeparator: ' ' })}
+                                {incomeTax
+                                    ? numericFormatter(incomeTax.toFixed(2), {
+                                          thousandSeparator: ' ',
+                                      })
+                                    : ''}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Military Tax')}</Typography>
                             <Typography sx={{ textAlign: 'right' }}>
-                                {numericFormatter(militaryTax.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                                {militaryTax
+                                    ? numericFormatter(militaryTax.toFixed(2), {
+                                          thousandSeparator: ' ',
+                                      })
+                                    : ''}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Other Deductions')}</Typography>
                             <Typography sx={{ textAlign: 'right' }}>
-                                {numericFormatter(otherDeductions.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                                {otherDeductions
+                                    ? numericFormatter(otherDeductions.toFixed(2), {
+                                          thousandSeparator: ' ',
+                                      })
+                                    : ''}
                             </Typography>
                         </Box>
                     </Box>
@@ -256,29 +295,42 @@ export function SalaryReport(props: IFindPositionBalance) {
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography sx={{ fontSize: '1rem', fontWeight: 'medium' }}>
-                                {t('Gross Pay')}
-                            </Typography>
+                            <Typography>{t('Gross Pay')}</Typography>
                             <Typography
                                 sx={{ textAlign: 'right', fontSize: '1rem', fontWeight: 'medium' }}
                             >
-                                {numericFormatter(grossPay.toFixed(2), { thousandSeparator: ' ' })}
+                                {grossPay
+                                    ? numericFormatter(grossPay.toFixed(2), {
+                                          thousandSeparator: ' ',
+                                      })
+                                    : ''}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Paid')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
+                            <Typography color={paid ? '' : 'divider'}>{t('Paid')}</Typography>
+                            <Typography sx={{ textAlign: 'right' }} color={paid ? '' : 'divider'}>
                                 {numericFormatter(paid.toFixed(2), {
                                     thousandSeparator: ' ',
                                 })}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Out Balance')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {numericFormatter(outBalance.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                            <Typography>{t('Debt')}</Typography>
+                            <Typography
+                                sx={{ textAlign: 'right' }}
+                                color={
+                                    outBalance < 0
+                                        ? 'error.main'
+                                        : outBalance > 0
+                                          ? 'primary.main'
+                                          : 'divider'
+                                }
+                            >
+                                {outBalance
+                                    ? numericFormatter(outBalance.toFixed(2), {
+                                          thousandSeparator: ' ',
+                                      })
+                                    : ''}
                             </Typography>
                         </Box>
                     </Box>
@@ -292,22 +344,36 @@ export function SalaryReport(props: IFindPositionBalance) {
             width: 240,
             sortable: true,
             renderCell: (params) => {
-                const fundUSC = 0;
-                const companyExpensesTotal = 0;
+                const fundUSC: number = 0;
+                const accruals = params.row?.accruals || 0;
+                const companyExpensesTotal: number = accruals + fundUSC;
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Fund USC')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {numericFormatter(fundUSC.toFixed(2), { thousandSeparator: ' ' })}
+                            <Typography
+                                sx={{ textAlign: 'right' }}
+                                color={
+                                    accruals > 0 && fundUSC <= 0
+                                        ? 'error.main'
+                                        : !fundUSC
+                                          ? 'divider'
+                                          : ''
+                                }
+                            >
+                                {numericFormatter(fundUSC.toFixed(2), {
+                                    thousandSeparator: ' ',
+                                })}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Total')}</Typography>
                             <Typography sx={{ textAlign: 'right' }}>
-                                {numericFormatter(companyExpensesTotal.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                                {companyExpensesTotal
+                                    ? numericFormatter(companyExpensesTotal.toFixed(2), {
+                                          thousandSeparator: ' ',
+                                      })
+                                    : ''}
                             </Typography>
                         </Box>
                     </Box>
