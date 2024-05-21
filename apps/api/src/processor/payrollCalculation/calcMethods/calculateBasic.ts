@@ -1,16 +1,9 @@
-import {
-    PaymentGroup,
-    RecordFlags,
-    WorkNormFact,
-    WorkNormPlan,
-    getMaxDate,
-    getMinDate,
-} from '@repo/shared';
+import { PaymentGroup, RecordFlags, WorkingTime, getMaxDate, getMinDate } from '@repo/shared';
 import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.entity';
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PositionHistory } from '../../../resources/position-history/entities/position-history.entity';
 import { PayrollCalculationService } from '../payrollCalculation.service';
-import { getFact, getPlan } from '../utils/workingTime';
+import { getWorkingTimeFact, getWorkingTimePlan } from '../utils/workingTime';
 
 export function calculateBasics(ctx: PayrollCalculationService) {
     for (const accPeriod of ctx.accPeriods) {
@@ -21,10 +14,16 @@ export function calculateBasics(ctx: PayrollCalculationService) {
         );
         const payrolls: Payroll[] = [];
         for (const assignment of assignments) {
-            const dateFrom = getMaxDate(accPeriod.dateFrom, ctx.position.dateFrom);
-            const dateTo = getMinDate(accPeriod.dateTo, ctx.position.dateTo);
-            const plan = getPlan(ctx, assignment.workNormId, dateFrom);
-            const fact = getFact(plan, dateFrom, dateTo);
+            const dateFrom = getMaxDate(
+                assignment.dateFrom,
+                getMaxDate(accPeriod.dateFrom, ctx.position.dateFrom),
+            );
+            const dateTo = getMinDate(
+                assignment.dateTo,
+                getMinDate(accPeriod.dateTo, ctx.position.dateTo),
+            );
+            const plan = getWorkingTimePlan(ctx, assignment.workNormId, dateFrom);
+            const fact = getWorkingTimeFact(plan, dateFrom, dateTo);
             payrolls.push(calcBasic(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact));
         }
         ctx.merge(PaymentGroup.BASIC, accPeriod, payrolls);
@@ -37,8 +36,8 @@ function calcBasic(
     accPeriod: PayPeriod,
     dateFrom: Date,
     dateTo: Date,
-    plan: WorkNormPlan,
-    fact: WorkNormFact,
+    plan: WorkingTime,
+    fact: WorkingTime,
 ): Payroll {
     return Object.assign({
         id: ctx.getNextPayrollId(),

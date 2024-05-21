@@ -28,7 +28,7 @@ export default function Payroll() {
 
     return (
         <PageLayout>
-            <PageTitle>{t('Payroll')}</PageTitle>
+            <PageTitle>{t('Salary Report')}</PageTitle>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
                     <InputLabel>{t('Pay Period')}</InputLabel>
@@ -45,7 +45,7 @@ export default function Payroll() {
                 }}
             >
                 <Tabs id="people__tabs" value={tab} onChange={handleChange}>
-                    <Tab label={t('Salary Report')} />
+                    <Tab label={t('Payroll')} />
                     <Tab label={t(`Employer Expenses`)} />
                     <Tab label={t('Summary Report')} />
 

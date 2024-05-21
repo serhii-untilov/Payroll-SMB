@@ -21,7 +21,7 @@ import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionsService } from './positions.service';
 import { FindPositionDto } from './dto/find-position.dto';
-import { FindAllPositionBalanceDto } from './dto/position-balance.dto copy';
+import { FindAllPositionBalanceDto } from './dto/position-balance.dto';
 
 @Controller('positions')
 export class PositionsController {

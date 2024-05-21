@@ -45,11 +45,9 @@ export type IUpdateWorkNorm = Partial<
     >
 >;
 
-export type WorkNormPlan = {
+export class WorkingTime {
     days: number;
     hours: number;
     mask: number;
-    hoursByDay: HoursByDay;
-};
-
-export type WorkNormFact = WorkNormPlan;
+    hoursByDay: HoursByDay = {};
+}

@@ -1,9 +1,10 @@
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
-import { AccessType, PaymentGroup, RecordFlags, ResourceType } from '@repo/shared';
+import { AccessType, PaymentGroup, RecordFlags, ResourceType, WorkingTime } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { AccessService } from '../../resources/access/access.service';
 import { CompaniesService } from '../../resources/companies/companies.service';
 import { Company } from '../../resources/companies/entities/company.entity';
+import { PayPeriod } from '../../resources/pay-periods/entities/pay-period.entity';
 import { PayPeriodsService } from '../../resources/pay-periods/pay-periods.service';
 import { PaymentType } from '../../resources/payment-types/entities/payment-type.entity';
 import { PaymentTypesService } from '../../resources/payment-types/payment-types.service';
@@ -13,9 +14,9 @@ import { Position } from '../../resources/positions/entities/position.entity';
 import { PositionsService } from '../../resources/positions/positions.service';
 import { WorkNorm } from '../../resources/work-norms/entities/work-norm.entity';
 import { WorkNormsService } from '../../resources/work-norms/work-norms.service';
-import { PayPeriod } from '../../resources/pay-periods/entities/pay-period.entity';
 import { calculateBasics } from './calcMethods/calculateBasic';
 import { getPayrollUnionCancel } from './utils/payrollsData';
+import { calcBalanceWorkingTime } from './utils/workingTime';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
@@ -31,6 +32,9 @@ export class PayrollCalculationService {
     private _payrollId = 0;
     private _toInsert: Payroll[] = [];
     private _toDeleteIds: number[] = [];
+    // Synthetic working time, for totals only, not for calculate payroll
+    private _syntheticTimePlan: WorkingTime;
+    private _syntheticTimeFact: WorkingTime;
 
     constructor(
         @Inject(forwardRef(() => AccessService))
@@ -75,6 +79,18 @@ export class PayrollCalculationService {
     }
     public get payrolls() {
         return this._payrolls;
+    }
+    public get syntheticTimePlan() {
+        return this._syntheticTimePlan;
+    }
+    public get syntheticTimeFact() {
+        return this._syntheticTimeFact;
+    }
+    public set syntheticTimePlan(plan: WorkingTime) {
+        this._syntheticTimePlan = plan;
+    }
+    public set syntheticTimeFact(fact: WorkingTime) {
+        this._syntheticTimeFact = fact;
     }
 
     public async calculateCompany(userId: number, companyId: number) {
@@ -288,7 +304,12 @@ export class PayrollCalculationService {
         this.initNextPayrollId();
         calculateBasics(this); // Base salary (wage)
         await this.save();
-        await this.positionsService.updateBalance(this.position.id, this.payPeriod.dateFrom);
+        const balanceWorkingTime = calcBalanceWorkingTime(this);
+        await this.positionsService.calculateBalance(
+            this.position.id,
+            this.payPeriod.dateFrom,
+            balanceWorkingTime,
+        );
         this._toInsert = [];
         this._toDeleteIds = [];
     }
