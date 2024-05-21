@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
-import { AccessType, PaymentGroup, RecordFlags, ResourceType, WorkingTime } from '@repo/shared';
+import { AccessType, RecordFlags, ResourceType, WorkingTime } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { AccessService } from '../../resources/access/access.service';
 import { CompaniesService } from '../../resources/companies/companies.service';
@@ -17,6 +17,8 @@ import { WorkNormsService } from '../../resources/work-norms/work-norms.service'
 import { calculateBasics } from './calcMethods/calculateBasic';
 import { getPayrollUnionCancel } from './utils/payrollsData';
 import { calcBalanceWorkingTime } from './utils/workingTime';
+import { calculateIncomeTax } from './calcMethods/calculateIncomeTax';
+import { calculateMilitaryTax } from './calcMethods/calculateMilitaryTax';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
@@ -146,7 +148,7 @@ export class PayrollCalculationService {
         return this._payrollId;
     }
 
-    public merge(paymentGroup: PaymentGroup, accPeriod: PayPeriod, payrolls: Payroll[]): void {
+    public merge(paymentTypeIds: number[], accPeriod: PayPeriod, payrolls: Payroll[]): void {
         const toInsert: Payroll[] = [];
         const toDeleteIds: number[] = [];
         const processedIds: number[] = [];
@@ -228,9 +230,6 @@ export class PayrollCalculationService {
             }
         }
         // Create cancel record in payrolls for record in this.payrolls which doesn't have the same record in payrolls
-        const paymentTypeIds: number[] = this.paymentTypes
-            .filter((o) => o.paymentGroup === paymentGroup)
-            .map((o) => o.id);
         const toCancel: Payroll[] = this.payrolls.filter(
             (o) =>
                 o.accPeriod.getTime() >= accPeriod.dateFrom.getTime() &&
@@ -302,7 +301,9 @@ export class PayrollCalculationService {
             true,
         );
         this.initNextPayrollId();
-        calculateBasics(this); // Base salary (wage)
+        calculateBasics(this);
+        calculateIncomeTax(this);
+        calculateMilitaryTax(this);
         await this.save();
         const balanceWorkingTime = calcBalanceWorkingTime(this);
         await this.positionsService.calculateBalance(
@@ -322,6 +323,17 @@ export class PayrollCalculationService {
     private async getMaxCalculateDate(payPeriodDateTo: Date): Promise<Date> {
         // TODO
         return payPeriodDateTo;
+    }
+
+    public getPayrollsAccPeriod(accPeriod: Date) {
+        return [
+            ...this._payrolls.filter(
+                (o) =>
+                    o.accPeriod.getTime() === accPeriod.getTime() &&
+                    !this._toDeleteIds.includes(o.id),
+            ),
+            ...this._toInsert.filter((o) => o.accPeriod.getTime() === accPeriod.getTime()),
+        ];
     }
 
     private async save() {

@@ -47,4 +47,5 @@ export interface IPositionBalanceExtended
     workNormName?: string;
     paymentTypeName?: string;
     calcMethod?: string;
+    calcMethodBalance: { calcMethod: string; factSum: number }[];
 }

@@ -1,3 +1,4 @@
+import { numericFormatter } from 'react-number-format';
 import { ApiError } from '../api';
 
 export function rgb(r: number, g: number, b: number): string {
@@ -50,4 +51,12 @@ export function capitalizeFirstChar(word: string | undefined | null): string {
 export function getObjectByType<Type>(data: any): Type {
     const template: Type = data as Type;
     return template;
+}
+
+export function sumFormatter(value: number | string, blankIfZero: boolean = true): string {
+    return Number(value) || !blankIfZero
+        ? numericFormatter(Number(value).toFixed(2), {
+              thousandSeparator: ' ',
+          })
+        : '';
 }

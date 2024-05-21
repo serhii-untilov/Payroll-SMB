@@ -9,6 +9,7 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import {
+    CalcMethod,
     IFindPositionBalance,
     IPosition,
     getFullName,
@@ -19,7 +20,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { numericFormatter } from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
@@ -27,6 +27,7 @@ import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { deletePosition, getPositionsBalance } from '../../../services/position.service';
+import { sumFormatter } from '../../../services/utils';
 
 export function SalaryReport(props: IFindPositionBalance) {
     const { companyId } = props;
@@ -75,7 +76,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                                 sx={{ fontSize: '1rem', fontWeight: 'medium' }}
                             >
                                 {params.row?.wage
-                                    ? `${numericFormatter(params.row?.wage?.toFixed(2), { thousandSeparator: ' ' })} ${unitName}`
+                                    ? `${sumFormatter(params.row?.wage)} ${unitName}`
                                     : ''}
                             </Typography>
                             {Number(params.row?.rate) !== 1 && (
@@ -137,12 +138,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             width: 180,
             sortable: true,
             valueGetter: (params) => {
-                const compensation = params.row?.basic || 0;
-                return compensation
-                    ? numericFormatter(compensation.toFixed(2), {
-                          thousandSeparator: ' ',
-                      })
-                    : '';
+                return sumFormatter(params.row?.basic);
             },
             renderCell: (params) => {
                 const inBalance = params.row?.inBalance || 0;
@@ -158,23 +154,14 @@ export function SalaryReport(props: IFindPositionBalance) {
                                 sx={{ textAlign: 'right' }}
                                 color={inBalance ? 'warning.main' : 'divider'}
                             >
-                                {numericFormatter(inBalance.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                                {sumFormatter(inBalance)}
                             </Typography>
                         </Box>
 
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Compensation')}</Typography>
-                            <Typography
-                                sx={{ textAlign: 'right' }}
-                                color={wage === compensation ? 'text.primary' : 'warning.main'}
-                            >
-                                {compensation
-                                    ? numericFormatter(compensation.toFixed(2), {
-                                          thousandSeparator: ' ',
-                                      })
-                                    : ''}
+                            <Typography sx={{ textAlign: 'right' }}>
+                                {sumFormatter(compensation)}
                             </Typography>
                         </Box>
                     </Box>
@@ -189,7 +176,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             sortable: true,
             renderCell: (params) => {
                 const adjustments = params.row?.adjustments;
-                const bonus = params.row?.bonus || 0;
+                const bonus = params.row?.bonuses || 0;
                 const otherEarnings = params.row?.other_accruals;
                 return (
                     <Box sx={{ width: '100%' }}>
@@ -197,11 +184,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography>{t('Adjustments')}</Typography>
                                 <Typography sx={{ textAlign: 'right' }}>
-                                    {adjustments
-                                        ? numericFormatter(adjustments.toFixed(2), {
-                                              thousandSeparator: ' ',
-                                          })
-                                        : ''}
+                                    {sumFormatter(adjustments)}
                                 </Typography>
                             </Box>
                         ) : null}
@@ -209,11 +192,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography>{t('Bonus')}</Typography>
                                 <Typography sx={{ textAlign: 'right' }}>
-                                    {bonus
-                                        ? numericFormatter(bonus.toFixed(2), {
-                                              thousandSeparator: ' ',
-                                          })
-                                        : ''}
+                                    {sumFormatter(bonus)}
                                 </Typography>
                             </Box>
                         ) : null}
@@ -221,11 +200,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography>{t('Other Earnings')}</Typography>
                                 <Typography sx={{ textAlign: 'right' }}>
-                                    {otherEarnings
-                                        ? numericFormatter(otherEarnings.toFixed(2), {
-                                              thousandSeparator: ' ',
-                                          })
-                                        : ''}
+                                    {sumFormatter(otherEarnings)}
                                 </Typography>
                             </Box>
                         ) : null}
@@ -235,13 +210,17 @@ export function SalaryReport(props: IFindPositionBalance) {
         },
         {
             field: 'deductions',
-            headerName: t('Taxes & Deductions'),
+            headerName: t('Deductions'),
             type: 'number',
             width: 230,
             sortable: true,
             renderCell: (params) => {
-                const incomeTax = params.row?.taxes;
-                const militaryTax: number = 0;
+                const incomeTax = params.row?.calcMethodBalance.find(
+                    (o) => o.calcMethod === CalcMethod.INCOME_TAX,
+                )?.factSum;
+                const militaryTax = params.row?.calcMethodBalance.find(
+                    (o) => o.calcMethod === CalcMethod.MILITARY_TAX,
+                )?.factSum;
                 const otherDeductions = params.row?.other_deductions;
                 return (
                     <Box sx={{ width: '100%' }}>
@@ -261,9 +240,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                                           : ''
                                 }
                             >
-                                {numericFormatter(incomeTax.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                                {sumFormatter(incomeTax)}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -282,20 +259,14 @@ export function SalaryReport(props: IFindPositionBalance) {
                                           : ''
                                 }
                             >
-                                {numericFormatter(militaryTax.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                                {sumFormatter(militaryTax)}
                             </Typography>
                         </Box>
                         {otherDeductions ? (
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography>{t('Other Deductions')}</Typography>
                                 <Typography sx={{ textAlign: 'right' }}>
-                                    {otherDeductions
-                                        ? numericFormatter(otherDeductions.toFixed(2), {
-                                              thousandSeparator: ' ',
-                                          })
-                                        : ''}
+                                    {sumFormatter(otherDeductions)}
                                 </Typography>
                             </Box>
                         ) : null}
@@ -326,19 +297,13 @@ export function SalaryReport(props: IFindPositionBalance) {
                             <Typography
                                 sx={{ textAlign: 'right', fontSize: '1rem', fontWeight: 'medium' }}
                             >
-                                {grossPay
-                                    ? numericFormatter(grossPay.toFixed(2), {
-                                          thousandSeparator: ' ',
-                                      })
-                                    : ''}
+                                {sumFormatter(grossPay)}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography color={paid ? '' : 'divider'}>{t('Paid')}</Typography>
                             <Typography sx={{ textAlign: 'right' }} color={paid ? '' : 'divider'}>
-                                {numericFormatter(paid.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                                {sumFormatter(paid, false)}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -353,11 +318,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                                           : 'divider'
                                 }
                             >
-                                {outBalance
-                                    ? numericFormatter(outBalance.toFixed(2), {
-                                          thousandSeparator: ' ',
-                                      })
-                                    : ''}
+                                {sumFormatter(outBalance)}
                             </Typography>
                         </Box>
                     </Box>
@@ -388,19 +349,13 @@ export function SalaryReport(props: IFindPositionBalance) {
                                           : ''
                                 }
                             >
-                                {numericFormatter(fundUSC.toFixed(2), {
-                                    thousandSeparator: ' ',
-                                })}
+                                {sumFormatter(fundUSC, false)}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Total')}</Typography>
                             <Typography sx={{ textAlign: 'right' }}>
-                                {companyExpensesTotal
-                                    ? numericFormatter(companyExpensesTotal.toFixed(2), {
-                                          thousandSeparator: ' ',
-                                      })
-                                    : ''}
+                                {sumFormatter(companyExpensesTotal)}
                             </Typography>
                         </Box>
                     </Box>

@@ -1,9 +1,17 @@
-import { PaymentGroup, RecordFlags, WorkingTime, getMaxDate, getMinDate } from '@repo/shared';
+import {
+    CalcMethod,
+    PaymentGroup,
+    RecordFlags,
+    WorkingTime,
+    getMaxDate,
+    getMinDate,
+} from '@repo/shared';
 import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.entity';
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PositionHistory } from '../../../resources/position-history/entities/position-history.entity';
 import { PayrollCalculationService } from '../payrollCalculation.service';
 import { getWorkingTimeFact, getWorkingTimePlan } from '../utils/workingTime';
+import { NotFoundException } from '@nestjs/common';
 
 export function calculateBasics(ctx: PayrollCalculationService) {
     for (const accPeriod of ctx.accPeriods) {
@@ -24,13 +32,19 @@ export function calculateBasics(ctx: PayrollCalculationService) {
             );
             const plan = getWorkingTimePlan(ctx, assignment.workNormId, dateFrom);
             const fact = getWorkingTimeFact(plan, dateFrom, dateTo);
-            payrolls.push(calcBasic(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact));
+            const payroll = makePayroll(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact);
+            const paymentType = ctx.paymentTypes.find((o) => o.id === payroll.paymentTypeId);
+            payroll.factSum = getCalcFunction(paymentType.calcMethod)(payroll);
+            payrolls.push(payroll);
         }
-        ctx.merge(PaymentGroup.BASIC, accPeriod, payrolls);
+        const basicIds = ctx.paymentTypes
+            .filter((o) => o.paymentGroup === PaymentGroup.BASIC)
+            .map((o) => o.id);
+        ctx.merge(basicIds, accPeriod, payrolls);
     }
 }
 
-function calcBasic(
+function makePayroll(
     ctx: PayrollCalculationService,
     assignment: PositionHistory,
     accPeriod: PayPeriod,
@@ -39,7 +53,7 @@ function calcBasic(
     plan: WorkingTime,
     fact: WorkingTime,
 ): Payroll {
-    return Object.assign({
+    const payroll = Object.assign({
         id: ctx.getNextPayrollId(),
         positionId: ctx.position.id,
         payPeriod: ctx.payPeriod.dateFrom,
@@ -53,12 +67,37 @@ function calcBasic(
         rate: assignment.rate,
         factDays: fact.days,
         factHours: fact.hours,
-        factSum: plan.days
-            ? ((assignment.wage * fact.days) / plan.days) * Math.min(1, assignment.rate)
-            : 0,
+        factSum: 0,
         mask1: fact.mask,
         recordFlags: RecordFlags.AUTO,
         planHoursByDay: plan.hoursByDay,
         factHoursByDay: fact.hoursByDay,
     });
+    return payroll;
+}
+
+function getCalcFunction(calcMethod: string): (payroll: Payroll) => number {
+    switch (calcMethod) {
+        case CalcMethod.SALARY:
+            return calcSalary;
+        case CalcMethod.WAGE:
+            return calcWage;
+        case CalcMethod.COMMISSION:
+            return calcCommission;
+    }
+    throw new NotFoundException('Calc method not found.');
+}
+
+function calcSalary(payroll: Payroll) {
+    return payroll.planDays
+        ? ((payroll.planSum * payroll.factDays) / payroll.planDays) * Math.min(1, payroll.rate)
+        : 0;
+}
+
+function calcWage(payroll: Payroll) {
+    return payroll.planSum * payroll.factHours * Math.min(1, payroll.rate);
+}
+
+function calcCommission(payroll: Payroll) {
+    return payroll.planSum;
 }
