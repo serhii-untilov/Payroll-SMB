@@ -1,3 +1,4 @@
+import { PayrollCalculationService } from './../../processor/payrollCalculation/payrollCalculation.service';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -22,6 +23,10 @@ describe('CompaniesController', () => {
                 { provide: UsersService, useValue: createMock<UsersService>() },
                 { provide: UsersCompanyService, useValue: createMock<UsersCompanyService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                {
+                    provide: PayrollCalculationService,
+                    useValue: createMock<PayrollCalculationService>(),
+                },
             ],
         }).compile();
 

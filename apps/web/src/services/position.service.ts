@@ -1,4 +1,11 @@
-import { ICreatePosition, IFindPosition, IPosition, IUpdatePosition } from '@repo/shared';
+import {
+    ICreatePosition,
+    IFindPosition,
+    IFindPositionBalance,
+    IPosition,
+    IPositionBalanceExtended,
+    IUpdatePosition,
+} from '@repo/shared';
 import { api } from '../api';
 import authHeader from './auth-header';
 
@@ -7,8 +14,15 @@ export async function createPosition(position: ICreatePosition): Promise<IPositi
     return response.data;
 }
 
-export async function getPositionList(params: IFindPosition): Promise<IPosition[]> {
-    const response = await api.post('/api/positions/find-all', params, { headers: authHeader() });
+export async function getPositions(params: IFindPosition): Promise<IPosition[]> {
+    const response = await api.post('/api/positions/find', params, { headers: authHeader() });
+    return response.data;
+}
+
+export async function getPositionsBalance(
+    params: IFindPositionBalance,
+): Promise<IPositionBalanceExtended[]> {
+    const response = await api.post('/api/positions/balance', params, { headers: authHeader() });
     return response.data;
 }
 

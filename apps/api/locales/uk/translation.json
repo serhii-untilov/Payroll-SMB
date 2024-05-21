@@ -124,13 +124,13 @@
     "Pay Periods": "Розрахункові періоди",
     "Close": "Закрити",
     "Open": "Відкрити",
-    "In Balance": "Вхідне сальдо",
+    "In Balance": "Вх.залишок",
     "Accruals": "Нараховано",
     "Deductions": "Утримано",
     "Taxes": "Податки",
     "Net Pay": "До виплати",
     "Payments Sum": "Виплачено",
-    "Out Balance": "Вихідне сальдо",
+    "Out Balance": "Вих.залишок",
     "Calculate": "Розрахувати",
     "Add Work Address": "Додати робочу адресу",
     "Add Home Address": "Додати домашню адресу",
@@ -159,5 +159,8 @@
     "Fund USC": "ЄСВ",
     "Total": "Разом",
     "Company Expenses": "Витрати підприємства",
-    "The record has been updated by another user. Try to edit it after reloading.": "Запис оновлено іншим користувачем. Спробуйте відредагувати його після перезавантаження."
+    "The record has been updated by another user. Try to edit it after reloading.": "Запис оновлено іншим користувачем. Спробуйте відредагувати його після перезавантаження.",
+    "Tree View": "Ієрархічна структура",
+    "Debt": "Залишок",
+    "Adjustments": "Доплати"
 }

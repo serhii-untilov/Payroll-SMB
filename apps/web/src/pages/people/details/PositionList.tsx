@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
-import { deletePosition, getPositionList } from '../../../services/position.service';
+import { deletePosition, getPositions } from '../../../services/position.service';
 import useAppContext from '../../../hooks/useAppContext';
 
 export function PositionList(props: IFindPosition) {
@@ -162,7 +162,7 @@ export function PositionList(props: IFindPosition) {
     } = useQuery<IPosition[], Error>({
         queryKey: ['position', 'list', props],
         queryFn: async () => {
-            return (await getPositionList(props)).sort((a, b) =>
+            return (await getPositions(props)).sort((a, b) =>
                 (Number(a.cardNumber) || 2147483647) < (Number(b.cardNumber) || 2147483647)
                     ? -1
                     : (Number(a.cardNumber) || 2147483647) > (Number(b.cardNumber) || 2147483647)

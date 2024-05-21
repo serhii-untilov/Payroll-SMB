@@ -14,7 +14,7 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
-import { IPositionHistory, objectStringDateToShort } from '@repo/shared';
+import { IPositionHistory, deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
@@ -34,7 +34,7 @@ export class PositionHistoryController {
         @Body() payload: CreatePositionHistoryDto,
     ): Promise<IPositionHistory> {
         const userId = req.user['sub'];
-        return await this.positionHistoryService.create(userId, objectStringDateToShort(payload));
+        return await this.positionHistoryService.create(userId, deepStringToShortDate(payload));
     }
 
     @Get()
@@ -70,11 +70,7 @@ export class PositionHistoryController {
         @Body() payload: UpdatePositionHistoryDto,
     ): Promise<IPositionHistory> {
         const userId = req.user['sub'];
-        return await this.positionHistoryService.update(
-            userId,
-            id,
-            objectStringDateToShort(payload),
-        );
+        return await this.positionHistoryService.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')
@@ -98,7 +94,7 @@ export class PositionHistoryController {
         const userId = req.user['sub'];
         const positionList = await this.positionHistoryService.find(
             userId,
-            objectStringDateToShort(params),
+            deepStringToShortDate(params),
         );
         // Will return the last positionHistory record or null
         positionList.sort((a, b) =>

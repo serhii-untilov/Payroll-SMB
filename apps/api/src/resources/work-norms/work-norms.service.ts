@@ -1,22 +1,11 @@
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-    AccessType,
-    HoursByDay,
-    ResourceType,
-    WorkNormFact,
-    WorkNormPlan,
-    WorkNormType,
-    monthBegin,
-    monthEnd,
-    setBit,
-} from '@repo/shared';
+import { AccessType, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNorm } from './entities/work-norm.entity';
-import { add } from 'date-fns';
 
 @Injectable()
 export class WorkNormsService {

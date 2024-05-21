@@ -1,3 +1,4 @@
+import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@repo/testing';
@@ -8,6 +9,8 @@ import { UsersService } from '../users/users.service';
 import { CompaniesService } from '../companies/companies.service';
 import { createMock } from '@golevelup/ts-jest';
 import { AccessService } from '../access/access.service';
+import { PayrollsService } from '../payrolls/payrolls.service';
+import { PositionsService } from '../positions/positions.service';
 
 describe('PayPeriodsService', () => {
     let service: PayPeriodsService;
@@ -21,9 +24,15 @@ describe('PayPeriodsService', () => {
                     provide: getRepositoryToken(PayPeriod),
                     useFactory: repositoryMockFactory,
                 },
+                {
+                    provide: getRepositoryToken(PayPeriodCalcMethod),
+                    useFactory: repositoryMockFactory,
+                },
                 { provide: UsersService, useValue: createMock<UsersService>() },
-                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
+                { provide: PositionsService, useValue: createMock<PositionsService>() },
+                { provide: PayrollsService, useValue: createMock<PayrollsService>() },
             ],
         }).compile();
 

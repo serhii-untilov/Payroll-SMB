@@ -18,13 +18,13 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { SalaryCalculationService } from '../../processor/salaryCalculation/salaryCalculation.service';
+import { PayrollCalculationService } from '../../processor/payrollCalculation/payrollCalculation.service';
 
 @Controller('companies')
 export class CompaniesController {
     constructor(
         private readonly companiesService: CompaniesService,
-        private readonly salaryCalculateService: SalaryCalculationService,
+        private readonly salaryCalculateService: PayrollCalculationService,
     ) {}
 
     @Post()

@@ -7,6 +7,8 @@ import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { Position } from './entities/position.entity';
 import { PositionsService } from './positions.service';
+import { PayrollsService } from '../payrolls/payrolls.service';
+import { PositionBalance } from './entities/position-balance.entity';
 
 describe('PositionsService', () => {
     let service: PositionsService;
@@ -20,8 +22,13 @@ describe('PositionsService', () => {
                     provide: getRepositoryToken(Position),
                     useFactory: repositoryMockFactory,
                 },
+                {
+                    provide: getRepositoryToken(PositionBalance),
+                    useFactory: repositoryMockFactory,
+                },
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
+                { provide: PayrollsService, useValue: createMock<PayrollsService>() },
             ],
         }).compile();
 

@@ -19,7 +19,7 @@ import { UpdatePayrollDto } from './dto/update-payroll.dto';
 import { PayrollsService } from './payrolls.service';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { Request } from 'express';
-import { objectStringDateToShort } from '@repo/shared';
+import { deepStringToShortDate } from '@repo/shared';
 import { FindPayrollDto } from './dto/find-payroll.dto';
 import { Payroll } from './entities/payroll.entity';
 
@@ -32,7 +32,7 @@ export class PayrollsController {
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreatePayrollDto): Promise<Payroll> {
         const userId = req.user['sub'];
-        return await this.payrollsService.create(userId, objectStringDateToShort(payload));
+        return await this.payrollsService.create(userId, deepStringToShortDate(payload));
     }
 
     @Get(':id')
@@ -72,6 +72,6 @@ export class PayrollsController {
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() params: FindPayrollDto): Promise<Payroll[]> {
         const userId = req.user['sub'];
-        return await this.payrollsService.findAll(userId, objectStringDateToShort(params));
+        return await this.payrollsService.findAll(userId, deepStringToShortDate(params));
     }
 }

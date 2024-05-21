@@ -18,8 +18,8 @@ import { calculateBasics } from './calcMethods/calculateBasic';
 import { getPayrollUnionCancel } from './utils/payrollsData';
 
 @Injectable({ scope: Scope.REQUEST })
-export class SalaryCalculationService {
-    private _logger: Logger = new Logger(SalaryCalculationService.name);
+export class PayrollCalculationService {
+    private _logger: Logger = new Logger(PayrollCalculationService.name);
     private _userId: number;
     private _company: Company;
     private _paymentTypes: PaymentType[];
@@ -101,6 +101,8 @@ export class SalaryCalculationService {
             this._position = position;
             await this._calculatePosition();
         }
+        await this.payPeriodsService.updateBalance(this.payPeriod.id);
+        await this.payPeriodsService.updateCalcMethods(this.payPeriod.id);
     }
 
     public async calculatePosition(userId: number, positionId: number) {
@@ -119,6 +121,8 @@ export class SalaryCalculationService {
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculatePosition();
+        await this.payPeriodsService.updateBalance(this.payPeriod.id);
+        await this.payPeriodsService.updateCalcMethods(this.payPeriod.id);
     }
 
     public getNextPayrollId(): number {
@@ -284,6 +288,7 @@ export class SalaryCalculationService {
         this.initNextPayrollId();
         calculateBasics(this); // Base salary (wage)
         await this.save();
+        await this.positionsService.updateBalance(this.position.id, this.payPeriod.dateFrom);
         this._toInsert = [];
         this._toDeleteIds = [];
     }

@@ -58,37 +58,37 @@ export function CompanyPayPeriods(params: Props) {
             width: 180,
             sortable: true,
             valueGetter: (params) => {
-                Number(params.value) === 0 ? '' : params.value;
+                return Number(params.value) === 0 ? '' : params.value;
             },
         },
         {
-            field: 'accrual',
+            field: 'accruals',
             headerName: t('Accruals'),
             type: 'number',
             width: 170,
             sortable: true,
             valueGetter: (params) => {
-                Number(params.value) === 0 ? '' : params.value;
+                return Number(params.value) === 0 ? '' : params.value;
             },
         },
         {
-            field: 'deduction',
+            field: 'deductions',
             headerName: t('Deductions'),
             type: 'number',
             width: 170,
             sortable: true,
             valueGetter: (params) => {
-                Number(params.value) === 0 ? '' : params.value;
+                return Number(params.value) === 0 ? '' : params.value;
             },
         },
         {
-            field: 'tax',
+            field: 'taxes',
             headerName: t('Taxes'),
             type: 'number',
             width: 170,
             sortable: true,
             valueGetter: (params) => {
-                Number(params.value) === 0 ? '' : params.value;
+                return Number(params.value) === 0 ? '' : params.value;
             },
         },
         {
@@ -98,17 +98,21 @@ export function CompanyPayPeriods(params: Props) {
             width: 170,
             sortable: true,
             valueGetter: (params) => {
-                Number(params.value) === 0 ? '' : params.value;
+                const netPay =
+                    Number(params.row.inBalance) +
+                    Number(params.row.accruals) -
+                    (Number(params.row.deductions) - Number(params.row.payments));
+                return netPay === 0 ? '' : netPay;
             },
         },
         {
-            field: 'payment',
+            field: 'payments',
             headerName: t('Payments Sum'),
             type: 'number',
             width: 170,
             sortable: true,
             valueGetter: (params) => {
-                Number(params.value) === 0 ? '' : params.value;
+                return Number(params.value) === 0 ? '' : params.value;
             },
         },
         {
@@ -118,7 +122,7 @@ export function CompanyPayPeriods(params: Props) {
             width: 190,
             sortable: true,
             valueGetter: (params) => {
-                Number(params.value) === 0 ? '' : params.value;
+                return Number(params.value) === 0 ? '' : params.value;
             },
         },
     ];

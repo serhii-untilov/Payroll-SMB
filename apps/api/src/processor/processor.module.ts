@@ -1,12 +1,12 @@
 import { Module, forwardRef } from '@nestjs/common';
+import { PaymentTypesModule } from '../resources/payment-types/payment-types.module';
+import { WorkNormsModule } from '../resources/work-norms/work-norms.module';
 import { AccessModule } from '../resources/access/access.module';
 import { CompaniesModule } from '../resources/companies/companies.module';
 import { PayPeriodsModule } from '../resources/pay-periods/pay-periods.module';
 import { PayrollsModule } from '../resources/payrolls/payrolls.module';
 import { PositionsModule } from '../resources/positions/positions.module';
-import { SalaryCalculationService } from './salaryCalculation/salaryCalculation.service';
-import { WorkNormsModule } from 'src/resources/work-norms/work-norms.module';
-import { PaymentTypesModule } from 'src/resources/payment-types/payment-types.module';
+import { PayrollCalculationService } from './payrollCalculation/payrollCalculation.service';
 
 @Module({
     imports: [
@@ -19,7 +19,7 @@ import { PaymentTypesModule } from 'src/resources/payment-types/payment-types.mo
         forwardRef(() => WorkNormsModule),
     ],
     controllers: [],
-    providers: [SalaryCalculationService],
-    exports: [SalaryCalculationService],
+    providers: [PayrollCalculationService],
+    exports: [PayrollCalculationService],
 })
 export class ProcessorModule {}
