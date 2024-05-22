@@ -1,7 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
-import { IPosition, IPositionHistory, PaymentGroup, maxDate, minDate } from '@repo/shared';
+import {
+    IPosition,
+    IPositionHistory,
+    PaymentGroup,
+    formatDate,
+    maxDate,
+    minDate,
+} from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
@@ -48,8 +55,8 @@ const formSchema = yup.object().shape({
     jobId: yup.number().nullable(),
     workNormId: yup.number().nullable(),
     paymentTypeId: yup.number().nullable(),
-    wage: yup.number().nullable(),
-    rate: yup.number().nullable(),
+    wage: yup.number().nullable().notRequired().optional(),
+    rate: yup.number().nullable().notRequired().optional(),
     positionHistoryVersion: yup.number().nullable(),
 });
 
@@ -135,7 +142,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
         });
     }
 
-    console.log('watch(personId)', watch('personId'));
+    // console.log('watch(personId)', watch('personId'));
 
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) {
@@ -178,6 +185,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
             reset(await getFormData(pos?.id));
             await queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+            await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -253,6 +261,12 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             id="sequenceNumber"
                             label={t('Sequence Number')}
                             type="number"
+                            rules={{
+                                required: false,
+                                validate: () => {
+                                    return true;
+                                },
+                            }}
                         />
                     </Grid>
 
@@ -302,6 +316,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             id="wage"
                             label={t('Wage')}
                             type="number"
+                            defaultValue={0}
                             autoFocus={!!data?.personId}
                         />
                     </Grid>
@@ -312,7 +327,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             id="rate"
                             label={t('Rate')}
                             type="number"
-                            // defaultValue={'1'}
+                            defaultValue={0}
                         />
                     </Grid>
 
@@ -322,7 +337,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             name="dateFrom"
                             id="dateFrom"
                             label={t('Date From')}
-                            // defaultValue={formatDate(minDate())}
+                            defaultValue={formatDate(minDate())}
                         />
                     </Grid>
 
@@ -332,7 +347,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             name="dateTo"
                             id="dateTo"
                             label={t('Date To')}
-                            // defaultValue={formatDate(maxDate())}
+                            defaultValue={formatDate(maxDate())}
                         />
                     </Grid>
                 </Grid>

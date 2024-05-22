@@ -5,6 +5,7 @@ import {
     Injectable,
     forwardRef,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, BalanceWorkingTime, PaymentPart, ResourceType, maxDate } from '@repo/shared';
 import { sub } from 'date-fns';
@@ -24,10 +25,13 @@ import { PayrollsService } from '../payrolls/payrolls.service';
 import { PayPeriodsService } from './../pay-periods/pay-periods.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { FindPositionDto } from './dto/find-position.dto';
+import { FindAllPositionBalanceDto, PositionBalanceExtended } from './dto/position-balance.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionBalance } from './entities/position-balance.entity';
 import { Position } from './entities/position.entity';
-import { FindAllPositionBalanceDto, PositionBalanceExtended } from './dto/position-balance.dto';
+import { PositionCreatedEvent } from './events/position-created.event';
+import { PositionDeletedEvent } from './events/position-deleted.event';
+import { PositionUpdatedEvent } from './events/position-updated.event';
 
 @Injectable()
 export class PositionsService {
@@ -44,7 +48,56 @@ export class PositionsService {
         private accessService: AccessService,
         @Inject(forwardRef(() => PayrollsService))
         private payrollsService: PayrollsService,
+        private eventEmitter: EventEmitter2,
     ) {}
+
+    async availableFindAllOrFail(userId: number, companyId: number) {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableFindOneOrFail(userId: number, id: number) {
+        const record = await this.repositoryPosition.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            record.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableCreateOrFail(userId: number, companyId: number) {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            companyId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+    }
+
+    async availableUpdateOrFail(userId: number, id: number) {
+        const record = await this.repositoryPosition.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            record.companyId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+    }
+
+    async availableDeleteOrFail(userId: number, id: number) {
+        const record = await this.repositoryPosition.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            record.companyId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+    }
 
     async create(userId: number, payload: CreatePositionDto): Promise<Position> {
         if (payload?.cardNumber) {
@@ -57,19 +110,16 @@ export class PositionsService {
                 throw new BadRequestException(`Position '${payload.cardNumber}' already exists.`);
             }
         }
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            payload.companyId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
+
         const cardNumber = payload?.cardNumber || (await this.getNextCardNumber(payload.companyId));
-        return await this.repositoryPosition.save({
+        const created = await this.repositoryPosition.save({
             ...payload,
             cardNumber,
             createdUserId: userId,
             updatedUserId: userId,
         });
+        this.eventEmitter.emit('position.created', new PositionCreatedEvent(userId, created));
+        return created;
     }
 
     async findAll(userId: number, payload: FindPositionDto): Promise<Position[]> {
@@ -84,12 +134,6 @@ export class PositionsService {
             deletedOnly,
             includeDeleted,
         } = payload;
-        this.accessService.availableForUserCompanyOrFail(
-            userId,
-            companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         const options: FindManyOptions<Partial<Position>> = {
             relations: {
                 company: !!relations,
@@ -186,12 +230,6 @@ export class PositionsService {
                     : false,
             },
         });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         if (!(onDate || onPayPeriodDate)) {
             return position;
         }
@@ -233,33 +271,25 @@ export class PositionsService {
 
     async update(userId: number, id: number, payload: UpdatePositionDto): Promise<Position> {
         const record = await this.repositoryPosition.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            record.companyId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
         if (payload.version !== record.version) {
             throw new ConflictException(
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        return await this.repositoryPosition.save({ ...payload, id, updatedUserId: userId });
+        await this.repositoryPosition.save({ ...payload, id, updatedUserId: userId });
+        const updated = await this.repositoryPosition.findOneOrFail({ where: { id } });
+        this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, updated));
+        return updated;
     }
 
     async remove(userId: number, id: number): Promise<Position> {
-        const record = await this.repositoryPosition.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            record.companyId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
-        return await this.repositoryPosition.save({
-            id,
-            deletedUserId: userId,
-            deletedDate: new Date(),
+        await this.repositoryPosition.save({ id, deletedUserId: userId, deletedDate: new Date() });
+        const deleted = await this.repositoryPosition.findOneOrFail({
+            where: { id },
+            withDeleted: true,
         });
+        this.eventEmitter.emit('position.deleted', new PositionDeletedEvent(userId, deleted));
+        return deleted;
     }
 
     async getNextCardNumber(companyId: number): Promise<string> {
@@ -335,12 +365,6 @@ export class PositionsService {
         userId: number,
         params: FindAllPositionBalanceDto,
     ): Promise<PositionBalanceExtended[]> {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            params.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         const payPeriod = await this.payPeriodsService.findOne(userId, {
             where: {
                 companyId: params.companyId,
@@ -380,10 +404,10 @@ export class PositionsService {
                     and ph3."dateFrom" <= $2
                 )
             )
-            inner join department d on d.id = ph."departmentId"
-            inner join job j on j.id = ph."jobId"
-            inner join work_norm wn on wn.id = ph."workNormId"
-            inner join payment_type pt on pt.id = ph."paymentTypeId"
+            left join department d on d.id = ph."departmentId"
+            left join job j on j.id = ph."jobId"
+            left join work_norm wn on wn.id = ph."workNormId"
+            left join payment_type pt on pt.id = ph."paymentTypeId"
             where p."companyId" = $1
                 and pb."payPeriod" = $3`,
             [params.companyId, payPeriod.dateTo, payPeriod.dateFrom],

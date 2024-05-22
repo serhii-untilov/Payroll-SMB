@@ -22,14 +22,15 @@ import { PersonsService } from './persons.service';
 
 @Controller('persons')
 export class PersonsController {
-    constructor(private readonly personsService: PersonsService) {}
+    constructor(private readonly service: PersonsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() person: CreatePersonDto): Promise<IPerson> {
         const userId = req.user['sub'];
-        return await this.personsService.create(userId, person);
+        await this.service.availableCreateOrFail(userId);
+        return await this.service.create(userId, person);
     }
 
     @Get()
@@ -37,7 +38,8 @@ export class PersonsController {
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request): Promise<IPerson[]> {
         const userId = req.user['sub'];
-        return await this.personsService.findAll(userId);
+        await this.service.availableFindAllOrFail(userId);
+        return await this.service.findAll(userId);
     }
 
     @Get(':id')
@@ -45,7 +47,8 @@ export class PersonsController {
     @HttpCode(HttpStatus.OK)
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
         const userId = req.user['sub'];
-        return await this.personsService.findOne(userId, id);
+        await this.service.availableFindOneOrFail(userId);
+        return await this.service.findOne(userId, id);
     }
 
     @Patch(':id')
@@ -57,7 +60,8 @@ export class PersonsController {
         @Body() person: UpdatePersonDto,
     ): Promise<IPerson> {
         const userId = req.user['sub'];
-        return await this.personsService.update(userId, id, person);
+        await this.service.availableUpdateOrFail(userId);
+        return await this.service.update(userId, id, person);
     }
 
     @Delete(':id')
@@ -65,7 +69,8 @@ export class PersonsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
         const userId = req.user['sub'];
-        return await this.personsService.remove(userId, id);
+        await this.service.availableDeleteOrFail(userId);
+        return await this.service.remove(userId, id);
     }
 
     @Post('find')
@@ -73,6 +78,7 @@ export class PersonsController {
     @HttpCode(HttpStatus.OK)
     async find(@Req() req: Request, @Body() person: FindPersonDto): Promise<IPerson | null> {
         const userId = req.user['sub'];
-        return await this.personsService.find(userId, person);
+        await this.service.availableFindOneOrFail(userId);
+        return await this.service.find(userId, person);
     }
 }

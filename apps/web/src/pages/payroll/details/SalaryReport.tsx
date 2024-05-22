@@ -61,6 +61,8 @@ export function SalaryReport(props: IFindPositionBalance) {
                     params.row.firstName,
                     params.row.middleName,
                 );
+                const wage = params.row?.wage;
+                const rate = params.row?.rate;
                 return (
                     <div style={{ width: '100%' }}>
                         <Typography
@@ -72,16 +74,14 @@ export function SalaryReport(props: IFindPositionBalance) {
                         <Typography color="textSecondary">{params.row?.jobName || ''}</Typography>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography
-                                color="textSecondary"
+                                color={wage ? 'textSecondary' : 'warning.main'}
                                 sx={{ fontSize: '1rem', fontWeight: 'medium' }}
                             >
-                                {params.row?.wage
-                                    ? `${sumFormatter(params.row?.wage)} ${unitName}`
-                                    : ''}
+                                {`${sumFormatter(wage, false)} ${unitName}`}
                             </Typography>
-                            {Number(params.row?.rate) !== 1 && (
+                            {Number(rate) !== 1 && (
                                 <Typography sx={{ textAlign: 'right' }} color="warning.main">
-                                    {params.row?.rate || ''}
+                                    {`${t('Rate')}: ${sumFormatter(rate, false)}`}
                                 </Typography>
                             )}
                         </Box>
@@ -142,7 +142,6 @@ export function SalaryReport(props: IFindPositionBalance) {
             },
             renderCell: (params) => {
                 const inBalance = params.row?.inBalance || 0;
-                const wage = params.row?.wage || 0;
                 const compensation = params.row?.basic || 0;
                 return (
                     <Box sx={{ width: '100%' }}>
@@ -154,14 +153,17 @@ export function SalaryReport(props: IFindPositionBalance) {
                                 sx={{ textAlign: 'right' }}
                                 color={inBalance ? 'warning.main' : 'divider'}
                             >
-                                {sumFormatter(inBalance)}
+                                {sumFormatter(inBalance, false)}
                             </Typography>
                         </Box>
 
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Typography>{t('Compensation')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {sumFormatter(compensation)}
+                            <Typography
+                                sx={{ textAlign: 'right' }}
+                                color={compensation ? '' : 'warning.main'}
+                            >
+                                {sumFormatter(compensation, false)}
                             </Typography>
                         </Box>
                     </Box>
@@ -215,6 +217,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             width: 230,
             sortable: true,
             renderCell: (params) => {
+                const accruals = params.row?.accruals || 0;
                 const incomeTax = params.row?.calcMethodBalance.find(
                     (o) => o.calcMethod === CalcMethod.INCOME_TAX,
                 )?.factSum;
@@ -224,44 +227,48 @@ export function SalaryReport(props: IFindPositionBalance) {
                 const otherDeductions = params.row?.other_deductions;
                 return (
                     <Box sx={{ width: '100%' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography
-                                color={!params.row.accruals && !incomeTax ? 'disabled' : ''}
-                            >
-                                {t('Income Tax')}
-                            </Typography>
-                            <Typography
-                                sx={{ textAlign: 'right' }}
-                                color={
-                                    params.row.accruals > 0 && incomeTax <= 0
-                                        ? 'warning.main'
-                                        : !params.row.accruals && !incomeTax
-                                          ? 'disabled'
-                                          : ''
-                                }
-                            >
-                                {sumFormatter(incomeTax)}
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography
-                                color={!params.row.accruals && !militaryTax ? 'disabled' : ''}
-                            >
-                                {t('Military Tax')}
-                            </Typography>
-                            <Typography
-                                sx={{ textAlign: 'right' }}
-                                color={
-                                    params.row.accruals > 0 && militaryTax <= 0
-                                        ? 'warning.main'
-                                        : !params.row.accruals && !militaryTax
-                                          ? 'disabled'
-                                          : ''
-                                }
-                            >
-                                {sumFormatter(militaryTax)}
-                            </Typography>
-                        </Box>
+                        {incomeTax || accruals ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography
+                                    color={!params.row.accruals && !incomeTax ? 'disabled' : ''}
+                                >
+                                    {t('Income Tax')}
+                                </Typography>
+                                <Typography
+                                    sx={{ textAlign: 'right' }}
+                                    color={
+                                        params.row.accruals > 0 && incomeTax <= 0
+                                            ? 'warning.main'
+                                            : !params.row.accruals && !incomeTax
+                                              ? 'disabled'
+                                              : ''
+                                    }
+                                >
+                                    {sumFormatter(incomeTax)}
+                                </Typography>
+                            </Box>
+                        ) : null}
+                        {militaryTax || accruals ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography
+                                    color={!params.row.accruals && !militaryTax ? 'disabled' : ''}
+                                >
+                                    {t('Military Tax')}
+                                </Typography>
+                                <Typography
+                                    sx={{ textAlign: 'right' }}
+                                    color={
+                                        params.row.accruals > 0 && militaryTax <= 0
+                                            ? 'warning.main'
+                                            : !params.row.accruals && !militaryTax
+                                              ? 'disabled'
+                                              : ''
+                                    }
+                                >
+                                    {sumFormatter(militaryTax)}
+                                </Typography>
+                            </Box>
+                        ) : null}
                         {otherDeductions ? (
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography>{t('Other Deductions')}</Typography>
@@ -284,6 +291,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                 return params.row?.wage || '';
             },
             renderCell: (params) => {
+                const accruals = params.row?.accruals || 0;
                 const grossPay =
                     (params.row?.inBalance || 0) +
                     (params.row?.accruals || 0) -
@@ -293,21 +301,29 @@ export function SalaryReport(props: IFindPositionBalance) {
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Gross Pay')}</Typography>
+                            <Typography color={grossPay ? '' : 'divider'}>
+                                {t('Gross Pay')}
+                            </Typography>
                             <Typography
                                 sx={{ textAlign: 'right', fontSize: '1rem', fontWeight: 'medium' }}
+                                color={grossPay ? '' : 'divider'}
                             >
-                                {sumFormatter(grossPay)}
+                                {sumFormatter(grossPay, false)}
                             </Typography>
                         </Box>
+                        {paid || accruals ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography color={paid ? '' : 'divider'}>{t('Paid')}</Typography>
+                                <Typography
+                                    sx={{ textAlign: 'right' }}
+                                    color={paid ? '' : 'divider'}
+                                >
+                                    {sumFormatter(paid, false)}
+                                </Typography>
+                            </Box>
+                        ) : null}
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography color={paid ? '' : 'divider'}>{t('Paid')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }} color={paid ? '' : 'divider'}>
-                                {sumFormatter(paid, false)}
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Debt')}</Typography>
+                            <Typography color={outBalance ? '' : 'divider'}>{t('Debt')}</Typography>
                             <Typography
                                 sx={{ textAlign: 'right' }}
                                 color={
@@ -318,7 +334,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                                           : 'divider'
                                 }
                             >
-                                {sumFormatter(outBalance)}
+                                {sumFormatter(outBalance, false)}
                             </Typography>
                         </Box>
                     </Box>
@@ -337,27 +353,31 @@ export function SalaryReport(props: IFindPositionBalance) {
                 const companyExpensesTotal: number = accruals + fundUSC;
                 return (
                     <Box sx={{ width: '100%' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Fund USC')}</Typography>
-                            <Typography
-                                sx={{ textAlign: 'right' }}
-                                color={
-                                    accruals > 0 && fundUSC <= 0
-                                        ? 'warning.main'
-                                        : !fundUSC
-                                          ? 'divider'
-                                          : ''
-                                }
-                            >
-                                {sumFormatter(fundUSC, false)}
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Total')}</Typography>
-                            <Typography sx={{ textAlign: 'right' }}>
-                                {sumFormatter(companyExpensesTotal)}
-                            </Typography>
-                        </Box>
+                        {fundUSC || accruals ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography>{t('Fund USC')}</Typography>
+                                <Typography
+                                    sx={{ textAlign: 'right' }}
+                                    color={
+                                        accruals > 0 && fundUSC <= 0
+                                            ? 'warning.main'
+                                            : !fundUSC
+                                              ? 'divider'
+                                              : ''
+                                    }
+                                >
+                                    {sumFormatter(fundUSC, false)}
+                                </Typography>
+                            </Box>
+                        ) : null}
+                        {companyExpensesTotal || accruals ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography>{t('Total')}</Typography>
+                                <Typography sx={{ textAlign: 'right' }}>
+                                    {sumFormatter(companyExpensesTotal)}
+                                </Typography>
+                            </Box>
+                        ) : null}
                     </Box>
                 );
             },
@@ -370,7 +390,7 @@ export function SalaryReport(props: IFindPositionBalance) {
         isLoading: isPositionListLoading,
         error: positionListError,
     } = useQuery<IPosition[], Error>({
-        queryKey: ['position', 'list', props],
+        queryKey: ['position', 'balance', props],
         queryFn: async () => {
             return (await getPositionsBalance(props)).sort((a, b) =>
                 (Number(a.cardNumber) || 2147483647) < (Number(b.cardNumber) || 2147483647)

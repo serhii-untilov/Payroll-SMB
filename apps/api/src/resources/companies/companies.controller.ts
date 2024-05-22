@@ -5,6 +5,7 @@ import {
     Get,
     HttpCode,
     HttpStatus,
+    Inject,
     Param,
     ParseIntPipe,
     Patch,
@@ -12,6 +13,7 @@ import {
     Query,
     Req,
     UseGuards,
+    forwardRef,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
@@ -19,11 +21,17 @@ import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { PayrollCalculationService } from '../../processor/payrollCalculation/payrollCalculation.service';
+import { AccessService } from '../access/access.service';
+import { AccessType, ResourceType } from '@repo/shared';
 
 @Controller('companies')
 export class CompaniesController {
     constructor(
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
+        @Inject(forwardRef(() => CompaniesService))
         private readonly companiesService: CompaniesService,
+        @Inject(forwardRef(() => PayrollCalculationService))
         private readonly salaryCalculateService: PayrollCalculationService,
     ) {}
 
@@ -81,6 +89,12 @@ export class CompaniesController {
     @HttpCode(HttpStatus.OK)
     async salaryCalculate(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            id,
+            ResourceType.COMPANY,
+            AccessType.UPDATE,
+        );
         return await this.salaryCalculateService.calculateCompany(userId, id);
     }
 }

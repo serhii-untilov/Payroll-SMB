@@ -66,6 +66,54 @@ export class PayPeriodsService {
         private payrollsService: PayrollsService,
     ) {}
 
+    async availableFindAllOrFail(userId: number, companyId: number) {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableFindOneOrFail(userId: number, id: number) {
+        const record = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            record.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableCreateOrFail(userId: number, companyId: number) {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            companyId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+    }
+
+    async availableUpdateOrFail(userId: number, id: number) {
+        const record = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            record.companyId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+    }
+
+    async availableDeleteOrFail(userId: number, id: number) {
+        const record = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            record.companyId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+    }
+
     async create(userId: number, payload: CreatePayPeriodDto): Promise<PayPeriod> {
         const existing = await this.repositoryPayPeriod.findOneBy({
             companyId: payload.companyId,
@@ -87,12 +135,6 @@ export class PayPeriodsService {
                 `Pay Period '${formatPeriod(payload.dateFrom, payload.dateTo)}' intersects with period '${formatPeriod(intersection.dateFrom, intersection.dateTo)}'.`,
             );
         }
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            payload.companyId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
         return await this.repositoryPayPeriod.save({
             ...payload,
             createdUserId: userId,
@@ -105,12 +147,6 @@ export class PayPeriodsService {
         companyId: number,
         params: FindManyOptions<PayPeriod>,
     ): Promise<PayPeriod[]> {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         params['where']['companyId'] = companyId;
         const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
         const payPeriodList = await this.repositoryPayPeriod.find(options);
@@ -120,14 +156,7 @@ export class PayPeriodsService {
     }
 
     async findOne(userId: number, params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
-        const payPeriod = await this.repositoryPayPeriod.findOneOrFail(params);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            payPeriod.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-        return payPeriod;
+        return await this.repositoryPayPeriod.findOneOrFail(params);
     }
 
     async find(params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
@@ -136,12 +165,6 @@ export class PayPeriodsService {
 
     async update(userId: number, id: number, payload: UpdatePayPeriodDto): Promise<PayPeriod> {
         const record = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            record.companyId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
         if (payload.version !== record.version) {
             throw new ConflictException(
                 'The record has been updated by another user. Try to edit it after reloading.',
@@ -151,18 +174,8 @@ export class PayPeriodsService {
     }
 
     async remove(userId: number, id: number): Promise<PayPeriod> {
-        const payPeriod = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            payPeriod.companyId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
-        return await this.repositoryPayPeriod.save({
-            id,
-            deletedDate: new Date(),
-            deletedUserId: userId,
-        });
+        await this.repositoryPayPeriod.save({ id, deletedDate: new Date(), deletedUserId: userId });
+        return await this.repositoryPayPeriod.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
     async findCurrent(
@@ -180,12 +193,6 @@ export class PayPeriodsService {
                 state: PayPeriodState.OPENED,
             });
         }
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         const company = await this.companiesService.findOne(userId, companyId);
         const options = {
             where: { companyId: company.id, dateFrom: company.payPeriod },

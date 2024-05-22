@@ -7,6 +7,7 @@ import { PayPeriodsModule } from '../resources/pay-periods/pay-periods.module';
 import { PayrollsModule } from '../resources/payrolls/payrolls.module';
 import { PositionsModule } from '../resources/positions/positions.module';
 import { PayrollCalculationService } from './payrollCalculation/payrollCalculation.service';
+import { PositionListenerService } from './listeners/position-listener/position-listener.service';
 
 @Module({
     imports: [
@@ -19,7 +20,7 @@ import { PayrollCalculationService } from './payrollCalculation/payrollCalculati
         forwardRef(() => WorkNormsModule),
     ],
     controllers: [],
-    providers: [PayrollCalculationService],
+    providers: [PayrollCalculationService, PositionListenerService],
     exports: [PayrollCalculationService],
 })
 export class ProcessorModule {}

@@ -11,14 +11,14 @@ import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PositionHistory } from '../../../resources/position-history/entities/position-history.entity';
 import { PayrollCalculationService } from '../payrollCalculation.service';
 import { getWorkingTimeFact, getWorkingTimePlan } from '../utils/workingTime';
-import { NotFoundException } from '@nestjs/common';
 
 export function calculateBasics(ctx: PayrollCalculationService) {
     for (const accPeriod of ctx.accPeriods) {
         const assignments = ctx.position.history.filter(
             (o) =>
                 o.dateFrom.getTime() <= accPeriod.dateTo.getTime() &&
-                o.dateTo.getTime() >= accPeriod.dateFrom.getTime(),
+                o.dateTo.getTime() >= accPeriod.dateFrom.getTime() &&
+                o.paymentTypeId,
         );
         const payrolls: Payroll[] = [];
         for (const assignment of assignments) {
@@ -34,7 +34,8 @@ export function calculateBasics(ctx: PayrollCalculationService) {
             const fact = getWorkingTimeFact(plan, dateFrom, dateTo);
             const payroll = makePayroll(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact);
             const paymentType = ctx.paymentTypes.find((o) => o.id === payroll.paymentTypeId);
-            payroll.factSum = getCalcFunction(paymentType.calcMethod)(payroll);
+            const calcFunction = getCalcFunction(paymentType?.calcMethod);
+            payroll.factSum = calcFunction ? calcFunction(payroll) : 0;
             payrolls.push(payroll);
         }
         const basicIds = ctx.paymentTypes
@@ -85,7 +86,8 @@ function getCalcFunction(calcMethod: string): (payroll: Payroll) => number {
         case CalcMethod.COMMISSION:
             return calcCommission;
     }
-    throw new NotFoundException('Calc method not found.');
+    // throw new NotFoundException('Calc method not found.');
+    return null;
 }
 
 function calcSalary(payroll: Payroll) {

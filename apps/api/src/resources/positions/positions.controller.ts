@@ -18,10 +18,10 @@ import { IPosition, deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePositionDto } from './dto/create-position.dto';
-import { UpdatePositionDto } from './dto/update-position.dto';
-import { PositionsService } from './positions.service';
 import { FindPositionDto } from './dto/find-position.dto';
 import { FindAllPositionBalanceDto } from './dto/position-balance.dto';
+import { UpdatePositionDto } from './dto/update-position.dto';
+import { PositionsService } from './positions.service';
 
 @Controller('positions')
 export class PositionsController {
@@ -30,12 +30,10 @@ export class PositionsController {
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(
-        @Req() req: Request,
-        @Body() createPositionDto: CreatePositionDto,
-    ): Promise<IPosition> {
+    async create(@Req() req: Request, @Body() payload: CreatePositionDto): Promise<IPosition> {
         const userId = req.user['sub'];
-        return await this.positionsService.create(userId, createPositionDto);
+        await this.positionsService.availableCreateOrFail(userId, payload.companyId);
+        return await this.positionsService.create(userId, payload);
     }
 
     @Post('find')
@@ -43,6 +41,7 @@ export class PositionsController {
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() payload: FindPositionDto): Promise<IPosition[]> {
         const userId = req.user['sub'];
+        await this.positionsService.availableFindAllOrFail(userId, payload.companyId);
         return await this.positionsService.findAll(userId, deepStringToShortDate(payload));
     }
 
@@ -56,12 +55,14 @@ export class PositionsController {
         @Query('onDate') onDate: Date,
     ): Promise<IPosition> {
         const userId = req.user['sub'];
-        return await this.positionsService.findOne(
+        const found = await this.positionsService.findOne(
             userId,
             id,
             !!relations,
             onDate ? new Date(onDate) : null,
         );
+        await this.positionsService.availableFindAllOrFail(userId, found.companyId);
+        return found;
     }
 
     @Patch(':id')
@@ -70,10 +71,11 @@ export class PositionsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updatePositionDto: UpdatePositionDto,
+        @Body() payload: UpdatePositionDto,
     ): Promise<IPosition> {
         const userId = req.user['sub'];
-        return await this.positionsService.update(userId, id, updatePositionDto);
+        await this.positionsService.availableUpdateOrFail(userId, id);
+        return await this.positionsService.update(userId, id, payload);
     }
 
     @Delete(':id')
@@ -81,6 +83,7 @@ export class PositionsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPosition> {
         const userId = req.user['sub'];
+        await this.positionsService.availableDeleteOrFail(userId, id);
         return await this.positionsService.remove(userId, id);
     }
 
@@ -92,6 +95,7 @@ export class PositionsController {
         @Body() payload: FindAllPositionBalanceDto,
     ): Promise<IPosition[]> {
         const userId = req.user['sub'];
+        await this.positionsService.availableFindAllOrFail(userId, payload.companyId);
         const response = await this.positionsService.findAllBalance(
             userId,
             deepStringToShortDate(payload),

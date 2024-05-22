@@ -33,6 +33,7 @@ const formSchema = yup.object().shape({
     email: yup.string().nullable(),
     photo: yup.string().nullable(),
     deletedUserId: yup.number().nullable(),
+    version: yup.number().nullable(),
 });
 
 type FormType = yup.InferType<typeof formSchema>;
@@ -59,11 +60,7 @@ export function Personal({ personId }: Props) {
         photo: '',
     };
 
-    const {
-        data: person,
-        isError: isPersonError,
-        error: personError,
-    } = useQuery<FormType, Error>({
+    const { data, isError, error } = useQuery<FormType, Error>({
         queryKey: ['person', { personId }],
         queryFn: async () => {
             return formSchema.cast(await getPerson(personId, true));
@@ -77,8 +74,8 @@ export function Personal({ personId }: Props) {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: person || defaultValues,
-        values: person || defaultValues,
+        defaultValues: data, // || defaultValues,
+        values: data, // || defaultValues,
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -94,21 +91,22 @@ export function Personal({ personId }: Props) {
             enqueueSnackbar(t(formErrors.lastName?.message), { variant: 'error' });
     }, [formErrors, t]);
 
-    if (isPersonError) {
-        return enqueueSnackbar(`${personError.name}\n${personError.message}`, {
+    if (isError) {
+        return enqueueSnackbar(`${error.name}\n${error.message}`, {
             variant: 'error',
         });
     }
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) {
-            reset(person);
+            reset(data);
         }
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const person = data.id
-                ? await updatePerson(data.id, dirtyValues)
+                ? await updatePerson(data.id, { ...dirtyValues, version: data.version })
                 : await createPerson(data);
-            reset(person);
+            const updated = await getPerson(person.id, true);
+            reset(updated);
             queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
@@ -116,12 +114,8 @@ export function Personal({ personId }: Props) {
         }
     };
 
-    const onSave = () => {
-        handleSubmit(onSubmit);
-    };
-
     const onCancel = () => {
-        reset(defaultValues);
+        reset(data);
         queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
     };
 
@@ -145,7 +139,7 @@ export function Personal({ personId }: Props) {
         <>
             <TabLayout>
                 <Toolbar
-                    onSave={isDirty ? onSave : 'disabled'}
+                    onSave={isDirty ? handleSubmit(onSubmit) : 'disabled'}
                     onCancel={isDirty ? onCancel : 'disabled'}
                     onPrint={'disabled'}
                     onExport={'disabled'}

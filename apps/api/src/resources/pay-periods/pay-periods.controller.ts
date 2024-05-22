@@ -29,9 +29,10 @@ export class PayPeriodsController {
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createPayPeriodDto: CreatePayPeriodDto) {
+    async create(@Req() req: Request, @Body() payload: CreatePayPeriodDto) {
         const userId = req.user['sub'];
-        return await this.payPeriodsService.create(userId, createPayPeriodDto);
+        await this.payPeriodsService.availableCreateOrFail(userId, payload.companyId);
+        return await this.payPeriodsService.create(userId, payload);
     }
 
     @Get()
@@ -44,6 +45,7 @@ export class PayPeriodsController {
         @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
     ) {
         const userId = req.user['sub'];
+        await this.payPeriodsService.availableFindAllOrFail(userId, companyId);
         return await this.payPeriodsService.findAll(userId, companyId, {
             where: { companyId },
             relations: { company: !!relations },
@@ -61,6 +63,7 @@ export class PayPeriodsController {
         @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
     ) {
         const userId = req.user['sub'];
+        await this.payPeriodsService.availableFindAllOrFail(userId, companyId);
         return await this.payPeriodsService.findCurrent(
             userId,
             companyId,
@@ -79,6 +82,7 @@ export class PayPeriodsController {
         @Query('fullFieldList', new ParseBoolPipe({ optional: true })) fullFieldList: boolean,
     ) {
         const userId = req.user['sub'];
+        await this.payPeriodsService.availableFindOneOrFail(userId, id);
         return await this.payPeriodsService.findOne(userId, {
             where: { id },
             relations: { company: !!relations },
@@ -95,6 +99,7 @@ export class PayPeriodsController {
         @Body() updatePayPeriodDto: UpdatePayPeriodDto,
     ) {
         const userId = req.user['sub'];
+        await this.payPeriodsService.availableUpdateOrFail(userId, id);
         return await this.payPeriodsService.update(userId, id, updatePayPeriodDto);
     }
 
@@ -103,6 +108,7 @@ export class PayPeriodsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
+        await this.payPeriodsService.availableDeleteOrFail(userId, id);
         return await this.payPeriodsService.remove(userId, id);
     }
 
