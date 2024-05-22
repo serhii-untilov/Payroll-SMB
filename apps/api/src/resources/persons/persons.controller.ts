@@ -39,7 +39,7 @@ export class PersonsController {
     async findAll(@Req() req: Request): Promise<IPerson[]> {
         const userId = req.user['sub'];
         await this.service.availableFindAllOrFail(userId);
-        return await this.service.findAll(userId);
+        return await this.service.findAll();
     }
 
     @Get(':id')
@@ -48,7 +48,7 @@ export class PersonsController {
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
         const userId = req.user['sub'];
         await this.service.availableFindOneOrFail(userId);
-        return await this.service.findOne(userId, id);
+        return await this.service.findOne(id);
     }
 
     @Patch(':id')
@@ -76,9 +76,9 @@ export class PersonsController {
     @Post('find')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async find(@Req() req: Request, @Body() person: FindPersonDto): Promise<IPerson | null> {
+    async find(@Req() req: Request, @Body() params: FindPersonDto): Promise<IPerson | null> {
         const userId = req.user['sub'];
         await this.service.availableFindOneOrFail(userId);
-        return await this.service.find(userId, person);
+        return await this.service.find(params);
     }
 }
