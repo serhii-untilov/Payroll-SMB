@@ -20,7 +20,7 @@ export function getWorkingTimePlan(
     onDate: Date,
 ): WorkingTime {
     const workNorm = ctx.workNorms.find((o) => o.id === workNormId);
-    if (workNorm.type === WorkNormType.WEEKLY) {
+    if (workNorm?.type === WorkNormType.WEEKLY) {
         return getPlanForWeekly(workNorm, onDate);
     }
     return { days: 0, hours: 0, mask: 0, hoursByDay: {} };

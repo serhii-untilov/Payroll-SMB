@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
-import { AccessType, RecordFlags, ResourceType, WorkingTime } from '@repo/shared';
+import { RecordFlags, WorkingTime } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { AccessService } from '../../resources/access/access.service';
 import { CompaniesService } from '../../resources/companies/companies.service';
@@ -15,10 +15,10 @@ import { PositionsService } from '../../resources/positions/positions.service';
 import { WorkNorm } from '../../resources/work-norms/entities/work-norm.entity';
 import { WorkNormsService } from '../../resources/work-norms/work-norms.service';
 import { calculateBasics } from './calcMethods/calculateBasic';
-import { getPayrollUnionCancel } from './utils/payrollsData';
-import { calcBalanceWorkingTime } from './utils/workingTime';
 import { calculateIncomeTax } from './calcMethods/calculateIncomeTax';
 import { calculateMilitaryTax } from './calcMethods/calculateMilitaryTax';
+import { getPayrollUnionCancel } from './utils/payrollsData';
+import { calcBalanceWorkingTime } from './utils/workingTime';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
@@ -96,13 +96,7 @@ export class PayrollCalculationService {
     }
 
     public async calculateCompany(userId: number, companyId: number) {
-        this.logger.log(`calculateCompany: ${companyId}, userId: ${userId}`);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            companyId,
-            ResourceType.COMPANY,
-            AccessType.UPDATE,
-        );
+        this.logger.log(`userId: ${userId}, calculateCompany: ${companyId}`);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
@@ -119,19 +113,28 @@ export class PayrollCalculationService {
             this._position = position;
             await this._calculatePosition();
         }
+        await this._calculateCompanyTotals();
+    }
+
+    public async calculateCompanyTotals(userId: number, companyId: number) {
+        this.logger.log(`userId: ${userId}, calculateCompanyTotals: ${companyId}`);
+        this._userId = userId;
+        this._company = await this.companiesService.findOne(userId, companyId);
+        await this.loadResources();
+        this._payPeriod = await this.payPeriodsService.findOne(userId, {
+            where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
+        });
+        await this._calculateCompanyTotals();
+    }
+
+    private async _calculateCompanyTotals() {
         await this.payPeriodsService.updateBalance(this.payPeriod.id);
         await this.payPeriodsService.updateCalcMethods(this.payPeriod.id);
     }
 
     public async calculatePosition(userId: number, positionId: number) {
-        this.logger.log(`calculatePosition: ${positionId}, userId: ${userId}`);
+        this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
         this._position = await this.positionsService.findOne(userId, positionId, true);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            this.position.companyId,
-            ResourceType.COMPANY,
-            AccessType.UPDATE,
-        );
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
@@ -139,8 +142,7 @@ export class PayrollCalculationService {
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculatePosition();
-        await this.payPeriodsService.updateBalance(this.payPeriod.id);
-        await this.payPeriodsService.updateCalcMethods(this.payPeriod.id);
+        await this._calculateCompanyTotals();
     }
 
     public getNextPayrollId(): number {

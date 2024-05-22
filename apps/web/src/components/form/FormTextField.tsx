@@ -26,7 +26,9 @@ export const FormTextField = (props: FormTextFieldProps) => {
                         autoFocus={props?.autoFocus}
                         size="small"
                         error={error != undefined}
-                        onChange={onChange}
+                        onChange={(e) => {
+                            onChange(e.target.value || props.defaultValue);
+                        }}
                         value={value}
                         fullWidth
                         {...props}

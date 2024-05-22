@@ -3,7 +3,6 @@ import {
     ConflictException,
     Inject,
     Injectable,
-    NotFoundException,
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,6 +25,46 @@ export class PersonsService {
         private accessService: AccessService,
     ) {}
 
+    async availableFindAllOrFail(userId: number) {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableFindOneOrFail(userId: number) {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableCreateOrFail(userId: number) {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+    }
+
+    async availableUpdateOrFail(userId: number) {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+    }
+
+    async availableDeleteOrFail(userId: number) {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+    }
+
     async create(userId: number, payload: CreatePersonDto): Promise<Person> {
         const where: FindPersonDto[] = [
             {
@@ -42,11 +81,6 @@ export class PersonsService {
                 `Person '${payload.firstName} ${payload.lastName}' already exists.`,
             );
         }
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
         return await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -54,59 +88,32 @@ export class PersonsService {
         });
     }
 
-    async findAll(userId: number): Promise<Person[]> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
+    async findAll(): Promise<Person[]> {
         return await this.repository.find();
     }
 
-    async findOne(userId: number, id: number): Promise<Person> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-        const person = await this.repository.findOneBy({ id });
-        if (!person) {
-            throw new NotFoundException(`Person could not be found.`);
-        }
+    async findOne(id: number): Promise<Person> {
+        const person = await this.repository.findOneOrFail({ where: { id } });
         return person;
     }
 
     async update(userId: number, id: number, payload: UpdatePersonDto): Promise<Person> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (payload.version !== record.version) {
             throw new ConflictException(
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        return await this.repository.save({ ...payload, id, updatedUser: userId });
+        await this.repository.save({ ...payload, id, updatedUser: userId });
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: number, id: number): Promise<Person> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
-        await this.repository.findOneOrFail({ where: { id } });
-        return await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
+        await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
+        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
-    async find(userId: number, params: FindPersonDto): Promise<Person | null> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
+    async find(params: FindPersonDto): Promise<Person | null> {
         return await this.repository.findOne({ where: params });
     }
 }

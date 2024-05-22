@@ -5,17 +5,19 @@ import {
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType, castAsPositionHistory } from '@repo/shared';
-import { FindOptionsWhere, Repository, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
+import { add, sub } from 'date-fns';
+import { FindOptionsWhere, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
+import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
+import { FindPositionHistoryDto } from './dto/find-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistory } from './entities/position-history.entity';
-import { FindPositionHistoryDto } from './dto/find-position-history.dto';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
-import { add, sub } from 'date-fns';
+import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 
 @Injectable()
 export class PositionHistoryService {
@@ -30,30 +32,10 @@ export class PositionHistoryService {
         private readonly payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => AccessService))
         private accessService: AccessService,
+        private eventEmitter: EventEmitter2,
     ) {}
 
-    async create(userId: number, payload: CreatePositionHistoryDto): Promise<PositionHistory> {
-        const position = await this.positionsService.findOne(userId, payload.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-        const created = await this.repository.save({
-            ...payload,
-            createdUserId: userId,
-            updatedUserId: userId,
-        });
-        await this.normalizeAfterCreateOrUpdate(userId, created);
-        return created;
-    }
-
-    async findAll(
-        userId: number,
-        positionId: number,
-        relations: boolean = false,
-    ): Promise<PositionHistory[]> {
+    async availableFindAllOrFail(userId: number, positionId: number) {
         const position = await this.positionsService.findOne(userId, positionId);
         await this.accessService.availableForUserCompanyOrFail(
             userId,
@@ -61,6 +43,68 @@ export class PositionHistoryService {
             this.resourceType,
             AccessType.ACCESS,
         );
+    }
+
+    async availableFindOneOrFail(userId: number, positionId: number) {
+        const position = await this.positionsService.findOne(userId, positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableCreateOrFail(userId: number, positionId: number) {
+        const position = await this.positionsService.findOne(userId, positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+    }
+
+    async availableUpdateOrFail(userId: number, id: number) {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        const position = await this.positionsService.findOne(userId, record.positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+    }
+
+    async availableDeleteOrFail(userId: number, id: number) {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        const position = await this.positionsService.findOne(userId, record.positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+    }
+
+    async create(userId: number, payload: CreatePositionHistoryDto): Promise<PositionHistory> {
+        const created = await this.repository.save({
+            ...payload,
+            createdUserId: userId,
+            updatedUserId: userId,
+        });
+        await this.normalizeAfterCreateOrUpdate(userId, created);
+        const record = await this.repository.findOneOrFail({ where: { id: created.id } });
+        const position = await this.positionsService.findOne(userId, record.positionId);
+        this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
+        return record;
+    }
+
+    async findAll(
+        userId: number,
+        positionId: number,
+        relations: boolean = false,
+    ): Promise<PositionHistory[]> {
         return await this.repository.find({
             where: {
                 positionId,
@@ -75,12 +119,8 @@ export class PositionHistoryService {
         });
     }
 
-    async findOne(
-        userId: number,
-        id: number,
-        relations: boolean = false,
-    ): Promise<PositionHistory> {
-        const record = await this.repository.findOne({
+    async findOne(id: number, relations: boolean = false): Promise<PositionHistory> {
+        return await this.repository.findOneOrFail({
             where: { id },
             relations: {
                 position: relations,
@@ -90,17 +130,6 @@ export class PositionHistoryService {
                 paymentType: relations,
             },
         });
-        if (!record) {
-            throw new NotFoundException(`PositionHistory could not be found.`);
-        }
-        const position = await this.positionsService.findOne(userId, record.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-        return record;
     }
 
     async update(
@@ -109,13 +138,6 @@ export class PositionHistoryService {
         payload: UpdatePositionHistoryDto,
     ): Promise<PositionHistory> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        const position = await this.positionsService.findOne(userId, record.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
         if (payload.version !== record.version) {
             throw new ConflictException(
                 'The record has been updated by another user. Try to edit it after reloading.',
@@ -123,35 +145,26 @@ export class PositionHistoryService {
         }
         const updated = await this.repository.save({ ...payload, id, updatedUserId: userId });
         await this.normalizeAfterCreateOrUpdate(userId, updated);
-        return updated;
+        const position = await this.positionsService.findOne(userId, record.positionId);
+        this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
+        return record;
     }
 
     async remove(userId: number, id: number): Promise<PositionHistory> {
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        const position = await this.positionsService.findOne(userId, record.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
         const deleted = await this.repository.save({
             id,
             deletedUserId: userId,
             deletedDate: new Date(),
         });
         await this.normalizeAfterDeleted(userId, deleted);
-        return deleted;
+        const record = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+        const position = await this.positionsService.findOne(userId, record.positionId);
+        this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
+        return record;
     }
 
     async find(userId: number, params: FindPositionHistoryDto): Promise<PositionHistory[]> {
         const position = await this.positionsService.findOne(userId, params.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         const where: FindOptionsWhere<PositionHistory> = castAsPositionHistory(params);
         if (params.onDate) {
             where.dateFrom = LessThanOrEqual(params.onDate);
@@ -179,7 +192,10 @@ export class PositionHistoryService {
         });
     }
 
-    async normalizeAfterCreateOrUpdate(userId: number, record: PositionHistory): Promise<void> {
+    private async normalizeAfterCreateOrUpdate(
+        userId: number,
+        record: PositionHistory,
+    ): Promise<void> {
         const position = await this.positionsService.findOne(userId, record.positionId);
         if (!position) {
             throw new NotFoundException('Position not found.');
@@ -219,7 +235,7 @@ export class PositionHistoryService {
         }
     }
 
-    async normalizeAfterDeleted(userId: number, record: PositionHistory): Promise<void> {
+    private async normalizeAfterDeleted(userId: number, record: PositionHistory): Promise<void> {
         const position = await this.positionsService.findOne(userId, record.positionId);
         if (!position) {
             throw new NotFoundException('Position not found.');
