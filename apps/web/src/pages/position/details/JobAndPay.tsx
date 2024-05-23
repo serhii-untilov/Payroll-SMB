@@ -154,8 +154,8 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
         if (onSubmitCallback) onSubmitCallback();
         const positionData = formData_Position(data);
         const positionHistoryData = formData_PositionHistory(data);
-        const positionDirtyValues = getDirtyValues(dirtyFields, positionData);
-        const positionHistoryDirtyValues = getDirtyValues(dirtyFields, positionHistoryData);
+        const positionDirtyValues = getDirtyValues(dirtyFields, positionData, true);
+        const positionHistoryDirtyValues = getDirtyValues(dirtyFields, positionHistoryData, true);
         try {
             let pos = positionData;
             if (Object.keys(positionDirtyValues).length) {

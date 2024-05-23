@@ -16,12 +16,12 @@ export function getDirtyValues<
     DirtyFields extends Record<string, any>,
     // Values extends Record<keyof DirtyFields, unknown>,
     Values extends Partial<Record<keyof DirtyFields, any>>,
->(dirtyFields: DirtyFields, values: Values): Partial<typeof values> {
+>(dirtyFields: DirtyFields, values: Values, hasOwnPropertyCheck = false): Partial<typeof values> {
     const hasOwnProperty = Object.prototype.hasOwnProperty;
     const dirtyValues = Object.keys(dirtyFields).reduce((prev, key) => {
         // Unsure when RFH sets this to `false`, but omit the field if so.
         if (!dirtyFields[key]) return prev;
-        if (!hasOwnProperty?.call(values, key)) return prev;
+        if (hasOwnPropertyCheck && !hasOwnProperty?.call(values, key)) return prev;
 
         return {
             ...prev,
