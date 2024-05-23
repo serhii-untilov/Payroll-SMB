@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { PositionCreatedEvent } from 'src/resources/positions/events/position-created.event';
+import { PositionCreatedEvent } from '../../../resources/positions/events/position-created.event';
 import { PayrollCalculationService } from './../../payrollCalculation/payrollCalculation.service';
 
 @Injectable()

@@ -9,6 +9,7 @@ import { PositionsController } from './positions.controller';
 import { PositionsService } from './positions.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionBalance } from './entities/position-balance.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('PositionsController', () => {
     let controller: PositionsController;
@@ -30,6 +31,7 @@ describe('PositionsController', () => {
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
+                { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],
         }).compile();
 

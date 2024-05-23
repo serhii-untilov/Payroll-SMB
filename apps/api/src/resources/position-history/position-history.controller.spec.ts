@@ -8,6 +8,7 @@ import { PositionsService } from '../positions/positions.service';
 import { PositionHistory } from './entities/position-history.entity';
 import { PositionHistoryController } from './position-history.controller';
 import { PositionHistoryService } from './position-history.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('PositionHistoryController', () => {
     let controller: PositionHistoryController;
@@ -25,6 +26,7 @@ describe('PositionHistoryController', () => {
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],
         }).compile();
 
