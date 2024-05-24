@@ -133,6 +133,10 @@ replace environment variables in *.locale files and run the application.
 |Cancel                     |Сторно                    |cancel, cancelId   |Cancelled - сторновано, скасовано                                               |
 |Company Debt               |Борг підприємства         |companyDebt        |                                                                                |
 |Employee Debt              |Борг працівника           |employeeDebt       |                                                                                |
+|USC                        |ЄСВ                       |USC                |Unified Social Contribution - Єдиний соціальний внесок                          |
+|Min Wage                   |Мінімальна зарплата       |minWage            |Мінімальна зарплата                                                             |
+|USC to the minimum wage    |ЄСВ доплата до мін ЗП     |minWageUSC         |Supplement to the minimum wage - Доплата до мінімальної зарплати                |
+|Max base USC               |Максимальна баз ЄСВ       |maxBaseUSC         |Максимальна сума оподаткування ЄСВ                                              |
 
 ## Development
 
@@ -230,6 +234,10 @@ npx --workspace @repo/api nest generate resource processor
 npx --workspace @repo/api nest generate service summaryCalculation processor
 npx --workspace @repo/api nest generate service balanceCalculation processor
 npx --workspace @repo/api nest generate service positionListener processor/listeners
+npx --workspace @repo/api nest generate resource fundTypes resources
+npx --workspace @repo/api nest generate resource funds resources
+npx --workspace @repo/api nest generate resource minWage resources
+npx --workspace @repo/api nest generate resource maxBaseUSC resources
 
 ```
 

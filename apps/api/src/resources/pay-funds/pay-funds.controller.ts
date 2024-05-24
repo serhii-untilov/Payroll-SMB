@@ -14,23 +14,23 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
-import { CreatePayrollDto } from './dto/create-payroll.dto';
-import { UpdatePayrollDto } from './dto/update-payroll.dto';
-import { PayrollsService } from './payrolls.service';
+import { CreatePayFundDto } from './dto/create-pay-fund.dto';
+import { UpdatePayFundDto } from './dto/update-pay-fund.dto';
+import { PayFundsService } from './pay-funds.service';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { Request } from 'express';
 import { deepStringToShortDate } from '@repo/shared';
-import { FindPayrollDto } from './dto/find-payroll.dto';
-import { Payroll } from './entities/payroll.entity';
+import { PayFund } from './entities/pay-fund.entity';
+import { FindPayFundDto } from './dto/find-pay-fund.dto';
 
-@Controller('payroll')
-export class PayrollsController {
-    constructor(private readonly service: PayrollsService) {}
+@Controller('fund')
+export class FundsController {
+    constructor(private readonly service: PayFundsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() payload: CreatePayrollDto): Promise<Payroll> {
+    async create(@Req() req: Request, @Body() payload: CreatePayFundDto): Promise<PayFund> {
         const userId = req.user['sub'];
         await this.service.availableCreateOrFail(userId, payload);
         return await this.service.create(userId, deepStringToShortDate(payload));
@@ -43,7 +43,7 @@ export class PayrollsController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
-    ): Promise<Payroll> {
+    ): Promise<PayFund> {
         const userId = req.user['sub'];
         await this.service.availableFindOneOrFail(userId, id);
         return await this.service.findOne(userId, id, relations);
@@ -55,17 +55,17 @@ export class PayrollsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updatePayrollDto: UpdatePayrollDto,
-    ): Promise<Payroll> {
+        @Body() updateFundDto: UpdatePayFundDto,
+    ): Promise<PayFund> {
         const userId = req.user['sub'];
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, updatePayrollDto);
+        return await this.service.update(userId, id, updateFundDto);
     }
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Payroll> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<PayFund> {
         const userId = req.user['sub'];
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
@@ -74,7 +74,7 @@ export class PayrollsController {
     @Post('find-all')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(@Req() req: Request, @Body() params: FindPayrollDto): Promise<Payroll[]> {
+    async findAll(@Req() req: Request, @Body() params: FindPayFundDto): Promise<PayFund[]> {
         const userId = req.user['sub'];
         await this.service.availableFindAllOrFail(userId, params);
         return await this.service.findAll(userId, deepStringToShortDate(params));

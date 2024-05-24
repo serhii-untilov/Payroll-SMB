@@ -17,6 +17,7 @@ import { Job } from './entities/job.entity';
 @Injectable()
 export class JobsService {
     public readonly resourceType = ResourceType.JOB;
+
     constructor(
         @InjectRepository(Job)
         private repository: Repository<Job>,
@@ -59,8 +60,8 @@ export class JobsService {
             this.resourceType,
             AccessType.UPDATE,
         );
-        const job = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== job.version) {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        if (payload.version !== record.version) {
             throw new ConflictException(
                 'The record has been updated by another user. Try to edit it after reloading.',
             );

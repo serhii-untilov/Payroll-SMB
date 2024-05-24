@@ -1,29 +1,28 @@
-import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    forwardRef,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, IPaymentGroupsTotal, IPaymentPartsTotal, ResourceType } from '@repo/shared';
+import {
+    AccessType,
+    IPayFundGroupsTotal,
+    IPayFundCategoriesTotal,
+    ResourceType,
+} from '@repo/shared';
 import { Between, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PositionsService } from '../positions/positions.service';
-import { CreatePayrollDto } from './dto/create-payroll.dto';
-import { FindPayrollDto } from './dto/find-payroll.dto';
-import { UpdatePayrollDto } from './dto/update-payroll.dto';
-import { Payroll } from './entities/payroll.entity';
-import { defaultPaymentPartsTotal, defaultPaymentGroupsTotal } from '@repo/shared';
+import { CreatePayFundDto } from './dto/create-pay-fund.dto';
+import { FindPayFundDto } from './dto/find-pay-fund.dto';
+import { UpdatePayFundDto } from './dto/update-pay-fund.dto';
+import { PayFund } from './entities/pay-fund.entity';
+import { defaultPayFundCategoriesTotal, defaultPayFundGroupsTotal } from '@repo/shared';
 
 @Injectable()
-export class PayrollsService {
-    public readonly resourceType = ResourceType.PAYROLL;
+export class PayFundsService {
+    public readonly resourceType = ResourceType.PAY_FUND;
 
     constructor(
-        @InjectRepository(Payroll)
-        private repository: Repository<Payroll>,
+        @InjectRepository(PayFund)
+        private repository: Repository<PayFund>,
         @Inject(forwardRef(() => AccessService))
         private accessService: AccessService,
         @Inject(forwardRef(() => PositionsService))
@@ -32,7 +31,7 @@ export class PayrollsService {
         private companiesService: CompaniesService,
     ) {}
 
-    async availableFindAllOrFail(userId: number, params: FindPayrollDto) {
+    async availableFindAllOrFail(userId: number, params: FindPayFundDto) {
         const { positionId, companyId } = params;
         if (!positionId && !companyId) {
             throw new BadRequestException('Should be defined companyId or positionId');
@@ -66,7 +65,7 @@ export class PayrollsService {
         );
     }
 
-    async availableCreateOrFail(userId: number, payload: CreatePayrollDto) {
+    async availableCreateOrFail(userId: number, payload: CreatePayFundDto) {
         const position = await this.positionsService.findOne(userId, payload.positionId);
         await this.accessService.availableForUserCompanyOrFail(
             userId,
@@ -125,7 +124,7 @@ export class PayrollsService {
         }
     }
 
-    async create(userId: number, payload: CreatePayrollDto): Promise<Payroll> {
+    async create(userId: number, payload: CreatePayFundDto): Promise<PayFund> {
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -134,7 +133,7 @@ export class PayrollsService {
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(userId: number, params: FindPayrollDto): Promise<Payroll[]> {
+    async findAll(userId: number, params: FindPayFundDto): Promise<PayFund[]> {
         const { positionId, companyId, relations, ...other } = params;
         if (!positionId && !companyId) {
             throw new BadRequestException('Should be defined companyId or positionId');
@@ -147,18 +146,17 @@ export class PayrollsService {
             },
             relations: {
                 position: relations,
-                paymentType: relations,
+                payFundType: relations,
             },
         });
     }
 
     async findBetween(
-        userId: number,
         positionId: number,
         dateFrom: Date,
         dateTo: Date,
         relations?: boolean,
-    ): Promise<Payroll[]> {
+    ): Promise<PayFund[]> {
         return await this.repository.find({
             where: {
                 positionId,
@@ -166,160 +164,153 @@ export class PayrollsService {
             },
             relations: {
                 position: relations,
-                paymentType: relations,
+                payFundType: relations,
             },
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean): Promise<Payroll> {
-        const payroll = await this.repository.findOneOrFail({
+    async findOne(userId: number, id: number, relations: boolean): Promise<PayFund> {
+        return await this.repository.findOneOrFail({
             where: { id },
-            relations: { position: relations, paymentType: relations },
+            relations: { position: relations, payFundType: relations },
         });
-        return payroll;
     }
 
-    async update(userId: number, id: number, payload: UpdatePayrollDto): Promise<Payroll> {
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+    async update(userId: number, id: number, payload: UpdatePayFundDto): Promise<PayFund> {
         await this.repository.save({ ...payload, id, updatedUserId: userId });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<Payroll> {
+    async remove(userId: number, id: number) {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async delete(userId: number, id: number) {
         await this.repository.delete(id);
     }
 
-    async payrollPositionPaymentParts(
+    async payFundPositionPayFundCategories(
         positionId: number,
         payPeriod: Date,
-    ): Promise<IPaymentPartsTotal> {
+    ): Promise<IPayFundCategoriesTotal> {
         const records = await this.repository
-            .createQueryBuilder('payroll')
-            .select('paymentType.paymentPart', 'paymentPart')
-            .addSelect('SUM(payroll.factSum)', 'factSum')
-            .innerJoin('payroll.paymentType', 'paymentType')
-            .where('payroll.positionId = :positionId', { positionId })
-            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
-            .groupBy('paymentType.paymentPart')
+            .createQueryBuilder('pay-fund')
+            .select('pay-fund-type.payFundCategory', 'payFundCategory')
+            .addSelect('SUM(pay-fund.paySum)', 'paySum')
+            .innerJoin('pay-fund.payFundType', 'payFundType')
+            .where('pay-fund.positionId = :positionId', { positionId })
+            .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('payFundType.payFundCategory')
             .getRawMany();
         return {
-            ...defaultPaymentPartsTotal,
+            ...defaultPayFundCategoriesTotal,
             ...records.reduce((a, b) => {
-                a[b.paymentPart] = Number(b.factSum);
+                a[b.payFundCategory] = Number(b.paySum);
                 return a;
             }, {}),
         };
     }
 
-    async payrollPositionPaymentGroups(
+    async payFundPositionPayFundGroups(
         positionId: number,
         payPeriod: Date,
-    ): Promise<IPaymentGroupsTotal> {
+    ): Promise<IPayFundGroupsTotal> {
         const records = await this.repository
-            .createQueryBuilder('payroll')
-            .select('paymentType.paymentGroup', 'paymentGroup')
-            .addSelect('SUM(payroll.factSum)', 'factSum')
-            .innerJoin('payroll.paymentType', 'paymentType')
-            .where('payroll.positionId = :positionId', { positionId })
-            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
-            .groupBy('paymentType.paymentGroup')
+            .createQueryBuilder('pay-fund')
+            .select('payFundType.payFundGroup', 'payFundGroup')
+            .addSelect('SUM(pay-fund.paySum)', 'paySum')
+            .innerJoin('pay-fund.payFundType', 'payFundType')
+            .where('pay-fund.positionId = :positionId', { positionId })
+            .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('payFundType.payFundGroup')
             .getRawMany();
         return {
-            ...defaultPaymentGroupsTotal,
+            ...defaultPayFundGroupsTotal,
             ...records.reduce((a, b) => {
-                a[b.paymentGroup] = Number(b.factSum);
+                a[b.payFundGroup] = Number(b.paySum);
                 return a;
             }, {}),
         };
     }
 
-    async payrollCompanyPaymentParts(
+    async payFundCompanyPayFundCategories(
         companyId: number,
         payPeriod: Date,
-    ): Promise<IPaymentPartsTotal> {
+    ): Promise<IPayFundCategoriesTotal> {
         const records = await this.repository
-            .createQueryBuilder('payroll')
-            .select('paymentType.paymentPart', 'paymentPart')
-            .addSelect('SUM(payroll.factSum)', 'factSum')
-            .innerJoin('payroll.paymentType', 'paymentType')
-            .innerJoin('payroll.position', 'position')
+            .createQueryBuilder('pay-fund')
+            .select('payFundType.payFundCategory', 'payFundCategory')
+            .addSelect('SUM(pay-fund.paySum)', 'paySum')
+            .innerJoin('pay-fund.payFundType', 'payFundType')
+            .innerJoin('pay-fund.position', 'position')
             .where('position.companyId = :companyId', { companyId })
-            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
-            .groupBy('paymentType.paymentPart')
+            .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('payFundType.payFundPart')
             .getRawMany();
         return {
-            ...defaultPaymentPartsTotal,
+            ...defaultPayFundCategoriesTotal,
             ...records.reduce((a, b) => {
-                a[b.paymentPart] = Number(b.factSum);
+                a[b.payFundPart] = Number(b.factSum);
                 return a;
             }, {}),
         };
     }
 
-    async payrollCompanyPaymentGroups(
+    async payFundCompanyPayFundGroups(
         companyId: number,
         payPeriod: Date,
-    ): Promise<IPaymentGroupsTotal> {
+    ): Promise<IPayFundGroupsTotal> {
         const records = await this.repository
-            .createQueryBuilder('payroll')
-            .select('paymentType.paymentGroup', 'paymentGroup')
-            .addSelect('SUM(payroll.factSum)', 'factSum')
-            .innerJoin('payroll.paymentType', 'paymentType')
-            .innerJoin('payroll.position', 'position')
+            .createQueryBuilder('pay-fund')
+            .select('payFundType.payFundGroup', 'payFundGroup')
+            .addSelect('SUM(fund.paySum)', 'paySum')
+            .innerJoin('pay-fund.payFundType', 'payFundType')
+            .innerJoin('pay-fund.position', 'position')
             .where('position.companyId = :companyId', { companyId })
-            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
-            .groupBy('paymentType.paymentGroup')
+            .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('payFundType.payFundGroup')
             .getRawMany();
         return {
-            ...defaultPaymentGroupsTotal,
+            ...defaultPayFundGroupsTotal,
             ...records.reduce((a, b) => {
-                a[b.paymentGroup] = Number(b.factSum);
+                a[b.payFundGroup] = Number(b.factSum);
                 return a;
             }, {}),
         };
     }
 
-    async payrollCompanyCalcMethods(
+    async payFundCompanyCalcMethods(
         companyId: number,
         payPeriod: Date,
     ): Promise<{ calcMethod: string; factSum: number }[]> {
         return await this.repository
-            .createQueryBuilder('payroll')
-            .select('paymentType.calcMethod', 'calcMethod')
-            .addSelect('SUM(payroll.factSum)', 'factSum')
-            .innerJoin('payroll.paymentType', 'paymentType')
-            .innerJoin('payroll.position', 'position')
+            .createQueryBuilder('pay-fund')
+            .select('payFundType.calcMethod', 'calcMethod')
+            .addSelect('SUM(pay-fund.paySum)', 'paySum')
+            .innerJoin('pay-fund.payFundType', 'payFundType')
+            .innerJoin('pay-fund.position', 'position')
             .where('position.companyId = :companyId', { companyId })
-            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
-            .groupBy('paymentType.calcMethod')
+            .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('payFundType.calcMethod')
             .getRawMany();
     }
 
-    async payrollCompanyCalcMethodsByPositions(
+    async fundCompanyCalcMethodsByPositions(
         companyId: number,
         payPeriod: Date,
     ): Promise<{ positionId: number; calcMethod: string; factSum: number }[]> {
         return await this.repository
-            .createQueryBuilder('payroll')
-            .select('payroll.positionId', 'positionId')
-            .addSelect('paymentType.calcMethod', 'calcMethod')
-            .addSelect('SUM(payroll.factSum)', 'factSum')
-            .innerJoin('payroll.paymentType', 'paymentType')
-            .innerJoin('payroll.position', 'position')
+            .createQueryBuilder('pay-fund')
+            .select('pay-fund.positionId', 'positionId')
+            .addSelect('payFundType.calcMethod', 'calcMethod')
+            .addSelect('SUM(pay-fund.paySum)', 'paySum')
+            .innerJoin('pay-fund.payFundType', 'payFundType')
+            .innerJoin('pay-fund.position', 'position')
             .where('position.companyId = :companyId', { companyId })
-            .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
-            .groupBy('payroll.positionId')
-            .addGroupBy('paymentType.calcMethod')
+            .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
+            .groupBy('pay-fund.positionId')
+            .addGroupBy('payFundType.calcMethod')
             .getRawMany();
     }
 }
