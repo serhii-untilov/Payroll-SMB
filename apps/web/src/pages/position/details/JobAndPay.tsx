@@ -17,6 +17,7 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { FormDateField } from '../../../components/form/FormDateField';
+import { FormNumberField } from '../../../components/form/FormNumberField';
 import { FormTextField } from '../../../components/form/FormTextField';
 import TabLayout from '../../../components/layout/TabLayout';
 import { Toolbar } from '../../../components/layout/Toolbar';
@@ -34,6 +35,7 @@ import {
     updatePositionHistory,
 } from '../../../services/positionHistory.service';
 import { getDirtyValues } from '../../../services/utils';
+import { FormSequenceField } from '../../../components/form/FormSequenceField';
 
 const formSchema = yup.object().shape({
     // Position
@@ -256,7 +258,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                         />
                     </Grid>
                     <Grid item xs={12} sm={3}>
-                        <FormTextField
+                        <FormSequenceField
                             control={control}
                             name="sequenceNumber"
                             id="sequenceNumber"
@@ -311,24 +313,29 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={3}>
-                        <FormTextField
+                        <FormNumberField
                             control={control}
                             name="wage"
                             id="wage"
                             label={t('Wage')}
-                            type="number"
-                            defaultValue={0}
+                            // type="number"
+                            // defaultValue={0}
+                            step={500}
+                            min={0}
                             autoFocus={!!data?.personId}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <FormTextField
+                        <FormNumberField
                             control={control}
                             name="rate"
                             id="rate"
                             label={t('Rate')}
-                            type="number"
-                            defaultValue={0}
+                            // type="number"
+                            // defaultValue={0}
+                            step={0.25}
+                            min={0}
+                            max={2}
                         />
                     </Grid>
 

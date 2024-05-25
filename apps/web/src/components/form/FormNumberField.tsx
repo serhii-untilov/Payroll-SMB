@@ -4,16 +4,19 @@ import { grey } from '@mui/material/colors';
 import { Controller } from 'react-hook-form';
 import { InputLabel } from '../layout/InputLabel';
 
-export type FormTextFieldProps = OutlinedInputProps & {
+export type Props = OutlinedInputProps & {
     name: string;
     control: any;
     label: string;
     rules?: any;
     autoFocus?: boolean;
+    step?: number;
+    min?: number;
+    max?: number;
 };
 
-export const FormTextField = (props: FormTextFieldProps) => {
-    const { label } = props;
+export const FormNumberField = (props: Props) => {
+    const { label, step, min, max, name, control, rules, autoFocus, ...other } = props;
     return (
         <>
             <InputLabel>{label}</InputLabel>
@@ -25,17 +28,20 @@ export const FormTextField = (props: FormTextFieldProps) => {
                     <OutlinedInput
                         autoFocus={props?.autoFocus}
                         size="small"
+                        type="number"
+                        inputProps={{
+                            // maxLength: 13,
+                            step: step || 1,
+                            min: min,
+                            max: max,
+                        }}
                         error={error != undefined}
                         onChange={(e) => {
-                            onChange(
-                                e.target.value ||
-                                    props.defaultValue ||
-                                    (props.type === 'number' ? 0 : ''),
-                            );
+                            onChange(e.target.value || 0);
                         }}
                         value={value || ''}
                         fullWidth
-                        {...props}
+                        {...other}
                         label=""
                     />
                 )}
