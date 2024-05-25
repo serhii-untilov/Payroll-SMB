@@ -348,25 +348,25 @@ export function SalaryReport(props: IFindPositionBalance) {
             width: 240,
             sortable: true,
             renderCell: (params) => {
-                const fundUSC: number = 0;
+                const fundECB: number = 0;
                 const accruals = params.row?.accruals || 0;
-                const companyExpensesTotal: number = accruals + fundUSC;
+                const companyExpensesTotal: number = accruals + fundECB;
                 return (
                     <Box sx={{ width: '100%' }}>
-                        {fundUSC || accruals ? (
+                        {fundECB || accruals ? (
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography>{t('Fund USC')}</Typography>
+                                <Typography>{t('Fund ECB')}</Typography>
                                 <Typography
                                     sx={{ textAlign: 'right' }}
                                     color={
-                                        accruals > 0 && fundUSC <= 0
+                                        accruals > 0 && fundECB <= 0
                                             ? 'warning.main'
-                                            : !fundUSC
+                                            : !fundECB
                                               ? 'divider'
                                               : ''
                                     }
                                 >
-                                    {sumFormatter(fundUSC, false)}
+                                    {sumFormatter(fundECB, false)}
                                 </Typography>
                             </Box>
                         ) : null}

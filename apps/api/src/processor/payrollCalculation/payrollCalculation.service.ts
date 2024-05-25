@@ -17,8 +17,8 @@ import { WorkNormsService } from '../../resources/work-norms/work-norms.service'
 import { calculateBasics } from './calcMethods/calculateBasic';
 import { calculateIncomeTax } from './calcMethods/calculateIncomeTax';
 import { calculateMilitaryTax } from './calcMethods/calculateMilitaryTax';
-import { getPayrollUnionCancel } from './utils/payrollsData';
-import { calcBalanceWorkingTime } from './utils/workingTime';
+import { getPayrollUnionRecord } from './helpers/payrollsData';
+import { calcBalanceWorkingTime } from './helpers/workingTime';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
@@ -173,7 +173,7 @@ export class PayrollCalculationService {
                 toInsert.push(Object.assign({ ...record, id: this.getNextPayrollId() }));
             } else {
                 processedIds.push(found.id); // memorize to avoid cancelling the found record
-                const foundUnionCancel = getPayrollUnionCancel(
+                const foundUnionCancel = getPayrollUnionRecord(
                     found,
                     this.payrolls,
                     this.payPeriod,
@@ -249,7 +249,7 @@ export class PayrollCalculationService {
             ) {
                 toDeleteIds.push(record.id);
             } else {
-                const recordUnionCancel = getPayrollUnionCancel(
+                const recordUnionCancel = getPayrollUnionRecord(
                     record,
                     this.payrolls,
                     this.payPeriod,

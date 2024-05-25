@@ -9,6 +9,7 @@ import { UsersService } from '../users/users.service';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
 import { AccessService } from '../access/access.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('CompaniesService', () => {
     let service: CompaniesService;
@@ -22,6 +23,7 @@ describe('CompaniesService', () => {
                 { provide: UsersService, useValue: createMock<UsersService>() },
                 { provide: UsersCompanyService, useValue: createMock<UsersCompanyService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],
         }).compile();
 

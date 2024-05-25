@@ -1,6 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { PayFundsService } from './pay-funds.service';
-import { FundsController } from './pay-funds.controller';
+import { PayFundsController } from './pay-funds.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PayFund } from './entities/pay-fund.entity';
 import { PositionsModule } from '../positions/positions.module';
@@ -14,8 +14,8 @@ import { CompaniesModule } from '../companies/companies.module';
         forwardRef(() => CompaniesModule),
         forwardRef(() => AccessModule),
     ],
-    controllers: [FundsController],
+    controllers: [PayFundsController],
     providers: [PayFundsService],
     exports: [PayFundsService],
 })
-export class FundsModule {}
+export class PayFundsModule {}

@@ -9,6 +9,7 @@ import { UsersService } from '../users/users.service';
 import { CompaniesController } from './companies.controller';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('CompaniesController', () => {
     let controller: CompaniesController;
@@ -23,6 +24,7 @@ describe('CompaniesController', () => {
                 { provide: UsersService, useValue: createMock<UsersService>() },
                 { provide: UsersCompanyService, useValue: createMock<UsersCompanyService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
                 {
                     provide: PayrollCalculationService,
                     useValue: createMock<PayrollCalculationService>(),

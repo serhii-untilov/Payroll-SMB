@@ -16,11 +16,11 @@ import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
 import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';
-import { FundTypesService } from './pay-fund-types.service';
+import { PayFundTypesService } from './pay-fund-types.service';
 
-@Controller('fund-types')
-export class FundTypesController {
-    constructor(private readonly service: FundTypesService) {}
+@Controller('pay-fund-types')
+export class PayFundTypesController {
+    constructor(private readonly service: PayFundTypesService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)

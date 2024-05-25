@@ -129,14 +129,14 @@ replace environment variables in *.locale files and run the application.
 |Checking account           |Поточний рахунок          |checkingAccount    |Поточний розрахунковий рахунок                                                  |
 |Total Earned               |Разом нараховано          |totalEarned        |                                                                                |
 |Total Deducted             |Разом утримано            |totalDeducted      |                                                                                |
-|Unified Social Contribution|Єдиний соціальний внесок  |fundUSC            |                                                                                |
+|Unified Social Contribution|Єдиний соціальний внесок  |fundECB            |                                                                                |
 |Cancel                     |Сторно                    |cancel, cancelId   |Cancelled - сторновано, скасовано                                               |
 |Company Debt               |Борг підприємства         |companyDebt        |                                                                                |
 |Employee Debt              |Борг працівника           |employeeDebt       |                                                                                |
-|USC                        |ЄСВ                       |USC                |Unified Social Contribution - Єдиний соціальний внесок                          |
+|USC                        |ЄСВ                       |ECB                |Unified Social Contribution - Єдиний соціальний внесок                          |
 |Min Wage                   |Мінімальна зарплата       |minWage            |Мінімальна зарплата                                                             |
-|USC to the minimum wage    |ЄСВ доплата до мін ЗП     |minWageUSC         |Supplement to the minimum wage - Доплата до мінімальної зарплати                |
-|Max base USC               |Максимальна баз ЄСВ       |maxBaseUSC         |Максимальна сума оподаткування ЄСВ                                              |
+|USC to the minimum wage    |ЄСВ доплата до мін ЗП     |minWageECB         |Supplement to the minimum wage - Доплата до мінімальної зарплати                |
+|Max base USC               |Максимальна баз ЄСВ       |maxBaseECB         |Максимальна сума оподаткування ЄСВ                                              |
 
 ## Development
 
@@ -168,6 +168,7 @@ npm i --workspace @repo/api --save-dev @golevelup/ts-jest
 npm i --workspace @repo/api --save-dev webpack-node-externals run-script-webpack-plugin webpack
 npm i --workspace @repo/api --save-dev webpack webpack-cli
 npm i --workspace @repo/api --save @nestjs/event-emitter
+npm i --workspace @repo/api --save-dev tsconfig-paths
 
 # Init "web" application for front-end
 #npm i --workspace @repo/web --save react-query
@@ -193,6 +194,7 @@ npm i --workspace @repo/web --save-dev rollup-plugin-visualizer
 npm i --workspace @repo/web --save react-error-boundary
 npm i --workspace @repo/web --save date-fns
 npm i --workspace @repo/web --save react-number-format
+// npm i --workspace @repo/web --save module-alias
 
 # Init "shared" library for common types and interfaces
 mkdir packages/shared
@@ -237,7 +239,9 @@ npx --workspace @repo/api nest generate service positionListener processor/liste
 npx --workspace @repo/api nest generate resource fundTypes resources
 npx --workspace @repo/api nest generate resource funds resources
 npx --workspace @repo/api nest generate resource minWage resources
-npx --workspace @repo/api nest generate resource maxBaseUSC resources
+npx --workspace @repo/api nest generate resource maxBaseECB resources
+npx --workspace @repo/api nest generate service payFundCalculation processor
+npx --workspace @repo/api nest generate service companyListener processor/listeners
 
 ```
 

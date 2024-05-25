@@ -24,7 +24,7 @@ import { PayFund } from './entities/pay-fund.entity';
 import { FindPayFundDto } from './dto/find-pay-fund.dto';
 
 @Controller('fund')
-export class FundsController {
+export class PayFundsController {
     constructor(private readonly service: PayFundsService) {}
 
     @Post()

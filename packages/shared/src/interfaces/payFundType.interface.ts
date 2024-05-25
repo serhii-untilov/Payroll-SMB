@@ -1,7 +1,7 @@
 import { ILogger } from './logger.interface';
 
 export enum PayFundGroup {
-    USC = 'USC',
+    ECB = 'ECB',
     CUSTOM = 'custom',
 }
 
@@ -13,13 +13,13 @@ export enum PayFundCategory {
 }
 
 export enum PayFundCalcMethod {
-    USC_SALARY = 'USC-salary',
-    USC_COMMISSION = 'USC-commission',
-    USC_MIN_WAGE = 'USC-min-wage',
-    USC_SICK_BY_COMPANY = 'USC-sick-by-company',
-    USC_SICK_BY_SIF = 'USC-sick-by-SIF',
-    USC_MATERNITY = 'USC-maternity',
-    USC_VACATION = 'USC-vacation',
+    ECB_VACATION = 'ECB-vacation',
+    ECB_SALARY = 'ECB-salary',
+    ECB_COMMISSION = 'ECB-commission',
+    ECB_SICK_BY_COMPANY = 'ECB-sick-by-company',
+    ECB_SICK_BY_SIF = 'ECB-sick-by-SIF',
+    ECB_MATERNITY = 'ECB-maternity',
+    ECB_MIN_WAGE = 'ECB-min-wage',
     CUSTOM = 'custom',
 }
 
@@ -35,7 +35,7 @@ export interface IPayFundType extends ILogger {
     group: string; // See enum PayFundGroup
     calcMethod: string; // See enum PayFundCalcMethod
     sequence: number;
-    description: string;
+    description?: string;
 }
 
 export type ICreatePayFundType = Omit<
@@ -78,11 +78,11 @@ export const defaultPayFundCategoriesTotal: IPayFundCategoriesTotal = {
 };
 
 export type IPayFundGroupsTotal = {
-    USC?: number;
+    ECB?: number;
     custom?: number;
 };
 
 export const defaultPayFundGroupsTotal: IPayFundGroupsTotal = {
-    USC: 0,
+    ECB: 0,
     custom: 0,
 };

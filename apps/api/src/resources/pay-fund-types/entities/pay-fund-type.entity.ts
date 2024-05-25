@@ -19,6 +19,6 @@ export class PayFundType extends Logger implements IPayFundType {
     @Column({ type: 'integer' })
     sequence: number;
 
-    @Column({ type: 'varchar', length: 300 })
-    description: string;
+    @Column({ type: 'varchar', length: 300, nullable: true })
+    description?: string;
 }

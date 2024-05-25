@@ -26,7 +26,6 @@ export * from './interfaces/access.interface';
 export * from './interfaces/payroll.interface';
 export * from './interfaces/payFundType.interface';
 export * from './interfaces/payFund.interface';
-export * from './interfaces/maxBaseUSC.interface';
 export * from './interfaces/minWage.interface';
 export * from './utils/date';
 export * from './utils/bitwise';

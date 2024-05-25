@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { FundsController } from './pay-funds.controller';
+import { PayFundsController } from './pay-funds.controller';
 import { PayFundsService } from './pay-funds.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { PayFund } from './entities/pay-fund.entity';
@@ -10,11 +10,11 @@ import { AccessService } from '../access/access.service';
 import { createMock } from '@golevelup/ts-jest';
 
 describe('FundController', () => {
-    let controller: FundsController;
+    let controller: PayFundsController;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [FundsController],
+            controllers: [PayFundsController],
             providers: [
                 PayFundsService,
                 {
@@ -27,7 +27,7 @@ describe('FundController', () => {
             ],
         }).compile();
 
-        controller = module.get<FundsController>(FundsController);
+        controller = module.get<PayFundsController>(PayFundsController);
     });
 
     it('should be defined', () => {

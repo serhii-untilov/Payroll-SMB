@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from '../../../resources/abstract/logger.abstract';
 import { IMinWage } from '@repo/shared';
 
 @Entity()
+@Index('MIN_WAGE_DATE_FROM_INDEX', ['dateFrom', 'dateTo', 'paySum'], { unique: true })
 export class MinWage extends Logger implements IMinWage {
     @PrimaryGeneratedColumn('increment')
     id: number;
@@ -15,4 +16,11 @@ export class MinWage extends Logger implements IMinWage {
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     paySum: number;
+
+    @AfterLoad()
+    transform() {
+        this.dateFrom = new Date(this.dateFrom);
+        this.dateTo = new Date(this.dateTo);
+        this.paySum = Number(this.paySum);
+    }
 }

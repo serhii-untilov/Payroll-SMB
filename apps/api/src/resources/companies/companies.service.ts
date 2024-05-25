@@ -15,6 +15,11 @@ import { UsersService } from '../users/users.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CompanyCreatedEvent } from './events/company-created.event';
+import { CompanyUpdatedEvent } from './events/company-updated.event';
+import { CompanyDeletedEvent } from './events/company-deleted.event';
+import { CompanyCalculateEvent } from './events/company-calculate.event';
 
 @Injectable()
 export class CompaniesService {
@@ -29,19 +34,58 @@ export class CompaniesService {
         private usersCompanyService: UsersCompanyService,
         @Inject(forwardRef(() => AccessService))
         private accessService: AccessService,
+        private eventEmitter: EventEmitter2,
     ) {}
+
+    async availableFindAllOrFail(userId: number) {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableFindOneOrFail(userId: number, id: number) {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            id,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableCreateOrFail(userId: number) {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+    }
+
+    async availableUpdateOrFail(userId: number, id: number) {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            id,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+    }
+
+    async availableDeleteOrFail(userId: number, id: number) {
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            id,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+    }
 
     async create(userId: number, payload: CreateCompanyDto): Promise<Company> {
         const existing = await this.repository.findOneBy({ name: payload.name });
         if (existing) {
             throw new BadRequestException(`Company '${payload.name}' already exists.`);
         }
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-        const newCompany = await this.repository.save({
+        const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
             updatedUserId: userId,
@@ -52,18 +96,14 @@ export class CompaniesService {
         }
         await this.usersCompanyService.create(userId, {
             userId,
-            companyId: newCompany.id,
+            companyId: created.id,
             roleId: user.roleId,
         });
-        return newCompany;
+        this.eventEmitter.emit('company.created', new CompanyCreatedEvent(userId, created));
+        return created;
     }
 
     async findAll(userId: number, relations: boolean): Promise<Company[]> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         return await this.repository.find({
             relations: {
                 law: relations,
@@ -77,11 +117,6 @@ export class CompaniesService {
     }
 
     async findOne(userId: number, id: number, relations: boolean = false): Promise<Company | null> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         const company = await this.repository.findOneOrFail({
             relations: {
                 law: !!relations,
@@ -105,36 +140,28 @@ export class CompaniesService {
     }
 
     async update(userId: number, id: number, payload: UpdateCompanyDto): Promise<Company> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
         await this.usersCompanyService.getUserCompanyRoleTypeOrException(userId, id);
-        const company = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== company.version) {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        if (payload.version !== record.version) {
             throw new ConflictException(
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        return await this.repository.save({
-            ...payload,
-            id,
-            updatedUserId: userId,
-        });
+        await this.repository.save({ ...payload, id, updatedUserId: userId });
+        const updated = await this.repository.findOneOrFail({ where: { id } });
+        this.eventEmitter.emit('company.updated', new CompanyUpdatedEvent(userId, updated));
+        return updated;
     }
 
     async remove(userId: number, id: number): Promise<Company> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
-        await this.usersCompanyService.getUserCompanyRoleTypeOrException(userId, id);
-        return await this.repository.save({
-            id,
-            deletedDate: new Date(),
-            deletedUserId: userId,
-        });
+        await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
+        const deleted = await this.repository.findOne({ where: { id }, withDeleted: true });
+        this.eventEmitter.emit('company.deleted', new CompanyDeletedEvent(userId, deleted));
+        return deleted;
+    }
+
+    async calculatePayroll(userId: number, id: number): Promise<void> {
+        const company = await this.repository.findOneOrFail({ where: { id } });
+        this.eventEmitter.emit('company.calculate', new CompanyCalculateEvent(userId, company));
     }
 }

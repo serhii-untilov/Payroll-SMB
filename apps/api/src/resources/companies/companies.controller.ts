@@ -20,19 +20,12 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { PayrollCalculationService } from '../../processor/payrollCalculation/payrollCalculation.service';
-import { AccessService } from '../access/access.service';
-import { AccessType, ResourceType } from '@repo/shared';
 
 @Controller('companies')
 export class CompaniesController {
     constructor(
-        @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
         @Inject(forwardRef(() => CompaniesService))
-        private readonly companiesService: CompaniesService,
-        @Inject(forwardRef(() => PayrollCalculationService))
-        private readonly salaryCalculateService: PayrollCalculationService,
+        private readonly service: CompaniesService,
     ) {}
 
     @Post()
@@ -40,7 +33,8 @@ export class CompaniesController {
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() createCompanyDto: CreateCompanyDto) {
         const userId = req.user['sub'];
-        const company = await this.companiesService.create(userId, createCompanyDto);
+        await this.service.availableCreateOrFail(userId);
+        const company = await this.service.create(userId, createCompanyDto);
         return company;
     }
 
@@ -49,7 +43,8 @@ export class CompaniesController {
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Query() relations: boolean) {
         const userId = req.user['sub'];
-        return await this.companiesService.findAll(userId, relations);
+        await this.service.availableFindAllOrFail(userId);
+        return await this.service.findAll(userId, relations);
     }
 
     @Get(':id')
@@ -61,7 +56,8 @@ export class CompaniesController {
         @Query() relations: boolean,
     ) {
         const userId = req.user['sub'];
-        return await this.companiesService.findOne(userId, id, relations);
+        await this.service.availableFindOneOrFail(userId, id);
+        return await this.service.findOne(userId, id, relations);
     }
 
     @Patch(':id')
@@ -73,7 +69,8 @@ export class CompaniesController {
         @Body() updateCompanyDto: UpdateCompanyDto,
     ) {
         const userId = req.user['sub'];
-        return await this.companiesService.update(userId, id, updateCompanyDto);
+        await this.service.availableUpdateOrFail(userId, id);
+        return await this.service.update(userId, id, updateCompanyDto);
     }
 
     @Delete(':id')
@@ -81,20 +78,16 @@ export class CompaniesController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
-        return await this.companiesService.remove(userId, id);
+        await this.service.availableDeleteOrFail(userId, id);
+        return await this.service.remove(userId, id);
     }
 
-    @Get(':id/salary-calculate')
+    @Post(':id/calculate-payroll')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async salaryCalculate(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            id,
-            ResourceType.COMPANY,
-            AccessType.UPDATE,
-        );
-        return await this.salaryCalculateService.calculateCompany(userId, id);
+        await this.service.availableUpdateOrFail(userId, id);
+        return await this.service.calculatePayroll(userId, id);
     }
 }

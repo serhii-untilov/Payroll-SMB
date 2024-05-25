@@ -14,7 +14,7 @@ import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';
 import { PayFundType } from './entities/pay-fund-type.entity';
 
 @Injectable()
-export class FundTypesService {
+export class PayFundTypesService {
     public readonly resourceType = ResourceType.FUND_TYPE;
 
     constructor(

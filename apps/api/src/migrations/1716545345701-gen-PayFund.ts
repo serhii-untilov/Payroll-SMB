@@ -53,28 +53,9 @@ export class Gen1716545345701 implements MigrationInterface {
                 CONSTRAINT "PK_4efc386239a3353e2879891c0d4" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
-            CREATE TABLE "max_base_usc" (
-                "createdDate" TIMESTAMP NOT NULL DEFAULT now(),
-                "createdUserId" integer,
-                "updatedDate" TIMESTAMP NOT NULL DEFAULT now(),
-                "updatedUserId" integer,
-                "deletedDate" TIMESTAMP,
-                "deletedUserId" integer,
-                "version" integer DEFAULT '1',
-                "id" SERIAL NOT NULL,
-                "dateFrom" date NOT NULL DEFAULT '1900-01-01',
-                "dateTo" date NOT NULL DEFAULT '9999-12-31',
-                "paySum" numeric(15, 2) NOT NULL DEFAULT '0',
-                CONSTRAINT "PK_e2b4d47321e6b55752751846394" PRIMARY KEY ("id")
-            )
-        `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
-            DROP TABLE "max_base_usc"
-        `);
         await queryRunner.query(`
             DROP TABLE "min_wage"
         `);
