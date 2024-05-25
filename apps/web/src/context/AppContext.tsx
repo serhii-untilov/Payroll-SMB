@@ -92,6 +92,12 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     }, [themeMode]);
 
     useEffect(() => {
+        if (company) {
+            localStorage.setItem('company', company.id.toString());
+        }
+    }, [company]);
+
+    useEffect(() => {
         const initPayPeriod = async () => {
             const current: Date =
                 (await getCurrentPayPeriodDateFrom(company?.id)) || startOfMonth(new Date());

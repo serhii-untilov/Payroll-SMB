@@ -45,5 +45,6 @@ export class PositionBalanceExtended implements IPositionBalanceExtended {
     calcMethod?: string;
     wage: number;
     rate: number;
+    paySumECB?: number;
     calcMethodBalance: { calcMethod: string; factSum: number }[];
 }

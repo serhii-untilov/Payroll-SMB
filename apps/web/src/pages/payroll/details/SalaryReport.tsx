@@ -348,7 +348,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             width: 240,
             sortable: true,
             renderCell: (params) => {
-                const fundECB: number = 0;
+                const fundECB: number = params.row?.paySumECB || 0;
                 const accruals = params.row?.accruals || 0;
                 const companyExpensesTotal: number = accruals + fundECB;
                 return (
@@ -373,7 +373,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                         {companyExpensesTotal || accruals ? (
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography>{t('Total')}</Typography>
-                                <Typography sx={{ textAlign: 'right' }}>
+                                <Typography sx={{ textAlign: 'right', fontWeight: 'medium' }}>
                                     {sumFormatter(companyExpensesTotal)}
                                 </Typography>
                             </Box>

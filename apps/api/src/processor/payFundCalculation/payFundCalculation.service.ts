@@ -1,3 +1,4 @@
+import { PayFundCalc_ECB_MinWage } from './calcMethods/PayFundCalc_ECB_MinWage';
 import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayFundCalcMethod } from '@repo/shared';
@@ -17,7 +18,7 @@ import { PositionsService } from './../../resources/positions/positions.service'
 import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
 import { PayrollsService } from './../../resources/payrolls/payrolls.service';
 import { PaymentTypesService } from './../../resources/payment-types/payment-types.service';
-import { PayFundCalc_ECB_OnSalary } from './calcMethods/PayFundCalc_ECB_OnSalary';
+import { PayFundCalc_ECB_Salary } from './calcMethods/PayFundCalc_ECB_Salary';
 import { PayFundCalc } from './calcMethods/abstract/PayFundCalc';
 
 @Injectable({ scope: Scope.REQUEST })
@@ -184,7 +185,6 @@ export class PayFundCalculationService {
                             );
                         }
                     }
-                    current.paySum = current.paySum - prior.paySum;
                 } else {
                     if (prior.payPeriod.getTime() < this.payPeriod.dateFrom.getTime()) {
                         toInsert.push(
@@ -231,7 +231,9 @@ export class PayFundCalculationService {
         current: PayFund[],
     ): PayFundCalc {
         if (payFundType.calcMethod === PayFundCalcMethod.ECB_SALARY) {
-            return new PayFundCalc_ECB_OnSalary(this, accPeriod, payFundType, current);
+            return new PayFundCalc_ECB_Salary(this, accPeriod, payFundType, current);
+        } else if (payFundType.calcMethod === PayFundCalcMethod.ECB_MIN_WAGE) {
+            return new PayFundCalc_ECB_MinWage(this, accPeriod, payFundType, current);
         }
         return null;
     }
@@ -290,6 +292,7 @@ export class PayFundCalculationService {
             await this.payFundsService.delete(this.userId, toDeleteIds[i]);
         }
         for (const record of toInsert) {
+            delete record.id;
             const created = await this.payFundsService.create(this.userId, record);
             this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
         }

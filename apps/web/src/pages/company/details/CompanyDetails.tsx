@@ -33,6 +33,7 @@ const formSchema = yup.object().shape({
     dateTo: yup.date().nullable(),
     payPeriod: yup.date().required(),
     checkDate: yup.date().required(),
+    version: yup.number().nullable(),
 });
 
 type FormType = yup.InferType<typeof formSchema>;
@@ -166,7 +167,7 @@ export function CompanyDetails(props: Props) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const company = data.id
-                ? await updateCompany(data.id, dirtyValues)
+                ? await updateCompany(data.id, { ...dirtyValues, version: data.version })
                 : await createCompany(data);
             reset(company);
             queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });

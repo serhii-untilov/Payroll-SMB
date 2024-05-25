@@ -164,5 +164,6 @@
     "Tree View": "Tree View",
     "Debt": "Debt",
     "Adjustments": "Adjustments",
-    "Working Time": "Working Time"
+    "Working Time": "Working Time",
+    "Rate error": "The rate must be between 0 and 2"
 }

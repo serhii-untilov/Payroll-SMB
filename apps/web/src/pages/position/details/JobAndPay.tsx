@@ -56,7 +56,7 @@ const formSchema = yup.object().shape({
     workNormId: yup.number().nullable(),
     paymentTypeId: yup.number().nullable(),
     wage: yup.number().nullable().notRequired().optional(),
-    rate: yup.number().nullable().notRequired().optional(),
+    rate: yup.number().nullable().notRequired().optional().min(0).max(2),
     positionHistoryVersion: yup.number().nullable(),
 });
 
@@ -130,6 +130,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
             enqueueSnackbar(t(formErrors.dateFrom?.message), { variant: 'error' });
         formErrors.dateTo?.message &&
             enqueueSnackbar(t(formErrors.dateTo?.message), { variant: 'error' });
+        formErrors.rate?.message && enqueueSnackbar(t('Rate error'), { variant: 'error' });
     }, [formErrors, t]);
 
     if (isLoading) {
@@ -158,7 +159,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
         const positionHistoryDirtyValues = getDirtyValues(dirtyFields, positionHistoryData, true);
         try {
             let pos = positionData;
-            if (Object.keys(positionDirtyValues).length) {
+            if (Object.keys(positionDirtyValues).length || !pos.id) {
                 pos = positionData.id
                     ? await updatePosition(positionData.id, {
                           ...positionDirtyValues,
@@ -353,25 +354,25 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                 </Grid>
 
                 <Grid container sx={{ mt: 2 }}>
-                    {positionId && data?.personId && (
+                    {positionId && data?.personId ? (
                         <Grid item xs={12}>
                             <Button startIcon={<HistoryRounded />}>
                                 {t('Assignments History')}
                             </Button>
                         </Grid>
-                    )}
+                    ) : null}
                     <Grid item xs={12}>
                         <Button startIcon={<AddCircleRounded />}>
                             {t('Add Additional Earning Type')}
                         </Button>
                     </Grid>
-                    {positionId && data?.personId && (
+                    {positionId && data?.personId ? (
                         <Grid item xs={12}>
                             <Button startIcon={<AddCircleRounded />}>
                                 {t('Add Additional Deduction Type')}
                             </Button>
                         </Grid>
-                    )}
+                    ) : null}
                     <Grid item xs={12}>
                         <Button startIcon={<AddCircleRounded />}>{t('Add Work Address')}</Button>
                     </Grid>

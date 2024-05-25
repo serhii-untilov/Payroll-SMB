@@ -1,12 +1,12 @@
-import { CalcMethod, PayFundCategory, PaymentGroup } from '@repo/shared';
+import { MinWage } from './../../../resources/min-wage/entities/min-wage.entity';
+import { PayFundCategory, PayFundGroup } from '@repo/shared';
 import { PayFundType } from '../../../resources/pay-fund-types/entities/pay-fund-type.entity';
 import { PayFund } from '../../../resources/pay-funds/entities/pay-fund.entity';
 import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.entity';
-import { accPeriodFactSum } from '../../payrollCalculation/helpers/payrollsData';
 import { PayFundCalculationService } from '../payFundCalculation.service';
 import { PayFundCalc } from './abstract/PayFundCalc';
 
-export class PayFundCalc_ECB_OnSalary extends PayFundCalc {
+export class PayFundCalc_ECB_MinWage extends PayFundCalc {
     constructor(
         ctx: PayFundCalculationService,
         accPeriod: PayPeriod,
@@ -18,8 +18,8 @@ export class PayFundCalc_ECB_OnSalary extends PayFundCalc {
 
     calculate(): PayFund {
         const payFund = this.makePayFund();
-        payFund.incomeSum = this.calcIncomeSum();
-        payFund.baseSum = this.calcBaseSum(payFund);
+        payFund.incomeSum = 0;
+        payFund.baseSum = this.calcBaseSum();
         payFund.rate = this.getRate();
         payFund.paySum = this.calcPaySum(payFund);
         return payFund;
@@ -27,6 +27,7 @@ export class PayFundCalc_ECB_OnSalary extends PayFundCalc {
 
     private makePayFund(): PayFund {
         return Object.assign({
+            id: this.ctx.getNextPayFundId(),
             positionId: this.ctx.position.id,
             payPeriod: this.ctx.payPeriod.dateFrom,
             accPeriod: this.accPeriod.dateFrom,
@@ -39,34 +40,7 @@ export class PayFundCalc_ECB_OnSalary extends PayFundCalc {
         });
     }
 
-    getPaymentTypeIds(): number[] {
-        // TODO: Replace to Entry Table
-        const calcMethods: string[] = [CalcMethod.SALARY, CalcMethod.WAGE];
-        const paymentGroups: string[] = [
-            PaymentGroup.ADJUSTMENTS,
-            PaymentGroup.BONUSES,
-            PaymentGroup.VACATIONS,
-            PaymentGroup.SICKS,
-            PaymentGroup.REFUNDS,
-            PaymentGroup.OTHER_ACCRUALS,
-        ];
-        return this.ctx.paymentTypes
-            .filter(
-                (o) => calcMethods.includes(o.calcMethod) || paymentGroups.includes(o.paymentGroup),
-            )
-            .map((o) => o.id);
-    }
-
-    calcIncomeSum(): number {
-        return accPeriodFactSum(
-            this.ctx.payPeriod,
-            this.accPeriod,
-            this.ctx.payrolls,
-            this.getPaymentTypeIds(),
-        );
-    }
-
-    getMinWage() {
+    getMinWage(): MinWage {
         return this.ctx.minWages.find(
             (o) =>
                 o.dateFrom.getTime() <= this.accPeriod.dateFrom.getTime() &&
@@ -75,25 +49,27 @@ export class PayFundCalc_ECB_OnSalary extends PayFundCalc {
     }
 
     getPriorBaseSum(): number {
-        // TODO
-        return 0;
+        const payFundIds = this.ctx.payFundTypes
+            .filter((o) => o.group === PayFundGroup.ECB)
+            .map((o) => o.id);
+        return this.current
+            .filter((o) => payFundIds.includes(o.payFundTypeId))
+            .reduce((a, b) => {
+                return a + b.baseSum;
+            }, 0);
     }
 
-    calcBaseSum(payFund: PayFund): number {
+    calcBaseSum(): number {
         const minWage = this.getMinWage();
         if (!minWage) {
             return 0;
         }
-        const maxBaseSum = minWage.paySum * 15;
+        const minBaseSum = minWage.paySum;
         const priorBaseSum = this.getPriorBaseSum();
-        const overallBaseSum = priorBaseSum + payFund.incomeSum;
-        if (overallBaseSum > maxBaseSum) {
-            return Math.max(0, maxBaseSum - priorBaseSum);
-        } else if (overallBaseSum < -maxBaseSum) {
-            return Math.min(0, -maxBaseSum + priorBaseSum);
-        } else {
-            return payFund.incomeSum;
+        if (priorBaseSum > 0 && priorBaseSum < minBaseSum) {
+            return minBaseSum - priorBaseSum;
         }
+        return 0;
     }
 
     getRate(): number {

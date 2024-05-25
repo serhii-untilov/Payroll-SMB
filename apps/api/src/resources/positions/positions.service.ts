@@ -389,7 +389,8 @@ export class PositionsService {
                 ph."paymentTypeId", pt."name" "paymentTypeName", pt."calcMethod",
                 ph.wage, ph.rate,
                 pb."planDays", pb."planHours",
-                pb."factDays", pb."factHours"
+                pb."factDays", pb."factHours",
+                t1."paySum" "paySumECB"
             from position_balance pb
             inner join "position" p on p.id = pb."positionId" and p."companyId" = $1
             inner join person p2 on p2.id = p."personId"
@@ -408,6 +409,16 @@ export class PositionsService {
             left join job j on j.id = ph."jobId"
             left join work_norm wn on wn.id = ph."workNormId"
             left join payment_type pt on pt.id = ph."paymentTypeId"
+            left join (
+            	select ppf.id, sum(pf."paySum") "paySum"
+            	from pay_fund pf
+            	inner join "position" ppf on ppf.id = pf."positionId"
+            	inner join pay_fund_type pft on pft.id = pf."payFundTypeId"
+            	where ppf."companyId" = $1
+            		and pf."payPeriod" = $3
+            		and pft."group" = 'ECB'
+            	group by ppf.id
+            ) t1 on pb."positionId" = t1.id
             where p."companyId" = $1
                 and pb."payPeriod" = $3`,
             [params.companyId, payPeriod.dateTo, payPeriod.dateFrom],
@@ -439,6 +450,7 @@ export class PositionsService {
             o.planHours = Number(o.planHours);
             o.factDays = Number(o.factDays);
             o.factHours = Number(o.factHours);
+            o.paySumECB = Number(o.paySumECB);
             o.calcMethodBalance = calcMethodBalance
                 .filter((b) => b.positionId === o.positionId)
                 .map((b) => {
