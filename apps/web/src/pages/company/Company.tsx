@@ -17,6 +17,7 @@ import { ICompany } from '@repo/shared';
 import { IconButton } from '@mui/material';
 import { ArrowBackIosNewRounded } from '@mui/icons-material';
 import { CompanyPayPeriods } from './details/CompanyPayPeriods';
+import { useQuery } from '@tanstack/react-query';
 
 type Props = {
     showGoBack: boolean;
@@ -26,19 +27,33 @@ export default function Company(props: Props) {
     const { companyId } = useParams();
     const [tab, setTab] = useState(Number(localStorage.getItem('company-tab-index')));
     const { t } = useTranslation();
-    const [company, setCompany] = useState<ICompany | null>();
+    // const [company, setCompany] = useState<ICompany | null>();
     const { locale } = useLocale();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchCompany = async () => {
-            const company = companyId ? await getCompany(+companyId) : null;
-            setCompany(company);
-        };
-        fetchCompany();
-    }, [companyId, setCompany]);
+    // useEffect(() => {
+    //     const fetchCompany = async () => {
+    //         const company = companyId ? await getCompany(+companyId) : null;
+    //         setCompany(company);
+    //     };
+    //     fetchCompany();
+    // }, [companyId, setCompany]);
 
-    useEffect(() => {}, [company, locale]);
+    // useEffect(() => {}, [company, locale]);
+    useEffect(() => {}, [locale]);
+
+    const {
+        data: company,
+        isError: isCompanyError,
+        isLoading: isCompanyLoading,
+        error: companyError,
+    } = useQuery<Partial<ICompany>, Error>({
+        queryKey: ['company', { companyId }],
+        queryFn: async () => {
+            return companyId ? await getCompany(+companyId) : {};
+        },
+        enabled: !!companyId,
+    });
 
     const generatePageTitle = () => {
         return company?.id ? company?.name || '' : t('New Company');
