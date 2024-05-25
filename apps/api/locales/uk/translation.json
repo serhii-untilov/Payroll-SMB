@@ -156,12 +156,13 @@
     "Compensation": "Зарплата",
     "Paid": "Виплачено",
     "Company Managers": "Керівники підприємства",
-    "Fund USC": "ЄСВ",
+    "Fund ECB": "ЄСВ",
     "Total": "Разом",
     "Company Expenses": "Витрати підприємства",
     "The record has been updated by another user. Try to edit it after reloading.": "Запис оновлено іншим користувачем. Спробуйте відредагувати його після перезавантаження.",
     "Tree View": "Ієрархічна структура",
     "Debt": "Залишок",
     "Adjustments": "Доплати",
-    "Working Time": "Робочий час"
+    "Working Time": "Робочий час",
+    "Rate error": "Ставка повинна бути в межах від 0 до 2"
 }

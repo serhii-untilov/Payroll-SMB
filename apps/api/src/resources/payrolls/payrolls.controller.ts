@@ -25,14 +25,15 @@ import { Payroll } from './entities/payroll.entity';
 
 @Controller('payroll')
 export class PayrollsController {
-    constructor(private readonly payrollsService: PayrollsService) {}
+    constructor(private readonly service: PayrollsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreatePayrollDto): Promise<Payroll> {
         const userId = req.user['sub'];
-        return await this.payrollsService.create(userId, deepStringToShortDate(payload));
+        await this.service.availableCreateOrFail(userId, payload);
+        return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
     @Get(':id')
@@ -44,7 +45,8 @@ export class PayrollsController {
         @Query('relations', ParseBoolPipe) relations: boolean,
     ): Promise<Payroll> {
         const userId = req.user['sub'];
-        return await this.payrollsService.findOne(userId, id, relations);
+        await this.service.availableFindOneOrFail(userId, id);
+        return await this.service.findOne(userId, id, relations);
     }
 
     @Patch(':id')
@@ -56,7 +58,8 @@ export class PayrollsController {
         @Body() updatePayrollDto: UpdatePayrollDto,
     ): Promise<Payroll> {
         const userId = req.user['sub'];
-        return await this.payrollsService.update(userId, id, updatePayrollDto);
+        await this.service.availableUpdateOrFail(userId, id);
+        return await this.service.update(userId, id, updatePayrollDto);
     }
 
     @Delete(':id')
@@ -64,7 +67,8 @@ export class PayrollsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Payroll> {
         const userId = req.user['sub'];
-        return await this.payrollsService.remove(userId, id);
+        await this.service.availableDeleteOrFail(userId, id);
+        return await this.service.remove(userId, id);
     }
 
     @Post('find-all')
@@ -72,6 +76,7 @@ export class PayrollsController {
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() params: FindPayrollDto): Promise<Payroll[]> {
         const userId = req.user['sub'];
-        return await this.payrollsService.findAll(userId, deepStringToShortDate(params));
+        await this.service.availableFindAllOrFail(userId, params);
+        return await this.service.findAll(userId, deepStringToShortDate(params));
     }
 }

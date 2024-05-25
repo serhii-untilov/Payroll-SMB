@@ -3,7 +3,7 @@ import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.en
 import { PaymentType } from '../../../resources/payment-types/entities/payment-type.entity';
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PayrollCalculationService } from '../payrollCalculation.service';
-import { accPeriodFactSum } from '../utils/payrollsData';
+import { accPeriodFactSum } from '../helpers/payrollsData';
 
 export function calculateIncomeTax(ctx: PayrollCalculationService) {
     const incomeTaxes = ctx.paymentTypes.filter((o) => o.calcMethod === CalcMethod.INCOME_TAX);
@@ -13,7 +13,7 @@ export function calculateIncomeTax(ctx: PayrollCalculationService) {
             const dateFrom = getMaxDate(accPeriod.dateFrom, ctx.position.dateFrom);
             const dateTo = getMinDate(accPeriod.dateTo, ctx.position.dateTo);
             const payroll = makePayroll(ctx, accPeriod, incomeTax, dateFrom, dateTo);
-            payroll.planSum = calcPlanSum(ctx, accPeriod.dateFrom);
+            payroll.planSum = calcPlanSum(ctx, accPeriod);
             payroll.rate = getRate();
             payroll.factSum = calcFactSum(payroll);
             payrolls.push(payroll);
@@ -44,18 +44,19 @@ function makePayroll(
     return payroll;
 }
 
-function calcPlanSum(ctx: PayrollCalculationService, accPeriod: Date) {
+function calcPlanSum(ctx: PayrollCalculationService, accPeriod: PayPeriod): number {
     // TODO: Entry Table
     const paymentTypeIds = ctx.paymentTypes
         .filter((o) => o.paymentPart === PaymentPart.ACCRUALS)
         .map((o) => o.id);
-    return accPeriodFactSum(ctx, accPeriod, paymentTypeIds);
+    const payrolls = ctx.getPayrollsAccPeriod(accPeriod.dateFrom);
+    return accPeriodFactSum(ctx.payPeriod, accPeriod, payrolls, paymentTypeIds);
 }
 
-function calcFactSum(payroll: Payroll) {
+function calcFactSum(payroll: Payroll): number {
     return (payroll.planSum * payroll.rate) / 100;
 }
 
-function getRate() {
+function getRate(): number {
     return 18; // TODO
 }

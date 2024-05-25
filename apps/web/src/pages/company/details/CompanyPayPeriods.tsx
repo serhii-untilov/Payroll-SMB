@@ -19,7 +19,7 @@ import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { getPayPeriodList, getPayPeriodName } from '../../../services/payPeriod.service';
-import { salaryCalculate } from '../../../services/company.service';
+import { calculatePayroll } from '../../../services/company.service';
 import { numericFormatter } from 'react-number-format';
 import { sumFormatter } from '../../../services/utils';
 
@@ -165,7 +165,7 @@ export function CompanyPayPeriods(params: Props) {
     const onCalculate = async () => {
         console.log('onCalculate');
         if (companyId) {
-            await salaryCalculate(companyId);
+            await calculatePayroll(companyId);
             queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
             queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
         }

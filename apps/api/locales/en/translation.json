@@ -157,12 +157,13 @@
     "Compensation": "Compensation",
     "Paid": "Paid",
     "Company Managers": "Company Managers",
-    "Fund USC": "Fund USC",
+    "Fund ECB": "Fund USC",
     "Total": "Total",
     "Company Expenses": "Company Expenses",
     "The record has been updated by another user. Try to edit it after reloading.": "The record has been updated by another user. Try to edit it after reloading.",
     "Tree View": "Tree View",
     "Debt": "Debt",
     "Adjustments": "Adjustments",
-    "Working Time": "Working Time"
+    "Working Time": "Working Time",
+    "Rate error": "The rate must be between 0 and 2"
 }

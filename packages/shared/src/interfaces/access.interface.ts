@@ -24,6 +24,7 @@ export enum ResourceType {
     MANAGER = 'Manager',
     ACCOUNT = 'Account',
     PAYMENT_TYPE = 'Payment Type',
+    FUND_TYPE = 'Fund Type',
     WORK_NORM = 'Work Norm',
     PAY_PERIOD = 'Pay Period',
     POSITION = 'Position',
@@ -38,6 +39,9 @@ export enum ResourceType {
     PAYROLL = 'Payroll',
     PAYMENT = 'Payment',
     REPORT = 'Report',
+    PAY_FUND = 'Pay Fund',
+    MIN_WAGE = 'Minimal Wage',
+    MAX_BASE_UFC = 'Maximal Base UFC',
 }
 
 export interface IAccess {

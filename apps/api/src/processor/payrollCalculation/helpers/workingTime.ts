@@ -12,7 +12,7 @@ import {
 } from '@repo/shared';
 import { add } from 'date-fns';
 import { WorkNorm } from '../../../resources/work-norms/entities/work-norm.entity';
-import { PayrollCalculationService } from './../payrollCalculation.service';
+import { PayrollCalculationService } from '../payrollCalculation.service';
 
 export function getWorkingTimePlan(
     ctx: PayrollCalculationService,

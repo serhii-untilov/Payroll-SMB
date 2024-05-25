@@ -32,32 +32,8 @@ export class PayrollsService {
         private companiesService: CompaniesService,
     ) {}
 
-    async create(userId: number, payload: CreatePayrollDto): Promise<Payroll> {
-        const position = await this.positionsService.findOne(userId, payload.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-        const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payload.payPeriod.getTime() !== company.payPeriod.getTime()) {
-            await this.accessService.availableForUserCompanyOrFail(
-                userId,
-                position.companyId,
-                this.resourceType,
-                AccessType.ELEVATED,
-            );
-        }
-        return await this.repository.save({
-            ...payload,
-            createdUserId: userId,
-            updatedUserId: userId,
-        });
-    }
-
-    async findAll(userId: number, params: FindPayrollDto): Promise<Payroll[]> {
-        const { positionId, companyId, relations, ...other } = params;
+    async availableFindAllOrFail(userId: number, params: FindPayrollDto) {
+        const { positionId, companyId } = params;
         if (!positionId && !companyId) {
             throw new BadRequestException('Should be defined companyId or positionId');
         }
@@ -77,6 +53,91 @@ export class PayrollsService {
                 this.resourceType,
                 AccessType.ACCESS,
             );
+        }
+    }
+
+    async availableFindOneOrFail(userId: number, positionId: number) {
+        const position = await this.positionsService.findOne(userId, positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.ACCESS,
+        );
+    }
+
+    async availableCreateOrFail(userId: number, payload: CreatePayrollDto) {
+        const position = await this.positionsService.findOne(userId, payload.positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+        const company = await this.companiesService.findOne(userId, position.companyId);
+        if (payload.payPeriod.getTime() !== company.payPeriod.getTime()) {
+            await this.accessService.availableForUserCompanyOrFail(
+                userId,
+                position.companyId,
+                this.resourceType,
+                AccessType.ELEVATED,
+            );
+        }
+    }
+
+    async availableUpdateOrFail(userId: number, id: number) {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        const position = await this.positionsService.findOne(userId, record.positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.UPDATE,
+        );
+        const company = await this.companiesService.findOne(userId, position.companyId);
+        if (record.payPeriod.getTime() !== company.payPeriod.getTime()) {
+            await this.accessService.availableForUserCompanyOrFail(
+                userId,
+                position.companyId,
+                this.resourceType,
+                AccessType.ELEVATED,
+            );
+        }
+    }
+
+    async availableDeleteOrFail(userId: number, id: number) {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        const position = await this.positionsService.findOne(userId, record.positionId);
+        await this.accessService.availableForUserCompanyOrFail(
+            userId,
+            position.companyId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+        const company = await this.companiesService.findOne(userId, position.companyId);
+        if (record.payPeriod.getTime() !== company.payPeriod.getTime()) {
+            await this.accessService.availableForUserCompanyOrFail(
+                userId,
+                position.companyId,
+                this.resourceType,
+                AccessType.ELEVATED,
+            );
+        }
+    }
+
+    async create(userId: number, payload: CreatePayrollDto): Promise<Payroll> {
+        const created = await this.repository.save({
+            ...payload,
+            createdUserId: userId,
+            updatedUserId: userId,
+        });
+        return await this.repository.findOneOrFail({ where: { id: created.id } });
+    }
+
+    async findAll(userId: number, params: FindPayrollDto): Promise<Payroll[]> {
+        const { positionId, companyId, relations, ...other } = params;
+        if (!positionId && !companyId) {
+            throw new BadRequestException('Should be defined companyId or positionId');
         }
         return await this.repository.find({
             where: {
@@ -98,13 +159,6 @@ export class PayrollsService {
         dateTo: Date,
         relations?: boolean,
     ): Promise<Payroll[]> {
-        const position = await this.positionsService.findOne(userId, positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         return await this.repository.find({
             where: {
                 positionId,
@@ -122,82 +176,27 @@ export class PayrollsService {
             where: { id },
             relations: { position: relations, paymentType: relations },
         });
-        const position = await this.positionsService.findOne(userId, payroll.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         return payroll;
     }
 
     async update(userId: number, id: number, payload: UpdatePayrollDto): Promise<Payroll> {
-        const payroll = await this.repository.findOneOrFail({ where: { id } });
-        const position = await this.positionsService.findOne(userId, payroll.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-        const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payroll.payPeriod.getTime() !== company.payPeriod.getTime()) {
-            await this.accessService.availableForUserCompanyOrFail(
-                userId,
-                position.companyId,
-                this.resourceType,
-                AccessType.ELEVATED,
-            );
-        }
-        if (payload.version !== payroll.version) {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        if (payload.version !== record.version) {
             throw new ConflictException(
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        return await this.repository.save({ ...payload, id, updatedUserId: userId });
+        await this.repository.save({ ...payload, id, updatedUserId: userId });
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number) {
-        const payroll = await this.repository.findOneOrFail({ where: { id } });
-        const position = await this.positionsService.findOne(userId, payroll.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-        const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payroll.payPeriod.getTime() !== company.payPeriod.getTime()) {
-            await this.accessService.availableForUserCompanyOrFail(
-                userId,
-                position.companyId,
-                this.resourceType,
-                AccessType.ELEVATED,
-            );
-        }
-        return await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
+    async remove(userId: number, id: number): Promise<Payroll> {
+        await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
+        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
     async delete(userId: number, id: number) {
-        const payroll = await this.repository.findOneOrFail({ where: { id } });
-        const position = await this.positionsService.findOne(userId, payroll.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-        const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payroll.payPeriod.getTime() !== company.payPeriod.getTime()) {
-            await this.accessService.availableForUserCompanyOrFail(
-                userId,
-                position.companyId,
-                this.resourceType,
-                AccessType.ELEVATED,
-            );
-        }
-        return await this.repository.delete(id);
+        await this.repository.delete(id);
     }
 
     async payrollPositionPaymentParts(

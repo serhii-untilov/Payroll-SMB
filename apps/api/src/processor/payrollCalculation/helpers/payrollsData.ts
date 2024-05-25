@@ -1,9 +1,8 @@
 import { RecordFlags } from '@repo/shared';
-import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.entity';
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
-import { PayrollCalculationService } from '../payrollCalculation.service';
+import { PayPeriod } from './../../../resources/pay-periods/entities/pay-period.entity';
 
-export function getPayrollUnionCancel(
+export function getPayrollUnionRecord(
     payroll: Payroll,
     payrolls: Payroll[],
     payPeriod: PayPeriod,
@@ -25,12 +24,18 @@ export function getPayrollUnionCancel(
 }
 
 export function accPeriodFactSum(
-    ctx: PayrollCalculationService,
-    accPeriod: Date,
+    payPeriod: PayPeriod,
+    accPeriod: PayPeriod,
+    payrolls: Payroll[],
     paymentTypeIds: number[],
-) {
-    const payrolls = ctx.getPayrollsAccPeriod(accPeriod);
+): number {
     return payrolls
-        .filter((o) => paymentTypeIds.includes(o.paymentTypeId))
+        .filter(
+            (o) =>
+                paymentTypeIds.includes(o.paymentTypeId) &&
+                o.payPeriod.getTime() <= payPeriod.dateTo.getTime() &&
+                o.accPeriod.getTime() >= accPeriod.dateFrom.getTime() &&
+                o.accPeriod.getTime() <= accPeriod.dateTo.getTime(),
+        )
         .reduce((a, b) => a + b.factSum, 0);
 }

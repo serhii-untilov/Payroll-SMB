@@ -20,6 +20,7 @@
   ],
   "scripts": {
     "dev": "./scripts/docker_db && npm --workspace @repo/api run m:run && turbo run dev",
+    "db": "./scripts/docker_db",
     "start": "./scripts/docker_db && npm --workspace @repo/api run m:run && npm --workspace @repo/api start",
     "build": "turbo run build",
     "lint": "turbo lint",
