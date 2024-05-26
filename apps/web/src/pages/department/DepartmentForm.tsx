@@ -127,17 +127,17 @@ export default function DepartmentForm(params: Params) {
             if (submitCallback) submitCallback(department);
             params.setOpen(false);
             reset(defaultValues);
-            queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
+            await queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
         }
     };
 
-    const onCancel = () => {
+    const onCancel = async () => {
         reset(defaultValues);
         params.setOpen(false);
-        queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
 
     return (
@@ -145,10 +145,13 @@ export default function DepartmentForm(params: Params) {
             <Dialog
                 disableRestoreFocus
                 open={params.open}
-                onClose={() => {
+                onClose={async () => {
                     params.setOpen(false);
                     reset(department);
-                    queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
+                    await queryClient.invalidateQueries({
+                        queryKey: ['department'],
+                        refetchType: 'all',
+                    });
                 }}
                 // PaperProps={{
                 //     component: 'form',

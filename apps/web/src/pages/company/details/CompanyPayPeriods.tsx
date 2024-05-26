@@ -166,8 +166,8 @@ export function CompanyPayPeriods(params: Props) {
         console.log('onCalculate');
         if (companyId) {
             await calculatePayroll(companyId);
-            queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
-            queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+            await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
+            await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
         }
     };
 

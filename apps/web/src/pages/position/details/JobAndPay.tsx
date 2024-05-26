@@ -197,7 +197,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
 
     const onCancel = async () => {
         reset(await getFormData(data?.id));
-        queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
     };
 
     const onDelete = () => {

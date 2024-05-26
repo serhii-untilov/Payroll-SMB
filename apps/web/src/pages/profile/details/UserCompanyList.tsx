@@ -1,25 +1,30 @@
+import { Typography } from '@mui/material';
 import {
     GridCallbackDetails,
     GridCellParams,
     GridColDef,
+    GridRowId,
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { ICompany, IUserCompany, date2view } from '@repo/shared';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
-import { deleteCompany, getCompany, getCompanyList } from '../../../services/company.service';
-import Company from '../../company/Company';
-import { getUserCompanyList } from '../../../services/user.service';
-import { useNavigate } from 'react-router-dom';
 import useAppContext from '../../../hooks/useAppContext';
+import { getCompany } from '../../../services/company.service';
+import {
+    deleteUserCompany,
+    getUserCompanyList,
+    restoreUserCompany,
+} from '../../../services/user.service';
 
 type Props = {
     userId: number | undefined;
@@ -31,7 +36,8 @@ export function UserCompanyList(params: Props) {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-    const { setCompany } = useAppContext();
+    const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
+    const [showDeleted, setShowDeleted] = useState<boolean>(false);
 
     const gridRef = useGridApiRef();
 
@@ -43,7 +49,21 @@ export function UserCompanyList(params: Props) {
             width: 400,
             sortable: true,
             valueGetter: (params) => {
-                return params.row.company.name;
+                return params.row.company?.name;
+            },
+            renderCell: (params) => {
+                return (
+                    <Typography
+                        sx={
+                            params.row.company?.id === currentCompany?.id
+                                ? { fontSize: '1rem', fontWeight: 'medium' }
+                                : {}
+                        }
+                        color={params.row.company?.id === currentCompany?.id ? 'primary' : ''}
+                    >
+                        {params.row.company?.name}
+                    </Typography>
+                );
             },
         },
         {
@@ -63,7 +83,7 @@ export function UserCompanyList(params: Props) {
             width: 200,
             sortable: true,
             valueGetter: (params) => {
-                return date2view(params.row.company.payPeriod);
+                return date2view(params.row.company?.payPeriod);
             },
         },
         {
@@ -73,7 +93,7 @@ export function UserCompanyList(params: Props) {
             width: 200,
             sortable: true,
             valueGetter: (params) => {
-                return date2view(params.row.company.dateFrom);
+                return date2view(params.row.company?.dateFrom);
             },
         },
 
@@ -84,7 +104,7 @@ export function UserCompanyList(params: Props) {
             width: 200,
             sortable: true,
             valueGetter: (params) => {
-                return date2view(params.row.company.dateTo);
+                return date2view(params.row.company?.dateTo);
             },
         },
     ];
@@ -95,9 +115,9 @@ export function UserCompanyList(params: Props) {
         isLoading,
         error: error,
     } = useQuery<IUserCompany[], Error>({
-        queryKey: ['userCompany', 'list', { userId }],
+        queryKey: ['company', 'list', { userId, showDeleted }],
         queryFn: async () => {
-            return userId ? await getUserCompanyList(userId, true) : [];
+            return userId ? await getUserCompanyList(userId, true, showDeleted) : [];
         },
         enabled: !!userId,
     });
@@ -120,20 +140,60 @@ export function UserCompanyList(params: Props) {
     const onSelectCompany = async (companyId: number) => {
         console.log('onEditCompany');
         const company = await getCompany(companyId);
-        setCompany(company);
+        setCurrentCompany(company);
         navigate(`/company/${companyId}`);
     };
 
-    const submitCallback = (data: ICompany) => {
-        queryClient.invalidateQueries({ queryKey: ['userCompany'], refetchType: 'all' });
+    const submitCallback = async (data: ICompany) => {
+        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
     };
 
     const onDeleteCompany = async () => {
-        // for (const id of rowSelectionModel) {
-        //     await deleteCompany(+id);
-        // }
-        // queryClient.invalidateQueries({ queryKey: ['userCompany'], refetchType: 'all' });
-        console.log('onDeleteCompany');
+        let attemptToDeleteCurrentCompany = false;
+        for (const id of notDeletedSelection()) {
+            const companyId = data?.find((o) => o.id === id)?.companyId;
+            if (companyId !== currentCompany?.id) {
+                await deleteUserCompany(Number(id));
+            } else {
+                attemptToDeleteCurrentCompany = true;
+            }
+        }
+        setRowSelectionModel([]);
+        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
+        if (attemptToDeleteCurrentCompany) {
+            enqueueSnackbar(t(`Deleting the current company is not allowed.`), {
+                variant: 'error',
+            });
+        }
+    };
+
+    const deletedSelection = (): number[] => {
+        return rowSelectionModel
+            .filter((id) =>
+                data?.find(
+                    (userCompany) => userCompany.id === Number(id) && userCompany.deletedDate,
+                ),
+            )
+            .map((o) => Number(o));
+    };
+
+    const notDeletedSelection = (): number[] => {
+        return rowSelectionModel
+            .filter((id) =>
+                data?.find(
+                    (userCompany) =>
+                        userCompany.id === Number(id) && userCompany.deletedDate === null,
+                ),
+            )
+            .map((o) => Number(o));
+    };
+
+    const onRestoreDeleted = async () => {
+        for (const id of deletedSelection()) {
+            await restoreUserCompany(id);
+        }
+        setRowSelectionModel([]);
+        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
     };
 
     const onPrint = () => {
@@ -144,18 +204,34 @@ export function UserCompanyList(params: Props) {
         gridRef.current.exportDataAsCsv();
     };
 
+    const onShowDeleted = async () => {
+        setShowDeleted(!showDeleted);
+        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
+    };
+
+    const getRowStatus = (params: any): string => {
+        return params.row?.deletedDate
+            ? 'Deleted'
+            : params.row?.companyId === currentCompany?.id
+              ? 'Current'
+              : 'Normal';
+    };
+
     return (
         <>
             <Toolbar
                 onAdd={onAddCompany}
-                onDelete={rowSelectionModel.length ? onDeleteCompany : 'disabled'}
+                onDelete={notDeletedSelection().length ? onDeleteCompany : 'disabled'}
                 onPrint={data?.length ? onPrint : 'disabled'}
                 onExport={data?.length ? onExport : 'disabled'}
                 onShowHistory={'disabled'}
-                onShowDeleted={'disabled'}
-                onRestoreDeleted={'disabled'}
+                onShowDeleted={onShowDeleted}
+                onRestoreDeleted={
+                    showDeleted && deletedSelection().length ? onRestoreDeleted : 'disabled'
+                }
             />
             <DataGrid
+                getRowStatus={getRowStatus}
                 apiRef={gridRef}
                 rows={data || []}
                 columns={columns}

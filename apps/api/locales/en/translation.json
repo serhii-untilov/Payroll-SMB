@@ -165,5 +165,6 @@
     "Debt": "Debt",
     "Adjustments": "Adjustments",
     "Working Time": "Working Time",
-    "Rate error": "The rate must be between 0 and 2"
+    "Rate error": "The rate must be between 0 and 2",
+    "Deleting the current company is not allowed.": "Deleting the current company is not allowed."
 }

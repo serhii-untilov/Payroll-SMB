@@ -1,6 +1,7 @@
 import {
     BadRequestException,
     ConflictException,
+    ForbiddenException,
     Inject,
     Injectable,
     NotFoundException,
@@ -154,10 +155,16 @@ export class CompaniesService {
     }
 
     async remove(userId: number, id: number): Promise<Company> {
-        await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-        const deleted = await this.repository.findOne({ where: { id }, withDeleted: true });
-        this.eventEmitter.emit('company.deleted', new CompanyDeletedEvent(userId, deleted));
-        return deleted;
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        if (record.createdUserId === userId) {
+            await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
+            const deleted = await this.repository.findOne({ where: { id }, withDeleted: true });
+            this.eventEmitter.emit('company.deleted', new CompanyDeletedEvent(userId, deleted));
+            return deleted;
+        }
+        throw new ForbiddenException(
+            `User doesn't have access to the requested Company's resource.`,
+        );
     }
 
     async calculatePayroll(userId: number, id: number): Promise<void> {
