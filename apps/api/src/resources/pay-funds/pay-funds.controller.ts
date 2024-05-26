@@ -55,11 +55,11 @@ export class PayFundsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateFundDto: UpdatePayFundDto,
+        @Body() payload: UpdatePayFundDto,
     ): Promise<PayFund> {
         const userId = req.user['sub'];
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, updateFundDto);
+        return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')

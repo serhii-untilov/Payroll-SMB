@@ -8,17 +8,18 @@ import useLocale from '../../hooks/useLocale';
 import { getPayPeriodList, getPayPeriodName } from '../../services/payPeriod.service';
 import { Skeleton } from '../layout/Skeleton';
 
-export type PayPeriodOption = {
-    label: string;
-    value: string;
+export type PayPeriodOption = SelectProps & {
+    companyId: number | undefined;
 };
 
-export function SelectPayPeriod(props: SelectProps) {
-    const { company, payPeriod, setPayPeriod } = useAppContext();
+export function SelectPayPeriod(props: PayPeriodOption) {
+    const { companyId, value } = props;
+    const { company: currentCompany, setPayPeriod } = useAppContext();
     const { locale } = useLocale();
+
     const { data, isError, isLoading, error } = useQuery<IPayPeriod[], Error>({
-        queryKey: ['payPeriod', 'list', { companyId: company?.id, payPeriod: company?.payPeriod }],
-        queryFn: async () => getPayPeriodList(company?.id),
+        queryKey: ['payPeriod', 'list', { companyId }],
+        queryFn: async () => await getPayPeriodList(companyId),
     });
 
     if (isError) {
@@ -41,7 +42,7 @@ export function SelectPayPeriod(props: SelectProps) {
                     {getPayPeriodName(
                         period.dateFrom,
                         period.dateTo,
-                        isEqual(period.dateFrom, company?.payPeriod),
+                        isEqual(period.dateFrom, currentCompany?.payPeriod),
                         locale.dateLocale,
                     )}
                 </MenuItem>
@@ -50,8 +51,10 @@ export function SelectPayPeriod(props: SelectProps) {
     };
 
     const onChange = (event: any) => {
-        setPayPeriod(new Date(event.target.value));
-        localStorage.setItem('payPeriod', event.target.value);
+        if (companyId === currentCompany?.id) {
+            setPayPeriod(new Date(event.target.value));
+            localStorage.setItem('payPeriod', event.target.value);
+        }
     };
 
     return (
@@ -60,7 +63,7 @@ export function SelectPayPeriod(props: SelectProps) {
             margin="none"
             fullWidth
             onChange={onChange}
-            value={format(payPeriod || startOfMonth(new Date()), 'yyyy-MM-dd')}
+            value={value}
             {...props}
             label={''}
         >

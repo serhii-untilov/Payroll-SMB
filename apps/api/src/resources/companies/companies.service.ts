@@ -141,7 +141,7 @@ export class CompaniesService {
     }
 
     async update(userId: number, id: number, payload: UpdateCompanyDto): Promise<Company> {
-        await this.usersCompanyService.getUserCompanyRoleTypeOrException(userId, id);
+        await this.usersCompanyService.getUserCompanyRoleTypeOrFail(userId, id);
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (payload.version !== record.version) {
             throw new ConflictException(

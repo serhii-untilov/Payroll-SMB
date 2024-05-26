@@ -42,6 +42,25 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
             },
         },
     },
+    '& .row-status--Current': {
+        color: theme.palette.primary.main,
+        fontWeight: 500,
+        '&:hover': {
+            backgroundColor: theme.palette.grey['200'],
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.background.default,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.background.paper,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
     '& .row-status--Vacancy': {
         backgroundColor: getBackgroundColor(theme.palette.success.main, theme.palette.mode),
         '&:hover': {

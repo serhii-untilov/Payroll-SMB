@@ -20,6 +20,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { deepStringToShortDate } from '@repo/shared';
 
 @Controller('companies')
 export class CompaniesController {
@@ -31,10 +32,10 @@ export class CompaniesController {
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createCompanyDto: CreateCompanyDto) {
+    async create(@Req() req: Request, @Body() payload: CreateCompanyDto) {
         const userId = req.user['sub'];
         await this.service.availableCreateOrFail(userId);
-        const company = await this.service.create(userId, createCompanyDto);
+        const company = await this.service.create(userId, deepStringToShortDate(payload));
         return company;
     }
 
@@ -66,11 +67,11 @@ export class CompaniesController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateCompanyDto: UpdateCompanyDto,
+        @Body() payload: UpdateCompanyDto,
     ) {
         const userId = req.user['sub'];
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, updateCompanyDto);
+        return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')

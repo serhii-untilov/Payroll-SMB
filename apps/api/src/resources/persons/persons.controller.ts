@@ -12,7 +12,7 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
-import { IPerson } from '@repo/shared';
+import { IPerson, deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePersonDto } from './dto/create-person.dto';
@@ -27,10 +27,10 @@ export class PersonsController {
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() person: CreatePersonDto): Promise<IPerson> {
+    async create(@Req() req: Request, @Body() payload: CreatePersonDto): Promise<IPerson> {
         const userId = req.user['sub'];
         await this.service.availableCreateOrFail(userId);
-        return await this.service.create(userId, person);
+        return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
     @Get()
@@ -57,11 +57,11 @@ export class PersonsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() person: UpdatePersonDto,
+        @Body() payload: UpdatePersonDto,
     ): Promise<IPerson> {
         const userId = req.user['sub'];
         await this.service.availableUpdateOrFail(userId);
-        return await this.service.update(userId, id, person);
+        return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')

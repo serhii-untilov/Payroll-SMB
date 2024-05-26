@@ -21,28 +21,28 @@ import { RolesService } from './roles.service';
 
 @Controller('roles')
 export class RolesController {
-    constructor(private readonly rolesService: RolesService) {}
+    constructor(private readonly service: RolesService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createRoleDto: CreateRoleDto): Promise<IRole> {
+    async create(@Req() req: Request, @Body() payload: CreateRoleDto): Promise<IRole> {
         const userId = req.user['sub'];
-        return await this.rolesService.create(userId, createRoleDto);
+        return await this.service.create(userId, payload);
     }
 
     @Get()
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request): Promise<IRole[]> {
         const userId = req.user['sub'];
-        return await this.rolesService.findAll(userId);
+        return await this.service.findAll(userId);
     }
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IRole> {
         const userId = req.user['sub'];
-        return await this.rolesService.findOne(userId, id);
+        return await this.service.findOne(userId, id);
     }
 
     @Patch(':id')
@@ -51,10 +51,10 @@ export class RolesController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateRoleDto: UpdateRoleDto,
+        @Body() payload: UpdateRoleDto,
     ): Promise<IRole> {
         const userId = req.user['sub'];
-        return await this.rolesService.update(userId, id, updateRoleDto);
+        return await this.service.update(userId, id, payload);
     }
 
     @Delete(':id')
@@ -62,6 +62,6 @@ export class RolesController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IRole> {
         const userId = req.user['sub'];
-        return await this.rolesService.remove(userId, id);
+        return await this.service.remove(userId, id);
     }
 }

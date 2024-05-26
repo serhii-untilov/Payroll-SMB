@@ -137,7 +137,7 @@ export class UsersCompanyService {
         return record?.role?.type;
     }
 
-    async getUserCompanyRoleTypeOrException(userId: number, companyId: number): Promise<string> {
+    async getUserCompanyRoleTypeOrFail(userId: number, companyId: number): Promise<string> {
         const roleType = await this.getUserCompanyRoleType(userId, companyId);
         if (!roleType) {
             throw new ForbiddenException(

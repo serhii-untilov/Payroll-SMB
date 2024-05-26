@@ -51,20 +51,17 @@ export function UserCompanyList(params: Props) {
             valueGetter: (params) => {
                 return params.row.company?.name;
             },
-            renderCell: (params) => {
-                return (
-                    <Typography
-                        sx={
-                            params.row.company?.id === currentCompany?.id
-                                ? { fontSize: '1rem', fontWeight: 'medium' }
-                                : {}
-                        }
-                        color={params.row.company?.id === currentCompany?.id ? 'primary' : ''}
-                    >
-                        {params.row.company?.name}
-                    </Typography>
-                );
-            },
+            // renderCell: (params) => {
+            //     const isCurrentCompany = params.row.company?.id === currentCompany?.id;
+            //     return (
+            //         <Typography
+            //             sx={isCurrentCompany ? { fontSize: '1rem', fontWeight: 'medium' } : {}}
+            //             color={params.row.company?.id === currentCompany?.id ? 'primary' : ''}
+            //         >
+            //             {params.row.company?.name}
+            //         </Typography>
+            //     );
+            // },
         },
         {
             field: 'roleName',

@@ -122,11 +122,11 @@ export class AccessService {
     }
 
     async availableForUserCompany(params: AvailableAccessUserCompanyDto): Promise<boolean> {
-        const roleType = await this.usersCompanyService.getUserCompanyRoleTypeOrException(
+        const roleType = await this.usersCompanyService.getUserCompanyRoleTypeOrFail(
             params.userId,
             params.companyId,
         );
-        await this.usersCompanyService.getUserCompanyRoleTypeOrException(
+        await this.usersCompanyService.getUserCompanyRoleTypeOrFail(
             params.userId,
             params.companyId,
         );

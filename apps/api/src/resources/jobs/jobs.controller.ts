@@ -20,28 +20,28 @@ import { JobsService } from './jobs.service';
 
 @Controller('jobs')
 export class JobsController {
-    constructor(private readonly jobsService: JobsService) {}
+    constructor(private readonly service: JobsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createJobDto: CreateJobDto) {
+    async create(@Req() req: Request, @Body() payload: CreateJobDto) {
         const userId = req.user['sub'];
-        return await this.jobsService.create(userId, createJobDto);
+        return await this.service.create(userId, payload);
     }
 
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll() {
-        return await this.jobsService.findAll();
+        return await this.service.findAll();
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.jobsService.findOne(id);
+        return await this.service.findOne(id);
     }
 
     @Patch(':id')
@@ -50,10 +50,10 @@ export class JobsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateJobDto: UpdateJobDto,
+        @Body() payload: UpdateJobDto,
     ) {
         const userId = req.user['sub'];
-        return await this.jobsService.update(userId, id, updateJobDto);
+        return await this.service.update(userId, id, payload);
     }
 
     @Delete(':id')
@@ -61,6 +61,6 @@ export class JobsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
-        return await this.jobsService.remove(userId, id);
+        return await this.service.remove(userId, id);
     }
 }

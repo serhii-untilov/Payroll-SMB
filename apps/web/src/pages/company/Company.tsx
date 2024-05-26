@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
@@ -26,35 +26,29 @@ type Props = {
 
 export default function Company(props: Props) {
     const params = useParams();
-    const [companyId, setCompanyId] = useState(Number(params.companyId));
-    const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
+    const companyId = Number(params.companyId);
+    // const [companyId, setCompanyId] = useState(Number(params.companyId));
     const [tab, setTab] = useState(Number(localStorage.getItem('company-tab-index')));
     const { t } = useTranslation();
     const { locale } = useLocale();
     const navigate = useNavigate();
 
     useEffect(() => {}, [locale]);
-    useEffect(() => {
-        if (currentCompany) {
-            setCompanyId(currentCompany.id);
-        }
-    }, [currentCompany]);
 
     const { data, isError, isLoading, error } = useQuery<Partial<ICompany>, Error>({
         queryKey: ['company', { companyId }],
         queryFn: async () => {
             return companyId ? await getCompany(companyId) : {};
         },
-        enabled: !!companyId,
     });
+
+    const pageTitle = useMemo(() => {
+        return data?.id ? data?.name || '' : t('New Company');
+    }, [data, t]);
 
     if (isLoading) {
         return <Loading />;
     }
-
-    const generatePageTitle = () => {
-        return data?.id ? data?.name || '' : t('New Company');
-    };
 
     const onGoBack = () => {
         navigate(-1);
@@ -78,7 +72,7 @@ export default function Company(props: Props) {
                         <ArrowBackIosNewRounded />
                     </IconButton>
                 )}
-                {generatePageTitle()}
+                {pageTitle}
             </PageTitle>
             <Tabs id="company__details_tabs" value={tab} onChange={handleChange}>
                 <Tab label={t('Accounting Details')} />

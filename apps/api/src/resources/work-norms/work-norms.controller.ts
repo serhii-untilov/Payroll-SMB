@@ -19,24 +19,25 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNormsService } from './work-norms.service';
+import { deepStringToShortDate } from '@repo/shared';
 
 @Controller('work-norms')
 export class WorkNormsController {
-    constructor(private readonly workNormsService: WorkNormsService) {}
+    constructor(private readonly service: WorkNormsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createWorkNormDto: CreateWorkNormDto) {
+    async create(@Req() req: Request, @Body() payload: CreateWorkNormDto) {
         const userId = req.user['sub'];
-        return await this.workNormsService.create(userId, createWorkNormDto);
+        return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
     @Get()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(@Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean) {
-        return await this.workNormsService.findAll(!!relations);
+        return await this.service.findAll(!!relations);
     }
 
     @Get(':id')
@@ -46,7 +47,7 @@ export class WorkNormsController {
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ) {
-        return await this.workNormsService.findOne(id, !!relations);
+        return await this.service.findOne(id, !!relations);
     }
 
     @Patch(':id')
@@ -55,10 +56,10 @@ export class WorkNormsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateWorkNormDto: UpdateWorkNormDto,
+        @Body() payload: UpdateWorkNormDto,
     ) {
         const userId = req.user['sub'];
-        return await this.workNormsService.update(userId, id, updateWorkNormDto);
+        return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')
@@ -66,6 +67,6 @@ export class WorkNormsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
-        return await this.workNormsService.remove(userId, id);
+        return await this.service.remove(userId, id);
     }
 }

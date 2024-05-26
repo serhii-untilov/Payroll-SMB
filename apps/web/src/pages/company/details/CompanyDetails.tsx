@@ -1,13 +1,23 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { IAccounting, ILaw, PaymentSchedule, maxDate, minDate } from '@repo/shared';
+import {
+    AccountingType,
+    IAccounting,
+    ILaw,
+    PaymentSchedule,
+    maxDate,
+    minDate,
+    monthBegin,
+    monthEnd,
+} from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { endOfMonth, format, startOfDay, startOfMonth } from 'date-fns';
+import { format, startOfMonth } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { FormInputDropdown } from '../../../components/form/FormInputDropdown';
 import { FormTextField } from '../../../components/form/FormTextField';
@@ -38,46 +48,20 @@ const formSchema = yup.object().shape({
 
 type FormType = yup.InferType<typeof formSchema>;
 
-// To prevent Warning: A component is changing an uncontrolled input to be controlled.
-const defaultValues: FormType = {
-    id: null,
-    name: '',
-    lawId: 0,
-    taxId: '',
-    accountingId: 0,
-    paymentSchedule: PaymentSchedule.LAST_DAY,
-    dateFrom: minDate(),
-    dateTo: maxDate(),
-    payPeriod: startOfMonth(new Date()),
-    checkDate: startOfDay(endOfMonth(new Date())),
-};
-
 type Props = {
     companyId: number | undefined;
 };
 
 export function CompanyDetails(props: Props) {
-    // const { companyId } = props;
-    const [companyId, setCompanyId] = useState(props.companyId);
+    const { companyId } = props;
+    // const [companyId, setCompanyId] = useState(props.companyId);
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const { locale } = useLocale();
     const { t } = useTranslation();
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     useEffect(() => {});
-
-    const {
-        data: company,
-        isError: isCompanyError,
-        isLoading: isCompanyLoading,
-        error: companyError,
-    } = useQuery<FormType, Error>({
-        queryKey: ['company', { companyId }],
-        queryFn: async () => {
-            return formSchema.cast(companyId ? await getCompany(companyId) : defaultValues);
-        },
-        // enabled: !!companyId,
-    });
 
     const {
         data: lawList,
@@ -87,7 +71,7 @@ export function CompanyDetails(props: Props) {
     } = useQuery<ILaw[], Error>({
         queryKey: ['lawList'],
         queryFn: async () => {
-            return getLawList();
+            return await getLawList();
         },
     });
 
@@ -99,7 +83,37 @@ export function CompanyDetails(props: Props) {
     } = useQuery<IAccounting[], Error>({
         queryKey: ['accounting', 'list'],
         queryFn: async () => {
-            return getAccountingList();
+            return await getAccountingList();
+        },
+    });
+
+    // To prevent Warning: A component is changing an uncontrolled input to be controlled.
+    const defaultValues = useMemo((): FormType => {
+        return {
+            id: null,
+            name: '',
+            lawId: lawList ? lawList[0].id : 0,
+            taxId: '',
+            accountingId: accountingList
+                ? accountingList.find((o) => o.type === AccountingType.GENERIC)?.id || 0
+                : 0,
+            paymentSchedule: PaymentSchedule.LAST_DAY,
+            dateFrom: minDate(),
+            dateTo: maxDate(),
+            payPeriod: monthBegin(new Date()),
+            checkDate: monthEnd(new Date()),
+        };
+    }, [lawList, accountingList]);
+
+    const {
+        data: company,
+        isError: isCompanyError,
+        isLoading: isCompanyLoading,
+        error: companyError,
+    } = useQuery<FormType, Error>({
+        queryKey: ['company', { companyId, defaultValues }],
+        queryFn: async () => {
+            return formSchema.cast(companyId ? await getCompany(companyId) : defaultValues);
         },
     });
 
@@ -110,7 +124,7 @@ export function CompanyDetails(props: Props) {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: company || defaultValues,
+        defaultValues: company || {},
         values: company || defaultValues,
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
@@ -169,10 +183,12 @@ export function CompanyDetails(props: Props) {
             const company = data.id
                 ? await updateCompany(data.id, { ...dirtyValues, version: data.version })
                 : await createCompany(data);
-            reset(company);
+            // reset(company);
+            setCurrentCompany(company);
             await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
-            if (!currentCompany || currentCompany.id === company.id) {
-                setCurrentCompany(company);
+            await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
+            if (!props.companyId) {
+                navigate(`/company/${company.id}`);
             }
         } catch (e: unknown) {
             const error = e as AxiosError;
@@ -264,6 +280,7 @@ export function CompanyDetails(props: Props) {
                                 formState,
                             }) => (
                                 <SelectPayPeriod
+                                    companyId={companyId}
                                     label={''}
                                     name="payPeriod"
                                     autoComplete="payPeriod"

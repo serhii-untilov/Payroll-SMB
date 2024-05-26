@@ -30,6 +30,7 @@ import {
     subYears,
 } from 'date-fns';
 import {
+    DataSource,
     FindManyOptions,
     FindOneOptions,
     LessThanOrEqual,
@@ -64,6 +65,7 @@ export class PayPeriodsService {
         private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService))
         private payrollsService: PayrollsService,
+        private dataSource: DataSource,
     ) {}
 
     async availableFindAllOrFail(userId: number, companyId: number) {
@@ -147,12 +149,19 @@ export class PayPeriodsService {
         companyId: number,
         params: FindManyOptions<PayPeriod>,
     ): Promise<PayPeriod[]> {
-        params['where']['companyId'] = companyId;
-        const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
-        const payPeriodList = await this.repositoryPayPeriod.find(options);
-        if (payPeriodList.length) return payPeriodList;
-        await this.fillPeriods(userId, companyId);
-        return await this.repositoryPayPeriod.find(options);
+        if (companyId) {
+            params['where']['companyId'] = companyId;
+            const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
+            let payPeriodList = await this.repositoryPayPeriod.find(options);
+            if (payPeriodList.length) return payPeriodList;
+            await this.fillPeriods(userId, companyId);
+            payPeriodList = await this.repositoryPayPeriod.find(options);
+            return payPeriodList;
+        } else {
+            // Periods for creating company
+            const filler = getFiller(PaymentSchedule.LAST_DAY);
+            return filler(null, getDateFrom(new Date()), getDateTo(new Date()));
+        }
     }
 
     async findOne(userId: number, params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
@@ -205,11 +214,7 @@ export class PayPeriodsService {
         return await this.findOne(userId, options);
     }
 
-    async fillPeriods(userId: number, companyId: number | null): Promise<PayPeriod[]> {
-        if (!companyId) {
-            const filler = getFiller(PaymentSchedule.LAST_DAY);
-            return filler(null, getDateFrom(new Date()), getDateTo(new Date()));
-        }
+    async fillPeriods(userId: number, companyId: number): Promise<void> {
         const company = await this.companiesService.findOne(userId, companyId);
         const dateFrom = getDateFrom(company.payPeriod);
         const dateTo = getDateTo(company.payPeriod);
