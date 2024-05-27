@@ -29,14 +29,7 @@ import {
     sub,
     subYears,
 } from 'date-fns';
-import {
-    DataSource,
-    FindOneOptions,
-    LessThanOrEqual,
-    MoreThanOrEqual,
-    Not,
-    Repository,
-} from 'typeorm';
+import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Not, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
@@ -64,7 +57,6 @@ export class PayPeriodsService {
         private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService))
         private payrollsService: PayrollsService,
-        private dataSource: DataSource,
     ) {}
 
     async availableFindAllOrFail(userId: number, companyId: number) {

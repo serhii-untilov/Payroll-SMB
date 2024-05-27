@@ -3,6 +3,7 @@ import { CompanyListenerService } from './company-listener.service';
 import { PayrollCalculationService } from '../../../processor/payrollCalculation/payrollCalculation.service';
 import { createMock } from '@golevelup/ts-jest';
 import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
+import { PayPeriodsService } from './../../../resources/pay-periods/pay-periods.service';
 
 describe('CompanyListenerService', () => {
     let service: CompanyListenerService;
@@ -18,6 +19,10 @@ describe('CompanyListenerService', () => {
                 {
                     provide: PayFundCalculationService,
                     useValue: createMock<PayFundCalculationService>(),
+                },
+                {
+                    provide: PayPeriodsService,
+                    useValue: createMock<PayPeriodsService>(),
                 },
             ],
         }).compile();
