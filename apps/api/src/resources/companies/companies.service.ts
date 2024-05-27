@@ -82,7 +82,8 @@ export class CompaniesService {
     }
 
     async create(userId: number, payload: CreateCompanyDto): Promise<Company> {
-        const existing = await this.repository.findOneBy({ name: payload.name });
+        // const existing = await this.repository.findOneBy({ name: payload.name });
+        const existing = await this.usersCompanyService.findOneByName(userId, payload.name);
         if (existing) {
             throw new BadRequestException(`Company '${payload.name}' already exists.`);
         }

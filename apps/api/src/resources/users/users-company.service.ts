@@ -61,6 +61,13 @@ export class UsersCompanyService {
         return userCompany;
     }
 
+    async findOneByName(userId: number, name: string): Promise<UserCompany> {
+        return await this.repository.findOne({
+            relations: { company: true },
+            where: { userId, company: { name } },
+        });
+    }
+
     async update(userId: number, id: number, payload: UpdateUserCompanyDto): Promise<UserCompany> {
         await this.accessService.availableForUserOrFail(
             userId,
