@@ -107,16 +107,16 @@ export function Personal({ personId }: Props) {
                 : await createPerson(data);
             const updated = await getPerson(person.id, true);
             reset(updated);
-            queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
+            await queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
         }
     };
 
-    const onCancel = () => {
+    const onCancel = async () => {
         reset(data);
-        queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
     };
 
     const onPrint = () => {

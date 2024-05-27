@@ -55,11 +55,11 @@ export class PayrollsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updatePayrollDto: UpdatePayrollDto,
+        @Body() payload: UpdatePayrollDto,
     ): Promise<Payroll> {
         const userId = req.user['sub'];
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, updatePayrollDto);
+        return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')

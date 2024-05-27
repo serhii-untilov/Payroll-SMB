@@ -6,62 +6,25 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
+import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
 import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';
 import { PayFundType } from './entities/pay-fund-type.entity';
 
 @Injectable()
-export class PayFundTypesService {
+export class PayFundTypesService extends AvailableForUser {
     public readonly resourceType = ResourceType.FUND_TYPE;
 
     constructor(
         @InjectRepository(PayFundType)
         private repository: Repository<PayFundType>,
         @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
-    ) {}
-
-    async availableFindAllOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-    }
-
-    async availableFindOneOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-    }
-
-    async availableCreateOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-    }
-
-    async availableUpdateOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-    }
-
-    async availableDeleteOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
+        accessService: AccessService,
+    ) {
+        super(accessService);
     }
 
     async create(userId: number, payload: CreatePayFundTypeDto): Promise<PayFundType> {

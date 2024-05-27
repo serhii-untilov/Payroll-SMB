@@ -1,6 +1,7 @@
 import {
     BadRequestException,
     ConflictException,
+    ForbiddenException,
     Inject,
     Injectable,
     NotFoundException,
@@ -81,7 +82,8 @@ export class CompaniesService {
     }
 
     async create(userId: number, payload: CreateCompanyDto): Promise<Company> {
-        const existing = await this.repository.findOneBy({ name: payload.name });
+        // const existing = await this.repository.findOneBy({ name: payload.name });
+        const existing = await this.usersCompanyService.findOneByName(userId, payload.name);
         if (existing) {
             throw new BadRequestException(`Company '${payload.name}' already exists.`);
         }
@@ -140,7 +142,7 @@ export class CompaniesService {
     }
 
     async update(userId: number, id: number, payload: UpdateCompanyDto): Promise<Company> {
-        await this.usersCompanyService.getUserCompanyRoleTypeOrException(userId, id);
+        await this.usersCompanyService.getUserCompanyRoleTypeOrFail(userId, id);
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (payload.version !== record.version) {
             throw new ConflictException(
@@ -154,10 +156,16 @@ export class CompaniesService {
     }
 
     async remove(userId: number, id: number): Promise<Company> {
-        await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-        const deleted = await this.repository.findOne({ where: { id }, withDeleted: true });
-        this.eventEmitter.emit('company.deleted', new CompanyDeletedEvent(userId, deleted));
-        return deleted;
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        if (record.createdUserId === userId) {
+            await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
+            const deleted = await this.repository.findOne({ where: { id }, withDeleted: true });
+            this.eventEmitter.emit('company.deleted', new CompanyDeletedEvent(userId, deleted));
+            return deleted;
+        }
+        throw new ForbiddenException(
+            `User doesn't have access to the requested Company's resource.`,
+        );
     }
 
     async calculatePayroll(userId: number, id: number): Promise<void> {

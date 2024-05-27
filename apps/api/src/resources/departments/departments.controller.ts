@@ -19,17 +19,18 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
+import { deepStringToShortDate } from '@repo/shared';
 
 @Controller('departments')
 export class DepartmentsController {
-    constructor(private readonly departmentsService: DepartmentsService) {}
+    constructor(private readonly service: DepartmentsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createDepartmentDto: CreateDepartmentDto) {
+    async create(@Req() req: Request, @Body() payload: CreateDepartmentDto) {
         const userId = req.user['sub'];
-        return await this.departmentsService.create(userId, createDepartmentDto);
+        return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
     @Get()
@@ -41,7 +42,7 @@ export class DepartmentsController {
         @Query('relations', ParseBoolPipe) relations: boolean,
     ) {
         const userId = req.user['sub'];
-        return await this.departmentsService.findAll(userId, companyId, !!relations);
+        return await this.service.findAll(userId, companyId, !!relations);
     }
 
     @Get(':id')
@@ -53,7 +54,7 @@ export class DepartmentsController {
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ) {
         const userId = req.user['sub'];
-        return await this.departmentsService.findOne(userId, id, !!relations);
+        return await this.service.findOne(userId, id, !!relations);
     }
 
     @Patch(':id')
@@ -62,10 +63,10 @@ export class DepartmentsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateDepartmentDto: UpdateDepartmentDto,
+        @Body() payload: UpdateDepartmentDto,
     ) {
         const userId = req.user['sub'];
-        return await this.departmentsService.update(userId, id, updateDepartmentDto);
+        return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')
@@ -73,6 +74,6 @@ export class DepartmentsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
-        return await this.departmentsService.remove(userId, id);
+        return await this.service.remove(userId, id);
     }
 }

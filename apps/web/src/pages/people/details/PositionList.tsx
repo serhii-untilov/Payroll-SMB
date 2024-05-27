@@ -191,15 +191,15 @@ export function PositionList(props: IFindPosition) {
         navigate(`/people/position/${positionId}`);
     };
 
-    const submitCallback = (data: IPosition) => {
-        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+    const submitCallback = async (data: IPosition) => {
+        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
             await deletePosition(+id);
         }
-        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const onPrint = () => {

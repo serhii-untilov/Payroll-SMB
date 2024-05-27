@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, BalanceWorkingTime, PaymentPart, ResourceType, maxDate } from '@repo/shared';
+import { BalanceWorkingTime, PaymentPart, ResourceType, maxDate } from '@repo/shared';
 import { sub } from 'date-fns';
 import {
     And,
@@ -20,6 +20,7 @@ import {
     Not,
     Repository,
 } from 'typeorm';
+import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { PayPeriodsService } from './../pay-periods/pay-periods.service';
@@ -34,75 +35,33 @@ import { PositionDeletedEvent } from './events/position-deleted.event';
 import { PositionUpdatedEvent } from './events/position-updated.event';
 
 @Injectable()
-export class PositionsService {
+export class PositionsService extends AvailableForUserCompany {
     public readonly resourceType = ResourceType.POSITION;
 
     constructor(
         @InjectRepository(Position)
-        private repositoryPosition: Repository<Position>,
+        private repository: Repository<Position>,
         @InjectRepository(PositionBalance)
         private repositoryPositionBalance: Repository<PositionBalance>,
         @Inject(forwardRef(() => PayPeriodsService))
         private readonly payPeriodsService: PayPeriodsService,
-        @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
         @Inject(forwardRef(() => PayrollsService))
         private payrollsService: PayrollsService,
         private eventEmitter: EventEmitter2,
-    ) {}
-
-    async availableFindAllOrFail(userId: number, companyId: number) {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
+        @Inject(forwardRef(() => AccessService))
+        accessService: AccessService,
+    ) {
+        super(accessService);
     }
 
-    async availableFindOneOrFail(userId: number, id: number) {
-        const record = await this.repositoryPosition.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            record.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-    }
-
-    async availableCreateOrFail(userId: number, companyId: number) {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            companyId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-    }
-
-    async availableUpdateOrFail(userId: number, id: number) {
-        const record = await this.repositoryPosition.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            record.companyId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-    }
-
-    async availableDeleteOrFail(userId: number, id: number) {
-        const record = await this.repositoryPosition.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            record.companyId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
+    async getCompanyId(entityId: number): Promise<number> {
+        return (await this.repository.findOneOrFail({ where: { id: entityId } })).companyId;
     }
 
     async create(userId: number, payload: CreatePositionDto): Promise<Position> {
         if (payload?.cardNumber) {
             const existing = payload?.cardNumber
-                ? await this.repositoryPosition.findOne({
+                ? await this.repository.findOne({
                       where: { cardNumber: payload.cardNumber },
                   })
                 : null;
@@ -112,7 +71,7 @@ export class PositionsService {
         }
 
         const cardNumber = payload?.cardNumber || (await this.getNextCardNumber(payload.companyId));
-        const created = await this.repositoryPosition.save({
+        const created = await this.repository.save({
             ...payload,
             cardNumber,
             createdUserId: userId,
@@ -205,7 +164,7 @@ export class PositionsService {
                 ? And(LessThan(maxDate()))
                 : LessThan(maxDate());
         }
-        return await this.repositoryPosition.find(options);
+        return await this.repository.find(options);
     }
 
     async findOne(
@@ -215,7 +174,7 @@ export class PositionsService {
         onDate?: Date,
         onPayPeriodDate?: Date,
     ): Promise<Position> {
-        const position = await this.repositoryPosition.findOneOrFail({
+        const position = await this.repository.findOneOrFail({
             where: { id },
             relations: {
                 company: !!relations,
@@ -266,25 +225,25 @@ export class PositionsService {
                 dateFrom: LessThanOrEqual(payPeriod.dateTo),
             };
         }
-        return await this.repositoryPosition.findOneOrFail(options);
+        return await this.repository.findOneOrFail(options);
     }
 
     async update(userId: number, id: number, payload: UpdatePositionDto): Promise<Position> {
-        const record = await this.repositoryPosition.findOneOrFail({ where: { id } });
+        const record = await this.repository.findOneOrFail({ where: { id } });
         if (payload.version !== record.version) {
             throw new ConflictException(
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        await this.repositoryPosition.save({ ...payload, id, updatedUserId: userId });
-        const updated = await this.repositoryPosition.findOneOrFail({ where: { id } });
+        await this.repository.save({ ...payload, id, updatedUserId: userId });
+        const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, updated));
         return updated;
     }
 
     async remove(userId: number, id: number): Promise<Position> {
-        await this.repositoryPosition.save({ id, deletedUserId: userId, deletedDate: new Date() });
-        const deleted = await this.repositoryPosition.findOneOrFail({
+        await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
+        const deleted = await this.repository.findOneOrFail({
             where: { id },
             withDeleted: true,
         });
@@ -293,9 +252,9 @@ export class PositionsService {
     }
 
     async getNextCardNumber(companyId: number): Promise<string> {
-        const first = await this.repositoryPosition.findOneBy({ companyId, cardNumber: '1' });
+        const first = await this.repository.findOneBy({ companyId, cardNumber: '1' });
         if (!first) return '1';
-        const result = await this.repositoryPosition.query(
+        const result = await this.repository.query(
             `select coalesce(min(cast(p."cardNumber" as integer)), 0) + 1 "freeNumber"
             from position p
             where p."companyId" = $1
@@ -321,7 +280,7 @@ export class PositionsService {
         payPeriod: Date,
         balanceWorkingTime: BalanceWorkingTime,
     ) {
-        const position = await this.repositoryPosition.findOneByOrFail({ id: positionId });
+        const position = await this.repository.findOneByOrFail({ id: positionId });
         const prevPayPeriod = await this.payPeriodsService.find({
             where: {
                 companyId: position.companyId,

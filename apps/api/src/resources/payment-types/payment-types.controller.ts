@@ -21,14 +21,14 @@ import { PaymentTypesService } from './payment-types.service';
 
 @Controller('payment-types')
 export class PaymentTypesController {
-    constructor(private readonly paymentTypesService: PaymentTypesService) {}
+    constructor(private readonly service: PaymentTypesService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createPaymentTypeDto: CreatePaymentTypeDto) {
+    async create(@Req() req: Request, @Body() payload: CreatePaymentTypeDto) {
         const userId = req.user['sub'];
-        return await this.paymentTypesService.create(userId, createPaymentTypeDto);
+        return await this.service.create(userId, payload);
     }
 
     @Get()
@@ -40,7 +40,7 @@ export class PaymentTypesController {
         @Query('methods') methods: string,
         @Query('ids') ids: string,
     ) {
-        return await this.paymentTypesService.findAll({
+        return await this.service.findAll({
             part,
             groups: groups ? JSON.parse(decodeURIComponent(groups)) : null,
             methods: methods ? JSON.parse(decodeURIComponent(methods)) : null,
@@ -52,7 +52,7 @@ export class PaymentTypesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.paymentTypesService.findOne({
+        return await this.service.findOne({
             where: { id },
             relations: {
                 law: true,
@@ -70,7 +70,7 @@ export class PaymentTypesController {
         @Body() updatePaymentTypeDto: UpdatePaymentTypeDto,
     ) {
         const userId = req.user['sub'];
-        return await this.paymentTypesService.update(userId, id, updatePaymentTypeDto);
+        return await this.service.update(userId, id, updatePaymentTypeDto);
     }
 
     @Delete(':id')
@@ -78,6 +78,6 @@ export class PaymentTypesController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
-        return await this.paymentTypesService.remove(userId, id);
+        return await this.service.remove(userId, id);
     }
 }

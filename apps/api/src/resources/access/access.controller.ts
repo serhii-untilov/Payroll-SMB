@@ -31,9 +31,9 @@ export class AccessController {
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createAccessDto: CreateAccessDto): Promise<IAccess> {
+    async create(@Req() req: Request, @Body() payload: CreateAccessDto): Promise<IAccess> {
         const userId = req.user['sub'];
-        return await this.accessService.create(userId, createAccessDto);
+        return await this.accessService.create(userId, payload);
     }
 
     @Get()
@@ -59,10 +59,10 @@ export class AccessController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateAccessDto: UpdateAccessDto,
+        @Body() payload: UpdateAccessDto,
     ): Promise<IAccess> {
         const userId = req.user['sub'];
-        return await this.accessService.update(userId, id, updateAccessDto);
+        return await this.accessService.update(userId, id, payload);
     }
 
     @Delete(':id')

@@ -164,5 +164,6 @@
     "Debt": "Залишок",
     "Adjustments": "Доплати",
     "Working Time": "Робочий час",
-    "Rate error": "Ставка повинна бути в межах від 0 до 2"
+    "Rate error": "Ставка повинна бути в межах від 0 до 2",
+    "Deleting the current company is not allowed.": "Видалення поточного підприємства не допускається."
 }

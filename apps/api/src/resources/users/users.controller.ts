@@ -1,3 +1,4 @@
+import { UserCompany } from './entities/user-company.entity';
 import {
     Controller,
     Get,
@@ -112,8 +113,36 @@ export class UsersController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+        @Query('deleted', new ParseBoolPipe({ optional: true })) deleted: boolean,
     ): Promise<IUserCompany[]> {
         const userId = req.user['sub'];
-        return await this.usersCompanyService.getUserCompanyList(userId, id, !!relations);
+        return await this.usersCompanyService.getUserCompanyList(
+            userId,
+            id,
+            !!relations,
+            !!deleted,
+        );
+    }
+
+    @Delete('/company/:id')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async userCompanyRemove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+    ): Promise<UserCompany> {
+        const userId = req.user['sub'];
+        return await this.usersCompanyService.remove(userId, id);
+    }
+
+    @Post('/company/:id/restore')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async userCompanyRestore(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+    ): Promise<UserCompany> {
+        const userId = req.user['sub'];
+        return await this.usersCompanyService.restore(userId, id);
     }
 }

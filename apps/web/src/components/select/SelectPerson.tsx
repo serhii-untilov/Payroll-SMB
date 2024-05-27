@@ -204,7 +204,7 @@ export const SelectPerson = (props: Props) => {
                                             sex: dialogValue.sex,
                                         });
                                         onChange(person.id);
-                                        queryClient.invalidateQueries({
+                                        await queryClient.invalidateQueries({
                                             queryKey: ['person'],
                                             refetchType: 'all',
                                         });

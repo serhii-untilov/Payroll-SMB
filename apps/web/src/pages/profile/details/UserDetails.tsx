@@ -110,7 +110,7 @@ export function UserDetails(props: Props) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
         }
-        queryClient.invalidateQueries({ queryKey: ['user', 'current'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['user'], refetchType: 'all' });
     };
 
     const onCancel = () => {

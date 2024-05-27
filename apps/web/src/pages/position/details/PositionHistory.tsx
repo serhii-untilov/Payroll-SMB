@@ -123,7 +123,7 @@ export function PositionHistory(props: Props) {
     const onDelete = async () => {
         console.log('onDelete');
         // delete
-        queryClient.invalidateQueries({ queryKey: ['positionHistory'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['positionHistory'], refetchType: 'all' });
     };
 
     const onPrint = () => {

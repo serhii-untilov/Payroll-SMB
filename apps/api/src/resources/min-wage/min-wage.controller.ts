@@ -18,6 +18,7 @@ import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
 import { MinWage } from './entities/min-wage.entity';
 import { MinWageService } from './min-wage.service';
+import { deepStringToShortDate } from '@repo/shared';
 
 @Controller('min-wage')
 export class MinWageController {
@@ -29,7 +30,7 @@ export class MinWageController {
     async create(@Req() req: Request, @Body() payload: CreateMinWageDto): Promise<MinWage> {
         const userId = req.user['sub'];
         await this.service.availableCreateOrFail(userId);
-        return await this.service.create(userId, payload);
+        return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
     @Post()
@@ -60,7 +61,7 @@ export class MinWageController {
     ): Promise<MinWage> {
         const userId = req.user['sub'];
         await this.service.availableUpdateOrFail(userId);
-        return await this.service.update(userId, id, payload);
+        return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')

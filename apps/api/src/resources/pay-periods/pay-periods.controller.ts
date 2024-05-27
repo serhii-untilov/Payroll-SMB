@@ -20,19 +20,19 @@ import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { defaultFieldList } from './entities/pay-period.entity';
 import { PayPeriodsService } from './pay-periods.service';
-import { PaymentSchedule } from '@repo/shared';
+import { PaymentSchedule, deepStringToShortDate } from '@repo/shared';
 
 @Controller('pay-periods')
 export class PayPeriodsController {
-    constructor(private readonly payPeriodsService: PayPeriodsService) {}
+    constructor(private readonly service: PayPeriodsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreatePayPeriodDto) {
         const userId = req.user['sub'];
-        await this.payPeriodsService.availableCreateOrFail(userId, payload.companyId);
-        return await this.payPeriodsService.create(userId, payload);
+        await this.service.availableCreateOrFail(userId, payload.companyId);
+        return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
     @Get()
@@ -40,17 +40,13 @@ export class PayPeriodsController {
     @HttpCode(HttpStatus.OK)
     async findAll(
         @Req() req: Request,
-        @Query('companyId', ParseIntPipe) companyId: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
-        @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
+        @Query('companyId', new ParseIntPipe({ optional: true })) companyId: number,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+        @Query('fullFieldList', new ParseBoolPipe({ optional: true })) fullFieldList: boolean,
     ) {
         const userId = req.user['sub'];
-        await this.payPeriodsService.availableFindAllOrFail(userId, companyId);
-        return await this.payPeriodsService.findAll(userId, companyId, {
-            where: { companyId },
-            relations: { company: !!relations },
-            ...(!!fullFieldList ? {} : defaultFieldList),
-        });
+        await this.service.availableFindAllOrFail(userId, companyId);
+        return await this.service.findAll(companyId, relations, fullFieldList);
     }
 
     @Get('current')
@@ -63,13 +59,8 @@ export class PayPeriodsController {
         @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
     ) {
         const userId = req.user['sub'];
-        await this.payPeriodsService.availableFindAllOrFail(userId, companyId);
-        return await this.payPeriodsService.findCurrent(
-            userId,
-            companyId,
-            !!relations,
-            !!fullFieldList,
-        );
+        await this.service.availableFindAllOrFail(userId, companyId);
+        return await this.service.findCurrent(userId, companyId, !!relations, !!fullFieldList);
     }
 
     @Get(':id')
@@ -82,8 +73,8 @@ export class PayPeriodsController {
         @Query('fullFieldList', new ParseBoolPipe({ optional: true })) fullFieldList: boolean,
     ) {
         const userId = req.user['sub'];
-        await this.payPeriodsService.availableFindOneOrFail(userId, id);
-        return await this.payPeriodsService.findOne(userId, {
+        await this.service.availableFindOneOrFail(userId, id);
+        return await this.service.findOne(userId, {
             where: { id },
             relations: { company: !!relations },
             ...(!!fullFieldList ? {} : defaultFieldList),
@@ -96,11 +87,11 @@ export class PayPeriodsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updatePayPeriodDto: UpdatePayPeriodDto,
+        @Body() payload: UpdatePayPeriodDto,
     ) {
         const userId = req.user['sub'];
-        await this.payPeriodsService.availableUpdateOrFail(userId, id);
-        return await this.payPeriodsService.update(userId, id, updatePayPeriodDto);
+        await this.service.availableUpdateOrFail(userId, id);
+        return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')
@@ -108,14 +99,14 @@ export class PayPeriodsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
-        await this.payPeriodsService.availableDeleteOrFail(userId, id);
-        return await this.payPeriodsService.remove(userId, id);
+        await this.service.availableDeleteOrFail(userId, id);
+        return await this.service.remove(userId, id);
     }
 
     @Get('generate')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async generate(@Query('paymentSchedule') paymentSchedule: PaymentSchedule) {
-        return await this.payPeriodsService.generate(paymentSchedule);
+        return await this.service.generate(paymentSchedule);
     }
 }

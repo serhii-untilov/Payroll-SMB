@@ -5,6 +5,7 @@ import { PayrollCalculationService } from './../../payrollCalculation/payrollCal
 import { CompanyUpdatedEvent } from './../../../resources/companies/events/company-updated.event';
 import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
 import { CompanyDeletedEvent } from './../../../resources/companies/events/company-deleted.event';
+import { PayPeriodsService } from './../../../resources/pay-periods/pay-periods.service';
 
 @Injectable()
 export class CompanyListenerService {
@@ -15,11 +16,14 @@ export class CompanyListenerService {
         private payrollCalculationService: PayrollCalculationService,
         @Inject(forwardRef(() => PayFundCalculationService))
         private payFundCalculationService: PayFundCalculationService,
+        @Inject(forwardRef(() => PayPeriodsService))
+        private payPeriodsService: PayPeriodsService,
     ) {}
 
     @OnEvent('company.created')
     async handleCompanyCreatedEvent(event: CompanyCreatedEvent) {
         this._logger.log(`handling ['company.created'] ${JSON.stringify(event)}`);
+        await this.payPeriodsService.fillPeriods(event.userId, event.companyId);
         await this.payrollCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payFundCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payrollCalculationService.calculateCompanyTotals(event.userId, event.companyId);
@@ -28,6 +32,7 @@ export class CompanyListenerService {
     @OnEvent('company.updated')
     async handleCompanyUpdatedEvent(event: CompanyUpdatedEvent) {
         this._logger.log(`handling ['company.updated'] ${JSON.stringify(event)}`);
+        await this.payPeriodsService.fillPeriods(event.userId, event.companyId);
         await this.payrollCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payFundCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payrollCalculationService.calculateCompanyTotals(event.userId, event.companyId);

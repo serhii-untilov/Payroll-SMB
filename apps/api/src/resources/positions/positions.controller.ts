@@ -33,7 +33,7 @@ export class PositionsController {
     async create(@Req() req: Request, @Body() payload: CreatePositionDto): Promise<IPosition> {
         const userId = req.user['sub'];
         await this.positionsService.availableCreateOrFail(userId, payload.companyId);
-        return await this.positionsService.create(userId, payload);
+        return await this.positionsService.create(userId, deepStringToShortDate(payload));
     }
 
     @Post('find')
@@ -75,7 +75,7 @@ export class PositionsController {
     ): Promise<IPosition> {
         const userId = req.user['sub'];
         await this.positionsService.availableUpdateOrFail(userId, id);
-        return await this.positionsService.update(userId, id, payload);
+        return await this.positionsService.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')

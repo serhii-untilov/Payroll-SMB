@@ -69,9 +69,9 @@ export default function Position() {
         });
     }
 
-    const onCancel = () => {
+    const onCancel = async () => {
+        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
         navigate(-1);
-        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const generatePageTitle = () => {
@@ -84,9 +84,9 @@ export default function Position() {
         return `${positionName}` + (jobName ? `, ${jobName}` : '');
     };
 
-    const onSubmitCallback = () => {
+    const onSubmitCallback = async () => {
         console.log('onDetailSubmit');
-        queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     return (

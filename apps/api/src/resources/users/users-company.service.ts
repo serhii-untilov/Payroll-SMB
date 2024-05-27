@@ -1,5 +1,4 @@
 import {
-    BadRequestException,
     ForbiddenException,
     Inject,
     Injectable,
@@ -62,6 +61,13 @@ export class UsersCompanyService {
         return userCompany;
     }
 
+    async findOneByName(userId: number, name: string): Promise<UserCompany> {
+        return await this.repository.findOne({
+            relations: { company: true },
+            where: { userId, company: { name } },
+        });
+    }
+
     async update(userId: number, id: number, payload: UpdateUserCompanyDto): Promise<UserCompany> {
         await this.accessService.availableForUserOrFail(
             userId,
@@ -79,26 +85,44 @@ export class UsersCompanyService {
             this.resourceType,
             AccessType.DELETE,
         );
-        const record = await this.repository.findOne({
-            relations: {
-                company: true,
-            },
-            where: { id },
-        });
-        if (record.company.createdUserId === userId) {
-            throw new BadRequestException(`The user can't delete access to his own company.`);
-        }
-        return await this.repository.save({
+        // const record = await this.repository.findOne({
+        //     relations: {
+        //         company: true,
+        //     },
+        //     where: { id },
+        // });
+        // if (record.company.createdUserId === userId) {
+        //     throw new BadRequestException(`The user can't delete access to his own company.`);
+        // }
+        await this.repository.save({
             id,
             deletedUserId: userId,
             deletedDate: new Date(),
         });
+        return await this.repository.findOne({ where: { id }, withDeleted: true });
+    }
+
+    async restore(userId: number, id: number): Promise<UserCompany> {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.DELETE,
+        );
+        await this.repository.save({
+            id,
+            deletedUserId: null,
+            deletedDate: null,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
+        return await this.repository.findOne({ where: { id } });
     }
 
     async getUserCompanyList(
         userId: number,
         id: number,
         relations: boolean,
+        deleted: boolean,
     ): Promise<UserCompany[]> {
         await this.accessService.availableForUserOrFail(
             userId,
@@ -107,6 +131,7 @@ export class UsersCompanyService {
         );
         return await this.repository.find({
             where: { userId: id },
+            withDeleted: deleted,
             ...(relations ? { relations: { company: true, role: true } } : {}),
         });
     }
@@ -119,7 +144,7 @@ export class UsersCompanyService {
         return record?.role?.type;
     }
 
-    async getUserCompanyRoleTypeOrException(userId: number, companyId: number): Promise<string> {
+    async getUserCompanyRoleTypeOrFail(userId: number, companyId: number): Promise<string> {
         const roleType = await this.getUserCompanyRoleType(userId, companyId);
         if (!roleType) {
             throw new ForbiddenException(

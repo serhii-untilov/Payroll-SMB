@@ -25,10 +25,10 @@ export class PayFundTypesController {
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() createFundTypeDto: CreatePayFundTypeDto) {
+    async create(@Req() req: Request, @Body() payload: CreatePayFundTypeDto) {
         const userId = req.user['sub'];
         await this.service.availableCreateOrFail(userId);
-        return await this.service.create(userId, createFundTypeDto);
+        return await this.service.create(userId, payload);
     }
 
     @Get()

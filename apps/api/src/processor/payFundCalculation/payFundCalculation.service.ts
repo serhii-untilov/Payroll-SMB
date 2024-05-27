@@ -1,8 +1,5 @@
-import { PayFundCalc_ECB_MinWage } from './calcMethods/PayFundCalc_ECB_MinWage';
-import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayFundCalcMethod } from '@repo/shared';
-import { LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { CompaniesService } from './../../resources/companies/companies.service';
 import { Company } from './../../resources/companies/entities/company.entity';
 import { MinWage } from './../../resources/min-wage/entities/min-wage.entity';
@@ -13,11 +10,13 @@ import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
 import { PayFundsService } from './../../resources/pay-funds/pay-funds.service';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
 import { PayPeriodsService } from './../../resources/pay-periods/pay-periods.service';
-import { Position } from './../../resources/positions/entities/position.entity';
-import { PositionsService } from './../../resources/positions/positions.service';
+import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
+import { PaymentTypesService } from './../../resources/payment-types/payment-types.service';
 import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
 import { PayrollsService } from './../../resources/payrolls/payrolls.service';
-import { PaymentTypesService } from './../../resources/payment-types/payment-types.service';
+import { Position } from './../../resources/positions/entities/position.entity';
+import { PositionsService } from './../../resources/positions/positions.service';
+import { PayFundCalc_ECB_MinWage } from './calcMethods/PayFundCalc_ECB_MinWage';
 import { PayFundCalc_ECB_Salary } from './calcMethods/PayFundCalc_ECB_Salary';
 import { PayFundCalc } from './calcMethods/abstract/PayFundCalc';
 
@@ -241,12 +240,13 @@ export class PayFundCalculationService {
     private async _calculatePosition() {
         const dateFrom = await this.getMinCalculateDate(this.payPeriod.dateFrom);
         const dateTo = await this.getMaxCalculateDate(this.payPeriod.dateTo);
-        this._accPeriods = await this.payPeriodsService.findAll(this.userId, this.company.id, {
-            where: {
-                dateFrom: MoreThanOrEqual(dateFrom),
-                dateTo: LessThanOrEqual(dateTo),
-            },
-        });
+        this._accPeriods = await this.payPeriodsService.findAll(
+            this.company.id,
+            false,
+            false,
+            dateFrom,
+            dateTo,
+        );
         this._payrolls = await this.payrollsService.findBetween(
             this.userId,
             this.position.id,

@@ -30,7 +30,7 @@ import {
     subYears,
 } from 'date-fns';
 import {
-    FindManyOptions,
+    DataSource,
     FindOneOptions,
     LessThanOrEqual,
     MoreThanOrEqual,
@@ -64,6 +64,7 @@ export class PayPeriodsService {
         private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService))
         private payrollsService: PayrollsService,
+        private dataSource: DataSource,
     ) {}
 
     async availableFindAllOrFail(userId: number, companyId: number) {
@@ -143,16 +144,30 @@ export class PayPeriodsService {
     }
 
     async findAll(
-        userId: number,
         companyId: number,
-        params: FindManyOptions<PayPeriod>,
+        relations: boolean = false,
+        fullFieldList: boolean = false,
+        dateFrom: Date = null,
+        dateTo: Date = null,
     ): Promise<PayPeriod[]> {
-        params['where']['companyId'] = companyId;
-        const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
-        const payPeriodList = await this.repositoryPayPeriod.find(options);
-        if (payPeriodList.length) return payPeriodList;
-        await this.fillPeriods(userId, companyId);
-        return await this.repositoryPayPeriod.find(options);
+        if (companyId) {
+            return await this.repositoryPayPeriod.find({
+                ...(fullFieldList ? {} : defaultFieldList),
+                where: {
+                    companyId,
+                    ...(dateFrom ? { dateFrom: MoreThanOrEqual(dateFrom) } : {}),
+                    ...(dateTo ? { dateTo: LessThanOrEqual(dateTo) } : {}),
+                },
+                relations: {
+                    company: relations,
+                },
+                order: { dateFrom: 'ASC' },
+            });
+        } else {
+            // Periods for creating company
+            const filler = getFiller(PaymentSchedule.LAST_DAY);
+            return filler(null, getDateFrom(new Date()), getDateTo(new Date()));
+        }
     }
 
     async findOne(userId: number, params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
@@ -199,17 +214,10 @@ export class PayPeriodsService {
             relations: { company: relations },
             ...(fullFieldList ? {} : defaultFieldList),
         };
-        const resp = await this.findOne(userId, options);
-        if (resp) return resp;
-        await this.fillPeriods(userId, company.id);
         return await this.findOne(userId, options);
     }
 
-    async fillPeriods(userId: number, companyId: number | null): Promise<PayPeriod[]> {
-        if (!companyId) {
-            const filler = getFiller(PaymentSchedule.LAST_DAY);
-            return filler(null, getDateFrom(new Date()), getDateTo(new Date()));
-        }
+    async fillPeriods(userId: number, companyId: number): Promise<void> {
         const company = await this.companiesService.findOne(userId, companyId);
         const dateFrom = getDateFrom(company.payPeriod);
         const dateTo = getDateTo(company.payPeriod);
@@ -250,9 +258,9 @@ export class PayPeriodsService {
     }
 
     async save(userId: number, periods: PayPeriod[]) {
-        periods.forEach((period) => {
+        for (const period of periods) {
             this.create(userId, period);
-        });
+        }
     }
 
     async deleteOpenedPeriods(companyId: number, dateFrom: Date) {

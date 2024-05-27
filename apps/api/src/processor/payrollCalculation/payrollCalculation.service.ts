@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { RecordFlags, WorkingTime } from '@repo/shared';
-import { LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { AccessService } from '../../resources/access/access.service';
 import { CompaniesService } from '../../resources/companies/companies.service';
 import { Company } from '../../resources/companies/entities/company.entity';
@@ -289,12 +288,13 @@ export class PayrollCalculationService {
         this._toDeleteIds = [];
         const dateFrom = await this.getMinCalculateDate(this.payPeriod.dateFrom);
         const dateTo = await this.getMaxCalculateDate(this.payPeriod.dateTo);
-        this._accPeriods = await this.payPeriodsService.findAll(this.userId, this.company.id, {
-            where: {
-                dateFrom: MoreThanOrEqual(dateFrom),
-                dateTo: LessThanOrEqual(dateTo),
-            },
-        });
+        this._accPeriods = await this.payPeriodsService.findAll(
+            this.company.id,
+            false,
+            false,
+            dateFrom,
+            dateTo,
+        );
         this._payrolls = await this.payrollsService.findBetween(
             this.userId,
             this.position.id,

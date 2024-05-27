@@ -17,7 +17,7 @@ export default function Payroll() {
     const { locale } = useLocale();
     const [tab, setTab] = useState(Number(localStorage.getItem('people-tab-index')));
     const { t } = useTranslation();
-    const { payPeriod } = useAppContext();
+    const { payPeriod, setPayPeriod } = useAppContext();
 
     useEffect(() => {}, [locale]);
 
@@ -27,38 +27,43 @@ export default function Payroll() {
     };
 
     return (
-        <PageLayout>
-            <PageTitle>{t('Salary Report')}</PageTitle>
-            <Grid container spacing={2}>
-                <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
-                    <InputLabel>{t('Pay Period')}</InputLabel>
-                    <SelectPayPeriod sx={{ fontWeight: 'bold' }} />
+        company &&
+        payPeriod && (
+            <PageLayout>
+                <PageTitle>{t('Salary Report')}</PageTitle>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
+                        <InputLabel>{t('Pay Period')}</InputLabel>
+                        <SelectPayPeriod companyId={company?.id} sx={{ fontWeight: 'bold' }} />
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Box
-                id="people__tabs-box"
-                sx={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flexGrow: 1,
-                }}
-            >
-                <Tabs id="people__tabs" value={tab} onChange={handleChange}>
-                    <Tab label={t('Payroll')} />
-                    <Tab label={t(`Employer Expenses`)} />
-                    <Tab label={t('Summary Report')} />
+                <Box
+                    id="people__tabs-box"
+                    sx={{
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flexGrow: 1,
+                    }}
+                >
+                    <Tabs id="people__tabs" value={tab} onChange={handleChange}>
+                        <Tab label={t('Payroll')} />
+                        <Tab label={t(`Employer Expenses`)} />
+                        <Tab label={t('Summary Report')} />
 
-                    <Tab label={t('Accounting Entries')} />
-                </Tabs>
+                        <Tab label={t('Accounting Entries')} />
+                    </Tabs>
 
-                <TabPanel value={tab} index={0}>
-                    {company?.id && (
-                        <SalaryReport companyId={company?.id} payPeriod={payPeriod || new Date()} />
-                    )}
-                </TabPanel>
-                <TabPanel value={tab} index={1}>
-                    {/* {company?.id && (
+                    <TabPanel value={tab} index={0}>
+                        {company?.id && (
+                            <SalaryReport
+                                companyId={company?.id}
+                                payPeriod={payPeriod || new Date()}
+                            />
+                        )}
+                    </TabPanel>
+                    <TabPanel value={tab} index={1}>
+                        {/* {company?.id && (
                         <PositionList
                             companyId={company?.id}
                             employeesOnly={true}
@@ -66,9 +71,9 @@ export default function Payroll() {
                             onPayPeriodDate={payPeriod || new Date()}
                         />
                     )} */}
-                </TabPanel>
-                <TabPanel value={tab} index={3}>
-                    {/* {company?.id && (
+                    </TabPanel>
+                    <TabPanel value={tab} index={3}>
+                        {/* {company?.id && (
                         <PositionList
                             companyId={company?.id}
                             vacanciesOnly={true}
@@ -76,9 +81,9 @@ export default function Payroll() {
                             onPayPeriodDate={payPeriod || new Date()}
                         />
                     )} */}
-                </TabPanel>
-                <TabPanel value={tab} index={5}>
-                    {/* {company?.id && (
+                    </TabPanel>
+                    <TabPanel value={tab} index={5}>
+                        {/* {company?.id && (
                         <PositionList
                             companyId={company?.id}
                             employeesOnly={true}
@@ -87,17 +92,18 @@ export default function Payroll() {
                             onPayPeriodDate={payPeriod || new Date()}
                         />
                     )} */}
-                </TabPanel>
-                <TabPanel value={tab} index={6}>
-                    {/* {company?.id && (
+                    </TabPanel>
+                    <TabPanel value={tab} index={6}>
+                        {/* {company?.id && (
                         <PositionList
                             companyId={company?.id}
                             includeDeleted={true}
                             relations={true}
                         />
                     )} */}
-                </TabPanel>
-            </Box>
-        </PageLayout>
+                    </TabPanel>
+                </Box>
+            </PageLayout>
+        )
     );
 }
