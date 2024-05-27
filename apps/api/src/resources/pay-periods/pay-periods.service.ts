@@ -31,7 +31,6 @@ import {
 } from 'date-fns';
 import {
     DataSource,
-    FindManyOptions,
     FindOneOptions,
     LessThanOrEqual,
     MoreThanOrEqual,
@@ -145,18 +144,25 @@ export class PayPeriodsService {
     }
 
     async findAll(
-        userId: number,
         companyId: number,
-        params: FindManyOptions<PayPeriod>,
+        relations: boolean = false,
+        fullFieldList: boolean = false,
+        dateFrom: Date = null,
+        dateTo: Date = null,
     ): Promise<PayPeriod[]> {
         if (companyId) {
-            params['where']['companyId'] = companyId;
-            const options: FindManyOptions<PayPeriod> = { order: { dateFrom: 'ASC' }, ...params };
-            let payPeriodList = await this.repositoryPayPeriod.find(options);
-            if (payPeriodList.length) return payPeriodList;
-            await this.fillPeriods(userId, companyId);
-            payPeriodList = await this.repositoryPayPeriod.find(options);
-            return payPeriodList;
+            return await this.repositoryPayPeriod.find({
+                ...(fullFieldList ? {} : defaultFieldList),
+                where: {
+                    companyId,
+                    ...(dateFrom ? { dateFrom: MoreThanOrEqual(dateFrom) } : {}),
+                    ...(dateTo ? { dateTo: LessThanOrEqual(dateTo) } : {}),
+                },
+                relations: {
+                    company: relations,
+                },
+                order: { dateFrom: 'ASC' },
+            });
         } else {
             // Periods for creating company
             const filler = getFiller(PaymentSchedule.LAST_DAY);
@@ -208,9 +214,6 @@ export class PayPeriodsService {
             relations: { company: relations },
             ...(fullFieldList ? {} : defaultFieldList),
         };
-        const resp = await this.findOne(userId, options);
-        if (resp) return resp;
-        await this.fillPeriods(userId, company.id);
         return await this.findOne(userId, options);
     }
 
@@ -255,9 +258,9 @@ export class PayPeriodsService {
     }
 
     async save(userId: number, periods: PayPeriod[]) {
-        periods.forEach((period) => {
+        for (const period of periods) {
             this.create(userId, period);
-        });
+        }
     }
 
     async deleteOpenedPeriods(companyId: number, dateFrom: Date) {

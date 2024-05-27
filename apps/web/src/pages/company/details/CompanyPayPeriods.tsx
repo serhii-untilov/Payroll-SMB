@@ -22,6 +22,7 @@ import { getPayPeriodList, getPayPeriodName } from '../../../services/payPeriod.
 import { calculatePayroll } from '../../../services/company.service';
 import { numericFormatter } from 'react-number-format';
 import { sumFormatter } from '../../../services/utils';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     companyId: number | undefined;
@@ -33,6 +34,7 @@ export function CompanyPayPeriods(params: Props) {
     const { locale } = useLocale();
     const { company, payPeriod, setPayPeriod } = useAppContext();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+    const navigate = useNavigate();
 
     const queryClient = useQueryClient();
     const gridRef = useGridApiRef();
@@ -152,6 +154,7 @@ export function CompanyPayPeriods(params: Props) {
 
     const onEdit = (id: number) => {
         console.log('onEdit');
+        navigate('/payroll');
     };
 
     const onPrint = () => {

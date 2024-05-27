@@ -46,11 +46,7 @@ export class PayPeriodsController {
     ) {
         const userId = req.user['sub'];
         await this.service.availableFindAllOrFail(userId, companyId);
-        return await this.service.findAll(userId, companyId, {
-            where: { companyId },
-            relations: { company: !!relations },
-            ...(!!fullFieldList ? {} : defaultFieldList),
-        });
+        return await this.service.findAll(companyId, relations, fullFieldList);
     }
 
     @Get('current')
