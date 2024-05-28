@@ -1,6 +1,5 @@
 import {
     Autocomplete,
-    AutocompleteProps,
     Dialog,
     DialogActions,
     DialogContent,
@@ -11,15 +10,14 @@ import {
     TextField,
     createFilterOptions,
 } from '@mui/material';
-import { IPerson } from '@repo/shared';
-import { enqueueSnackbar } from 'notistack';
-import { Controller } from 'react-hook-form';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { createPerson, getPersonList } from '../../services/person.service';
-import { InputLabel } from '../layout/InputLabel';
-import { useMemo, useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
+import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { createPerson, getPersonList } from '../../services/person.service';
 import { Button } from '../layout/Button';
+import { InputLabel } from '../layout/InputLabel';
 
 export interface Props {
     name: string;

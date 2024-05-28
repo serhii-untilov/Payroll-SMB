@@ -51,11 +51,6 @@ export class Person extends Logger implements IPerson {
     @AfterLoad()
     @AfterInsert()
     @AfterUpdate()
-    // generateFullName(): void {
-    //     this.fullName = `${this.lastName || ''} ${this.firstName || ''} ${this.middleName || ''}`
-    //         .replace('  ', ' ')
-    //         .trim();
-    // }
     transform() {
         this.fullName = getFullName(this.lastName, this.firstName, this.middleName);
     }

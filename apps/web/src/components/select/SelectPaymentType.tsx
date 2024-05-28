@@ -34,6 +34,7 @@ export function SelectPaymentType({ companyId, control, label, id, name, filter 
 
     return (
         <FormAutocomplete
+            valueType={'number'}
             control={control}
             label={label || ''}
             name={name || id || ''}
