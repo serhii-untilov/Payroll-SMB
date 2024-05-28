@@ -6,7 +6,7 @@ export function Footer() {
         <Box
             id="footer"
             sx={{
-                maxWidth: 'md',
+                maxWidth: 'lg',
                 width: '100%',
                 my: 1,
                 p: 1,

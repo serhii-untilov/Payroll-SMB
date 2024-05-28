@@ -167,5 +167,8 @@
     "Rate error": "Ставка повинна бути в межах від 0 до 2",
     "Deleting the current company is not allowed.": "Видалення поточного підприємства не допускається.",
     "male": "чоловік",
-    "female": "жінка"
+    "female": "жінка",
+    "Employer": "Роботодавець",
+    "Administrator": "Адміністратор",
+    "Main features": "Основні можливості"
 }

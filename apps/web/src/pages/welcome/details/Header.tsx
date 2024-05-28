@@ -20,16 +20,15 @@ export function Header({ wideScreen }: Props) {
         <Box
             id="header"
             sx={{
-                // width: { sm: 300, lg: 800 },
-                maxWidth: 'md',
+                maxWidth: 'lg',
                 width: '100%',
-                my: 1,
+                my: 2,
                 p: 1,
+                display: 'flex',
+                justifyContent: 'space-between',
                 // mx: { sm: 8, md: 8, lg: 16, xl: 16 },
                 borderRadius: 25,
-                display: 'flex',
                 // alignItems: 'center',
-                justifyContent: 'space-between',
                 /* From https://css.glass */
                 background: 'rgba(255, 255, 255, 0.3)',
                 boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
