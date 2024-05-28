@@ -14,6 +14,7 @@ export function Logo(props: any) {
                 '&:hover:not(.Mui-disabled)': {
                     cursor: 'pointer',
                 },
+                display: 'inline',
             }}
             alt="Application logo."
             src={logoImage}

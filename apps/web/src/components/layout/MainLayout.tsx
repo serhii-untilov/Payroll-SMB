@@ -59,6 +59,7 @@ export default function MainLayout() {
                         height: '100%',
                         px: [1],
                         bgcolor: (theme) => theme.palette.background.paper,
+
                         // bgcolor: (theme) => theme.palette.background.default,
 
                         // color: (theme) => (theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800'),
@@ -115,9 +116,9 @@ export default function MainLayout() {
                                 primary={themeMode === 'light' ? t('Light theme') : t('Dark theme')}
                                 icon={
                                     themeMode === 'light' ? (
-                                        <LightModeOutlined />
-                                    ) : (
                                         <DarkModeOutlined />
+                                    ) : (
+                                        <LightModeOutlined />
                                     )
                                 }
                             />
