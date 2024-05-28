@@ -7,15 +7,16 @@ export type FormAutocompleteOption = {
     value: any;
 };
 
-export type FormAutocompleteProps = OutlinedInputProps & {
+export type Props = OutlinedInputProps & {
     name: string;
+    valueType: 'number' | 'string';
     control: any;
     label: string;
     rules?: any;
     options: FormAutocompleteOption[];
 };
 
-export const FormAutocomplete = (props: FormAutocompleteProps) => {
+export const FormAutocomplete = (props: Props) => {
     return (
         <>
             <InputLabel>{props.label}</InputLabel>
@@ -44,7 +45,7 @@ export const FormAutocomplete = (props: FormAutocompleteProps) => {
                                 );
                             }}
                             onChange={(event, item) => {
-                                onChange(item?.value || null);
+                                onChange(item?.value || (props.valueType === 'number' ? null : ''));
                             }}
                             renderInput={(params) => {
                                 return (

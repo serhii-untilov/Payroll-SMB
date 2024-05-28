@@ -33,6 +33,7 @@ export function SelectWorkNorm({ companyId, control, label, id, name }: Props) {
 
     return (
         <FormAutocomplete
+            valueType={'number'}
             control={control}
             label={label || ''}
             name={name || id || ''}

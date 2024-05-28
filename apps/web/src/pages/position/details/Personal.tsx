@@ -16,6 +16,7 @@ import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { createPerson, getPerson, updatePerson } from '../../../services/person.service';
 import { getDirtyValues } from '../../../services/utils';
+import { SelectSex } from '../../../components/select/SelectSex';
 
 interface Props {
     personId: number;
@@ -202,13 +203,7 @@ export function Personal({ personId }: Props) {
                         />
                     </Grid>
                     <Grid item xs={12} sm={12} md={4}>
-                        <FormTextField
-                            control={control}
-                            name="sex"
-                            id="sex"
-                            label={t('Sex')}
-                            type="text"
-                        />
+                        <SelectSex control={control} name="sex" id="sex" label={t('Sex')} />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <FormTextField
