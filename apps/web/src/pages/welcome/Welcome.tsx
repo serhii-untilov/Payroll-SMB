@@ -34,7 +34,7 @@ function Welcome() {
                     }}
                 >
                     <Header wideScreen={wideScreen} />
-                    <Features />
+                    <Features wideScreen={wideScreen} />
                     <Footer />
                 </Box>
             </Box>
