@@ -1,62 +1,49 @@
-import { Box, Typography } from '@mui/material';
+import { ArrowBackIosNewRounded } from '@mui/icons-material';
+import { Box, IconButton, Typography } from '@mui/material';
 // import image from '/screenshot-administrator-role.png';
-import { BoxProps } from '@mui/system';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-type Props = BoxProps;
+type Props = {
+    embedded?: boolean;
+};
 
-export function AdministratorFeatures(props: Props) {
+export default function AdministratorFeatures({ embedded }: Props) {
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+
     const featureList = useMemo(
         () => [
+            `Організація роботи користувачів у середовищах корпоративного або ізольованого обліку заробітної плати для множини підприємств у централізованій базі даних.`,
             `Створення переліку ролей користувачів відповідно до розподілу задач між учасниками обліку.`,
             `По замовчуванню користувачам призначаються ролі за стандартними типами: 'Адміністратор', 'Бухгалтер', 'Працівник', в залежності від способу реєстрації користувача.`,
             `Ролі, створені у системі по замовчуванню, їх функції та параметри доступу можуть бути перевизначені Адміністратором у відповідності до сценарію використання системи.`,
-        ],
-        [],
-    );
-
-    const useCases = useMemo(
-        () => [
-            `Корпоративна структура - облік підприємств з єдиною нормативно-довідковою системою. Адміністратор або група адміністраторів підтримують у актуальному стані локальні довідники загального призначення. У такому разі доступ користувачів до довідників обмежена режимом 'тільки читання'.`,
-            `Централізоване обслуговування множини незалежних підприємств - облік підприємств з ізольованою нормативно-довідковою системою. В цьому сценарії адміністратор частково або повністю передає бухгалтеру або групі бухгалтерів підтримку локальних довідників. Ізольовані довідники наповнюються окремо для кожного підприємства.`,
+            `Оновлення загальних довідників. Довідники, що містять норми законодавства оновлюються автоматично.`,
         ],
         [],
     );
 
     return (
         <>
-            {/* <Box
-                component="img"
-                sx={{
-                    width: '100%',
-                    height: 'auto',
-                    mx: ['auto'],
-                    borderRadius: 2,
-                    border: '2px solid white',
-                }}
-                alt="Screenshot"
-                src={image}
-                {...props}
-            /> */}
-            <Box component="div" sx={{ overflow: 'auto' }}>
-                <Typography color={'text.primary'}>
-                    Роль Адміністратора - визначальна і надає можливість організації роботи
-                    користувачів у середовищах корпоративного або ізольованого обліку заробітної
-                    плати для множини підприємств у централізованій базі даних.
-                </Typography>
-                <Typography variant="h6" color={'text.primary'} sx={{ my: 1 }}>
-                    Сценарії організації роботи:
-                </Typography>
-                <ul>
-                    {useCases.map((item) => (
-                        <li>
-                            <Typography color={'grey.800'}>{item}</Typography>
-                        </li>
-                    ))}
-                </ul>
-                <Typography variant="h6" color={'text.primary'} sx={{ my: 1 }}>
-                    Основні задачі Адміністратора:
-                </Typography>
+            {!embedded && (
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <IconButton
+                        aria-label="Go Back"
+                        color="primary"
+                        sx={{ mr: 1 }}
+                        onClick={() => {
+                            navigate(-1);
+                        }}
+                    >
+                        <ArrowBackIosNewRounded />
+                    </IconButton>
+                    <Typography component="h2" color="primary.main" variant="h2" noWrap>
+                        {t('Administrator')}
+                    </Typography>
+                </Box>
+            )}
+            <Box sx={embedded ? {} : { p: 1 }}>
                 <ul>
                     {featureList.map((item) => (
                         <li>
@@ -64,9 +51,6 @@ export function AdministratorFeatures(props: Props) {
                         </li>
                     ))}
                 </ul>
-                <Typography color={'text.primary'}>
-                    Примітка: законодавчі довідники оновлюються автоматично.
-                </Typography>
             </Box>
         </>
     );

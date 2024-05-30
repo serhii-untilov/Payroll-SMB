@@ -8,7 +8,7 @@ export function Footer() {
             sx={{
                 maxWidth: 'lg',
                 width: '100%',
-                my: 1,
+                my: 3,
                 p: 1,
                 // mx: { sm: 8, md: 8, lg: 16, xl: 16 },
                 borderRadius: 25,

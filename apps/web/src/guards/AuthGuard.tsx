@@ -25,8 +25,7 @@ const AuthGuard: FC<AuthGuardProps> = (props) => {
             setRequestedLocation(location.pathname);
         }
 
-        // return <SignIn />;
-        return <Welcome />;
+        return <SignIn />;
     }
 
     // This is done so that in case the route changes by any chance through other

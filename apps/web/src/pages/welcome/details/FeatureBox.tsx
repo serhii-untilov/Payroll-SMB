@@ -1,4 +1,7 @@
-import { Box, Typography } from '@mui/material';
+import { ChevronRightRounded } from '@mui/icons-material';
+import { Box, Button, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
 
 type Props = {
     name: string;
@@ -7,10 +10,14 @@ type Props = {
     selectedIndex: number;
     index: number;
     onClick: (index: number) => void;
+    details: string;
 };
 
 export function FeatureBox(props: Props) {
-    const { name, description, icon, selectedIndex, index, onClick } = props;
+    const { name, description, icon, selectedIndex, index, onClick, details } = props;
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+
     return (
         <Box
             component={'button'}
@@ -32,15 +39,28 @@ export function FeatureBox(props: Props) {
                     index === selectedIndex
                         ? '1px solid white'
                         : '1px solid rgba(255, 255, 255, 0.3)',
-                bgcolor: index === selectedIndex ? '#e3f2fd' : 'inherit',
+                bgcolor: {
+                    xs: 'inherit',
+                    sm: 'inherit',
+                    md: index === selectedIndex ? '#e3f2fd' : 'inherit',
+                },
                 '&:hover': {
-                    border: '1px solid white',
-                    bgcolor: '#e3f2fd',
+                    xs: {},
+                    sm: {},
+                    md: {
+                        border: '1px solid white',
+                        bgcolor: '#e3f2fd',
+                    },
                 },
             }}
         >
-            <Box sx={{ display: 'flex', height: '100%', gap: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mx: 2 }}>{icon}</Box>
+            <Box sx={{ display: 'flex', height: '100%', gap: 1, width: '100%' }}>
+                <Box
+                    color={'red'}
+                    sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', mx: 2 }}
+                >
+                    {icon}
+                </Box>
                 <Box
                     sx={{
                         display: 'flex',
@@ -48,23 +68,32 @@ export function FeatureBox(props: Props) {
                         justifyContent: 'space-around',
                         height: '100%',
                         gap: 1,
+                        width: '100%',
                     }}
                 >
                     <Typography variant="h5" sx={{ fontWeight: 500 }} align="left">
                         {name}
                     </Typography>
-                    <Typography align="left" color={'grey.800'}>
+                    <Typography
+                        align="left"
+                        color={'grey.800'}
+                        // sx={{display: { xs: 'block', sm: 'block', md: 'none' }}}
+                    >
                         <ul
                             style={{
                                 padding: 0,
                                 margin: 0,
                                 textIndent: 0,
+                                minHeight: 0,
+                                overflow: 'auto',
                             }}
                         >
                             {description.map((item) => (
                                 <li
                                     style={{
                                         listStyleType: 'none',
+                                        // marginTop: '0.2rem',
+                                        // marginBottom: '0.2rem',
                                     }}
                                 >
                                     {item}
@@ -72,6 +101,24 @@ export function FeatureBox(props: Props) {
                             ))}
                         </ul>
                     </Typography>
+                    <Button
+                        onClick={() => {
+                            navigate(details);
+                        }}
+                        variant="text"
+                        size="small"
+                        endIcon={<ChevronRightRounded />}
+                        sx={{
+                            display: { xs: 'inline-flex', sm: 'inline-flex', md: 'none' },
+                            alignSelf: 'flex-end',
+                            // zIndex: 50,
+                            m: 0,
+                            p: 0,
+                            textTransform: 'none',
+                        }}
+                    >
+                        {t('Learn more')}
+                    </Button>
                 </Box>
             </Box>
         </Box>

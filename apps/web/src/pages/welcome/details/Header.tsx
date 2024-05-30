@@ -16,7 +16,7 @@ export function Header({ wideScreen }: Props) {
     const [showSidebarMenu, setShowSidebarMenu] = useState(false);
 
     const letsGo = () => {
-        navigate('/');
+        navigate('/dashboard');
     };
 
     return (
@@ -26,9 +26,12 @@ export function Header({ wideScreen }: Props) {
                 sx={{
                     maxWidth: 'lg',
                     width: '100%',
-                    px: { xs: 0, sm: 1, md: 2 },
+                    px: { xs: 1, sm: 2 },
                     display: 'flex',
                     justifyContent: 'space-between',
+                    // fixed header
+                    // zIndex: 100,
+                    // position: 'fixed',
                 }}
             >
                 <Box
@@ -45,7 +48,8 @@ export function Header({ wideScreen }: Props) {
                         boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                         backdropFilter: 'blur(5px)',
                         webkitBackdropFilter: 'blur(5px)',
-                        border: '1px solid rgba(255, 255, 255, 0.3)',
+                        // border: '1px solid rgba(255, 255, 255, 0.3)',
+                        border: '1px solid rgba(25, 118, 210, 0.3)',
                     }}
                 >
                     <Box id="header__left-side" sx={{ display: 'flex', align: 'center', px: 1 }}>
@@ -66,13 +70,14 @@ export function Header({ wideScreen }: Props) {
                     </Box>
                     <Box
                         id="header__right-side"
-                        sx={{ display: 'flex', align: 'center', px: 2, gap: 0 }}
+                        sx={{ display: 'flex', align: 'center', px: 2, gap: 1 }}
                     >
                         <Button
                             href="/demo"
-                            variant="text"
+                            variant="contained"
+                            color="primary"
                             sx={{
-                                display: { xs: 'none', sm: 'none', md: 'block' },
+                                display: { xs: 'none', sm: 'block', md: 'block' },
                                 borderRadius: 3,
                                 height: 38,
                                 px: 2,
@@ -81,21 +86,26 @@ export function Header({ wideScreen }: Props) {
                         >
                             {t('Demo')}
                         </Button>
-                        <IconButton
-                            href="/demo"
+
+                        <Button
+                            href="/register"
+                            variant="text"
                             sx={{
-                                color: 'primary.main',
-                                display: { xs: 'none', sm: 'block', md: 'none' },
+                                display: { xs: 'none', sm: 'block', md: 'block' },
+                                borderRadius: 3,
+                                height: 38,
+                                px: 2,
+                                my: 'auto',
                             }}
                         >
-                            <SearchRounded />
-                        </IconButton>
+                            {t('Sign Up')}
+                        </Button>
 
                         <Button
                             href="/login"
                             variant="text"
                             sx={{
-                                display: { xs: 'none', sm: 'none', md: 'block' },
+                                display: { xs: 'none', sm: 'block', md: 'block' },
                                 borderRadius: 3,
                                 height: 38,
                                 px: 2,
@@ -106,46 +116,13 @@ export function Header({ wideScreen }: Props) {
                         </Button>
 
                         <IconButton
-                            href="/login"
-                            sx={{
-                                color: 'primary.main',
-                                display: { xs: 'none', sm: 'block', md: 'none' },
-                            }}
-                        >
-                            <LoginRounded />
-                        </IconButton>
-
-                        <Button
-                            href="/register"
-                            variant="text"
-                            sx={{
-                                display: { xs: 'none', sm: 'none', md: 'block' },
-                                borderRadius: 3,
-                                height: 38,
-                                px: 2,
-                                my: 'auto',
-                            }}
-                        >
-                            {t('Sign Up')}
-                        </Button>
-                        <IconButton
-                            href="/register"
-                            sx={{
-                                color: 'primary.main',
-                                display: { xs: 'none', sm: 'block', md: 'none' },
-                            }}
-                        >
-                            <PersonRounded />
-                        </IconButton>
-
-                        <IconButton
                             id="header__menu-button"
                             onClick={() => {
                                 setShowSidebarMenu(true);
                             }}
                             sx={{
                                 color: 'primary.main',
-                                display: { xs: 'block', sm: 'none' },
+                                display: { xs: 'block', sm: 'none', md: 'none' },
                             }}
                         >
                             <MenuRounded />
@@ -155,7 +132,7 @@ export function Header({ wideScreen }: Props) {
             </Box>
             {/* {showSidebarMenu && <SidebarMenu setShowSidebarMenu={setShowSidebarMenu} />} */}
             <Drawer
-                anchor={'right'}
+                anchor={'top'}
                 open={showSidebarMenu}
                 onClose={() => {
                     setShowSidebarMenu(false);

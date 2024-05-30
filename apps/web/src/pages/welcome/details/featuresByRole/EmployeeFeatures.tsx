@@ -1,11 +1,17 @@
-import { Box, Typography } from '@mui/material';
-import image from '/screenshot-employee-role.png';
-import { BoxProps } from '@mui/system';
+import { Box, IconButton, Typography } from '@mui/material';
 import { useMemo } from 'react';
+import image from '/screenshot-employee-role.png';
+import { ArrowBackIosNewRounded } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-type Props = BoxProps;
+type Props = {
+    embedded?: boolean;
+};
 
-export function EmployeeFeatures(props: Props) {
+export default function EmployeeFeatures({ embedded }: Props) {
+    const { t } = useTranslation();
+    const navigate = useNavigate();
     const featureList = useMemo(
         () => [
             `Перегляд персональної особової картки, історії призначень та змін умов оплати праці.`,
@@ -21,26 +27,46 @@ export function EmployeeFeatures(props: Props) {
 
     return (
         <>
-            <Box
-                component="img"
-                sx={{
-                    width: '100%',
-                    height: 'auto',
-                    mx: ['auto'],
-                    borderRadius: 2,
-                    border: '2px solid white',
-                }}
-                alt="Screenshot"
-                src={image}
-                {...props}
-            />
-            <ul>
-                {featureList.map((item) => (
-                    <li>
-                        <Typography color={'grey.800'}>{item}</Typography>
-                    </li>
-                ))}
-            </ul>
+            {!embedded && (
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <IconButton
+                        aria-label="Go Back"
+                        color="primary"
+                        sx={{ mr: 1 }}
+                        onClick={() => {
+                            navigate(-1);
+                        }}
+                    >
+                        <ArrowBackIosNewRounded />
+                    </IconButton>
+                    <Typography component="h2" color="primary.main" variant="h2" noWrap>
+                        {t('Employee')}
+                    </Typography>
+                </Box>
+            )}
+            {/* {embedded && (
+                <Box
+                    component="img"
+                    sx={{
+                        width: '100%',
+                        height: 'auto',
+                        mx: ['auto'],
+                        borderRadius: 2,
+                        border: '2px solid white',
+                    }}
+                    alt="Screenshot"
+                    src={image}
+                />
+            )} */}
+            <Box sx={embedded ? {} : { p: 1 }}>
+                <ul>
+                    {featureList.map((item) => (
+                        <li>
+                            <Typography color={'grey.800'}>{item}</Typography>
+                        </li>
+                    ))}
+                </ul>
+            </Box>
         </>
     );
 }

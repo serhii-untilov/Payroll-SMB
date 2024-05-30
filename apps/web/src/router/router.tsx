@@ -24,12 +24,28 @@ const Payments = Loadable(lazy(() => import('../pages/payments/Payments')));
 const Reports = Loadable(lazy(() => import('../pages/reports/Reports')));
 const Profile = Loadable(lazy(() => import('../pages/profile/Profile')));
 const Position = Loadable(lazy(() => import('../pages/position/Position')));
+const AccountantFeatures = Loadable(
+    lazy(() => import('../pages/welcome/details/featuresByRole/AccountantFeatures')),
+);
+const EmployeeFeatures = Loadable(
+    lazy(() => import('../pages/welcome/details/featuresByRole/EmployeeFeatures')),
+);
+const AdministratorFeatures = Loadable(
+    lazy(() => import('../pages/welcome/details/featuresByRole/AdministratorFeatures')),
+);
 
 const router: RouteObject[] = [
+    {
+        index: true,
+        element: <Welcome />,
+    },
     {
         path: 'welcome',
         element: <Welcome />,
     },
+    { path: 'accountant-features', element: <AccountantFeatures /> },
+    { path: 'employee-features', element: <EmployeeFeatures /> },
+    { path: 'administrator-features', element: <AdministratorFeatures /> },
     {
         path: 'signin',
         element: (
