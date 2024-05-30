@@ -28,11 +28,7 @@ const Position = Loadable(lazy(() => import('../pages/position/Position')));
 const router: RouteObject[] = [
     {
         path: 'welcome',
-        element: (
-            // <GuestGuard>
-            <Welcome />
-            // </GuestGuard>
-        ),
+        element: <Welcome />,
     },
     {
         path: 'signin',

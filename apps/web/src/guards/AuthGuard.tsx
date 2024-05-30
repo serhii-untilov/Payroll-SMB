@@ -4,6 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useAuth from '../hooks/useAuth';
 import SignIn from '../pages/auth/SignIn';
+import Welcome from '../pages/welcome/Welcome';
 
 interface AuthGuardProps {
     children: ReactNode;
@@ -24,7 +25,8 @@ const AuthGuard: FC<AuthGuardProps> = (props) => {
             setRequestedLocation(location.pathname);
         }
 
-        return <SignIn />;
+        // return <SignIn />;
+        return <Welcome />;
     }
 
     // This is done so that in case the route changes by any chance through other

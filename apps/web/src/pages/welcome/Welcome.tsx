@@ -25,12 +25,13 @@ function Welcome() {
                         alignItems: 'center',
                         flexGrow: 1,
                         flex: 1,
-                        height: '100vh',
+                        // height: '100vh',
                         width: '100%',
                         overflow: 'auto',
                         p: [1],
                         background:
                             'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff)',
+                        // 'linear-gradient(to bottom, #bbdefb, #ffffff, #ffffff, #ffffff)',
                     }}
                 >
                     <Header wideScreen={wideScreen} />

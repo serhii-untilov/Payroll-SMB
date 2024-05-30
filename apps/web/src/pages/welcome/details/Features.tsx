@@ -3,6 +3,9 @@ import { Box, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FeatureBox } from './FeatureBox';
+import { AccountantFeatures } from './featuresByRole/AccountantFeatures';
+import { AdministratorFeatures } from './featuresByRole/AdministratorFeatures';
+import { EmployeeFeatures } from './featuresByRole/EmployeeFeatures';
 
 type Props = { wideScreen: boolean };
 
@@ -18,10 +21,10 @@ export function Features({ wideScreen }: Props) {
 
     const mainFeatures = useMemo(
         () => [
-            'Нарахування заробітної плати для підприємств малого та середнього бізнесу',
-            'Автоматизоване створення розрахункових документів згідно з розкладом бізнес-процесів',
-            'Корпоративний або ізольований метод обліку для множини підприємств у централізованій базі даних',
-            'Рольова модель доступу користувачів',
+            'Нарахування заробітної плати для підприємств малого та середнього бізнесу.',
+            'Автоматизоване створення розрахункових документів та звітів згідно з розкладом бізнес-процесів.',
+            'Корпоративний або ізольований метод обліку для множини підприємств у централізованій базі даних.',
+            'Рольова модель доступу користувачів.',
         ],
         [],
     );
@@ -36,22 +39,27 @@ export function Features({ wideScreen }: Props) {
                     'Табельний облік, виплата зарплати.',
                 ],
                 icon: <BusinessCenterOutlined color="primary" />,
+                roleFeatures: <AccountantFeatures />,
             },
             {
                 name: t('Employee'),
                 description: [
-                    `Перегляд особової картки та розрахункових листів. Створення заяв про відпустку або звільнення. Повідомлення про хворобу.`,
+                    `Перегляд особової картки та розрахункових листів.`,
+                    `Створення заяв про відпустку або звільнення.`,
+                    `Отримання довідок з місця роботи та заробіток.`,
                 ],
                 icon: <PeopleOutlined color="primary" />,
+                roleFeatures: <EmployeeFeatures />,
             },
             {
                 name: t('Administrator'),
                 description: [
-                    'Розподіл прав доступу між ролями користувачів.',
-                    'Розподіл функцій між користувачами за допомогою ролей.',
+                    'Призначення прав доступу ролям користувачів.',
+                    'Розподіл функцій обліку між користувачами.',
                     'Централізоване оновлення загальних довідників.',
                 ],
                 icon: <Settings color="primary" />,
+                roleFeatures: <AdministratorFeatures />,
             },
         ],
         [t],
@@ -63,7 +71,8 @@ export function Features({ wideScreen }: Props) {
             sx={{
                 maxWidth: 'lg',
                 width: '100%',
-                my: 1,
+                // mt: 13,
+                mb: 1,
                 p: 1,
                 display: 'flex',
                 flex: 1,
@@ -72,7 +81,7 @@ export function Features({ wideScreen }: Props) {
             }}
         >
             <Box
-                id="features-left"
+                id="features__left-side"
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -87,14 +96,26 @@ export function Features({ wideScreen }: Props) {
                         display: 'flex',
                         flexDirection: 'column',
                         height: '100%',
-                        gap: 2,
                     }}
                 >
                     <Typography variant="h1">{t('Main features')}</Typography>
-                    <Typography color="grey.700">
-                        <ul>
+                    <Typography color="grey.800">
+                        <ul
+                            style={{
+                                padding: 0,
+                                marginLeft: '1rem',
+                            }}
+                        >
                             {mainFeatures.map((item) => (
-                                <li>{item}</li>
+                                <li
+                                    style={{
+                                        // listStyleType: 'none'
+                                        marginTop: '0.4rem',
+                                        marginBottom: '0.4rem',
+                                    }}
+                                >
+                                    {item}
+                                </li>
                             ))}
                         </ul>
                     </Typography>
@@ -110,22 +131,25 @@ export function Features({ wideScreen }: Props) {
                     ></FeatureBox>
                 ))}
             </Box>
-            {wideScreen && (
-                <Box
-                    id="features-right"
-                    sx={{
-                        height: '100%',
-                        flex: 1,
-                        border: 1,
-                        borderRadius: 3,
-                        p: 1,
-                        borderColor: 'grey.300',
-                        bgcolor: 'grey.50',
-                    }}
-                >
-                    <Box>Description</Box>
-                </Box>
-            )}
+            <Box
+                id="features__right-side"
+                sx={{
+                    // display: { sm: 'none', md: '' },
+                    display: { xs: 'none', sm: 'none', md: 'block' },
+                    height: '100%',
+                    flex: 1,
+                    borderRadius: 3,
+                    p: 2,
+                    /* From https://css.glass */
+                    background: 'rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(5px)',
+                    webkitBackdropFilter: 'blur(5px)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                }}
+            >
+                {featuresByRoles[selectedIndex].roleFeatures}
+            </Box>
         </Box>
     );
 }

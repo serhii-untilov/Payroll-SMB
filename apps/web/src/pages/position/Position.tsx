@@ -17,6 +17,7 @@ import { getPosition } from '../../services/position.service';
 import { JobAndPay } from './details/JobAndPay';
 import { Personal } from './details/Personal';
 import { PositionHistory } from './details/PositionHistory';
+import { AvatarBox } from '../../components/utility/AvatarBox';
 
 export default function Position() {
     const params = useParams();
@@ -97,6 +98,7 @@ export default function Position() {
                 </IconButton>
                 {generatePageTitle()}
             </PageTitle>
+            <AvatarBox />
             <Tabs value={tab} onChange={handleChangeTab}>
                 <Tab label={t('Job & Pay')} />
                 {/* <Tab label={t('Additional Earnings')} /> */}
