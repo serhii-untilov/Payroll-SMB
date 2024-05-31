@@ -2,6 +2,7 @@ import { ChevronRightRounded } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import useAppContext from '../../../hooks/useAppContext';
 
 type Props = {
     name: string;
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export function FeatureBox(props: Props) {
+    const { themeMode } = useAppContext();
     const { name, description, icon, selectedIndex, index, onClick, details } = props;
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -42,14 +44,19 @@ export function FeatureBox(props: Props) {
                 bgcolor: {
                     xs: 'inherit',
                     sm: 'inherit',
-                    md: index === selectedIndex ? '#e3f2fd' : 'inherit',
+                    md:
+                        index === selectedIndex
+                            ? themeMode === 'light'
+                                ? '#e3f2fd'
+                                : 'primary.main'
+                            : 'inherit',
                 },
                 '&:hover': {
                     xs: {},
                     sm: {},
                     md: {
                         border: '1px solid white',
-                        bgcolor: '#e3f2fd',
+                        bgcolor: themeMode === 'light' ? '#e3f2fd' : 'black',
                     },
                 },
             }}
@@ -74,14 +81,15 @@ export function FeatureBox(props: Props) {
                         width: '100%',
                     }}
                 >
-                    <Typography variant="h5" color="primary" sx={{ fontWeight: 500 }} align="left">
+                    <Typography
+                        variant="h5"
+                        color={themeMode === 'light' ? 'primary' : 'black'}
+                        sx={{ fontWeight: 500 }}
+                        align="left"
+                    >
                         {name}
                     </Typography>
-                    <Typography
-                        align="left"
-                        color={'grey.800'}
-                        // sx={{display: { xs: 'block', sm: 'block', md: 'none' }}}
-                    >
+                    <Typography align="left" color={'text.primary'}>
                         <ul
                             style={{
                                 padding: 0,
@@ -95,8 +103,6 @@ export function FeatureBox(props: Props) {
                                 <li
                                     style={{
                                         listStyleType: 'none',
-                                        // marginTop: '0.2rem',
-                                        // marginBottom: '0.2rem',
                                     }}
                                 >
                                     {item}

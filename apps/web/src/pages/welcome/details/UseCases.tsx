@@ -110,6 +110,7 @@ export function UseCases() {
                                 p: 2,
                                 minHeight: 0,
                                 maxWidth: 400,
+                                objectFit: 'contain',
                             }}
                             alt="Use case image"
                             src={item.image}

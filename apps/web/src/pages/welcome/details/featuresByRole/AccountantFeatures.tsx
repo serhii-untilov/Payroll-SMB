@@ -46,7 +46,7 @@ export default function AccountantFeatures({ embedded }: Props) {
                 <ul>
                     {featureList.map((item) => (
                         <li>
-                            <Typography color={'grey.800'}>{item}</Typography>
+                            <Typography color={'text.secondary'}>{item}</Typography>
                         </li>
                     ))}
                 </ul>

@@ -73,6 +73,7 @@ export function ScreenshotList() {
                         borderRadius: 2,
                         border: '2px solid white',
                         minHeight: 0,
+                        objectFit: 'contain',
                     }}
                     alt="Screenshot"
                     src={imageList[index].img}

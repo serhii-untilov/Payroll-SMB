@@ -7,8 +7,10 @@ import { UseCases } from './UseCases';
 import AccountantFeatures from './featuresByRole/AccountantFeatures';
 import AdministratorFeatures from './featuresByRole/AdministratorFeatures';
 import EmployeeFeatures from './featuresByRole/EmployeeFeatures';
+import useAppContext from '../../../hooks/useAppContext';
 
 export function Features() {
+    const { themeMode } = useAppContext();
     const { t } = useTranslation();
     const [selectedIndex, setSelectedIndex] = useState(
         Number(localStorage.getItem('feature-index')),
@@ -28,7 +30,9 @@ export function Features() {
             {
                 name: t('Accountant'),
                 description: [t('accountantFeature1'), t('accountantFeature2')],
-                icon: <BusinessCenterOutlined color="primary" />,
+                icon: (
+                    <BusinessCenterOutlined color={themeMode === 'light' ? 'primary' : 'primary'} />
+                ),
                 roleFeatures: <AccountantFeatures embedded={true} />,
                 details: '/accountant-features',
             },
@@ -47,7 +51,7 @@ export function Features() {
                 details: '/administrator-features',
             },
         ],
-        [t],
+        [t, themeMode],
     );
 
     return (
@@ -76,7 +80,7 @@ export function Features() {
                 <Typography variant="h1" sx={{ textAlign: 'center' }}>
                     {t('Main features')}
                 </Typography>
-                <Typography color="grey.800">
+                <Typography color="text.secondary">
                     <ul>
                         {mainFeatures.map((item) => (
                             <li>{item}</li>

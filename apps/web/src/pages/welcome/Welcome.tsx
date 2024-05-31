@@ -3,8 +3,10 @@ import { Features } from './details/Features';
 import { Footer } from './details/Footer';
 import { Header } from './details/Header';
 import { ScreenshotList } from './details/ScreenshotList';
+import useAppContext from '../../hooks/useAppContext';
 
 function Welcome() {
+    const { themeMode } = useAppContext();
     return (
         <>
             <Box
@@ -28,7 +30,9 @@ function Welcome() {
                         overflow: 'auto',
                         p: [1],
                         background:
-                            'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)',
+                            themeMode === 'light'
+                                ? 'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)'
+                                : '',
                     }}
                 >
                     <Header />

@@ -14,8 +14,10 @@ import { Logo } from '../../../components/layout/Logo';
 import { useState } from 'react';
 import { SidebarMenu } from './SidebarMenu';
 import useLocale from '../../../hooks/useLocale';
+import useAppContext from '../../../hooks/useAppContext';
 
 export function Header() {
+    const { themeMode } = useAppContext();
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [showSidebarMenu, setShowSidebarMenu] = useState(false);
@@ -54,7 +56,7 @@ export function Header() {
                         justifyContent: 'space-between',
                         borderRadius: 25,
                         /* From https://css.glass */
-                        background: 'rgba(255, 255, 255, 0.6)',
+                        background: themeMode === 'light' ? 'rgba(255, 255, 255, 0.6)' : '',
                         boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                         backdropFilter: 'blur(5px)',
                         webkitBackdropFilter: 'blur(5px)',
@@ -87,7 +89,7 @@ export function Header() {
                             variant="contained"
                             color="primary"
                             sx={{
-                                display: { xs: 'none', sm: 'block', md: 'block' },
+                                display: { xs: 'none', sm: 'none', md: 'block' },
                                 borderRadius: 3,
                                 height: 38,
                                 width: 90,
@@ -103,7 +105,7 @@ export function Header() {
                             href="/register"
                             variant="text"
                             sx={{
-                                display: { xs: 'none', sm: 'block', md: 'block' },
+                                display: { xs: 'none', sm: 'none', md: 'block' },
                                 borderRadius: 3,
                                 width: 120,
                                 height: 38,
@@ -119,7 +121,7 @@ export function Header() {
                             href="/login"
                             variant="text"
                             sx={{
-                                display: { xs: 'none', sm: 'block', md: 'block' },
+                                display: { xs: 'none', sm: 'none', md: 'block' },
                                 borderRadius: 3,
                                 height: 38,
                                 width: 90,
@@ -139,15 +141,17 @@ export function Header() {
                             sx={{
                                 my: 'auto',
                                 color: 'primary.main',
-                                display: { xs: 'inline-flex', sm: 'none', md: 'none' },
+                                display: { xs: 'inline-flex', sm: 'inline-flex', md: 'none' },
                             }}
                         >
                             <MenuRounded />
                         </IconButton>
                         <IconButton
-                            aria-label="delete"
                             color="primary"
-                            sx={{ my: 'auto' }}
+                            sx={{
+                                my: 'auto',
+                                display: { xs: 'none', sm: 'none', md: 'inline-flex' },
+                            }}
                             onClick={() => {
                                 onToggleLanguage();
                             }}
@@ -157,7 +161,6 @@ export function Header() {
                     </Box>
                 </Box>
             </Box>
-            {/* {showSidebarMenu && <SidebarMenu setShowSidebarMenu={setShowSidebarMenu} />} */}
             <Drawer
                 anchor={'top'}
                 open={showSidebarMenu}

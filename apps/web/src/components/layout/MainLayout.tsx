@@ -9,12 +9,12 @@ import Toolbar from '@mui/material/Toolbar';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, redirect } from 'react-router-dom';
-import { Link } from './Link';
 import useAppContext from '../../hooks/useAppContext';
 import useAuth from '../../hooks/useAuth';
 import useLocale from '../../hooks/useLocale';
 import { AppTitle } from './AppTitle';
 import { Copyright } from './Copyright';
+import { Link } from './Link';
 import { ListItemButton } from './ListItemButton';
 import { ListItemLink } from './ListItemLink';
 import { Logo } from './Logo';
@@ -43,8 +43,6 @@ export default function MainLayout() {
             sx={{
                 display: 'flex',
                 maxWidth: 'hd2',
-                // justifyContent: 'center',
-                // alignContent: 'center',
                 mx: 'auto',
             }}
         >
@@ -59,16 +57,6 @@ export default function MainLayout() {
                         height: '100%',
                         px: [1],
                         bgcolor: (theme) => theme.palette.background.paper,
-
-                        // bgcolor: (theme) => theme.palette.background.default,
-
-                        // color: (theme) => (theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800'),
-                        // pr: 8,
-                        // mr: 2,
-                        // boxShadow: 1,
-
-                        // borderRight: 0.5,
-                        // borderColor: 'divider',
                     }}
                 >
                     <Box
@@ -144,13 +132,6 @@ export default function MainLayout() {
             <Box
                 component="main"
                 sx={{
-                    // bgcolor: (theme) =>
-                    //     theme.palette.mode === 'light'
-                    //         ? 'background.paper'
-                    //         : theme.palette.grey[100],
-                    // bgcolor: 'background.paper',
-                    // bgcolor: 'background.default',
-                    // color: 'text.primary',
                     display: 'flex',
                     flexDirection: 'column',
                     flexGrow: 1,
