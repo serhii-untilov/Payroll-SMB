@@ -31,7 +31,7 @@ export function ScreenshotList() {
     return (
         <>
             <Typography variant="h2" color={'text.primary'} sx={{ my: 3, textAlign: 'center' }}>
-                Скріншоти
+                Світлини
             </Typography>
             <Box
                 id="screenshot-list"
