@@ -1,10 +1,10 @@
-import { Dispatch, FC, ReactNode, SetStateAction, createContext, useEffect, useState } from 'react';
-import { Localization, enUS } from '@mui/material/locale';
+import { enUS } from '@mui/material/locale';
 import { ukUA } from '@mui/x-data-grid/locales';
+import { enUS as dateEn } from 'date-fns/locale/en-US';
+import { uk as dateUk } from 'date-fns/locale/uk';
+import { Dispatch, FC, ReactNode, SetStateAction, createContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/useAuth';
-import { uk as dateUk } from 'date-fns/locale/uk';
-import { enUS as dateEn } from 'date-fns/locale/en-US';
 
 export type supportedLanguages = 'en' | 'uk';
 
@@ -24,6 +24,7 @@ export type LocaleContextType = {
     locale: Locale;
     setLocale: Dispatch<SetStateAction<Locale>>;
     setLanguage: (language?: string | null) => void;
+    toggleLanguage: () => void;
     supportedLocales: typeof supportedLocales;
 };
 
@@ -31,6 +32,7 @@ const LocaleContext = createContext<LocaleContextType>({
     locale: supportedLocales[0],
     setLocale: () => {},
     setLanguage: () => {},
+    toggleLanguage: () => {},
     supportedLocales: supportedLocales,
 });
 
@@ -41,7 +43,6 @@ interface LocaleProviderProps {
 export const LocaleProvider: FC<LocaleProviderProps> = (props) => {
     const { children } = props;
     const { user } = useAuth();
-    const userLocale = supportedLocales.find((o) => o.language === user?.language);
     const [locale, setLocale] = useState<Locale>(getBrowserLocale() || supportedLocales[0]);
     // i18n
     const {
@@ -78,8 +79,22 @@ export const LocaleProvider: FC<LocaleProviderProps> = (props) => {
         }
     }
 
+    function toggleLanguage(): void {
+        // Set next locale
+        const index = supportedLocales.findIndex((o) => o.language === locale.language);
+        if (index < 0 || index === supportedLocales.length - 1) {
+            setLocale(supportedLocales[0]);
+            changeLanguage(supportedLocales[0].language);
+        } else {
+            setLocale(supportedLocales[index + 1]);
+            changeLanguage(supportedLocales[index + 1].language);
+        }
+    }
+
     return (
-        <LocaleContext.Provider value={{ locale, setLocale, setLanguage, supportedLocales }}>
+        <LocaleContext.Provider
+            value={{ locale, setLocale, setLanguage, toggleLanguage, supportedLocales }}
+        >
             {children}
         </LocaleContext.Provider>
     );

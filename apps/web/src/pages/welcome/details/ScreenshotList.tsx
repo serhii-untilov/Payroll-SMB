@@ -1,24 +1,29 @@
 import { KeyboardArrowLeftRounded, KeyboardArrowRightRounded } from '@mui/icons-material';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
-import { useState } from 'react';
-
-const imageList = [
-    {
-        img: '/screenshot-1.png',
-        title: 'Employees',
-    },
-    {
-        img: '/screenshot-2.png',
-        title: 'Payroll',
-    },
-    // {
-    //     img: '/screenshot-3.png',
-    //     title: 'Dark theme',
-    // },
-];
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import useLocale from '../../../hooks/useLocale';
 
 export function ScreenshotList() {
+    const { t } = useTranslation();
+    const { locale } = useLocale();
     const [index, setIndex] = useState(0);
+
+    useEffect(() => {}, [t]);
+
+    const imageList = useMemo(
+        () => [
+            {
+                img: locale.language === 'uk' ? '/screenshot-1-uk.png' : '/screenshot-1-en.png',
+                title: t('Employees'),
+            },
+            {
+                img: locale.language === 'uk' ? '/screenshot-2-uk.png' : '/screenshot-2-en.png',
+                title: t('Payroll'),
+            },
+        ],
+        [t, locale],
+    );
 
     const onNextImage = () => {
         if (index + 1 < imageList.length) {
@@ -35,7 +40,7 @@ export function ScreenshotList() {
     return (
         <>
             <Typography variant="h2" color={'text.primary'} sx={{ my: 3, textAlign: 'center' }}>
-                Світлини
+                {t('Screenshots')}
             </Typography>
             <Box
                 id="screenshot-list"

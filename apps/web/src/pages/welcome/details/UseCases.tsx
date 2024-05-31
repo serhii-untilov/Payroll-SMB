@@ -1,50 +1,61 @@
 import { Box, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import useLocale from '../../../hooks/useLocale';
 
 export function UseCases() {
+    const { t } = useTranslation();
+    const { locale } = useLocale();
+
+    useEffect(() => {}, [t]);
+
     const useCases = useMemo(
         () => [
             {
-                name: 'Корпоративна структура',
+                name: t('Corporate structure'),
                 description: [
-                    `Централізований облік підприємств з єдиною нормативно-довідковою підсистемою.`,
-                    `Адміністратор або група адміністраторів підтримують у актуальному стані локальні довідники загального призначення.`,
-                    `Оновлення довідників, що містять норми законодавства виконується автоматично.`,
-                    `У такому разі доступ користувачів до довідників обмежена режимом 'тільки читання'.`,
-                    `Адміністрування системи можуть виконувати працівники організації або спеціалісти супроводження.`,
+                    t('CorporateStructureDescription1'),
+                    t('CorporateStructureDescription2'),
+                    t('CorporateStructureDescription3'),
+                    t('CorporateStructureDescription4'),
+                    t('CorporateStructureDescription5'),
                 ],
-                image: 'corporate-system-uk.png',
+                image:
+                    locale.language === 'uk'
+                        ? 'corporate-system-uk.png'
+                        : 'corporate-system-en.png',
             },
             {
-                name: 'Незалежні підприємства',
+                name: t('Independent enterprises'),
                 description: [
-                    `Централізований облік незалежних підприємств з ізольованою нормативно-довідковою підсистемою.`,
-                    `В цьому сценарії адміністратор частково або повністю передає бухгалтеру або групі бухгалтерів підтримку локальних довідників.`,
-                    `Ізольовані довідники наповнюються окремо для кожного підприємства.`,
-                    `Оновлення довідників, що містять норми законодавства виконується автоматично.`,
-                    `Адміністрування системи може виконувати працівник сервісної організації або спеціалісти супроводження.`,
+                    t('IndependentEnterprisesDescription1'),
+                    t('IndependentEnterprisesDescription2'),
+                    t('IndependentEnterprisesDescription3'),
+                    t('IndependentEnterprisesDescription4'),
+                    t('IndependentEnterprisesDescription5'),
                 ],
-                image: 'isolated-system-uk.png',
+                image:
+                    locale.language === 'uk' ? 'isolated-system-uk.png' : 'isolated-system-en.png',
             },
             {
-                name: 'Одне підприємство',
+                name: t('Single enterprise'),
                 description: [
-                    `Облік заробітної плати для одного підприємства.`,
-                    `Установка системи виконується на сервер підприємства самостійно або із залученням спеціаліста супроводження.`,
-                    `Оновлення довідників, що містять норми законодавства виконується автоматично. Локальні довідники наповнюють користувачі.`,
-                    `В цьому сценарії також можлива настройка прав доступу одного користувача до усіх функцій системи або розподіл функцій між групою користувачів.`,
-                    `Адміністративні функції може виконувати сам користувач, один чи кілька користувачів групи або спеціаліст супроводження.`,
+                    t('SingleEnterpriseDescription1'),
+                    t('SingleEnterpriseDescription2'),
+                    t('SingleEnterpriseDescription3'),
+                    t('SingleEnterpriseDescription4'),
+                    t('SingleEnterpriseDescription5'),
                 ],
-                image: 'single-system-uk.png',
+                image: locale.language === 'uk' ? 'single-system-uk.png' : 'single-system-en.png',
             },
         ],
-        [],
+        [t, locale],
     );
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', my: 5, gap: 2 }}>
             <Typography variant="h2" color={'text.primary'} sx={{ my: 3, textAlign: 'center' }}>
-                Сценарії використання
+                {t('Usage scenarios')}
             </Typography>
             {useCases.map((item, index) => {
                 return (
@@ -56,7 +67,6 @@ export function UseCases() {
                                     ? { xs: 'column', md: 'row-reverse' }
                                     : { xs: 'column', md: 'row' },
                             gap: { xs: 2, md: 6 },
-                            // border: '1px solid gray',
                             borderRadius: 3,
                             py: 3,
                             px: 6,
@@ -67,7 +77,6 @@ export function UseCases() {
                             webkitBackdropFilter: 'blur(5px)',
                             border: '1px solid rgba(255, 255, 255, 0.3)',
                             minHeight: 380,
-                            // maxHeight: 380,
                             overflow: 'auto',
                         }}
                     >
@@ -96,9 +105,7 @@ export function UseCases() {
                                 width: '100%',
                                 height: 'auto',
                                 mx: ['auto'],
-                                // borderRadius: 2,
                                 border: '1px solid rgba(255, 255, 255, 0.1)',
-                                // backgroundColor: 'grey',
                                 borderRadius: 2,
                                 p: 2,
                                 minHeight: 0,

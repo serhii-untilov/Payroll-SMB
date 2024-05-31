@@ -3,14 +3,12 @@ import { Box, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FeatureBox } from './FeatureBox';
+import { UseCases } from './UseCases';
 import AccountantFeatures from './featuresByRole/AccountantFeatures';
 import AdministratorFeatures from './featuresByRole/AdministratorFeatures';
 import EmployeeFeatures from './featuresByRole/EmployeeFeatures';
-import { UseCases } from './UseCases';
 
-type Props = { wideScreen: boolean };
-
-export function Features({ wideScreen }: Props) {
+export function Features() {
     const { t } = useTranslation();
     const [selectedIndex, setSelectedIndex] = useState(
         Number(localStorage.getItem('feature-index')),
@@ -21,43 +19,29 @@ export function Features({ wideScreen }: Props) {
     }, [selectedIndex]);
 
     const mainFeatures = useMemo(
-        () => [
-            'Нарахування заробітної плати для підприємств малого та середнього бізнесу',
-            'Автоматизоване створення розрахункових документів та звітів згідно з розкладом бізнес-процесів',
-            'Корпоративний або ізольований метод обліку для множини підприємств у централізованій базі даних',
-            'Рольова модель доступу користувачів до ресурсів і функцій системи',
-        ],
-        [],
+        () => [t('mainFeatures1'), t('mainFeatures2'), t('mainFeatures3'), t('mainFeatures4')],
+        [t],
     );
 
     const featuresByRoles = useMemo(
         () => [
             {
                 name: t('Accountant'),
-                description: [
-                    'Створення вакансій, призначення працівників.',
-                    'Табельний облік, виплата зарплати.',
-                ],
+                description: [t('accountantFeature1'), t('accountantFeature2')],
                 icon: <BusinessCenterOutlined color="primary" />,
                 roleFeatures: <AccountantFeatures embedded={true} />,
                 details: '/accountant-features',
             },
             {
                 name: t('Employee'),
-                description: [
-                    `Перегляд особової картки та розрахункових листів.`,
-                    `Створення заяв та отримання довідок.`,
-                ],
+                description: [t(`employeeFeature1`), t(`employeeFeature2`)],
                 icon: <PeopleOutlined color="primary" />,
                 roleFeatures: <EmployeeFeatures embedded={true} />,
                 details: '/employee-features',
             },
             {
                 name: t('Administrator'),
-                description: [
-                    'Призначення прав доступу користувачам.',
-                    'Централізоване оновлення загальних довідників.',
-                ],
+                description: [t('administratorFeature1'), t('administratorFeature2')],
                 icon: <Settings color="primary" />,
                 roleFeatures: <AdministratorFeatures embedded={true} />,
                 details: '/administrator-features',
@@ -66,28 +50,16 @@ export function Features({ wideScreen }: Props) {
         [t],
     );
 
-    const useCases = useMemo(
-        () => [
-            `Корпоративна структура - облік підприємств з єдиною нормативно-довідковою системою. Адміністратор або група адміністраторів підтримують у актуальному стані локальні довідники загального призначення. У такому разі доступ користувачів до довідників обмежена режимом 'тільки читання'.`,
-            `Централізоване обслуговування множини незалежних підприємств - облік підприємств з ізольованою нормативно-довідковою системою. В цьому сценарії адміністратор частково або повністю передає бухгалтеру або групі бухгалтерів підтримку локальних довідників. Ізольовані довідники наповнюються окремо для кожного підприємства.`,
-        ],
-        [],
-    );
-
     return (
         <Box
             id="features"
             sx={{
                 maxWidth: 'lg',
                 width: '100%',
-                // mb: 1,
                 p: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100%',
-                // gap: 4,
-                // fixed header
-                // mt: 13,
             }}
         >
             <Box
@@ -146,37 +118,12 @@ export function Features({ wideScreen }: Props) {
                         webkitBackdropFilter: 'blur(5px)',
                         border: '1px solid rgba(255, 255, 255, 0.3)',
                         minHeight: 380,
-                        // maxHeight: 380,
                         overflow: 'auto',
                     }}
                 >
                     {featuresByRoles[selectedIndex].roleFeatures}
                 </Box>
             </Box>
-            {/* <Box
-                id="features__use-cases"
-                sx={{
-                    flex: 0,
-                    m: 2,
-                    p: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: '100%',
-                    alignItems: 'center',
-                    gap: 0,
-                }}
-            >
-                <Typography variant="h2" color={'text.primary'} sx={{ my: 1 }}>
-                    Сценарії організації роботи
-                </Typography>
-                <ul>
-                    {useCases.map((item) => (
-                        <li>
-                            <Typography color={'grey.800'}>{item}</Typography>
-                        </li>
-                    ))}
-                </ul>
-            </Box> */}
             <UseCases />
         </Box>
     );

@@ -1,5 +1,11 @@
-import { LoginRounded, MenuRounded, PersonRounded, SearchRounded } from '@mui/icons-material';
-import { Box, Drawer, IconButton } from '@mui/material';
+import {
+    Language,
+    LoginRounded,
+    MenuRounded,
+    PersonRounded,
+    SearchRounded,
+} from '@mui/icons-material';
+import { Box, ButtonGroup, Drawer, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AppTitle } from '../../../components/layout/AppTitle';
@@ -7,13 +13,17 @@ import { Button } from '../../../components/layout/Button';
 import { Logo } from '../../../components/layout/Logo';
 import { useState } from 'react';
 import { SidebarMenu } from './SidebarMenu';
+import useLocale from '../../../hooks/useLocale';
 
-type Props = { wideScreen: boolean };
-
-export function Header({ wideScreen }: Props) {
+export function Header() {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [showSidebarMenu, setShowSidebarMenu] = useState(false);
+    const { toggleLanguage } = useLocale();
+
+    const onToggleLanguage = () => {
+        toggleLanguage();
+    };
 
     const letsGo = () => {
         navigate('/dashboard');
@@ -80,8 +90,10 @@ export function Header({ wideScreen }: Props) {
                                 display: { xs: 'none', sm: 'block', md: 'block' },
                                 borderRadius: 3,
                                 height: 38,
+                                width: 90,
                                 px: 2,
                                 my: 'auto',
+                                textAlign: 'center',
                             }}
                         >
                             {t('Demo')}
@@ -93,9 +105,11 @@ export function Header({ wideScreen }: Props) {
                             sx={{
                                 display: { xs: 'none', sm: 'block', md: 'block' },
                                 borderRadius: 3,
+                                width: 120,
                                 height: 38,
                                 px: 2,
                                 my: 'auto',
+                                textAlign: 'center',
                             }}
                         >
                             {t('Sign Up')}
@@ -108,8 +122,10 @@ export function Header({ wideScreen }: Props) {
                                 display: { xs: 'none', sm: 'block', md: 'block' },
                                 borderRadius: 3,
                                 height: 38,
+                                width: 90,
                                 px: 2,
                                 my: 'auto',
+                                textAlign: 'center',
                             }}
                         >
                             {t('Sign In')}
@@ -121,11 +137,22 @@ export function Header({ wideScreen }: Props) {
                                 setShowSidebarMenu(true);
                             }}
                             sx={{
+                                my: 'auto',
                                 color: 'primary.main',
-                                display: { xs: 'block', sm: 'none', md: 'none' },
+                                display: { xs: 'inline-flex', sm: 'none', md: 'none' },
                             }}
                         >
                             <MenuRounded />
+                        </IconButton>
+                        <IconButton
+                            aria-label="delete"
+                            color="primary"
+                            sx={{ my: 'auto' }}
+                            onClick={() => {
+                                onToggleLanguage();
+                            }}
+                        >
+                            <Language />
                         </IconButton>
                     </Box>
                 </Box>
