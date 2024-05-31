@@ -59,7 +59,7 @@ export function Header({ wideScreen }: Props) {
                             onClick={letsGo}
                             align="left"
                             sx={{
-                                color: 'primary.dark',
+                                color: 'primary.main',
                                 display: 'inline',
                                 my: 'auto',
                                 mx: 2,

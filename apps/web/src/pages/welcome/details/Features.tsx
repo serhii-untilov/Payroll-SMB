@@ -25,7 +25,7 @@ export function Features({ wideScreen }: Props) {
             'Нарахування заробітної плати для підприємств малого та середнього бізнесу',
             'Автоматизоване створення розрахункових документів та звітів згідно з розкладом бізнес-процесів',
             'Корпоративний або ізольований метод обліку для множини підприємств у централізованій базі даних',
-            'Рольова модель доступу користувачів',
+            'Рольова модель доступу користувачів до ресурсів і функцій системи',
         ],
         [],
     );
@@ -101,7 +101,9 @@ export function Features({ wideScreen }: Props) {
                     gap: 0,
                 }}
             >
-                <Typography variant="h1">{t('Main features')}</Typography>
+                <Typography variant="h1" sx={{ textAlign: 'center' }}>
+                    {t('Main features')}
+                </Typography>
                 <Typography color="grey.800">
                     <ul>
                         {mainFeatures.map((item) => (

@@ -56,8 +56,11 @@ export function FeatureBox(props: Props) {
         >
             <Box sx={{ display: 'flex', height: '100%', gap: 1, width: '100%' }}>
                 <Box
-                    color={'red'}
-                    sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', mx: 2 }}
+                    sx={{
+                        display: { xs: 'none', sm: 'flex' },
+                        alignItems: 'center',
+                        mx: 2,
+                    }}
                 >
                     {icon}
                 </Box>
@@ -71,7 +74,7 @@ export function FeatureBox(props: Props) {
                         width: '100%',
                     }}
                 >
-                    <Typography variant="h5" sx={{ fontWeight: 500 }} align="left">
+                    <Typography variant="h5" color="primary" sx={{ fontWeight: 500 }} align="left">
                         {name}
                     </Typography>
                     <Typography

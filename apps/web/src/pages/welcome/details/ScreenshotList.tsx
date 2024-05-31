@@ -11,6 +11,10 @@ const imageList = [
         img: '/screenshot-2.png',
         title: 'Payroll',
     },
+    // {
+    //     img: '/screenshot-3.png',
+    //     title: 'Dark theme',
+    // },
 ];
 
 export function ScreenshotList() {
