@@ -29,8 +29,10 @@ export function AppTitle(props: TypographyProps) {
                 noWrap
                 align="center"
                 sx={{ mb: 2 }}
-                {...props}
                 color="text.primary"
+                // color="primary.dark"
+                // color="grey.800"
+                {...props}
             >
                 {t(title || 'Payroll')}
             </Typography>
