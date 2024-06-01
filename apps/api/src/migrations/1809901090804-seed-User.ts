@@ -50,8 +50,8 @@ export class Seed1809901090804 implements MigrationInterface {
         const dataSource = queryRunner.connection;
         for (let n = 0; n < recordList.length; n++) {
             const values = langPipe(lang, recordList[n]);
-            const hashedPassword = bcrypt.hashSync(values.password, 10);
-            const roleId = await getRoleIdByType(dataSource, values);
+            const hashedPassword = values.password ? bcrypt.hashSync(values.password, 10) : '';
+            const roleId = await getRoleIdByType(dataSource, values.roleType);
             delete values.roleType;
             values['roleId'] = roleId;
             await dataSource
@@ -59,7 +59,7 @@ export class Seed1809901090804 implements MigrationInterface {
                 .insert()
                 .into(entity)
                 .values({ ...values, password: hashedPassword })
-                .orUpdate(['firstName', 'lastName', 'password'], ['email'])
+                // .orUpdate(['firstName', 'lastName', 'password'], ['email'])
                 .execute();
         }
     }
