@@ -69,7 +69,7 @@ export function UseCases() {
                             gap: { xs: 2, md: 6 },
                             borderRadius: 3,
                             py: 3,
-                            px: 6,
+                            px: 3,
                             // From https://css.glass
                             background: 'rgba(255, 255, 255, 0.3)',
                             boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
@@ -88,6 +88,7 @@ export function UseCases() {
                                 height: '100%',
                                 justifyContent: 'center',
                                 gap: 2,
+                                px: 3,
                             }}
                         >
                             <Typography variant="h3" color="primary">
@@ -105,7 +106,8 @@ export function UseCases() {
                                 width: '100%',
                                 height: 'auto',
                                 mx: ['auto'],
-                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                border: 1, // '1px solid rgba(255, 255, 255, 0.1)',
+                                borderColor: 'grey.200',
                                 borderRadius: 2,
                                 p: 2,
                                 minHeight: 0,
