@@ -1,4 +1,4 @@
 #!/bin/sh
-#./scripts/create_env
+./scripts/create_env
 docker compose rm --force --stop --volumes
 docker compose up db --detach --renew-anon-volumes --timestamps

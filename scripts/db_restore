@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Examples:
+# pg_restore --dbname=acc_pro_ufgd --format=c --verbose --exit-on-error --host=localhost --port="5433" --username=postgres --role="postgres" acc_pro_ufgd.backup 2>&1 | tee restore.log
+# pg_restore -v -h localhost -p 5433 -U acc_pro_ufgd -d acc_pro_ufgd -f /home/untilov/dev/backup/acc_pro_ufgd
+# pg_restore -v -h localhost -p 5433 -U acc_pro_ufgd -f /home/untilov/dev/backup/acc_pro_ufgd
+# pg_restore -v -h localhost -p 5433 -U acc_pro_ufgd -n acc_pro_ufgd -f /home/untilov/dev/backup/acc_pro_ufgd
+# pg_restore --dbname=acc_pro_ufgd --format=c --verbose --exit-on-error --host=localhost --port="5433" --username=postgres --role="postgres" acc_pro_ufgd.backup 2>&1 | tee restore.log
+# pg_restore -v -h localhost -p 5532 -U payrolladm -d payroll -f ./backup/payroll.backup
+# pg_restore --clean --dbname=payroll --format=c --verbose --exit-on-error --host=localhost --port="5532" --username=payrolladm --role="payroll" ./postgres-backup/payroll.backup 2>&1 | tee restore.log
+
+pg_restore --dbname=payroll --verbose --exit-on-error --host=localhost --port="5532" --username=postgresadm ./postgres-backup/payroll.backup 2>&1 | tee ./postgres-backup/payroll.restore.log
