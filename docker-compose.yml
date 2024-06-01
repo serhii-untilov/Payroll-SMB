@@ -51,3 +51,4 @@ networks:
   default:
     name: payroll_network
     driver: bridge
+    external: true
