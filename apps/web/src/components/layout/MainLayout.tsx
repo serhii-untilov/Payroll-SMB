@@ -82,7 +82,7 @@ export default function MainLayout() {
                                         mt: [2],
                                     }}
                                 >
-                                    <Link to="/welcome" color={'common.black'}>
+                                    <Link to="/welcome">
                                         <AppTitle align="left" />
                                     </Link>
                                 </Box>
