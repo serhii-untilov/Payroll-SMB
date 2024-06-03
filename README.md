@@ -28,7 +28,7 @@ In Production mode frontend and backend applications works on the same port:
 ### Development mode
 
 ``` bash
-npm i && npm run dev
+npm i && npm run build && npm run dev
 ```
 
 In Development mode frontend and backend applications works on the different ports:

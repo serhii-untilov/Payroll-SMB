@@ -39,7 +39,7 @@ export function Footer() {
                 <IconButton
                     id="github-button"
                     color="primary"
-                    href="https://github.com/serhii-untilov/"
+                    href="https://github.com/serhii-untilov/Payroll-SMB"
                     target="_blank"
                     rel="noreferrer"
                 >
