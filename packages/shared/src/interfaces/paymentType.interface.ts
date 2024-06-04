@@ -50,7 +50,7 @@ export enum CalcMethod {
     INCOME_TAX = 'income-tax',
     MILITARY_TAX = 'military-tax',
     // PAYMENTS group
-    ADVANCED_PAYMENT = 'advanced-payment',
+    ADVANCE_PAYMENT = 'advance-payment',
     REGULAR_PAYMENT = 'regular-payment',
     FAST_PAYMENT = 'fast-payment',
     // DEDUCTIONS group

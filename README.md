@@ -137,6 +137,9 @@ replace environment variables in *.locale files and run the application.
 |Min Wage                   |Мінімальна зарплата       |minWage            |Мінімальна зарплата                                                             |
 |USC to the minimum wage    |ЄСВ доплата до мін ЗП     |minWageECB         |Supplement to the minimum wage - Доплата до мінімальної зарплати                |
 |Max base USC               |Максимальна баз ЄСВ       |maxBaseECB         |Максимальна сума оподаткування ЄСВ                                              |
+|Advance Payment            |Виплата авансу            |advancePayment     |                                                                                |
+|Regular Payment            |Виплата зарплати          |regularPayment     |                                                                                |
+|Fast Payment               |Виплата у міжрозрахунок   |fastPayment        |Виплата у міжрозрахунковий період: оплата відпустки, розрахунок при звільненні  |
 
 ## Development
 
@@ -242,6 +245,8 @@ npx --workspace @repo/api nest generate resource minWage resources
 npx --workspace @repo/api nest generate resource maxBaseECB resources
 npx --workspace @repo/api nest generate service payFundCalculation processor
 npx --workspace @repo/api nest generate service companyListener processor/listeners
+npx --workspace @repo/api nest generate resource tasks resources
+npx --workspace @repo/api nest generate service taskList processor
 
 ```
 

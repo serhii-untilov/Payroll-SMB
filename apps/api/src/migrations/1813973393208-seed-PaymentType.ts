@@ -144,7 +144,7 @@ const recordList = [
         name: { en: 'Advance payment', uk: 'Виплата авансу' },
         paymentPart: PaymentPart.DEDUCTIONS,
         paymentGroup: PaymentGroup.PAYMENTS,
-        calcMethod: CalcMethod.ADVANCED_PAYMENT,
+        calcMethod: CalcMethod.ADVANCE_PAYMENT,
         description: {
             en: `Advanced payment - an employee is paid for work they have not yet completed or for a period that has not yet ended.`,
             uk: `Аванс - працівник отримує плату за роботу, яку він ще не виконав, або за період, який ще не закінчився.`,

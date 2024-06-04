@@ -42,6 +42,7 @@ export enum ResourceType {
     PAY_FUND = 'Pay Fund',
     MIN_WAGE = 'Minimal Wage',
     MAX_BASE_UFC = 'Maximal Base UFC',
+    TASK = 'Task',
 }
 
 export interface IAccess {

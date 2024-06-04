@@ -6,6 +6,7 @@ import { CompanyUpdatedEvent } from './../../../resources/companies/events/compa
 import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
 import { CompanyDeletedEvent } from './../../../resources/companies/events/company-deleted.event';
 import { PayPeriodsService } from './../../../resources/pay-periods/pay-periods.service';
+import { TaskListService } from './../../../processor/task-list/task-list.service';
 
 @Injectable()
 export class CompanyListenerService {
@@ -18,6 +19,8 @@ export class CompanyListenerService {
         private payFundCalculationService: PayFundCalculationService,
         @Inject(forwardRef(() => PayPeriodsService))
         private payPeriodsService: PayPeriodsService,
+        @Inject(forwardRef(() => TaskListService))
+        private taskListService: TaskListService,
     ) {}
 
     @OnEvent('company.created')
@@ -27,6 +30,7 @@ export class CompanyListenerService {
         await this.payrollCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payFundCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payrollCalculationService.calculateCompanyTotals(event.userId, event.companyId);
+        await this.taskListService.generate(event.userId, event.companyId);
     }
 
     @OnEvent('company.updated')
@@ -36,6 +40,7 @@ export class CompanyListenerService {
         await this.payrollCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payFundCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payrollCalculationService.calculateCompanyTotals(event.userId, event.companyId);
+        await this.taskListService.generate(event.userId, event.companyId);
     }
 
     @OnEvent('company.deleted')
@@ -49,5 +54,6 @@ export class CompanyListenerService {
         await this.payrollCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payFundCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payrollCalculationService.calculateCompanyTotals(event.userId, event.companyId);
+        await this.taskListService.generate(event.userId, event.companyId);
     }
 }
