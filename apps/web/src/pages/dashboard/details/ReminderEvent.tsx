@@ -14,7 +14,7 @@ export function ReminderEvent(props: Props) {
 
     return (
         <Box
-            boxShadow={1}
+            // boxShadow={1}
             sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -27,12 +27,12 @@ export function ReminderEvent(props: Props) {
             }}
         >
             <Grid container flexDirection="column" alignItems="start">
-                <Grid item xs={2}>
+                <Grid item>
                     <Typography sx={{ fontWeight: 'medium' }}>
                         {t(formatDate(event.date))}
                     </Typography>
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item>
                     <Typography>{t(event.description)}</Typography>
                 </Grid>
             </Grid>

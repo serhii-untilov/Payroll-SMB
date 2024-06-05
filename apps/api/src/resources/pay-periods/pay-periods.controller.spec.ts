@@ -11,6 +11,7 @@ import { AccessService } from '../access/access.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
 import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
+import { PayFundsService } from '../pay-funds/pay-funds.service';
 
 describe('PayPeriodsController', () => {
     let controller: PayPeriodsController;
@@ -34,6 +35,7 @@ describe('PayPeriodsController', () => {
                 { provide: CompaniesService, useValue: createMock<CompaniesService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
+                { provide: PayFundsService, useValue: createMock<PayFundsService>() },
             ],
         }).compile();
 

@@ -57,7 +57,7 @@ export function TodoTask(props: Props) {
 
     return (
         <Grid
-            boxShadow={1}
+            // boxShadow={1}
             container
             justifyContent="space-between"
             alignItems="center"

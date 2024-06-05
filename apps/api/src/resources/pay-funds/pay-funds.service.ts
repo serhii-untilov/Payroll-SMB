@@ -313,4 +313,14 @@ export class PayFundsService {
             .addGroupBy('payFundType.calcMethod')
             .getRawMany();
     }
+
+    async paySum(companyId: number, payPeriod: Date): Promise<number> {
+        const { paySum } = await this.repository
+            .createQueryBuilder('payFund')
+            .select('SUM(*)', '"paySum"')
+            .where('"companyId" = :companyId', { companyId })
+            .andWhere('"payPeriod" = :payPeriod', { payPeriod })
+            .getRawOne();
+        return Number(paySum);
+    }
 }

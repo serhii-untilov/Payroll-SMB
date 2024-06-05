@@ -101,12 +101,12 @@ export function formatDate(date: Date): string {
     return [year, month, day].join('-');
 }
 
-export function formatDateTime(date: Date): string {
+export function formatDateTime(date: Date, locale: string = 'en-us'): string {
     const d = new Date(date);
-    return d.toLocaleDateString('en-us', {
-        weekday: 'long',
+    return d.toLocaleDateString(locale, {
+        // weekday: 'long',
         year: 'numeric',
-        month: 'short',
+        month: 'numeric',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',

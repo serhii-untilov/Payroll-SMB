@@ -65,7 +65,7 @@ export default function Dashboard() {
                         </Typography>
                         <Box
                             component="section"
-                            boxShadow={1}
+                            // boxShadow={1}
                             sx={{
                                 // border: '1px dashed lightgrey',
                                 borderRadius: '5px',
@@ -73,8 +73,7 @@ export default function Dashboard() {
                                 mx: { xs: 1, sm: 2, md: 8, lg: 18 },
                                 p: { xs: 1, sm: 2 },
                                 color: (theme) => theme.palette.common.black,
-                                // bgcolor: blue[50],
-                                // opacity: 50,
+                                bgcolor: blue[50],
                             }}
                         >
                             <Summary></Summary>
