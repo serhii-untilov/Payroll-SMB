@@ -112,4 +112,14 @@ export class DepartmentsService {
             deletedDate: new Date(),
         });
     }
+
+    async count(companyId: number): Promise<number> {
+        const { count } = await this.repository
+            .createQueryBuilder('department')
+            .select('COUNT(*)', 'count')
+            .where('"companyId" = :companyId', { companyId })
+            .andWhere('"deletedDate" is null')
+            .getRawOne();
+        return Number(count);
+    }
 }

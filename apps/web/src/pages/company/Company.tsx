@@ -1,34 +1,33 @@
+import { ArrowBackIosNewRounded } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import { ICompany } from '@repo/shared';
+import { useQuery } from '@tanstack/react-query';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageTitle } from '../../components/layout/PageTitle';
 import { Tab } from '../../components/layout/Tab';
 import { TabPanel } from '../../components/layout/TabPanel';
 import { Tabs } from '../../components/layout/Tabs';
-import useAppContext from '../../hooks/useAppContext';
-import useLocale from '../../hooks/useLocale';
-import { CompanyAccounts } from './details/CompanyAccounts';
-import { CompanyDetails } from './details/CompanyDetails';
-import { CompanyDepartments } from './details/CompanyDepartments';
-import { CompanyManagers } from './details/CompanyManagers';
-import { getCompany } from '../../services/company.service';
-import { ICompany } from '@repo/shared';
-import { IconButton } from '@mui/material';
-import { ArrowBackIosNewRounded } from '@mui/icons-material';
-import { CompanyPayPeriods } from './details/CompanyPayPeriods';
-import { useQuery } from '@tanstack/react-query';
 import { Loading } from '../../components/utility/Loading';
+import useLocale from '../../hooks/useLocale';
+import { getCompany } from '../../services/company.service';
+import { CompanyAccounts } from './details/CompanyAccounts';
+import { CompanyDepartments } from './details/CompanyDepartments';
+import { CompanyDetails } from './details/CompanyDetails';
+import { CompanyManagers } from './details/CompanyManagers';
+import { CompanyPayPeriods } from './details/CompanyPayPeriods';
 
-type Props = {
-    showGoBack: boolean;
-};
-
-export default function Company(props: Props) {
+export default function Company() {
     const params = useParams();
     const companyId = Number(params.companyId);
-    // const [companyId, setCompanyId] = useState(Number(params.companyId));
-    const [tab, setTab] = useState(Number(localStorage.getItem('company-tab-index')));
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabName = searchParams.get('tab');
+    const goBack = searchParams.get('return') === 'true';
+    const [tab, setTab] = useState(
+        tabName ? getTabIndex(tabName) : Number(localStorage.getItem('company-tab-index')),
+    );
     const { t } = useTranslation();
     const { locale } = useLocale();
     const navigate = useNavigate();
@@ -50,10 +49,6 @@ export default function Company(props: Props) {
         return <Loading />;
     }
 
-    const onGoBack = () => {
-        navigate(-1);
-    };
-
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('company-tab-index', newValue.toString());
@@ -61,19 +56,7 @@ export default function Company(props: Props) {
 
     return (
         <PageLayout>
-            <PageTitle>
-                {companyId ? null : (
-                    <IconButton
-                        aria-label="Go Back"
-                        color="primary"
-                        sx={{ mr: 1 }}
-                        onClick={onGoBack}
-                    >
-                        <ArrowBackIosNewRounded />
-                    </IconButton>
-                )}
-                {pageTitle}
-            </PageTitle>
+            <PageTitle goBack={goBack}>{pageTitle}</PageTitle>
             <Tabs id="company__details_tabs" value={tab} onChange={handleChange}>
                 <Tab label={t('Accounting Details')} />
                 <Tab label={t('Pay Periods')} disabled={!data?.id} />
@@ -98,4 +81,12 @@ export default function Company(props: Props) {
             </TabPanel>
         </PageLayout>
     );
+}
+
+function getTabIndex(tabName: string | null): number {
+    if (!tabName) {
+        return 0;
+    }
+    const map = { details: 0, periods: 1, departments: 2, managers: 3, accounts: 4 };
+    return map[tabName];
 }

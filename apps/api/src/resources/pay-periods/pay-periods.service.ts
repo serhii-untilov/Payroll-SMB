@@ -342,6 +342,17 @@ export class PayPeriodsService {
         }
         return this.repositoryPayPeriodCalcMethod.find({ where: { payPeriodId: id } });
     }
+
+    async countClosed(companyId: number): Promise<number> {
+        const { count } = await this.repositoryPayPeriod
+            .createQueryBuilder('pay_period')
+            .select('COUNT(*)', 'count')
+            .where('"companyId" = :companyId', { companyId })
+            .andWhere('"deletedDate" is null')
+            .andWhere('"state" = :state', { state: PayPeriodState.CLOSED })
+            .getRawOne();
+        return Number(count);
+    }
 }
 
 function getFiller(paymentSchedule: PaymentSchedule | string) {

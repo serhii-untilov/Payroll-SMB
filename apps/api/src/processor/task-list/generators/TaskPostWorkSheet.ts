@@ -8,7 +8,7 @@ export class TaskPostWorkSheet extends TaskGenerator {
         super(ctx, type);
     }
 
-    getTask(): Task | null {
+    async getTask(): Promise<Task | null> {
         return this.makeTask();
     }
 }

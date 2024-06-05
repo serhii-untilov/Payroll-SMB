@@ -99,7 +99,7 @@ export class TasksService extends AvailableForUserCompany {
         const dateFrom = monthBegin(new Date());
         const dateTo = monthEnd(dateFrom);
         const availableTypeList = [TaskType.CREATE_COMPANY];
-        const notAvailableTypeList = [TaskType.POST_DEPARTMENT_LIST, TaskType.POST_POSITION_LIST];
+        const notAvailableTypeList = [TaskType.FILL_DEPARTMENT_LIST, TaskType.FILL_POSITION_LIST];
         const fakeTaskList = [
             ...availableTypeList.map((o) =>
                 Object.assign({ id: 0, type: o, dateFrom, dateTo, status: TaskStatus.TODO }),

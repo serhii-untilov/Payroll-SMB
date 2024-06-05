@@ -1,9 +1,9 @@
 import { TaskPostWorkSheet } from './generators/TaskPostWorkSheet';
-import { TaskPostPositionList } from './generators/TaskPostPositionList';
-import { TaskPostIncomeTaxReport } from './generators/TaskPostIncomeTaxReport';
+import { TaskFillPositionList } from './generators/TaskFillPositionList';
+import { TaskSendIncomeTaxReport } from './generators/TaskSendIncomeTaxReport';
 import { TaskPostAccrualDocument } from './generators/TaskPostAccrualDocument';
 import { TaskClosePayPeriod } from './generators/TaskClosePayPeriod';
-import { TaskPostDepartmentList } from './generators/TaskPostDepartmentList';
+import { TaskFillDepartmentList } from './generators/TaskFillDepartmentList';
 import { Inject, Injectable, Logger, NotFoundException, Scope, forwardRef } from '@nestjs/common';
 import { CompaniesService } from './../../resources/companies/companies.service';
 import { Company } from './../../resources/companies/entities/company.entity';
@@ -14,9 +14,11 @@ import { TaskStatus, TaskType } from '@repo/shared';
 import { TaskGenerator } from './generators/abstract/TaskGenerator';
 import { TasksService } from './../../resources/tasks/tasks.service';
 import { TaskPostAdvancePayment } from './generators/TaskPostAdvancePayment';
-import { TaskPostApplicationFss } from './generators/TaskPostApplicationFss';
+import { TaskSendApplicationFss } from './generators/TaskSendApplicationFss';
 import { TaskPostPaymentFss } from './generators/TaskPostPaymentFss';
 import { TaskPostRegularPayment } from './generators/TaskPostRegularPayment';
+import { DepartmentsService } from './../../resources/departments/departments.service';
+import { PositionsService } from './../../resources/positions/positions.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskListService {
@@ -32,9 +34,13 @@ export class TaskListService {
         @Inject(forwardRef(() => CompaniesService))
         private companiesService: CompaniesService,
         @Inject(forwardRef(() => PayPeriodsService))
-        private payPeriodsService: PayPeriodsService,
+        public payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => TasksService))
         private tasksService: TasksService,
+        @Inject(forwardRef(() => DepartmentsService))
+        public departmentsService: DepartmentsService,
+        @Inject(forwardRef(() => PositionsService))
+        public positionsService: PositionsService,
     ) {}
 
     public get logger() {
@@ -75,28 +81,29 @@ export class TaskListService {
         this._sequenceNumber = this.priorTaskList
             .filter((o) => o.status === TaskStatus.DONE_BY_USER)
             .reduce((a, b) => (a > b.sequenceNumber ? a : b.sequenceNumber), 0);
-        this._generate();
+        await this._generate();
     }
 
-    private _generate() {
-        [
-            TaskType.POST_DEPARTMENT_LIST,
-            TaskType.POST_POSITION_LIST,
-            TaskType.POST_INCOME_TAX_REPORT,
+    private async _generate() {
+        const typeList = [
+            TaskType.FILL_DEPARTMENT_LIST,
+            TaskType.FILL_POSITION_LIST,
+            TaskType.SEND_INCOME_TAX_REPORT,
             TaskType.POST_WORK_SHEET,
             TaskType.POST_ACCRUAL_DOCUMENT,
-            TaskType.POST_APPLICATION_FSS,
+            TaskType.SEND_APPLICATION_FSS,
             TaskType.POST_PAYMENT_FSS,
             TaskType.POST_ADVANCE_PAYMENT,
             TaskType.POST_REGULAR_PAYMENT,
             TaskType.CLOSE_PAY_PERIOD,
-        ].forEach((type) => {
+        ];
+        for (const type of typeList) {
             const generator = this._getTaskGenerator(type);
-            const task = generator.getTask();
+            const task = await generator.getTask();
             if (task) {
                 this.currentTaskList.push(task);
             }
-        });
+        }
         const { toInsert, toDelete } = this._merge();
         this._save(toInsert, toDelete);
     }
@@ -107,16 +114,25 @@ export class TaskListService {
                 (task) =>
                     task.status !== TaskStatus.DONE_BY_USER &&
                     !this.currentTaskList.find(
-                        (o) => o.type === task.type && o.status === task.status,
+                        (o) =>
+                            o.type === task.type &&
+                            o.status === task.status &&
+                            o.dateFrom.getTime() === task.dateFrom.getTime() &&
+                            o.dateTo.getTime() === task.dateTo.getTime(),
                     ),
             )
             .map((o) => o.id);
         const toInsert = this.currentTaskList.filter(
             (task) =>
                 !this.priorTaskList.find(
+                    (o) => o.type === task.type && o.status === TaskStatus.DONE_BY_USER,
+                ) &&
+                !this.priorTaskList.find(
                     (o) =>
                         o.type === task.type &&
-                        (o.status === task.status || o.status === TaskStatus.DONE_BY_USER),
+                        o.status === task.status &&
+                        o.dateFrom.getTime() === task.dateFrom.getTime() &&
+                        o.dateTo.getTime() === task.dateTo.getTime(),
                 ),
         );
         return { toInsert, toDelete };
@@ -146,24 +162,24 @@ export class TaskListService {
                 generator: () => new TaskPostAdvancePayment(this, type),
             },
             {
-                type: TaskType.POST_APPLICATION_FSS,
-                generator: () => new TaskPostApplicationFss(this, type),
+                type: TaskType.SEND_APPLICATION_FSS,
+                generator: () => new TaskSendApplicationFss(this, type),
             },
             {
-                type: TaskType.POST_DEPARTMENT_LIST,
-                generator: () => new TaskPostDepartmentList(this, type),
+                type: TaskType.FILL_DEPARTMENT_LIST,
+                generator: () => new TaskFillDepartmentList(this, type),
             },
             {
-                type: TaskType.POST_INCOME_TAX_REPORT,
-                generator: () => new TaskPostIncomeTaxReport(this, type),
+                type: TaskType.SEND_INCOME_TAX_REPORT,
+                generator: () => new TaskSendIncomeTaxReport(this, type),
             },
             {
                 type: TaskType.POST_PAYMENT_FSS,
                 generator: () => new TaskPostPaymentFss(this, type),
             },
             {
-                type: TaskType.POST_POSITION_LIST,
-                generator: () => new TaskPostPositionList(this, type),
+                type: TaskType.FILL_POSITION_LIST,
+                generator: () => new TaskFillPositionList(this, type),
             },
             {
                 type: TaskType.POST_REGULAR_PAYMENT,

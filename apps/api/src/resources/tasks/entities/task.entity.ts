@@ -1,6 +1,6 @@
 import { ITask } from '@repo/shared';
 import { Logger } from './../../../resources/abstract/logger.abstract';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Company } from './../../../resources/companies/entities/company.entity';
 
 @Entity()
@@ -28,4 +28,10 @@ export class Task extends Logger implements ITask {
 
     @Column({ type: 'varchar', length: 15 })
     status: string; // See enum TaskStatus
+
+    @AfterLoad()
+    transform() {
+        this.dateFrom = new Date(this.dateFrom);
+        this.dateTo = new Date(this.dateTo);
+    }
 }

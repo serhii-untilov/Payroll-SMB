@@ -11,7 +11,7 @@ export abstract class TaskGenerator {
         this.type = type;
     }
 
-    public abstract getTask(): Task | null;
+    public abstract getTask(): Promise<Task | null>;
 
     public makeTask(): Task {
         return Object.assign({

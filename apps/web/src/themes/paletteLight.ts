@@ -73,8 +73,8 @@ export function paletteLight(): ExtPaletteOptions {
         // augmentColor: f R(),
         tonalOffset: 0.2,
         text: {
-            primary: rgba(0, 0, 0, 0.87),
-            // primary: '#1d1d1f', // Apple
+            // primary: rgba(0, 0, 0, 0.87),
+            primary: '#1d1d1f', // Apple
             secondary: rgba(0, 0, 0, 0.6),
             disabled: rgba(0, 0, 0, 0.38),
         },

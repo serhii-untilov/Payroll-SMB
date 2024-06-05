@@ -40,12 +40,12 @@ export class CompanyListenerService {
         await this.payrollCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payFundCalculationService.calculateCompany(event.userId, event.companyId);
         await this.payrollCalculationService.calculateCompanyTotals(event.userId, event.companyId);
-        await this.taskListService.generate(event.userId, event.companyId);
     }
 
     @OnEvent('company.deleted')
     async handleCompanyDeletedEvent(event: CompanyDeletedEvent) {
         this._logger.log(`handling ['company.deleted'] ${JSON.stringify(event)}`);
+        await this.taskListService.generate(event.userId, event.companyId);
     }
 
     @OnEvent('company.calculate')

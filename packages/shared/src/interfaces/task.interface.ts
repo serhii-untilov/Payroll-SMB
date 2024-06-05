@@ -4,16 +4,16 @@ import { ILogger } from './logger.interface';
 export enum TaskType {
     CREATE_USER = 'create-user', // Створення користувача
     CREATE_COMPANY = 'create-company', // Створення підприємства
-    POST_DEPARTMENT_LIST = 'post-department-list', // Заповнення списку підрозділів
-    POST_POSITION_LIST = 'post-position-list', // Заповнення списку працівників
+    FILL_DEPARTMENT_LIST = 'fill-department-list', // Заповнення списку підрозділів
+    FILL_POSITION_LIST = 'fill-position-list', // Заповнення списку працівників
     POST_WORK_SHEET = 'post-work-sheet', // Заповнення табелю
     POST_ACCRUAL_DOCUMENT = 'post-accrual-document', // Розрахунок разових нарахувань
-    POST_APPLICATION_FSS = 'post-application-fss', // Заявка у ФСС
+    SEND_APPLICATION_FSS = 'send-application-fss', // Заявка у ФСС
     POST_PAYMENT_FSS = 'post-payment-fss', // Виплата по заявкам ФСС
     POST_ADVANCE_PAYMENT = 'post-advance-payment', // Виплата авансу
     POST_REGULAR_PAYMENT = 'post-regular-payment', // Виплата зарплати
     CLOSE_PAY_PERIOD = 'close-pay-period', // Закриття розрахункового періоду
-    POST_INCOME_TAX_REPORT = 'post-income-tax-report', // Звіт з ПДФО
+    SEND_INCOME_TAX_REPORT = 'send-income-tax-report', // Звіт з ПДФО
 }
 
 export enum TaskStatus {
@@ -61,7 +61,7 @@ export type IUpdateTask = Partial<
 >;
 
 export type IFindTask = {
-    companyId: number;
+    companyId?: number;
     onDate?: Date;
     onPayPeriodDate?: Date;
     relations?: boolean;

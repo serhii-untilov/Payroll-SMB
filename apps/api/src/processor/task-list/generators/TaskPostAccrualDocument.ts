@@ -8,7 +8,7 @@ export class TaskPostAccrualDocument extends TaskGenerator {
         super(ctx, type);
     }
 
-    getTask(): Task | null {
+    async getTask(): Promise<Task | null> {
         return this.makeTask();
     }
 }
