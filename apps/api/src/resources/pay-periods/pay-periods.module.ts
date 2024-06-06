@@ -8,6 +8,7 @@ import { PayPeriod } from './entities/pay-period.entity';
 import { PayPeriodsController } from './pay-periods.controller';
 import { PayPeriodsService } from './pay-periods.service';
 import { PositionsModule } from '../positions/positions.module';
+import { PayFundsModule } from '../pay-funds/pay-funds.module';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { PositionsModule } from '../positions/positions.module';
         forwardRef(() => CompaniesModule),
         forwardRef(() => PositionsModule),
         forwardRef(() => PayrollsModule),
+        forwardRef(() => PayFundsModule),
     ],
     controllers: [PayPeriodsController],
     providers: [PayPeriodsService],

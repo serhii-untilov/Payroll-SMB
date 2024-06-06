@@ -27,6 +27,7 @@ export * from './interfaces/payroll.interface';
 export * from './interfaces/payFundType.interface';
 export * from './interfaces/payFund.interface';
 export * from './interfaces/minWage.interface';
+export * from './interfaces/task.interface';
 export * from './utils/date';
 export * from './utils/bitwise';
 export * from './utils/getFullName';

@@ -1,6 +1,7 @@
 import { Box, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { InputLabel } from '../../components/layout/InputLabel';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageTitle } from '../../components/layout/PageTitle';
@@ -13,9 +14,14 @@ import useLocale from '../../hooks/useLocale';
 import { PositionList } from './details/PositionList';
 
 export default function People() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabName = searchParams.get('tab');
+    const goBack = searchParams.get('return') === 'true';
     const { company } = useAppContext();
     const { locale } = useLocale();
-    const [tab, setTab] = useState(Number(localStorage.getItem('people-tab-index')));
+    const [tab, setTab] = useState(
+        tabName ? getTabIndex(tabName) : Number(localStorage.getItem('people-tab-index')),
+    );
     const { t } = useTranslation();
     const { payPeriod } = useAppContext();
 
@@ -30,7 +36,7 @@ export default function People() {
         company &&
         payPeriod && (
             <PageLayout>
-                <PageTitle>{t('People')}</PageTitle>
+                <PageTitle goBack={goBack}>{t('People')}</PageTitle>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
                         <InputLabel>{t('Pay Period')}</InputLabel>
@@ -109,4 +115,20 @@ export default function People() {
             </PageLayout>
         )
     );
+}
+
+function getTabIndex(tabName: string | null): number {
+    if (!tabName) {
+        return 0;
+    }
+    const map = {
+        positions: 0,
+        employees: 1,
+        contractors: 2,
+        vacancies: 3,
+        offers: 4,
+        dismissed: 5,
+        all: 6,
+    };
+    return map[tabName];
 }

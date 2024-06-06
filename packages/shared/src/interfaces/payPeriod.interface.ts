@@ -38,6 +38,8 @@ export interface IPayPeriod extends ILogger {
     outBalance?: number;
     outCompanyDebt?: number;
     outEmployeeDebt?: number;
+
+    funds?: number;
 }
 
 export type ICreatePayPeriod = Omit<

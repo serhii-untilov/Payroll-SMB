@@ -3,17 +3,21 @@ import PageLayout from '../../components/layout/PageLayout';
 import useLocale from '../../hooks/useLocale';
 import { useEffect } from 'react';
 import { PageTitle } from '../../components/layout/PageTitle';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Reports() {
     const { locale } = useLocale();
     const { t } = useTranslation();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabName = searchParams.get('tab');
+    const goBack = searchParams.get('return') === 'true';
 
     useEffect(() => {}, [locale]);
 
     return (
         <>
             <PageLayout>
-                <PageTitle>{t('Reports')}</PageTitle>
+                <PageTitle goBack={goBack}>{t('Reports')}</PageTitle>
             </PageLayout>
         </>
     );

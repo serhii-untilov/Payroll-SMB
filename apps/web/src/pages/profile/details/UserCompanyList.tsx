@@ -138,7 +138,7 @@ export function UserCompanyList(params: Props) {
         console.log('onEditCompany');
         const company = await getCompany(companyId);
         setCurrentCompany(company);
-        navigate(`/company/${companyId}`);
+        navigate(`/company/${companyId}?tab=details&return=true`);
     };
 
     const submitCallback = async (data: ICompany) => {

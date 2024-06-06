@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class Gen1717258858125 implements MigrationInterface {
-    name = 'Gen1717258858125'
+    name = 'Gen1717258858125';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -142,5 +142,4 @@ export class Gen1717258858125 implements MigrationInterface {
             ADD "accrual" numeric(15, 2) NOT NULL DEFAULT '0'
         `);
     }
-
 }

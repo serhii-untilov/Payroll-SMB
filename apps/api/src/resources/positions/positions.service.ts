@@ -442,4 +442,15 @@ export class PositionsService extends AvailableForUserCompany {
             .getRawOne();
         return Number(result?.employeeDebt);
     }
+
+    async countEmployees(companyId: number): Promise<number> {
+        const { count } = await this.repository
+            .createQueryBuilder('position')
+            .select('COUNT(*)', 'count')
+            .where('"companyId" = :companyId', { companyId })
+            .andWhere('"deletedDate" is null')
+            .andWhere('"personId" is not null')
+            .getRawOne();
+        return Number(count);
+    }
 }

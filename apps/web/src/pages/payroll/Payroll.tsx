@@ -11,11 +11,17 @@ import { SelectPayPeriod } from '../../components/select/SelectPayPeriod';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { SalaryReport } from './details/SalaryReport';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Payroll() {
     const { company } = useAppContext();
     const { locale } = useLocale();
-    const [tab, setTab] = useState(Number(localStorage.getItem('people-tab-index')));
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabName = searchParams.get('tab');
+    const goBack = searchParams.get('return') === 'true';
+    const [tab, setTab] = useState(
+        Number(tabName ? getTabIndex(tabName) : localStorage.getItem('people-tab-index')),
+    );
     const { t } = useTranslation();
     const { payPeriod, setPayPeriod } = useAppContext();
 
@@ -30,7 +36,7 @@ export default function Payroll() {
         company &&
         payPeriod && (
             <PageLayout>
-                <PageTitle>{t('Salary Report')}</PageTitle>
+                <PageTitle goBack={goBack}>{t('Salary Report')}</PageTitle>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
                         <InputLabel>{t('Pay Period')}</InputLabel>
@@ -106,4 +112,12 @@ export default function Payroll() {
             </PageLayout>
         )
     );
+}
+
+function getTabIndex(tabName: string | null): number {
+    if (!tabName) {
+        return 0;
+    }
+    const map = { payroll: 0, employer: 1, summary: 2, entries: 3 };
+    return map[tabName];
 }

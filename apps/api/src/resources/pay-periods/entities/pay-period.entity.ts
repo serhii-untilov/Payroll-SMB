@@ -82,6 +82,9 @@ export class PayPeriod extends Logger implements IPayPeriod {
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     outEmployeeDebt?: number;
 
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
+    funds?: number;
+
     @OneToMany(() => PayPeriodCalcMethod, (payPeriodCalcMethod) => payPeriodCalcMethod.payPeriod)
     calcMethods?: PayPeriodCalcMethod[];
 
@@ -107,5 +110,6 @@ export class PayPeriod extends Logger implements IPayPeriod {
         this.outBalance = Number(this.outBalance);
         this.outCompanyDebt = Number(this.outCompanyDebt);
         this.outEmployeeDebt = Number(this.outEmployeeDebt);
+        this.funds = Number(this.funds);
     }
 }
