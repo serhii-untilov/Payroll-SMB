@@ -140,6 +140,7 @@ replace environment variables in *.locale files and run the application.
 |Advance Payment            |Виплата авансу            |advancePayment     |                                                                                |
 |Regular Payment            |Виплата зарплати          |regularPayment     |                                                                                |
 |Fast Payment               |Виплата у міжрозрахунок   |fastPayment        |Виплата у міжрозрахунковий період: оплата відпустки, розрахунок при звільненні  |
+|Overdue Tasks              |Прострочені задачі        |overdueTasks       |                                                                                |
 
 ## Development
 

@@ -14,6 +14,10 @@ export function ScreenshotList() {
     const imageList = useMemo(
         () => [
             {
+                img: locale.language === 'uk' ? '/screenshot-4-uk.png' : '/screenshot-4-en.png',
+                title: t('Dashboard'),
+            },
+            {
                 img: locale.language === 'uk' ? '/screenshot-1-uk.png' : '/screenshot-1-en.png',
                 title: t('Employees'),
             },
