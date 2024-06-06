@@ -246,5 +246,8 @@
     "User": "User",
     "today at": "today at",
     "yesterday at": "yesterday at",
-    "at": "at"
+    "at": "at",
+    "Current payment period": "Current payment period",
+    "Calculation was completed": "Calculation was completed",
+    "Total expenses": "Total expenses"
 }
