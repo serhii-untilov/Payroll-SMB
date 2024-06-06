@@ -36,6 +36,9 @@ export class UsersService {
             throw new ConflictException('User already exists.');
         }
         if (!payload.roleId) {
+            payload.roleId = await this.rolesService.findRoleByType(RoleType.EMPLOYER);
+        }
+        if (!payload.roleId) {
             throw new BadRequestException(`Role should be defined.`);
         }
         const roleType = await this.rolesService.getRoleType(payload.roleId);
