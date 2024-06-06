@@ -39,6 +39,7 @@ import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
 import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
 import { PayFundsService } from '../pay-funds/pay-funds.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class PayPeriodsService {
@@ -60,6 +61,8 @@ export class PayPeriodsService {
         private payrollsService: PayrollsService,
         @Inject(forwardRef(() => PayFundsService))
         private payFundsService: PayFundsService,
+        @Inject(forwardRef(() => UsersService))
+        private usersService: UsersService,
     ) {}
 
     async availableFindAllOrFail(userId: number, companyId: number) {
@@ -306,6 +309,7 @@ export class PayPeriodsService {
             payPeriod.dateFrom,
         );
         const funds = await this.payFundsService.paySum(payPeriod.companyId, payPeriod.dateFrom);
+        const systemUserId = await this.usersService.getSystemUserId();
         return await this.repositoryPayPeriod.save({
             ...payPeriod,
             inBalance,
@@ -317,6 +321,8 @@ export class PayPeriodsService {
             outCompanyDebt,
             outEmployeeDebt,
             funds,
+            updatedDate: new Date(),
+            updatedUserId: systemUserId,
         });
     }
 

@@ -1,17 +1,17 @@
-import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
-import { PayPeriod } from './entities/pay-period.entity';
-import { PayPeriodsService } from './pay-periods.service';
-import { UsersService } from '../users/users.service';
-import { CompaniesService } from '../companies/companies.service';
-import { createMock } from '@golevelup/ts-jest';
 import { AccessService } from '../access/access.service';
+import { CompaniesService } from '../companies/companies.service';
+import { PayFundsService } from '../pay-funds/pay-funds.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
-import { PayFundsService } from '../pay-funds/pay-funds.service';
+import { UsersService } from '../users/users.service';
+import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
+import { PayPeriod } from './entities/pay-period.entity';
+import { PayPeriodsService } from './pay-periods.service';
 
 describe('PayPeriodsService', () => {
     let service: PayPeriodsService;
@@ -35,6 +35,7 @@ describe('PayPeriodsService', () => {
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
                 { provide: PayFundsService, useValue: createMock<PayFundsService>() },
+                { provide: UsersService, useValue: createMock<UsersService>() },
             ],
         }).compile();
 

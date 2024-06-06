@@ -15,7 +15,7 @@ export function Summary() {
     const { t } = useTranslation();
 
     const { data: payPeriod } = useQuery({
-        queryKey: ['pay-period', 'current', company],
+        queryKey: ['payPeriod', 'current', company],
         queryFn: async () => {
             return company?.id ? await getCurrentPayPeriod(company.id, true, true) : null;
         },

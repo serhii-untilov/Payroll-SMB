@@ -1,3 +1,4 @@
+import { UsersModule } from './../users/users.module';
 import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -18,6 +19,7 @@ import { PayFundsModule } from '../pay-funds/pay-funds.module';
         forwardRef(() => PositionsModule),
         forwardRef(() => PayrollsModule),
         forwardRef(() => PayFundsModule),
+        forwardRef(() => UsersModule),
     ],
     controllers: [PayPeriodsController],
     providers: [PayPeriodsService],

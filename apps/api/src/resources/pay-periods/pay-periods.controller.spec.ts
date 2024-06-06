@@ -36,6 +36,7 @@ describe('PayPeriodsController', () => {
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
                 { provide: PayFundsService, useValue: createMock<PayFundsService>() },
+                { provide: UsersService, useValue: createMock<UsersService>() },
             ],
         }).compile();
 
