@@ -245,5 +245,8 @@
     "User": "Користувач",
     "today at": "сьогодні o",
     "yesterday at": "вчора o",
-    "at": "о"
+    "at": "о",
+    "Current payment period": "Поточний розрахунковий період",
+    "Calculation was completed": "Розрахунок виконано",
+    "Total expenses": "Загальні витрати"
 }

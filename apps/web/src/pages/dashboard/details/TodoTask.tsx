@@ -1,13 +1,12 @@
 import {
     CropSquare,
-    DoneAllRounded,
     DoneRounded,
     FileDownloadDoneRounded,
     LoopRounded,
     NotInterested,
 } from '@mui/icons-material';
 import { Grid, IconButton, Typography } from '@mui/material';
-import { amber, green, grey, orange, red } from '@mui/material/colors';
+import { green, grey, orange, red } from '@mui/material/colors';
 import { ITask, TaskStatus, TaskType } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
@@ -182,21 +181,21 @@ function getPath(type: string, ctx: AppContextType): string {
             return `/company/${ctx?.company?.id || ''}?tab=departments&return=true`;
         case TaskType.FILL_POSITION_LIST:
             return '/people?tab=positions&return=true';
-        case TaskType.POST_WORK_SHEET: // = 'post-work-sheet', // Заповнення табелю
+        case TaskType.POST_WORK_SHEET:
             return '/time-sheet?return=true';
-        case TaskType.POST_ACCRUAL_DOCUMENT: // = 'post-accrual-document', // Розрахунок разових нарахувань
+        case TaskType.POST_ACCRUAL_DOCUMENT:
             return '/payroll?return=true';
-        case TaskType.SEND_APPLICATION_FSS: // = 'post-application-fss', // Заявка у ФСС
+        case TaskType.SEND_APPLICATION_FSS:
             return '/payments?return=true';
-        case TaskType.POST_PAYMENT_FSS: // = 'post-payment-fss', // Виплата по заявкам ФСС
+        case TaskType.POST_PAYMENT_FSS:
             return '/payments?return=true';
-        case TaskType.POST_ADVANCE_PAYMENT: // = 'post-advance-payment', // Виплата авансу
+        case TaskType.POST_ADVANCE_PAYMENT:
             return '/payments?return=true';
-        case TaskType.POST_REGULAR_PAYMENT: // = 'post-regular-payment', // Виплата зарплати
+        case TaskType.POST_REGULAR_PAYMENT:
             return '/payments?return=true';
-        case TaskType.CLOSE_PAY_PERIOD: // = 'close-pay-period', // Закриття розрахункового періоду
+        case TaskType.CLOSE_PAY_PERIOD:
             return `/company/${ctx?.company?.id || ''}?tab=periods&return=true`;
-        case TaskType.SEND_INCOME_TAX_REPORT: // = 'post-income-tax-report', // Звіт з ПДФО
+        case TaskType.SEND_INCOME_TAX_REPORT:
             return '/reports?return=true';
         default:
             return '#';

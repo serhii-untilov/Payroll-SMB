@@ -64,7 +64,7 @@ export function Summary() {
                             <Grid item>
                                 <Link to={`/company/${company.id}?tab=periods&return=true`}>
                                     <Typography sx={{ display: 'inline' }}>
-                                        Поточний розрахунковий період:{' '}
+                                        {t('Current payment period')}:{' '}
                                     </Typography>{' '}
                                     <Typography
                                         color={'warning.main'}
@@ -126,7 +126,7 @@ export function Summary() {
                         {payPeriod?.updatedDate && (
                             <Link to={'/payroll?tab=payroll&return=true'}>
                                 <Typography sx={{ textAlign: 'end', display: 'inline' }}>
-                                    Розрахунок виконано:{' '}
+                                    {t('Calculation was completed')}:{' '}
                                 </Typography>{' '}
                                 <Typography
                                     sx={{
@@ -145,7 +145,7 @@ export function Summary() {
                         {payPeriod?.updatedDate && (
                             <Link to={'/payroll?tab=employer&return=true'}>
                                 <Typography sx={{ textAlign: 'end', display: 'inline' }}>
-                                    Загальні витрати:{' '}
+                                    {t('Total expenses')}:{' '}
                                 </Typography>
                                 <Typography
                                     color={'warning.main'}
