@@ -2,9 +2,9 @@ import { CalcMethod, PayFundCategory, PaymentGroup } from '@repo/shared';
 import { PayFundType } from '../../../resources/pay-fund-types/entities/pay-fund-type.entity';
 import { PayFund } from '../../../resources/pay-funds/entities/pay-fund.entity';
 import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.entity';
-import { accPeriodFactSum } from '../../payrollCalculation/helpers/payrollsData';
 import { PayFundCalculationService } from '../payFundCalculation.service';
 import { PayFundCalc } from './abstract/PayFundCalc';
+import { accPeriodFactSum } from './../../../processor/helpers/payrollsData';
 
 export class PayFundCalc_ECB_Salary extends PayFundCalc {
     constructor(

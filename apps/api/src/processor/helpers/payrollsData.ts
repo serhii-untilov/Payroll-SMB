@@ -1,6 +1,6 @@
 import { RecordFlags } from '@repo/shared';
-import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
-import { PayPeriod } from './../../../resources/pay-periods/entities/pay-period.entity';
+import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
+import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
 
 export function getPayrollUnionRecord(
     payroll: Payroll,

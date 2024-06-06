@@ -7,7 +7,7 @@ export async function createTask(task: ICreateTask): Promise<ITask> {
     return response.data;
 }
 
-export async function getTasks(params: IFindTask): Promise<ITask[]> {
+export async function getTaskList(params: IFindTask): Promise<ITask[]> {
     const response = await api.post('/api/tasks/find', params, { headers: authHeader() });
     return response.data.sort((a, b) =>
         a.dateFrom.getTime() < b.dateFrom.getTime()

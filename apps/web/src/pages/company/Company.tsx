@@ -1,5 +1,3 @@
-import { ArrowBackIosNewRounded } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
 import { ICompany } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
@@ -30,7 +28,6 @@ export default function Company() {
     );
     const { t } = useTranslation();
     const { locale } = useLocale();
-    const navigate = useNavigate();
 
     useEffect(() => {}, [locale]);
 

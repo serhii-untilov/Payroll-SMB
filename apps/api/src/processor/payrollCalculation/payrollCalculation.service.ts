@@ -16,8 +16,8 @@ import { WorkNormsService } from '../../resources/work-norms/work-norms.service'
 import { calculateBasics } from './calcMethods/calculateBasic';
 import { calculateIncomeTax } from './calcMethods/calculateIncomeTax';
 import { calculateMilitaryTax } from './calcMethods/calculateMilitaryTax';
-import { getPayrollUnionRecord } from './helpers/payrollsData';
-import { calcBalanceWorkingTime } from './helpers/workingTime';
+import { getPayrollUnionRecord } from './../helpers/payrollsData';
+import { calcBalanceWorkingTime } from './../helpers/workingTime';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {

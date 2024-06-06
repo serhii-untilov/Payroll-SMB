@@ -41,7 +41,8 @@ export class TasksController {
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() payload: FindTaskDto): Promise<Task[]> {
         const userId = req.user['sub'];
-        await this.tasksService.availableFindAllOrFail(userId, payload.companyId);
+        payload.companyId &&
+            (await this.tasksService.availableFindAllOrFail(userId, payload.companyId));
         return await this.tasksService.findAll(userId, deepStringToShortDate(payload));
     }
 

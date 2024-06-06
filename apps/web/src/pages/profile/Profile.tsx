@@ -17,6 +17,7 @@ import useLocale from '../../hooks/useLocale';
 import { getCurrentUser } from '../../services/auth.service';
 import { UserCompanyList } from './details/UserCompanyList';
 import { UserDetails } from './details/UserDetails';
+import { useSearchParams } from 'react-router-dom';
 
 const formSchema = Yup.object().shape({
     id: Yup.number(),
@@ -38,7 +39,12 @@ const defaultValues: FormType = {
 };
 
 export default function Profile() {
-    const [tab, setTab] = useState(Number(localStorage.getItem('profile-tab-index')));
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabName = searchParams.get('tab');
+    const goBack = searchParams.get('return') === 'true';
+    const [tab, setTab] = useState(
+        tabName ? getTabIndex(tabName) : Number(localStorage.getItem('profile-tab-index')),
+    );
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { user: currentUser } = useAuth();
@@ -95,7 +101,7 @@ export default function Profile() {
 
     return (
         <PageLayout>
-            <PageTitle>{generateTitle()}</PageTitle>
+            <PageTitle goBack={goBack}>{generateTitle()}</PageTitle>
             <AvatarBox />
             <Tabs id="user__details_tabs" value={tab} onChange={handleChange}>
                 <Tab label={t('User Profile')} />
@@ -109,4 +115,12 @@ export default function Profile() {
             </TabPanel>
         </PageLayout>
     );
+}
+
+function getTabIndex(tabName: string | null): number {
+    if (!tabName) {
+        return 0;
+    }
+    const map = { details: 0, companies: 1 };
+    return map[tabName];
 }

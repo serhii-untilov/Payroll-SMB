@@ -240,5 +240,8 @@
     "todo": "Todo",
     "in-progress": "In Progress",
     "done": "Done",
-    "done-by-user": "Marked as Done"
+    "done-by-user": "Marked as Done",
+    "welcome-for-a-new-user1": "Welcome to the new user!",
+    "welcome-for-a-new-user2": "To start work, you need to complete the tasks listed below.",
+    "User": "User"
 }

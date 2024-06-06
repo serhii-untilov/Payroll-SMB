@@ -10,9 +10,9 @@ import {
     monthEnd,
     setBit,
 } from '@repo/shared';
-import { add } from 'date-fns';
-import { WorkNorm } from '../../../resources/work-norms/entities/work-norm.entity';
-import { PayrollCalculationService } from '../payrollCalculation.service';
+import { add, sub } from 'date-fns';
+import { WorkNorm } from './../../resources/work-norms/entities/work-norm.entity';
+import { PayrollCalculationService } from '../payrollCalculation/payrollCalculation.service';
 
 export function getWorkingTimePlan(
     ctx: PayrollCalculationService,
@@ -120,4 +120,11 @@ function getPlanForWeekly(workNorm: WorkNorm, onDate: Date): WorkingTime {
         }
     }
     return { days, hours, mask, hoursByDay };
+}
+
+export function getWorkDayBeforeOrEqual(date: Date): Date {
+    while (date.getDay() === 0 || date.getDay() === 6) {
+        date = sub(date, { days: 1 });
+    }
+    return date;
 }

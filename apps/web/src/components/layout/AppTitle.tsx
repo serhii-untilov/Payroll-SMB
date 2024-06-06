@@ -29,7 +29,7 @@ export function AppTitle(props: TypographyProps) {
                 noWrap
                 align="center"
                 sx={{ mb: 2 }}
-                color="text.primary"
+                // color="text.primary"
                 // color="primary.dark"
                 // color="grey.800"
                 {...props}
