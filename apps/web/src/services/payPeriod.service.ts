@@ -82,13 +82,14 @@ export function getPayPeriodName(
     dateTo: Date,
     isCurrent: boolean,
     locale: any,
+    template: string = 'y LLLL',
 ): string {
     const state = isCurrent ? `(${t('current')})` : '';
     if (
         isEqual(startOfDay(dateFrom), startOfMonth(dateFrom)) &&
         isEqual(startOfDay(dateTo), startOfDay(endOfMonth(dateTo)))
     ) {
-        return `${format(dateFrom, 'y LLLL', { locale })} ${state}`;
+        return `${format(dateFrom, template, { locale })} ${state}`;
     }
-    return `${format(dateFrom, 'y LLLL', { locale })} ${format(dateFrom, 'd')} - ${format(dateTo, 'd')} ${state}`;
+    return `${format(dateFrom, template, { locale })} ${format(dateFrom, 'd')} - ${format(dateTo, 'd')} ${state}`;
 }

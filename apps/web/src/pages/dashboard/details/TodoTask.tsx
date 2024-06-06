@@ -163,10 +163,7 @@ function getBackgroundColor(task: ITask) {
 }
 
 function getStatusTooltip(task: ITask) {
-    if (task.type === TaskType.CREATE_COMPANY) {
-        return task.status;
-    }
-    if (task.type === TaskType.FILL_POSITION_LIST) {
+    if (!canMarkAsDone(task)) {
         return task.status;
     }
     if (task.status === TaskStatus.NOT_AVAILABLE) return task.status;
