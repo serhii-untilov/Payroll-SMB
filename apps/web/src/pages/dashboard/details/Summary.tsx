@@ -6,7 +6,8 @@ import useAppContext from '../../../hooks/useAppContext';
 import { getCurrentPayPeriod, getPayPeriodName } from '../../../services/payPeriod.service';
 import { useQuery } from '@tanstack/react-query';
 import useLocale from '../../../hooks/useLocale';
-import { sumFormatter } from '../../../services/utils';
+import { capitalizeFirstChar, sumFormatter } from '../../../services/utils';
+import { sub } from 'date-fns';
 
 export function Summary() {
     const { company } = useAppContext();
@@ -19,6 +20,26 @@ export function Summary() {
             return company?.id ? await getCurrentPayPeriod(company.id, true, true) : null;
         },
     });
+
+    const formatUpdatedDate = (date: Date): string => {
+        let hours = '' + date.getHours();
+        let minutes = '' + date.getMinutes();
+        const month = '' + (date.getMonth() + 1);
+        const day = '' + date.getDate();
+        const year = date.getFullYear();
+
+        if (hours.length < 2) hours = '0' + hours;
+        if (minutes.length < 2) minutes = '0' + minutes;
+
+        const d = new Date(date);
+        if (d.setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)) {
+            return `${t('today at')} ${hours}:${minutes} `;
+        }
+        if (d.setHours(0, 0, 0, 0) === sub(new Date(), { days: 1 }).setHours(0, 0, 0, 0)) {
+            return `${t('yesterday at')} ${hours}:${minutes} `;
+        }
+        return `${day}-${month}-${year} ${t('at')} ${hours}:${minutes} `;
+    };
 
     return (
         <Grid container flexDirection="row">
@@ -49,11 +70,14 @@ export function Summary() {
                                         color={'warning.main'}
                                         sx={{ fontWeight: 'medium', display: 'inline' }}
                                     >
-                                        {getPayPeriodName(
-                                            payPeriod.dateFrom,
-                                            payPeriod.dateTo,
-                                            false,
-                                            locale.dateLocale,
+                                        {capitalizeFirstChar(
+                                            getPayPeriodName(
+                                                payPeriod.dateFrom,
+                                                payPeriod.dateTo,
+                                                false,
+                                                locale.dateLocale,
+                                                'LLLL y',
+                                            ),
                                         )}
                                     </Typography>
                                 </Link>
@@ -104,8 +128,15 @@ export function Summary() {
                                 <Typography sx={{ textAlign: 'end', display: 'inline' }}>
                                     Розрахунок виконано:{' '}
                                 </Typography>{' '}
-                                <Typography sx={{ textAlign: 'end', display: 'inline' }}>
-                                    {formatDateTime(payPeriod.updatedDate, locale.dateLocale)}
+                                <Typography
+                                    sx={{
+                                        textAlign: 'end',
+                                        display: 'inline',
+                                        fontWeight: 'medium',
+                                    }}
+                                >
+                                    {/* {formatDateTime(payPeriod.updatedDate, locale.dateLocale)} */}
+                                    {formatUpdatedDate(payPeriod.updatedDate)}
                                 </Typography>
                             </Link>
                         )}
