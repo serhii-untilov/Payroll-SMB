@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Greeting } from '../../components/layout/Greeting';
+import { Greeting } from './details/Greeting';
 import { Link } from '../../components/layout/Link';
 import PageLayout from '../../components/layout/PageLayout';
 import { Summary } from './details/Summary';

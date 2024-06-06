@@ -1,10 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IUpdateUser } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import PageLayout from '../../components/layout/PageLayout';
@@ -14,15 +12,11 @@ import { TabPanel } from '../../components/layout/TabPanel';
 import { Tabs } from '../../components/layout/Tabs';
 import { AvatarBox } from '../../components/utility/AvatarBox';
 import { Loading } from '../../components/utility/Loading';
-import { supportedLanguages } from '../../context/LocaleContext';
+import useAuth from '../../hooks/useAuth';
 import useLocale from '../../hooks/useLocale';
 import { getCurrentUser } from '../../services/auth.service';
-import { updateUser } from '../../services/user.service';
-import { getDirtyValues } from '../../services/utils';
 import { UserCompanyList } from './details/UserCompanyList';
 import { UserDetails } from './details/UserDetails';
-import useAppContext from '../../hooks/useAppContext';
-import useAuth from '../../hooks/useAuth';
 
 const formSchema = Yup.object().shape({
     id: Yup.number(),
@@ -45,7 +39,6 @@ const defaultValues: FormType = {
 
 export default function Profile() {
     const [tab, setTab] = useState(Number(localStorage.getItem('profile-tab-index')));
-    const { supportedLocales, setLanguage } = useLocale();
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { user: currentUser } = useAuth();
@@ -63,10 +56,6 @@ export default function Profile() {
     });
 
     const {
-        control,
-        handleSubmit,
-        watch,
-        reset,
         formState: { errors: formErrors },
     } = useForm({
         defaultValues: user || defaultValues,
@@ -74,8 +63,6 @@ export default function Profile() {
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
-
-    const { dirtyFields, isDirty } = useFormState({ control });
 
     useEffect(() => {}, [locale]);
 
@@ -95,27 +82,6 @@ export default function Profile() {
     if (isQueryError) {
         return enqueueSnackbar(`${queryError.name}\n${queryError.message}`, { variant: 'error' });
     }
-
-    const onSubmit: SubmitHandler<FormType> = async (data) => {
-        if (!isDirty) return;
-        if (!data?.id) {
-            enqueueSnackbar(`!data?.id`, { variant: 'error' });
-            return;
-        }
-        const dirtyValues = getDirtyValues(dirtyFields, data);
-        try {
-            const user = await updateUser(data.id, dirtyValues as IUpdateUser);
-            reset(user);
-            user.language && setLanguage(user.language as supportedLanguages);
-        } catch (e: unknown) {
-            const error = e as AxiosError;
-            enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
-        }
-    };
-
-    const onCancel = () => {
-        reset(user);
-    };
 
     const generateTitle = () => {
         const userName = `${user?.firstName} ${user?.lastName}`.trim();
