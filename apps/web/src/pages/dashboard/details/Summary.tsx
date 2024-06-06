@@ -24,25 +24,42 @@ export function Summary() {
         <Grid container flexDirection="row">
             <Grid item xs={6} container flexDirection="column">
                 {company?.id ? (
-                    <Box>
+                    <Grid
+                        container
+                        flexDirection={'column'}
+                        justifyContent={'space-between'}
+                        spacing={1}
+                    >
                         {company?.id && (
-                            <Link to={`/company/${company.id}`}>
-                                <Typography variant="h3" color="primary">
-                                    {company.name}
-                                </Typography>
-                            </Link>
+                            <Grid item>
+                                <Link to={`/company/${company.id}?tab=details&return=true`}>
+                                    <Typography variant="h3" color="primary">
+                                        {company.name}
+                                    </Typography>
+                                </Link>
+                            </Grid>
                         )}
                         {payPeriod?.dateTo && (
-                            <Typography color={'warning.main'} sx={{ fontWeight: 'bold' }}>
-                                {getPayPeriodName(
-                                    payPeriod.dateFrom,
-                                    payPeriod.dateTo,
-                                    false,
-                                    locale.dateLocale,
-                                )}
-                            </Typography>
+                            <Grid item>
+                                <Link to={`/company/${company.id}?tab=periods&return=true`}>
+                                    <Typography sx={{ display: 'inline' }}>
+                                        Поточний розрахунковий період:{' '}
+                                    </Typography>{' '}
+                                    <Typography
+                                        color={'warning.main'}
+                                        sx={{ fontWeight: 'medium', display: 'inline' }}
+                                    >
+                                        {getPayPeriodName(
+                                            payPeriod.dateFrom,
+                                            payPeriod.dateTo,
+                                            false,
+                                            locale.dateLocale,
+                                        )}
+                                    </Typography>
+                                </Link>
+                            </Grid>
                         )}
-                    </Box>
+                    </Grid>
                 ) : (
                     t('create-company')
                 )}
@@ -55,25 +72,47 @@ export function Summary() {
                 justifyContent="center"
                 alignContent={'end'}
             >
-                {payPeriod?.updatedDate && (
-                    <Link to={'/payroll?tab=payroll&return=true'}>
-                        <Grid container flexDirection={'row'} justifyContent={'space-between'}>
-                            <Typography sx={{ textAlign: 'end' }}>Розрахунок виконано: </Typography>{' '}
-                            <Typography sx={{ textAlign: 'end' }}>
-                                {formatDateTime(payPeriod.updatedDate, locale.dateLocale)}
-                            </Typography>
-                        </Grid>
-                        <Grid container flexDirection={'row'} justifyContent={'space-between'}>
-                            <Typography sx={{ textAlign: 'end' }}>Загальні витрати: </Typography>
-                            <Typography
-                                color={'warning.main'}
-                                sx={{ textAlign: 'end', fontWeight: 'medium' }}
-                            >
-                                {sumFormatter(Number(payPeriod.accruals) + Number(payPeriod.funds))}
-                            </Typography>
-                        </Grid>
-                    </Link>
-                )}
+                <Grid
+                    container
+                    flexDirection={'column'}
+                    justifyContent={'space-between'}
+                    alignItems={'end'}
+                    spacing={1}
+                >
+                    <Grid item>
+                        {payPeriod?.updatedDate && (
+                            <Link to={'/payroll?tab=payroll&return=true'}>
+                                <Typography sx={{ textAlign: 'end', display: 'inline' }}>
+                                    Розрахунок виконано:{' '}
+                                </Typography>{' '}
+                                <Typography sx={{ textAlign: 'end', display: 'inline' }}>
+                                    {formatDateTime(payPeriod.updatedDate, locale.dateLocale)}
+                                </Typography>
+                            </Link>
+                        )}
+                    </Grid>
+                    <Grid item>
+                        {payPeriod?.updatedDate && (
+                            <Link to={'/payroll?tab=employer&return=true'}>
+                                <Typography sx={{ textAlign: 'end', display: 'inline' }}>
+                                    Загальні витрати:{' '}
+                                </Typography>
+                                <Typography
+                                    color={'warning.main'}
+                                    sx={{
+                                        textAlign: 'end',
+                                        fontWeight: 'medium',
+                                        display: 'inline',
+                                    }}
+                                >
+                                    {sumFormatter(
+                                        Number(payPeriod.accruals) + Number(payPeriod.funds),
+                                    )}
+                                </Typography>
+                            </Link>
+                        )}
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     );
