@@ -71,7 +71,8 @@ export default function Dashboard() {
                                 borderRadius: '5px',
                                 my: { xs: 1, sm: 2 },
                                 mx: { xs: 1, sm: 2, md: 8, lg: 18 },
-                                p: { xs: 1, sm: 2 },
+                                py: { xs: 1, sm: 2 },
+                                px: { xs: 1, sm: 4 },
                                 color: (theme) => theme.palette.common.black,
                                 bgcolor: blue[50],
                             }}
