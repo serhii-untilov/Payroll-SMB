@@ -31,7 +31,7 @@ const formSchema = Yup.object().shape({
     lastName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email('Email is invalid'),
     password: Yup.string().required('Password is required'),
-    roles: Yup.array().required('Role is required'),
+    // roles: Yup.array().required('Role is required'),
 });
 
 type FormType = Yup.InferType<typeof formSchema>;
@@ -41,7 +41,7 @@ const defaultValues: FormType = {
     lastName: '',
     email: '',
     password: '',
-    roles: [],
+    // roles: [],
 };
 
 export default function SignUp() {
