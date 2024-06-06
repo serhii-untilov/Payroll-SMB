@@ -12,7 +12,7 @@ import { Summary } from './details/Summary';
 import { Loading } from '../../components/utility/Loading';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
-import { getTasks } from '../../services/task.service';
+import { getTaskList } from '../../services/task.service';
 import { Reminder } from './details/Reminder';
 import { Todo } from './details/Todo';
 import { Upcoming } from './details/Upcoming';
@@ -32,9 +32,8 @@ export default function Dashboard() {
     } = useQuery<ITask[], Error>({
         queryKey: ['task', 'list', company],
         queryFn: async () => {
-            return await getTasks(company?.id ? { companyId: company?.id } : {});
+            return await getTaskList(company?.id ? { companyId: company?.id } : {});
         },
-        enabled: !!company?.id,
     });
     if (isError) {
         return enqueueSnackbar(`${error.name}\n${error.message}`, {

@@ -45,7 +45,7 @@ export class PayPeriodsController {
         @Query('fullFieldList', new ParseBoolPipe({ optional: true })) fullFieldList: boolean,
     ) {
         const userId = req.user['sub'];
-        await this.service.availableFindAllOrFail(userId, companyId);
+        companyId && (await this.service.availableFindAllOrFail(userId, companyId));
         return await this.service.findAll(companyId, relations, fullFieldList);
     }
 

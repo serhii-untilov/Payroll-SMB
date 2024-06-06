@@ -316,10 +316,11 @@ export class PayFundsService {
 
     async paySum(companyId: number, payPeriod: Date): Promise<number> {
         const { paySum } = await this.repository
-            .createQueryBuilder('payFund')
-            .select('SUM(*)', '"paySum"')
-            .where('"companyId" = :companyId', { companyId })
-            .andWhere('"payPeriod" = :payPeriod', { payPeriod })
+            .createQueryBuilder('pay_fund')
+            .select('SUM("paySum")', 'paySum')
+            .innerJoin('position', 'position')
+            .where('position.companyId = :companyId', { companyId })
+            .andWhere('pay_fund.payPeriod = :payPeriod', { payPeriod })
             .getRawOne();
         return Number(paySum);
     }

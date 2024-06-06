@@ -12,7 +12,7 @@ type Props = {
 export type IEvent = { date: Date; description: string };
 
 const events: IEvent[] = [
-    { date: new Date(), description: 'День народження Петренко Ганна' },
+    { date: new Date(), description: 'День народження Ганна Петренко' },
     // { date: add(new Date(), { days: 1 }), description: 'Абонплата за користування ПЗ' },
 ];
 

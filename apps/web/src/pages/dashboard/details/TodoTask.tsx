@@ -7,7 +7,7 @@ import {
     NotInterested,
 } from '@mui/icons-material';
 import { Grid, IconButton, Typography } from '@mui/material';
-import { amber, green, grey, red } from '@mui/material/colors';
+import { amber, green, grey, orange, red } from '@mui/material/colors';
 import { ITask, TaskStatus, TaskType } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
@@ -27,21 +27,31 @@ export function TodoTask(props: Props) {
     const queryClient = useQueryClient();
     const { t } = useTranslation();
     const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
-    const statusIcon = useMemo(() => getStatusIcon(task?.status), [task]);
+    const statusIcon = useMemo(() => getStatusIcon(task), [task]);
     const backgroundColor = useMemo(() => getBackgroundColor(task), [task]);
     const navigate = useNavigate();
     const ctx = useAppContext();
 
     const onClickTask = () => {
+        if (task.status === TaskStatus.NOT_AVAILABLE) {
+            return;
+        }
         const path = getPath(task.type, ctx);
         navigate(path);
     };
 
     const onClickStatus = async () => {
-        if (task.status === TaskStatus.TODO || task.status === TaskStatus.IN_PROGRESS) {
-            await markDone();
-        } else if (task.status === TaskStatus.DONE_BY_USER) {
-            await markTodo();
+        if (task.status === TaskStatus.NOT_AVAILABLE) {
+            return;
+        }
+        if (canMarkAsDone(task)) {
+            if (task.status === TaskStatus.TODO || task.status === TaskStatus.IN_PROGRESS) {
+                await markDone();
+            } else if (task.status === TaskStatus.DONE_BY_USER) {
+                await markTodo();
+            }
+        } else {
+            onClickTask();
         }
     };
 
@@ -125,8 +135,8 @@ function getTitleByTaskType(type: string) {
     }
 }
 
-function getStatusIcon(status: string) {
-    switch (status) {
+function getStatusIcon(task: ITask) {
+    switch (task.status) {
         case TaskStatus.NOT_AVAILABLE:
             return <NotInterested />;
         case TaskStatus.TODO:
@@ -147,12 +157,18 @@ function getBackgroundColor(task: ITask) {
     if (task.status === TaskStatus.DONE) return green[50];
     if (task.status === TaskStatus.DONE_BY_USER) return green[50];
     if (task.dateTo.getTime() < new Date().getTime()) return red[50];
-    if (task.status === TaskStatus.TODO) return amber[50];
-    if (task.status === TaskStatus.IN_PROGRESS) return amber[50];
+    if (task.status === TaskStatus.TODO) return orange[50];
+    if (task.status === TaskStatus.IN_PROGRESS) return orange[50];
     return red[50];
 }
 
 function getStatusTooltip(task: ITask) {
+    if (task.type === TaskType.CREATE_COMPANY) {
+        return task.status;
+    }
+    if (task.type === TaskType.FILL_POSITION_LIST) {
+        return task.status;
+    }
     if (task.status === TaskStatus.NOT_AVAILABLE) return task.status;
     if (task.status === TaskStatus.DONE) return task.status;
     if (task.status === TaskStatus.DONE_BY_USER) return 'Mark as Todo';
@@ -164,7 +180,7 @@ function getStatusTooltip(task: ITask) {
 function getPath(type: string, ctx: AppContextType): string {
     switch (type) {
         case TaskType.CREATE_COMPANY:
-            return '/company?tab=details&return=true';
+            return '/company/?tab=details&return=true';
         case TaskType.FILL_DEPARTMENT_LIST:
             return `/company/${ctx?.company?.id || ''}?tab=departments&return=true`;
         case TaskType.FILL_POSITION_LIST:
@@ -188,4 +204,15 @@ function getPath(type: string, ctx: AppContextType): string {
         default:
             return '#';
     }
+}
+
+function canMarkAsDone(task: ITask) {
+    if (task.status === TaskStatus.NOT_AVAILABLE) return false;
+    switch (task.type) {
+        case TaskType.FILL_DEPARTMENT_LIST:
+        case TaskType.POST_WORK_SHEET:
+        case TaskType.POST_ACCRUAL_DOCUMENT:
+            return true;
+    }
+    return false;
 }

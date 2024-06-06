@@ -22,8 +22,8 @@ export function Summary() {
 
     return (
         <Grid container flexDirection="row">
-            <Grid item xs={6} container flexDirection="column">
-                {company?.id ? (
+            {company?.id ? (
+                <Grid item xs={6} container flexDirection="column">
                     <Grid
                         container
                         flexDirection={'column'}
@@ -60,10 +60,29 @@ export function Summary() {
                             </Grid>
                         )}
                     </Grid>
-                ) : (
-                    t('create-company')
-                )}
-            </Grid>
+                </Grid>
+            ) : (
+                <Grid
+                    container
+                    flexDirection={'column'}
+                    justifyContent={'space-between'}
+                    spacing={1}
+                >
+                    <Grid item>
+                        <Link to="/profile?tab=details&return=true">
+                            <Typography variant="h3" color="primary">
+                                {t('welcome-for-a-new-user1')}
+                            </Typography>
+                        </Link>
+                    </Grid>
+                    <Grid item>
+                        <Typography sx={{ display: 'inline' }}>
+                            {t('welcome-for-a-new-user2')}
+                        </Typography>{' '}
+                    </Grid>
+                </Grid>
+            )}
+
             <Grid
                 item
                 xs={6}
@@ -107,6 +126,7 @@ export function Summary() {
                                 >
                                     {sumFormatter(
                                         Number(payPeriod.accruals) + Number(payPeriod.funds),
+                                        false,
                                     )}
                                 </Typography>
                             </Link>

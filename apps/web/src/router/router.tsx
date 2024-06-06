@@ -73,8 +73,11 @@ const router: RouteObject[] = [
             { index: true, element: <Dashboard /> },
             { path: 'dashboard', element: <Dashboard /> },
             {
-                path: 'company/:companyId',
-                element: <Company />,
+                path: 'company',
+                children: [
+                    { index: true, element: <Company /> },
+                    { path: ':companyId', element: <Company /> },
+                ],
             },
             {
                 path: 'people',

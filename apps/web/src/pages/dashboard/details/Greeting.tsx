@@ -6,6 +6,7 @@ import useAuth from '../../../hooks/useAuth';
 import { getCurrentUser } from '../../../services/auth.service';
 import { capitalizeFirstChar, getPartOfDay } from '../../../services/utils';
 import { useMemo } from 'react';
+import { Link } from '../../../components/layout/Link';
 
 export function Greeting() {
     const { user: currentUser } = useAuth();
@@ -36,7 +37,8 @@ export function Greeting() {
 
     return (
         <>
-            {t(getPartOfDay(dateTime.getHours()))}, {capitalizeFirstChar(userName)}
+            {t(getPartOfDay(dateTime.getHours()))},{' '}
+            <Link to={'/profile?tab=details&return=true'}>{capitalizeFirstChar(userName)}</Link>
         </>
     );
 }
