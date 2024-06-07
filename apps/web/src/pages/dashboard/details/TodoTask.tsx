@@ -5,7 +5,7 @@ import {
     LoopRounded,
     NotInterested,
 } from '@mui/icons-material';
-import { Grid, IconButton, Typography } from '@mui/material';
+import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { green, grey, orange, red } from '@mui/material/colors';
 import { ITask, TaskStatus, TaskType } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
@@ -65,15 +65,14 @@ export function TodoTask(props: Props) {
     };
 
     return (
-        <Grid
-            // boxShadow={1}
-            container
-            justifyContent="space-between"
-            alignItems="center"
+        <Box
             sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 m: 1,
                 py: 1,
-                px: 2,
+                px: 3,
                 borderRadius: 2,
                 bgcolor: backgroundColor,
             }}
@@ -99,7 +98,7 @@ export function TodoTask(props: Props) {
                     </IconButton>
                 )}
             </Grid>
-        </Grid>
+        </Box>
     );
 }
 
@@ -167,7 +166,7 @@ function getStatusTooltip(task: ITask) {
     }
     if (task.status === TaskStatus.NOT_AVAILABLE) return task.status;
     if (task.status === TaskStatus.DONE) return task.status;
-    if (task.status === TaskStatus.DONE_BY_USER) return 'Mark as Todo';
+    if (task.status === TaskStatus.DONE_BY_USER) return 'Marked as Done';
     if (task.status === TaskStatus.TODO) return 'Mark as Done';
     if (task.status === TaskStatus.IN_PROGRESS) return 'Mark Done';
     return red[50];
