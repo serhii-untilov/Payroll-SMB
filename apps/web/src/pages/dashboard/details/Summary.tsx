@@ -44,7 +44,7 @@ export function Summary() {
     return (
         <Grid container flexDirection="row">
             {company?.id ? (
-                <Grid item xs={6} container flexDirection="column">
+                <Grid item xs={12} lg={6} container flexDirection="column">
                     <Grid
                         container
                         flexDirection={'column'}
@@ -109,7 +109,8 @@ export function Summary() {
 
             <Grid
                 item
-                xs={6}
+                xs={12}
+                lg={6}
                 container
                 flexDirection="column"
                 justifyContent="center"
@@ -119,8 +120,9 @@ export function Summary() {
                     container
                     flexDirection={'column'}
                     justifyContent={'space-between'}
-                    alignItems={'end'}
+                    // alignItems={'end'}
                     spacing={1}
+                    sx={{ alignItems: { xs: 'start', lg: 'end' } }}
                 >
                     <Grid item>
                         {payPeriod?.updatedDate && (
@@ -130,7 +132,7 @@ export function Summary() {
                                 </Typography>{' '}
                                 <Typography
                                     sx={{
-                                        textAlign: 'end',
+                                        // textAlign: 'end',
                                         display: 'inline',
                                         fontWeight: 'medium',
                                     }}
@@ -144,7 +146,12 @@ export function Summary() {
                     <Grid item>
                         {payPeriod?.updatedDate && (
                             <Link to={'/payroll?tab=employer&return=true'}>
-                                <Typography sx={{ textAlign: 'end', display: 'inline' }}>
+                                <Typography
+                                    sx={{
+                                        // textAlign: { xs: 'start', lg: 'end' },
+                                        display: 'inline',
+                                    }}
+                                >
                                     {t('Total expenses')}:{' '}
                                 </Typography>
                                 <Typography
