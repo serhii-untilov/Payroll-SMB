@@ -1,6 +1,6 @@
 import { TaskStatus, TaskType } from '@repo/shared';
-import { TaskListService } from '../task-list.service';
 import { Task } from '../../../resources/tasks/entities/task.entity';
+import { TaskListService } from '../task-list.service';
 import { TaskGenerator } from './abstract/TaskGenerator';
 
 export class TaskFillDepartmentList extends TaskGenerator {

@@ -7,6 +7,7 @@ import { getCurrentUser } from '../../../services/auth.service';
 import { capitalizeFirstChar, getPartOfDay } from '../../../services/utils';
 import { useMemo } from 'react';
 import { Link } from '../../../components/layout/Link';
+import { Typography } from '@mui/material';
 
 export function Greeting() {
     const { user: currentUser } = useAuth();
@@ -36,9 +37,9 @@ export function Greeting() {
     }
 
     return (
-        <>
+        <Typography component="h2" variant="h1" textAlign={'center'} sx={{ my: 2 }}>
             {t(getPartOfDay(dateTime.getHours()))},{' '}
             <Link to={'/profile?tab=details&return=true'}>{capitalizeFirstChar(userName)}</Link>
-        </>
+        </Typography>
     );
 }

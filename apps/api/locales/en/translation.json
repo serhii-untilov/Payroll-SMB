@@ -229,7 +229,7 @@
     "fill-position-list": "Create staff units, assign employees",
     "post-work-sheet": "Make changes to the Work Time Sheet and post the document",
     "post-accrual-document": "Calculate additional accruals and post document",
-    "send-application-fss": "Send the Application-calculation to the Social Insurance Fund",
+    "send-application-fss": "Send the Application to the Social Insurance Fund",
     "post-payment-fss": "Pay accruals by the Social Insurance Fund",
     "post-advance-payment": "Pay an advance",
     "post-regular-payment": "Pay Regular payment",
