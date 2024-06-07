@@ -79,6 +79,6 @@ export class PersonsController {
     async find(@Req() req: Request, @Body() params: FindPersonDto): Promise<IPerson | null> {
         const userId = req.user['sub'];
         await this.service.availableFindOneOrFail(userId);
-        return await this.service.find(params);
+        return await this.service.findOneBy(params);
     }
 }

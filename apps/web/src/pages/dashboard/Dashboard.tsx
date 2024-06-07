@@ -34,6 +34,7 @@ export default function Dashboard() {
         queryFn: async () => {
             return await getTaskList(company?.id ? { companyId: company?.id } : {});
         },
+        enabled: !!company?.id,
     });
     if (isError) {
         return enqueueSnackbar(`${error.name}\n${error.message}`, {
@@ -120,7 +121,7 @@ export default function Dashboard() {
                                         >
                                             {t('Reminders')}
                                         </Typography>
-                                        <Reminder companyId={company?.id} />
+                                        <Reminder taskList={taskList || []} />
                                     </Grid>
                                     <Grid item>
                                         <Typography

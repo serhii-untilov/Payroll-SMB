@@ -228,6 +228,67 @@ export class PositionsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail(options);
     }
 
+    async findFirstByPersonId(
+        userId: number,
+        personId: number,
+        relations?: boolean,
+        onDate?: Date,
+        onPayPeriodDate?: Date,
+    ): Promise<Position> {
+        const position = await this.repository.findOneOrFail({
+            where: { personId },
+            relations: {
+                company: !!relations,
+                person: !!relations,
+                history: !!relations
+                    ? {
+                          department: true,
+                          job: true,
+                          workNorm: true,
+                          paymentType: true,
+                      }
+                    : false,
+            },
+        });
+        if (!(onDate || onPayPeriodDate)) {
+            return position;
+        }
+        const options: FindOneOptions<Partial<Position>> = {
+            relations: {
+                company: true,
+                person: !!relations,
+                history: !!relations
+                    ? {
+                          department: true,
+                          job: true,
+                          workNorm: true,
+                          paymentType: true,
+                      }
+                    : false,
+            },
+            where: { personId },
+        };
+        if (onDate && relations) {
+            options.where['history'] = {
+                dateTo: MoreThanOrEqual(onDate),
+                dateFrom: LessThanOrEqual(onDate),
+            };
+        }
+        if (onPayPeriodDate && relations) {
+            const payPeriod = await this.payPeriodsService.findOne(userId, {
+                where: {
+                    companyId: position.companyId,
+                    dateFrom: onPayPeriodDate,
+                },
+            });
+            options.where['history'] = {
+                dateTo: MoreThanOrEqual(payPeriod.dateFrom),
+                dateFrom: LessThanOrEqual(payPeriod.dateTo),
+            };
+        }
+        return await this.repository.findOneOrFail(options);
+    }
+
     async update(userId: number, id: number, payload: UpdatePositionDto): Promise<Position> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (payload.version !== record.version) {
@@ -452,5 +513,9 @@ export class PositionsService extends AvailableForUserCompany {
             .andWhere('"personId" is not null')
             .getRawOne();
         return Number(count);
+    }
+
+    async findMany(params: FindManyOptions<Position>): Promise<Position[]> {
+        return this.repository.find(params);
     }
 }

@@ -5,64 +5,32 @@ import {
     Injectable,
     forwardRef,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { ResourceType, formatDate, monthBegin, monthEnd } from '@repo/shared';
 import { Repository } from 'typeorm';
+import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { FindPersonDto } from './dto/find-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { Person } from './entities/person.entity';
+import { PersonCreatedEvent } from './events/person-created.event';
+import { PersonUpdatedEvent } from './events/person-updated.event';
+import { PersonDeletedEvent } from './events/person-deleted.event';
 
 @Injectable()
-export class PersonsService {
+export class PersonsService extends AvailableForUser {
     public readonly resourceType = ResourceType.PERSON;
 
     constructor(
         @InjectRepository(Person)
         private repository: Repository<Person>,
         @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
-    ) {}
-
-    async availableFindAllOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-    }
-
-    async availableFindOneOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-    }
-
-    async availableCreateOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-    }
-
-    async availableUpdateOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-    }
-
-    async availableDeleteOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
+        public accessService: AccessService,
+        private eventEmitter: EventEmitter2,
+    ) {
+        super(accessService);
     }
 
     async create(userId: number, payload: CreatePersonDto): Promise<Person> {
@@ -71,7 +39,7 @@ export class PersonsService {
                 firstName: payload.firstName,
                 lastName: payload.lastName,
                 ...(payload.middleName ? { middleName: payload.middleName } : {}),
-                ...(payload.birthDate ? { birthDate: payload.birthDate } : {}),
+                ...(payload.birthday ? { birthday: payload.birthday } : {}),
                 ...(payload.taxId ? { taxId: payload.taxId } : {}),
             },
         ];
@@ -81,11 +49,13 @@ export class PersonsService {
                 `Person '${payload.firstName} ${payload.lastName}' already exists.`,
             );
         }
-        return await this.repository.save({
+        const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
             updatedUserId: userId,
         });
+        this.eventEmitter.emit('person.created', new PersonCreatedEvent(userId, created.id));
+        return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
     async findAll(): Promise<Person[]> {
@@ -105,15 +75,46 @@ export class PersonsService {
             );
         }
         await this.repository.save({ ...payload, id, updatedUser: userId });
-        return await this.repository.findOneOrFail({ where: { id } });
+        const updated = await this.repository.findOneOrFail({ where: { id } });
+        this.eventEmitter.emit('person.updated', new PersonUpdatedEvent(userId, updated.id));
+        return updated;
     }
 
     async remove(userId: number, id: number): Promise<Person> {
         await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
-        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+        const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+        this.eventEmitter.emit('person.deleted', new PersonDeletedEvent(userId, id));
+        return deleted;
     }
 
-    async find(params: FindPersonDto): Promise<Person | null> {
+    async findOneBy(params: FindPersonDto): Promise<Person | null> {
         return await this.repository.findOne({ where: params });
+    }
+
+    async findByBirthdayInMonth(companyId: number, date: Date): Promise<Person[]> {
+        const dateFrom = monthBegin(date);
+        const dateTo = monthEnd(date);
+        const personList = await this.repository.query(
+            `select p.id, p.birthday
+            from person p
+            where id in (
+            select distinct p.id
+            from
+                person p
+            inner join position pos on
+                pos."personId" = p.id
+            where
+                date_part('month',
+                p.birthday) = date_part('month',
+                to_date($1,
+                'YYYY-MM-DD'))
+                and pos."companyId" = $3
+                and pos."dateFrom" <= to_date($2, 'YYYY-MM-DD')
+                and pos."dateTo" >= to_date($1, 'YYYY-MM-DD')
+            )`,
+            [formatDate(dateFrom), formatDate(dateTo), companyId],
+        );
+        personList.forEach((o) => (o.birthday = new Date(o.birthday)));
+        return personList;
     }
 }

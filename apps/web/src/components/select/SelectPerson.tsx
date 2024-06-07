@@ -39,7 +39,7 @@ const personDefaultValues = {
     firstName: '',
     middleName: '',
     taxId: '',
-    birthDate: '',
+    birthday: '',
     sex: '',
 };
 
@@ -196,8 +196,8 @@ export const SelectPerson = (props: Props) => {
                                             lastName: dialogValue.lastName,
                                             middleName: dialogValue.middleName,
                                             taxId: dialogValue.taxId,
-                                            birthDate: dialogValue.birthDate
-                                                ? new Date(dialogValue.birthDate)
+                                            birthday: dialogValue.birthday
+                                                ? new Date(dialogValue.birthday)
                                                 : null,
                                             sex: dialogValue.sex,
                                         });
@@ -294,13 +294,13 @@ export const SelectPerson = (props: Props) => {
                                                     size="small"
                                                     fullWidth
                                                     label=""
-                                                    name="birthDate"
-                                                    id="birthDate"
-                                                    value={dialogValue.birthDate}
+                                                    name="birthday"
+                                                    id="birthday"
+                                                    value={dialogValue.birthday}
                                                     onChange={(event) =>
                                                         setDialogValue({
                                                             ...dialogValue,
-                                                            birthDate: event.target.value,
+                                                            birthday: event.target.value,
                                                         })
                                                     }
                                                     type="date"

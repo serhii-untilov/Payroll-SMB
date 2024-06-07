@@ -10,15 +10,15 @@ export class TaskPostAdvancePayment extends TaskGenerator {
         super(ctx, type);
     }
 
-    async getTask(): Promise<Task | null> {
+    async getTaskList(): Promise<Task[]> {
         if (this.ctx.company.paymentSchedule == PaymentSchedule.EVERY_15_DAY) {
-            return null;
+            return [];
         }
         const task = this.makeTask();
         task.dateFrom = getWorkDayBeforeOrEqual(
             add(monthBegin(this.ctx.payPeriod.dateFrom), { days: 14 }),
         );
         task.dateTo = task.dateFrom;
-        return task;
+        return [task];
     }
 }

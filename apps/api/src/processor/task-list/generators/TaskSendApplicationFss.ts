@@ -8,7 +8,7 @@ export class TaskSendApplicationFss extends TaskGenerator {
         super(ctx, type);
     }
 
-    async getTask(): Promise<Task | null> {
-        return this.makeTask();
+    async getTaskList(): Promise<Task[]> {
+        return [this.makeTask()];
     }
 }

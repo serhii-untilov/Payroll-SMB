@@ -8,10 +8,10 @@ export class TaskClosePayPeriod extends TaskGenerator {
         super(ctx, type);
     }
 
-    async getTask(): Promise<Task | null> {
+    async getTaskList(): Promise<Task[]> {
         const task = this.makeTask();
         task.dateFrom = this.ctx.payPeriod.dateTo;
         task.dateTo = this.ctx.payPeriod.dateTo;
-        return task;
+        return [task];
     }
 }

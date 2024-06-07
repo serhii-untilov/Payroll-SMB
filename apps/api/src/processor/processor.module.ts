@@ -16,6 +16,8 @@ import { PayFundCalculationService } from './payFundCalculation/payFundCalculati
 import { PayrollCalculationService } from './payrollCalculation/payrollCalculation.service';
 import { TaskListService } from './task-list/task-list.service';
 import { DepartmentsModule } from './../resources/departments/departments.module';
+import { PersonsModule } from './../resources/persons/persons.module';
+import { PersonListenerService } from './listeners/person-listener/person-listener.service';
 
 @Module({
     imports: [
@@ -31,13 +33,15 @@ import { DepartmentsModule } from './../resources/departments/departments.module
         forwardRef(() => MinWageModule),
         forwardRef(() => TasksModule),
         forwardRef(() => DepartmentsModule),
+        forwardRef(() => PersonsModule),
     ],
     controllers: [],
     providers: [
-        PayrollCalculationService,
+        PersonListenerService,
         PositionListenerService,
-        PayFundCalculationService,
         CompanyListenerService,
+        PayrollCalculationService,
+        PayFundCalculationService,
         TaskListService,
     ],
     exports: [PayrollCalculationService, PayFundCalculationService],

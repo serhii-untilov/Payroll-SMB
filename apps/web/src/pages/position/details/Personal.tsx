@@ -28,7 +28,7 @@ const formSchema = yup.object().shape({
     firstName: yup.string().required(),
     middleName: yup.string().nullable(),
     taxId: yup.string().nullable(),
-    birthDate: yup.date().nullable(),
+    birthday: yup.date().nullable(),
     sex: yup.string().nullable(),
     phone: yup.string().nullable(),
     email: yup.string().nullable(),
@@ -53,7 +53,7 @@ export function Personal({ personId }: Props) {
         lastName: '',
         firstName: '',
         middleName: '',
-        birthDate: null,
+        birthday: null,
         taxId: '',
         sex: '',
         phone: '',
@@ -197,8 +197,8 @@ export function Personal({ personId }: Props) {
                     <Grid item xs={12} sm={12} md={4}>
                         <FormDateField
                             control={control}
-                            name="birthDate"
-                            id="birthDate"
+                            name="birthday"
+                            id="birthday"
                             label={t('Birth Date')}
                         />
                     </Grid>

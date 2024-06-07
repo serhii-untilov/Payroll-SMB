@@ -11,10 +11,11 @@ export abstract class TaskGenerator {
         this.type = type;
     }
 
-    public abstract getTask(): Promise<Task | null>;
+    public abstract getTaskList(): Promise<Task[]>;
 
     public makeTask(): Task {
         return Object.assign({
+            id: this.ctx.id,
             companyId: this.ctx.company.id,
             type: this.type,
             dateFrom: this.ctx.payPeriod.dateFrom,

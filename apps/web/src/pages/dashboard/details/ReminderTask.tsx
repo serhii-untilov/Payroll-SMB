@@ -6,37 +6,89 @@ import {
     NotInterested,
 } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography } from '@mui/material';
-import { green, grey, orange, red } from '@mui/material/colors';
-import { ITask, TaskStatus, TaskType } from '@repo/shared';
-import { useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { amber, green, grey, red } from '@mui/material/colors';
+import { ITask, TaskStatus, TaskType, dropTime } from '@repo/shared';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Tooltip } from '../../../components/layout/Tooltip';
-import { AppContextType } from '../../../context/AppContext';
-import useAppContext from '../../../hooks/useAppContext';
+import useLocale from '../../../hooks/useLocale';
+import { getPerson } from '../../../services/person.service';
 import { updateTask } from '../../../services/task.service';
+import { getPositionByPersonId } from '../../../services/position.service';
+import { differenceInYears } from 'date-fns';
 
 type Props = {
     task: ITask;
 };
 
-export function TodoTask(props: Props) {
-    const [task, setTask] = useState(props.task);
+export function ReminderTask(props: Props) {
+    const { task } = props;
     const queryClient = useQueryClient();
     const { t } = useTranslation();
     const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
     const statusIcon = useMemo(() => getStatusIcon(task), [task]);
     const backgroundColor = useMemo(() => getBackgroundColor(task), [task]);
     const navigate = useNavigate();
-    const ctx = useAppContext();
+    const { locale } = useLocale();
+
+    const { data: person } = useQuery({
+        queryKey: ['person', 'task', task],
+        queryFn: async () => {
+            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId
+                ? await getPerson(task.entityId)
+                : null;
+        },
+        enabled: !!task?.id,
+    });
+
+    const { data: position } = useQuery({
+        queryKey: ['position', 'task', task],
+        queryFn: async () => {
+            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId
+                ? await getPositionByPersonId({
+                      personId: task.entityId,
+                      relations: false,
+                      onDate: task.dateFrom,
+                  })
+                : null;
+        },
+        enabled: !!person?.id,
+    });
+
+    const taskDate = useMemo(() => {
+        const day = task.dateFrom.getDate();
+        const month = task.dateFrom.toLocaleString(locale.dateLocale.code, { month: 'short' });
+        return `${day} ${month}`;
+    }, [task, locale]);
+
+    const description = useMemo(() => {
+        switch (task.type) {
+            case TaskType.HAPPY_BIRTHDAY:
+                return `${person?.fullName}, ${person?.birthday ? differenceInYears(task.dateTo, person?.birthday) : ''}`;
+            default:
+                return '';
+        }
+    }, [person, task]);
+
+    const getPath = () => {
+        switch (task.type) {
+            case TaskType.HAPPY_BIRTHDAY:
+                return position?.id ? `/people/position/${position?.id}?return=true` : '#';
+            default:
+                return '#';
+        }
+    };
 
     const onClickTask = () => {
         if (task.status === TaskStatus.NOT_AVAILABLE) {
             return;
         }
-        const path = getPath(task.type, ctx);
-        navigate(path);
+        const path = getPath();
+        if (path) {
+            navigate(path);
+        }
     };
 
     const onClickStatus = async () => {
@@ -55,17 +107,12 @@ export function TodoTask(props: Props) {
     };
 
     const markDone = async () => {
-        setTask(
-            await updateTask(task.id, {
-                status: TaskStatus.DONE_BY_USER,
-                version: task.version,
-            }),
-        );
+        await updateTask(task.id, { status: TaskStatus.DONE_BY_USER, version: task.version });
         await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
     };
 
     const markTodo = async () => {
-        setTask(await updateTask(task.id, { status: TaskStatus.TODO, version: task.version }));
+        await updateTask(task.id, { status: TaskStatus.TODO, version: task.version });
         await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
     };
 
@@ -77,7 +124,8 @@ export function TodoTask(props: Props) {
                 alignItems: 'center',
                 m: 1,
                 py: 1,
-                px: 3,
+                pl: 1,
+                pr: 3,
                 borderRadius: 2,
                 bgcolor: backgroundColor,
             }}
@@ -89,10 +137,28 @@ export function TodoTask(props: Props) {
                 onClick={() => onClickTask()}
                 sx={{ border: 0, bgcolor: 'inherit', textAlign: 'left', cursor: 'pointer' }}
             >
-                <Typography sx={{ fontWeight: 'medium', color: 'text.primary' }}>
-                    {t(title)}
-                </Typography>
-                <Typography sx={{ color: 'text.primary' }}>{t(task.type)}</Typography>
+                <Grid container>
+                    <Grid
+                        alignItems={'middle'}
+                        alignContent={'center'}
+                        width={46}
+                        item
+                        sx={{ mr: 1, px: 1, bgcolor: 'white', borderRadius: 2 }}
+                    >
+                        <Typography sx={{ color: 'text.primary', textAlign: 'center' }}>
+                            {taskDate.split(' ')[0]}
+                        </Typography>
+                        <Typography sx={{ color: 'text.primary', textAlign: 'center' }}>
+                            {taskDate.split(' ')[1]}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                        <Typography sx={{ fontWeight: 'medium', color: 'text.primary' }}>
+                            {t(title)}
+                        </Typography>
+                        <Typography sx={{ color: 'text.primary' }}>{description}</Typography>
+                    </Grid>
+                </Grid>
             </Grid>
             <Grid item xs={1}>
                 {statusIcon && (
@@ -108,36 +174,7 @@ export function TodoTask(props: Props) {
 }
 
 function getTitleByTaskType(type: string) {
-    switch (type) {
-        case TaskType.CREATE_USER:
-            return 'User';
-        case TaskType.CREATE_COMPANY:
-            return 'Company';
-        case TaskType.FILL_DEPARTMENT_LIST:
-            return 'Company';
-        case TaskType.FILL_POSITION_LIST:
-            return 'People';
-        case TaskType.POST_WORK_SHEET:
-            return 'Time Sheet';
-        case TaskType.POST_ACCRUAL_DOCUMENT:
-            return 'Payroll';
-        case TaskType.SEND_APPLICATION_FSS:
-            return 'Payments';
-        case TaskType.POST_PAYMENT_FSS:
-            return 'Payments';
-        case TaskType.POST_ADVANCE_PAYMENT:
-            return 'Payments';
-        case TaskType.POST_REGULAR_PAYMENT:
-            return 'Payments';
-        case TaskType.CLOSE_PAY_PERIOD:
-            return 'Company';
-        case TaskType.SEND_INCOME_TAX_REPORT:
-            return 'Reports';
-        case TaskType.HAPPY_BIRTHDAY:
-            return 'Persons';
-        default:
-            return type;
-    }
+    return type;
 }
 
 function getStatusIcon(task: ITask) {
@@ -161,9 +198,9 @@ function getBackgroundColor(task: ITask) {
     if (task.status === TaskStatus.NOT_AVAILABLE) return grey[50];
     if (task.status === TaskStatus.DONE) return green[50];
     if (task.status === TaskStatus.DONE_BY_USER) return green[50];
-    if (task.dateTo.getTime() < new Date().getTime()) return red[50];
-    if (task.status === TaskStatus.TODO) return orange[50];
-    if (task.status === TaskStatus.IN_PROGRESS) return orange[50];
+    if (dropTime(task.dateTo) <= dropTime(new Date())) return red[50];
+    if (task.status === TaskStatus.TODO) return amber[50];
+    if (task.status === TaskStatus.IN_PROGRESS) return amber[50];
     return red[50];
 }
 
@@ -179,42 +216,7 @@ function getStatusTooltip(task: ITask) {
     return red[50];
 }
 
-function getPath(type: string, ctx: AppContextType): string {
-    switch (type) {
-        case TaskType.CREATE_COMPANY:
-            return '/company/?tab=details&return=true';
-        case TaskType.FILL_DEPARTMENT_LIST:
-            return `/company/${ctx?.company?.id || ''}?tab=departments&return=true`;
-        case TaskType.FILL_POSITION_LIST:
-            return '/people?tab=positions&return=true';
-        case TaskType.POST_WORK_SHEET:
-            return '/time-sheet?return=true';
-        case TaskType.POST_ACCRUAL_DOCUMENT:
-            return '/payroll?return=true';
-        case TaskType.SEND_APPLICATION_FSS:
-            return '/payments?return=true';
-        case TaskType.POST_PAYMENT_FSS:
-            return '/payments?return=true';
-        case TaskType.POST_ADVANCE_PAYMENT:
-            return '/payments?return=true';
-        case TaskType.POST_REGULAR_PAYMENT:
-            return '/payments?return=true';
-        case TaskType.CLOSE_PAY_PERIOD:
-            return `/company/${ctx?.company?.id || ''}?tab=periods&return=true`;
-        case TaskType.SEND_INCOME_TAX_REPORT:
-            return '/reports?return=true';
-        default:
-            return '#';
-    }
-}
-
 function canMarkAsDone(task: ITask) {
     if (task.status === TaskStatus.NOT_AVAILABLE) return false;
-    switch (task.type) {
-        case TaskType.FILL_DEPARTMENT_LIST:
-        case TaskType.POST_WORK_SHEET:
-        case TaskType.POST_ACCRUAL_DOCUMENT:
-            return true;
-    }
-    return false;
+    return true;
 }

@@ -8,7 +8,7 @@ export class TaskFillDepartmentList extends TaskGenerator {
         super(ctx, type);
     }
 
-    async getTask(): Promise<Task | null> {
+    async getTaskList(): Promise<Task[]> {
         const task = this.makeTask();
         const count = await this.ctx.departmentsService.count(this.ctx.company.id);
         task.status = count ? TaskStatus.DONE : TaskStatus.TODO;
@@ -18,6 +18,6 @@ export class TaskFillDepartmentList extends TaskGenerator {
                 return null;
             }
         }
-        return task;
+        return [task];
     }
 }

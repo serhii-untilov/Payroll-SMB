@@ -9,10 +9,10 @@ export class TaskPostRegularPayment extends TaskGenerator {
         super(ctx, type);
     }
 
-    async getTask(): Promise<Task | null> {
+    async getTaskList(): Promise<Task[]> {
         const task = this.makeTask();
         task.dateFrom = getWorkDayBeforeOrEqual(this.ctx.payPeriod.dateTo);
         task.dateTo = task.dateFrom;
-        return task;
+        return [task];
     }
 }
