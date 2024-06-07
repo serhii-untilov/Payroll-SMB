@@ -102,4 +102,24 @@ export class PositionsController {
         );
         return response;
     }
+
+    @Get('person/:id')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async findFirstByPersonId(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+        @Query('onDate') onDate: Date,
+    ): Promise<IPosition> {
+        const userId = req.user['sub'];
+        const found = await this.positionsService.findFirstByPersonId(
+            userId,
+            id,
+            !!relations,
+            onDate ? new Date(onDate) : null,
+        );
+        await this.positionsService.availableFindAllOrFail(userId, found.companyId);
+        return found;
+    }
 }

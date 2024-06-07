@@ -1,23 +1,20 @@
-import { ArrowBackIosNewRounded } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
 import { IPosition, maxDate, minDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageTitle } from '../../components/layout/PageTitle';
 import { Tab } from '../../components/layout/Tab';
 import { TabPanel } from '../../components/layout/TabPanel';
 import { Tabs } from '../../components/layout/Tabs';
+import { AvatarBox } from '../../components/utility/AvatarBox';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { getPosition } from '../../services/position.service';
 import { JobAndPay } from './details/JobAndPay';
 import { Personal } from './details/Personal';
-import { PositionHistory } from './details/PositionHistory';
-import { AvatarBox } from '../../components/utility/AvatarBox';
 
 export default function Position() {
     const params = useParams();
@@ -27,7 +24,12 @@ export default function Position() {
     const { company, payPeriod } = useAppContext();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const [tab, setTab] = useState(Number(localStorage.getItem('position-tab-index')));
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabName = searchParams.get('tab');
+    const goBack = searchParams.get('return') === 'true';
+    const [tab, setTab] = useState(
+        tabName ? getTabIndex(tabName) : Number(localStorage.getItem('position-tab-index')),
+    );
 
     const handleChangeTab = (event: SyntheticEvent, newValue: number) => {
         setTab(newValue);
@@ -70,11 +72,6 @@ export default function Position() {
         });
     }
 
-    const onCancel = async () => {
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
-        navigate(-1);
-    };
-
     const generatePageTitle = () => {
         const positionName = positionId
             ? position?.personId
@@ -92,12 +89,7 @@ export default function Position() {
 
     return (
         <PageLayout>
-            <PageTitle>
-                <IconButton aria-label="Go Back" color="primary" sx={{ mr: 1 }} onClick={onCancel}>
-                    <ArrowBackIosNewRounded />
-                </IconButton>
-                {generatePageTitle()}
-            </PageTitle>
+            <PageTitle goBack={goBack}>{generatePageTitle()}</PageTitle>
             <AvatarBox />
             <Tabs value={tab} onChange={handleChangeTab}>
                 <Tab label={t('Job & Pay')} />
@@ -123,4 +115,12 @@ export default function Position() {
             <TabPanel value={tab} index={4}></TabPanel>
         </PageLayout>
     );
+}
+
+function getTabIndex(tabName: string | null): number {
+    if (!tabName) {
+        return 0;
+    }
+    const map = { details: 0, personal: 1, time: 2, documents: 3, notes: 4 };
+    return map[tabName] || 0;
 }

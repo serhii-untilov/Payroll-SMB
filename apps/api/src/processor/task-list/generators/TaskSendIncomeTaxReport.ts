@@ -9,18 +9,18 @@ export class TaskSendIncomeTaxReport extends TaskGenerator {
         super(ctx, type);
     }
 
-    async getTask(): Promise<Task | null> {
+    async getTaskList(): Promise<Task[]> {
         const monthNumber = monthBegin(this.ctx.payPeriod.dateFrom).getMonth() + 1;
         if (monthNumber % 3 !== 0) {
-            return null;
+            return [];
         }
         const countClosed = await this.ctx.payPeriodsService.countClosed(this.ctx.company.id);
         if (!countClosed) {
-            return null;
+            return [];
         }
         const task = this.makeTask();
         task.dateFrom = monthBegin(this.ctx.payPeriod.dateFrom);
         task.dateTo = add(task.dateFrom, { days: 39 });
-        return task;
+        return [task];
     }
 }

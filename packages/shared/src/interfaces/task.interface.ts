@@ -14,6 +14,7 @@ export enum TaskType {
     POST_REGULAR_PAYMENT = 'post-regular-payment', // Виплата зарплати
     CLOSE_PAY_PERIOD = 'close-pay-period', // Закриття розрахункового періоду
     SEND_INCOME_TAX_REPORT = 'send-income-tax-report', // Звіт з ПДФО
+    HAPPY_BIRTHDAY = 'happy-birthday', // Привітати з днем народження
 }
 
 export enum TaskStatus {
@@ -33,6 +34,7 @@ export interface ITask extends ILogger {
     dateTo: Date;
     sequenceNumber: number;
     status: string; // See enum TaskStatus
+    entityId?: number;
 }
 
 export type ICreateTask = Omit<

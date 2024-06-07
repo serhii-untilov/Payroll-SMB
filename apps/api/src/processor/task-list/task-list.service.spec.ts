@@ -6,6 +6,7 @@ import { TasksService } from './../../resources/tasks/tasks.service';
 import { TaskListService } from './task-list.service';
 import { DepartmentsService } from './../../resources/departments/departments.service';
 import { PositionsService } from './../../resources/positions/positions.service';
+import { PersonsService } from './../../resources/persons/persons.service';
 
 describe('TaskListService', () => {
     let service: TaskListService;
@@ -19,6 +20,7 @@ describe('TaskListService', () => {
                 { provide: TasksService, useValue: createMock<TasksService>() },
                 { provide: DepartmentsService, useValue: createMock<DepartmentsService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
+                { provide: PersonsService, useValue: createMock<PersonsService>() },
             ],
         }).compile();
 

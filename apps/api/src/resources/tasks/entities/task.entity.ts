@@ -29,6 +29,9 @@ export class Task extends Logger implements ITask {
     @Column({ type: 'varchar', length: 15 })
     status: string; // See enum TaskStatus
 
+    @Column({ type: 'integer', nullable: true })
+    entityId?: number | null;
+
     @AfterLoad()
     transform() {
         this.dateFrom = new Date(this.dateFrom);

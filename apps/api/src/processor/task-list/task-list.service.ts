@@ -1,3 +1,4 @@
+import { TaskHappyBirthday } from './generators/TaskHappyBirthday';
 import { TaskPostWorkSheet } from './generators/TaskPostWorkSheet';
 import { TaskFillPositionList } from './generators/TaskFillPositionList';
 import { TaskSendIncomeTaxReport } from './generators/TaskSendIncomeTaxReport';
@@ -10,7 +11,7 @@ import { Company } from './../../resources/companies/entities/company.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
 import { PayPeriodsService } from './../../resources/pay-periods/pay-periods.service';
 import { Task } from './../../resources/tasks/entities/task.entity';
-import { TaskStatus, TaskType } from '@repo/shared';
+import { TaskStatus, TaskType, dropTime } from '@repo/shared';
 import { TaskGenerator } from './generators/abstract/TaskGenerator';
 import { TasksService } from './../../resources/tasks/tasks.service';
 import { TaskPostAdvancePayment } from './generators/TaskPostAdvancePayment';
@@ -19,6 +20,7 @@ import { TaskPostPaymentFss } from './generators/TaskPostPaymentFss';
 import { TaskPostRegularPayment } from './generators/TaskPostRegularPayment';
 import { DepartmentsService } from './../../resources/departments/departments.service';
 import { PositionsService } from './../../resources/positions/positions.service';
+import { PersonsService } from './../../resources/persons/persons.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskListService {
@@ -29,6 +31,7 @@ export class TaskListService {
     private _priorTaskList: Task[] = [];
     private _currentTaskList: Task[] = [];
     private _sequenceNumber: number = 0;
+    private _id: number = 0;
 
     constructor(
         @Inject(forwardRef(() => CompaniesService))
@@ -41,6 +44,8 @@ export class TaskListService {
         public departmentsService: DepartmentsService,
         @Inject(forwardRef(() => PositionsService))
         public positionsService: PositionsService,
+        @Inject(forwardRef(() => PersonsService))
+        public personsService: PersonsService,
     ) {}
 
     public get logger() {
@@ -65,6 +70,10 @@ export class TaskListService {
         this._sequenceNumber = this._sequenceNumber + 1;
         return this._sequenceNumber;
     }
+    public get id() {
+        this._id = this._id + 1;
+        return this._id;
+    }
 
     public async generate(userId: number, companyId: number) {
         this.logger.log(`userId: ${userId}, generate for companyId: ${companyId}`);
@@ -81,6 +90,9 @@ export class TaskListService {
         this._sequenceNumber = this.priorTaskList
             .filter((o) => o.status === TaskStatus.DONE_BY_USER)
             .reduce((a, b) => (a > b.sequenceNumber ? a : b.sequenceNumber), 0);
+        this._id = this.priorTaskList
+            .filter((o) => o.status === TaskStatus.DONE_BY_USER)
+            .reduce((a, b) => (a > b.id ? a : b.id), 0);
         await this._generate();
     }
 
@@ -96,12 +108,13 @@ export class TaskListService {
             TaskType.POST_ADVANCE_PAYMENT,
             TaskType.POST_REGULAR_PAYMENT,
             TaskType.CLOSE_PAY_PERIOD,
+            TaskType.HAPPY_BIRTHDAY,
         ];
         for (const type of typeList) {
             const generator = this._getTaskGenerator(type);
-            const task = await generator.getTask();
-            if (task) {
-                this.currentTaskList.push(task);
+            const taskList = await generator.getTaskList();
+            if (taskList.length) {
+                this.currentTaskList.push(...taskList);
             }
         }
         const { toInsert, toDelete } = this._merge();
@@ -109,38 +122,33 @@ export class TaskListService {
     }
 
     private _merge(): { toInsert: Task[]; toDelete: number[] } {
-        const toDelete = this.priorTaskList
-            .filter(
-                (task) =>
-                    task.status !== TaskStatus.DONE_BY_USER &&
-                    !this.currentTaskList.find(
-                        (o) =>
-                            o.type === task.type &&
-                            o.status === task.status &&
-                            o.dateFrom.getTime() === task.dateFrom.getTime() &&
-                            o.dateTo.getTime() === task.dateTo.getTime(),
-                    ),
-            )
-            .map((o) => o.id);
+        const toDelete = [];
+        const processed = [];
+        for (const task of this.priorTaskList) {
+            const found = this.currentTaskList.find(
+                (o) =>
+                    o.type === task.type &&
+                    (o.status === task.status || task.status === TaskStatus.DONE_BY_USER) &&
+                    (o.entityId || 0) === (task.entityId || 0) &&
+                    dropTime(o.dateFrom) === dropTime(task.dateFrom) &&
+                    dropTime(o.dateTo) === dropTime(task.dateTo) &&
+                    !processed.find((p) => p === o.id),
+            );
+            if (found) {
+                processed.push(found.id);
+            } else {
+                toDelete.push(task.id);
+            }
+        }
         const toInsert = this.currentTaskList.filter(
-            (task) =>
-                !this.priorTaskList.find(
-                    (o) => o.type === task.type && o.status === TaskStatus.DONE_BY_USER,
-                ) &&
-                !this.priorTaskList.find(
-                    (o) =>
-                        o.type === task.type &&
-                        o.status === task.status &&
-                        o.dateFrom.getTime() === task.dateFrom.getTime() &&
-                        o.dateTo.getTime() === task.dateTo.getTime(),
-                ),
+            (task) => !processed.find((id) => id === task.id),
         );
         return { toInsert, toDelete };
     }
 
     private _save(toInsert: Task[], toDelete: number[]) {
         for (const id of toDelete) {
-            this.tasksService.remove(this.userId, id);
+            this.tasksService.delete(id);
         }
         for (const task of toInsert) {
             this.tasksService.create(this.userId, task);
@@ -188,6 +196,10 @@ export class TaskListService {
             {
                 type: TaskType.POST_WORK_SHEET,
                 generator: () => new TaskPostWorkSheet(this, type),
+            },
+            {
+                type: TaskType.HAPPY_BIRTHDAY,
+                generator: () => new TaskHappyBirthday(this, type),
             },
         ].find((o) => o.type === type);
         if (!found) {

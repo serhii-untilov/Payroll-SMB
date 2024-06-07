@@ -414,11 +414,11 @@ export function SalaryReport(props: IFindPositionBalance) {
     }
 
     const onAddPosition = () => {
-        navigate('/people/position/');
+        navigate('/people/position/?tab=details&return=true');
     };
 
     const onEditPosition = (positionId: number) => {
-        navigate(`/people/position/${positionId}`);
+        navigate(`/people/position/${positionId}?return=true`);
     };
 
     const submitCallback = async (data: IPosition) => {

@@ -206,3 +206,7 @@ export function getMaxDate(date1: Date, date2: Date): Date {
     const d2 = new Date(date2);
     return d1.getTime() > d2.getTime() ? d1 : d2;
 }
+
+export function dropTime(date: Date): number {
+    return date.setHours(0, 0, 0, 0);
+}

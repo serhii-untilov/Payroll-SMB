@@ -1,41 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { Loading } from '../../../components/utility/Loading';
-import { ReminderEvent } from './ReminderEvent';
+import { ReminderTask } from './ReminderTask';
 import { add } from 'date-fns';
+import { ITask, TaskType } from '@repo/shared';
 
 type Props = {
-    companyId: number | undefined;
+    taskList: ITask[];
 };
 
-// TODO: move to shared library and make interface
-export type IEvent = { date: Date; description: string };
-
-const events: IEvent[] = [
-    { date: new Date(), description: 'День народження Ганна Петренко' },
-    // { date: add(new Date(), { days: 1 }), description: 'Абонплата за користування ПЗ' },
-];
-
 export function Reminder(props: Props) {
-    const { companyId } = props;
-
-    const { data, isError, isLoading, error } = useQuery<IEvent[], Error>({
-        queryKey: ['event', 'list', props],
-        queryFn: async () => {
-            return events;
-        },
-        enabled: !!companyId,
-    });
-
-    if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
-    }
-
-    if (isLoading) {
-        return <Loading />;
-    }
-
-    return <>{data?.map((event) => <ReminderEvent event={event} />)}</>;
+    const typeList = [TaskType.HAPPY_BIRTHDAY.toString()];
+    return (
+        <>
+            {props.taskList
+                ?.filter((o) => o.dateFrom.getTime() <= new Date().getTime())
+                .filter((o) => typeList.includes(o.type))
+                .map((task) => <ReminderTask task={task} />)}
+        </>
+    );
 }

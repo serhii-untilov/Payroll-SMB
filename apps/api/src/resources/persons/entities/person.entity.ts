@@ -28,7 +28,7 @@ export class Person extends Logger implements IPerson {
     fullName?: string;
 
     @Column({ type: 'date', nullable: true })
-    birthDate?: Date;
+    birthday?: Date;
 
     @Column({ type: 'varchar', length: 15, default: '' })
     taxId?: string;

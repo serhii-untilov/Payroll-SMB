@@ -86,12 +86,23 @@ export class TasksService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
+    // Soft delete
     async remove(userId: number, id: number): Promise<Task> {
         await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({
             where: { id },
             withDeleted: true,
         });
+        return deleted;
+    }
+
+    // Hard delete
+    async delete(id: number): Promise<Task> {
+        const deleted = await this.repository.findOneOrFail({
+            where: { id },
+            withDeleted: true,
+        });
+        await this.repository.delete({ id });
         return deleted;
     }
 

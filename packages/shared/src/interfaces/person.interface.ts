@@ -11,7 +11,7 @@ export interface IPerson extends ILogger {
     lastName: string;
     middleName?: string | null;
     fullName?: string | null;
-    birthDate?: Date | null;
+    birthday?: Date | null;
     taxId?: string | null;
     sex?: string | null; // See enum Sex
     phone?: string | null;

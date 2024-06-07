@@ -35,6 +35,7 @@ export class PositionListenerService {
         await this.payrollCalculationService.calculatePosition(event.userId, event.positionId);
         await this.payFundCalculationService.calculatePosition(event.userId, event.positionId);
         await this.payrollCalculationService.calculateCompanyTotals(event.userId, event.companyId);
+        await this.taskListService.generate(event.userId, event.companyId);
     }
 
     @OnEvent('position.deleted')

@@ -5,7 +5,7 @@ export class CreatePersonDto implements ICreatePerson {
     @ApiProperty() firstName: string;
     @ApiProperty() lastName: string;
     @ApiProperty() middleName?: string | undefined;
-    @ApiProperty() birthDate?: Date | undefined;
+    @ApiProperty() birthday?: Date | undefined;
     @ApiProperty() taxId?: string | undefined;
     @ApiProperty() sex?: string | undefined; // See enum Sex
     @ApiProperty() phone?: string | undefined;
