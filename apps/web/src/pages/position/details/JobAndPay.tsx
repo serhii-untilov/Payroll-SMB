@@ -360,28 +360,34 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                     </Grid>
                 </Grid>
 
-                <Grid container sx={{ mt: 2 }}>
-                    {positionId && data?.personId ? (
-                        <Grid item xs={12}>
-                            <Button startIcon={<HistoryRounded />}>
-                                {t('Assignments History')}
-                            </Button>
-                        </Grid>
-                    ) : null}
-                    <Grid item xs={12}>
-                        <Button startIcon={<AddCircleRounded />}>
-                            {t('Add Additional Earning Type')}
-                        </Button>
-                    </Grid>
-                    {positionId && data?.personId ? (
+                <Grid container sx={{ mt: 2 }} md={12} lg={10} xl={8} spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        {positionId && data?.personId ? (
+                            <Grid item xs={12}>
+                                <Button startIcon={<HistoryRounded />}>
+                                    {t('Assignments History')}
+                                </Button>
+                            </Grid>
+                        ) : null}
                         <Grid item xs={12}>
                             <Button startIcon={<AddCircleRounded />}>
-                                {t('Add Additional Deduction Type')}
+                                {t('Add Work Address')}
                             </Button>
                         </Grid>
-                    ) : null}
-                    <Grid item xs={12}>
-                        <Button startIcon={<AddCircleRounded />}>{t('Add Work Address')}</Button>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Grid item xs={12}>
+                            <Button startIcon={<AddCircleRounded />}>
+                                {t('Add Additional Earning Type')}
+                            </Button>
+                        </Grid>
+                        {positionId && data?.personId ? (
+                            <Grid item xs={12}>
+                                <Button startIcon={<AddCircleRounded />}>
+                                    {t('Add Additional Deduction Type')}
+                                </Button>
+                            </Grid>
+                        ) : null}
                     </Grid>
                 </Grid>
             </TabLayout>
