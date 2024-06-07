@@ -151,6 +151,7 @@ export class TaskListService {
             this.tasksService.delete(id);
         }
         for (const task of toInsert) {
+            delete task.id;
             this.tasksService.create(this.userId, task);
         }
     }

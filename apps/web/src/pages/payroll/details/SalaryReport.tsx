@@ -483,6 +483,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                     department: false,
                     dateFrom: false,
                     dateTo: false,
+                    // additionalEarnings: false,
                 }}
                 apiRef={gridRef}
                 rows={positionList || []}

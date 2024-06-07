@@ -123,8 +123,9 @@ function getPlanForWeekly(workNorm: WorkNorm, onDate: Date): WorkingTime {
 }
 
 export function getWorkDayBeforeOrEqual(date: Date): Date {
-    while (date.getDay() === 0 || date.getDay() === 6) {
-        date = sub(date, { days: 1 });
+    let d = new Date(date);
+    while (d.getDay() === 0 || d.getDay() === 6) {
+        d = sub(d, { days: 1 });
     }
-    return date;
+    return d;
 }

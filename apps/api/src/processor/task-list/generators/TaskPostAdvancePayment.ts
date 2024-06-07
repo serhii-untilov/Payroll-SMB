@@ -18,7 +18,7 @@ export class TaskPostAdvancePayment extends TaskGenerator {
         task.dateFrom = getWorkDayBeforeOrEqual(
             add(monthBegin(this.ctx.payPeriod.dateFrom), { days: 14 }),
         );
-        task.dateTo = task.dateFrom;
+        task.dateTo = new Date(task.dateFrom);
         return [task];
     }
 }

@@ -2,6 +2,7 @@ import { TaskType } from '@repo/shared';
 import { TaskListService } from '../task-list.service';
 import { Task } from '../../../resources/tasks/entities/task.entity';
 import { TaskGenerator } from './abstract/TaskGenerator';
+import { getWorkDayBeforeOrEqual } from './../../helpers/workingTime';
 
 export class TaskSendApplicationFss extends TaskGenerator {
     constructor(ctx: TaskListService, type: TaskType) {
@@ -9,6 +10,9 @@ export class TaskSendApplicationFss extends TaskGenerator {
     }
 
     async getTaskList(): Promise<Task[]> {
-        return [this.makeTask()];
+        const task = this.makeTask();
+        task.dateFrom = getWorkDayBeforeOrEqual(this.ctx.payPeriod.dateTo);
+        task.dateTo = new Date(task.dateFrom);
+        return [task];
     }
 }

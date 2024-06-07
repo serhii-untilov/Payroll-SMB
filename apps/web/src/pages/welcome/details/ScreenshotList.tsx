@@ -25,6 +25,10 @@ export function ScreenshotList() {
                 img: locale.language === 'uk' ? '/screenshot-2-uk.png' : '/screenshot-2-en.png',
                 title: t('Payroll'),
             },
+            {
+                img: locale.language === 'uk' ? '/screenshot-5-uk.png' : '/screenshot-5-en.png',
+                title: t('Personal Card'),
+            },
         ],
         [t, locale],
     );

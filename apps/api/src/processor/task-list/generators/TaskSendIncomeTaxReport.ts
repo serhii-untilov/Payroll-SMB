@@ -3,6 +3,7 @@ import { TaskListService } from '../task-list.service';
 import { Task } from '../../../resources/tasks/entities/task.entity';
 import { TaskGenerator } from './abstract/TaskGenerator';
 import { add } from 'date-fns';
+import { getWorkDayBeforeOrEqual } from 'src/processor/helpers/workingTime';
 
 export class TaskSendIncomeTaxReport extends TaskGenerator {
     constructor(ctx: TaskListService, type: TaskType) {
@@ -20,7 +21,7 @@ export class TaskSendIncomeTaxReport extends TaskGenerator {
         }
         const task = this.makeTask();
         task.dateFrom = monthBegin(this.ctx.payPeriod.dateFrom);
-        task.dateTo = add(task.dateFrom, { days: 39 });
+        task.dateTo = getWorkDayBeforeOrEqual(add(task.dateFrom, { days: 39 }));
         return [task];
     }
 }

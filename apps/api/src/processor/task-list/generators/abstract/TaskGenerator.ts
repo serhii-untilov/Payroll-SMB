@@ -1,6 +1,7 @@
 import { TaskStatus, TaskType } from '@repo/shared';
 import { Task } from '../../../../resources/tasks/entities/task.entity';
 import { TaskListService } from './../../task-list.service';
+import { getWorkDayBeforeOrEqual } from './../../../helpers/workingTime';
 
 export abstract class TaskGenerator {
     ctx: TaskListService;
@@ -19,7 +20,7 @@ export abstract class TaskGenerator {
             companyId: this.ctx.company.id,
             type: this.type,
             dateFrom: new Date(this.ctx.payPeriod.dateFrom),
-            dateTo: new Date(this.ctx.payPeriod.dateTo),
+            dateTo: getWorkDayBeforeOrEqual(this.ctx.payPeriod.dateTo),
             sequenceNumber: this.ctx.sequenceNumber,
             status: TaskStatus.TODO,
         });
