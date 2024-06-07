@@ -1,13 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
-import { Loading } from '../../../components/utility/Loading';
-import { ReminderTask } from './ReminderTask';
-import { add } from 'date-fns';
-import { ITask, TaskType, dropTime } from '@repo/shared';
-import { useMemo } from 'react';
 import { Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/system';
+import { ITask, TaskType } from '@repo/shared';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Task } from './Task';
 
 type Props = {
@@ -27,7 +22,7 @@ export function Reminder(props: Props) {
 
     return taskList.length ? (
         <Box>
-            <Typography component="h3" variant="h3" textAlign={'center'}>
+            <Typography component="h4" variant="h4" textAlign={'center'}>
                 {t('Reminders')}
             </Typography>
             {taskList.map((task) => (

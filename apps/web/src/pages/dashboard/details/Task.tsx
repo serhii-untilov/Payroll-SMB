@@ -51,11 +51,12 @@ export function Task(props: Props) {
     });
 
     const { data: position } = useQuery({
-        queryKey: ['position', 'task', task],
+        queryKey: ['position', 'task', { taskId: task.id, companyId: ctx.company?.id }],
         queryFn: async () => {
-            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId
+            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId && ctx.company?.id
                 ? await getPositionByPersonId({
                       personId: task.entityId,
+                      companyId: ctx.company.id,
                       relations: false,
                       onDate: task.dateFrom,
                   })
@@ -79,12 +80,13 @@ export function Task(props: Props) {
         }
     }, [person, task, t]);
 
-    const path = useMemo(() => getPath(task.type, ctx, position), [task, ctx, position]);
+    // const path = useMemo(() => getPath(task.type, ctx, position), [task, ctx, position]);
 
     const onClickTask = () => {
         if (task.status === TaskStatus.NOT_AVAILABLE) {
             return;
         }
+        const path = getPath(task.type, ctx, position);
         if (path) {
             navigate(path);
         }

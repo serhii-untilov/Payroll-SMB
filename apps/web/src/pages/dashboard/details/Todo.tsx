@@ -1,9 +1,9 @@
-import { ITask, TaskType } from '@repo/shared';
-import { Task } from './Task';
-import { useMemo } from 'react';
-import { Box } from '@mui/system';
 import { Typography } from '@mui/material';
+import { Box } from '@mui/system';
+import { ITask, TaskType } from '@repo/shared';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Task } from './Task';
 
 type Props = {
     taskList: ITask[];
@@ -37,7 +37,7 @@ export function Todo(props: Props) {
     );
     return taskList.length ? (
         <Box>
-            <Typography component="h3" variant="h3" textAlign={'center'}>
+            <Typography component="h4" variant="h4" textAlign={'center'}>
                 {t('Things to do')}
             </Typography>
             {taskList.map((task) => (

@@ -36,7 +36,7 @@ export function Upcoming(props: Props) {
     );
     return taskList.length ? (
         <Box>
-            <Typography component="h3" variant="h3" textAlign={'center'}>
+            <Typography component="h4" variant="h4" textAlign={'center'}>
                 {t('Upcoming')}
             </Typography>
             {taskList.map((task) => (

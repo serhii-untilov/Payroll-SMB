@@ -103,7 +103,7 @@ export class PositionsController {
         return response;
     }
 
-    @Get('person/:id')
+    @Post('person/:id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findFirstByPersonId(
@@ -111,10 +111,12 @@ export class PositionsController {
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
         @Query('onDate') onDate: Date,
+        @Body() payload: { companyId: number },
     ): Promise<IPosition> {
         const userId = req.user['sub'];
         const found = await this.positionsService.findFirstByPersonId(
             userId,
+            payload.companyId,
             id,
             !!relations,
             onDate ? new Date(onDate) : null,

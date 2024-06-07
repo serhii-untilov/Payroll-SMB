@@ -57,14 +57,16 @@ export async function deletePosition(id: number): Promise<IPosition> {
 
 export async function getPositionByPersonId(params: {
     personId: number;
+    companyId: number;
     relations?: boolean;
     onDate?: Date;
     onPayPeriodDate?: Date | null | undefined;
 }): Promise<IPosition> {
-    const response = await api.get(
+    const response = await api.post(
         `/api/positions/person/${params.personId}?relations=${!!params.relations}` +
             (params.onDate ? `&onDate=${params.onDate}` : '') +
             (params.onPayPeriodDate ? `&onPayPeriodDate=${params.onPayPeriodDate}` : ''),
+        { companyId: params.companyId },
         {
             headers: authHeader(),
         },
