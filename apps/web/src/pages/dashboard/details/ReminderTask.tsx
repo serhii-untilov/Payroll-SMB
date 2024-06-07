@@ -9,7 +9,7 @@ import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { amber, green, grey, red } from '@mui/material/colors';
 import { ITask, TaskStatus, TaskType, dropTime } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Tooltip } from '../../../components/layout/Tooltip';
@@ -17,14 +17,14 @@ import useLocale from '../../../hooks/useLocale';
 import { getPerson } from '../../../services/person.service';
 import { updateTask } from '../../../services/task.service';
 import { getPositionByPersonId } from '../../../services/position.service';
-import { differenceInYears } from 'date-fns';
+import { add, differenceInYears } from 'date-fns';
 
 type Props = {
     task: ITask;
 };
 
 export function ReminderTask(props: Props) {
-    const { task } = props;
+    const [task, setTask] = useState(props.task);
     const queryClient = useQueryClient();
     const { t } = useTranslation();
     const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
@@ -66,7 +66,7 @@ export function ReminderTask(props: Props) {
     const description = useMemo(() => {
         switch (task.type) {
             case TaskType.HAPPY_BIRTHDAY:
-                return `${person?.fullName}, ${person?.birthday ? differenceInYears(task.dateTo, person?.birthday) : ''}`;
+                return `${person?.fullName}, ${person?.birthday ? differenceInYears(add(task.dateTo, { days: 1 }), person?.birthday) : ''}`;
             default:
                 return '';
         }
@@ -107,12 +107,14 @@ export function ReminderTask(props: Props) {
     };
 
     const markDone = async () => {
-        await updateTask(task.id, { status: TaskStatus.DONE_BY_USER, version: task.version });
+        setTask(
+            await updateTask(task.id, { status: TaskStatus.DONE_BY_USER, version: task.version }),
+        );
         await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
     };
 
     const markTodo = async () => {
-        await updateTask(task.id, { status: TaskStatus.TODO, version: task.version });
+        setTask(await updateTask(task.id, { status: TaskStatus.TODO, version: task.version }));
         await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
     };
 
@@ -163,9 +165,9 @@ export function ReminderTask(props: Props) {
             <Grid item xs={1}>
                 {statusIcon && (
                     <IconButton onClick={() => onClickStatus()}>
-                        <Tooltip placement="top" title={t(getStatusTooltip(task))}>
-                            {statusIcon}
-                        </Tooltip>
+                        {/* <Tooltip placement="top" title={t(getStatusTooltip(task))}> */}
+                        {statusIcon}
+                        {/* </Tooltip> */}
                     </IconButton>
                 )}
             </Grid>
@@ -213,7 +215,7 @@ function getStatusTooltip(task: ITask) {
     if (task.status === TaskStatus.DONE_BY_USER) return 'Marked as Done';
     if (task.status === TaskStatus.TODO) return 'Mark as Done';
     if (task.status === TaskStatus.IN_PROGRESS) return 'Mark Done';
-    return red[50];
+    return '';
 }
 
 function canMarkAsDone(task: ITask) {

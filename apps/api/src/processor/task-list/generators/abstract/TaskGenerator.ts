@@ -18,8 +18,8 @@ export abstract class TaskGenerator {
             id: this.ctx.id,
             companyId: this.ctx.company.id,
             type: this.type,
-            dateFrom: this.ctx.payPeriod.dateFrom,
-            dateTo: this.ctx.payPeriod.dateTo,
+            dateFrom: new Date(this.ctx.payPeriod.dateFrom),
+            dateTo: new Date(this.ctx.payPeriod.dateTo),
             sequenceNumber: this.ctx.sequenceNumber,
             status: TaskStatus.TODO,
         });

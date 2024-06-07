@@ -50,9 +50,7 @@ export default function Dashboard() {
             <PageLayout>
                 <Grid container flexDirection="column" alignItems="space-between" spacing={2}>
                     <Grid item>
-                        <Typography component="h2" variant="h1" textAlign={'center'} sx={{ my: 2 }}>
-                            <Greeting />
-                        </Typography>
+                        <Greeting />
                         <Box
                             sx={{
                                 display: 'flex',
@@ -100,13 +98,6 @@ export default function Dashboard() {
                             <Grid item xs={12} md={6}>
                                 <Grid container flexDirection="column">
                                     <Grid item>
-                                        <Typography
-                                            component="h3"
-                                            variant="h3"
-                                            textAlign={'center'}
-                                        >
-                                            {t('Things to do')}
-                                        </Typography>
                                         <Todo taskList={taskList || []} />
                                     </Grid>
                                 </Grid>
@@ -114,23 +105,9 @@ export default function Dashboard() {
                             <Grid item xs={12} md={6}>
                                 <Grid container flexDirection="column">
                                     <Grid item>
-                                        <Typography
-                                            component="h3"
-                                            variant="h3"
-                                            textAlign={'center'}
-                                        >
-                                            {t('Reminders')}
-                                        </Typography>
                                         <Reminder taskList={taskList || []} />
                                     </Grid>
                                     <Grid item>
-                                        <Typography
-                                            component="h3"
-                                            variant="h3"
-                                            textAlign={'center'}
-                                        >
-                                            {t('Upcoming')}
-                                        </Typography>
                                         <Upcoming taskList={taskList || []} />
                                     </Grid>
                                 </Grid>
