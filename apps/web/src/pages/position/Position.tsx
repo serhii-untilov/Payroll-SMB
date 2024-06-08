@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageTitle } from '../../components/layout/PageTitle';
 import { Tab } from '../../components/layout/Tab';
@@ -23,7 +23,6 @@ export default function Position() {
     const { t } = useTranslation();
     const { company, payPeriod } = useAppContext();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
     const goBack = searchParams.get('return') === 'true';

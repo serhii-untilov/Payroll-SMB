@@ -34,7 +34,8 @@ export class PositionHistoryController {
         @Body() payload: CreatePositionHistoryDto,
     ): Promise<IPositionHistory> {
         const userId = req.user['sub'];
-        await this.service.availableCreateOrFail(userId, payload.positionId);
+        const companyId = await this.service.getPositionCompanyId(payload.positionId);
+        await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
@@ -47,7 +48,8 @@ export class PositionHistoryController {
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPositionHistory[]> {
         const userId = req.user['sub'];
-        await this.service.availableCreateOrFail(userId, positionId);
+        const companyId = await this.service.getPositionCompanyId(positionId);
+        await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.findAll(userId, positionId, !!relations);
     }
 
@@ -61,7 +63,8 @@ export class PositionHistoryController {
     ): Promise<IPositionHistory> {
         const userId = req.user['sub'];
         const found = await this.service.findOne(id, !!relations);
-        await this.service.availableFindOneOrFail(userId, found.positionId);
+        const companyId = await this.service.getPositionCompanyId(found.positionId);
+        await this.service.availableFindOneOrFail(userId, companyId);
         return found;
     }
 
@@ -98,7 +101,8 @@ export class PositionHistoryController {
         @Body() params: FindPositionHistoryDto,
     ): Promise<IPositionHistory | null> {
         const userId = req.user['sub'];
-        await this.service.availableFindAllOrFail(userId, params.positionId);
+        const companyId = await this.service.getPositionCompanyId(params.positionId);
+        await this.service.availableFindAllOrFail(userId, companyId);
         const positionList = await this.service.find(userId, deepStringToShortDate(params));
         // Will return the last positionHistory record or null
         positionList.sort((a, b) =>

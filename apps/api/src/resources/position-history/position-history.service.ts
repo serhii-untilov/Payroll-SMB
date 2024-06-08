@@ -46,6 +46,10 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return (await this.positionsService.findOne(positionId)).companyId;
     }
 
+    async getPositionCompanyId(positionId: number): Promise<number> {
+        return (await this.positionsService.findOne(positionId)).companyId;
+    }
+
     async create(userId: number, payload: CreatePositionHistoryDto): Promise<PositionHistory> {
         const created = await this.repository.save({
             ...payload,
