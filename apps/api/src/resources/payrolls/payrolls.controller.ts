@@ -32,7 +32,8 @@ export class PayrollsController {
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreatePayrollDto): Promise<Payroll> {
         const userId = req.user['sub'];
-        await this.service.availableCreateOrFail(userId, payload);
+        const companyId = await this.service.getPositionCompanyId(payload.positionId);
+        await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
@@ -76,7 +77,7 @@ export class PayrollsController {
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() params: FindPayrollDto): Promise<Payroll[]> {
         const userId = req.user['sub'];
-        await this.service.availableFindAllOrFail(userId, params);
+        await this.service.availableFindAllOrFail(userId, params.companyId);
         return await this.service.findAll(userId, deepStringToShortDate(params));
     }
 }

@@ -154,7 +154,7 @@ export function CompanyPayPeriods(params: Props) {
 
     const onEdit = (id: number) => {
         console.log('onEdit');
-        navigate('/payroll');
+        navigate('/payroll?tab=payroll&return=true');
     };
 
     const onPrint = () => {

@@ -2,12 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PayrollCalculationService } from './payrollCalculation.service';
 import { AccessService } from '../../resources/access/access.service';
 import { CompaniesService } from '../../resources/companies/companies.service';
-import { PayPeriodsService } from '../../resources/pay-periods/pay-periods.service';
+import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
 import { createMock } from '@golevelup/ts-jest';
 import { PositionsService } from '../../resources/positions/positions.service';
 import { PayrollsService } from '../../resources/payrolls/payrolls.service';
 import { PaymentTypesService } from '../../resources/payment-types/payment-types.service';
 import { WorkNormsService } from '../../resources/work-norms/work-norms.service';
+import { PayPeriodCalculationService } from '../payPeriodCalculation/payPeriodCalculation.service';
 
 describe('ProcessorService', () => {
     let service: PayrollCalculationService;
@@ -23,6 +24,10 @@ describe('ProcessorService', () => {
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
                 { provide: WorkNormsService, useValue: createMock<WorkNormsService>() },
+                {
+                    provide: PayPeriodCalculationService,
+                    useValue: createMock<PayPeriodCalculationService>(),
+                },
             ],
         }).compile();
 

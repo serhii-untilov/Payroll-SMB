@@ -1,61 +1,24 @@
-import { AccessType, ResourceType } from '@repo/shared';
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ResourceType } from '@repo/shared';
+import { Repository } from 'typeorm';
+import { AvailableForUser } from '../abstract/availableForUser';
+import { AccessService } from '../access/access.service';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { MinWage } from './entities/min-wage.entity';
-import { Repository } from 'typeorm';
-import { AccessService } from '../access/access.service';
 
 @Injectable()
-export class MinWageService {
+export class MinWageService extends AvailableForUser {
     readonly resourceType = ResourceType.MIN_WAGE;
 
     constructor(
         @InjectRepository(MinWage)
         private repository: Repository<MinWage>,
         @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
-    ) {}
-
-    async availableFindAllOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-    }
-
-    async availableFindOneOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-    }
-
-    async availableCreateOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-    }
-
-    async availableUpdateOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-    }
-
-    async availableDeleteOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
+        public accessService: AccessService,
+    ) {
+        super(accessService);
     }
 
     async create(userId: number, payload: CreateMinWageDto): Promise<MinWage> {

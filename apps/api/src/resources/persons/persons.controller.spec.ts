@@ -6,6 +6,7 @@ import { AccessService } from '../access/access.service';
 import { Person } from './entities/person.entity';
 import { PersonsController } from './persons.controller';
 import { PersonsService } from './persons.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('PersonsController', () => {
     let controller: PersonsController;
@@ -22,6 +23,7 @@ describe('PersonsController', () => {
                     useFactory: repositoryMockFactory,
                 },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],
         }).compile();
 

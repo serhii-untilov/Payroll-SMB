@@ -3,7 +3,7 @@ import { PersonListenerService } from './person-listener.service';
 import { PayrollCalculationService } from '../../payrollCalculation/payrollCalculation.service';
 import { createMock } from '@golevelup/ts-jest';
 import { PayFundCalculationService } from '../../payFundCalculation/payFundCalculation.service';
-import { TaskListService } from '../../task-list/task-list.service';
+import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
 import { PositionsService } from './../../../resources/positions/positions.service';
 
 describe('PersonListenerService', () => {
@@ -26,8 +26,8 @@ describe('PersonListenerService', () => {
                     useValue: createMock<PayFundCalculationService>(),
                 },
                 {
-                    provide: TaskListService,
-                    useValue: createMock<TaskListService>(),
+                    provide: TaskGenerationService,
+                    useValue: createMock<TaskGenerationService>(),
                 },
             ],
         }).compile();

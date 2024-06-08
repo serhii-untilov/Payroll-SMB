@@ -1,7 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { AccessModule } from '../resources/access/access.module';
 import { CompaniesModule } from '../resources/companies/companies.module';
-import { PayPeriodsModule } from '../resources/pay-periods/pay-periods.module';
+import { PayPeriodsModule } from '../resources/pay-periods/payPeriods.module';
 import { PaymentTypesModule } from '../resources/payment-types/payment-types.module';
 import { PayrollsModule } from '../resources/payrolls/payrolls.module';
 import { PositionsModule } from '../resources/positions/positions.module';
@@ -14,10 +14,12 @@ import { CompanyListenerService } from './listeners/company-listener/company-lis
 import { PositionListenerService } from './listeners/position-listener/position-listener.service';
 import { PayFundCalculationService } from './payFundCalculation/payFundCalculation.service';
 import { PayrollCalculationService } from './payrollCalculation/payrollCalculation.service';
-import { TaskListService } from './task-list/task-list.service';
+import { TaskGenerationService } from './taskGeneration/taskGeneration.service';
 import { DepartmentsModule } from './../resources/departments/departments.module';
 import { PersonsModule } from './../resources/persons/persons.module';
 import { PersonListenerService } from './listeners/person-listener/person-listener.service';
+import { PayPeriodCalculationService } from './payPeriodCalculation/payPeriodCalculation.service';
+import { UsersModule } from './../resources/users/users.module';
 
 @Module({
     imports: [
@@ -34,6 +36,7 @@ import { PersonListenerService } from './listeners/person-listener/person-listen
         forwardRef(() => TasksModule),
         forwardRef(() => DepartmentsModule),
         forwardRef(() => PersonsModule),
+        forwardRef(() => UsersModule),
     ],
     controllers: [],
     providers: [
@@ -42,8 +45,8 @@ import { PersonListenerService } from './listeners/person-listener/person-listen
         CompanyListenerService,
         PayrollCalculationService,
         PayFundCalculationService,
-        TaskListService,
+        TaskGenerationService,
+        PayPeriodCalculationService,
     ],
-    exports: [PayrollCalculationService, PayFundCalculationService],
 })
 export class ProcessorModule {}

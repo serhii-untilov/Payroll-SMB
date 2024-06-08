@@ -3,8 +3,8 @@ import { RecordFlags, WorkingTime } from '@repo/shared';
 import { AccessService } from '../../resources/access/access.service';
 import { CompaniesService } from '../../resources/companies/companies.service';
 import { Company } from '../../resources/companies/entities/company.entity';
-import { PayPeriod } from '../../resources/pay-periods/entities/pay-period.entity';
-import { PayPeriodsService } from '../../resources/pay-periods/pay-periods.service';
+import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
 import { PaymentType } from '../../resources/payment-types/entities/payment-type.entity';
 import { PaymentTypesService } from '../../resources/payment-types/payment-types.service';
 import { Payroll } from '../../resources/payrolls/entities/payroll.entity';
@@ -16,8 +16,9 @@ import { WorkNormsService } from '../../resources/work-norms/work-norms.service'
 import { calculateBasics } from './calcMethods/calculateBasic';
 import { calculateIncomeTax } from './calcMethods/calculateIncomeTax';
 import { calculateMilitaryTax } from './calcMethods/calculateMilitaryTax';
-import { getPayrollUnionRecord } from './../helpers/payrollsData';
-import { calcBalanceWorkingTime } from './../helpers/workingTime';
+import { getPayrollUnionRecord } from '../helpers/payroll.helper';
+import { calcBalanceWorkingTime } from '../helpers/workingTime.helper';
+import { PayPeriodCalculationService } from '../payPeriodCalculation/payPeriodCalculation.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
@@ -52,6 +53,8 @@ export class PayrollCalculationService {
         private payrollsService: PayrollsService,
         @Inject(forwardRef(() => WorkNormsService))
         public workNormsService: WorkNormsService,
+        @Inject(forwardRef(() => PayPeriodCalculationService))
+        private payPeriodCalculationService: PayPeriodCalculationService,
     ) {}
 
     public get logger() {
@@ -99,7 +102,7 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne(userId, {
+        this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         const positions = await this.positionsService.findAll(userId, {
@@ -120,24 +123,24 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne(userId, {
+        this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculateCompanyTotals();
     }
 
     private async _calculateCompanyTotals() {
-        await this.payPeriodsService.updateBalance(this.payPeriod.id);
-        await this.payPeriodsService.updateCalcMethods(this.payPeriod.id);
+        await this.payPeriodCalculationService.updateBalance(this.payPeriod.id);
+        await this.payPeriodCalculationService.updateCalcMethods(this.payPeriod.id);
     }
 
     public async calculatePosition(userId: number, positionId: number) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
-        this._position = await this.positionsService.findOne(userId, positionId, true);
+        this._position = await this.positionsService.findOne(positionId, true);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne(userId, {
+        this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculatePosition();

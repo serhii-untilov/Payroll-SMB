@@ -1,12 +1,14 @@
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-    AccessType,
-    IPayFundGroupsTotal,
     IPayFundCategoriesTotal,
+    IPayFundGroupsTotal,
     ResourceType,
+    defaultPayFundCategoriesTotal,
+    defaultPayFundGroupsTotal,
 } from '@repo/shared';
 import { Between, Repository } from 'typeorm';
+import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PositionsService } from '../positions/positions.service';
@@ -14,114 +16,34 @@ import { CreatePayFundDto } from './dto/create-pay-fund.dto';
 import { FindPayFundDto } from './dto/find-pay-fund.dto';
 import { UpdatePayFundDto } from './dto/update-pay-fund.dto';
 import { PayFund } from './entities/pay-fund.entity';
-import { defaultPayFundCategoriesTotal, defaultPayFundGroupsTotal } from '@repo/shared';
 
 @Injectable()
-export class PayFundsService {
+export class PayFundsService extends AvailableForUserCompany {
     public readonly resourceType = ResourceType.PAY_FUND;
 
     constructor(
         @InjectRepository(PayFund)
         private repository: Repository<PayFund>,
         @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
+        public accessService: AccessService,
         @Inject(forwardRef(() => PositionsService))
         private positionsService: PositionsService,
         @Inject(forwardRef(() => CompaniesService))
         private companiesService: CompaniesService,
-    ) {}
-
-    async availableFindAllOrFail(userId: number, params: FindPayFundDto) {
-        const { positionId, companyId } = params;
-        if (!positionId && !companyId) {
-            throw new BadRequestException('Should be defined companyId or positionId');
-        }
-        if (positionId) {
-            const position = await this.positionsService.findOne(userId, params.positionId);
-            await this.accessService.availableForUserCompanyOrFail(
-                userId,
-                position.companyId,
-                this.resourceType,
-                AccessType.ACCESS,
-            );
-        }
-        if (companyId) {
-            await this.accessService.availableForUserCompanyOrFail(
-                userId,
-                companyId,
-                this.resourceType,
-                AccessType.ACCESS,
-            );
-        }
+    ) {
+        super(accessService);
     }
 
-    async availableFindOneOrFail(userId: number, positionId: number) {
-        const position = await this.positionsService.findOne(userId, positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
+    async getCompanyId(entityId: number): Promise<number> {
+        const { positionId } = await this.repository.findOneOrFail({
+            select: { positionId: true },
+            where: { id: entityId },
+        });
+        return (await this.positionsService.findOne(positionId)).companyId;
     }
 
-    async availableCreateOrFail(userId: number, payload: CreatePayFundDto) {
-        const position = await this.positionsService.findOne(userId, payload.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-        const company = await this.companiesService.findOne(userId, position.companyId);
-        if (payload.payPeriod.getTime() !== company.payPeriod.getTime()) {
-            await this.accessService.availableForUserCompanyOrFail(
-                userId,
-                position.companyId,
-                this.resourceType,
-                AccessType.ELEVATED,
-            );
-        }
-    }
-
-    async availableUpdateOrFail(userId: number, id: number) {
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        const position = await this.positionsService.findOne(userId, record.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-        const company = await this.companiesService.findOne(userId, position.companyId);
-        if (record.payPeriod.getTime() !== company.payPeriod.getTime()) {
-            await this.accessService.availableForUserCompanyOrFail(
-                userId,
-                position.companyId,
-                this.resourceType,
-                AccessType.ELEVATED,
-            );
-        }
-    }
-
-    async availableDeleteOrFail(userId: number, id: number) {
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        const position = await this.positionsService.findOne(userId, record.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
-        const company = await this.companiesService.findOne(userId, position.companyId);
-        if (record.payPeriod.getTime() !== company.payPeriod.getTime()) {
-            await this.accessService.availableForUserCompanyOrFail(
-                userId,
-                position.companyId,
-                this.resourceType,
-                AccessType.ELEVATED,
-            );
-        }
+    async getPositionCompanyId(positionId: number): Promise<number> {
+        return (await this.positionsService.findOne(positionId)).companyId;
     }
 
     async create(userId: number, payload: CreatePayFundDto): Promise<PayFund> {

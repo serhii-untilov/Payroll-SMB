@@ -8,6 +8,15 @@ export abstract class AvailableForUser {
     constructor(accessService: AccessService) {
         this.accessService = accessService;
     }
+
+    async availableCreateOrFail(userId: number) {
+        await this.accessService.availableForUserOrFail(
+            userId,
+            this.resourceType,
+            AccessType.CREATE,
+        );
+    }
+
     async availableFindAllOrFail(userId: number) {
         await this.accessService.availableForUserOrFail(
             userId,
@@ -21,14 +30,6 @@ export abstract class AvailableForUser {
             userId,
             this.resourceType,
             AccessType.ACCESS,
-        );
-    }
-
-    async availableCreateOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.CREATE,
         );
     }
 
