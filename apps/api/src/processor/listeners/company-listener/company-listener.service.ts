@@ -6,7 +6,7 @@ import { CompanyUpdatedEvent } from './../../../resources/companies/events/compa
 import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
 import { CompanyDeletedEvent } from './../../../resources/companies/events/company-deleted.event';
 import { PayPeriodsService } from './../../../resources/pay-periods/pay-periods.service';
-import { TaskListService } from './../../../processor/task-list/task-list.service';
+import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
 
 @Injectable()
 export class CompanyListenerService {
@@ -19,8 +19,8 @@ export class CompanyListenerService {
         private payFundCalculationService: PayFundCalculationService,
         @Inject(forwardRef(() => PayPeriodsService))
         private payPeriodsService: PayPeriodsService,
-        @Inject(forwardRef(() => TaskListService))
-        private taskListService: TaskListService,
+        @Inject(forwardRef(() => TaskGenerationService))
+        private taskListService: TaskGenerationService,
     ) {}
 
     @OnEvent('company.created')

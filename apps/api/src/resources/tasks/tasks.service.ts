@@ -54,7 +54,7 @@ export class TasksService extends AvailableForUserCompany {
             options.where['dateTo'] = MoreThanOrEqual(onDate);
         }
         if (onPayPeriodDate) {
-            const payPeriod = await this.payPeriodsService.findOne(userId, {
+            const payPeriod = await this.payPeriodsService.findOne({
                 where: {
                     companyId,
                     dateFrom: onPayPeriodDate,

@@ -56,7 +56,6 @@ export class PositionsController {
     ): Promise<IPosition> {
         const userId = req.user['sub'];
         const found = await this.positionsService.findOne(
-            userId,
             id,
             !!relations,
             onDate ? new Date(onDate) : null,

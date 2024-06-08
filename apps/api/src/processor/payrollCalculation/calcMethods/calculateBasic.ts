@@ -10,7 +10,7 @@ import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.en
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PositionHistory } from '../../../resources/position-history/entities/position-history.entity';
 import { PayrollCalculationService } from '../payrollCalculation.service';
-import { getWorkingTimeFact, getWorkingTimePlan } from './../../helpers/workingTime';
+import { getWorkingTimeFact, getWorkingTimePlan } from '../../helpers/workingTime.helper';
 
 export function calculateBasics(ctx: PayrollCalculationService) {
     for (const accPeriod of ctx.accPeriods) {

@@ -6,25 +6,25 @@ import { TaskPostAccrualDocument } from './generators/TaskPostAccrualDocument';
 import { TaskClosePayPeriod } from './generators/TaskClosePayPeriod';
 import { TaskFillDepartmentList } from './generators/TaskFillDepartmentList';
 import { Inject, Injectable, Logger, NotFoundException, Scope, forwardRef } from '@nestjs/common';
-import { CompaniesService } from './../../resources/companies/companies.service';
-import { Company } from './../../resources/companies/entities/company.entity';
-import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { PayPeriodsService } from './../../resources/pay-periods/pay-periods.service';
-import { Task } from './../../resources/tasks/entities/task.entity';
+import { CompaniesService } from '../../resources/companies/companies.service';
+import { Company } from '../../resources/companies/entities/company.entity';
+import { PayPeriod } from '../../resources/pay-periods/entities/pay-period.entity';
+import { PayPeriodsService } from '../../resources/pay-periods/pay-periods.service';
+import { Task } from '../../resources/tasks/entities/task.entity';
 import { TaskStatus, TaskType, dropTime } from '@repo/shared';
 import { TaskGenerator } from './generators/abstract/TaskGenerator';
-import { TasksService } from './../../resources/tasks/tasks.service';
+import { TasksService } from '../../resources/tasks/tasks.service';
 import { TaskPostAdvancePayment } from './generators/TaskPostAdvancePayment';
 import { TaskSendApplicationFss } from './generators/TaskSendApplicationFss';
 import { TaskPostPaymentFss } from './generators/TaskPostPaymentFss';
 import { TaskPostRegularPayment } from './generators/TaskPostRegularPayment';
-import { DepartmentsService } from './../../resources/departments/departments.service';
-import { PositionsService } from './../../resources/positions/positions.service';
-import { PersonsService } from './../../resources/persons/persons.service';
+import { DepartmentsService } from '../../resources/departments/departments.service';
+import { PositionsService } from '../../resources/positions/positions.service';
+import { PersonsService } from '../../resources/persons/persons.service';
 
 @Injectable({ scope: Scope.REQUEST })
-export class TaskListService {
-    private _logger: Logger = new Logger(TaskListService.name);
+export class TaskGenerationService {
+    private _logger: Logger = new Logger(TaskGenerationService.name);
     private _userId: number;
     private _company: Company;
     private _payPeriod: PayPeriod;
@@ -79,7 +79,7 @@ export class TaskListService {
         this.logger.log(`userId: ${userId}, generate for companyId: ${companyId}`);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
-        this._payPeriod = await this.payPeriodsService.findOne(userId, {
+        this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         this._priorTaskList = await this.tasksService.findAll(userId, {

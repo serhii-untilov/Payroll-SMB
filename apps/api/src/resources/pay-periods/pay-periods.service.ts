@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-    AccessType,
     PayPeriodState,
     PaymentPart,
     PaymentSchedule,
@@ -30,19 +29,20 @@ import {
     subYears,
 } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Not, Repository } from 'typeorm';
+import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
+import { PayFundsService } from '../pay-funds/pay-funds.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
+import { UsersService } from '../users/users.service';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
 import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
-import { PayFundsService } from '../pay-funds/pay-funds.service';
-import { UsersService } from '../users/users.service';
 
 @Injectable()
-export class PayPeriodsService {
+export class PayPeriodsService extends AvailableForUserCompany {
     private logger: Logger = new Logger(PayPeriodsService.name);
     public readonly resourceType = ResourceType.PAY_PERIOD;
 
@@ -52,7 +52,7 @@ export class PayPeriodsService {
         @InjectRepository(PayPeriodCalcMethod)
         private repositoryPayPeriodCalcMethod: Repository<PayPeriodCalcMethod>,
         @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
+        public accessService: AccessService,
         @Inject(forwardRef(() => CompaniesService))
         private companiesService: CompaniesService,
         @Inject(forwardRef(() => PositionsService))
@@ -63,54 +63,13 @@ export class PayPeriodsService {
         private payFundsService: PayFundsService,
         @Inject(forwardRef(() => UsersService))
         private usersService: UsersService,
-    ) {}
-
-    async availableFindAllOrFail(userId: number, companyId: number) {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
+    ) {
+        super(accessService);
     }
 
-    async availableFindOneOrFail(userId: number, id: number) {
-        const record = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            record.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-    }
-
-    async availableCreateOrFail(userId: number, companyId: number) {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            companyId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-    }
-
-    async availableUpdateOrFail(userId: number, id: number) {
-        const record = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            record.companyId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-    }
-
-    async availableDeleteOrFail(userId: number, id: number) {
-        const record = await this.repositoryPayPeriod.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            record.companyId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
+    async getCompanyId(entityId: number): Promise<number> {
+        return (await this.repositoryPayPeriod.findOneOrFail({ where: { id: entityId } }))
+            .companyId;
     }
 
     async create(userId: number, payload: CreatePayPeriodDto): Promise<PayPeriod> {
@@ -168,7 +127,7 @@ export class PayPeriodsService {
         }
     }
 
-    async findOne(userId: number, params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
+    async findOne(params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
         return await this.repositoryPayPeriod.findOneOrFail(params);
     }
 
@@ -212,7 +171,7 @@ export class PayPeriodsService {
             relations: { company: relations },
             ...(fullFieldList ? {} : defaultFieldList),
         };
-        return await this.findOne(userId, options);
+        return await this.findOne(options);
     }
 
     async fillPeriods(userId: number, companyId: number): Promise<void> {

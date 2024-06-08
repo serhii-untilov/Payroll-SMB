@@ -1,12 +1,12 @@
 import { PaymentSchedule, TaskType, monthBegin } from '@repo/shared';
 import { add } from 'date-fns';
 import { Task } from '../../../resources/tasks/entities/task.entity';
-import { TaskListService } from '../task-list.service';
-import { getWorkDayBeforeOrEqual } from './../../../processor/helpers/workingTime';
+import { TaskGenerationService } from '../taskGeneration.service';
+import { getWorkDayBeforeOrEqual } from '../../helpers/workingTime.helper';
 import { TaskGenerator } from './abstract/TaskGenerator';
 
 export class TaskPostAdvancePayment extends TaskGenerator {
-    constructor(ctx: TaskListService, type: TaskType) {
+    constructor(ctx: TaskGenerationService, type: TaskType) {
         super(ctx, type);
     }
 

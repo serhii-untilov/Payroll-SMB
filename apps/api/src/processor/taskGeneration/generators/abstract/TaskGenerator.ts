@@ -1,13 +1,13 @@
 import { TaskStatus, TaskType } from '@repo/shared';
 import { Task } from '../../../../resources/tasks/entities/task.entity';
-import { TaskListService } from './../../task-list.service';
-import { getWorkDayBeforeOrEqual } from './../../../helpers/workingTime';
+import { TaskGenerationService } from '../../taskGeneration.service';
+import { getWorkDayBeforeOrEqual } from '../../../helpers/workingTime.helper';
 
 export abstract class TaskGenerator {
-    ctx: TaskListService;
+    ctx: TaskGenerationService;
     type: TaskType;
 
-    constructor(ctx: TaskListService, type: TaskType) {
+    constructor(ctx: TaskGenerationService, type: TaskType) {
         this.ctx = ctx;
         this.type = type;
     }

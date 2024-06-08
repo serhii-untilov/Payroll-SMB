@@ -3,7 +3,7 @@ import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.en
 import { PaymentType } from '../../../resources/payment-types/entities/payment-type.entity';
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PayrollCalculationService } from '../payrollCalculation.service';
-import { accPeriodFactSum } from './../../helpers/payrollsData';
+import { accPeriodFactSum } from '../../helpers/payroll.helper';
 
 export function calculateMilitaryTax(ctx: PayrollCalculationService) {
     const militaryTaxes = ctx.paymentTypes.filter((o) => o.calcMethod === CalcMethod.MILITARY_TAX);

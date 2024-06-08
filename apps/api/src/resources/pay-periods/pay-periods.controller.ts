@@ -14,13 +14,13 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import { PaymentSchedule, deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { defaultFieldList } from './entities/pay-period.entity';
 import { PayPeriodsService } from './pay-periods.service';
-import { PaymentSchedule, deepStringToShortDate } from '@repo/shared';
 
 @Controller('pay-periods')
 export class PayPeriodsController {
@@ -74,7 +74,7 @@ export class PayPeriodsController {
     ) {
         const userId = req.user['sub'];
         await this.service.availableFindOneOrFail(userId, id);
-        return await this.service.findOne(userId, {
+        return await this.service.findOne({
             where: { id },
             relations: { company: !!relations },
             ...(!!fullFieldList ? {} : defaultFieldList),

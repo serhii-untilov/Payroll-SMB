@@ -4,7 +4,7 @@ import { PayrollCalculationService } from '../../../processor/payrollCalculation
 import { createMock } from '@golevelup/ts-jest';
 import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
 import { PayPeriodsService } from './../../../resources/pay-periods/pay-periods.service';
-import { TaskListService } from './../../../processor/task-list/task-list.service';
+import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
 
 describe('CompanyListenerService', () => {
     let service: CompanyListenerService;
@@ -26,8 +26,8 @@ describe('CompanyListenerService', () => {
                     useValue: createMock<PayPeriodsService>(),
                 },
                 {
-                    provide: TaskListService,
-                    useValue: createMock<TaskListService>(),
+                    provide: TaskGenerationService,
+                    useValue: createMock<TaskGenerationService>(),
                 },
             ],
         }).compile();

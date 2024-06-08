@@ -16,8 +16,8 @@ import { WorkNormsService } from '../../resources/work-norms/work-norms.service'
 import { calculateBasics } from './calcMethods/calculateBasic';
 import { calculateIncomeTax } from './calcMethods/calculateIncomeTax';
 import { calculateMilitaryTax } from './calcMethods/calculateMilitaryTax';
-import { getPayrollUnionRecord } from './../helpers/payrollsData';
-import { calcBalanceWorkingTime } from './../helpers/workingTime';
+import { getPayrollUnionRecord } from '../helpers/payroll.helper';
+import { calcBalanceWorkingTime } from '../helpers/workingTime.helper';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
@@ -99,7 +99,7 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne(userId, {
+        this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         const positions = await this.positionsService.findAll(userId, {
@@ -120,7 +120,7 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne(userId, {
+        this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculateCompanyTotals();
@@ -133,11 +133,11 @@ export class PayrollCalculationService {
 
     public async calculatePosition(userId: number, positionId: number) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
-        this._position = await this.positionsService.findOne(userId, positionId, true);
+        this._position = await this.positionsService.findOne(positionId, true);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne(userId, {
+        this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculatePosition();

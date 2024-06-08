@@ -11,7 +11,7 @@ import {
     setBit,
 } from '@repo/shared';
 import { add, sub } from 'date-fns';
-import { WorkNorm } from './../../resources/work-norms/entities/work-norm.entity';
+import { WorkNorm } from '../../resources/work-norms/entities/work-norm.entity';
 import { PayrollCalculationService } from '../payrollCalculation/payrollCalculation.service';
 
 export function getWorkingTimePlan(

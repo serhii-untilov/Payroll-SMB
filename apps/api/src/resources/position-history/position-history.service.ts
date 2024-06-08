@@ -7,20 +7,21 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType, castAsPositionHistory } from '@repo/shared';
+import { ResourceType, castAsPositionHistory } from '@repo/shared';
 import { add, sub } from 'date-fns';
 import { FindOptionsWhere, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindPositionHistoryDto } from './dto/find-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistory } from './entities/position-history.entity';
-import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 
 @Injectable()
-export class PositionHistoryService {
+export class PositionHistoryService extends AvailableForUserCompany {
     public readonly resourceType = ResourceType.POSITION;
 
     constructor(
@@ -31,60 +32,18 @@ export class PositionHistoryService {
         @Inject(forwardRef(() => PayPeriodsService))
         private readonly payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
+        public accessService: AccessService,
         private eventEmitter: EventEmitter2,
-    ) {}
-
-    async availableFindAllOrFail(userId: number, positionId: number) {
-        const position = await this.positionsService.findOne(userId, positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
+    ) {
+        super(accessService);
     }
 
-    async availableFindOneOrFail(userId: number, positionId: number) {
-        const position = await this.positionsService.findOne(userId, positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-    }
-
-    async availableCreateOrFail(userId: number, positionId: number) {
-        const position = await this.positionsService.findOne(userId, positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-    }
-
-    async availableUpdateOrFail(userId: number, id: number) {
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        const position = await this.positionsService.findOne(userId, record.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-    }
-
-    async availableDeleteOrFail(userId: number, id: number) {
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        const position = await this.positionsService.findOne(userId, record.positionId);
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            position.companyId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
+    async getCompanyId(entityId: number): Promise<number> {
+        const { positionId } = await this.repository.findOneOrFail({
+            select: { positionId: true },
+            where: { id: entityId },
+        });
+        return (await this.positionsService.findOne(positionId)).companyId;
     }
 
     async create(userId: number, payload: CreatePositionHistoryDto): Promise<PositionHistory> {
@@ -95,7 +54,7 @@ export class PositionHistoryService {
         });
         await this.normalizeAfterCreateOrUpdate(userId, created);
         const record = await this.repository.findOneOrFail({ where: { id: created.id } });
-        const position = await this.positionsService.findOne(userId, record.positionId);
+        const position = await this.positionsService.findOne(record.positionId);
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
         return record;
     }
@@ -145,7 +104,7 @@ export class PositionHistoryService {
         }
         const updated = await this.repository.save({ ...payload, id, updatedUserId: userId });
         await this.normalizeAfterCreateOrUpdate(userId, updated);
-        const position = await this.positionsService.findOne(userId, record.positionId);
+        const position = await this.positionsService.findOne(record.positionId);
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
         return record;
     }
@@ -158,20 +117,20 @@ export class PositionHistoryService {
         });
         await this.normalizeAfterDeleted(userId, deleted);
         const record = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
-        const position = await this.positionsService.findOne(userId, record.positionId);
+        const position = await this.positionsService.findOne(record.positionId);
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
         return record;
     }
 
     async find(userId: number, params: FindPositionHistoryDto): Promise<PositionHistory[]> {
-        const position = await this.positionsService.findOne(userId, params.positionId);
+        const position = await this.positionsService.findOne(params.positionId);
         const where: FindOptionsWhere<PositionHistory> = castAsPositionHistory(params);
         if (params.onDate) {
             where.dateFrom = LessThanOrEqual(params.onDate);
             where.dateTo = MoreThanOrEqual(params.onDate);
         }
         if (params.onPayPeriodDate) {
-            const payPeriod = await this.payPeriodsService.findOne(userId, {
+            const payPeriod = await this.payPeriodsService.findOne({
                 where: {
                     companyId: position.companyId,
                     dateFrom: params.onPayPeriodDate,
@@ -196,7 +155,7 @@ export class PositionHistoryService {
         userId: number,
         record: PositionHistory,
     ): Promise<void> {
-        const position = await this.positionsService.findOne(userId, record.positionId);
+        const position = await this.positionsService.findOne(record.positionId);
         if (!position) {
             throw new NotFoundException('Position not found.');
         }
@@ -236,7 +195,7 @@ export class PositionHistoryService {
     }
 
     private async normalizeAfterDeleted(userId: number, record: PositionHistory): Promise<void> {
-        const position = await this.positionsService.findOne(userId, record.positionId);
+        const position = await this.positionsService.findOne(record.positionId);
         if (!position) {
             throw new NotFoundException('Position not found.');
         }

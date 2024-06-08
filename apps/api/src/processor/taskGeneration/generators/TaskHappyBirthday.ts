@@ -1,10 +1,10 @@
 import { TaskType } from '@repo/shared';
 import { Task } from '../../../resources/tasks/entities/task.entity';
-import { TaskListService } from '../task-list.service';
+import { TaskGenerationService } from '../taskGeneration.service';
 import { TaskGenerator } from './abstract/TaskGenerator';
 
 export class TaskHappyBirthday extends TaskGenerator {
-    constructor(ctx: TaskListService, type: TaskType) {
+    constructor(ctx: TaskGenerationService, type: TaskType) {
         super(ctx, type);
     }
 

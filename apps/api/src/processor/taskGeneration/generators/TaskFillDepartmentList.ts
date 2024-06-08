@@ -1,21 +1,21 @@
 import { TaskStatus, TaskType } from '@repo/shared';
 import { Task } from '../../../resources/tasks/entities/task.entity';
-import { TaskListService } from '../task-list.service';
+import { TaskGenerationService } from '../taskGeneration.service';
 import { TaskGenerator } from './abstract/TaskGenerator';
 
-export class TaskFillPositionList extends TaskGenerator {
-    constructor(ctx: TaskListService, type: TaskType) {
+export class TaskFillDepartmentList extends TaskGenerator {
+    constructor(ctx: TaskGenerationService, type: TaskType) {
         super(ctx, type);
     }
 
     async getTaskList(): Promise<Task[]> {
         const task = this.makeTask();
-        const countEmployees = await this.ctx.positionsService.countEmployees(this.ctx.company.id);
-        task.status = countEmployees ? TaskStatus.DONE : TaskStatus.TODO;
-        if (countEmployees) {
+        const count = await this.ctx.departmentsService.count(this.ctx.company.id);
+        task.status = count ? TaskStatus.DONE : TaskStatus.TODO;
+        if (count) {
             const countClosed = await this.ctx.payPeriodsService.countClosed(this.ctx.company.id);
             if (countClosed) {
-                return [];
+                return null;
             }
         }
         return [task];

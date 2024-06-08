@@ -1,18 +1,18 @@
 import { TaskType } from '@repo/shared';
-import { TaskListService } from '../task-list.service';
+import { TaskGenerationService } from '../taskGeneration.service';
 import { Task } from '../../../resources/tasks/entities/task.entity';
 import { TaskGenerator } from './abstract/TaskGenerator';
-import { getWorkDayBeforeOrEqual } from 'src/processor/helpers/workingTime';
+import { getWorkDayBeforeOrEqual } from '../../helpers/workingTime.helper';
 
-export class TaskClosePayPeriod extends TaskGenerator {
-    constructor(ctx: TaskListService, type: TaskType) {
+export class TaskPostRegularPayment extends TaskGenerator {
+    constructor(ctx: TaskGenerationService, type: TaskType) {
         super(ctx, type);
     }
 
     async getTaskList(): Promise<Task[]> {
         const task = this.makeTask();
         task.dateFrom = getWorkDayBeforeOrEqual(this.ctx.payPeriod.dateTo);
-        task.dateTo = new Date(task.dateFrom);
+        task.dateTo = task.dateFrom;
         return [task];
     }
 }

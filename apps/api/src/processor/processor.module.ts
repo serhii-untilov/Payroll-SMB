@@ -14,7 +14,7 @@ import { CompanyListenerService } from './listeners/company-listener/company-lis
 import { PositionListenerService } from './listeners/position-listener/position-listener.service';
 import { PayFundCalculationService } from './payFundCalculation/payFundCalculation.service';
 import { PayrollCalculationService } from './payrollCalculation/payrollCalculation.service';
-import { TaskListService } from './task-list/task-list.service';
+import { TaskGenerationService } from './taskGeneration/taskGeneration.service';
 import { DepartmentsModule } from './../resources/departments/departments.module';
 import { PersonsModule } from './../resources/persons/persons.module';
 import { PersonListenerService } from './listeners/person-listener/person-listener.service';
@@ -42,7 +42,7 @@ import { PersonListenerService } from './listeners/person-listener/person-listen
         CompanyListenerService,
         PayrollCalculationService,
         PayFundCalculationService,
-        TaskListService,
+        TaskGenerationService,
     ],
     exports: [PayrollCalculationService, PayFundCalculationService],
 })

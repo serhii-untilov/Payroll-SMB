@@ -5,7 +5,7 @@ import { PayrollCalculationService } from './../../payrollCalculation/payrollCal
 import { PositionUpdatedEvent } from './../../../resources/positions/events/position-updated.event';
 import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
 import { PositionDeletedEvent } from './../../../resources/positions/events/position-deleted.event';
-import { TaskListService } from './../../../processor/task-list/task-list.service';
+import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
 
 @Injectable()
 export class PositionListenerService {
@@ -16,8 +16,8 @@ export class PositionListenerService {
         private payrollCalculationService: PayrollCalculationService,
         @Inject(forwardRef(() => PayFundCalculationService))
         private payFundCalculationService: PayFundCalculationService,
-        @Inject(forwardRef(() => TaskListService))
-        private taskListService: TaskListService,
+        @Inject(forwardRef(() => TaskGenerationService))
+        private taskListService: TaskGenerationService,
     ) {}
 
     @OnEvent('position.created')
