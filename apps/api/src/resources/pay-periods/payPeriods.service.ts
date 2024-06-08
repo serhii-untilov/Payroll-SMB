@@ -1,14 +1,16 @@
-import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    Logger,
-    forwardRef,
-} from '@nestjs/common';
+import { ConflictException, Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PayPeriodState, ResourceType, formatPeriod } from '@repo/shared';
-import { endOfMonth, startOfDay, startOfMonth } from 'date-fns';
+import {
+    addMonths,
+    addYears,
+    endOfMonth,
+    endOfYear,
+    startOfDay,
+    startOfMonth,
+    startOfYear,
+    subYears,
+} from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -86,11 +88,10 @@ export class PayPeriodsService extends AvailableForUserCompany {
                 order: { dateFrom: 'ASC' },
             });
         } else {
-            // Periods for creating company
-            // const filler = getFiller(PaymentSchedule.LAST_DAY);
-            // return filler(null, getDateFrom(new Date()), getDateTo(new Date()));
-            // TODO
-            throw new BadRequestException('No periods without company.');
+            // Fake period list for creating company
+            const dateFrom = subYears(startOfYear(new Date()), 1);
+            const dateTo = addYears(endOfYear(dateFrom), 1);
+            return getPeriodList(dateFrom, dateTo);
         }
     }
 
@@ -155,4 +156,23 @@ export class PayPeriodsService extends AvailableForUserCompany {
             .getRawOne();
         return Number(count);
     }
+}
+
+function getPeriodList(dateFrom: Date, dateTo: Date): PayPeriod[] {
+    const periodList: PayPeriod[] = [];
+    for (
+        let d = startOfMonth(dateFrom);
+        d.getTime() < endOfMonth(dateTo).getTime();
+        d = addMonths(d, 1)
+    ) {
+        const period = Object.assign({
+            id: 0,
+            companyId: 0,
+            dateFrom: startOfMonth(d),
+            dateTo: endOfMonth(d),
+            state: PayPeriodState.OPENED,
+        });
+        periodList.push(period);
+    }
+    return periodList;
 }

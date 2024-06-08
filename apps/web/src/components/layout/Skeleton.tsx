@@ -6,7 +6,7 @@ export function Skeleton(props?: SkeletonProps) {
         <MuiSkeleton
             variant="rounded"
             width={'100%'}
-            height={'2rem'}
+            height={42}
             animation={false}
             sx={{ backgroundColor: grey[100] }}
             {...props}
