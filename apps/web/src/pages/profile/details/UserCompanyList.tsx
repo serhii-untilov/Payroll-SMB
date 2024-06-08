@@ -131,7 +131,7 @@ export function UserCompanyList(params: Props) {
 
     const onAddCompany = () => {
         console.log('onAddCompany');
-        navigate(`/profile/company/`);
+        navigate(`/profile/company/?tab=details&return=true`);
     };
 
     const onSelectCompany = async (companyId: number) => {
