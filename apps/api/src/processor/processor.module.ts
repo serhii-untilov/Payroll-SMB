@@ -19,6 +19,7 @@ import { DepartmentsModule } from './../resources/departments/departments.module
 import { PersonsModule } from './../resources/persons/persons.module';
 import { PersonListenerService } from './listeners/person-listener/person-listener.service';
 import { PayPeriodCalculationService } from './payPeriodCalculation/payPeriodCalculation.service';
+import { UsersModule } from './../resources/users/users.module';
 
 @Module({
     imports: [
@@ -35,6 +36,7 @@ import { PayPeriodCalculationService } from './payPeriodCalculation/payPeriodCal
         forwardRef(() => TasksModule),
         forwardRef(() => DepartmentsModule),
         forwardRef(() => PersonsModule),
+        forwardRef(() => UsersModule),
     ],
     controllers: [],
     providers: [

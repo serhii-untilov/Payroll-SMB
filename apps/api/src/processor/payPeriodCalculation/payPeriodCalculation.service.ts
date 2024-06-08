@@ -64,11 +64,10 @@ export class PayPeriodCalculationService {
     }
 
     async fillPeriods(userId: number, companyId: number): Promise<void> {
-        const company = await this.companiesService.findOne(userId, companyId);
-        const dateFrom = subYears(startOfYear(company.payPeriod), 1);
-        const dateTo = addYears(endOfYear(company.payPeriod), 1);
-        const generator = this.getGenerator();
-        const current = generator.getPeriodList(dateFrom, dateTo);
+        this._company = await this.companiesService.findOne(userId, companyId);
+        this._userId = userId;
+        const dateFrom = subYears(startOfYear(this.company.payPeriod), 1);
+        const dateTo = addYears(endOfYear(this.company.payPeriod), 1);
         const prior = await this.payPeriodsService.findAll(
             companyId,
             false,
@@ -76,6 +75,10 @@ export class PayPeriodCalculationService {
             dateFrom,
             dateTo,
         );
+        this._id = prior.reduce((a, b) => (a > b.id ? a : b.id), 0);
+        const generator = this.getGenerator();
+        const current = generator.getPeriodList(dateFrom, dateTo);
+
         const { toDelete, toInsert } = this.merge(prior, current);
         this.save(toDelete, toInsert);
     }
