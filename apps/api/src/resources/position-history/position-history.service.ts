@@ -12,7 +12,7 @@ import { add, sub } from 'date-fns';
 import { FindOptionsWhere, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PayPeriodsService } from '../pay-periods/payPeriods.service';
 import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';

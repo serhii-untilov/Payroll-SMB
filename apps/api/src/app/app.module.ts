@@ -15,7 +15,7 @@ import { CompaniesModule } from '../resources/companies/companies.module';
 import { DepartmentsModule } from '../resources/departments/departments.module';
 import { JobsModule } from '../resources/jobs/jobs.module';
 import { LawsModule } from '../resources/laws/laws.module';
-import { PayPeriodsModule } from '../resources/pay-periods/pay-periods.module';
+import { PayPeriodsModule } from '../resources/pay-periods/payPeriods.module';
 import { PaymentTypesModule } from '../resources/payment-types/payment-types.module';
 import { PersonsModule } from '../resources/persons/persons.module';
 import { PositionHistoryModule } from '../resources/position-history/position-history.module';

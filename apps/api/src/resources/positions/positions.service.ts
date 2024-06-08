@@ -23,7 +23,7 @@ import {
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
-import { PayPeriodsService } from './../pay-periods/pay-periods.service';
+import { PayPeriodsService } from '../pay-periods/payPeriods.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { FindPositionDto } from './dto/find-position.dto';
 import { FindAllPositionBalanceDto, PositionBalanceExtended } from './dto/position-balance.dto';

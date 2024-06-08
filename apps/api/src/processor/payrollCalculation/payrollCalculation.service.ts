@@ -3,8 +3,8 @@ import { RecordFlags, WorkingTime } from '@repo/shared';
 import { AccessService } from '../../resources/access/access.service';
 import { CompaniesService } from '../../resources/companies/companies.service';
 import { Company } from '../../resources/companies/entities/company.entity';
-import { PayPeriod } from '../../resources/pay-periods/entities/pay-period.entity';
-import { PayPeriodsService } from '../../resources/pay-periods/pay-periods.service';
+import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
 import { PaymentType } from '../../resources/payment-types/entities/payment-type.entity';
 import { PaymentTypesService } from '../../resources/payment-types/payment-types.service';
 import { Payroll } from '../../resources/payrolls/entities/payroll.entity';
@@ -18,6 +18,7 @@ import { calculateIncomeTax } from './calcMethods/calculateIncomeTax';
 import { calculateMilitaryTax } from './calcMethods/calculateMilitaryTax';
 import { getPayrollUnionRecord } from '../helpers/payroll.helper';
 import { calcBalanceWorkingTime } from '../helpers/workingTime.helper';
+import { PayPeriodCalculationService } from '../payPeriodCalculation/payPeriodCalculation.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
@@ -52,6 +53,8 @@ export class PayrollCalculationService {
         private payrollsService: PayrollsService,
         @Inject(forwardRef(() => WorkNormsService))
         public workNormsService: WorkNormsService,
+        @Inject(forwardRef(() => PayPeriodCalculationService))
+        private payPeriodCalculationService: PayPeriodCalculationService,
     ) {}
 
     public get logger() {
@@ -127,8 +130,8 @@ export class PayrollCalculationService {
     }
 
     private async _calculateCompanyTotals() {
-        await this.payPeriodsService.updateBalance(this.payPeriod.id);
-        await this.payPeriodsService.updateCalcMethods(this.payPeriod.id);
+        await this.payPeriodCalculationService.updateBalance(this.payPeriod.id);
+        await this.payPeriodCalculationService.updateCalcMethods(this.payPeriod.id);
     }
 
     public async calculatePosition(userId: number, positionId: number) {

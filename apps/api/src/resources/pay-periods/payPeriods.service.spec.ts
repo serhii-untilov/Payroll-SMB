@@ -1,33 +1,27 @@
 import { createMock } from '@golevelup/ts-jest';
-import { Test } from '@nestjs/testing';
-import { UsersService } from '../users/users.service';
-import { PayPeriodsController } from './pay-periods.controller';
-import { PayPeriodsService } from './pay-periods.service';
-import { CompaniesService } from '../companies/companies.service';
+import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { PayPeriod } from './entities/pay-period.entity';
-import { repositoryMockFactory } from '@repo/testing';
+import { MockType, repositoryMockFactory } from '@repo/testing';
+import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
+import { CompaniesService } from '../companies/companies.service';
+import { PayFundsService } from '../pay-funds/pay-funds.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
-import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
-import { PayFundsService } from '../pay-funds/pay-funds.service';
+import { UsersService } from '../users/users.service';
+import { PayPeriod } from './entities/payPeriod.entity';
+import { PayPeriodsService } from './payPeriods.service';
 
-describe('PayPeriodsController', () => {
-    let controller: PayPeriodsController;
+describe('PayPeriodsService', () => {
     let service: PayPeriodsService;
+    let repoMock: MockType<Repository<PayPeriod>>;
 
     beforeEach(async () => {
-        const module = await Test.createTestingModule({
-            controllers: [PayPeriodsController],
+        const module: TestingModule = await Test.createTestingModule({
             providers: [
                 PayPeriodsService,
                 {
                     provide: getRepositoryToken(PayPeriod),
-                    useFactory: repositoryMockFactory,
-                },
-                {
-                    provide: getRepositoryToken(PayPeriodCalcMethod),
                     useFactory: repositoryMockFactory,
                 },
                 { provide: UsersService, useValue: createMock<UsersService>() },
@@ -40,12 +34,12 @@ describe('PayPeriodsController', () => {
             ],
         }).compile();
 
-        controller = module.get<PayPeriodsController>(PayPeriodsController);
         service = module.get<PayPeriodsService>(PayPeriodsService);
+        repoMock = module.get(getRepositoryToken(PayPeriod));
     });
 
     it('should be defined', () => {
-        expect(controller).toBeDefined();
         expect(service).toBeDefined();
+        expect(repoMock).toBeTruthy();
     });
 });

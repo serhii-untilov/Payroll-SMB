@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Company } from '../../companies/entities/company.entity';
-import { PayPeriodCalcMethod } from './pay-period-calc-method.entity';
+import { PayPeriodCalcMethod } from './payPeriodCalcMethod.entity';
 
 export const defaultFieldList = {
     select: {

@@ -4,7 +4,7 @@ import { TasksController } from './tasks.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { AccessModule } from '../access/access.module';
-import { PayPeriodsModule } from '../pay-periods/pay-periods.module';
+import { PayPeriodsModule } from '../pay-periods/payPeriods.module';
 
 @Module({
     imports: [

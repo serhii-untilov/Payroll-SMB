@@ -1,32 +1,28 @@
 import { createMock } from '@golevelup/ts-jest';
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { MockType, repositoryMockFactory } from '@repo/testing';
-import { Repository } from 'typeorm';
+import { repositoryMockFactory } from '@repo/testing';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PayFundsService } from '../pay-funds/pay-funds.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
 import { UsersService } from '../users/users.service';
-import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
-import { PayPeriod } from './entities/pay-period.entity';
-import { PayPeriodsService } from './pay-periods.service';
+import { PayPeriod } from './entities/payPeriod.entity';
+import { PayPeriodsController } from './payPeriods.controller';
+import { PayPeriodsService } from './payPeriods.service';
 
-describe('PayPeriodsService', () => {
+describe('PayPeriodsController', () => {
+    let controller: PayPeriodsController;
     let service: PayPeriodsService;
-    let repoMock: MockType<Repository<PayPeriod>>;
 
     beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
+        const module = await Test.createTestingModule({
+            controllers: [PayPeriodsController],
             providers: [
                 PayPeriodsService,
                 {
                     provide: getRepositoryToken(PayPeriod),
-                    useFactory: repositoryMockFactory,
-                },
-                {
-                    provide: getRepositoryToken(PayPeriodCalcMethod),
                     useFactory: repositoryMockFactory,
                 },
                 { provide: UsersService, useValue: createMock<UsersService>() },
@@ -39,12 +35,12 @@ describe('PayPeriodsService', () => {
             ],
         }).compile();
 
+        controller = module.get<PayPeriodsController>(PayPeriodsController);
         service = module.get<PayPeriodsService>(PayPeriodsService);
-        repoMock = module.get(getRepositoryToken(PayPeriod));
     });
 
     it('should be defined', () => {
+        expect(controller).toBeDefined();
         expect(service).toBeDefined();
-        expect(repoMock).toBeTruthy();
     });
 });

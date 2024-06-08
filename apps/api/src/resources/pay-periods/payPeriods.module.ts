@@ -1,13 +1,14 @@
-import { UsersModule } from './../users/users.module';
-import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
+import { UsersModule } from '../users/users.module';
+import { PayPeriodCalcMethod } from './entities/payPeriodCalcMethod.entity';
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccessModule } from '../access/access.module';
 import { CompaniesModule } from '../companies/companies.module';
 import { PayrollsModule } from '../payrolls/payrolls.module';
-import { PayPeriod } from './entities/pay-period.entity';
-import { PayPeriodsController } from './pay-periods.controller';
-import { PayPeriodsService } from './pay-periods.service';
+import { PayPeriod } from './entities/payPeriod.entity';
+import { PayPeriodsController } from './payPeriods.controller';
+import { PayPeriodsCalcMethodService } from './payPeriodsCalcMethod.service';
+import { PayPeriodsService } from './payPeriods.service';
 import { PositionsModule } from '../positions/positions.module';
 import { PayFundsModule } from '../pay-funds/pay-funds.module';
 
@@ -22,7 +23,7 @@ import { PayFundsModule } from '../pay-funds/pay-funds.module';
         forwardRef(() => UsersModule),
     ],
     controllers: [PayPeriodsController],
-    providers: [PayPeriodsService],
-    exports: [PayPeriodsService],
+    providers: [PayPeriodsService, PayPeriodsCalcMethodService],
+    exports: [PayPeriodsService, PayPeriodsCalcMethodService],
 })
 export class PayPeriodsModule {}

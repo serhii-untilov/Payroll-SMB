@@ -248,6 +248,7 @@ npx --workspace @repo/api nest generate service payFundCalculation processor
 npx --workspace @repo/api nest generate service companyListener processor/listeners
 npx --workspace @repo/api nest generate resource tasks resources
 npx --workspace @repo/api nest generate service taskList processor
+npx --workspace @repo/api nest generate service payPeriodCalculation processor
 
 ```
 

@@ -1,6 +1,6 @@
 import { IPayPeriodCalcMethod } from '@repo/shared';
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { PayPeriod } from './pay-period.entity';
+import { PayPeriod } from './payPeriod.entity';
 
 @Entity()
 export class PayPeriodCalcMethod implements IPayPeriodCalcMethod {

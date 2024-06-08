@@ -4,7 +4,7 @@ import { ResourceType, TaskStatus, TaskType, monthBegin, monthEnd } from '@repo/
 import { FindManyOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PayPeriodsService } from '../pay-periods/payPeriods.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { FindTaskDto } from './dto/find-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';

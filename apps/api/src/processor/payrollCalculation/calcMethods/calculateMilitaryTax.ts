@@ -1,5 +1,5 @@
 import { CalcMethod, PaymentPart, RecordFlags, getMaxDate, getMinDate } from '@repo/shared';
-import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from '../../../resources/pay-periods/entities/payPeriod.entity';
 import { PaymentType } from '../../../resources/payment-types/entities/payment-type.entity';
 import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PayrollCalculationService } from '../payrollCalculation.service';

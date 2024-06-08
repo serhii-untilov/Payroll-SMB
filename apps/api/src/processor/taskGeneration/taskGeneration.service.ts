@@ -1,26 +1,26 @@
-import { TaskHappyBirthday } from './generators/TaskHappyBirthday';
-import { TaskPostWorkSheet } from './generators/TaskPostWorkSheet';
-import { TaskFillPositionList } from './generators/TaskFillPositionList';
-import { TaskSendIncomeTaxReport } from './generators/TaskSendIncomeTaxReport';
-import { TaskPostAccrualDocument } from './generators/TaskPostAccrualDocument';
-import { TaskClosePayPeriod } from './generators/TaskClosePayPeriod';
-import { TaskFillDepartmentList } from './generators/TaskFillDepartmentList';
 import { Inject, Injectable, Logger, NotFoundException, Scope, forwardRef } from '@nestjs/common';
+import { TaskStatus, TaskType, dropTime } from '@repo/shared';
 import { CompaniesService } from '../../resources/companies/companies.service';
 import { Company } from '../../resources/companies/entities/company.entity';
-import { PayPeriod } from '../../resources/pay-periods/entities/pay-period.entity';
-import { PayPeriodsService } from '../../resources/pay-periods/pay-periods.service';
+import { DepartmentsService } from '../../resources/departments/departments.service';
+import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
+import { PersonsService } from '../../resources/persons/persons.service';
+import { PositionsService } from '../../resources/positions/positions.service';
 import { Task } from '../../resources/tasks/entities/task.entity';
-import { TaskStatus, TaskType, dropTime } from '@repo/shared';
-import { TaskGenerator } from './generators/abstract/TaskGenerator';
 import { TasksService } from '../../resources/tasks/tasks.service';
+import { TaskClosePayPeriod } from './generators/TaskClosePayPeriod';
+import { TaskFillDepartmentList } from './generators/TaskFillDepartmentList';
+import { TaskFillPositionList } from './generators/TaskFillPositionList';
+import { TaskHappyBirthday } from './generators/TaskHappyBirthday';
+import { TaskPostAccrualDocument } from './generators/TaskPostAccrualDocument';
 import { TaskPostAdvancePayment } from './generators/TaskPostAdvancePayment';
-import { TaskSendApplicationFss } from './generators/TaskSendApplicationFss';
 import { TaskPostPaymentFss } from './generators/TaskPostPaymentFss';
 import { TaskPostRegularPayment } from './generators/TaskPostRegularPayment';
-import { DepartmentsService } from '../../resources/departments/departments.service';
-import { PositionsService } from '../../resources/positions/positions.service';
-import { PersonsService } from '../../resources/persons/persons.service';
+import { TaskPostWorkSheet } from './generators/TaskPostWorkSheet';
+import { TaskSendApplicationFss } from './generators/TaskSendApplicationFss';
+import { TaskSendIncomeTaxReport } from './generators/TaskSendIncomeTaxReport';
+import { TaskGenerator } from './generators/abstract/TaskGenerator';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskGenerationService {

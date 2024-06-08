@@ -14,13 +14,13 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
-import { PaymentSchedule, deepStringToShortDate } from '@repo/shared';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
-import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
-import { defaultFieldList } from './entities/pay-period.entity';
-import { PayPeriodsService } from './pay-periods.service';
+import { CreatePayPeriodDto } from './dto/createPayPeriod.dto';
+import { UpdatePayPeriodDto } from './dto/updatePayPeriod.dto';
+import { defaultFieldList } from './entities/payPeriod.entity';
+import { PayPeriodsService } from './payPeriods.service';
 
 @Controller('pay-periods')
 export class PayPeriodsController {
@@ -101,12 +101,5 @@ export class PayPeriodsController {
         const userId = req.user['sub'];
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
-    }
-
-    @Get('generate')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async generate(@Query('paymentSchedule') paymentSchedule: PaymentSchedule) {
-        return await this.service.generate(paymentSchedule);
     }
 }

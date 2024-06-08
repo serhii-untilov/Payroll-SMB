@@ -1,7 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CompaniesService } from '../../resources/companies/companies.service';
-import { PayPeriodsService } from '../../resources/pay-periods/pay-periods.service';
+import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
 import { TasksService } from '../../resources/tasks/tasks.service';
 import { TaskGenerationService } from './taskGeneration.service';
 import { DepartmentsService } from '../../resources/departments/departments.service';

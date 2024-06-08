@@ -1,7 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccessModule } from '../access/access.module';
-import { PayPeriodsModule } from '../pay-periods/pay-periods.module';
+import { PayPeriodsModule } from '../pay-periods/payPeriods.module';
 import { Position } from './entities/position.entity';
 import { PositionsController } from './positions.controller';
 import { PositionsService } from './positions.service';
