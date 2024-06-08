@@ -38,4 +38,10 @@ export class AuthController {
         const refreshToken = req.user['refreshToken'];
         return this.authService.refreshTokens(userId, refreshToken);
     }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('preview')
+    async demo(): Promise<AuthDto> {
+        return await this.authService.demo();
+    }
 }

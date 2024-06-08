@@ -1,20 +1,16 @@
-import {
-    Language,
-    LoginRounded,
-    MenuRounded,
-    PersonRounded,
-    SearchRounded,
-} from '@mui/icons-material';
-import { Box, ButtonGroup, Drawer, IconButton } from '@mui/material';
+import { Language, MenuRounded } from '@mui/icons-material';
+import { Box, Drawer, IconButton } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AppTitle } from '../../../components/layout/AppTitle';
 import { Button } from '../../../components/layout/Button';
 import { Logo } from '../../../components/layout/Logo';
-import { useState } from 'react';
-import { SidebarMenu } from './SidebarMenu';
-import useLocale from '../../../hooks/useLocale';
 import useAppContext from '../../../hooks/useAppContext';
+import useAuth from '../../../hooks/useAuth';
+import useLocale from '../../../hooks/useLocale';
+import { preview } from '../../../services/auth.service';
+import { SidebarMenu } from './SidebarMenu';
 
 export function Header() {
     const { themeMode } = useAppContext();
@@ -22,6 +18,7 @@ export function Header() {
     const { t } = useTranslation();
     const [showSidebarMenu, setShowSidebarMenu] = useState(false);
     const { toggleLanguage } = useLocale();
+    const { login, logout } = useAuth();
 
     const onToggleLanguage = () => {
         toggleLanguage();
@@ -29,6 +26,21 @@ export function Header() {
 
     const letsGo = () => {
         navigate('/dashboard');
+    };
+
+    const onClickDemo = async () => {
+        login(await preview());
+        navigate('/dashboard');
+    };
+
+    const onClickRegister = async () => {
+        logout();
+        navigate('/register');
+    };
+
+    const onClickLogin = async () => {
+        logout();
+        navigate('/login');
     };
 
     return (
@@ -85,7 +97,9 @@ export function Header() {
                         sx={{ display: 'flex', align: 'center', px: 2, gap: 1 }}
                     >
                         <Button
-                            href="/demo"
+                            onClick={() => {
+                                onClickDemo();
+                            }}
                             variant="contained"
                             color="primary"
                             sx={{
@@ -102,7 +116,8 @@ export function Header() {
                         </Button>
 
                         <Button
-                            href="/register"
+                            // href="/register"
+                            onClick={() => onClickRegister()}
                             variant="text"
                             sx={{
                                 display: { xs: 'none', sm: 'none', md: 'block' },
@@ -118,7 +133,8 @@ export function Header() {
                         </Button>
 
                         <Button
-                            href="/login"
+                            // href="/login"
+                            onClick={() => onClickLogin()}
                             variant="text"
                             sx={{
                                 display: { xs: 'none', sm: 'none', md: 'block' },

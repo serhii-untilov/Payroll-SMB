@@ -34,7 +34,7 @@ export default function Dashboard() {
         queryFn: async () => {
             return await getTaskList(company?.id ? { companyId: company?.id } : {});
         },
-        enabled: !!company?.id,
+        // enabled: !!company?.id,
     });
     if (isError) {
         return enqueueSnackbar(`${error.name}\n${error.message}`, {

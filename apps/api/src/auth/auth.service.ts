@@ -14,6 +14,8 @@ import { CreateUserDto } from '../resources/users/dto/create-user.dto';
 import { UsersService } from '../resources/users/users.service';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';
+import { AccessService } from './../resources/access/access.service';
+import { AccessType, ResourceType, RoleType } from '@repo/shared';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +26,8 @@ export class AuthService {
         private jwtService: JwtService,
         @Inject(forwardRef(() => ConfigService))
         private configService: ConfigService,
+        @Inject(forwardRef(() => AccessService))
+        private accessService: AccessService,
     ) {}
 
     async register(user: CreateUserDto): Promise<TokensDto> {
@@ -115,5 +119,25 @@ export class AuthService {
         const tokens = await this.getTokens(user.id, user.email);
         await this.updateRefreshToken(user.id, tokens.refreshToken);
         return tokens;
+    }
+
+    async demo(): Promise<AuthDto> {
+        await this.accessService.availableForRoleTypeOrFail(
+            RoleType.EMPLOYER,
+            ResourceType.DEMO,
+            AccessType.ACCESS,
+        );
+        if (process.env['DEMO_AVAILABLE'] === 'true') {
+            return {
+                email: process.env['DEMO_LOGIN'],
+                password: process.env['DEMO_PASSWORD'],
+                rememberMe: true,
+            };
+        }
+        return {
+            email: '',
+            password: '',
+            rememberMe: false,
+        };
     }
 }
