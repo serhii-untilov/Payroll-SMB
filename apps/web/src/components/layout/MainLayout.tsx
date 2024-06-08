@@ -35,7 +35,8 @@ export default function MainLayout() {
 
     function onLogout() {
         logout();
-        redirect('/signin');
+        // redirect('/signin');
+        redirect('/welcome');
     }
 
     return (

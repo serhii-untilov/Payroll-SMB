@@ -13,6 +13,7 @@ import { dbConfig } from '../config/db.config';
 import { googleConfig } from '../config/google.config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { AccessService } from './../resources/access/access.service';
 
 describe('AuthController', () => {
     let controller: AuthController;
@@ -40,6 +41,7 @@ describe('AuthController', () => {
                 AuthService,
                 ConfigService,
                 { provide: UsersService, useValue: createMock<UsersService>() },
+                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
             controllers: [AuthController],
             exports: [],

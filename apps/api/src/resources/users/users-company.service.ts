@@ -153,4 +153,15 @@ export class UsersCompanyService {
         }
         return roleType;
     }
+
+    async count(userId: number, companyId: number): Promise<number> {
+        const { count } = await this.repository
+            .createQueryBuilder('user_company')
+            .select('COUNT(*)', 'count')
+            .where('"userId" = :userId', { userId })
+            .andWhere('"companyId" = :companyId', { companyId })
+            .andWhere('"deletedDate" is null')
+            .getRawOne();
+        return Number(count);
+    }
 }

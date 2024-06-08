@@ -21,6 +21,8 @@ import { TaskPostWorkSheet } from './generators/TaskPostWorkSheet';
 import { TaskSendApplicationFss } from './generators/TaskSendApplicationFss';
 import { TaskSendIncomeTaxReport } from './generators/TaskSendIncomeTaxReport';
 import { TaskGenerator } from './generators/abstract/TaskGenerator';
+import { TaskCreateCompany } from './generators/TaskCreateCompany';
+import { UsersCompanyService } from './../../resources/users/users-company.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskGenerationService {
@@ -46,6 +48,8 @@ export class TaskGenerationService {
         public positionsService: PositionsService,
         @Inject(forwardRef(() => PersonsService))
         public personsService: PersonsService,
+        @Inject(forwardRef(() => UsersCompanyService))
+        public usersCompanyService: UsersCompanyService,
     ) {}
 
     public get logger() {
@@ -98,6 +102,7 @@ export class TaskGenerationService {
 
     private async _generate() {
         const typeList = [
+            TaskType.CREATE_COMPANY,
             TaskType.FILL_DEPARTMENT_LIST,
             TaskType.FILL_POSITION_LIST,
             TaskType.SEND_INCOME_TAX_REPORT,
@@ -158,6 +163,10 @@ export class TaskGenerationService {
 
     private _getTaskGenerator(type: TaskType): TaskGenerator {
         const found = [
+            {
+                type: TaskType.CREATE_COMPANY,
+                generator: () => new TaskCreateCompany(this, type),
+            },
             {
                 type: TaskType.CLOSE_PAY_PERIOD,
                 generator: () => new TaskClosePayPeriod(this, type),
