@@ -62,11 +62,7 @@ export const SelectPerson = (props: Props) => {
         queryKey: ['person', 'SelectPerson'],
         queryFn: async () => {
             const personList = await getPersonList();
-            const fakePersonList = [
-                { fullName: 'Mary Lee', id: 1 },
-                { fullName: 'John Smith', id: 2 },
-            ];
-            return (personList.length ? personList : fakePersonList)
+            return personList
                 .map((o) => {
                     return {
                         inputValue: '',
