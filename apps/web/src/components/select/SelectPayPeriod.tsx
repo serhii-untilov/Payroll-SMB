@@ -47,9 +47,9 @@ export function SelectPayPeriod(props: PayPeriodOption) {
         });
     }
 
-    if (isLoading) {
-        return <Skeleton animation={'wave'} />;
-    }
+    // if (isLoading) {
+    //     return <Skeleton animation={'wave'} />;
+    // }
 
     return (
         <Select

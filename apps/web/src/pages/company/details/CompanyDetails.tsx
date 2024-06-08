@@ -183,11 +183,11 @@ export function CompanyDetails(props: Props) {
             const company = data.id
                 ? await updateCompany(data.id, { ...dirtyValues, version: data.version })
                 : await createCompany(data);
-            // reset(company);
-            setCurrentCompany(company);
+            reset(company);
             await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
-            if (!props.companyId) {
+            if (!currentCompany) {
+                setCurrentCompany(company);
                 navigate(`/company/${company.id}`);
             }
         } catch (e: unknown) {
@@ -293,21 +293,6 @@ export function CompanyDetails(props: Props) {
                             )}
                         />
                     </Grid>
-                    {/* {(isDirty || !currentCompany) && (
-                        <Grid item xs={12} sx={{ mb: 1 }}>
-                            <Grid container spacing={1}>
-                                <Grid item>
-                                    <Button type="submit">{t('Update')}</Button>
-                                </Grid>
-
-                                <Grid item>
-                                    <Button color="secondary" onClick={onCancel}>
-                                        {t('Cancel')}
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    )} */}
                 </Grid>
             </Grid>
         </>
