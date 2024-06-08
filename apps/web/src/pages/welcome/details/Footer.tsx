@@ -8,7 +8,8 @@ export function Footer() {
             sx={{
                 maxWidth: 'lg',
                 width: '100%',
-                my: 3,
+                mt: 0,
+                mb: 1,
                 p: 1,
                 // mx: { sm: 8, md: 8, lg: 16, xl: 16 },
                 borderRadius: 25,
@@ -42,6 +43,7 @@ export function Footer() {
                     href="https://github.com/serhii-untilov/Payroll-SMB"
                     target="_blank"
                     rel="noreferrer"
+                    sx={{ my: 'auto' }}
                 >
                     <SvgIcon>
                         <svg
@@ -69,6 +71,7 @@ export function Footer() {
                     href="https://www.linkedin.com/in/serhiiuntilov/"
                     target="_blank"
                     rel="noreferrer"
+                    sx={{ my: 'auto' }}
                 >
                     <SvgIcon>
                         <svg
@@ -96,6 +99,7 @@ export function Footer() {
                     href="https://www.facebook.com/s.untilov/"
                     target="_blank"
                     rel="noreferrer"
+                    sx={{ my: 'auto' }}
                 >
                     <SvgIcon>
                         <svg x="0px" y="0px" viewBox="0 0 40 40">
@@ -111,6 +115,15 @@ export function Footer() {
                         </svg>
                     </SvgIcon>
                 </IconButton>
+                <a
+                    href="https://www.digitalocean.com/?refcode=b2277b6f3168&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"
+                    target="_blank"
+                >
+                    <img
+                        src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%202.svg"
+                        alt="DigitalOcean Referral Badge"
+                    />
+                </a>
             </Box>
         </Box>
     );
