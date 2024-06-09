@@ -63,7 +63,7 @@ export class TasksService extends AvailableForUserCompany {
             options.where['dateFrom'] = LessThanOrEqual(payPeriod.dateTo);
             options.where['dateTo'] = MoreThanOrEqual(payPeriod.dateFrom);
         }
-        return await this.repository.find(options);
+        return sortedTaskList(await this.repository.find(options));
     }
 
     async findOne(userId: number, id: number, relations?: boolean): Promise<Task> {
@@ -127,4 +127,22 @@ export class TasksService extends AvailableForUserCompany {
         ];
         return fakeTaskList;
     }
+}
+
+function sortedTaskList(list: Task[]): Task[] {
+    return [...list].sort((a, b) =>
+        a.dateFrom.getTime() < b.dateFrom.getTime()
+            ? -1
+            : a.dateFrom.getTime() > b.dateFrom.getTime()
+              ? 1
+              : a.sequenceNumber < b.sequenceNumber
+                ? -1
+                : a.sequenceNumber > b.sequenceNumber
+                  ? 1
+                  : a.id < b.id
+                    ? -1
+                    : a.id > b.id
+                      ? 1
+                      : 0,
+    );
 }

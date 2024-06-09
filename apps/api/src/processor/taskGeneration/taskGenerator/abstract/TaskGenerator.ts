@@ -15,14 +15,15 @@ export abstract class TaskGenerator {
     public abstract getTaskList(): Promise<Task[]>;
 
     public makeTask(): Task {
-        return Object.assign({
+        const task = Object.assign({
             id: this.ctx.id,
             companyId: this.ctx.company.id,
             type: this.type,
             dateFrom: new Date(this.ctx.payPeriod.dateFrom),
             dateTo: getWorkDayBeforeOrEqual(this.ctx.payPeriod.dateTo),
-            sequenceNumber: this.ctx.sequenceNumber,
             status: TaskStatus.TODO,
         });
+        task.sequenceNumber = this.ctx.sequenceNumber.get(task);
+        return task;
     }
 }

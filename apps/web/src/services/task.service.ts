@@ -9,17 +9,7 @@ export async function createTask(task: ICreateTask): Promise<ITask> {
 
 export async function getTaskList(params: IFindTask): Promise<ITask[]> {
     const response = await api.post('/api/tasks/find', params, { headers: authHeader() });
-    return response.data.sort((a, b) =>
-        a.dateFrom.getTime() < b.dateFrom.getTime()
-            ? -1
-            : a.dateFrom.getTime() > b.dateFrom.getTime()
-              ? 1
-              : a.sequenceNumber < b.sequenceNumber
-                ? -1
-                : a.sequenceNumber > b.sequenceNumber
-                  ? 1
-                  : 0,
-    );
+    return response.data;
 }
 
 export async function getTask(params: {

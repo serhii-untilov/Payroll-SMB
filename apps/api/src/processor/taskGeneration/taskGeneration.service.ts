@@ -9,20 +9,22 @@ import { PersonsService } from '../../resources/persons/persons.service';
 import { PositionsService } from '../../resources/positions/positions.service';
 import { Task } from '../../resources/tasks/entities/task.entity';
 import { TasksService } from '../../resources/tasks/tasks.service';
-import { TaskClosePayPeriod } from './generators/TaskClosePayPeriod';
-import { TaskFillDepartmentList } from './generators/TaskFillDepartmentList';
-import { TaskFillPositionList } from './generators/TaskFillPositionList';
-import { TaskHappyBirthday } from './generators/TaskHappyBirthday';
-import { TaskPostAccrualDocument } from './generators/TaskPostAccrualDocument';
-import { TaskPostAdvancePayment } from './generators/TaskPostAdvancePayment';
-import { TaskPostPaymentFss } from './generators/TaskPostPaymentFss';
-import { TaskPostRegularPayment } from './generators/TaskPostRegularPayment';
-import { TaskPostWorkSheet } from './generators/TaskPostWorkSheet';
-import { TaskSendApplicationFss } from './generators/TaskSendApplicationFss';
-import { TaskSendIncomeTaxReport } from './generators/TaskSendIncomeTaxReport';
-import { TaskGenerator } from './generators/abstract/TaskGenerator';
-import { TaskCreateCompany } from './generators/TaskCreateCompany';
 import { UsersCompanyService } from './../../resources/users/users-company.service';
+import { TaskClosePayPeriod } from './taskGenerator/TaskClosePayPeriod';
+import { TaskCreateCompany } from './taskGenerator/TaskCreateCompany';
+import { TaskFillDepartmentList } from './taskGenerator/TaskFillDepartmentList';
+import { TaskFillPositionList } from './taskGenerator/TaskFillPositionList';
+import { TaskHappyBirthday } from './taskGenerator/TaskHappyBirthday';
+import { TaskPostAccrualDocument } from './taskGenerator/TaskPostAccrualDocument';
+import { TaskPostAdvancePayment } from './taskGenerator/TaskPostAdvancePayment';
+import { TaskPostPaymentFss } from './taskGenerator/TaskPostPaymentFss';
+import { TaskPostRegularPayment } from './taskGenerator/TaskPostRegularPayment';
+import { TaskPostWorkSheet } from './taskGenerator/TaskPostWorkSheet';
+import { TaskSendApplicationFss } from './taskGenerator/TaskSendApplicationFss';
+import { TaskSendIncomeTaxReport } from './taskGenerator/TaskSendIncomeTaxReport';
+import { TaskGenerator } from './taskGenerator/abstract/TaskGenerator';
+import { FixedSequenceNumber } from './taskSequenceNumber/FixedSequenceNumber';
+import { TaskSequenceNumber } from './taskSequenceNumber/abstract/TaskSequenceNumber';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskGenerationService {
@@ -32,7 +34,7 @@ export class TaskGenerationService {
     private _payPeriod: PayPeriod;
     private _priorTaskList: Task[] = [];
     private _currentTaskList: Task[] = [];
-    private _sequenceNumber: number = 0;
+    private _sequenceNumber: TaskSequenceNumber;
     private _id: number = 0;
 
     constructor(
@@ -50,7 +52,9 @@ export class TaskGenerationService {
         public personsService: PersonsService,
         @Inject(forwardRef(() => UsersCompanyService))
         public usersCompanyService: UsersCompanyService,
-    ) {}
+    ) {
+        this._sequenceNumber = new FixedSequenceNumber();
+    }
 
     public get logger() {
         return this._logger;
@@ -71,7 +75,6 @@ export class TaskGenerationService {
         return this._currentTaskList;
     }
     public get sequenceNumber() {
-        this._sequenceNumber = this._sequenceNumber + 1;
         return this._sequenceNumber;
     }
     public get id() {
@@ -91,9 +94,6 @@ export class TaskGenerationService {
             onPayPeriodDate: this.payPeriod.dateFrom,
             relations: false,
         });
-        this._sequenceNumber = this.priorTaskList
-            .filter((o) => o.status === TaskStatus.DONE_BY_USER)
-            .reduce((a, b) => (a > b.sequenceNumber ? a : b.sequenceNumber), 0);
         this._id = this.priorTaskList
             .filter((o) => o.status === TaskStatus.DONE_BY_USER)
             .reduce((a, b) => (a > b.id ? a : b.id), 0);
