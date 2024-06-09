@@ -3,7 +3,7 @@ import { TaskGenerationService } from '../taskGeneration.service';
 import { Task } from '../../../resources/tasks/entities/task.entity';
 import { TaskGenerator } from './abstract/TaskGenerator';
 import { add } from 'date-fns';
-import { getWorkDayBeforeOrEqual } from './../../helpers/workingTime.helper';
+import { getWorkDayBeforeOrEqual } from '../../helpers/workingTime.helper';
 
 export class TaskSendIncomeTaxReport extends TaskGenerator {
     constructor(ctx: TaskGenerationService, type: TaskType) {

@@ -1,8 +1,8 @@
 import { TaskType } from '@repo/shared';
-import { TaskGenerationService } from '../taskGeneration.service';
 import { Task } from '../../../resources/tasks/entities/task.entity';
+import { getWorkDayBeforeOrEqual } from '../../helpers/workingTime.helper';
+import { TaskGenerationService } from '../taskGeneration.service';
 import { TaskGenerator } from './abstract/TaskGenerator';
-import { getWorkDayBeforeOrEqual } from './../../helpers/workingTime.helper';
 
 export class TaskClosePayPeriod extends TaskGenerator {
     constructor(ctx: TaskGenerationService, type: TaskType) {
