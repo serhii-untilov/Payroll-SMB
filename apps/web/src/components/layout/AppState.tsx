@@ -6,23 +6,19 @@ import { PropsWithChildren, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import useAppContext from '../../hooks/useAppContext';
-import { useOnlineStatus } from '../../hooks/useOnlineStatus';
-import { useServerCompanyEvents } from '../../hooks/useServerCompanyEvents';
 import { Tooltip } from './Tooltip';
+import { ServerEvent } from '@repo/shared';
 
 type Props = CircularProgressProps & PropsWithChildren;
 
 export function AppState(props: Props) {
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
-    const isOnline = useOnlineStatus();
-    const { company } = useAppContext();
-    const { event } = useServerCompanyEvents(company?.id || 0);
+    const { serverEvent: event } = useAppContext();
     const navigate = useNavigate();
 
     const state = useMemo(() => {
-        return !isOnline
-            ? 'error'
+        return !event
+            ? 'success'
             : event.includes('started')
               ? 'warning'
               : event.includes('finished')
@@ -30,41 +26,16 @@ export function AppState(props: Props) {
                 : event.includes('failed')
                   ? 'error'
                   : 'info';
-    }, [event, isOnline]);
-
-    useEffect(() => {
-        const invalidateQueries = async () => {
-            // const keys = ['company', 'position', 'payPeriod', 'task'];
-            // for (const key of keys) {
-            //     await queryClient.invalidateQueries({
-            //         queryKey: [key],
-            //         refetchType: 'all',
-            //     });
-            // }
-            await queryClient.invalidateQueries();
-            console.log('Queries made invalidated');
-        };
-        if (!isOnline) {
-            enqueueSnackbar(`${t('OffLine')}`, { variant: getSnackbarVariant(event) });
-        } else if (event) {
-            if (event.includes('finished')) {
-                invalidateQueries();
-                // enqueueSnackbar(`${t(event)}`, { variant: getSnackbarVariant(event) });
-            }
-            if (event.includes('failed') || event.includes('error')) {
-                enqueueSnackbar(`${t(event)}`, { variant: getSnackbarVariant(event) });
-            }
-        }
-    }, [event, queryClient, t, isOnline]);
+    }, [event]);
 
     const onButtonClick = () => {
         navigate('/dashboard');
     };
 
-    return event ? (
+    return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Tooltip placement="bottom" title={t(!isOnline ? 'Offline' : event)}>
-                {event.includes('finished') ? (
+            <Tooltip placement="bottom" title={t(event || ServerEvent.PAYROLL_FINISHED)}>
+                {!event || event.includes('finished') ? (
                     <IconButton
                         size="small"
                         color={state}
@@ -79,7 +50,7 @@ export function AppState(props: Props) {
                 )}
             </Tooltip>
         </Box>
-    ) : null;
+    );
 }
 
 function getSnackbarVariant(event: string): BaseVariant {
@@ -87,5 +58,6 @@ function getSnackbarVariant(event: string): BaseVariant {
     if (event.includes('failed')) return 'error';
     if (event.includes('finished')) return 'success';
     if (event.includes('started')) return 'info';
+    if (!event) return 'success';
     return 'info';
 }

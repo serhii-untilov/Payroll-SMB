@@ -5,7 +5,7 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany, IUserCompany } from '@repo/shared';
+import { ICompany, IUserCompany, ServerEvent } from '@repo/shared';
 import { format, startOfMonth } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 import useAuth from '../hooks/useAuth';
@@ -14,6 +14,7 @@ import { getCompany } from '../services/company.service';
 import { getCurrentPayPeriodDateFrom } from '../services/payPeriod.service';
 import { getUserCompanyList } from '../services/user.service';
 import { defaultTheme } from '../themes/defaultTheme';
+import { useQueryClient } from '@tanstack/react-query';
 
 export type AppContextType = {
     compactView: boolean;
@@ -26,6 +27,7 @@ export type AppContextType = {
     switchThemeMode: () => void;
     payPeriod: Date | undefined | null;
     setPayPeriod: Dispatch<Date | undefined | null>;
+    serverEvent: string;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -39,6 +41,7 @@ const AppContext = createContext<AppContextType>({
     switchThemeMode: () => {},
     payPeriod: startOfMonth(new Date()),
     setPayPeriod: () => {},
+    serverEvent: '',
 });
 
 interface AppProviderProps {
@@ -59,6 +62,8 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         [themeMode, locale],
     );
     const [payPeriod, setPayPeriod] = useState<Date | undefined | null>(null);
+    const [serverEvent, setServerEvent] = useState('');
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         setCompactView(!wideScreen);
@@ -118,6 +123,28 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         initPayPeriod();
     }, [company]);
 
+    const eventSource = useMemo(() => {
+        return company?.id
+            ? new EventSource(`/api/server-events/company-stream/${company?.id}`)
+            : null;
+    }, [company]);
+
+    useEffect(() => {
+        if (eventSource) {
+            eventSource.onerror = function (event) {
+                setServerEvent(ServerEvent.COMMUNICATION_ERROR);
+                console.log(`An error occurred while attempting to connect.`);
+            };
+            eventSource.onmessage = async (event) => {
+                if (event.data.includes('finished')) {
+                    await queryClient.invalidateQueries();
+                }
+                setServerEvent(event.data);
+                console.log(`New company ${company?.id} message:`, event.data);
+            };
+        }
+    }, [eventSource, company, queryClient]);
+
     const switchThemeMode = () => {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light');
     };
@@ -135,6 +162,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
                 switchThemeMode,
                 payPeriod,
                 setPayPeriod,
+                serverEvent,
             }}
         >
             <ThemeProvider theme={theme}>{children}</ThemeProvider>

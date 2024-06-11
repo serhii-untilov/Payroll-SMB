@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
-import { PayPeriodState, PaymentPart, PaymentSchedule, dropTime } from '@repo/shared';
+import { PaymentPart, PaymentSchedule, dropTime } from '@repo/shared';
 import { addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
 import { PayPeriodCalcMethod } from '../../resources/pay-periods/entities/payPeriodCalcMethod.entity';
@@ -84,35 +84,24 @@ export class PayPeriodCalculationService {
     }
 
     private merge(priorList: PayPeriod[], currentList: PayPeriod[]) {
-        const toDelete: number[] = [];
-        const toInsert: PayPeriod[] = [];
-        const processedIds: number[] = [];
-        for (const prior of priorList) {
-            const found = currentList.find(
-                (current) =>
-                    dropTime(current.dateFrom) <= dropTime(prior.dateFrom) &&
-                    dropTime(current.dateTo) >= dropTime(prior.dateTo),
-            );
-            if (found) {
-                processedIds.push(found.id);
-            } else if (prior.state === PayPeriodState.OPENED) {
-                if (dropTime(prior.dateFrom) >= dropTime(currentList[0].dateFrom)) {
-                    toDelete.push(prior.id);
-                }
-            }
-        }
-        for (const current of currentList) {
-            const found = priorList
-                .filter((o) => !toDelete.includes(o.id))
-                .find(
+        const toDelete = priorList
+            .filter(
+                (prior) =>
+                    !currentList.find(
+                        (current) =>
+                            dropTime(current.dateFrom) === dropTime(prior.dateFrom) &&
+                            dropTime(current.dateTo) === dropTime(prior.dateTo),
+                    ),
+            )
+            .map((prior) => prior.id);
+        const toInsert = currentList.filter(
+            (current) =>
+                !priorList.find(
                     (prior) =>
-                        dropTime(prior.dateFrom) <= dropTime(current.dateFrom) &&
-                        dropTime(prior.dateTo) >= dropTime(current.dateTo),
-                );
-            if (!found) {
-                toInsert.push(current);
-            }
-        }
+                        dropTime(current.dateFrom) === dropTime(prior.dateFrom) &&
+                        dropTime(current.dateTo) === dropTime(prior.dateTo),
+                ),
+        );
         return { toDelete, toInsert };
     }
 

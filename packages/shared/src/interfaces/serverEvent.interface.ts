@@ -1,4 +1,4 @@
-export type ServerEventType = 'started' | 'finished' | 'failed';
+export type ServerEventType = 'started' | 'finished' | 'failed' | '';
 
 export function getServerEventType(event: ServerEvent | string): ServerEventType {
     if (event.includes('error') || event.includes('failed')) return 'failed';
