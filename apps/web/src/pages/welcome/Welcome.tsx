@@ -1,12 +1,13 @@
 import { Box, CssBaseline } from '@mui/material';
+import useAppContext from '../../hooks/useAppContext';
 import { Features } from './details/Features';
 import { Footer } from './details/Footer';
 import { Header } from './details/Header';
 import { ScreenshotList } from './details/ScreenshotList';
-import useAppContext from '../../hooks/useAppContext';
 
 function Welcome() {
     const { themeMode } = useAppContext();
+
     return (
         <>
             <Box

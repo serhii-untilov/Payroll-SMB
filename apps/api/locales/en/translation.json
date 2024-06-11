@@ -252,5 +252,13 @@
     "Calculation was completed": "Calculation was completed",
     "Total expenses": "Total expenses",
     "happy-birthday": "Birthday",
-    "age": "age"
+    "age": "age",
+    "Offline": "Offline",
+    "communication_error": "Communication error",
+    "payroll-started": "Payroll calculation has started",
+    "payroll-finished": "Payroll calculation has finished",
+    "payroll-failed": "Payroll calculation has failed",
+    "tasklist-started": "Tasklist refreshing has started",
+    "tasklist-finished": "Tasklist refreshing has finished",
+    "tasklist-failed": "Tasklist refreshing has failed"
 }

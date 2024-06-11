@@ -4,6 +4,7 @@ import { PayrollCalculationService } from '../../../processor/payrollCalculation
 import { createMock } from '@golevelup/ts-jest';
 import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
 import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
+import { SseService } from './../../serverSentEvents/sse.service';
 
 describe('PositionListenerService', () => {
     let service: PositionListenerService;
@@ -23,6 +24,10 @@ describe('PositionListenerService', () => {
                 {
                     provide: TaskGenerationService,
                     useValue: createMock<TaskGenerationService>(),
+                },
+                {
+                    provide: SseService,
+                    useValue: createMock<SseService>(),
                 },
             ],
         }).compile();

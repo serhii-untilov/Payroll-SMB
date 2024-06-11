@@ -41,7 +41,9 @@ export function PositionList(props: IFindPosition) {
             headerName: t('Position'),
             type: 'string',
             width: 250,
-            resizable: true,
+            // Warning: Failed prop type: MUI: `column.resizable = true` is not a valid prop.
+            // Column resizing is not available in the MIT version.
+            // resizable: true,
             sortable: true,
             valueGetter: (params) => {
                 return params.row?.personId ? params.row?.person?.fullName || '' : t('Vacancy');

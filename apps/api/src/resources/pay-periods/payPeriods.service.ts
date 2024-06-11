@@ -119,7 +119,9 @@ export class PayPeriodsService extends AvailableForUserCompany {
     }
 
     async delete(ids: number[]): Promise<void> {
-        await this.repository.delete(ids);
+        if (ids.length) {
+            await this.repository.delete(ids);
+        }
     }
 
     async findCurrent(
@@ -143,7 +145,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
             relations: { company: relations },
             ...(fullFieldList ? {} : defaultFieldList),
         };
-        return await this.findOne(options);
+        return await this.repository.findOneOrFail(options);
     }
 
     async countClosed(companyId: number): Promise<number> {

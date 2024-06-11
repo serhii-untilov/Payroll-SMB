@@ -1,12 +1,8 @@
 import { Position } from '../entities/position.entity';
+import { PositionEvent, PositionEventType } from './abstract/PositionEvent';
 
-export class PositionCreatedEvent {
-    userId: number;
-    positionId: number;
-    companyId: number;
+export class PositionCreatedEvent extends PositionEvent {
     constructor(userId: number, position: Position) {
-        this.userId = userId;
-        this.positionId = position.id;
-        this.companyId = position.companyId;
+        super(PositionEventType.CREATED, userId, position);
     }
 }

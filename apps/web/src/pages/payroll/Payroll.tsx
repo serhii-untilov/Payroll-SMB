@@ -14,7 +14,7 @@ import { SalaryReport } from './details/SalaryReport';
 import { useSearchParams } from 'react-router-dom';
 
 export default function Payroll() {
-    const { company } = useAppContext();
+    const { company, payPeriod } = useAppContext();
     const { locale } = useLocale();
     const [searchParams, setSearchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
@@ -23,7 +23,6 @@ export default function Payroll() {
         Number(tabName ? getTabIndex(tabName) : localStorage.getItem('people-tab-index')),
     );
     const { t } = useTranslation();
-    const { payPeriod, setPayPeriod } = useAppContext();
 
     useEffect(() => {}, [locale]);
 

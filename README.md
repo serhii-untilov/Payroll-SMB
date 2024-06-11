@@ -11,6 +11,7 @@ The Payroll SMB application provides a solution for employers and employees to c
 - Role-based access, JWT authorization
 - Event-driven calculate processing
 - Automatic documents prepared according to the business process schedule
+- Automatic update of data on the client after the completion of the batch calculation on the server
 
 ## Start the application
 
@@ -249,6 +250,8 @@ npx --workspace @repo/api nest generate service companyListener processor/listen
 npx --workspace @repo/api nest generate resource tasks resources
 npx --workspace @repo/api nest generate service taskList processor
 npx --workspace @repo/api nest generate service payPeriodCalculation processor
+npx --workspace @repo/api nest generate controller serverEvent processor
+npx --workspace @repo/api nest generate service serverEvent processor/serverEvent
 
 ```
 
@@ -312,6 +315,11 @@ openssl rand -base64 60
 - [**TypeORM** - PostgreSQL and typeorm — Advanced Querying](https://darraghoriordan.medium.com/postgresql-and-typeorm-advanced-querying-e5d8e4c950d6)
 - [**NestJS** - Inject NestJS Service from Another Module](https://tiloid.com/p/inject-nestjs-service-from-another-module)
 - [**Mocking** - Mocking Express Request with Jest and Typescript using correct types](https://stackoverflow.com/questions/57964299/mocking-express-request-with-jest-and-typescript-using-correct-types)
+- [**SSE** - NestJS: A Request Progress Tracker Using SSE](https://medium.com/@leonardoacrg.dev/nestjs-a-request-progress-tracker-using-sse-b9f2fded9d70)
 - [**SSE** - Backend to Frontend communication with Server-Sent Events](https://dev.to/cloudx/backend-to-frontend-communication-with-server-sent-events-56kf)
 - [**SSE** - NestJS - Server-Sent Events](https://docs.nestjs.com/techniques/server-sent-events)
+- [**SSE** - NestJS - Server-Sent Events](https://docs.nestjs.com/techniques/server-sent-events)
+- [**SSE** - NestJS - How to Push Server-Sent Events (SSE) in NestJS](https://www.slingacademy.com/article/how-to-push-server-sent-events-sse-in-nestjs/)
+- [**NestJS** - Sling Academy - NestJS Course](https://www.slingacademy.com/cat/node-js/)
+- [**Typescript** - 4 Different Ways Of Creating A Map In TypeScript](https://timmousk.com/blog/typescript-map/)
 

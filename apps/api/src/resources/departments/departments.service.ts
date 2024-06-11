@@ -1,22 +1,39 @@
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
+import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Department } from './entities/department.entity';
+import { DepartmentCreatedEvent } from './events/department-created.event';
+import { DepartmentDeletedEvent } from './events/department-deleted.event';
+import { DepartmentUpdatedEvent } from './events/department-updated.event';
 
 @Injectable()
-export class DepartmentsService {
+export class DepartmentsService extends AvailableForUserCompany {
     public readonly resourceType = ResourceType.DEPARTMENT;
 
     constructor(
+        @Inject(forwardRef(() => AccessService))
+        public accessService: AccessService,
         @InjectRepository(Department)
         private repository: Repository<Department>,
-        @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
-    ) {}
+        private eventEmitter: EventEmitter2,
+    ) {
+        super(accessService);
+    }
+
+    async getCompanyId(entityId: number): Promise<number> {
+        return (
+            await this.repository.findOneOrFail({
+                select: { companyId: true },
+                where: { id: entityId },
+            })
+        ).companyId;
+    }
 
     async create(userId: number, payload: CreateDepartmentDto): Promise<Department> {
         const existing = await this.repository.findOneBy({
@@ -26,17 +43,13 @@ export class DepartmentsService {
         if (existing) {
             throw new ConflictException(`Department '${payload.name}' already exists.`);
         }
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            payload.companyId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
-        return await this.repository.save({
+        const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
             updatedUserId: userId,
         });
+        this.eventEmitter.emit('department.created', new DepartmentCreatedEvent(userId, created));
+        return created;
     }
 
     async findAll(
@@ -44,12 +57,6 @@ export class DepartmentsService {
         companyId: number,
         relations: boolean = false,
     ): Promise<Department[]> {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
         return await this.repository.find({
             relations: {
                 company: relations,
@@ -61,7 +68,7 @@ export class DepartmentsService {
     }
 
     async findOne(userId: number, id: number, relations: boolean = false): Promise<Department> {
-        const department = await this.repository.findOneOrFail({
+        return await this.repository.findOneOrFail({
             relations: {
                 company: relations,
                 parentDepartment: relations,
@@ -69,48 +76,34 @@ export class DepartmentsService {
             },
             where: { id },
         });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            department.companyId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-        return department;
     }
 
     async update(userId: number, id: number, payload: UpdateDepartmentDto): Promise<Department> {
-        const department = await this.repository.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            department.companyId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-        if (payload.version !== department.version) {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        if (payload.version !== record.version) {
             throw new ConflictException(
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        return await this.repository.save({
+        await this.repository.save({
             ...payload,
             id,
             updatedUserId: userId,
         });
+        const updated = await this.repository.findOneOrFail({ where: { id } });
+        this.eventEmitter.emit('department.updated', new DepartmentUpdatedEvent(userId, updated));
+        return updated;
     }
 
     async remove(userId: number, id: number): Promise<Department> {
-        const department = await this.repository.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            department.companyId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
-        return await this.repository.save({
+        await this.repository.save({
             id,
             deletedUserId: userId,
             deletedDate: new Date(),
         });
+        const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+        this.eventEmitter.emit('department.deleted', new DepartmentDeletedEvent(userId, deleted));
+        return deleted;
     }
 
     async count(companyId: number): Promise<number> {

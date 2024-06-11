@@ -13,16 +13,15 @@ import { isEqual } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
-import { getPayPeriodList, getPayPeriodName } from '../../../services/payPeriod.service';
 import { calculatePayroll } from '../../../services/company.service';
-import { numericFormatter } from 'react-number-format';
+import { getPayPeriodList, getPayPeriodName } from '../../../services/payPeriod.service';
 import { sumFormatter } from '../../../services/utils';
-import { useNavigate } from 'react-router-dom';
 
 type Props = {
     companyId: number | undefined;
@@ -166,7 +165,6 @@ export function CompanyPayPeriods(params: Props) {
     };
 
     const onCalculate = async () => {
-        console.log('onCalculate');
         if (companyId) {
             await calculatePayroll(companyId);
             await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });

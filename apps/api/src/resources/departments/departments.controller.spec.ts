@@ -6,6 +6,7 @@ import { AccessService } from '../access/access.service';
 import { DepartmentsController } from './departments.controller';
 import { DepartmentsService } from './departments.service';
 import { Department } from './entities/department.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('DepartmentsController', () => {
     let controller: DepartmentsController;
@@ -18,6 +19,7 @@ describe('DepartmentsController', () => {
                 DepartmentsService,
                 { provide: getRepositoryToken(Department), useFactory: repositoryMockFactory },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],
         }).compile();
 
