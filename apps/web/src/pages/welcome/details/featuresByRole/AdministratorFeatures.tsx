@@ -29,7 +29,6 @@ export default function AdministratorFeatures({ embedded }: Props) {
             {!embedded && (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <IconButton
-                        aria-label="Go Back"
                         color="primary"
                         sx={{ mr: 1 }}
                         onClick={() => {

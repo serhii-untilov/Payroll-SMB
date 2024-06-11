@@ -18,11 +18,6 @@ const PageLayout: FC<Props> = ({ children, ...other }) => {
             }}
             {...other}
         >
-            {/* {compactView && title && ( */}
-            {/* <Box mb={{ xs: 0, lg: 1, xl: 1 }}> */}
-            {/* <PageTitle>{title}</PageTitle> */}
-            {/* </Box> */}
-            {/* )} */}
             {children}
         </Box>
     );

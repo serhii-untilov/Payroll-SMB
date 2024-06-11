@@ -4,9 +4,12 @@ import { Features } from './details/Features';
 import { Footer } from './details/Footer';
 import { Header } from './details/Header';
 import { ScreenshotList } from './details/ScreenshotList';
+import { useEffect } from 'react';
 
 function Welcome() {
     const { themeMode } = useAppContext();
+
+    useEffect(() => {}, [themeMode]);
 
     return (
         <>
@@ -30,8 +33,8 @@ function Welcome() {
                         width: '100%',
                         overflow: 'auto',
                         p: [1],
-                        background:
-                            themeMode === 'light'
+                        background: (theme) =>
+                            theme.palette.mode === 'light'
                                 ? 'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)'
                                 : '',
                     }}

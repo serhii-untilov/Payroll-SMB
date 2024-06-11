@@ -71,7 +71,8 @@ export function UseCases() {
                             py: 3,
                             px: 3,
                             // From https://css.glass
-                            background: 'rgba(255, 255, 255, 0.3)',
+                            background: (theme) =>
+                                theme.palette.mode === 'dark' ? '' : 'rgba(255, 255, 255, 0.3)',
                             boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                             backdropFilter: 'blur(5px)',
                             webkitBackdropFilter: 'blur(5px)',

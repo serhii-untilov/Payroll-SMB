@@ -1,5 +1,5 @@
 import { Language, MenuRounded } from '@mui/icons-material';
-import { Box, Drawer, IconButton } from '@mui/material';
+import { Box, Drawer, IconButton, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

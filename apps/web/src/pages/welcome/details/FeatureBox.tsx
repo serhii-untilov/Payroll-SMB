@@ -48,7 +48,7 @@ export function FeatureBox(props: Props) {
                         index === selectedIndex
                             ? themeMode === 'light'
                                 ? '#e3f2fd'
-                                : 'primary.main'
+                                : ''
                             : 'inherit',
                 },
                 '&:hover': {
@@ -81,12 +81,7 @@ export function FeatureBox(props: Props) {
                         width: '100%',
                     }}
                 >
-                    <Typography
-                        variant="h5"
-                        color={themeMode === 'light' ? 'primary' : 'black'}
-                        sx={{ fontWeight: 500 }}
-                        align="left"
-                    >
+                    <Typography variant="h5" color="primary" sx={{ fontWeight: 500 }} align="left">
                         {name}
                     </Typography>
                     <Typography align="left" color={'text.primary'}>
