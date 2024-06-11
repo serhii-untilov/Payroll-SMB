@@ -1,13 +1,12 @@
 import { CheckCircle } from '@mui/icons-material';
 import { Box, CircularProgress, CircularProgressProps, IconButton } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
-import { BaseVariant, enqueueSnackbar } from 'notistack';
-import { PropsWithChildren, useEffect, useMemo } from 'react';
+import { ServerEvent } from '@repo/shared';
+import { BaseVariant } from 'notistack';
+import { PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import useAppContext from '../../hooks/useAppContext';
 import { Tooltip } from './Tooltip';
-import { ServerEvent } from '@repo/shared';
 
 type Props = CircularProgressProps & PropsWithChildren;
 
@@ -16,16 +15,8 @@ export function AppState(props: Props) {
     const { serverEvent: event } = useAppContext();
     const navigate = useNavigate();
 
-    const state = useMemo(() => {
-        return !event
-            ? 'success'
-            : event.includes('started')
-              ? 'warning'
-              : event.includes('finished')
-                ? 'success'
-                : event.includes('failed')
-                  ? 'error'
-                  : 'info';
+    const color = useMemo(() => {
+        return event.includes('failed') || event.includes('error') ? 'error' : 'primary';
     }, [event]);
 
     const onButtonClick = () => {
@@ -38,7 +29,7 @@ export function AppState(props: Props) {
                 {!event || event.includes('finished') ? (
                     <IconButton
                         size="small"
-                        color={state}
+                        color={color}
                         onClick={() => {
                             onButtonClick();
                         }}
@@ -46,18 +37,16 @@ export function AppState(props: Props) {
                         <CheckCircle />
                     </IconButton>
                 ) : (
-                    <CircularProgress size={34} thickness={5} color={state} />
+                    <CircularProgress
+                        onClick={() => {
+                            onButtonClick();
+                        }}
+                        size={34}
+                        thickness={3}
+                        color={color}
+                    />
                 )}
             </Tooltip>
         </Box>
     );
-}
-
-function getSnackbarVariant(event: string): BaseVariant {
-    if (event.includes('error')) return 'error';
-    if (event.includes('failed')) return 'error';
-    if (event.includes('finished')) return 'success';
-    if (event.includes('started')) return 'info';
-    if (!event) return 'success';
-    return 'info';
 }
