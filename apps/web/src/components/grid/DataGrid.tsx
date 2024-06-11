@@ -27,7 +27,10 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
     '& .row-status--Normal': {
         backgroundColor: theme.palette.background.default,
         '&:hover': {
-            backgroundColor: theme.palette.grey['200'],
+            backgroundColor:
+                theme.palette.mode === 'dark'
+                    ? theme.palette.grey['900']
+                    : theme.palette.grey['200'],
         },
         '&.Mui-selected': {
             backgroundColor: getSelectedBackgroundColor(
