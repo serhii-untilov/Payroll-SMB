@@ -20,9 +20,9 @@ import { Upcoming } from './details/Upcoming';
 export default function Dashboard() {
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { company } = useAppContext();
+    const { company, themeMode } = useAppContext();
 
-    useEffect(() => {}, [locale]);
+    useEffect(() => {}, [locale, themeMode]);
 
     const {
         data: taskList,
@@ -82,7 +82,9 @@ export default function Dashboard() {
                                 py: { xs: 1, sm: 2 },
                                 px: { xs: 1, sm: 4 },
                                 color: (theme) => theme.palette.common.black,
-                                bgcolor: blue[50],
+                                bgcolor: (theme) => (theme.palette.mode === 'dark' ? '' : blue[50]),
+                                border: (theme) =>
+                                    theme.palette.mode === 'dark' ? '1px solid grey' : '',
                             }}
                         >
                             <Summary></Summary>

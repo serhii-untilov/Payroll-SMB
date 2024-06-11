@@ -13,7 +13,6 @@ import { add, differenceInYears } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AppContextType } from '../../../context/AppContext';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { getPerson } from '../../../services/person.service';
@@ -34,11 +33,10 @@ export function Task(props: Props) {
     const { t } = useTranslation();
     const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
     const statusIcon = useMemo(() => getStatusIcon(task, view), [task, view]);
-    const backgroundColor = useMemo(() => getBackgroundColor(task, view), [task, view]);
     const navigate = useNavigate();
-    const ctx = useAppContext();
+    const { company } = useAppContext();
     const { locale } = useLocale();
-    const tooltip = useMemo(() => getStatusTooltip(task, view), [task, view]);
+    const backgroundColor = useMemo(() => getBackgroundColor(task, view), [task, view]);
 
     const { data: person } = useQuery({
         queryKey: ['person', 'task', task],
@@ -51,12 +49,12 @@ export function Task(props: Props) {
     });
 
     const { data: position } = useQuery({
-        queryKey: ['position', 'task', { taskId: task.id, companyId: ctx.company?.id }],
+        queryKey: ['position', 'task', { taskId: task.id, companyId: company?.id }],
         queryFn: async () => {
-            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId && ctx.company?.id
+            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId && company?.id
                 ? await getPositionByPersonId({
                       personId: task.entityId,
-                      companyId: ctx.company.id,
+                      companyId: company.id,
                       relations: false,
                       onDate: task.dateFrom,
                   })
@@ -80,13 +78,11 @@ export function Task(props: Props) {
         }
     }, [person, task, t]);
 
-    // const path = useMemo(() => getPath(task.type, ctx, position), [task, ctx, position]);
-
     const onClickTask = () => {
         if (task.status === TaskStatus.NOT_AVAILABLE) {
             return;
         }
-        const path = getPath(task.type, ctx, position);
+        const path = getPath(task.type, company?.id, position);
         if (path) {
             navigate(path);
         }
@@ -134,7 +130,8 @@ export function Task(props: Props) {
                 pl: 1,
                 pr: 3,
                 borderRadius: 2,
-                bgcolor: backgroundColor,
+                bgcolor: (theme) => (theme.palette.mode === 'dark' ? '' : backgroundColor),
+                border: (theme) => (theme.palette.mode === 'dark' ? '1px solid grey' : ''),
             }}
         >
             <Grid
@@ -151,7 +148,12 @@ export function Task(props: Props) {
                             alignContent={'center'}
                             width={48}
                             item
-                            sx={{ mr: 1, px: 1, bgcolor: 'white', borderRadius: 2 }}
+                            sx={{
+                                mr: 1,
+                                px: 1,
+                                bgcolor: (theme) => (theme.palette.mode === 'dark' ? '' : 'white'),
+                                borderRadius: 2,
+                            }}
                         >
                             <Typography sx={{ color: 'text.primary', textAlign: 'center' }}>
                                 {taskDate.split(' ')[0]}
@@ -171,11 +173,7 @@ export function Task(props: Props) {
             </Grid>
             <Grid item xs={1}>
                 {statusIcon && (
-                    <IconButton onClick={() => onClickStatus()}>
-                        {/* <Tooltip placement="top" title={tooltip}> */}
-                        {statusIcon}
-                        {/* </Tooltip> */}
-                    </IconButton>
+                    <IconButton onClick={() => onClickStatus()}>{statusIcon}</IconButton>
                 )}
             </Grid>
         </Box>
@@ -248,28 +246,16 @@ function getBackgroundColor(task: ITask, view: TaskView) {
     return red[50];
 }
 
-function getStatusTooltip(task: ITask, view: TaskView) {
-    if (!canMarkAsDone(task, view)) {
-        return task.status;
-    }
-    if (task.status === TaskStatus.NOT_AVAILABLE) return task.status;
-    if (task.status === TaskStatus.DONE) return task.status;
-    if (task.status === TaskStatus.DONE_BY_USER) return 'Marked as Done';
-    if (task.status === TaskStatus.TODO) return 'Mark as Done';
-    if (task.status === TaskStatus.IN_PROGRESS) return 'Mark Done';
-    return '';
-}
-
 function getPath(
     type: string,
-    ctx: AppContextType,
+    companyId: number | null | undefined,
     position: IPosition | null | undefined,
 ): string {
     switch (type) {
         case TaskType.CREATE_COMPANY:
             return '/company/?tab=details&return=true';
         case TaskType.FILL_DEPARTMENT_LIST:
-            return `/company/${ctx?.company?.id || ''}?tab=departments&return=true`;
+            return companyId ? `/company/${companyId || ''}?tab=departments&return=true` : '#';
         case TaskType.FILL_POSITION_LIST:
             return '/people?tab=positions&return=true';
         case TaskType.POST_WORK_SHEET:
@@ -285,7 +271,7 @@ function getPath(
         case TaskType.POST_REGULAR_PAYMENT:
             return '/payments?return=true';
         case TaskType.CLOSE_PAY_PERIOD:
-            return `/company/${ctx?.company?.id || ''}?tab=periods&return=true`;
+            return companyId ? `/company/${companyId || ''}?tab=periods&return=true` : '#';
         case TaskType.SEND_INCOME_TAX_REPORT:
             return '/reports?return=true';
         case TaskType.HAPPY_BIRTHDAY:
