@@ -59,12 +59,13 @@ export function ScreenshotList() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    bgcolor: 'grey.50',
+                    // bgcolor: 'grey.50',
                     m: 1,
                     p: 2,
                     borderRadius: 3,
                     // From https://css.glass
-                    background: 'rgba(255, 255, 255, 0.3)',
+                    bgcolor: (theme) =>
+                        theme.palette.mode === 'dark' ? '' : 'rgba(255, 255, 255, 0.3)',
                     boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                     backdropFilter: 'blur(5px)',
                     webkitBackdropFilter: 'blur(5px)',

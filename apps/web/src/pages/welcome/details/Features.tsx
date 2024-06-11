@@ -116,7 +116,8 @@ export function Features() {
                         borderRadius: 3,
                         p: 2,
                         // From https://css.glass
-                        background: 'rgba(255, 255, 255, 0.3)',
+                        bgcolor: (theme) =>
+                            theme.palette.mode === 'dark' ? '' : 'rgba(255, 255, 255, 0.3)',
                         boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                         backdropFilter: 'blur(5px)',
                         webkitBackdropFilter: 'blur(5px)',

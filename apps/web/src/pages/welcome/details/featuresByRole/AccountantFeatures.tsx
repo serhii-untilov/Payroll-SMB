@@ -3,6 +3,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import PageLayout from '../../../../components/layout/PageLayout';
 
 type Props = {
     embedded?: boolean;
@@ -24,11 +25,14 @@ export default function AccountantFeatures({ embedded }: Props) {
     );
 
     return (
-        <Box sx={{ minHeight: 0 }}>
+        <Box
+            sx={{
+                minHeight: 0,
+            }}
+        >
             {!embedded && (
                 <Box sx={{ display: 'flex', alignItems: 'center', minHeight: 0 }}>
                     <IconButton
-                        aria-label="Go Back"
                         color="primary"
                         sx={{ mr: 1 }}
                         onClick={() => {
