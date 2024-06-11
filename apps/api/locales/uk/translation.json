@@ -251,5 +251,13 @@
     "Calculation was completed": "Розрахунок виконано",
     "Total expenses": "Загальні витрати",
     "happy-birthday": "День народження",
-    "age": "вік"
+    "age": "вік",
+    "Offline": "З'єднання відсутнє",
+    "communication_error": "Помилка зв'язку",
+    "payroll-started": "Розрахунок заробітної плати розпочато",
+    "payroll-finished": "Розрахунок заробітної плати виконано",
+    "payroll-failed": "Помилка розрахунку заробітної плати",
+    "tasklist-started": "Оновлення списку задач розпочато",
+    "tasklist-finished": "Оновлення списку задач виконано",
+    "tasklist-failed": "Помилка оновлення списку задач"
 }

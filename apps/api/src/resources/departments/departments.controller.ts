@@ -30,6 +30,7 @@ export class DepartmentsController {
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateDepartmentDto) {
         const userId = req.user['sub'];
+        await this.service.availableCreateOrFail(userId, payload.companyId);
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
@@ -42,6 +43,7 @@ export class DepartmentsController {
         @Query('relations', ParseBoolPipe) relations: boolean,
     ) {
         const userId = req.user['sub'];
+        await this.service.availableFindAllOrFail(userId, companyId);
         return await this.service.findAll(userId, companyId, !!relations);
     }
 
@@ -54,7 +56,9 @@ export class DepartmentsController {
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ) {
         const userId = req.user['sub'];
-        return await this.service.findOne(userId, id, !!relations);
+        const found = await this.service.findOne(userId, id, !!relations);
+        await this.service.availableFindOneOrFail(userId, found.companyId);
+        return found;
     }
 
     @Patch(':id')
@@ -66,6 +70,7 @@ export class DepartmentsController {
         @Body() payload: UpdateDepartmentDto,
     ) {
         const userId = req.user['sub'];
+        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
@@ -74,6 +79,7 @@ export class DepartmentsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = req.user['sub'];
+        await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 }

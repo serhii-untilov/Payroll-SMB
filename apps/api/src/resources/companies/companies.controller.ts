@@ -83,12 +83,15 @@ export class CompaniesController {
         return await this.service.remove(userId, id);
     }
 
-    @Post(':id/calculate-payroll')
+    @Get(':id/calculate-payroll')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async salaryCalculate(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    async salaryCalculate(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+    ): Promise<void> {
         const userId = req.user['sub'];
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.calculatePayroll(userId, id);
+        await this.service.calculatePayroll(userId, id);
     }
 }

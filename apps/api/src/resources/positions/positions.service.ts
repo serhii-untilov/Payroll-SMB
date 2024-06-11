@@ -55,7 +55,12 @@ export class PositionsService extends AvailableForUserCompany {
     }
 
     async getCompanyId(entityId: number): Promise<number> {
-        return (await this.repository.findOneOrFail({ where: { id: entityId } })).companyId;
+        return (
+            await this.repository.findOneOrFail({
+                select: { companyId: true },
+                where: { id: entityId },
+            })
+        ).companyId;
     }
 
     async create(userId: number, payload: CreatePositionDto): Promise<Position> {

@@ -124,6 +124,7 @@ export function Task(props: Props) {
 
     return (
         <Box
+            id={`task-id-${task.id}`}
             sx={{
                 display: 'flex',
                 justifyContent: 'space-between',

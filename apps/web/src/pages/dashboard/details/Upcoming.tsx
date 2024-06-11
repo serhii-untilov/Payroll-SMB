@@ -40,7 +40,7 @@ export function Upcoming(props: Props) {
                 {t('Upcoming')}
             </Typography>
             {taskList.map((task) => (
-                <Task task={task} view="upcoming" />
+                <Task key={task.id} task={task} view="upcoming" />
             ))}
         </Box>
     ) : null;

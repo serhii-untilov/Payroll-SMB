@@ -41,7 +41,7 @@ export function Todo(props: Props) {
                 {t('Things to do')}
             </Typography>
             {taskList.map((task) => (
-                <Task task={task} view="todo" />
+                <Task key={task.id} task={task} view="todo" />
             ))}
         </Box>
     ) : null;

@@ -30,5 +30,5 @@ export async function deleteCompany(id: number): Promise<ICompany> {
 }
 
 export async function calculatePayroll(id: number) {
-    await api.post(`/api/companies/${id}/calculate-payroll`, { headers: authHeader() });
+    await api.get(`/api/companies/${id}/calculate-payroll`, { headers: authHeader() });
 }

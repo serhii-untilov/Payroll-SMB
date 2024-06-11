@@ -143,7 +143,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
             relations: { company: relations },
             ...(fullFieldList ? {} : defaultFieldList),
         };
-        return await this.findOne(options);
+        return await this.repository.findOneOrFail(options);
     }
 
     async countClosed(companyId: number): Promise<number> {

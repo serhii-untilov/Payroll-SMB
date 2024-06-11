@@ -1,8 +1,7 @@
-export class PersonDeletedEvent {
-    userId: number;
-    id: number;
+import { PersonEvent, PersonEventType } from './abstract/PersonEvent';
+
+export class PersonDeletedEvent extends PersonEvent {
     constructor(userId: number, id: number) {
-        this.userId = userId;
-        this.id = id;
+        super(PersonEventType.DELETED, userId, id);
     }
 }

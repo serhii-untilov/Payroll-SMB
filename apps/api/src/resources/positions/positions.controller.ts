@@ -25,15 +25,15 @@ import { PositionsService } from './positions.service';
 
 @Controller('positions')
 export class PositionsController {
-    constructor(private readonly positionsService: PositionsService) {}
+    constructor(private readonly service: PositionsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreatePositionDto): Promise<IPosition> {
         const userId = req.user['sub'];
-        await this.positionsService.availableCreateOrFail(userId, payload.companyId);
-        return await this.positionsService.create(userId, deepStringToShortDate(payload));
+        await this.service.availableCreateOrFail(userId, payload.companyId);
+        return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
     @Post('find')
@@ -41,8 +41,8 @@ export class PositionsController {
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() payload: FindPositionDto): Promise<IPosition[]> {
         const userId = req.user['sub'];
-        await this.positionsService.availableFindAllOrFail(userId, payload.companyId);
-        return await this.positionsService.findAll(userId, deepStringToShortDate(payload));
+        await this.service.availableFindAllOrFail(userId, payload.companyId);
+        return await this.service.findAll(userId, deepStringToShortDate(payload));
     }
 
     @Get(':id')
@@ -55,12 +55,8 @@ export class PositionsController {
         @Query('onDate') onDate: Date,
     ): Promise<IPosition> {
         const userId = req.user['sub'];
-        const found = await this.positionsService.findOne(
-            id,
-            !!relations,
-            onDate ? new Date(onDate) : null,
-        );
-        await this.positionsService.availableFindAllOrFail(userId, found.companyId);
+        const found = await this.service.findOne(id, !!relations, onDate ? new Date(onDate) : null);
+        await this.service.availableFindAllOrFail(userId, found.companyId);
         return found;
     }
 
@@ -73,8 +69,8 @@ export class PositionsController {
         @Body() payload: UpdatePositionDto,
     ): Promise<IPosition> {
         const userId = req.user['sub'];
-        await this.positionsService.availableUpdateOrFail(userId, id);
-        return await this.positionsService.update(userId, id, deepStringToShortDate(payload));
+        await this.service.availableUpdateOrFail(userId, id);
+        return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
     @Delete(':id')
@@ -82,8 +78,8 @@ export class PositionsController {
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPosition> {
         const userId = req.user['sub'];
-        await this.positionsService.availableDeleteOrFail(userId, id);
-        return await this.positionsService.remove(userId, id);
+        await this.service.availableDeleteOrFail(userId, id);
+        return await this.service.remove(userId, id);
     }
 
     @Post('balance')
@@ -94,11 +90,8 @@ export class PositionsController {
         @Body() payload: FindAllPositionBalanceDto,
     ): Promise<IPosition[]> {
         const userId = req.user['sub'];
-        await this.positionsService.availableFindAllOrFail(userId, payload.companyId);
-        const response = await this.positionsService.findAllBalance(
-            userId,
-            deepStringToShortDate(payload),
-        );
+        await this.service.availableFindAllOrFail(userId, payload.companyId);
+        const response = await this.service.findAllBalance(userId, deepStringToShortDate(payload));
         return response;
     }
 
@@ -113,14 +106,14 @@ export class PositionsController {
         @Body() payload: { companyId: number },
     ): Promise<IPosition> {
         const userId = req.user['sub'];
-        const found = await this.positionsService.findFirstByPersonId(
+        const found = await this.service.findFirstByPersonId(
             userId,
             payload.companyId,
             id,
             !!relations,
             onDate ? new Date(onDate) : null,
         );
-        await this.positionsService.availableFindAllOrFail(userId, found.companyId);
+        await this.service.availableFindAllOrFail(userId, found.companyId);
         return found;
     }
 }

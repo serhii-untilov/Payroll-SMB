@@ -26,7 +26,7 @@ export function Reminder(props: Props) {
                 {t('Reminders')}
             </Typography>
             {taskList.map((task) => (
-                <Task task={task} view="reminder" />
+                <Task key={task.id} task={task} view="reminder" />
             ))}
         </Box>
     ) : null;

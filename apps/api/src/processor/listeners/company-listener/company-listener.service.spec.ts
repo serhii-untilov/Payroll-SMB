@@ -6,6 +6,7 @@ import { PayFundCalculationService } from './../../../processor/payFundCalculati
 import { PayPeriodsService } from '../../../resources/pay-periods/payPeriods.service';
 import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
 import { PayPeriodCalculationService } from './../../payPeriodCalculation/payPeriodCalculation.service';
+import { SseService } from './../../serverSentEvents/sse.service';
 
 describe('CompanyListenerService', () => {
     let service: CompanyListenerService;
@@ -33,6 +34,10 @@ describe('CompanyListenerService', () => {
                 {
                     provide: PayPeriodCalculationService,
                     useValue: createMock<PayPeriodCalculationService>(),
+                },
+                {
+                    provide: SseService,
+                    useValue: createMock<SseService>(),
                 },
             ],
         }).compile();
