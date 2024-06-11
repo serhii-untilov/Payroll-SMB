@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useOnlineStatus } from './useOnlineStatus';
 
 export function useServerCompanyEvents(companyId: number) {
-    const isOnline = true; // useOnlineStatus();
+    const isOnline = useOnlineStatus();
     const [event, setEvent] = useState('');
 
     const eventSource = useMemo(() => {
