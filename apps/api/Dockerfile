@@ -24,6 +24,7 @@ RUN npm i -g turbo
 RUN npm i -g typeorm
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
+COPY .env.docker /app/apps/api/.env
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/package-lock.json ./package-lock.json
 RUN npm install
