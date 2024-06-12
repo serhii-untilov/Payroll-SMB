@@ -24,7 +24,6 @@ RUN npm i -g turbo
 RUN npm i -g typeorm
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
-COPY .env.docker /app/apps/api/.env
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/package-lock.json ./package-lock.json
 RUN npm install
@@ -52,5 +51,6 @@ RUN addgroup --system --gid 1001 dockeruser
 RUN adduser --system --uid 1001 dockeruser
 USER dockeruser
 COPY --from=installer /app .
+COPY .env.docker ./apps/api/.env
 
 CMD npm --workspace @repo/api run m:run && node apps/api/dist/main.js

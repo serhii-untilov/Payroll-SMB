@@ -1,0 +1,11 @@
+#!/bin/sh
+curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/docker-compose.yml >docker-compose.yml
+curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/.env.docker >.env.docker
+curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/start >start
+curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stop >stop
+curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/update >update
+chmod +x ./start
+chmod +x ./stop
+chmod +x ./update
+./stop
+./start
