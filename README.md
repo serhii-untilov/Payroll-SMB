@@ -15,11 +15,16 @@ The Payroll SMB application provides a solution for employers and employees to c
 
 ## Start the application
 
-### Quick start (Docker required)
+### Quick start
 
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
 ```
+
+Note: Docker required.
+
+- [Get Docker Desktop](https://docs.docker.com/guides/getting-started/get-docker-desktop/)
+- [How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 
 ### Production mode
 
@@ -349,4 +354,3 @@ openssl rand -base64 60
 - [**SSE** - NestJS - How to Push Server-Sent Events (SSE) in NestJS](https://www.slingacademy.com/article/how-to-push-server-sent-events-sse-in-nestjs/)
 - [**NestJS** - Sling Academy - NestJS Course](https://www.slingacademy.com/cat/node-js/)
 - [**Typescript** - 4 Different Ways Of Creating A Map In TypeScript](https://timmousk.com/blog/typescript-map/)
-
