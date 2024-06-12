@@ -18,6 +18,10 @@ The Payroll SMB application provides a solution for employers and employees to c
 ### Production mode
 
 ``` bash
+git clone https://github.com/serhii-untilov/Payroll-SMB.git
+cd Payroll-SMB
+npm i -g turbo
+npm i -g typeorm
 npm i && npm run build && npm start
 ```
 
@@ -29,6 +33,10 @@ In Production mode frontend and backend applications works on the same port:
 ### Development mode
 
 ``` bash
+git clone https://github.com/serhii-untilov/Payroll-SMB.git
+cd Payroll-SMB
+npm i -g turbo
+npm i -g typeorm
 npm i && npm run build && npm run dev
 ```
 
@@ -37,17 +45,23 @@ In Development mode frontend and backend applications works on the different por
 - Backend URL <http://localhost:3000/api>
 - Frontend URL <http://localhost:5173>
 
-### By Docker
+### Docker mode
 
 ``` bash
 # Build and start application
-git clone https://github.com/serhii-untilov/Payroll.git
-cd Payroll
+git clone https://github.com/serhii-untilov/Payroll-SMB.git
+cd Payroll-SMB
+#docker compose build --no-cache --with-dependencies
 docker compose build
 ./start
 # Stop application
 docker compose down
 ```
+
+In Docker mode frontend and backend applications works on the same port:
+
+- Backend URL <http://localhost:3000/api>
+- Frontend URL <http://localhost:3000>
 
 ## Configuration
 
@@ -199,7 +213,7 @@ npm i --workspace @repo/web --save-dev rollup-plugin-visualizer
 npm i --workspace @repo/web --save react-error-boundary
 npm i --workspace @repo/web --save date-fns
 npm i --workspace @repo/web --save react-number-format
-// npm i --workspace @repo/web --save module-alias
+# npm i --workspace @repo/web --save module-alias
 
 # Init "shared" library for common types and interfaces
 mkdir packages/shared
