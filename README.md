@@ -15,7 +15,7 @@ The Payroll SMB application provides a solution for employers and employees to c
 
 ## Start the application
 
-## Quick start (docker required)
+### Quick start (docker required)
 
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
