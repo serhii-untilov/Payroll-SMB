@@ -14,6 +14,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./.env.docker:/app/api/.env
     env_file:
       - .env.docker
 

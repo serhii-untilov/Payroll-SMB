@@ -51,6 +51,6 @@ RUN addgroup --system --gid 1001 dockeruser
 RUN adduser --system --uid 1001 dockeruser
 USER dockeruser
 COPY --from=installer /app .
-COPY .env.docker ./apps/api/.env
+# COPY .env.docker ./apps/api/.env
 
 CMD npm --workspace @repo/api run m:run && node apps/api/dist/main.js
