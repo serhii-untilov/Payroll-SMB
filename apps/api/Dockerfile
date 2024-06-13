@@ -9,7 +9,7 @@ RUN apk update
 # Set working directory
 WORKDIR /app
 COPY . .
-RUN chown -R node:node .
+# RUN chown -R node:node .
 RUN npm install
 RUN npm i -g turbo
 RUN turbo prune @repo/api --docker
@@ -55,8 +55,10 @@ WORKDIR /app
 # CMD npm --workspace @repo/api run m:run && node apps/api/dist/main.js
 
 WORKDIR /app
-RUN chown -R node:node .
-USER node
+# RUN chown -R node:node .
+# USER node
+COPY --from=installer /app .
+COPY .env.docker .
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE ${PORT}

@@ -4,8 +4,12 @@ curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/.env.do
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/start >start
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stop >stop
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/update >update
+curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/update >logs
+curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/update >stats
 chmod +x ./start
 chmod +x ./stop
 chmod +x ./update
+chmod +x ./logs
+chmod +x ./stats
 ./stop
 ./start

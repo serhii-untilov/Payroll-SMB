@@ -15,9 +15,19 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./.env.docker:/app/api/.env
+      - .env.docker:/app/.env.docker
     env_file:
       - .env.docker
+    # environment:
+    #   DATABASE_HOST: db
+    #   DATABASE_PORT: 5432
+    #   DATABASE_USER: payrolladm
+    #   DATABASE_NAME: payroll
+    #   DATABASE_PASSWORD: TopSecret123
+    #   DATABASE_SYNCHRONIZE: true
+    #   DATABASE_LOGGING: true
+    # volumes:
+    #   - ./.env.docker:/app/api/.env
 
   db:
     container_name: payroll-db
@@ -30,13 +40,14 @@ services:
     volumes:
       - ./packages/postgres/init.postgres.sql:/docker-entrypoint-initdb.d/init.postgres.sql
       - ./postgres-data:/var/lib/postgresql/data
-    env_file:
-      - ./.env.docker
+      - .env.docker:/app/.env.docker
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: [ "CMD-SHELL", "pg_isready" ]
       interval: 1s
       timeout: 5s
       retries: 10
+    env_file:
+      - ./.env.docker
     # environment:
     #   POSTGRES_USER: payrolladm
     #   POSTGRES_PASSWORD: TopSecret123
