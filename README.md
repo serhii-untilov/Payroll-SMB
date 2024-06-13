@@ -19,7 +19,7 @@ https://payroll.untilov.com.ua
 
 ## Start the application
 
-### Quick start
+### Quick start on a Linux production server
 
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
@@ -29,16 +29,6 @@ Note: Docker required.
 
 - [Get Docker Desktop](https://docs.docker.com/guides/getting-started/get-docker-desktop/)
 - [How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
-
-### Production mode
-
-``` bash
-git clone https://github.com/serhii-untilov/Payroll-SMB.git
-cd Payroll-SMB
-npm i -g turbo
-npm i -g typeorm
-npm i && npm run build && npm start
-```
 
 In Production mode frontend and backend applications works on the same port:
 
