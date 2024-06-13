@@ -18,5 +18,5 @@ chmod +x ./update
 chmod +x ./logs
 chmod +x ./stats
 ./stop
-./update
+docker compose pull
 ./start
