@@ -39,16 +39,15 @@ services:
       retries: 10
     env_file:
       - ./.env.docker
-
-  reverse-proxy:
-    container_name: payroll-nginx
-    build:
-      context: .
-      dockerfile: ./packages/nginx/Dockerfile
-    image: untilov/nginx
-    restart: always
-    ports:
-      - 80:80
+  # reverse-proxy:
+  #   container_name: payroll-nginx
+  #   build:
+  #     context: .
+  #     dockerfile: ./packages/nginx/Dockerfile
+  #   image: untilov/nginx
+  #   restart: always
+  #   ports:
+  #     - 80:80
 
 networks:
   default:
