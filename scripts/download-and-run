@@ -1,4 +1,10 @@
 #!/bin/sh
+cd ~
+if ! [ -d ./payroll-smb ]; then
+    echo "The ./payroll-smb folder does not exist. Let's create it."
+    mkdir payroll-smb
+fi
+cd payroll-smb
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/docker-compose.yml >docker-compose.yml
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/.env.docker >.env.docker
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/start >start
@@ -12,4 +18,5 @@ chmod +x ./update
 chmod +x ./logs
 chmod +x ./stats
 ./stop
+./update
 ./start
