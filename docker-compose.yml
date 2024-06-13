@@ -18,16 +18,6 @@ services:
       - .env.docker:/app/.env.docker
     env_file:
       - .env.docker
-    # environment:
-    #   DATABASE_HOST: db
-    #   DATABASE_PORT: 5432
-    #   DATABASE_USER: payrolladm
-    #   DATABASE_NAME: payroll
-    #   DATABASE_PASSWORD: TopSecret123
-    #   DATABASE_SYNCHRONIZE: true
-    #   DATABASE_LOGGING: true
-    # volumes:
-    #   - ./.env.docker:/app/api/.env
 
   db:
     container_name: payroll-db
@@ -48,11 +38,6 @@ services:
       retries: 10
     env_file:
       - ./.env.docker
-    # environment:
-    #   POSTGRES_USER: payrolladm
-    #   POSTGRES_PASSWORD: TopSecret123
-    #   POSTGRES_DB_NAMES: payroll
-    #   PGUSER: payrolladm
 
   reverse-proxy:
     container_name: payroll-nginx
