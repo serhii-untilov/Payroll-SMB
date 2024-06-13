@@ -1,2 +1,3 @@
 #!/bin/sh
-docker compose pull
+# docker compose pull
+curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
