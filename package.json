@@ -1,5 +1,6 @@
 {
   "name": "payroll-smb",
+  "version": "1.01.001",
   "description": "The Payroll SMB Application",
   "author": "Serhii Untilov <s.untilov@gmail.com> (https://untilov.com.ua/)",
   "keywords": [
@@ -30,7 +31,9 @@
     "m:crt": "turbo run m:crt --filter=@repo/api",
     "m:gen": "./scripts/docker_db && turbo run m:gen --filter=@repo/api",
     "m:run": "./scripts/docker_db && turbo run m:run --filter=@repo/api",
-    "m:revert": "./scripts/docker_db && turbo run m:revert --filter=@repo/api"
+    "m:revert": "./scripts/docker_db && turbo run m:revert --filter=@repo/api",
+    "d:build": "docker compose build",
+    "d:push": "docker compose push"
   },
   "devDependencies": {
     "eslint-config-prettier": "^9.1.0",

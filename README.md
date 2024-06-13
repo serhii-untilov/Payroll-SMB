@@ -313,6 +313,7 @@ openssl rand -base64 60
 - [**Project architecture** - Bulletproof node.js project architecture](https://dev.to/santypk4/bulletproof-node-js-project-architecture-4epf)
 - [**Monorepo on Nx** - Full Stack Development Series](https://thefullstack.engineer/full-stack-development-series-an-introduction/)
 - [**Turborepo** - Add Turborepo to your existing monorepo](https://turbo.build/repo/docs/getting-started/existing-monorepo)
+- [**Commits** - Conventional Commits](https://www.conventionalcommits.org)
 - [**NestJS** - Combine a NestJS app with React](https://youtu.be/nY0R7pslbCI?si=Lunb95j6enSY8GXE)
 - [**Vite** - Server Proxy](https://vitejs.dev/config/server-options#server-proxy)
 - [**NestJS** - Serve Static](https://docs.nestjs.com/recipes/serve-static)
@@ -354,3 +355,4 @@ openssl rand -base64 60
 - [**SSE** - NestJS - How to Push Server-Sent Events (SSE) in NestJS](https://www.slingacademy.com/article/how-to-push-server-sent-events-sse-in-nestjs/)
 - [**NestJS** - Sling Academy - NestJS Course](https://www.slingacademy.com/cat/node-js/)
 - [**Typescript** - 4 Different Ways Of Creating A Map In TypeScript](https://timmousk.com/blog/typescript-map/)
+- [**Release** - Release Please](https://github.com/googleapis/release-please)

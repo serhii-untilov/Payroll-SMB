@@ -22,8 +22,11 @@ services:
   db:
     container_name: payroll-db
     image: postgres:15-alpine
+    hostname: payrollhost
+    expose:
+      - 5532
     ports:
-      - '5532:5432'
+      - 5532:5432
     volumes:
       - ./packages/postgres/init.postgres.sql:/docker-entrypoint-initdb.d/init.postgres.sql
       - ./postgres-data:/var/lib/postgresql/data

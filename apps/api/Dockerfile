@@ -9,6 +9,7 @@ RUN apk update
 # Set working directory
 WORKDIR /app
 COPY . .
+RUN chown -R node:node .
 RUN npm install
 RUN npm i -g turbo
 RUN turbo prune @repo/api --docker
@@ -47,10 +48,16 @@ FROM base AS runner
 WORKDIR /app
 
 # Don't run production as root
-RUN addgroup --system --gid 1001 dockeruser
-RUN adduser --system --uid 1001 dockeruser
-USER dockeruser
-COPY --from=installer /app .
-# COPY .env.docker ./apps/api/.env
+# RUN addgroup --system --gid 1001 dockeruser
+# RUN adduser --system --uid 1001 dockeruser
+# USER dockeruser
+# COPY --from=installer /app .
+# CMD npm --workspace @repo/api run m:run && node apps/api/dist/main.js
 
+WORKDIR /app
+RUN chown -R node:node .
+USER node
+ENV NODE_ENV=production
+ENV PORT=3000
+EXPOSE ${PORT}
 CMD npm --workspace @repo/api run m:run && node apps/api/dist/main.js
