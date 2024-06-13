@@ -50,24 +50,25 @@ In Development mode frontend and backend applications works on the different por
 - Backend URL <http://localhost:3000/api>
 - Frontend URL <http://localhost:5173>
 
-### Docker mode
+### Handle Docker containers
 
 ``` bash
-# To build docker images and push them to the Docker Hub
+# Build docker images and push them to the Docker Hub
 git clone https://github.com/serhii-untilov/Payroll-SMB.git
 cd Payroll-SMB
 docker compose build
 docker compose push
 
-# To pull docker images and start application
+# Pull docker images and start application
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
 
-# To stop application
-./stop
-# To update images
-./update
-# To start the application
+# Start the application
 ./start
+# Stop the application
+./stop
+# Update images
+./update
+
 ```
 
 In Docker mode frontend and backend applications works on the same port:
