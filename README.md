@@ -356,3 +356,4 @@ openssl rand -base64 60
 - [**NestJS** - Sling Academy - NestJS Course](https://www.slingacademy.com/cat/node-js/)
 - [**Typescript** - 4 Different Ways Of Creating A Map In TypeScript](https://timmousk.com/blog/typescript-map/)
 - [**Release** - Release Please](https://github.com/googleapis/release-please)
+- [**Docker** - postgres:15.0-alpine](https://hub.docker.com/layers/library/postgres/15.0-alpine/images/sha256-f46b2ae1a00a87552a52fe83d36f7aef60ef61f9d64baf3bfc4abaa89847024b?context=explore#!)
