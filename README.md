@@ -15,7 +15,22 @@ The Payroll SMB application provides a solution for employers and employees to c
 
 ## Live Demo
 
-https://payroll.untilov.com.ua
+Link to [Live Demo](https://payroll.untilov.com.ua)
+
+## Quick Start
+
+``` bash
+curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
+```
+Note: Docker required.
+
+- [Get Docker Desktop](https://docs.docker.com/guides/getting-started/get-docker-desktop/)
+- [How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
+
+In Production mode frontend and backend applications works on the same port:
+
+- Backend URL <http://localhost:3000/api>
+- Frontend URL <http://localhost:3000>
 
 ## Requirements
 
@@ -31,25 +46,7 @@ Payroll SMB should run on most Unix, Linux, macOS and Windows systems as long as
 
 *The program has been tested with the specified configuration on a [DigitalOcean](https://www.digitalocean.com/products/droplets) VPS. See the [live demo](https://payroll.untilov.com.ua).*
 
-## Start the application
-
-### Quick start on a Linux production server
-
-``` bash
-curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
-```
-
-Note: Docker required.
-
-- [Get Docker Desktop](https://docs.docker.com/guides/getting-started/get-docker-desktop/)
-- [How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
-
-In Production mode frontend and backend applications works on the same port:
-
-- Backend URL <http://localhost:3000/api>
-- Frontend URL <http://localhost:3000>
-
-### Development mode
+## Development
 
 ``` bash
 git clone https://github.com/serhii-untilov/Payroll-SMB.git
@@ -59,47 +56,58 @@ npm i -g typeorm
 npm i && npm run build && npm run dev
 ```
 
-In Development mode frontend and backend applications works on the different ports:
+In development mode, the frontend and backend applications work on different ports:
 
 - Backend URL <http://localhost:3000/api>
 - Frontend URL <http://localhost:5173>
 
-### Handle Docker containers
+### Build docker images and push them on Docker Hub
 
 ``` bash
-# Build docker images and push them to the Docker Hub
-git clone https://github.com/serhii-untilov/Payroll-SMB.git
-cd Payroll-SMB
 docker compose build
 docker compose push
-
-# Pull docker images and start application
-curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
-
-# Start the application
-./start
-# Stop the application
-./stop
-# Update images
-./update
-
 ```
 
-In Docker mode frontend and backend applications works on the same port:
+## Production
 
-- Backend URL <http://localhost:3000/api>
-- Frontend URL <http://localhost:3000>
+### Pull docker images and start Application
+
+``` bash
+curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
+```
+
+### Start the application
+
+``` bash
+./start
+```
+
+### Stop the application
+
+``` bash
+./stop
+```
+
+### Update images
+
+``` bash
+./update
+```
 
 ## Configuration
 
-On a **production** server, copy .env.production file to .env.locale, replace environment variables in the .env.locale file and start the application.
+On a **production** server:
+
+- copy .env.docker file to .env.locale
+- replace environment variables in the .env.locale file
+- start application
 
 In **development** mode:
 
 - copy apps/api/.env to apps/api/.env.locale
 - copy apps/web/.env.development to apps/web/.env.locale
-
-replace environment variables in *.locale files and run the application.
+- replace environment variables in *.locale files
+- run application
 
 ## Domain-specific language (DSL)
 
