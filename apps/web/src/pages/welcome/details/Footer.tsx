@@ -115,7 +115,7 @@ export function Footer() {
                         </svg>
                     </SvgIcon>
                 </IconButton>
-                {/* <a
+                <a
                     href="https://www.digitalocean.com/?refcode=b2277b6f3168&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"
                     target="_blank"
                 >
@@ -123,7 +123,7 @@ export function Footer() {
                         src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%202.svg"
                         alt="DigitalOcean Referral Badge"
                     />
-                </a> */}
+                </a>
             </Box>
         </Box>
     );
