@@ -17,6 +17,21 @@ The Payroll SMB application provides a solution for employers and employees to c
 
 https://payroll.untilov.com.ua
 
+## Requirements
+
+### Operating system
+
+Payroll SMB should run on most Unix, Linux, macOS and Windows systems as long as Docker is available on this platform.
+
+### Technical Parameters for Server or Workstation
+
+- 1 GB of memory
+- 1 CPU, 1 core
+- 1 GB of disk space for Docker containers (application and DBMS)
+- 1 GB of disk space for the database
+
+*The program has been tested in the specified configuration on a [DigitalOcean](https://www.digitalocean.com/products/droplets) VPS. See [Live Demo](https://payroll.untilov.com.ua).*
+
 ## Start the application
 
 ### Quick start on a Linux production server
