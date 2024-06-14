@@ -27,10 +27,9 @@ Payroll SMB should run on most Unix, Linux, macOS and Windows systems as long as
 
 - 1 GB of memory
 - 1 CPU, 1 core
-- 1 GB of disk space for Docker containers (application and DBMS)
-- 1 GB of disk space for the database
+- 20 GB of disk space
 
-*The program has been tested in the specified configuration on a [DigitalOcean](https://www.digitalocean.com/products/droplets) VPS. See [Live Demo](https://payroll.untilov.com.ua).*
+*The program has been tested with the specified configuration on a [DigitalOcean](https://www.digitalocean.com/products/droplets) VPS. See the [live demo](https://payroll.untilov.com.ua).*
 
 ## Start the application
 
