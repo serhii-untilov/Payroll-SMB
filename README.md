@@ -67,8 +67,7 @@ In development mode, the frontend and backend applications work on different por
 Build docker images and push them on Docker Hub
 
 ``` bash
-docker compose build
-docker compose push
+docker compose build && docker compose push
 ```
 
 ## Production
