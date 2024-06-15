@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-    private logger: Logger = new Logger(AppController.name);
+    private _logger: Logger = new Logger(AppController.name);
 
     constructor(private readonly appService: AppService) {}
 
@@ -33,6 +33,6 @@ export class AppController {
     @Post('/locales/add/:lng/:ns')
     @Header('Content-Type', 'application/json')
     addLocales(@Param() params) {
-        this.logger.log('/locales/add/', params);
+        this._logger.log('/locales/add/', params);
     }
 }

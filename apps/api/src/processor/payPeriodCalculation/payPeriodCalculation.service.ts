@@ -78,7 +78,6 @@ export class PayPeriodCalculationService {
         this._id = prior.reduce((a, b) => (a > b.id ? a : b.id), 0);
         const generator = this.getGenerator();
         const current = generator.getPeriodList(dateFrom, dateTo);
-
         const { toDelete, toInsert } = this.merge(prior, current);
         this.save(toDelete, toInsert);
     }
@@ -110,6 +109,7 @@ export class PayPeriodCalculationService {
             this.payPeriodsService.delete(toDelete);
         }
         for (const period of toInsert) {
+            delete period.id;
             this.payPeriodsService.create(this.userId, period);
         }
     }

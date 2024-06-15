@@ -52,14 +52,17 @@ export class CompanyListenerService {
 
     private async runBatch(userId: number, companyId: number) {
         try {
+            this._logger.log(`companyId ${companyId} ${ServerEvent.PAYROLL_STARTED}`);
             this.sseService.event(companyId, { data: ServerEvent.PAYROLL_STARTED });
             await this.payPeriodCalculationService.fillPeriods(userId, companyId);
             await this.payrollCalculationService.calculateCompany(userId, companyId);
             await this.payFundCalculationService.calculateCompany(userId, companyId);
             await this.payrollCalculationService.calculateCompanyTotals(userId, companyId);
             await this.taskListService.generate(userId, companyId);
+            this._logger.log(`companyId ${companyId} ${ServerEvent.PAYROLL_FINISHED}`);
             this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FINISHED });
         } catch (e) {
+            this._logger.fatal(`companyId ${companyId} ${ServerEvent.PAYROLL_FAILED}`);
             this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FAILED });
         }
     }

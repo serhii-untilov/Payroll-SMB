@@ -21,9 +21,13 @@ export async function loginUser(params: IAuth): Promise<ITokens> {
     return tokens;
 }
 
-export async function logoutUser() {
-    await api.get('/api/auth/logout', { headers: authHeader() });
+export async function logoutUser(): Promise<void> {
     removeUserTokens();
+    try {
+        await api.get('/api/auth/logout', { headers: authHeader() });
+        // eslint-disable-next-line no-empty
+    } finally {
+    }
 }
 
 export async function getCurrentUser(): Promise<IPublicUserData> {
