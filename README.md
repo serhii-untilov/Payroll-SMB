@@ -19,9 +19,12 @@ Link to [Live Demo](https://payroll.untilov.com.ua)
 
 ## Quick Start
 
+For a quick start, copy and run this command:
+
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
 ```
+
 Note: Docker required.
 
 - [Get Docker Desktop](https://docs.docker.com/guides/getting-started/get-docker-desktop/)
