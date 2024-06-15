@@ -6,12 +6,14 @@ if ! [ -d ./payroll-smb ]; then
 fi
 cd payroll-smb
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/docker-compose.yml >docker-compose.yml
-curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/.env.docker >.env.docker
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/start >start
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stop >stop
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/update >update
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/logs >logs
 curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stats >stats
+if ! [ -f ./.env.docker ]; then
+    curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/.env.docker >.env.docker
+fi
 chmod +x ./start
 chmod +x ./stop
 chmod +x ./update

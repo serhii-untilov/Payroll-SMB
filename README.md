@@ -101,8 +101,7 @@ curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scri
 
 On a **production** server:
 
-- copy .env.docker file to .env.locale
-- replace environment variables in the .env.locale file
+- replace environment variables in the .env.docker file
 - start application
 
 In **development** mode:
