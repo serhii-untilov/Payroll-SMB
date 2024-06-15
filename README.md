@@ -19,7 +19,7 @@ Link to [Live Demo](https://payroll.untilov.com.ua)
 
 ## Quick Start
 
-For a quick start, copy and run this command:
+For a quick start, run this command:
 
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
