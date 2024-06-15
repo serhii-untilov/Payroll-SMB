@@ -95,7 +95,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             field: 'hoursWorked',
             headerName: t('Working Time'),
             type: 'number',
-            width: 160,
+            width: 140,
             sortable: true,
             valueGetter: (params) => {
                 return Number(params.value) === 0 ? '' : params.value;
@@ -287,7 +287,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             field: 'grossPay',
             headerName: t('Gross Pay'),
             type: 'number',
-            width: 240,
+            width: 220,
             sortable: true,
             valueGetter: (params) => {
                 return params.row?.wage || '';
@@ -347,7 +347,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             field: 'employerExpenses',
             headerName: t('Employer Expenses'),
             type: 'number',
-            width: 240,
+            width: 200,
             sortable: true,
             renderCell: (params) => {
                 const fundECB: number = params.row?.paySumECB || 0;
@@ -485,7 +485,7 @@ export function SalaryReport(props: IFindPositionBalance) {
                     department: false,
                     dateFrom: false,
                     dateTo: false,
-                    // additionalEarnings: false,
+                    additionalEarnings: false,
                 }}
                 apiRef={gridRef}
                 rows={positionList || []}

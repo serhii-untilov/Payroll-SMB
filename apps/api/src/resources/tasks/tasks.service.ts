@@ -131,13 +131,13 @@ export class TasksService extends AvailableForUserCompany {
 
 function sortedTaskList(list: Task[]): Task[] {
     return [...list].sort((a, b) =>
-        a.dateFrom.getTime() < b.dateFrom.getTime()
+        a.sequenceNumber < b.sequenceNumber
             ? -1
-            : a.dateFrom.getTime() > b.dateFrom.getTime()
+            : a.sequenceNumber > b.sequenceNumber
               ? 1
-              : a.sequenceNumber < b.sequenceNumber
+              : a.dateTo.getTime() < b.dateTo.getTime()
                 ? -1
-                : a.sequenceNumber > b.sequenceNumber
+                : a.dateTo.getTime() > b.dateTo.getTime()
                   ? 1
                   : a.id < b.id
                     ? -1

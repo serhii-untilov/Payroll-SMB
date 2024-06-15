@@ -145,7 +145,7 @@ export function Summary() {
                     </Grid>
                     <Grid item>
                         {payPeriod?.updatedDate && (
-                            <Link to={'/payroll?tab=employer&return=true'}>
+                            <Link to={'/payroll?tab=payroll&return=true'}>
                                 <Typography
                                     sx={{
                                         // textAlign: { xs: 'start', lg: 'end' },

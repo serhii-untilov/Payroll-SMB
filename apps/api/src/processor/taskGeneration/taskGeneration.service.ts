@@ -102,7 +102,7 @@ export class TaskGenerationService {
 
     private async _generate() {
         const typeList = [
-            // TaskType.CREATE_COMPANY,
+            TaskType.CREATE_COMPANY,
             TaskType.FILL_DEPARTMENT_LIST,
             TaskType.FILL_POSITION_LIST,
             TaskType.SEND_INCOME_TAX_REPORT,

@@ -66,7 +66,7 @@ type FormType = yup.InferType<typeof formSchema>;
 
 interface Props {
     positionId: number | null | undefined;
-    onSubmitCallback?: () => void;
+    onSubmitCallback: (positionId) => void;
 }
 
 export function JobAndPay({ positionId, onSubmitCallback }: Props) {
@@ -154,7 +154,6 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
         if (!data) {
             return;
         }
-        if (onSubmitCallback) onSubmitCallback();
         const positionData = formData_Position(data);
         const positionHistoryData = formData_PositionHistory(data);
         const positionDirtyValues = getDirtyValues(dirtyFields, positionData, true);
@@ -189,6 +188,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
             await queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
+            onSubmitCallback(pos?.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
