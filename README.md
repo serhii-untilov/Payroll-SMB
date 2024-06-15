@@ -91,19 +91,19 @@ curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scri
 ./stop
 ```
 
-### Update the Docker images and script files
+### Update the application, script files, and migrate database
 
 ``` bash
 ./update
 ```
 
-### Display log file
+### Display the log file
 
 ``` bash
 ./logs
 ```
 
-### Display resource usage statistics
+### Display the resource usage statistics
 
 ``` bash
 ./stats
