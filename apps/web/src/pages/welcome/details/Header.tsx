@@ -183,7 +183,14 @@ export function Header() {
                     setShowSidebarMenu(false);
                 }}
             >
-                {<SidebarMenu setShowSidebarMenu={setShowSidebarMenu} />}
+                {
+                    <SidebarMenu
+                        onClickDemo={onClickDemo}
+                        onClickLogin={onClickLogin}
+                        onClickRegister={onClickRegister}
+                        setShowSidebarMenu={setShowSidebarMenu}
+                    />
+                }
             </Drawer>
         </>
     );

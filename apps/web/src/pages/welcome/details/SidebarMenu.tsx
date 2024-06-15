@@ -6,6 +6,9 @@ import { useTranslation } from 'react-i18next';
 
 type Props = {
     setShowSidebarMenu: (show: boolean) => void;
+    onClickDemo: () => void;
+    onClickLogin: () => void;
+    onClickRegister: () => void;
 };
 
 export function SidebarMenu(props: Props) {
@@ -14,11 +17,11 @@ export function SidebarMenu(props: Props) {
 
     const menuItems = useMemo(
         () => [
-            { label: t('Demo'), icon: <SearchRounded />, href: '/demo' },
-            { label: t('Sign Up'), icon: <PersonRounded />, href: '/register' },
-            { label: t('Sign In'), icon: <LoginRounded />, href: '/login' },
+            { label: t('Demo'), icon: <SearchRounded />, onClick: props.onClickDemo },
+            { label: t('Sign Up'), icon: <PersonRounded />, onclick: props.onClickRegister },
+            { label: t('Sign In'), icon: <LoginRounded />, onclick: props.onClickLogin },
         ],
-        [t],
+        [t, props],
     );
 
     return (
@@ -32,7 +35,7 @@ export function SidebarMenu(props: Props) {
             <List>
                 {menuItems.map((item) => (
                     <ListItem key={item.label} disablePadding>
-                        <ListItemButton href={item.href}>
+                        <ListItemButton onClick={item.onClick}>
                             <ListItemIcon>{item.icon}</ListItemIcon>
                             <ListItemText primary={item.label} />
                         </ListItemButton>
