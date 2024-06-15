@@ -99,7 +99,7 @@ const recordList = [
     },
 ];
 
-export class Seed1716557460889 implements MigrationInterface {
+export class Seed1816557460889 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         const userId = await getSystemUserId(dataSource);
