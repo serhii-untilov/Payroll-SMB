@@ -73,7 +73,7 @@ docker compose push
 
 ## Production
 
-### Pull docker images and start Application
+### Pull Docker images and start the application
 
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
@@ -91,7 +91,7 @@ curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scri
 ./stop
 ```
 
-### Update images
+### Update the Docker images and script files
 
 ``` bash
 ./update
