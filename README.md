@@ -64,7 +64,7 @@ In development mode, the frontend and backend applications work on different por
 - Backend URL <http://localhost:3000/api>
 - Frontend URL <http://localhost:5173>
 
-### Build docker images and push them on Docker Hub
+Build docker images and push them on Docker Hub
 
 ``` bash
 docker compose build
