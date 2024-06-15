@@ -1,2 +1,16 @@
 node_modules
-./postgres-data
+.turbo
+out
+
+# Local env and config files
+*.local
+
+# Local database
+*.sqlite
+
+stats.html
+
+*.bak
+
+/postgres-backup
+/postgres-data

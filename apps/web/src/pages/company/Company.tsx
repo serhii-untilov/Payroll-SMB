@@ -19,7 +19,7 @@ import { CompanyPayPeriods } from './details/CompanyPayPeriods';
 
 export default function Company() {
     const params = useParams();
-    const companyId = Number(params.companyId);
+    const [companyId, setCompanyId] = useState(Number(params.companyId));
     const [searchParams, setSearchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
     const goBack = searchParams.get('return') === 'true';
@@ -51,6 +51,10 @@ export default function Company() {
         localStorage.setItem('company-tab-index', newValue.toString());
     };
 
+    const submitCallback = (companyId: number) => {
+        setCompanyId(companyId);
+    };
+
     return (
         <PageLayout>
             <PageTitle goBack={goBack}>{pageTitle}</PageTitle>
@@ -62,7 +66,7 @@ export default function Company() {
                 <Tab label={t('Accounts')} disabled={!data?.id} />
             </Tabs>
             <TabPanel value={tab} index={0}>
-                <CompanyDetails companyId={companyId} />
+                <CompanyDetails companyId={companyId} submitCallback={submitCallback} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
                 <CompanyPayPeriods companyId={companyId} />

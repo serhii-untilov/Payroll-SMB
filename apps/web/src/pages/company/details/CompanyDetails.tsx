@@ -50,6 +50,7 @@ type FormType = yup.InferType<typeof formSchema>;
 
 type Props = {
     companyId: number | undefined;
+    submitCallback: (companyId: number) => void;
 };
 
 export function CompanyDetails(props: Props) {
@@ -188,8 +189,9 @@ export function CompanyDetails(props: Props) {
             await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
             if (!currentCompany) {
                 setCurrentCompany(company);
-                navigate(`/company/${company.id}`);
+                // navigate(`/company/${company.id}`);
             }
+            props.submitCallback(company?.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });

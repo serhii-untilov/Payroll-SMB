@@ -15,7 +15,7 @@ const recordList = [
     { dateFrom: '2020-01-01', dateTo: '2020-08-31', paySum: 4723 },
 ];
 
-export class Seed1716546444414 implements MigrationInterface {
+export class Seed1816546444414 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         const userId = await getSystemUserId(dataSource);

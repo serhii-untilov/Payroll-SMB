@@ -18,7 +18,7 @@ import { Personal } from './details/Personal';
 
 export default function Position() {
     const params = useParams();
-    const positionId = Number(params.positionId);
+    const [positionId, setPositionId] = useState(Number(params.positionId));
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company, payPeriod } = useAppContext();
@@ -81,8 +81,9 @@ export default function Position() {
         return `${positionName}` + (jobName ? `, ${jobName}` : '');
     };
 
-    const onSubmitCallback = async () => {
+    const onSubmitCallback = async (positionId) => {
         console.log('onDetailSubmit');
+        setPositionId(positionId);
         await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 

@@ -58,7 +58,7 @@ export function CompanyPayPeriods(params: Props) {
             field: 'inBalance',
             headerName: t('In Balance'),
             type: 'number',
-            width: 180,
+            width: 160,
             sortable: true,
             valueGetter: (params) => {
                 return Number(params.value) === 0 ? '' : params.value;
@@ -68,7 +68,7 @@ export function CompanyPayPeriods(params: Props) {
             field: 'accruals',
             headerName: t('Accruals'),
             type: 'number',
-            width: 170,
+            width: 160,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
@@ -78,7 +78,7 @@ export function CompanyPayPeriods(params: Props) {
             field: 'deductions',
             headerName: t('Deductions'),
             type: 'number',
-            width: 170,
+            width: 160,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
@@ -88,7 +88,7 @@ export function CompanyPayPeriods(params: Props) {
             field: 'taxes',
             headerName: t('Taxes'),
             type: 'number',
-            width: 170,
+            width: 160,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
@@ -98,7 +98,7 @@ export function CompanyPayPeriods(params: Props) {
             field: 'netPay',
             headerName: t('Net Pay'),
             type: 'number',
-            width: 170,
+            width: 160,
             sortable: true,
             valueGetter: (params) => {
                 const netPay =
@@ -112,7 +112,7 @@ export function CompanyPayPeriods(params: Props) {
             field: 'payments',
             headerName: t('Payments Sum'),
             type: 'number',
-            width: 170,
+            width: 160,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);

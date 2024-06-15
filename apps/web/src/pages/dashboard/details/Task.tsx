@@ -187,7 +187,7 @@ function getTitleByTaskType(type: string) {
         case TaskType.CREATE_COMPANY:
             return 'Company';
         case TaskType.FILL_DEPARTMENT_LIST:
-            return 'Company';
+            return 'Departments';
         case TaskType.FILL_POSITION_LIST:
             return 'People';
         case TaskType.POST_WORK_SHEET:
@@ -253,7 +253,7 @@ function getPath(
 ): string {
     switch (type) {
         case TaskType.CREATE_COMPANY:
-            return '/company/?tab=details&return=true';
+            return `/company/${companyId ? companyId : ''}?tab=details&return=true`;
         case TaskType.FILL_DEPARTMENT_LIST:
             return companyId ? `/company/${companyId || ''}?tab=departments&return=true` : '#';
         case TaskType.FILL_POSITION_LIST:

@@ -33,7 +33,7 @@ export function PositionList(props: IFindPosition) {
             field: 'cardNumber',
             headerName: t('Card Number'),
             type: 'string',
-            width: 120,
+            width: 100,
             sortable: true,
         },
         {
@@ -95,7 +95,7 @@ export function PositionList(props: IFindPosition) {
             field: 'paymentType',
             headerName: t('Payment Type'),
             type: 'string',
-            width: 200,
+            width: 190,
             sortable: true,
             valueGetter: (params) => {
                 return payPeriod
@@ -109,7 +109,7 @@ export function PositionList(props: IFindPosition) {
             field: 'wage',
             headerName: t('Wage'),
             type: 'number',
-            width: 130,
+            width: 110,
             sortable: true,
             valueGetter: (params) => {
                 const wage = payPeriod
@@ -124,7 +124,7 @@ export function PositionList(props: IFindPosition) {
             field: 'rate',
             headerName: t('Rate'),
             type: 'number',
-            width: 130,
+            width: 80,
             sortable: true,
             valueGetter: (params) => {
                 return payPeriod
@@ -156,12 +156,7 @@ export function PositionList(props: IFindPosition) {
         },
     ];
 
-    const {
-        data: positionList,
-        isError: isPositionListError,
-        isLoading: isPositionListLoading,
-        error: positionListError,
-    } = useQuery<IPosition[], Error>({
+    const { data, isError, isLoading, error } = useQuery<IPosition[], Error>({
         queryKey: ['position', 'list', props],
         queryFn: async () => {
             return (await getPositions(props)).sort((a, b) =>
@@ -175,12 +170,12 @@ export function PositionList(props: IFindPosition) {
         enabled: !!companyId && !!payPeriod,
     });
 
-    if (isPositionListLoading) {
+    if (isLoading) {
         return <Loading />;
     }
 
-    if (isPositionListError) {
-        return enqueueSnackbar(`${positionListError.name}\n${positionListError.message}`, {
+    if (isError) {
+        return enqueueSnackbar(`${error.name}\n${error.message}`, {
             variant: 'error',
         });
     }
@@ -238,8 +233,8 @@ export function PositionList(props: IFindPosition) {
         <>
             <Toolbar
                 onAdd={onAddPosition}
-                onPrint={positionList?.length ? onPrint : 'disabled'}
-                onExport={positionList?.length ? onExport : 'disabled'}
+                onPrint={data?.length ? onPrint : 'disabled'}
+                onExport={data?.length ? onExport : 'disabled'}
                 onDelete={rowSelectionModel.length ? onDeletePosition : 'disabled'}
                 // onShowDeleted={'disabled'}
                 onRestoreDeleted={'disabled'}
@@ -254,7 +249,7 @@ export function PositionList(props: IFindPosition) {
                     dateTo: false,
                 }}
                 apiRef={gridRef}
-                rows={positionList || []}
+                rows={data || []}
                 columns={columns}
                 checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
