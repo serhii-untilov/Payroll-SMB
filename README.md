@@ -97,6 +97,18 @@ curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scri
 ./update
 ```
 
+### Display log file
+
+``` bash
+./logs
+```
+
+### Display resource usage statistics
+
+``` bash
+./stats
+```
+
 ## Configuration
 
 On a **production** server:
