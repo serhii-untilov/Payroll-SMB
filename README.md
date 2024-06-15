@@ -73,37 +73,37 @@ docker compose push
 
 ## Production
 
-### Pull Docker images and start the application
+Pull Docker images and start the application
 
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
 ```
 
-### Start the application
+Start the application
 
 ``` bash
 ./start
 ```
 
-### Stop the application
+Stop the application
 
 ``` bash
 ./stop
 ```
 
-### Update the application, script files, and migrate database
+Update the application, script files, and migrate database
 
 ``` bash
 ./update
 ```
 
-### Display the log file
+Display the log file
 
 ``` bash
 ./logs
 ```
 
-### Display the resource usage statistics
+Display the resource usage statistics
 
 ``` bash
 ./stats
