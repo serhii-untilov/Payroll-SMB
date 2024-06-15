@@ -21,7 +21,7 @@ import { PayPeriod, defaultFieldList } from './entities/payPeriod.entity';
 
 @Injectable()
 export class PayPeriodsService extends AvailableForUserCompany {
-    private logger: Logger = new Logger(PayPeriodsService.name);
+    private _logger: Logger = new Logger(PayPeriodsService.name);
     public readonly resourceType = ResourceType.PAY_PERIOD;
 
     constructor(

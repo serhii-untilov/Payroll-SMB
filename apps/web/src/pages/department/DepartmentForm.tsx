@@ -39,6 +39,7 @@ const formSchema = yup.object().shape({
     dateFrom: yup.date().nullable(),
     dateTo: yup.date().nullable(),
     parentDepartmentId: yup.number().nullable(),
+    version: yup.number().nullable(),
 });
 
 type FormType = yup.InferType<typeof formSchema>;
@@ -61,6 +62,7 @@ export default function DepartmentForm(params: Params) {
             dateFrom: minDate(),
             dateTo: maxDate(),
             parentDepartmentId: null,
+            version: null,
         };
     }, [company]);
 
@@ -121,7 +123,7 @@ export default function DepartmentForm(params: Params) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const department = data.id
-                ? await updateDepartment(data.id, dirtyValues)
+                ? await updateDepartment(data.id, { ...dirtyValues, version: data.version })
                 : await createDepartment(data);
             reset(department);
             if (submitCallback) submitCallback(department);

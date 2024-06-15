@@ -9,7 +9,7 @@ import { Logo } from '../../../components/layout/Logo';
 import useAppContext from '../../../hooks/useAppContext';
 import useAuth from '../../../hooks/useAuth';
 import useLocale from '../../../hooks/useLocale';
-import { preview } from '../../../services/auth.service';
+import { logoutUser, preview } from '../../../services/auth.service';
 import { SidebarMenu } from './SidebarMenu';
 
 export function Header() {
@@ -29,18 +29,19 @@ export function Header() {
     };
 
     const onClickDemo = async () => {
-        login(await preview());
+        const credentials = await preview();
+        await login(credentials);
         navigate('/dashboard');
     };
 
     const onClickRegister = async () => {
-        logout();
-        navigate('/register');
+        await logout();
+        navigate('/signup');
     };
 
     const onClickLogin = async () => {
-        logout();
-        navigate('/login');
+        await logout();
+        navigate('/signin');
     };
 
     return (
@@ -116,7 +117,6 @@ export function Header() {
                         </Button>
 
                         <Button
-                            // href="/register"
                             onClick={() => onClickRegister()}
                             variant="text"
                             sx={{
@@ -133,7 +133,6 @@ export function Header() {
                         </Button>
 
                         <Button
-                            // href="/login"
                             onClick={() => onClickLogin()}
                             variant="text"
                             sx={{
