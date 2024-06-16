@@ -181,6 +181,7 @@ export class PayrollsService extends AvailableForUserCompany {
             .innerJoin('payroll.paymentType', 'paymentType')
             .innerJoin('payroll.position', 'position')
             .where('position.companyId = :companyId', { companyId })
+            .andWhere('payroll.positionId = position.id')
             .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
             .groupBy('paymentType.paymentPart')
             .getRawMany();
@@ -204,6 +205,7 @@ export class PayrollsService extends AvailableForUserCompany {
             .innerJoin('payroll.paymentType', 'paymentType')
             .innerJoin('payroll.position', 'position')
             .where('position.companyId = :companyId', { companyId })
+            .andWhere('payroll.positionId = position.id')
             .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
             .groupBy('paymentType.paymentGroup')
             .getRawMany();
@@ -227,6 +229,7 @@ export class PayrollsService extends AvailableForUserCompany {
             .innerJoin('payroll.paymentType', 'paymentType')
             .innerJoin('payroll.position', 'position')
             .where('position.companyId = :companyId', { companyId })
+            .andWhere('payroll.positionId = position.id')
             .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
             .groupBy('paymentType.calcMethod')
             .getRawMany();
@@ -244,6 +247,7 @@ export class PayrollsService extends AvailableForUserCompany {
             .innerJoin('payroll.paymentType', 'paymentType')
             .innerJoin('payroll.position', 'position')
             .where('position.companyId = :companyId', { companyId })
+            .andWhere('payroll.positionId = position.id')
             .andWhere('payroll.payPeriod = :payPeriod', { payPeriod })
             .groupBy('payroll.positionId')
             .addGroupBy('paymentType.calcMethod')

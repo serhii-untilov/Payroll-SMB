@@ -16,7 +16,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink, redirect } from 'react-router-dom';
+import { Link as RouterLink, redirect, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FormTextField } from '../../components/form/FormTextField';
 import { AppTitle } from '../../components/layout/AppTitle';
@@ -49,6 +49,7 @@ export default function SignUp() {
     const { register } = useAuth();
     const { locale } = useLocale();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const {
         control,
@@ -84,7 +85,8 @@ export default function SignUp() {
         if (data.email) {
             try {
                 await register(data);
-                redirect('/dashboard');
+                // redirect('/dashboard');
+                navigate('/dashboard');
             } catch (e) {
                 enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
             }
