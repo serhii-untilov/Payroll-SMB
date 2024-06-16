@@ -60,7 +60,12 @@ export class RolesService {
             AccessType.UPDATE,
         );
         await this.repository.findOneOrFail({ where: { id } });
-        return await this.repository.save({ ...data, id, updatedUserId: userId });
+        return await this.repository.save({
+            ...data,
+            id,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
     }
 
     async remove(userId: number, id: number): Promise<Role> {

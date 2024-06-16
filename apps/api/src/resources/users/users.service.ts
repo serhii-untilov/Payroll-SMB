@@ -110,7 +110,12 @@ export class UsersService {
                 }
             }
         }
-        return await this.repository.save({ id, ...payload, updatedUserId: userId });
+        return await this.repository.save({
+            id,
+            ...payload,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
     }
 
     async remove(userId: number, id: number): Promise<User> {

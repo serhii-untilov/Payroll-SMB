@@ -62,7 +62,7 @@ export class AccessService {
             throw new NotFoundException(`Access record could not be found.`);
         }
         await this.availableForUserOrFail(userId, this.resourceType, AccessType.UPDATE);
-        await this.repository.save({ ...data, id, updatedUserId: userId });
+        await this.repository.save({ ...data, id, updatedUserId: userId, updatedDate: new Date() });
         return await this.repository.save({ id, ...data });
     }
 

@@ -89,6 +89,7 @@ export class DepartmentsService extends AvailableForUserCompany {
             ...payload,
             id,
             updatedUserId: userId,
+            updatedDate: new Date(),
         });
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('department.updated', new DepartmentUpdatedEvent(userId, updated));

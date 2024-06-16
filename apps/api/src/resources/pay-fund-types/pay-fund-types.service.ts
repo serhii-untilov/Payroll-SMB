@@ -58,6 +58,7 @@ export class PayFundTypesService extends AvailableForUser {
             ...payload,
             id,
             updatedUserId: userId,
+            updatedDate: new Date(),
         });
     }
 

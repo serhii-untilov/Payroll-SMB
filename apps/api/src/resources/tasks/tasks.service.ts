@@ -82,7 +82,12 @@ export class TasksService extends AvailableForUserCompany {
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        await this.repository.save({ ...payload, id, updatedUserId: userId });
+        await this.repository.save({
+            ...payload,
+            id,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 

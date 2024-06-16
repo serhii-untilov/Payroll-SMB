@@ -99,7 +99,12 @@ export class PayFundsService extends AvailableForUserCompany {
     }
 
     async update(userId: number, id: number, payload: UpdatePayFundDto): Promise<PayFund> {
-        await this.repository.save({ ...payload, id, updatedUserId: userId });
+        await this.repository.save({
+            ...payload,
+            id,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 

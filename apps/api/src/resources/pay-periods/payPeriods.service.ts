@@ -110,7 +110,12 @@ export class PayPeriodsService extends AvailableForUserCompany {
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        return await this.repository.save({ ...payload, id, updatedUserId: userId });
+        return await this.repository.save({
+            ...payload,
+            id,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
     }
 
     async remove(userId: number, id: number): Promise<PayPeriod> {
