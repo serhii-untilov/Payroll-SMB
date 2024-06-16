@@ -132,8 +132,11 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     useEffect(() => {
         if (eventSource) {
             eventSource.onerror = function (event) {
-                setServerEvent(ServerEvent.COMMUNICATION_ERROR);
-                console.log(`An error occurred while attempting to connect.`);
+                // setServerEvent(ServerEvent.COMMUNICATION_ERROR);
+                // console.log(`An error occurred while attempting to connect.`);
+                console.log(
+                    `SSE error: ${ServerEvent.COMMUNICATION_ERROR}, event: ${JSON.stringify(event)}`,
+                );
             };
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
