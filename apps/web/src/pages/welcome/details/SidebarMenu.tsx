@@ -79,7 +79,7 @@ export function SidebarMenu(props: Props) {
 
     return (
         <Box
-            sx={{ minWidth: 320 }}
+            // sx={{ minWidth: 320 }}
             role="presentation"
             onClick={() => {
                 setShowSidebarMenu(false);
