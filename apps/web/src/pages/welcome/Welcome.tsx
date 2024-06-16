@@ -5,11 +5,13 @@ import { Footer } from './details/Footer';
 import { Header } from './details/Header';
 import { ScreenshotList } from './details/ScreenshotList';
 import { useEffect } from 'react';
+import useLocale from '../../hooks/useLocale';
 
 function Welcome() {
     const { themeMode } = useAppContext();
+    const { locale } = useLocale();
 
-    useEffect(() => {}, [themeMode]);
+    useEffect(() => {}, [themeMode, locale]);
 
     return (
         <>

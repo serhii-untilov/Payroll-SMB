@@ -1,5 +1,5 @@
 import { Language, MenuRounded } from '@mui/icons-material';
-import { Box, Drawer, IconButton, Typography } from '@mui/material';
+import { Box, Drawer, IconButton } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { Logo } from '../../../components/layout/Logo';
 import useAppContext from '../../../hooks/useAppContext';
 import useAuth from '../../../hooks/useAuth';
 import useLocale from '../../../hooks/useLocale';
-import { logoutUser, preview } from '../../../services/auth.service';
+import { preview } from '../../../services/auth.service';
 import { SidebarMenu } from './SidebarMenu';
 
 export function Header() {
@@ -177,7 +177,7 @@ export function Header() {
                 </Box>
             </Box>
             <Drawer
-                anchor={'top'}
+                anchor={'right'}
                 open={showSidebarMenu}
                 onClose={() => {
                     setShowSidebarMenu(false);
@@ -188,6 +188,7 @@ export function Header() {
                         onClickDemo={onClickDemo}
                         onClickLogin={onClickLogin}
                         onClickRegister={onClickRegister}
+                        onClickLanguage={onToggleLanguage}
                         setShowSidebarMenu={setShowSidebarMenu}
                     />
                 }

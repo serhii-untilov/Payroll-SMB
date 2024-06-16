@@ -46,12 +46,11 @@ export function ScreenshotList() {
     };
 
     return (
-        <>
+        <Box id="screenshot-list">
             <Typography variant="h2" color={'text.primary'} sx={{ my: 3, textAlign: 'center' }}>
                 {t('Screenshots')}
             </Typography>
             <Box
-                id="screenshot-list"
                 sx={{
                     maxWidth: 'lg',
                     width: '100%',
@@ -100,6 +99,6 @@ export function ScreenshotList() {
                     ></Button>
                 </ButtonGroup>
             </Box>
-        </>
+        </Box>
     );
 }

@@ -53,7 +53,7 @@ export function UseCases() {
     );
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', my: 5, gap: 2 }}>
+        <Box id="usage-scenarios" sx={{ display: 'flex', flexDirection: 'column', my: 5, gap: 2 }}>
             <Typography variant="h2" color={'text.primary'} sx={{ my: 3, textAlign: 'center' }}>
                 {t('Usage scenarios')}
             </Typography>
