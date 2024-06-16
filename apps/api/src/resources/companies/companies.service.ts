@@ -132,6 +132,7 @@ export class CompaniesService {
                 users: { userId },
             },
         });
+        this._logger.log(`companies/${id}: payPeriod: ${company.payPeriod}`);
         return company;
     }
 
