@@ -1,7 +1,7 @@
 import { ChevronRightRounded } from '@mui/icons-material';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Link, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useAppContext from '../../../hooks/useAppContext';
 
 type Props = {
@@ -22,7 +22,7 @@ export function FeatureBox(props: Props) {
 
     return (
         <Box
-            component={'button'}
+            // component={'button'}
             onClick={() => {
                 onClick(index);
             }}
@@ -84,7 +84,7 @@ export function FeatureBox(props: Props) {
                     <Typography variant="h5" color="primary" sx={{ fontWeight: 500 }} align="left">
                         {name}
                     </Typography>
-                    <Typography align="left" color={'text.primary'}>
+                    <Box color={'text.primary'}>
                         <ul
                             style={{
                                 padding: 0,
@@ -94,8 +94,9 @@ export function FeatureBox(props: Props) {
                                 overflow: 'auto',
                             }}
                         >
-                            {description.map((item) => (
+                            {description.map((item, index) => (
                                 <li
+                                    key={index + 1}
                                     style={{
                                         listStyleType: 'none',
                                     }}
@@ -104,12 +105,12 @@ export function FeatureBox(props: Props) {
                                 </li>
                             ))}
                         </ul>
-                    </Typography>
+                    </Box>
                     <Button
                         onClick={() => {
                             navigate(details);
                         }}
-                        variant="text"
+                        // variant="text"
                         size="small"
                         endIcon={<ChevronRightRounded />}
                         sx={{

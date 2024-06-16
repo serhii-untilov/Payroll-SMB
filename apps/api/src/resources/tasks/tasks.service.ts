@@ -130,6 +130,10 @@ export class TasksService extends AvailableForUserCompany {
                 }),
             ),
         ];
+        fakeTaskList.forEach((o, index) => {
+            o.id = index;
+            o.sequenceNumber = index;
+        });
         return fakeTaskList;
     }
 }

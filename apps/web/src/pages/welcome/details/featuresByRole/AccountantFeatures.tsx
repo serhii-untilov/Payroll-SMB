@@ -48,8 +48,8 @@ export default function AccountantFeatures({ embedded }: Props) {
             )}
             <Box sx={embedded ? { minHeight: 0 } : { p: 1, minHeight: 0 }}>
                 <ul>
-                    {featureList.map((item) => (
-                        <li>
+                    {featureList.map((item, index) => (
+                        <li key={index}>
                             <Typography color={'text.secondary'}>{item}</Typography>
                         </li>
                     ))}

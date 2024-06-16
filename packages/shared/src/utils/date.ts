@@ -81,6 +81,10 @@ export function deepStringToShortDate(obj: any): any {
     return obj;
 }
 
+export function dateUTC(date: Date): Date {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+}
+
 export function monthBegin(date: Date): Date {
     // return new Date(date.getFullYear(), date.getMonth(), 1);
     // return startOfMonth(date);

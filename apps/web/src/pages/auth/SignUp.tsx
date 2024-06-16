@@ -87,6 +87,7 @@ export default function SignUp() {
                 await register(data);
                 // redirect('/dashboard');
                 navigate('/dashboard');
+                return redirect('/dashboard');
             } catch (e) {
                 enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
             }

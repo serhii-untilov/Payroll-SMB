@@ -1,5 +1,5 @@
-import { ICreatePayPeriod, IPayPeriod, IUpdatePayPeriod } from '@repo/shared';
-import { format, isEqual, startOfDay } from 'date-fns';
+import { ICreatePayPeriod, IPayPeriod, IUpdatePayPeriod, dateUTC, monthBegin, monthEnd } from '@repo/shared';
+import { format, isEqual } from 'date-fns';
 import { t } from 'i18next';
 import { api } from '../api';
 import authHeader from './auth-header';
@@ -85,8 +85,8 @@ export function getPayPeriodName(
 ): string {
     const state = isCurrent ? `(${t('current')})` : '';
     if (
-        isEqual(startOfDay(dateFrom), monthBegin(dateFrom)) &&
-        isEqual(startOfDay(dateTo), monthEnd(dateTo))
+        isEqual(dateUTC(dateFrom), monthBegin(dateFrom)) &&
+        isEqual(dateUTC(dateTo), monthEnd(dateTo))
     ) {
         return `${format(dateFrom, template, { locale })} ${state}`;
     }

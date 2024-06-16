@@ -105,8 +105,9 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         const initPayPeriod = async () => {
             const current: Date =
                 (await getCurrentPayPeriodDateFrom(company?.id)) || monthBegin(new Date());
+            const currentPeriodString = localStorage.getItem('currentPayPeriod');
             const lastCurrent: Date = monthBegin(
-                localStorage.getItem('currentPayPeriod') || new Date(),
+                currentPeriodString ? new Date(currentPeriodString) : new Date(),
             );
             if (current.getTime() !== lastCurrent.getTime()) {
                 localStorage.setItem('currentPayPeriod', format(current, 'yyyy-MM-dd'));
@@ -114,7 +115,10 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
                 setPayPeriod(current);
                 return;
             }
-            const payPeriod: Date = monthBegin(localStorage.getItem('payPeriod') || new Date());
+            const payPeriodString = localStorage.getItem('payPeriod');
+            const payPeriod: Date = monthBegin(
+                payPeriodString ? new Date(payPeriodString) : new Date(),
+            );
             localStorage.setItem('currentPayPeriod', format(current, 'yyyy-MM-dd'));
             localStorage.setItem('payPeriod', format(payPeriod, 'yyyy-MM-dd'));
             setPayPeriod(payPeriod);
