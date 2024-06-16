@@ -38,14 +38,11 @@ export class CompaniesController {
     async create(@Req() req: Request, @Body() payload: CreateCompanyDto) {
         const userId = req.user['sub'];
         await this.service.availableCreateOrFail(userId);
-        this._logger.log(`C!!! 1 ${payload.payPeriod}`);
         const payloadTransformed = deepStringToShortDate(payload);
-        this._logger.log(`C!!! 2 ${payloadTransformed.payPeriod}`);
         const company = await this.service.create(
             userId,
             deepStringToShortDate(payloadTransformed),
         );
-        this._logger.log(`C!!! 3 ${company.payPeriod}`);
         return company;
     }
 

@@ -84,7 +84,6 @@ export class CompaniesService {
     }
 
     async create(userId: number, payload: CreateCompanyDto): Promise<Company> {
-        this._logger.log(`!!! 1 ${payload.payPeriod}`);
         const existing = await this.usersCompanyService.findOneByName(userId, payload.name);
         if (existing) {
             throw new BadRequestException(`Company '${payload.name}' already exists.`);
@@ -105,7 +104,6 @@ export class CompaniesService {
         });
         const created = await this.repository.findOneOrFail({ where: { id: record.id } });
         this.eventEmitter.emit('company.created', new CompanyCreatedEvent(userId, created));
-        this._logger.log(`!!! 2 ${created.payPeriod}`);
         return created;
     }
 
