@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { IconButton, InputAdornment, Link } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -11,12 +11,13 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
+import { grey } from '@mui/material/colors';
 import { ICreateUser } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink, redirect, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FormTextField } from '../../components/form/FormTextField';
 import { AppTitle } from '../../components/layout/AppTitle';
@@ -24,7 +25,6 @@ import { Copyright } from '../../components/layout/Copyright';
 import useAuth from '../../hooks/useAuth';
 import useLocale from '../../hooks/useLocale';
 import { errorMessage } from '../../services/utils';
-import { grey } from '@mui/material/colors';
 
 const formSchema = Yup.object().shape({
     firstName: Yup.string().required('First name is required'),
@@ -87,7 +87,7 @@ export default function SignUp() {
                 await register(data);
                 // redirect('/dashboard');
                 navigate('/dashboard');
-                return redirect('/dashboard');
+                // return redirect('/dashboard');
             } catch (e) {
                 enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
             }

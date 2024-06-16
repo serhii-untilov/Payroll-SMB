@@ -8,7 +8,7 @@ import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, redirect } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import useAppContext from '../../hooks/useAppContext';
 import useAuth from '../../hooks/useAuth';
 import useLocale from '../../hooks/useLocale';
@@ -26,6 +26,7 @@ export default function MainLayout() {
     const { locale, toggleLanguage } = useLocale();
     const { t } = useTranslation();
     const { compactView, setCompactView, themeMode, theme, switchThemeMode } = useAppContext();
+    const navigate = useNavigate();
 
     useEffect(() => {}, [locale, t]);
 
@@ -40,7 +41,8 @@ export default function MainLayout() {
     function onLogout() {
         logout();
         // redirect('/signin');
-        redirect('/welcome');
+        // redirect('/welcome');
+        navigate('/');
     }
 
     return (
