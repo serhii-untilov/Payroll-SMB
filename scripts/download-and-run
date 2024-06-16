@@ -5,14 +5,14 @@ if ! [ -d ./payroll-smb ]; then
     mkdir payroll-smb
 fi
 cd payroll-smb
-curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/docker-compose.yml >docker-compose.yml
-curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/start >start
-curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stop >stop
-curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/update >update
-curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/logs >logs
-curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stats >stats
+curl -O -s -S https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/docker-compose.yml
+curl -O -s -S https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/start
+curl -O -s -S https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stop
+curl -O -s -S https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/update
+curl -O -s -S https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/logs
+curl -O -s -S https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stats
 if ! [ -f ./.env.docker ]; then
-    curl https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/.env.docker >.env.docker
+    curl -O -s -S https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/.env.docker
 fi
 chmod +x ./start
 chmod +x ./stop

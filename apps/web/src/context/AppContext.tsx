@@ -6,6 +6,7 @@ import {
     useMediaQuery,
 } from '@mui/material';
 import { ICompany, IUserCompany, ServerEvent } from '@repo/shared';
+import { useQueryClient } from '@tanstack/react-query';
 import { format, startOfMonth } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 import useAuth from '../hooks/useAuth';
@@ -14,7 +15,6 @@ import { getCompany } from '../services/company.service';
 import { getCurrentPayPeriodDateFrom } from '../services/payPeriod.service';
 import { getUserCompanyList } from '../services/user.service';
 import { defaultTheme } from '../themes/defaultTheme';
-import { useQueryClient } from '@tanstack/react-query';
 
 export type AppContextType = {
     compactView: boolean;

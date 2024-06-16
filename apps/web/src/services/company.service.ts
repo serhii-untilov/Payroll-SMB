@@ -3,7 +3,9 @@ import { api } from '../api';
 import authHeader from './auth-header';
 
 export async function createCompany(company: ICreateCompany): Promise<ICompany> {
+    console.log('!!! 1', company.payPeriod);
     const response = await api.post(`/api/companies/`, company, { headers: authHeader() });
+    console.log('!!! 2', response.data.payPeriod);
     return response.data;
 }
 

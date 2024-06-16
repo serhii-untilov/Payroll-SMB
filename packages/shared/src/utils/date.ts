@@ -82,11 +82,15 @@ export function deepStringToShortDate(obj: any): any {
 }
 
 export function monthBegin(date: Date): Date {
-    return new Date(date.getFullYear(), date.getMonth(), 1);
+    // return new Date(date.getFullYear(), date.getMonth(), 1);
+    // return startOfMonth(date);
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), 1));
 }
 
 export function monthEnd(date: Date): Date {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    // return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    // return startOfDay(endOfMonth(date));
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth() + 1, 0));
 }
 
 export function formatDate(date: Date): string {
@@ -133,11 +137,11 @@ export function dateToTime(date: Date): number {
 }
 
 export function minDate(): Date {
-    return new Date('1900-01-01');
+    return monthBegin(new Date('1900-01-01'));
 }
 
 export function maxDate(): Date {
-    return new Date('9999-12-31');
+    return monthEnd(new Date('9999-12-31'));
 }
 
 export function getMonthName(date: Date): string {
@@ -160,7 +164,7 @@ export function getMonthName(date: Date): string {
 }
 
 export function getPeriodName(date: Date, format: string = 'ym'): string {
-    const d = new Date(date);
+    const d = date; // new Date(date);
     const monthName = getMonthName(d);
     const year = d.getFullYear();
     return format.localeCompare('ym') === 0 ? `${year} ${monthName}` : `${monthName} ${year}`;
