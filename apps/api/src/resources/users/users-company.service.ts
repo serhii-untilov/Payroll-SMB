@@ -74,7 +74,12 @@ export class UsersCompanyService {
             this.resourceType,
             AccessType.UPDATE,
         );
-        await this.repository.save({ id, ...payload, updatedUserId: userId });
+        await this.repository.save({
+            id,
+            ...payload,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
         // re-query the database so that the updated record is returned
         return await this.repository.findOneOrFail({ where: { id } });
     }

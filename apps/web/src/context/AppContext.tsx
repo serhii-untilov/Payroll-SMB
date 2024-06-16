@@ -5,7 +5,7 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany, IUserCompany, ServerEvent } from '@repo/shared';
+import { ICompany, IUserCompany, ServerEvent, monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { format, startOfMonth } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
@@ -39,7 +39,7 @@ const AppContext = createContext<AppContextType>({
     themeMode: 'light',
     setThemeMode: () => {},
     switchThemeMode: () => {},
-    payPeriod: startOfMonth(new Date()),
+    payPeriod: monthBegin(new Date()),
     setPayPeriod: () => {},
     serverEvent: '',
 });
@@ -85,7 +85,6 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
                     userCompanyList.find((o) => o.companyId === companyId) || userCompanyList[0];
                 const currentCompany = await getCompany(userCompany.companyId);
                 setCompany(currentCompany);
-                // setPayPeriod(company?.payPeriod || startOfMonth(new Date()));
                 localStorage.setItem('company', currentCompany.id.toString());
             }
         };
@@ -105,9 +104,10 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     useEffect(() => {
         const initPayPeriod = async () => {
             const current: Date =
-                (await getCurrentPayPeriodDateFrom(company?.id)) || startOfMonth(new Date());
-            const lastCurrent: Date = startOfMonth(
-                localStorage.getItem('currentPayPeriod') || new Date(),
+                (await getCurrentPayPeriodDateFrom(company?.id)) || monthBegin(new Date());
+            const currentPeriodString = localStorage.getItem('currentPayPeriod');
+            const lastCurrent: Date = monthBegin(
+                currentPeriodString ? new Date(currentPeriodString) : new Date(),
             );
             if (current.getTime() !== lastCurrent.getTime()) {
                 localStorage.setItem('currentPayPeriod', format(current, 'yyyy-MM-dd'));
@@ -115,7 +115,10 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
                 setPayPeriod(current);
                 return;
             }
-            const payPeriod: Date = startOfMonth(localStorage.getItem('payPeriod') || new Date());
+            const payPeriodString = localStorage.getItem('payPeriod');
+            const payPeriod: Date = monthBegin(
+                payPeriodString ? new Date(payPeriodString) : new Date(),
+            );
             localStorage.setItem('currentPayPeriod', format(current, 'yyyy-MM-dd'));
             localStorage.setItem('payPeriod', format(payPeriod, 'yyyy-MM-dd'));
             setPayPeriod(payPeriod);
@@ -132,8 +135,11 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     useEffect(() => {
         if (eventSource) {
             eventSource.onerror = function (event) {
-                setServerEvent(ServerEvent.COMMUNICATION_ERROR);
-                console.log(`An error occurred while attempting to connect.`);
+                // setServerEvent(ServerEvent.COMMUNICATION_ERROR);
+                // console.log(`An error occurred while attempting to connect.`);
+                console.log(
+                    `SSE error: ${ServerEvent.COMMUNICATION_ERROR}, event: ${JSON.stringify(event)}`,
+                );
             };
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {

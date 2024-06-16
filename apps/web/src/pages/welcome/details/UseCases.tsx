@@ -60,6 +60,7 @@ export function UseCases() {
             {useCases.map((item, index) => {
                 return (
                     <Box
+                        key={index}
                         sx={{
                             display: 'flex',
                             flexDirection:
@@ -95,8 +96,8 @@ export function UseCases() {
                             <Typography variant="h3" color="primary">
                                 {item.name}
                             </Typography>
-                            {item.description.map((element) => {
-                                return <Typography>{element}</Typography>;
+                            {item.description.map((element, index) => {
+                                return <Typography key={index}>{element}</Typography>;
                             })}
                         </Box>
                         <Box

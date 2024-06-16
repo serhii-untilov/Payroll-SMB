@@ -45,8 +45,8 @@ export default function EmployeeFeatures({ embedded }: Props) {
             )}
             <Box sx={embedded ? {} : { p: 1 }}>
                 <ul>
-                    {featureList.map((item) => (
-                        <li>
+                    {featureList.map((item, index) => (
+                        <li key={index}>
                             <Typography color={'text.secondary'}>{item}</Typography>
                         </li>
                     ))}

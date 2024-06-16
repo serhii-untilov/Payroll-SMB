@@ -1,5 +1,4 @@
-import { ICompany, PaymentSchedule } from '@repo/shared';
-import { endOfMonth, startOfDay, startOfMonth } from 'date-fns';
+import { ICompany, PaymentSchedule, monthBegin, monthEnd } from '@repo/shared';
 import {
     AfterLoad,
     BeforeInsert,
@@ -87,6 +86,6 @@ export class Company extends Logger implements ICompany {
 }
 
 function normalize(record: ICompany) {
-    record.payPeriod = startOfMonth(record?.payPeriod || new Date());
-    record.checkDate = startOfDay(endOfMonth(record?.payPeriod || new Date()));
+    record.payPeriod = monthBegin(record?.payPeriod || new Date());
+    record.checkDate = monthEnd(record?.payPeriod || new Date());
 }

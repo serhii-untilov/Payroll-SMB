@@ -239,7 +239,12 @@ export class PositionsService extends AvailableForUserCompany {
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        await this.repository.save({ ...payload, id, updatedUserId: userId });
+        await this.repository.save({
+            ...payload,
+            id,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, updated));
         return updated;

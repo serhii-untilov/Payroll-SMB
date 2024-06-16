@@ -1,9 +1,8 @@
-import { ICreatePayPeriod, IPayPeriod, IUpdatePayPeriod } from '@repo/shared';
-import { endOfMonth, format, isEqual, startOfDay, startOfMonth } from 'date-fns';
+import { ICreatePayPeriod, IPayPeriod, IUpdatePayPeriod, dateUTC, monthBegin, monthEnd } from '@repo/shared';
+import { format, isEqual } from 'date-fns';
 import { t } from 'i18next';
 import { api } from '../api';
 import authHeader from './auth-header';
-import { ObjectSchema, date, number, object, string } from 'yup';
 
 export async function createPayPeriod(payPeriod: ICreatePayPeriod): Promise<IPayPeriod> {
     const response = await api.post(`/api/pay-periods/`, payPeriod, { headers: authHeader() });
@@ -86,8 +85,8 @@ export function getPayPeriodName(
 ): string {
     const state = isCurrent ? `(${t('current')})` : '';
     if (
-        isEqual(startOfDay(dateFrom), startOfMonth(dateFrom)) &&
-        isEqual(startOfDay(dateTo), startOfDay(endOfMonth(dateTo)))
+        isEqual(dateUTC(dateFrom), monthBegin(dateFrom)) &&
+        isEqual(dateUTC(dateTo), monthEnd(dateTo))
     ) {
         return `${format(dateFrom, template, { locale })} ${state}`;
     }

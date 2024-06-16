@@ -86,9 +86,9 @@ export function SidebarMenu(props: Props) {
             }}
         >
             <List>
-                {menuItems.map((item) =>
+                {menuItems.map((item, index) =>
                     item?.label === 'divider' ? (
-                        <Divider component="li" />
+                        <Divider key={index} component="li" />
                     ) : (
                         <ListItem key={item.label} disablePadding>
                             <Link href={item.href} underline="none">

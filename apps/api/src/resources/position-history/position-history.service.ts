@@ -106,7 +106,12 @@ export class PositionHistoryService extends AvailableForUserCompany {
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        const updated = await this.repository.save({ ...payload, id, updatedUserId: userId });
+        const updated = await this.repository.save({
+            ...payload,
+            id,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
         await this.normalizeAfterCreateOrUpdate(userId, updated);
         const position = await this.positionsService.findOne(record.positionId);
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
@@ -186,7 +191,11 @@ export class PositionHistoryService extends AvailableForUserCompany {
             .filter((o) => o.dateFrom < record.dateFrom && o.dateTo >= record.dateFrom)
             .map((o) => o.id)) {
             const dateTo = sub(record.dateFrom, { days: -1 });
-            await this.repository.save({ id, dateTo, updatedUserId: userId });
+            await this.repository.save({
+                id,
+                dateTo,
+                updatedUserId: userId,
+            });
         }
         // Shift dateFrom
         for (const id of list

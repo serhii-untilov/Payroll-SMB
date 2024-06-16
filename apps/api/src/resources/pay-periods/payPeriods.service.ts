@@ -1,16 +1,7 @@
 import { ConflictException, Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PayPeriodState, ResourceType, formatPeriod } from '@repo/shared';
-import {
-    addMonths,
-    addYears,
-    endOfMonth,
-    endOfYear,
-    startOfDay,
-    startOfMonth,
-    startOfYear,
-    subYears,
-} from 'date-fns';
+import { PayPeriodState, ResourceType, formatPeriod, monthBegin, monthEnd } from '@repo/shared';
+import { addMonths, addYears, endOfYear, startOfYear, subYears } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -110,7 +101,12 @@ export class PayPeriodsService extends AvailableForUserCompany {
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        return await this.repository.save({ ...payload, id, updatedUserId: userId });
+        return await this.repository.save({
+            ...payload,
+            id,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
     }
 
     async remove(userId: number, id: number): Promise<PayPeriod> {
@@ -134,8 +130,8 @@ export class PayPeriodsService extends AvailableForUserCompany {
             return Object.assign(new PayPeriod(), {
                 id: null,
                 companyId: null,
-                dateFrom: startOfMonth(new Date()),
-                dateTo: startOfDay(endOfMonth(new Date())),
+                dateFrom: monthBegin(new Date()),
+                dateTo: monthEnd(new Date()),
                 state: PayPeriodState.OPENED,
             });
         }
@@ -145,7 +141,11 @@ export class PayPeriodsService extends AvailableForUserCompany {
             relations: { company: relations },
             ...(fullFieldList ? {} : defaultFieldList),
         };
-        return await this.repository.findOneOrFail(options);
+        const payPeriod = await this.repository.findOneOrFail(options);
+        this._logger.log(
+            `findCurrent/${companyId}: payPeriod: ${company.payPeriod}, dateFrom: ${payPeriod.dateFrom}`,
+        );
+        return payPeriod;
     }
 
     async countClosed(companyId: number): Promise<number> {
@@ -163,15 +163,15 @@ export class PayPeriodsService extends AvailableForUserCompany {
 function getPeriodList(dateFrom: Date, dateTo: Date): PayPeriod[] {
     const periodList: PayPeriod[] = [];
     for (
-        let d = startOfMonth(dateFrom);
-        d.getTime() < endOfMonth(dateTo).getTime();
+        let d = monthBegin(dateFrom);
+        d.getTime() < monthEnd(dateTo).getTime();
         d = addMonths(d, 1)
     ) {
         const period = Object.assign({
             id: 0,
             companyId: 0,
-            dateFrom: startOfMonth(d),
-            dateTo: endOfMonth(d),
+            dateFrom: monthBegin(d),
+            dateTo: monthEnd(d),
             state: PayPeriodState.OPENED,
         });
         periodList.push(period);

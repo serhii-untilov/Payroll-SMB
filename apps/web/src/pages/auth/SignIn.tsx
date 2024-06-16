@@ -1,9 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,13 +10,16 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Link from '@mui/material/Link';
+import { grey } from '@mui/material/colors';
 import { IAuth } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink, redirect } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { FormTextField } from '../../components/form/FormTextField';
 import { AppTitle } from '../../components/layout/AppTitle';
@@ -26,7 +27,6 @@ import { Copyright } from '../../components/layout/Copyright';
 import useAuth from '../../hooks/useAuth';
 import useLocale from '../../hooks/useLocale';
 import { errorMessage } from '../../services/utils';
-import { grey } from '@mui/material/colors';
 
 const formSchema = yup.object().shape({
     email: yup.string().required('Email is required').email('Email is invalid'),
@@ -48,6 +48,7 @@ export default function SignIn() {
     const { login } = useAuth();
     const { locale } = useLocale();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const {
         control,
@@ -77,7 +78,8 @@ export default function SignIn() {
     const onSubmit: SubmitHandler<IAuth> = async (data) => {
         try {
             await login({ ...data, rememberMe });
-            redirect('/dashboard');
+            // redirect('/dashboard');
+            navigate('/dashboard');
         } catch (e) {
             enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
         }

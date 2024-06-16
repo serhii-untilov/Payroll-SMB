@@ -66,7 +66,12 @@ export class JobsService {
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        return await this.repository.save({ ...payload, id, updatedUser: userId });
+        return await this.repository.save({
+            ...payload,
+            id,
+            updatedUser: userId,
+            updatedDate: new Date(),
+        });
     }
 
     async remove(userId: number, id: number): Promise<Job> {

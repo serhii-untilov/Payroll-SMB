@@ -80,13 +80,13 @@ export function Features() {
                 <Typography variant="h1" sx={{ textAlign: 'center' }}>
                     {t('Main features')}
                 </Typography>
-                <Typography color="text.secondary">
+                <Box color="text.secondary">
                     <ul>
-                        {mainFeatures.map((item) => (
-                            <li>{item}</li>
+                        {mainFeatures.map((item, index) => (
+                            <li key={index + 1}>{item}</li>
                         ))}
                     </ul>
-                </Typography>
+                </Box>
             </Box>
 
             <Box id="features-by-roles" sx={{ display: 'flex', gap: 2 }}>
@@ -96,6 +96,7 @@ export function Features() {
                 >
                     {featuresByRoles.map((item, index) => (
                         <FeatureBox
+                            key={index}
                             name={item.name}
                             description={item.description}
                             icon={item.icon}

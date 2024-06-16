@@ -1,4 +1,4 @@
-import { DarkModeOutlined, Language, LightModeOutlined } from '@mui/icons-material';
+import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
 import Support from '@mui/icons-material/Support';
@@ -8,7 +8,7 @@ import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, redirect } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import useAppContext from '../../hooks/useAppContext';
 import useAuth from '../../hooks/useAuth';
 import useLocale from '../../hooks/useLocale';
@@ -26,6 +26,7 @@ export default function MainLayout() {
     const { locale, toggleLanguage } = useLocale();
     const { t } = useTranslation();
     const { compactView, setCompactView, themeMode, theme, switchThemeMode } = useAppContext();
+    const navigate = useNavigate();
 
     useEffect(() => {}, [locale, t]);
 
@@ -33,14 +34,15 @@ export default function MainLayout() {
         setCompactView(!compactView);
     };
 
-    const onToggleLanguage = () => {
-        toggleLanguage();
-    };
+    // const onToggleLanguage = () => {
+    //     toggleLanguage();
+    // };
 
     function onLogout() {
         logout();
         // redirect('/signin');
-        redirect('/welcome');
+        // redirect('/welcome');
+        navigate('/');
     }
 
     return (
@@ -104,13 +106,13 @@ export default function MainLayout() {
                                 icon={<PersonOutlined />}
                             />
 
-                            <ListItemButton
+                            {/* <ListItemButton
                                 onClick={() => {
                                     onToggleLanguage();
                                 }}
                                 primary={locale.language === 'en' ? 'Українська' : 'English'}
                                 icon={<Language />}
-                            />
+                            /> */}
 
                             <ListItemButton
                                 onClick={switchThemeMode}

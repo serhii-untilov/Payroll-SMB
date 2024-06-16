@@ -99,7 +99,12 @@ export class PayFundsService extends AvailableForUserCompany {
     }
 
     async update(userId: number, id: number, payload: UpdatePayFundDto): Promise<PayFund> {
-        await this.repository.save({ ...payload, id, updatedUserId: userId });
+        await this.repository.save({
+            ...payload,
+            id,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
@@ -167,6 +172,7 @@ export class PayFundsService extends AvailableForUserCompany {
             .innerJoin('pay-fund.payFundType', 'payFundType')
             .innerJoin('pay-fund.position', 'position')
             .where('position.companyId = :companyId', { companyId })
+            .andWhere('pay_fund.positionId = position.id')
             .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
             .groupBy('payFundType.payFundPart')
             .getRawMany();
@@ -190,6 +196,7 @@ export class PayFundsService extends AvailableForUserCompany {
             .innerJoin('pay-fund.payFundType', 'payFundType')
             .innerJoin('pay-fund.position', 'position')
             .where('position.companyId = :companyId', { companyId })
+            .andWhere('pay_fund.positionId = position.id')
             .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
             .groupBy('payFundType.payFundGroup')
             .getRawMany();
@@ -213,6 +220,7 @@ export class PayFundsService extends AvailableForUserCompany {
             .innerJoin('pay-fund.payFundType', 'payFundType')
             .innerJoin('pay-fund.position', 'position')
             .where('position.companyId = :companyId', { companyId })
+            .andWhere('pay_fund.positionId = position.id')
             .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
             .groupBy('payFundType.calcMethod')
             .getRawMany();
@@ -230,6 +238,7 @@ export class PayFundsService extends AvailableForUserCompany {
             .innerJoin('pay-fund.payFundType', 'payFundType')
             .innerJoin('pay-fund.position', 'position')
             .where('position.companyId = :companyId', { companyId })
+            .andWhere('pay_fund.positionId = position.id')
             .andWhere('pay-fund.payPeriod = :payPeriod', { payPeriod })
             .groupBy('pay-fund.positionId')
             .addGroupBy('payFundType.calcMethod')
@@ -242,6 +251,7 @@ export class PayFundsService extends AvailableForUserCompany {
             .select('SUM("paySum")', 'paySum')
             .innerJoin('position', 'position')
             .where('position.companyId = :companyId', { companyId })
+            .andWhere('pay_fund.positionId = position.id')
             .andWhere('pay_fund.payPeriod = :payPeriod', { payPeriod })
             .getRawOne();
         return Number(paySum);

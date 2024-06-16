@@ -132,6 +132,7 @@ export class CompaniesService {
                 users: { userId },
             },
         });
+        this._logger.log(`companies/${id}: payPeriod: ${company.payPeriod}`);
         return company;
     }
 
@@ -151,7 +152,12 @@ export class CompaniesService {
                 'The record has been updated by another user. Try to edit it after reloading.',
             );
         }
-        await this.repository.save({ ...payload, id, updatedUserId: userId });
+        await this.repository.save({
+            ...payload,
+            id,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('company.updated', new CompanyUpdatedEvent(userId, updated));
         return updated;

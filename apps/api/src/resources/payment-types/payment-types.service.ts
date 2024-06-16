@@ -86,6 +86,7 @@ export class PaymentTypesService {
             ...payload,
             id,
             updatedUserId: userId,
+            updatedDate: new Date(),
         });
     }
 
