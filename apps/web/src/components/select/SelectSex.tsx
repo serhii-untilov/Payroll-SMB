@@ -16,7 +16,6 @@ export function SelectSex({ control, label, id, name }: Props) {
     const options = useMemo(
         () =>
             Object.values(Sex).map((value) => {
-                console.log(value);
                 return { label: t(value), value };
             }, Sex),
         [t],
