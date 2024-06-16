@@ -1,4 +1,4 @@
-import { DarkModeOutlined, Language, LightModeOutlined } from '@mui/icons-material';
+import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
 import Support from '@mui/icons-material/Support';
@@ -33,9 +33,9 @@ export default function MainLayout() {
         setCompactView(!compactView);
     };
 
-    const onToggleLanguage = () => {
-        toggleLanguage();
-    };
+    // const onToggleLanguage = () => {
+    //     toggleLanguage();
+    // };
 
     function onLogout() {
         logout();
@@ -104,13 +104,13 @@ export default function MainLayout() {
                                 icon={<PersonOutlined />}
                             />
 
-                            <ListItemButton
+                            {/* <ListItemButton
                                 onClick={() => {
                                     onToggleLanguage();
                                 }}
                                 primary={locale.language === 'en' ? 'Українська' : 'English'}
                                 icon={<Language />}
-                            />
+                            /> */}
 
                             <ListItemButton
                                 onClick={switchThemeMode}
