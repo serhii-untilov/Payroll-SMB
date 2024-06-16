@@ -1,4 +1,4 @@
-import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
+import { DarkModeOutlined, Language, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
 import Support from '@mui/icons-material/Support';
@@ -23,7 +23,7 @@ import { Sidebar } from './Sidebar';
 
 export default function MainLayout() {
     const { logout } = useAuth();
-    const { locale } = useLocale();
+    const { locale, toggleLanguage } = useLocale();
     const { t } = useTranslation();
     const { compactView, setCompactView, themeMode, theme, switchThemeMode } = useAppContext();
 
@@ -31,6 +31,10 @@ export default function MainLayout() {
 
     const toggleDrawer = () => {
         setCompactView(!compactView);
+    };
+
+    const onToggleLanguage = () => {
+        toggleLanguage();
     };
 
     function onLogout() {
@@ -101,13 +105,21 @@ export default function MainLayout() {
                             />
 
                             <ListItemButton
+                                onClick={() => {
+                                    onToggleLanguage();
+                                }}
+                                primary={locale.language === 'en' ? 'Українська' : 'English'}
+                                icon={<Language />}
+                            />
+
+                            <ListItemButton
                                 onClick={switchThemeMode}
                                 primary={themeMode === 'light' ? t('Light theme') : t('Dark theme')}
                                 icon={
                                     themeMode === 'light' ? (
-                                        <LightModeOutlined />
-                                    ) : (
                                         <DarkModeOutlined />
+                                    ) : (
+                                        <LightModeOutlined />
                                     )
                                 }
                             />
