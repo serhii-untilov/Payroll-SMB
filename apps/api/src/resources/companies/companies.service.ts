@@ -4,6 +4,7 @@ import {
     ForbiddenException,
     Inject,
     Injectable,
+    Logger,
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
@@ -24,6 +25,7 @@ import { CompanyCalculateEvent } from './events/company-calculate.event';
 
 @Injectable()
 export class CompaniesService {
+    private _logger: Logger = new Logger(CompaniesService.name);
     public readonly resourceType = ResourceType.COMPANY;
 
     constructor(
@@ -82,12 +84,11 @@ export class CompaniesService {
     }
 
     async create(userId: number, payload: CreateCompanyDto): Promise<Company> {
-        // const existing = await this.repository.findOneBy({ name: payload.name });
         const existing = await this.usersCompanyService.findOneByName(userId, payload.name);
         if (existing) {
             throw new BadRequestException(`Company '${payload.name}' already exists.`);
         }
-        const created = await this.repository.save({
+        const record = await this.repository.save({
             ...payload,
             createdUserId: userId,
             updatedUserId: userId,
@@ -98,9 +99,10 @@ export class CompaniesService {
         }
         await this.usersCompanyService.create(userId, {
             userId,
-            companyId: created.id,
+            companyId: record.id,
             roleId: user.roleId,
         });
+        const created = await this.repository.findOneOrFail({ where: { id: record.id } });
         this.eventEmitter.emit('company.created', new CompanyCreatedEvent(userId, created));
         return created;
     }

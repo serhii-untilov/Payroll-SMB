@@ -6,6 +6,7 @@ import {
     HttpCode,
     HttpStatus,
     Inject,
+    Logger,
     Param,
     ParseIntPipe,
     Patch,
@@ -24,6 +25,8 @@ import { deepStringToShortDate } from '@repo/shared';
 
 @Controller('companies')
 export class CompaniesController {
+    private _logger: Logger = new Logger(CompaniesService.name);
+
     constructor(
         @Inject(forwardRef(() => CompaniesService))
         private readonly service: CompaniesService,
@@ -35,7 +38,11 @@ export class CompaniesController {
     async create(@Req() req: Request, @Body() payload: CreateCompanyDto) {
         const userId = req.user['sub'];
         await this.service.availableCreateOrFail(userId);
-        const company = await this.service.create(userId, deepStringToShortDate(payload));
+        const payloadTransformed = deepStringToShortDate(payload);
+        const company = await this.service.create(
+            userId,
+            deepStringToShortDate(payloadTransformed),
+        );
         return company;
     }
 
