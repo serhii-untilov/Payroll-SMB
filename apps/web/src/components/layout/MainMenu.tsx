@@ -8,9 +8,9 @@ import Schedule from '@mui/icons-material/Schedule';
 import List from '@mui/material/List';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { ListItemLink } from './ListItemLink';
-import useAppContext from '../../hooks/useAppContext';
 
 export function MainMenu() {
     const { locale } = useLocale();

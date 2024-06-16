@@ -49,10 +49,7 @@ export function ListItemLink(props: ListItemLinkProps) {
                         minWidth: 39,
                     },
                     '&.active > .MuiListItemIcon-root': {
-                        color: (theme) =>
-                            theme.palette.mode === 'dark'
-                                ? theme.palette.background.default
-                                : theme.palette.text.primary,
+                        color: (theme) => theme.palette.background.default,
                         opacity: 1,
                         borderRadius: '3px',
                         minWidth: 39,
