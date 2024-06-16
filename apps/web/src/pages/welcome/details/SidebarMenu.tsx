@@ -74,7 +74,7 @@ export function SidebarMenu(props: Props) {
                 onClick: switchThemeMode,
             },
         ],
-        [t, props],
+        [t, props, locale, switchThemeMode, themeMode],
     );
 
     return (
