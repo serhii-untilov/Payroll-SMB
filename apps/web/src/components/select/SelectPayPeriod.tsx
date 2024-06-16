@@ -1,13 +1,12 @@
-import { MenuItem, Select, SelectChangeEvent, SelectProps } from '@mui/material';
-import { IPayPeriod } from '@repo/shared';
-import { format, isEqual, startOfMonth } from 'date-fns';
-import { enqueueSnackbar } from 'notistack';
+import { MenuItem, Select, SelectProps } from '@mui/material';
+import { IPayPeriod, monthBegin } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
+import { format, isEqual } from 'date-fns';
+import { enqueueSnackbar } from 'notistack';
+import { useMemo } from 'react';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { getPayPeriodList, getPayPeriodName } from '../../services/payPeriod.service';
-import { Skeleton } from '../layout/Skeleton';
-import { useMemo } from 'react';
 
 export type PayPeriodOption = SelectProps<string> & {
     companyId: number | undefined;
@@ -58,7 +57,7 @@ export function SelectPayPeriod(props: PayPeriodOption) {
             fullWidth
             native={false}
             onChange={(event: any) => setPayPeriod(new Date(event.target.value))}
-            value={format(payPeriod || startOfMonth(new Date()), 'yyyy-MM-dd')}
+            value={format(payPeriod || monthBegin(new Date()), 'yyyy-MM-dd')}
             {...other}
             label={''}
         >

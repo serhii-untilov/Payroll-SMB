@@ -171,12 +171,6 @@ export function CompanyDetails(props: Props) {
         });
     }
 
-    // const onChangePayPeriod = (e: any) => {
-    //     console.log(e.target.value);
-    //     e.target.value = format(startOfMonth(new Date(e.target.value)), 'P');
-    //     console.log(e.target.value);
-    // };
-
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
@@ -290,7 +284,7 @@ export function CompanyDetails(props: Props) {
                                     onChange={(event: any) =>
                                         onChange(new Date(event.target.value))
                                     }
-                                    value={format(value || startOfMonth(new Date()), 'yyyy-MM-dd')}
+                                    value={format(value || monthBegin(new Date()), 'yyyy-MM-dd')}
                                 />
                             )}
                         />
