@@ -50,7 +50,7 @@ export default function Position() {
         isError: isPositionError,
         error: positionError,
     } = useQuery<Partial<IPosition>, Error>({
-        queryKey: ['position', { positionId, relations: true }],
+        queryKey: ['position', { companyId: company?.id, positionId, relations: true }],
         queryFn: async () => {
             return positionId
                 ? await getPosition({

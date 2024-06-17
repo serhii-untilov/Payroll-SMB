@@ -30,7 +30,7 @@ export default function Dashboard() {
         isLoading,
         error,
     } = useQuery<ITask[], Error>({
-        queryKey: ['task', 'list', company],
+        queryKey: ['task', 'list', { companyId: company?.id }],
         queryFn: async () => {
             return await getTaskList(company?.id ? { companyId: company?.id } : {});
         },

@@ -99,7 +99,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
     };
 
     const { data, isError, error, isLoading } = useQuery<FormType, Error>({
-        queryKey: ['Job & Pay', { positionId }],
+        queryKey: ['position', { companyId: company?.id, positionId }],
         queryFn: () => {
             return getFormData(positionId);
         },
@@ -185,7 +185,6 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                       });
             }
             reset(await getFormData(pos?.id));
-            await queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
             onSubmitCallback(pos?.id);
@@ -197,7 +196,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
 
     const onCancel = async () => {
         reset(await getFormData(data?.id));
-        await queryClient.invalidateQueries({ queryKey: ['Job & Pay'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const onDelete = () => {

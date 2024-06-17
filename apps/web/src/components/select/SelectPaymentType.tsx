@@ -19,7 +19,7 @@ export function SelectPaymentType({ companyId, control, label, id, name, filter 
         isError: isPaymentTypeListError,
         error: paymentTypeListError,
     } = useQuery<IPaymentType[], Error>({
-        queryKey: ['paymentType', 'list', { companyId, filter }],
+        queryKey: ['paymentType', 'list', { companyId, ...filter }],
         queryFn: async () => {
             return companyId ? await getPaymentTypeList(filter) : [];
         },
