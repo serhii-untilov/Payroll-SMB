@@ -1,0 +1,24 @@
+#!/bin/sh
+cd ~
+if ! [ -d ./payroll-smb ]; then
+    echo "The ./payroll-smb folder does not exist. Let's create it."
+    mkdir payroll-smb
+fi
+cd payroll-smb
+echo 'Downloading scripts:'
+curl -O -S --progress-bar https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/docker-compose.yml
+curl -O -S --progress-bar https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/start
+curl -O -S --progress-bar https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stop
+curl -O -S --progress-bar https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/update
+curl -O -S --progress-bar https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/logs
+curl -O -S --progress-bar https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/stats
+if ! [ -f ./.env.docker ]; then
+    curl -O -S --progress-bar https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/.env.docker
+fi
+chmod +x ./start
+chmod +x ./stop
+chmod +x ./update
+chmod +x ./logs
+chmod +x ./stats
+./stop
+docker compose pull

@@ -30,6 +30,22 @@ Note: Docker required.
 - [Get Docker Desktop](https://docs.docker.com/guides/getting-started/get-docker-desktop/)
 - [How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 
+## Safe Start
+
+``` bash
+curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download | bash
+
+cd ~/payroll-smb
+```
+
+In the .env.docker file replace the variables with desired values: DATABASE_USERNAME, DATABASE_PASSWORD, POSTGRES_USER, POSTGRES_PASSWORD, PGUSER.
+
+Perform script to create database and start the application:
+
+``` bash
+./start
+```
+
 In Production mode frontend and backend applications works on the same port:
 
 - Backend URL <http://localhost:3000/api>
