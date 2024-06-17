@@ -403,3 +403,6 @@ openssl rand -base64 60
 - [**Typescript** - 4 Different Ways Of Creating A Map In TypeScript](https://timmousk.com/blog/typescript-map/)
 - [**Release** - Release Please](https://github.com/googleapis/release-please)
 - [**Docker** - postgres:15.0-alpine](https://hub.docker.com/layers/library/postgres/15.0-alpine/images/sha256-f46b2ae1a00a87552a52fe83d36f7aef60ef61f9d64baf3bfc4abaa89847024b?context=explore#!)
+- [**VPS** - Initial Server Setup with Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-20-04)
+- [**VPS** - Disabling Password Authentication on Your Server](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04)
+- [**VPS** - How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)

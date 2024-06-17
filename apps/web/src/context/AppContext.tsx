@@ -136,10 +136,9 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         if (eventSource) {
             eventSource.onerror = function (event) {
                 // setServerEvent(ServerEvent.COMMUNICATION_ERROR);
-                // console.log(`An error occurred while attempting to connect.`);
-                console.log(
-                    `SSE error: ${ServerEvent.COMMUNICATION_ERROR}, event: ${JSON.stringify(event)}`,
-                );
+                // console.log(
+                //     `SSE: ${JSON.stringify(event, ['message', 'arguments', 'type', 'name'])}`,
+                // );
             };
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
@@ -153,7 +152,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
                     );
                 }
                 setServerEvent(event.data);
-                console.log(`New company ${company?.id} message:`, event.data);
+                // console.log(`New company ${company?.id} message:`, event.data);
             };
         }
     }, [eventSource, company, queryClient]);
