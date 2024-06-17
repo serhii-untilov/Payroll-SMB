@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
-import { Button, Grid } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import {
     IPosition,
     IPositionHistory,
@@ -227,9 +227,11 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                     // }
                 />
 
-                <Grid container md={12} lg={10} xl={8} spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        {/* <FormTextField
+                <Grid container>
+                    <Grid item md={12} lg={10} xl={8}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                                {/* <FormTextField
                             control={control}
                             autoComplete="full-name"
                             name="name"
@@ -240,153 +242,159 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                             sx={{ fontWeight: 'bold' }}
                             placeholder={t('Vacancy')}
                         /> */}
-                        <SelectPerson
-                            control={control}
-                            name="personId"
-                            label={t('Full Name')}
-                            autoFocus={!data?.personId}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                        <FormTextField
-                            control={control}
-                            name="cardNumber"
-                            id="cardNumber"
-                            label={t('Card Number')}
-                            type="text"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                        <FormSequenceField
-                            control={control}
-                            name="sequenceNumber"
-                            id="sequenceNumber"
-                            label={t('Sequence Number')}
-                            type="number"
-                            rules={{
-                                required: false,
-                                validate: () => {
-                                    return true;
-                                },
-                            }}
-                        />
-                    </Grid>
+                                <SelectPerson
+                                    control={control}
+                                    name="personId"
+                                    label={t('Full Name')}
+                                    autoFocus={!data?.personId}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <FormTextField
+                                    control={control}
+                                    name="cardNumber"
+                                    id="cardNumber"
+                                    label={t('Card Number')}
+                                    type="text"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <FormSequenceField
+                                    control={control}
+                                    name="sequenceNumber"
+                                    id="sequenceNumber"
+                                    label={t('Sequence Number')}
+                                    type="number"
+                                    rules={{
+                                        required: false,
+                                        validate: () => {
+                                            return true;
+                                        },
+                                    }}
+                                />
+                            </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <SelectJob
-                            companyId={company?.id}
-                            control={control}
-                            name="jobId"
-                            id="jobId"
-                            label={t('Job')}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <SelectDepartment
-                            companyId={company?.id}
-                            control={control}
-                            name="departmentId"
-                            id="departmentId"
-                            label={t('Department')}
-                        />
-                    </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <SelectJob
+                                    companyId={company?.id}
+                                    control={control}
+                                    name="jobId"
+                                    id="jobId"
+                                    label={t('Job')}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <SelectDepartment
+                                    companyId={company?.id}
+                                    control={control}
+                                    name="departmentId"
+                                    id="departmentId"
+                                    label={t('Department')}
+                                />
+                            </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <SelectPaymentType
-                            companyId={company?.id}
-                            control={control}
-                            name="paymentTypeId"
-                            id="paymentTypeId"
-                            label={t('Payment Type')}
-                            filter={{ groups: [PaymentGroup.BASIC] }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <SelectWorkNorm
-                            companyId={company?.id}
-                            control={control}
-                            name="workNormId"
-                            id="workNormId"
-                            label={t('Work Norm')}
-                        />
-                    </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <SelectPaymentType
+                                    companyId={company?.id}
+                                    control={control}
+                                    name="paymentTypeId"
+                                    id="paymentTypeId"
+                                    label={t('Payment Type')}
+                                    filter={{ groups: [PaymentGroup.BASIC] }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <SelectWorkNorm
+                                    companyId={company?.id}
+                                    control={control}
+                                    name="workNormId"
+                                    id="workNormId"
+                                    label={t('Work Norm')}
+                                />
+                            </Grid>
 
-                    <Grid item xs={12} sm={6} md={3}>
-                        <FormNumberField
-                            control={control}
-                            name="wage"
-                            id="wage"
-                            label={t('Wage')}
-                            // type="number"
-                            // defaultValue={0}
-                            step={500}
-                            min={0}
-                            autoFocus={!!data?.personId}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={3}>
-                        <FormNumberField
-                            control={control}
-                            name="rate"
-                            id="rate"
-                            label={t('Rate')}
-                            // type="number"
-                            // defaultValue={0}
-                            step={0.25}
-                            min={0}
-                            max={2}
-                        />
-                    </Grid>
+                            <Grid item xs={12} sm={6} md={3}>
+                                <FormNumberField
+                                    control={control}
+                                    name="wage"
+                                    id="wage"
+                                    label={t('Wage')}
+                                    // type="number"
+                                    // defaultValue={0}
+                                    step={500}
+                                    min={0}
+                                    autoFocus={!!data?.personId}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6} md={3}>
+                                <FormNumberField
+                                    control={control}
+                                    name="rate"
+                                    id="rate"
+                                    label={t('Rate')}
+                                    // type="number"
+                                    // defaultValue={0}
+                                    step={0.25}
+                                    min={0}
+                                    max={2}
+                                />
+                            </Grid>
 
-                    <Grid item xs={12} sm={6} md={3}>
-                        <FormDateField
-                            control={control}
-                            name="dateFrom"
-                            id="dateFrom"
-                            label={t('Date From')}
-                            defaultValue={formatDate(minDate())}
-                        />
-                    </Grid>
+                            <Grid item xs={12} sm={6} md={3}>
+                                <FormDateField
+                                    control={control}
+                                    name="dateFrom"
+                                    id="dateFrom"
+                                    label={t('Date From')}
+                                    defaultValue={formatDate(minDate())}
+                                />
+                            </Grid>
 
-                    <Grid item xs={12} sm={6} md={3}>
-                        <FormDateField
-                            control={control}
-                            name="dateTo"
-                            id="dateTo"
-                            label={t('Date To')}
-                            defaultValue={formatDate(maxDate())}
-                        />
+                            <Grid item xs={12} sm={6} md={3}>
+                                <FormDateField
+                                    control={control}
+                                    name="dateTo"
+                                    id="dateTo"
+                                    label={t('Date To')}
+                                    defaultValue={formatDate(maxDate())}
+                                />
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
 
-                <Grid container sx={{ mt: 2 }} md={12} lg={10} xl={8} spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        {positionId && data?.personId ? (
-                            <Grid item xs={12}>
-                                <Button startIcon={<HistoryRounded />}>
-                                    {t('Assignments History')}
-                                </Button>
+                <Grid container sx={{ mt: 2 }}>
+                    <Grid item md={12} lg={10} xl={8}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                                {positionId && data?.personId ? (
+                                    <Grid item xs={12}>
+                                        <Button startIcon={<HistoryRounded />}>
+                                            {t('Assignments History')}
+                                        </Button>
+                                    </Grid>
+                                ) : null}
+                                <Grid item xs={12}>
+                                    <Button startIcon={<AddCircleRounded />}>
+                                        {t('Add Work Address')}
+                                    </Button>
+                                </Grid>
                             </Grid>
-                        ) : null}
-                        <Grid item xs={12}>
-                            <Button startIcon={<AddCircleRounded />}>
-                                {t('Add Work Address')}
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Grid item xs={12}>
-                            <Button startIcon={<AddCircleRounded />}>
-                                {t('Add Additional Earning Type')}
-                            </Button>
-                        </Grid>
-                        {positionId && data?.personId ? (
-                            <Grid item xs={12}>
-                                <Button startIcon={<AddCircleRounded />}>
-                                    {t('Add Additional Deduction Type')}
-                                </Button>
+                            <Grid item xs={12} md={6}>
+                                <Grid item xs={12}>
+                                    <Button startIcon={<AddCircleRounded />}>
+                                        {t('Add Additional Earning Type')}
+                                    </Button>
+                                </Grid>
+                                {positionId && data?.personId ? (
+                                    <Grid item xs={12}>
+                                        <Button startIcon={<AddCircleRounded />}>
+                                            {t('Add Additional Deduction Type')}
+                                        </Button>
+                                    </Grid>
+                                ) : null}
                             </Grid>
-                        ) : null}
+                        </Grid>
                     </Grid>
                 </Grid>
             </TabLayout>
