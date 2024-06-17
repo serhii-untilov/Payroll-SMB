@@ -104,7 +104,7 @@ export function Header() {
                             variant="contained"
                             color="primary"
                             sx={{
-                                display: { xs: 'none', sm: 'none', md: 'block' },
+                                display: { xs: 'none', sm: 'block', md: 'block' },
                                 borderRadius: 3,
                                 height: 38,
                                 width: 90,

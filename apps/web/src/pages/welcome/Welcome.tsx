@@ -63,7 +63,7 @@ function Welcome() {
                         variant="contained"
                         color="primary"
                         sx={{
-                            display: { xs: 'block', sm: 'block', md: 'none' },
+                            display: { xs: 'block', sm: 'none', md: 'none' },
                             borderRadius: 3,
                             height: 38,
                             width: 90,
