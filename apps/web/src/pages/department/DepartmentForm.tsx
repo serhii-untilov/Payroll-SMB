@@ -71,7 +71,7 @@ export default function DepartmentForm(params: Params) {
         isError: isDepartmentError,
         error: departmentError,
     } = useQuery<FormType, Error>({
-        queryKey: ['department', { departmentId }],
+        queryKey: ['department', { departmentId, companyId: company?.id }],
         queryFn: async () => {
             return formSchema.cast(
                 departmentId
