@@ -361,6 +361,7 @@ export class PositionsService extends AvailableForUserCompany {
                 t1."paySum" "paySumECB"
             from position_balance pb
             inner join "position" p on p.id = pb."positionId" and p."companyId" = $1
+                and p."deletedDate" is null
             inner join person p2 on p2.id = p."personId"
             inner join position_history ph on ph."positionId" = p.id and ph.id =
             (	select max(ph2.id)
