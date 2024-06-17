@@ -41,7 +41,7 @@ export function Footer() {
                 }}
             >
                 <Box id="footer__left" sx={{ flex: 1, my: 'auto' }}>
-                    <Link to="https://untilov-com-ua.vercel.app/" target="_blank" rel="noreferrer">
+                    <Link to="https://untilov.com.ua" target="_blank" rel="noreferrer">
                         <Typography sx={{ color: 'grey.700', display: 'inline' }}>
                             Copyright ©{' '}
                         </Typography>
