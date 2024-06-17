@@ -18,7 +18,7 @@ export function SelectPayPeriod(props: PayPeriodOption) {
     const { locale } = useLocale();
 
     const { data, isError, isLoading, error } = useQuery<IPayPeriod[], Error>({
-        queryKey: ['payPeriod', 'list', { companyId }],
+        queryKey: ['payPeriod', 'list', { companyId, payPeriod: company?.payPeriod }],
         queryFn: async () => await getPayPeriodList(companyId),
     });
 
@@ -57,7 +57,7 @@ export function SelectPayPeriod(props: PayPeriodOption) {
             fullWidth
             native={false}
             onChange={(event: any) => setPayPeriod(new Date(event.target.value))}
-            value={format(payPeriod || monthBegin(new Date()), 'yyyy-MM-dd')}
+            value={options?.length ? format(payPeriod || monthBegin(new Date()), 'yyyy-MM-dd') : ''}
             {...other}
             label={''}
         >
