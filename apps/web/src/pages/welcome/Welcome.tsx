@@ -68,7 +68,7 @@ function Welcome() {
                             height: 38,
                             width: 90,
                             px: 2,
-                            my: 'auto',
+                            my: 1,
                             textAlign: 'center',
                         }}
                     >
