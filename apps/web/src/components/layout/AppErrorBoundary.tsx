@@ -1,10 +1,11 @@
 import { ErrorInfo, PropsWithChildren } from 'react';
 import { ErrorBoundary, FallbackProps, useErrorBoundary } from 'react-error-boundary';
+import { useNavigate } from 'react-router-dom';
 
 function ErrorFallback(props: FallbackProps) {
     const { error, resetErrorBoundary } = props;
     const { resetBoundary } = useErrorBoundary();
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     return (
         <div role="alert">
@@ -23,7 +24,7 @@ function ErrorFallback(props: FallbackProps) {
                 }}
                 onClick={() => {
                     resetBoundary();
-                    // navigate(-1);
+                    navigate(-1);
                 }}
             >
                 Try again

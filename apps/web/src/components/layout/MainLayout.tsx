@@ -119,9 +119,9 @@ export default function MainLayout() {
                                 primary={themeMode === 'light' ? t('Light theme') : t('Dark theme')}
                                 icon={
                                     themeMode === 'light' ? (
-                                        <DarkModeOutlined />
-                                    ) : (
                                         <LightModeOutlined />
+                                    ) : (
+                                        <DarkModeOutlined />
                                     )
                                 }
                             />
