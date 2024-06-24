@@ -19,7 +19,7 @@ Link to [Live Demo](https://payroll.untilov.com.ua)
 
 ## Quick Start
 
-For a quick start, run this command:
+For a quick start, run this command on a Linux server:
 
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
@@ -254,7 +254,6 @@ npm i --workspace @repo/api --save @nestjs/event-emitter
 npm i --workspace @repo/api --save-dev tsconfig-paths
 
 # Init "web" application for front-end
-#npm i --workspace @repo/web --save react-query
 npm --workspace @repo/web i @tanstack/react-query
 npm i --workspace @repo/web --save axios
 npm i --workspace @repo/web --save react-router-dom
@@ -264,7 +263,6 @@ npm i --workspace @repo/web --save @fontsource/roboto
 npm i --workspace @repo/web --save @mui/icons-material
 npm i --workspace @repo/web --save @mui/x-data-grid
 # npm i --workspace @repo/web --save @mui/x-date-pickers
-# npm i --workspace @repo/web --save moment
 npm i --workspace @repo/web --save notistack
 npm i --workspace @repo/web --save-dev typescript jest ts-jest @types/jest
 npm i --workspace @repo/web --save avvvatars-react
@@ -277,7 +275,6 @@ npm i --workspace @repo/web --save-dev rollup-plugin-visualizer
 npm i --workspace @repo/web --save react-error-boundary
 npm i --workspace @repo/web --save date-fns
 npm i --workspace @repo/web --save react-number-format
-# npm i --workspace @repo/web --save module-alias
 
 # Init "shared" library for common types and interfaces
 mkdir packages/shared
@@ -406,3 +403,5 @@ openssl rand -base64 60
 - [**VPS** - Initial Server Setup with Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-20-04)
 - [**VPS** - Disabling Password Authentication on Your Server](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04)
 - [**VPS** - How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
+- [**Redux** - Getting Started with React Redux](https://react-redux.js.org/introduction/getting-started)
+- [**Backup** - Docker Postgres Backup/Restore Guide (with examples)](https://simplebackups.com/blog/docker-postgres-backup-restore-guide-with-examples/#before-you-begin)
