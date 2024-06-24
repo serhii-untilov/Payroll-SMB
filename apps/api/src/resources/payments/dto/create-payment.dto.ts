@@ -11,11 +11,11 @@ export class CreatePaymentDto implements ICreatePayment {
     @ApiProperty() paymentTypeId: number;
     @ApiProperty() dateFrom: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
     @ApiProperty() dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
-    @ApiProperty() grossPay?: number;
+    @ApiProperty() baseSum?: number;
     @ApiProperty() deductions?: number;
-    @ApiProperty() netPay?: number;
+    @ApiProperty() paySum: number;
     @ApiProperty() funds?: number;
     @ApiProperty() status: string; // See enum PaymentStatus
-    @ApiProperty() recordFlags?: number; // See enum RecordFlags
+    @ApiProperty() recordFlags: number; // See enum RecordFlags
     @ApiProperty() description?: string;
 }

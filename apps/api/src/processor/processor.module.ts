@@ -23,6 +23,7 @@ import { SseService } from './serverSentEvents/sse.service';
 import { SseController } from './serverSentEvents/sse.controller';
 import { TaskGenerationService } from './taskGeneration/taskGeneration.service';
 import { DepartmentListenerService } from './listeners/department-listener/department-listener.service';
+import { PaymentCalculationService } from './paymentCalculation/payment-calculation.service';
 
 @Module({
     imports: [
@@ -52,6 +53,7 @@ import { DepartmentListenerService } from './listeners/department-listener/depar
         TaskGenerationService,
         PayPeriodCalculationService,
         SseService,
+        PaymentCalculationService,
     ],
 })
 export class ProcessorModule {}

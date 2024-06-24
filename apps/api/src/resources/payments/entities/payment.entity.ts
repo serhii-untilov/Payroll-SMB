@@ -29,17 +29,17 @@ export class Payment extends Logger implements IPayment {
     @Column({ type: 'date' })
     dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
     @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
-    grossPay?: number;
+    baseSum?: number;
     @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
     deductions?: number;
     @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
-    netPay?: number;
+    paySum: number;
     @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
     funds?: number;
     @Column({ type: 'varchar', length: 10 })
     status: string; // See enum PaymentStatus
     @Column({ type: 'bigint', default: 0 })
-    recordFlags?: number; // See enum RecordFlags
+    recordFlags: number; // See enum RecordFlags
     @Column({ type: 'varchar', length: 256 })
     description?: string;
 
@@ -49,9 +49,9 @@ export class Payment extends Logger implements IPayment {
         this.accPeriod = new Date(this.accPeriod);
         this.dateFrom = new Date(this.dateFrom);
         this.dateTo = new Date(this.dateTo);
-        if (this.grossPay) this.grossPay = Number(this.grossPay);
+        if (this.baseSum) this.baseSum = Number(this.baseSum);
         if (this.deductions) this.deductions = Number(this.deductions);
-        if (this.netPay) this.netPay = Number(this.netPay);
+        if (this.paySum) this.paySum = Number(this.paySum);
         if (this.funds) this.funds = Number(this.funds);
     }
 }

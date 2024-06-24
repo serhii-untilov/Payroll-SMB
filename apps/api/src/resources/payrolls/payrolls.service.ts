@@ -73,8 +73,8 @@ export class PayrollsService extends AvailableForUserCompany {
                 ...(companyId ? { companyId } : {}),
             },
             relations: {
-                position: relations,
-                paymentType: relations,
+                position: !!relations,
+                paymentType: !!relations,
             },
         });
     }

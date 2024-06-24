@@ -8,12 +8,11 @@ export interface IPaymentPosition extends ILogger {
     paymentId: number;
     position?: IPosition;
     positionId: number;
-    grossPay?: number;
+    baseSum?: number;
     deductions?: number;
-    netPay?: number;
+    paySum: number;
     funds?: number;
-    status: string; // See enum PaymentStatus
-    recordFlags?: number; // See enum RecordFlags
+    recordFlags: number; // See enum RecordFlags
 }
 
 export type ICreatePaymentPosition = Omit<
