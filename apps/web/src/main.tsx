@@ -12,6 +12,8 @@ import { AuthProvider } from './context/AuthContext.tsx';
 import { LocaleProvider } from './context/LocaleContext.tsx';
 import './i18n.ts';
 import './index.css';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from './store/store';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -28,15 +30,17 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <AppErrorBoundary>
-            <QueryClientProvider client={queryClient}>
-                <AuthProvider>
-                    <BrowserRouter>
-                        <LocaleProvider>
-                            <App />
-                        </LocaleProvider>
-                    </BrowserRouter>
-                </AuthProvider>
-            </QueryClientProvider>
+            <ReduxProvider store={store}>
+                <QueryClientProvider client={queryClient}>
+                    <AuthProvider>
+                        <BrowserRouter>
+                            <LocaleProvider>
+                                <App />
+                            </LocaleProvider>
+                        </BrowserRouter>
+                    </AuthProvider>
+                </QueryClientProvider>
+            </ReduxProvider>
         </AppErrorBoundary>
     </React.StrictMode>,
 );
