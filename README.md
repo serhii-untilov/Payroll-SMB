@@ -124,6 +124,20 @@ Display the resource usage statistics
 ./stats
 ```
 
+Creating a backup of a database
+
+``` bash
+./scripts/db_backup
+```
+
+This will create a ./postgres-backup/payroll.dump file.
+
+Restoring a database from a backup file
+
+``` bash
+./scripts/db_restore
+```
+
 ## Configuration
 
 On a **production** server:

@@ -1,9 +1,2 @@
 #!/bin/sh
-[ -d postgres-backup ] || mkdir postgres-backup
-
-# Examples:
-# pg_dump -v -h localhost -p 5532 -U payrolladm -d payroll -f ./postgres-backup/payroll.backup
-# pg_dump --dbname=payroll --format=c --verbose --host=localhost --port="5532" --username=payrolladm --role="postgres" -f ./postgres-backup/payroll.backup
-# pg_dump --dbname=payroll --format=t --verbose --host=localhost --port="5532" --username=payrolladm --role="payroll" -f ./postgres-backup/payroll.backup | tee ./postgres-backup/payroll.backup.log
-
-docker exec -i payroll-db pg_dump -U payrolladm payroll >./postgres-backup/postgres-backup.sql
+docker exec -i payroll-db pg_dump -U payrolladm payroll --format=c -f /backup/payroll.dump
