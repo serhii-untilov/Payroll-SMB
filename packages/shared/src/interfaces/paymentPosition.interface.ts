@@ -14,7 +14,6 @@ export interface IPaymentPosition extends ILogger {
     funds?: number;
     status: string; // See enum PaymentStatus
     recordFlags?: number; // See enum RecordFlags
-    description?: string;
 }
 
 export type ICreatePaymentPosition = Omit<
@@ -41,3 +40,7 @@ export type IUpdatePaymentPosition = Partial<
         | 'deletedUserId'
     >
 >;
+
+export type IFindPaymentPosition = Partial<IPaymentPosition> & {
+    relations?: boolean;
+};

@@ -1,4 +1,4 @@
-import { Task } from 'src/resources/tasks/entities/task.entity';
+import { Task } from './../../../resources/tasks/entities/task.entity';
 import { TaskSequenceNumber } from './abstract/TaskSequenceNumber';
 import { TaskType } from '@repo/shared';
 
