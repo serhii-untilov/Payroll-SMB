@@ -6,6 +6,9 @@ import { Payment } from './entities/payment.entity';
 import { PositionsModule } from '../positions/positions.module';
 import { CompaniesModule } from '../companies/companies.module';
 import { AccessModule } from '../access/access.module';
+import { PaymentPositionsService } from './payment-positions.service';
+import { PaymentDeductionsService } from './payment-deductions.service';
+import { PaymentFundsService } from './payment-funds.service';
 
 @Module({
     imports: [
@@ -15,7 +18,17 @@ import { AccessModule } from '../access/access.module';
         forwardRef(() => AccessModule),
     ],
     controllers: [PaymentsController],
-    providers: [PaymentsService],
-    exports: [PaymentsService],
+    providers: [
+        PaymentsService,
+        PaymentPositionsService,
+        PaymentDeductionsService,
+        PaymentFundsService,
+    ],
+    exports: [
+        PaymentsService,
+        PaymentPositionsService,
+        PaymentDeductionsService,
+        PaymentFundsService,
+    ],
 })
 export class PaymentsModule {}

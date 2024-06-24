@@ -10,29 +10,33 @@ import { ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { FindPaymentDto } from './dto/find-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
-import { Payment } from './entities/payment.entity';
+import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
+import { FindPaymentPositionDto } from './dto/find-paymentPosition.dto';
+import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
+import { PaymentPosition } from './entities/paymentPosition.entity';
+import { PaymentsService } from './payments.service';
 
 @Injectable()
-export class PaymentsService extends AvailableForUserCompany {
+export class PaymentPositionsService extends AvailableForUserCompany {
     public readonly resourceType = ResourceType.PAYMENT;
 
     constructor(
-        @InjectRepository(Payment)
-        private repository: Repository<Payment>,
+        @InjectRepository(PaymentPosition)
+        private repository: Repository<PaymentPosition>,
         @Inject(forwardRef(() => AccessService))
         public accessService: AccessService,
+        @Inject(forwardRef(() => PaymentsService))
+        public paymentsService: PaymentsService,
     ) {
         super(accessService);
     }
 
     async getCompanyId(entityId: number): Promise<number> {
-        return (await this.repository.findOneOrFail({ where: { id: entityId } })).companyId;
+        const paymentPosition = await this.repository.findOneOrFail({ where: { id: entityId } });
+        return (await this.paymentsService.findOne(paymentPosition.paymentId)).companyId;
     }
 
-    async create(userId: number, payload: CreatePaymentDto): Promise<Payment> {
+    async create(userId: number, payload: CreatePaymentPositionDto): Promise<PaymentPosition> {
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -41,33 +45,33 @@ export class PaymentsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(params: FindPaymentDto): Promise<Payment[]> {
-        const { companyId, payPeriod, relations, ...other } = params;
-        if (!companyId) {
-            throw new BadRequestException('Should be defined companyId');
+    async findAll(params: FindPaymentPositionDto): Promise<PaymentPosition[]> {
+        const { paymentId, relations, ...other } = params;
+        if (!paymentId) {
+            throw new BadRequestException('Should be defined paymentId');
         }
         return await this.repository.find({
-            where: {
-                ...other,
-                ...(payPeriod ? { payPeriod } : {}),
-                companyId,
-            },
+            where: { ...other, paymentId },
             relations: {
-                company: relations,
-                paymentType: relations,
+                payment: relations,
+                position: relations,
             },
         });
     }
 
-    async findOne(id: number, relations: boolean = false): Promise<Payment> {
+    async findOne(id: number, relations: boolean = false): Promise<PaymentPosition> {
         const record = await this.repository.findOneOrFail({
             where: { id },
-            relations: { company: relations, paymentType: relations },
+            relations: { payment: relations, position: relations },
         });
         return record;
     }
 
-    async update(userId: number, id: number, payload: UpdatePaymentDto): Promise<Payment> {
+    async update(
+        userId: number,
+        id: number,
+        payload: UpdatePaymentPositionDto,
+    ): Promise<PaymentPosition> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (payload.version !== record.version) {
             throw new ConflictException(
@@ -83,7 +87,7 @@ export class PaymentsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<Payment> {
+    async remove(userId: number, id: number): Promise<PaymentPosition> {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }

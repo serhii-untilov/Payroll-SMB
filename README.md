@@ -336,7 +336,9 @@ npx --workspace @repo/api nest generate service payPeriodCalculation processor
 npx --workspace @repo/api nest generate controller serverEvent processor
 npx --workspace @repo/api nest generate service serverEvent processor/serverEvent
 npx --workspace @repo/api nest generate resource payments resources
-npx --workspace @repo/api nest generate service paymentPositions payments
+npx --workspace @repo/api nest generate service paymentPositions resources/payments
+npx --workspace @repo/api nest generate service paymentDeductions resources/payments
+npx --workspace @repo/api nest generate service paymentFunds resources/payments
 
 ```
 

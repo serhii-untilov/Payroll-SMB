@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/swagger';
-import { IUpdatePaymentDeduction } from '@repo/shared';
-import { CreatePaymentDeductionDto } from './create-paymentDeduction.dto';
+import { IUpdatePaymentFund } from '@repo/shared';
+import { CreatePaymentFundDto } from './create-paymentFund.dto';
 
-export class UpdatePaymentDeductionDto
-    extends PartialType(CreatePaymentDeductionDto)
-    implements IUpdatePaymentDeduction {}
+export class UpdatePaymentFundDto
+    extends PartialType(CreatePaymentFundDto)
+    implements IUpdatePaymentFund {}
