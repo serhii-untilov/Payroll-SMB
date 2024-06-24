@@ -260,5 +260,14 @@
     "payroll-failed": "Payroll calculation has failed",
     "tasklist-started": "Tasklist refreshing has started",
     "tasklist-finished": "Tasklist refreshing has finished",
-    "tasklist-failed": "Tasklist refreshing has failed"
+    "tasklist-failed": "Tasklist refreshing has failed",
+    "Application-calculation": "Application-calculation to the SIF",
+    "Mandatory Payments": "Mandatory Payments",
+    "Number": "#",
+    "Date": "Date",
+    "Company Payments": "Company Payments",
+    "SCI Payments": "SCI Payments",
+    "All Payments": "All Payments",
+    "To Pay": "To Pay",
+    "Payed": "Payed"
 }

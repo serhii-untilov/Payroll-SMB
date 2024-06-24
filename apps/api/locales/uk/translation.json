@@ -79,7 +79,7 @@
     "Contractors": "Підрядники",
     "Dismissed": "Звільнені",
     "Offers": "Кандидати",
-    "All": "Всі",
+    "All": "Усі",
     "current": "поточний",
     "Pay Period": "Розрахунковий період",
     "Job": "Посада",
@@ -149,7 +149,7 @@
     "Fact": "Факт",
     "Hours Worked": "Робочі години",
     "Additional Earnings": "Додаткові нарахування",
-    "Gross Pay": "До виплати",
+    "Gross Pay": "Нараховано",
     "Income Tax": "ПДФО",
     "Military Tax": "Військовий збір",
     "Other Deductions": "Інші утримання",
@@ -259,5 +259,14 @@
     "payroll-failed": "Помилка розрахунку заробітної плати",
     "tasklist-started": "Оновлення списку задач розпочато",
     "tasklist-finished": "Оновлення списку задач виконано",
-    "tasklist-failed": "Помилка оновлення списку задач"
+    "tasklist-failed": "Помилка оновлення списку задач",
+    "Application-calculation": "Заява-розрахунок до ФСС",
+    "Mandatory Payments": "Обов'язкові платежі",
+    "Number": "Номер",
+    "Date": "Дата",
+    "Company Payments": "Виплати підприємства",
+    "SCI Payments": "Виплати ФСС",
+    "All Payments": "Усі виплати",
+    "To Pay": "До виплати",
+    "Payed": "Виплачено"
 }

@@ -220,8 +220,13 @@ In **development** mode:
 |Regular Payment            |Виплата зарплати          |regularPayment     |                                                                                |
 |Fast Payment               |Виплата у міжрозрахунок   |fastPayment        |Виплата у міжрозрахунковий період: оплата відпустки, розрахунок при звільненні  |
 |Overdue Tasks              |Прострочені задачі        |overdueTasks       |                                                                                |
+|Application-calculation    |Заява-розрахунок          |appCalcSif         |Application-calculation to the Social Insurance Fund - Заява-розрахунок до ФСС  |
+|SIF                        |ФСС                       |sif                |The Social Insurance Fund - Фонд Соціального Страхування                        |
+|Mandatory Payments         |Обов'язкові платежі       |mandatoryPayments  |Обов'язкові платежі при виплаті                                                 |
+|Gross Pay                  |Разом нараховано          |grossPay           |Total amount of money an employee earns before any deductions are taken out     |
+|Net Pay                    |До виплати                |netPay             |                                                                                |
 
-## Development
+## Project Development History
 
 ### Initial script
 
