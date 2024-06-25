@@ -28,7 +28,7 @@ import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { deletePosition, getPositionsBalance } from '../../../services/position.service';
 import { sumFormatter } from '../../../services/utils';
-import { getPaymentsStub } from '../../../services/payments.service';
+import { getPayments, getPaymentsStub } from '../../../services/payment.service';
 
 export function PaymentList(props: IFindPositionBalance) {
     const { companyId } = props;
@@ -99,7 +99,7 @@ export function PaymentList(props: IFindPositionBalance) {
     } = useQuery<IPosition[], Error>({
         queryKey: ['position', 'balance', props],
         queryFn: async () => {
-            return getPaymentsStub();
+            return getPayments({ companyId, payPeriod });
         },
         enabled: !!companyId && !!payPeriod,
     });

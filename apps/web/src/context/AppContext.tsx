@@ -25,8 +25,8 @@ export type AppContextType = {
     themeMode: string;
     setThemeMode: Dispatch<string>;
     switchThemeMode: () => void;
-    payPeriod: Date | undefined | null;
-    setPayPeriod: Dispatch<Date | undefined | null>;
+    payPeriod: Date | undefined;
+    setPayPeriod: Dispatch<Date | undefined>;
     serverEvent: string;
 };
 
@@ -61,7 +61,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         () => responsiveFontSizes(createTheme(defaultTheme(themeMode), locale.locale)),
         [themeMode, locale],
     );
-    const [payPeriod, setPayPeriod] = useState<Date | undefined | null>(null);
+    const [payPeriod, setPayPeriod] = useState<Date>();
     const [serverEvent, setServerEvent] = useState('');
     const queryClient = useQueryClient();
 

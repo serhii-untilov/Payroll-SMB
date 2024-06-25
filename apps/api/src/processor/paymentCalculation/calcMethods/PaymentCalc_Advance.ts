@@ -1,9 +1,9 @@
 import { PaymentGroup } from '@repo/shared';
-import { payPeriodFactSum } from 'src/processor/helpers/payroll.helper';
 import { PaymentPosition } from '../../../resources/payments/entities/paymentPosition.entity';
 import { PaymentCalculationService } from '../payment-calculation.service';
-import { PaymentCalc } from './abstract/PaymentCalc';
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
+import { payPeriodFactSum } from './../../helpers/payroll.helper';
+import { PaymentCalc } from './abstract/PaymentCalc';
 
 export class PaymentCalc_Advance extends PaymentCalc {
     constructor(ctx: PaymentCalculationService, paymentType: PaymentType) {

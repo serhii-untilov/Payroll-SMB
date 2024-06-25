@@ -72,7 +72,7 @@ export class PaymentsController {
         return await this.service.remove(userId, id);
     }
 
-    @Post('find-all')
+    @Post('find')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() params: FindPaymentDto): Promise<Payment[]> {
