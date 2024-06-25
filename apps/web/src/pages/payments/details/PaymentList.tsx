@@ -1,4 +1,3 @@
-import { Box, Typography } from '@mui/material';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -8,14 +7,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import {
-    CalcMethod,
-    IFindPositionBalance,
-    IPosition,
-    getFullName,
-    getUnitByCalcMethod,
-    maxDate,
-} from '@repo/shared';
+import { IFindPayment, IPayment, maxDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -24,20 +16,17 @@ import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
-import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
-import { deletePosition, getPositionsBalance } from '../../../services/position.service';
-import { sumFormatter } from '../../../services/utils';
-import { getPayments, getPaymentsStub } from '../../../services/payment.service';
+import { getPayments } from '../../../services/payment.service';
+import { deletePosition } from '../../../services/position.service';
 
-export function PaymentList(props: IFindPositionBalance) {
-    const { companyId } = props;
+export function PaymentList(props: IFindPayment) {
+    const { companyId, payPeriod } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
-    const { payPeriod } = useAppContext();
     const { locale } = useLocale();
 
     const columns: GridColDef[] = [
@@ -91,25 +80,20 @@ export function PaymentList(props: IFindPositionBalance) {
         },
     ];
 
-    const {
-        data: positionList,
-        isError: isPositionListError,
-        isLoading: isPositionListLoading,
-        error: positionListError,
-    } = useQuery<IPosition[], Error>({
+    const { data, isError, isLoading, error } = useQuery<IPayment[], Error>({
         queryKey: ['position', 'balance', props],
         queryFn: async () => {
-            return getPayments({ companyId, payPeriod });
+            return await getPayments({ companyId, payPeriod });
         },
         enabled: !!companyId && !!payPeriod,
     });
 
-    if (isPositionListLoading) {
+    if (isLoading) {
         return <Loading />;
     }
 
-    if (isPositionListError) {
-        return enqueueSnackbar(`${positionListError.name}\n${positionListError.message}`, {
+    if (isError) {
+        return enqueueSnackbar(`${error.name}\n${error.message}`, {
             variant: 'error',
         });
     }
@@ -122,7 +106,7 @@ export function PaymentList(props: IFindPositionBalance) {
         navigate(`/people/position/${positionId}?return=true`);
     };
 
-    const submitCallback = async (data: IPosition) => {
+    const submitCallback = async (data: IPayment) => {
         await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
@@ -167,8 +151,8 @@ export function PaymentList(props: IFindPositionBalance) {
         <>
             <Toolbar
                 // onAdd={onAddPosition}
-                onPrint={positionList?.length ? onPrint : 'disabled'}
-                onExport={positionList?.length ? onExport : 'disabled'}
+                onPrint={data?.length ? onPrint : 'disabled'}
+                onExport={data?.length ? onExport : 'disabled'}
                 // onDelete={rowSelectionModel.length ? onDeletePosition : 'disabled'}
                 // onShowDeleted={'disabled'}
                 // onRestoreDeleted={'disabled'}
@@ -187,7 +171,7 @@ export function PaymentList(props: IFindPositionBalance) {
                     additionalEarnings: false,
                 }}
                 apiRef={gridRef}
-                rows={positionList || []}
+                rows={data || []}
                 columns={columns}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);

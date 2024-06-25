@@ -142,9 +142,9 @@ export class PayPeriodsService extends AvailableForUserCompany {
             ...(fullFieldList ? {} : defaultFieldList),
         };
         const payPeriod = await this.repository.findOneOrFail(options);
-        this._logger.log(
-            `findCurrent/${companyId}: payPeriod: ${company.payPeriod}, dateFrom: ${payPeriod.dateFrom}`,
-        );
+        // this._logger.log(
+        //     `findCurrent/${companyId}: payPeriod: ${company.payPeriod}, dateFrom: ${payPeriod.dateFrom}`,
+        // );
         return payPeriod;
     }
 
