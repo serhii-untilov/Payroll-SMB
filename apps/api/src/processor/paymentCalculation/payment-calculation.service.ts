@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
-import { CalcMethod, PaymentGroup } from '@repo/shared';
+import { CalcMethod, PaymentGroup, PaymentStatus } from '@repo/shared';
 import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
 import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
 import { PayPeriodCalculationService } from '../payPeriodCalculation/payPeriodCalculation.service';
@@ -7,7 +7,6 @@ import { CompaniesService } from './../../resources/companies/companies.service'
 import { Company } from './../../resources/companies/entities/company.entity';
 import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
 import { PaymentTypesService } from './../../resources/payment-types/payment-types.service';
-import { Payment } from './../../resources/payments/entities/payment.entity';
 import { PaymentPosition } from './../../resources/payments/entities/paymentPosition.entity';
 import { PaymentPositionsService } from './../../resources/payments/payment-positions.service';
 import { PaymentsService } from './../../resources/payments/payments.service';
@@ -16,8 +15,8 @@ import { PayrollsService } from './../../resources/payrolls/payrolls.service';
 import { Position } from './../../resources/positions/entities/position.entity';
 import { PositionsService } from './../../resources/positions/positions.service';
 import { PaymentCalc_Advance } from './calcMethods/PaymentCalc_Advance';
-import { PaymentCalc_Regular } from './calcMethods/PaymentCalc_Regular';
 import { PaymentCalc_Fast } from './calcMethods/PaymentCalc_Fast';
+import { PaymentCalc_Regular } from './calcMethods/PaymentCalc_Regular';
 import { PaymentCalc } from './calcMethods/abstract/PaymentCalc';
 
 @Injectable({ scope: Scope.REQUEST })
@@ -121,10 +120,55 @@ export class PaymentCalculationService {
         return this._paymentPositionId;
     }
 
-    private merge(): { toInsert: Payment[]; toDeleteIds: number[] } {
-        const toInsert: Payment[] = [];
-        const toDeleteIds: number[] = [];
-        // TODO
+    private collapse(paymentPositions: PaymentPosition[]): PaymentPosition[] {
+        return paymentPositions.reduce((a, b) => {
+            const found = a.find((o) => o.payment.paymentTypeId === b.payment.paymentTypeId);
+            if (found) {
+                found.paySum = found.paySum + b.paySum;
+            } else {
+                a.push(b);
+            }
+            return a;
+        }, []);
+    }
+
+    private merge(current: PaymentPosition[]): {
+        toDeleteIds: number[];
+        toInsert: PaymentPosition[];
+    } {
+        const toDeleteIds: number[] = this.paymentPositions
+            .filter(
+                (p) =>
+                    p.payment.status === PaymentStatus.DRAFT &&
+                    !current.find(
+                        (c) =>
+                            c.payment.paymentTypeId === p.payment.paymentTypeId &&
+                            c.paySum === p.paySum,
+                    ),
+            )
+            .map((o) => o.id);
+        const paymentPositions = this.collapse(
+            this.paymentPositions.filter((o) => !toDeleteIds.includes(o.id)),
+        );
+        const toInsert: PaymentPosition[] = current
+            .filter(
+                (c) =>
+                    !paymentPositions.find(
+                        (p) =>
+                            p.payment.paymentTypeId === c.payment.paymentTypeId &&
+                            p.paySum === c.paySum,
+                    ),
+            )
+            .map((c) => {
+                const found = paymentPositions.find(
+                    (p) => p.payment.paymentTypeId === c.payment.paymentTypeId,
+                );
+                if (found) {
+                    c.paySum = c.paySum - found.paySum;
+                }
+                return c;
+            })
+            .filter((o) => o.paySum > 0);
         return { toInsert, toDeleteIds };
     }
 
@@ -159,27 +203,36 @@ export class PaymentCalculationService {
             if (calcMethod) {
                 current.push(calcMethod.calculate());
             }
-            const { toInsert, toDeleteIds } = this.merge();
-            await this.save(toInsert, toDeleteIds);
         }
+        const { toInsert, toDeleteIds } = this.merge(current);
+        await this.save(toInsert, toDeleteIds);
     }
 
     private getCalcMethod(paymentType: PaymentType): PaymentCalc {
         if (paymentType.calcMethod === CalcMethod.REGULAR_PAYMENT) {
-            return new PaymentCalc_Regular(this);
+            return new PaymentCalc_Regular(this, paymentType);
         } else if (paymentType.calcMethod === CalcMethod.ADVANCE_PAYMENT) {
-            return new PaymentCalc_Advance(this);
+            return new PaymentCalc_Advance(this, paymentType);
         } else if (paymentType.calcMethod === CalcMethod.FAST_PAYMENT) {
-            return new PaymentCalc_Fast(this);
+            return new PaymentCalc_Fast(this, paymentType);
         }
         return null;
     }
 
-    private async save(toInsert: Payment[], toDeleteIds: number[]) {
-        await this.paymentsService.delete(toDeleteIds);
-        for (const record of toInsert) {
-            delete record.id;
-            const created = await this.paymentsService.create(this.userId, record);
+    private async save(toInsert: PaymentPosition[], toDeleteIds: number[]) {
+        await this.paymentPositionsService.delete(toDeleteIds);
+        for (const paymentPosition of toInsert) {
+            let payment = this.paymentsService.findOneBy({
+                companyId: this.company.id,
+                paymentTypeId: paymentPosition.payment.paymentTypeId,
+                status: PaymentStatus.DRAFT,
+            });
+            if (!payment) {
+                payment = this.paymentsService.create(this.userId, paymentPosition.payment);
+            }
+            delete paymentPosition.payment;
+            delete paymentPosition.id;
+            const created = await this.paymentPositionsService.create(this.userId, paymentPosition);
             this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
         }
     }

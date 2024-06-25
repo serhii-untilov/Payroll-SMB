@@ -67,6 +67,11 @@ export class PaymentsService extends AvailableForUserCompany {
         return record;
     }
 
+    async findOneBy(params: FindPaymentDto): Promise<Payment | null> {
+        const found = await this.findAll(params);
+        return found.length ? found[0] : null;
+    }
+
     async update(userId: number, id: number, payload: UpdatePaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (payload.version !== record.version) {

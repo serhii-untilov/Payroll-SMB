@@ -103,7 +103,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
-    async delete(id: number) {
-        await this.repository.delete(id);
+    async delete(ids: number[]) {
+        await this.repository.delete(ids);
     }
 }
