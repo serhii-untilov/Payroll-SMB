@@ -61,10 +61,10 @@ export class PaymentPositionsService extends AvailableForUserCompany {
 
     async findByPositionId(positionId: number, accPeriod: Date): Promise<PaymentPosition[]> {
         return await this.repository
-            .createQueryBuilder('paymentPositions')
-            .select('paymentPositions.*')
-            .innerJoin('paymentPositions.payment', 'payment')
-            .where('paymentPositions."positionId" = :positionId', { positionId })
+            .createQueryBuilder('payment_position')
+            .select('payment_position.*')
+            .innerJoin('payment_position.payment', 'payment')
+            .where('payment_position."positionId" = :positionId', { positionId })
             .andWhere('payment."accPeriod" = :accPeriod', { accPeriod })
             .andWhere('payment."deletedDate" is null')
             .getRawMany();

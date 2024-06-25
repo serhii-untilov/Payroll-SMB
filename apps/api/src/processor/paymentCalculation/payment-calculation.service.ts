@@ -220,7 +220,9 @@ export class PaymentCalculationService {
     }
 
     private async save(toInsert: PaymentPosition[], toDeleteIds: number[]) {
-        await this.paymentPositionsService.delete(toDeleteIds);
+        if (toDeleteIds.length) {
+            await this.paymentPositionsService.delete(toDeleteIds);
+        }
         for (const paymentPosition of toInsert) {
             let payment = this.paymentsService.findOneBy({
                 companyId: this.company.id,

@@ -16,13 +16,13 @@ export class PaymentPosition extends Logger implements IPaymentPosition {
     position?: Position;
     @Column({ type: 'integer' })
     positionId: number;
-    @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     baseSum?: number;
-    @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     deductions?: number;
-    @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     paySum: number;
-    @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     funds?: number;
     @Column({ type: 'bigint', default: 0 })
     recordFlags: number; // See enum RecordFlags

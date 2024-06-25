@@ -28,13 +28,13 @@ export class Payment extends Logger implements IPayment {
     dateFrom: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
     @Column({ type: 'date' })
     dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
-    @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     baseSum?: number;
-    @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     deductions?: number;
-    @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     paySum: number;
-    @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     funds?: number;
     @Column({ type: 'varchar', length: 10 })
     status: string; // See enum PaymentStatus

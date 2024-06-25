@@ -22,10 +22,10 @@ export class Gen1719247534354 implements MigrationInterface {
                 "paymentTypeId" integer NOT NULL,
                 "dateFrom" date NOT NULL,
                 "dateTo" date NOT NULL,
-                "baseSum" numeric(6, 2) NOT NULL DEFAULT '0',
-                "deductions" numeric(6, 2) NOT NULL DEFAULT '0',
-                "paySum" numeric(6, 2) NOT NULL DEFAULT '0',
-                "funds" numeric(6, 2) NOT NULL DEFAULT '0',
+                "baseSum" numeric(15, 2) NOT NULL DEFAULT '0',
+                "deductions" numeric(15, 2) NOT NULL DEFAULT '0',
+                "paySum" numeric(15, 2) NOT NULL DEFAULT '0',
+                "funds" numeric(15, 2) NOT NULL DEFAULT '0',
                 "status" character varying(10) NOT NULL,
                 "recordFlags" bigint NOT NULL DEFAULT '0',
                 "description" character varying(256) NOT NULL,
@@ -44,10 +44,10 @@ export class Gen1719247534354 implements MigrationInterface {
                 "id" SERIAL NOT NULL,
                 "paymentId" integer NOT NULL,
                 "positionId" integer NOT NULL,
-                "baseSum" numeric(6, 2) NOT NULL DEFAULT '0',
-                "deductions" numeric(6, 2) NOT NULL DEFAULT '0',
-                "paySum" numeric(6, 2) NOT NULL DEFAULT '0',
-                "funds" numeric(6, 2) NOT NULL DEFAULT '0',
+                "baseSum" numeric(15, 2) NOT NULL DEFAULT '0',
+                "deductions" numeric(15, 2) NOT NULL DEFAULT '0',
+                "paySum" numeric(15, 2) NOT NULL DEFAULT '0',
+                "funds" numeric(15, 2) NOT NULL DEFAULT '0',
                 "recordFlags" bigint NOT NULL DEFAULT '0',
                 CONSTRAINT "PK_beb52b3caaf6ad553308bd23687" PRIMARY KEY ("id")
             )
@@ -57,8 +57,8 @@ export class Gen1719247534354 implements MigrationInterface {
                 "id" SERIAL NOT NULL,
                 "paymentPositionId" integer NOT NULL,
                 "payFundTypeId" integer NOT NULL,
-                "baseSum" numeric(6, 2) NOT NULL DEFAULT '0',
-                "paySum" numeric(6, 2) NOT NULL DEFAULT '0',
+                "baseSum" numeric(15, 2) NOT NULL DEFAULT '0',
+                "paySum" numeric(15, 2) NOT NULL DEFAULT '0',
                 "recordFlags" bigint NOT NULL DEFAULT '0',
                 CONSTRAINT "PK_bcb29f80740a6a962b4b7fc3234" PRIMARY KEY ("id")
             )
@@ -68,8 +68,8 @@ export class Gen1719247534354 implements MigrationInterface {
                 "id" SERIAL NOT NULL,
                 "paymentPositionId" integer NOT NULL,
                 "paymentTypeId" integer NOT NULL,
-                "baseSum" numeric(6, 2) NOT NULL DEFAULT '0',
-                "paySum" numeric(6, 2) NOT NULL DEFAULT '0',
+                "baseSum" numeric(15, 2) NOT NULL DEFAULT '0',
+                "paySum" numeric(15, 2) NOT NULL DEFAULT '0',
                 "recordFlags" bigint NOT NULL DEFAULT '0',
                 CONSTRAINT "PK_920fb8320c0a7fd3542b333957c" PRIMARY KEY ("id")
             )
