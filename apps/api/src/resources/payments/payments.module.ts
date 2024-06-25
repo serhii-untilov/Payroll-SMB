@@ -1,18 +1,21 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { PaymentsService } from './payments.service';
-import { PaymentsController } from './payments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Payment } from './entities/payment.entity';
-import { PositionsModule } from '../positions/positions.module';
-import { CompaniesModule } from '../companies/companies.module';
 import { AccessModule } from '../access/access.module';
-import { PaymentPositionsService } from './payment-positions.service';
+import { CompaniesModule } from '../companies/companies.module';
+import { PositionsModule } from '../positions/positions.module';
+import { Payment } from './entities/payment.entity';
+import { PaymentDeduction } from './entities/paymentDeduction.entity';
+import { PaymentFund } from './entities/paymentFund.entity';
+import { PaymentPosition } from './entities/paymentPosition.entity';
 import { PaymentDeductionsService } from './payment-deductions.service';
 import { PaymentFundsService } from './payment-funds.service';
+import { PaymentPositionsService } from './payment-positions.service';
+import { PaymentsController } from './payments.controller';
+import { PaymentsService } from './payments.service';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Payment]),
+        TypeOrmModule.forFeature([Payment, PaymentPosition, PaymentDeduction, PaymentFund]),
         forwardRef(() => PositionsModule),
         forwardRef(() => CompaniesModule),
         forwardRef(() => AccessModule),
