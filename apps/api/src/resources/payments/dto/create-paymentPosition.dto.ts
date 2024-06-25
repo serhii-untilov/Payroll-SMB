@@ -9,6 +9,5 @@ export class CreatePaymentPositionDto implements ICreatePaymentPosition {
     @ApiProperty() deductions?: number;
     @ApiProperty() paySum: number;
     @ApiProperty() funds?: number;
-    @ApiProperty() status: string; // See enum PaymentStatus
     @ApiProperty() recordFlags: number; // See enum RecordFlags
 }
