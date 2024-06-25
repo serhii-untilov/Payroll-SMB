@@ -1,14 +1,15 @@
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ServerEvent } from '@repo/shared';
-import { SseService } from './../../serverSentEvents/sse.service';
 import { CompanyCreatedEvent } from '../../../resources/companies/events/company-created.event';
+import { PaymentCalculationService } from '../../paymentCalculation/payment-calculation.service';
 import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
 import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
 import { CompanyDeletedEvent } from './../../../resources/companies/events/company-deleted.event';
 import { CompanyUpdatedEvent } from './../../../resources/companies/events/company-updated.event';
 import { PayPeriodCalculationService } from './../../payPeriodCalculation/payPeriodCalculation.service';
 import { PayrollCalculationService } from './../../payrollCalculation/payrollCalculation.service';
+import { SseService } from './../../serverSentEvents/sse.service';
 
 @Injectable()
 export class CompanyListenerService {
@@ -17,6 +18,8 @@ export class CompanyListenerService {
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
         private payrollCalculationService: PayrollCalculationService,
+        @Inject(forwardRef(() => PaymentCalculationService))
+        private paymentCalculationService: PaymentCalculationService,
         @Inject(forwardRef(() => PayFundCalculationService))
         private payFundCalculationService: PayFundCalculationService,
         @Inject(forwardRef(() => TaskGenerationService))
@@ -57,6 +60,7 @@ export class CompanyListenerService {
             await this.payPeriodCalculationService.fillPeriods(userId, companyId);
             await this.payrollCalculationService.calculateCompany(userId, companyId);
             await this.payFundCalculationService.calculateCompany(userId, companyId);
+            await this.paymentCalculationService.calculateCompany(userId, companyId);
             await this.payrollCalculationService.calculateCompanyTotals(userId, companyId);
             await this.taskListService.generate(userId, companyId);
             this._logger.log(`companyId ${companyId} ${ServerEvent.PAYROLL_FINISHED}`);
