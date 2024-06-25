@@ -142,14 +142,20 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             };
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
-                    ['company', 'department', 'payPeriod', 'position', 'person', 'task'].forEach(
-                        async (key) => {
-                            await queryClient.invalidateQueries({
-                                queryKey: [key],
-                                refetchType: 'all',
-                            });
-                        },
-                    );
+                    [
+                        'company',
+                        'department',
+                        'payPeriod',
+                        'position',
+                        'person',
+                        'task',
+                        'payment',
+                    ].forEach(async (key) => {
+                        await queryClient.invalidateQueries({
+                            queryKey: [key],
+                            refetchType: 'all',
+                        });
+                    });
                 }
                 setServerEvent(event.data);
                 // console.log(`New company ${company?.id} message:`, event.data);

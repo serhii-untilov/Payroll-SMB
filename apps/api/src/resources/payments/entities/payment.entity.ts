@@ -40,7 +40,7 @@ export class Payment extends Logger implements IPayment {
     status: string; // See enum PaymentStatus
     @Column({ type: 'bigint', default: 0 })
     recordFlags: number; // See enum RecordFlags
-    @Column({ type: 'varchar', length: 256 })
+    @Column({ type: 'varchar', length: 256, default: '' })
     description?: string;
 
     @AfterLoad()

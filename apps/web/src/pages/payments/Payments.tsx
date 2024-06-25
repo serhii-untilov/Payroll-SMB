@@ -117,6 +117,6 @@ function getTabIndex(tabName: string | null): number {
     if (!tabName) {
         return 0;
     }
-    const map = { payments: 0, appCalcSif: 1 };
+    const map = { pay: 0, payed: 1, companyPayments: 2, sciPayments: 3, all: 4 };
     return map[tabName];
 }

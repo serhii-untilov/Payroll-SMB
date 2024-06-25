@@ -28,7 +28,7 @@ export class Gen1719247534354 implements MigrationInterface {
                 "funds" numeric(15, 2) NOT NULL DEFAULT '0',
                 "status" character varying(10) NOT NULL,
                 "recordFlags" bigint NOT NULL DEFAULT '0',
-                "description" character varying(256) NOT NULL,
+                "description" character varying(256) NOT NULL DEFAULT '',
                 CONSTRAINT "PK_fcaec7df5adf9cac408c686b2ab" PRIMARY KEY ("id")
             )
         `);

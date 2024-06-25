@@ -6,7 +6,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@repo/shared';
+import { ResourceType, dateUTC } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -95,5 +95,31 @@ export class PaymentsService extends AvailableForUserCompany {
 
     async delete(ids: number[]) {
         await this.repository.delete(ids);
+    }
+
+    async getNextDocNumber(companyId: number, payPeriod: Date): Promise<string> {
+        const first = await this.repository.findOneBy({ companyId, payPeriod, docNumber: '1' });
+        if (!first) return '1';
+        const result = await this.repository.query(
+            `select coalesce(min(cast(p."docNumber" as integer)), 0) + 1 "freeNumber"
+            from payment p
+            where p."companyId" = $1
+                and p."payPeriod" = $2
+                and p."deletedUserId" is NULL
+                and p."docNumber" ~ '^[0-9\.]+$' is true
+                and not exists (
+                    select null
+                    from payment p2
+                    where p2."companyId" = $1
+                        and p2."payPeriod" = $2
+                        and p2."deletedUserId" is NULL
+                        and (p2."docNumber") ~ '^[0-9\.]+$' is true
+                        and cast(p2."docNumber" as integer) = cast(p."docNumber" as integer)  + 1
+                )
+            `,
+            [companyId, dateUTC(payPeriod)],
+        );
+
+        return result[0].freeNumber.toString();
     }
 }

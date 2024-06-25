@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
-import { CalcMethod, PaymentGroup, PaymentStatus } from '@repo/shared';
+import { CalcMethod, PaymentGroup, PaymentStatus, dateUTC } from '@repo/shared';
 import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
 import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
 import { PayPeriodCalculationService } from '../payPeriodCalculation/payPeriodCalculation.service';
@@ -18,6 +18,7 @@ import { PaymentCalc_Advance } from './calcMethods/PaymentCalc_Advance';
 import { PaymentCalc_Fast } from './calcMethods/PaymentCalc_Fast';
 import { PaymentCalc_Regular } from './calcMethods/PaymentCalc_Regular';
 import { PaymentCalc } from './calcMethods/abstract/PaymentCalc';
+import { Payment } from './../../resources/payments/entities/payment.entity';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PaymentCalculationService {
@@ -224,18 +225,28 @@ export class PaymentCalculationService {
             await this.paymentPositionsService.delete(toDeleteIds);
         }
         for (const paymentPosition of toInsert) {
-            let payment = this.paymentsService.findOneBy({
+            let payment = await this.paymentsService.findOneBy({
                 companyId: this.company.id,
                 paymentTypeId: paymentPosition.payment.paymentTypeId,
                 status: PaymentStatus.DRAFT,
             });
             if (!payment) {
-                payment = this.paymentsService.create(this.userId, paymentPosition.payment);
+                payment = await this.createPayment(paymentPosition.payment);
             }
             delete paymentPosition.payment;
             delete paymentPosition.id;
             const created = await this.paymentPositionsService.create(this.userId, paymentPosition);
             this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
         }
+    }
+
+    private async createPayment(payment: Payment): Promise<Payment> {
+        delete payment.id;
+        payment.docNumber = await this.paymentsService.getNextDocNumber(
+            this.company.id,
+            this.payPeriod.dateFrom,
+        );
+        payment.docDate = dateUTC(new Date());
+        return await this.paymentsService.create(this.userId, payment);
     }
 }

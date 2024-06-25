@@ -81,7 +81,7 @@ export function PaymentList(props: IFindPayment) {
     ];
 
     const { data, isError, isLoading, error } = useQuery<IPayment[], Error>({
-        queryKey: ['position', 'balance', props],
+        queryKey: ['payment', 'list', props],
         queryFn: async () => {
             return await getPayments({ companyId, payPeriod });
         },
