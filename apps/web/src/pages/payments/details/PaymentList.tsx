@@ -7,7 +7,15 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { CalcMethod, IFindPayment, IPayment, date2view, maxDate } from '@repo/shared';
+import {
+    CalcMethod,
+    IFindPayment,
+    IPayment,
+    PaymentStatus,
+    date2view,
+    dateUTC,
+    maxDate,
+} from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -176,11 +184,17 @@ export function PaymentList(props: Props) {
     const getRowStatus = (params: any): string => {
         return params.row?.deletedDate
             ? 'Deleted'
-            : params.row?.dateTo < maxDate()
-              ? 'Dismissed'
-              : !params.row?.personId
-                ? 'Vacancy'
-                : 'Normal';
+            : params.row?.status === PaymentStatus.PAYED
+              ? 'Normal'
+              : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
+                ? 'Overdue'
+                : params.row?.status === PaymentStatus.SUBMITTED
+                  ? 'Todo'
+                  : params.row?.status === PaymentStatus.ACCEPTED
+                    ? 'Overdue'
+                    : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
+                      ? 'Todo'
+                      : 'Normal';
     };
 
     return (

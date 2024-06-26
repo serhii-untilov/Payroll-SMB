@@ -7,6 +7,7 @@ import { PaymentType } from './../../../../resources/payment-types/entities/paym
 export abstract class PaymentCalc {
     ctx: PaymentCalculationService;
     paymentType: PaymentType;
+    dateFrom: Date;
 
     constructor(ctx: PaymentCalculationService, paymentType: PaymentType) {
         this.ctx = ctx;

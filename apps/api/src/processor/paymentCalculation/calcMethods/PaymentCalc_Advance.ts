@@ -1,9 +1,10 @@
-import { PaymentGroup } from '@repo/shared';
+import { PaymentGroup, dateUTC } from '@repo/shared';
 import { PaymentPosition } from '../../../resources/payments/entities/paymentPosition.entity';
 import { PaymentCalculationService } from '../payment-calculation.service';
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
 import { payPeriodFactSum } from './../../helpers/payroll.helper';
 import { PaymentCalc } from './abstract/PaymentCalc';
+import { getAdvancePaymentDate } from 'src/processor/helpers/payment.helper';
 
 export class PaymentCalc_Advance extends PaymentCalc {
     constructor(ctx: PaymentCalculationService, paymentType: PaymentType) {
@@ -12,6 +13,8 @@ export class PaymentCalc_Advance extends PaymentCalc {
 
     calculate(): PaymentPosition {
         const paymentPosition = this.makePaymentPosition();
+        paymentPosition.payment.dateFrom = getAdvancePaymentDate(this.ctx.payPeriod);
+        paymentPosition.payment.dateTo = dateUTC(paymentPosition.payment.dateFrom);
         paymentPosition.baseSum = this.calcBaseSum();
         paymentPosition.paySum = this.calcPaySum(paymentPosition);
         return paymentPosition;

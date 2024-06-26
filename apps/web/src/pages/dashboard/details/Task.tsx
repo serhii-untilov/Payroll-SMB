@@ -82,7 +82,7 @@ export function Task(props: Props) {
         if (task.status === TaskStatus.NOT_AVAILABLE) {
             return;
         }
-        const path = getPath(task.type, company?.id, position);
+        const path = getPath(task, company?.id, position);
         if (path) {
             navigate(path);
         }
@@ -247,11 +247,11 @@ function getBackgroundColor(task: ITask, view: TaskView) {
 }
 
 function getPath(
-    type: string,
+    task: ITask,
     companyId: number | null | undefined,
     position: IPosition | null | undefined,
 ): string {
-    switch (type) {
+    switch (task.type) {
         case TaskType.CREATE_COMPANY:
             return `/company/${companyId ? companyId : ''}?tab=details&return=true`;
         case TaskType.FILL_DEPARTMENT_LIST:
@@ -267,9 +267,13 @@ function getPath(
         case TaskType.POST_PAYMENT_FSS:
             return '/payments?tab=sciPayments&return=true';
         case TaskType.POST_ADVANCE_PAYMENT:
-            return '/payments?tab=companyPayments&return=true';
+            return task.status === TaskStatus.TODO
+                ? '/payments?tab=pay&return=true'
+                : '/payments?tab=payed&return=true';
         case TaskType.POST_REGULAR_PAYMENT:
-            return '/payments?tab=companyPayments&return=true';
+            return task.status === TaskStatus.TODO
+                ? '/payments?tab=pay&return=true'
+                : '/payments?tab=payed&return=true';
         case TaskType.CLOSE_PAY_PERIOD:
             return companyId ? `/company/${companyId || ''}?tab=periods&return=true` : '#';
         case TaskType.SEND_INCOME_TAX_REPORT:

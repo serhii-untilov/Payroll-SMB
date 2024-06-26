@@ -246,7 +246,7 @@ export class PaymentCalculationService {
             this.company.id,
             this.payPeriod.dateFrom,
         );
-        payment.docDate = dateUTC(new Date());
+        payment.docDate = dateUTC(payment.dateFrom);
         return await this.paymentsService.create(this.userId, payment);
     }
 }
