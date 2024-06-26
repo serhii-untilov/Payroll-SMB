@@ -11,29 +11,14 @@ export function AppTitle(props: TypographyProps) {
 
     useEffect(() => {}, [locale]);
 
-    const {
-        data: title,
-        isError,
-        isLoading,
-        error,
-    } = useQuery<string, Error>({
+    const { data: title } = useQuery<string, Error>({
         queryKey: ['appTitle'],
         queryFn: async () => await getAppTitle(),
     });
 
     return (
         <>
-            <Typography
-                component="h1"
-                variant="h2"
-                noWrap
-                align="center"
-                sx={{ mb: 2 }}
-                // color="text.primary"
-                // color="primary.dark"
-                // color="grey.800"
-                {...props}
-            >
+            <Typography component="h1" variant="h2" noWrap align="center" sx={{ mb: 2 }} {...props}>
                 {t(title || 'Payroll')}
             </Typography>
         </>

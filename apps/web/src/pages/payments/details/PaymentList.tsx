@@ -7,7 +7,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IFindPayment, IPayment, maxDate } from '@repo/shared';
+import { CalcMethod, IFindPayment, IPayment, date2view, maxDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -18,10 +18,16 @@ import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
 import useLocale from '../../../hooks/useLocale';
 import { getPayments } from '../../../services/payment.service';
-import { deletePosition } from '../../../services/position.service';
+import { deletePayment } from '../../../services/payment.service';
+import { sumFormatter } from '../../../services/utils';
 
-export function PaymentList(props: IFindPayment) {
-    const { companyId, payPeriod } = props;
+type Props = IFindPayment & {
+    companyPayments: boolean;
+    sifPayments: boolean;
+};
+
+export function PaymentList(props: Props) {
+    const { companyId, payPeriod, status } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -43,19 +49,28 @@ export function PaymentList(props: IFindPayment) {
             type: 'string',
             width: 120,
             sortable: true,
+            valueGetter: (params) => {
+                return date2view(params.value);
+            },
         },
         {
             field: 'name',
             headerName: t('Name'),
             width: 280,
             sortable: true,
+            valueGetter: (params) => {
+                return params.row?.paymentType?.name;
+            },
         },
         {
-            field: 'grossPay',
+            field: 'baseSum',
             headerName: t('Gross Pay'),
             type: 'number',
             width: 160,
             sortable: true,
+            valueGetter: (params) => {
+                return sumFormatter(params.value);
+            },
         },
         {
             field: 'deductions',
@@ -63,34 +78,55 @@ export function PaymentList(props: IFindPayment) {
             type: 'number',
             width: 160,
             sortable: true,
+            valueGetter: (params) => {
+                return sumFormatter(params.value);
+            },
         },
         {
-            field: 'netPay',
+            field: 'paySum',
             headerName: t('Net Pay'),
             type: 'number',
             width: 160,
             sortable: true,
+            valueGetter: (params) => {
+                return sumFormatter(params.value);
+            },
         },
         {
-            field: 'mandatoryPayments',
+            field: 'funds',
             headerName: t('Mandatory Payments'),
             type: 'number',
             width: 220,
             sortable: true,
+            valueGetter: (params) => {
+                return sumFormatter(params.value);
+            },
         },
     ];
 
     const { data, isError, isLoading, error } = useQuery<IPayment[], Error>({
         queryKey: ['payment', 'list', props],
         queryFn: async () => {
-            return await getPayments({ companyId, payPeriod });
+            return (
+                await getPayments({
+                    relations: true,
+                    companyId,
+                    payPeriod,
+                    ...(status ? { status } : {}),
+                })
+            ).filter(
+                (o) =>
+                    (props.companyPayments &&
+                        o.paymentType?.calcMethod !== CalcMethod.SIF_PAYMENT) ||
+                    (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SIF_PAYMENT),
+            );
         },
         enabled: !!companyId && !!payPeriod,
     });
 
-    if (isLoading) {
-        return <Loading />;
-    }
+    // if (isLoading) {
+    //     return <Loading />;
+    // }
 
     if (isError) {
         return enqueueSnackbar(`${error.name}\n${error.message}`, {
@@ -98,23 +134,23 @@ export function PaymentList(props: IFindPayment) {
         });
     }
 
-    const onAddPosition = () => {
-        navigate('/people/position/?tab=details&return=true');
+    const onAddPayment = () => {
+        navigate('/people/payment/?tab=details&return=true');
     };
 
-    const onEditPosition = (positionId: number) => {
-        navigate(`/people/position/${positionId}?return=true`);
+    const onEditPayment = (paymentId: number) => {
+        navigate(`/people/payment/${paymentId}?return=true`);
     };
 
     const submitCallback = async (data: IPayment) => {
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
     };
 
-    const onDeletePosition = async () => {
+    const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
-            await deletePosition(+id);
+            await deletePayment(+id);
         }
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
     };
 
     const onPrint = () => {
@@ -150,13 +186,13 @@ export function PaymentList(props: IFindPayment) {
     return (
         <>
             <Toolbar
-                // onAdd={onAddPosition}
+                onAdd={onAddPayment}
                 onPrint={data?.length ? onPrint : 'disabled'}
                 onExport={data?.length ? onExport : 'disabled'}
-                // onDelete={rowSelectionModel.length ? onDeletePosition : 'disabled'}
-                // onShowDeleted={'disabled'}
-                // onRestoreDeleted={'disabled'}
-                // onShowHistory={'disabled'}
+                onDelete={rowSelectionModel.length ? onDeletePayment : 'disabled'}
+                onShowDeleted={'disabled'}
+                onRestoreDeleted={'disabled'}
+                onShowHistory={'disabled'}
             />
             <DataGrid
                 checkboxSelection={false}
@@ -183,14 +219,14 @@ export function PaymentList(props: IFindPayment) {
                     details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditPosition(params.row.positionId);
+                        onEditPayment(params.row.paymentId);
                     }
                 }}
                 onRowDoubleClick={(
                     params: GridRowParams,
                     event: MuiEvent,
                     details: GridCallbackDetails,
-                ) => onEditPosition(params.row.positionId)}
+                ) => onEditPayment(params.row.paymentId)}
             />
         </>
     );

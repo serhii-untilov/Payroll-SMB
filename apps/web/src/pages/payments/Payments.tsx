@@ -12,6 +12,7 @@ import { SelectPayPeriod } from '../../components/select/SelectPayPeriod';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { PaymentList } from './details/PaymentList';
+import { PaymentStatus } from '@repo/shared';
 
 export default function Payments() {
     const { company, payPeriod } = useAppContext();
@@ -64,6 +65,9 @@ export default function Payments() {
                             <PaymentList
                                 companyId={company?.id}
                                 payPeriod={payPeriod || new Date()}
+                                status={PaymentStatus.DRAFT}
+                                companyPayments={true}
+                                sifPayments={true}
                             />
                         )}
                     </TabPanel>
@@ -72,6 +76,9 @@ export default function Payments() {
                             <PaymentList
                                 companyId={company?.id}
                                 payPeriod={payPeriod || new Date()}
+                                status={PaymentStatus.PAYED}
+                                companyPayments={true}
+                                sifPayments={true}
                             />
                         )}
                     </TabPanel>
@@ -80,6 +87,8 @@ export default function Payments() {
                             <PaymentList
                                 companyId={company?.id}
                                 payPeriod={payPeriod || new Date()}
+                                companyPayments={true}
+                                sifPayments={false}
                             />
                         )}
                     </TabPanel>
@@ -88,6 +97,8 @@ export default function Payments() {
                             <PaymentList
                                 companyId={company?.id}
                                 payPeriod={payPeriod || new Date()}
+                                companyPayments={false}
+                                sifPayments={true}
                             />
                         )}
                     </TabPanel>
@@ -96,14 +107,8 @@ export default function Payments() {
                             <PaymentList
                                 companyId={company?.id}
                                 payPeriod={payPeriod || new Date()}
-                            />
-                        )}
-                    </TabPanel>
-                    <TabPanel value={tab} index={5}>
-                        {company?.id && (
-                            <PaymentList
-                                companyId={company?.id}
-                                payPeriod={payPeriod || new Date()}
+                                companyPayments={true}
+                                sifPayments={true}
                             />
                         )}
                     </TabPanel>
