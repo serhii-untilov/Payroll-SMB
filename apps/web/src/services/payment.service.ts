@@ -9,7 +9,17 @@ export async function createPayment(payment: ICreatePayment): Promise<IPayment> 
 
 export async function getPayments(params: IFindPayment): Promise<IPayment[]> {
     const response = await api.post('/api/payments/find', params, { headers: authHeader() });
-    return response.data;
+    return response.data.sort((a, b) =>
+        a.docDate.getTime() > b.docDate.getTime()
+            ? 1
+            : a.docDate.getTime() < b.docDate.getTime()
+              ? -1
+              : Number(a.docNumber) > Number(b.docNumber)
+                ? 1
+                : Number(a.docNumber) < Number(b.docNumber)
+                  ? -1
+                  : 0,
+    );
 }
 
 export async function getPayment(params: {

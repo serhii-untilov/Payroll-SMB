@@ -48,14 +48,14 @@ export function PaymentList(props: Props) {
             field: 'docNumber',
             headerName: t('Number'),
             type: 'string',
-            width: 120,
+            width: 110,
             sortable: true,
         },
         {
             field: 'docDate',
             headerName: t('Date'),
             type: 'string',
-            width: 120,
+            width: 130,
             sortable: true,
             valueGetter: (params) => {
                 return date2view(params.value);
@@ -64,7 +64,7 @@ export function PaymentList(props: Props) {
         {
             field: 'name',
             headerName: t('Name'),
-            width: 280,
+            width: 300,
             sortable: true,
             valueGetter: (params) => {
                 return params.row?.paymentType?.name;
@@ -74,7 +74,7 @@ export function PaymentList(props: Props) {
             field: 'baseSum',
             headerName: t('Gross Pay'),
             type: 'number',
-            width: 160,
+            width: 170,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
@@ -84,7 +84,7 @@ export function PaymentList(props: Props) {
             field: 'deductions',
             headerName: t('Deductions'),
             type: 'number',
-            width: 160,
+            width: 170,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
@@ -94,7 +94,7 @@ export function PaymentList(props: Props) {
             field: 'paySum',
             headerName: t('Net Pay'),
             type: 'number',
-            width: 160,
+            width: 170,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
@@ -143,11 +143,13 @@ export function PaymentList(props: Props) {
     }
 
     const onAddPayment = () => {
-        navigate('/people/payment/?tab=details&return=true');
+        // navigate('/people/payment/?tab=details&return=true');
+        console.log('onEditPayment');
     };
 
     const onEditPayment = (paymentId: number) => {
-        navigate(`/people/payment/${paymentId}?return=true`);
+        // navigate(`/people/payment/${paymentId}?return=true`);
+        console.log('onEditPayment');
     };
 
     const submitCallback = async (data: IPayment) => {
@@ -209,16 +211,14 @@ export function PaymentList(props: Props) {
                 onShowHistory={'disabled'}
             />
             <DataGrid
-                checkboxSelection={false}
+                checkboxSelection={true}
                 // rowHeight={80}
                 getRowStatus={getRowStatus}
                 columnVisibilityModel={{
                     // Hide columns, the other columns will remain visible
-                    cardNumber: false,
-                    department: false,
+                    docNumber: false,
                     dateFrom: false,
                     dateTo: false,
-                    additionalEarnings: false,
                 }}
                 apiRef={gridRef}
                 rows={data || []}
