@@ -45,6 +45,7 @@ export class PaymentCalc_Advance extends PaymentCalc {
             this.ctx.payrolls,
             this.getBaseSumPaymentTypeIds(),
         );
+        // TODO
         return Math.max(0, Math.trunc(factSum * 0.5));
     }
 
@@ -54,11 +55,13 @@ export class PaymentCalc_Advance extends PaymentCalc {
             this.ctx.payrolls,
             this.getDeductionsPaymentTypeIds(),
         );
+        // TODO
         return Math.max(0, Math.trunc(factSum * 0.5));
     }
 
     calcFunds(): number {
         const funds = payFundPayPeriodFactSum(this.ctx.payPeriod, this.ctx.payFunds);
+        // TODO
         return Math.max(0, Math.trunc(funds * 0.5));
     }
 
