@@ -60,14 +60,13 @@ export class PaymentPositionsService extends AvailableForUserCompany {
     }
 
     async findByPositionId(positionId: number, accPeriod: Date): Promise<PaymentPosition[]> {
-        return await this.repository
-            .createQueryBuilder('payment_position')
-            .select('payment_position.*')
-            .innerJoin('payment_position.payment', 'payment')
-            .where('payment_position."positionId" = :positionId', { positionId })
-            .andWhere('payment."accPeriod" = :accPeriod', { accPeriod })
-            .andWhere('payment."deletedDate" is null')
-            .getRawMany();
+        return await this.repository.find({
+            relations: {
+                payment: true,
+                position: true,
+            },
+            where: { positionId, payment: { accPeriod } },
+        });
     }
 
     async findOne(id: number, relations: boolean = false): Promise<PaymentPosition> {
@@ -105,5 +104,22 @@ export class PaymentPositionsService extends AvailableForUserCompany {
 
     async delete(ids: number[]) {
         await this.repository.delete(ids);
+    }
+
+    async calculateTotals(paymentId: number) {
+        const totals = await this.repository
+            .createQueryBuilder('payment_position')
+            .select('SUM("baseSum")', 'baseSum')
+            .addSelect('SUM(deductions)', 'deductions')
+            .addSelect('SUM("paySum")', 'paySum')
+            .addSelect('SUM(funds)', 'funds')
+            .where('"paymentId" = :paymentId', { paymentId })
+            .getRawOne();
+        return {
+            baseSum: totals.baseSum || 0,
+            deductions: totals.deductions || 0,
+            paySum: totals.paySum || 0,
+            funds: totals.funds || 0,
+        };
     }
 }

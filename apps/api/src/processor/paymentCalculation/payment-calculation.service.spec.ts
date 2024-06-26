@@ -10,6 +10,7 @@ import { PaymentsService } from './../../resources/payments/payments.service';
 import { PayrollsService } from './../../resources/payrolls/payrolls.service';
 import { PositionsService } from './../../resources/positions/positions.service';
 import { PaymentCalculationService } from './payment-calculation.service';
+import { PayFundsService } from './../../resources/pay-funds/pay-funds.service';
 
 describe('PaymentCalculationService', () => {
     let service: PaymentCalculationService;
@@ -23,6 +24,7 @@ describe('PaymentCalculationService', () => {
                 { provide: CompaniesService, useValue: createMock<CompaniesService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
+                { provide: PayFundsService, useValue: createMock<PayFundsService>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
                 { provide: PaymentsService, useValue: createMock<PaymentsService>() },
                 {

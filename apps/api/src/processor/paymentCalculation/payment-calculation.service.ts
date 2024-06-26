@@ -19,19 +19,22 @@ import { PaymentCalc_Fast } from './calcMethods/PaymentCalc_Fast';
 import { PaymentCalc_Regular } from './calcMethods/PaymentCalc_Regular';
 import { PaymentCalc } from './calcMethods/abstract/PaymentCalc';
 import { Payment } from './../../resources/payments/entities/payment.entity';
+import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
+import { PayFundsService } from './../../resources/pay-funds/pay-funds.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PaymentCalculationService {
-    private _logger: Logger = new Logger(PaymentCalculationService.name);
-    private _userId: number;
-    private _company: Company;
-    private _paymentTypes: PaymentType[];
-    private _position: Position;
-    private _payPeriod: PayPeriod;
-    private _accPeriods: PayPeriod[];
-    private _payrolls: Payroll[];
-    private _paymentPositions: PaymentPosition[];
-    private _paymentPositionId: number;
+    logger: Logger = new Logger(PaymentCalculationService.name);
+    userId: number;
+    company: Company;
+    paymentTypes: PaymentType[];
+    position: Position;
+    payPeriod: PayPeriod;
+    accPeriods: PayPeriod[];
+    payrolls: Payroll[];
+    payFunds: PayFund[];
+    paymentPositions: PaymentPosition[];
+    paymentPositionId: number;
 
     constructor(
         @Inject(forwardRef(() => CompaniesService))
@@ -44,6 +47,8 @@ export class PaymentCalculationService {
         private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService))
         private payrollsService: PayrollsService,
+        @Inject(forwardRef(() => PayFundsService))
+        private payFundsService: PayFundsService,
         @Inject(forwardRef(() => PaymentsService))
         private paymentsService: PaymentsService,
         @Inject(forwardRef(() => PaymentPositionsService))
@@ -52,40 +57,12 @@ export class PaymentCalculationService {
         public payPeriodCalculationService: PayPeriodCalculationService,
     ) {}
 
-    public get logger() {
-        return this._logger;
-    }
-    public get userId() {
-        return this._userId;
-    }
-    public get company() {
-        return this._company;
-    }
-    public get paymentTypes() {
-        return this._paymentTypes;
-    }
-    public get position() {
-        return this._position;
-    }
-    public get payPeriod() {
-        return this._payPeriod;
-    }
-    public get accPeriods() {
-        return this._accPeriods;
-    }
-    public get payrolls() {
-        return this._payrolls;
-    }
-    public get paymentPositions() {
-        return this._paymentPositions;
-    }
-
     public async calculateCompany(userId: number, companyId: number) {
         this.logger.log(`userId: ${userId}, calculateCompany: ${companyId}`);
-        this._userId = userId;
-        this._company = await this.companiesService.findOne(userId, companyId);
+        this.userId = userId;
+        this.company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne({
+        this.payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         const positions = await this.positionsService.findAll(userId, {
@@ -94,31 +71,44 @@ export class PaymentCalculationService {
             employeesOnly: true,
             relations: true,
         });
+        const changedPaymentIds: number[] = [];
         for (const position of positions) {
-            this._position = position;
-            await this._calculatePosition();
+            this.position = position;
+            changedPaymentIds.push(...(await this._calculatePosition()));
         }
+        await this.paymentsService.updateTotals(
+            this.userId,
+            changedPaymentIds.filter(
+                (id, index, array) => index === array.findIndex((o) => o === id),
+            ),
+        );
     }
 
     public async calculatePosition(userId: number, positionId: number) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
-        this._position = await this.positionsService.findOne(positionId, true);
-        this._userId = userId;
-        this._company = await this.companiesService.findOne(userId, this.position.companyId);
+        this.position = await this.positionsService.findOne(positionId, true);
+        this.userId = userId;
+        this.company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne({
+        this.payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
-        await this._calculatePosition();
+        const changedPaymentIds = await this._calculatePosition();
+        await this.paymentsService.updateTotals(
+            this.userId,
+            changedPaymentIds.filter(
+                (id, index, array) => index === array.findIndex((o) => o === id),
+            ),
+        );
     }
 
     private initPaymentPositionId() {
-        this._paymentPositionId = this.paymentPositions.reduce((a, b) => Math.max(a, b.id), 0);
+        this.paymentPositionId = this.paymentPositions.reduce((a, b) => Math.max(a, b.id), 0);
     }
 
     public getNextPaymentPositionId(): number {
-        this._paymentPositionId++;
-        return this._paymentPositionId;
+        this.paymentPositionId++;
+        return this.paymentPositionId;
     }
 
     private collapse(paymentPositions: PaymentPosition[]): PaymentPosition[] {
@@ -134,22 +124,23 @@ export class PaymentCalculationService {
     }
 
     private merge(current: PaymentPosition[]): {
-        toDeleteIds: number[];
+        toDelete: PaymentPosition[];
         toInsert: PaymentPosition[];
     } {
-        const toDeleteIds: number[] = this.paymentPositions
-            .filter(
-                (p) =>
-                    p.payment.status === PaymentStatus.DRAFT &&
-                    !current.find(
-                        (c) =>
-                            c.payment.paymentTypeId === p.payment.paymentTypeId &&
-                            c.paySum === p.paySum,
-                    ),
-            )
-            .map((o) => o.id);
+        const toDelete: PaymentPosition[] = this.paymentPositions.filter(
+            (p) =>
+                p.payment.status === PaymentStatus.DRAFT &&
+                !current.find(
+                    (c) =>
+                        c.payment.paymentTypeId === p.payment.paymentTypeId &&
+                        c.baseSum === p.baseSum &&
+                        c.deductions === p.deductions &&
+                        c.funds === p.funds &&
+                        c.paySum === p.paySum,
+                ),
+        );
         const paymentPositions = this.collapse(
-            this.paymentPositions.filter((o) => !toDeleteIds.includes(o.id)),
+            this.paymentPositions.filter((o) => !toDelete.find((d) => d.id === o.id)),
         );
         const toInsert: PaymentPosition[] = current
             .filter(
@@ -157,6 +148,9 @@ export class PaymentCalculationService {
                     !paymentPositions.find(
                         (p) =>
                             p.payment.paymentTypeId === c.payment.paymentTypeId &&
+                            p.baseSum === c.baseSum &&
+                            p.deductions === c.deductions &&
+                            p.funds === c.funds &&
                             p.paySum === c.paySum,
                     ),
             )
@@ -165,20 +159,30 @@ export class PaymentCalculationService {
                     (p) => p.payment.paymentTypeId === c.payment.paymentTypeId,
                 );
                 if (found) {
+                    c.baseSum = c.baseSum - found.baseSum;
+                    c.deductions = c.deductions - found.deductions;
+                    c.funds = c.funds - found.funds;
                     c.paySum = c.paySum - found.paySum;
                 }
                 return c;
             })
             .filter((o) => o.paySum > 0);
-        return { toInsert, toDeleteIds };
+        return { toInsert, toDelete };
     }
 
     private async loadResources() {
-        this._paymentTypes = await this.paymentTypesService.findAll(null);
+        this.paymentTypes = await this.paymentTypesService.findAll(null);
     }
 
     private async getPayrolls(): Promise<Payroll[]> {
         return await this.payrollsService.findAll(this.userId, {
+            positionId: this.position.id,
+            payPeriod: this.payPeriod.dateFrom,
+        });
+    }
+
+    private async getPayFunds(): Promise<PayFund[]> {
+        return await this.payFundsService.findAll(this.userId, {
             positionId: this.position.id,
             payPeriod: this.payPeriod.dateFrom,
         });
@@ -191,9 +195,10 @@ export class PaymentCalculationService {
         );
     }
 
-    private async _calculatePosition() {
-        this._payrolls = await this.getPayrolls();
-        this._paymentPositions = await this.getPaymentPositions();
+    private async _calculatePosition(): Promise<number[]> {
+        this.payrolls = await this.getPayrolls();
+        this.payFunds = await this.getPayFunds();
+        this.paymentPositions = await this.getPaymentPositions();
         this.initPaymentPositionId();
         const paymentTypeList = this.paymentTypes.filter(
             (o) => o.paymentGroup === PaymentGroup.PAYMENTS,
@@ -205,8 +210,8 @@ export class PaymentCalculationService {
                 current.push(calcMethod.calculate());
             }
         }
-        const { toInsert, toDeleteIds } = this.merge(current);
-        await this.save(toInsert, toDeleteIds);
+        const { toInsert, toDelete } = this.merge(current);
+        return await this.save(toInsert, toDelete);
     }
 
     private getCalcMethod(paymentType: PaymentType): PaymentCalc {
@@ -220,9 +225,14 @@ export class PaymentCalculationService {
         return null;
     }
 
-    private async save(toInsert: PaymentPosition[], toDeleteIds: number[]) {
-        if (toDeleteIds.length) {
-            await this.paymentPositionsService.delete(toDeleteIds);
+    private async save(
+        toInsert: PaymentPosition[],
+        toDelete: PaymentPosition[],
+    ): Promise<number[]> {
+        const changedPaymentIds: number[] = [];
+        for (const paymentPosition of toDelete) {
+            changedPaymentIds.push(paymentPosition.payment.id);
+            await this.paymentPositionsService.delete([paymentPosition.id]);
         }
         for (const paymentPosition of toInsert) {
             let payment = await this.paymentsService.findOneBy({
@@ -233,11 +243,14 @@ export class PaymentCalculationService {
             if (!payment) {
                 payment = await this.createPayment(paymentPosition.payment);
             }
+            changedPaymentIds.push(payment.id);
             delete paymentPosition.payment;
             delete paymentPosition.id;
+            paymentPosition.paymentId = payment.id;
             const created = await this.paymentPositionsService.create(this.userId, paymentPosition);
             this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
         }
+        return changedPaymentIds;
     }
 
     private async createPayment(payment: Payment): Promise<Payment> {

@@ -14,6 +14,7 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { FindPaymentDto } from './dto/find-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Payment } from './entities/payment.entity';
+import { PaymentPositionsService } from './payment-positions.service';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
@@ -24,6 +25,8 @@ export class PaymentsService extends AvailableForUserCompany {
         private repository: Repository<Payment>,
         @Inject(forwardRef(() => AccessService))
         public accessService: AccessService,
+        @Inject(forwardRef(() => PaymentPositionsService))
+        public paymentPositionsService: PaymentPositionsService,
     ) {
         super(accessService);
     }
@@ -121,5 +124,17 @@ export class PaymentsService extends AvailableForUserCompany {
         );
 
         return result[0].freeNumber.toString();
+    }
+
+    async updateTotals(userId: number, paymentIds: number[]) {
+        for (const id of paymentIds) {
+            const totals = await this.paymentPositionsService.calculateTotals(id);
+            await this.repository.save({
+                ...totals,
+                id,
+                updatedUserId: userId,
+                updatedDate: new Date(),
+            });
+        }
     }
 }
