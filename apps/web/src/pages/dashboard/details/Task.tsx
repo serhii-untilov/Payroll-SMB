@@ -263,13 +263,13 @@ function getPath(
         case TaskType.POST_ACCRUAL_DOCUMENT:
             return '/payroll?return=true';
         case TaskType.SEND_APPLICATION_FSS:
-            return '/payments?return=true';
+            return '/payments?tab=sciPayments&return=true';
         case TaskType.POST_PAYMENT_FSS:
-            return '/payments?return=true';
+            return '/payments?tab=sciPayments&return=true';
         case TaskType.POST_ADVANCE_PAYMENT:
-            return '/payments?return=true';
+            return '/payments?tab=companyPayments&return=true';
         case TaskType.POST_REGULAR_PAYMENT:
-            return '/payments?return=true';
+            return '/payments?tab=companyPayments&return=true';
         case TaskType.CLOSE_PAY_PERIOD:
             return companyId ? `/company/${companyId || ''}?tab=periods&return=true` : '#';
         case TaskType.SEND_INCOME_TAX_REPORT:
