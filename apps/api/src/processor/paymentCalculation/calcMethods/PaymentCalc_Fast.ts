@@ -28,6 +28,6 @@ export class PaymentCalc_Fast extends PaymentCalc {
 
     calcPaySum(): number {
         // TODO
-        return 100;
+        return 0;
     }
 }
