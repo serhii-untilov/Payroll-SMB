@@ -8,10 +8,16 @@ export abstract class PaymentCalc {
     ctx: PaymentCalculationService;
     paymentType: PaymentType;
     dateFrom: Date;
+    current: PaymentPosition[];
 
-    constructor(ctx: PaymentCalculationService, paymentType: PaymentType) {
+    constructor(
+        ctx: PaymentCalculationService,
+        paymentType: PaymentType,
+        current: PaymentPosition[],
+    ) {
         this.ctx = ctx;
         this.paymentType = paymentType;
+        this.current = current;
     }
 
     abstract calculate(): PaymentPosition;

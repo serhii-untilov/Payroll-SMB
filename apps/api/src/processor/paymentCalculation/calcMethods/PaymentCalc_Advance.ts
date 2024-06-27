@@ -8,8 +8,15 @@ import { getAdvancePaymentDate } from './../../helpers/payment.helper';
 import { payFundPayPeriodFactSum } from './../../helpers/payFund.helper';
 
 export class PaymentCalc_Advance extends PaymentCalc {
-    constructor(ctx: PaymentCalculationService, paymentType: PaymentType) {
-        super(ctx, paymentType);
+    rate: number;
+
+    constructor(
+        ctx: PaymentCalculationService,
+        paymentType: PaymentType,
+        current: PaymentPosition[],
+    ) {
+        super(ctx, paymentType, current);
+        this.rate = 0.5;
     }
 
     calculate(): PaymentPosition {
@@ -21,6 +28,36 @@ export class PaymentCalc_Advance extends PaymentCalc {
         paymentPosition.funds = this.calcFunds();
         paymentPosition.paySum = this.calcPaySum(paymentPosition);
         return paymentPosition;
+    }
+
+    calcBaseSum(): number {
+        const factSum = payPeriodFactSum(
+            this.ctx.payPeriod,
+            this.ctx.payrolls,
+            this.getBaseSumPaymentTypeIds(),
+        );
+        // TODO
+        return Math.max(0, Math.trunc(factSum * this.rate));
+    }
+
+    calcDeductions(): number {
+        const factSum = payPeriodFactSum(
+            this.ctx.payPeriod,
+            this.ctx.payrolls,
+            this.getDeductionsPaymentTypeIds(),
+        );
+        // TODO
+        return Math.max(0, Math.trunc(factSum * this.rate));
+    }
+
+    calcFunds(): number {
+        const funds = payFundPayPeriodFactSum(this.ctx.payPeriod, this.ctx.payFunds);
+        // TODO
+        return Math.max(0, Math.trunc(funds * this.rate));
+    }
+
+    calcPaySum(paymentPosition: PaymentPosition): number {
+        return paymentPosition.baseSum - paymentPosition.deductions;
     }
 
     getBaseSumPaymentTypeIds(): number[] {
@@ -37,35 +74,5 @@ export class PaymentCalc_Advance extends PaymentCalc {
         return this.ctx.paymentTypes
             .filter((o) => paymentGroups.includes(o.paymentGroup))
             .map((o) => o.id);
-    }
-
-    calcBaseSum(): number {
-        const factSum = payPeriodFactSum(
-            this.ctx.payPeriod,
-            this.ctx.payrolls,
-            this.getBaseSumPaymentTypeIds(),
-        );
-        // TODO
-        return Math.max(0, Math.trunc(factSum * 0.5));
-    }
-
-    calcDeductions(): number {
-        const factSum = payPeriodFactSum(
-            this.ctx.payPeriod,
-            this.ctx.payrolls,
-            this.getDeductionsPaymentTypeIds(),
-        );
-        // TODO
-        return Math.max(0, Math.trunc(factSum * 0.5));
-    }
-
-    calcFunds(): number {
-        const funds = payFundPayPeriodFactSum(this.ctx.payPeriod, this.ctx.payFunds);
-        // TODO
-        return Math.max(0, Math.trunc(funds * 0.5));
-    }
-
-    calcPaySum(paymentPosition: PaymentPosition): number {
-        return paymentPosition.baseSum - paymentPosition.deductions;
     }
 }

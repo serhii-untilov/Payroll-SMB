@@ -205,7 +205,8 @@ export class PaymentCalculationService {
         );
         const current: PaymentPosition[] = [];
         for (const paymentType of paymentTypeList) {
-            const calcMethod = this.getCalcMethod(paymentType);
+            // Pass copy of objects to prevent mutation
+            const calcMethod = this.calcMethodFactory({ ...paymentType }, [...current]);
             if (calcMethod) {
                 current.push(calcMethod.calculate());
             }
@@ -214,13 +215,13 @@ export class PaymentCalculationService {
         return await this.save(toInsert, toDelete);
     }
 
-    private getCalcMethod(paymentType: PaymentType): PaymentCalc {
+    private calcMethodFactory(paymentType: PaymentType, current: PaymentPosition[]): PaymentCalc {
         if (paymentType.calcMethod === CalcMethod.REGULAR_PAYMENT) {
-            return new PaymentCalc_Regular(this, paymentType);
+            return new PaymentCalc_Regular(this, paymentType, current);
         } else if (paymentType.calcMethod === CalcMethod.ADVANCE_PAYMENT) {
-            return new PaymentCalc_Advance(this, paymentType);
+            return new PaymentCalc_Advance(this, paymentType, current);
         } else if (paymentType.calcMethod === CalcMethod.FAST_PAYMENT) {
-            return new PaymentCalc_Fast(this, paymentType);
+            return new PaymentCalc_Fast(this, paymentType, current);
         }
         return null;
     }

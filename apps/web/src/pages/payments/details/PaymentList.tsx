@@ -55,7 +55,7 @@ export function PaymentList(props: Props) {
             field: 'docDate',
             headerName: t('Date'),
             type: 'string',
-            width: 130,
+            width: 125,
             sortable: true,
             valueGetter: (params) => {
                 return date2view(params.value);
@@ -64,7 +64,7 @@ export function PaymentList(props: Props) {
         {
             field: 'name',
             headerName: t('Name'),
-            width: 300,
+            width: 260,
             sortable: true,
             valueGetter: (params) => {
                 return params.row?.paymentType?.name;
@@ -74,7 +74,7 @@ export function PaymentList(props: Props) {
             field: 'baseSum',
             headerName: t('Gross Pay'),
             type: 'number',
-            width: 170,
+            width: 150,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
@@ -84,7 +84,7 @@ export function PaymentList(props: Props) {
             field: 'deductions',
             headerName: t('Deductions'),
             type: 'number',
-            width: 170,
+            width: 150,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
@@ -94,20 +94,35 @@ export function PaymentList(props: Props) {
             field: 'paySum',
             headerName: t('Net Pay'),
             type: 'number',
-            width: 170,
+            width: 150,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
             },
         },
         {
-            field: 'funds',
+            field: 'mandatoryPayments',
             headerName: t('Mandatory Payments'),
             type: 'number',
-            width: 220,
+            width: 190,
             sortable: true,
             valueGetter: (params) => {
-                return sumFormatter(params.value);
+                const mandatoryPayments = (params.row?.deductions || 0) + (params.row?.funds || 0);
+                return sumFormatter(mandatoryPayments);
+            },
+        },
+        {
+            field: 'total',
+            headerName: t('Total'),
+            type: 'number',
+            width: 150,
+            sortable: true,
+            valueGetter: (params) => {
+                const total =
+                    (params.row?.paySum || 0) +
+                    (params.row?.deductions || 0) +
+                    (params.row?.funds || 0);
+                return sumFormatter(total);
             },
         },
     ];

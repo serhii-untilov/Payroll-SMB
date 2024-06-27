@@ -4,8 +4,12 @@ import { PaymentType } from './../../../resources/payment-types/entities/payment
 import { PaymentCalc } from './abstract/PaymentCalc';
 
 export class PaymentCalc_Fast extends PaymentCalc {
-    constructor(ctx: PaymentCalculationService, paymentType: PaymentType) {
-        super(ctx, paymentType);
+    constructor(
+        ctx: PaymentCalculationService,
+        paymentType: PaymentType,
+        current: PaymentPosition[],
+    ) {
+        super(ctx, paymentType, current);
     }
 
     calculate(): PaymentPosition {
