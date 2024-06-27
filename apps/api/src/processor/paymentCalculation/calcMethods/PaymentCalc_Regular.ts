@@ -16,7 +16,7 @@ export class PaymentCalc_Regular extends PaymentCalc {
         super(ctx, paymentType, current);
     }
 
-    calculate(): PaymentPosition {
+    public calculate(): PaymentPosition {
         const paymentPosition = this.makePaymentPosition();
         paymentPosition.payment.dateFrom = getRegularPaymentDate(this.ctx.payPeriod);
         paymentPosition.payment.dateTo = dateUTC(paymentPosition.payment.dateFrom);
@@ -27,29 +27,29 @@ export class PaymentCalc_Regular extends PaymentCalc {
         return paymentPosition;
     }
 
-    calcBaseSum(): number {
+    private calcBaseSum(): number {
         const grossPay = this.getGrossPay();
         const { baseSum: currentBaseSum } = getTotals(this.current);
         return grossPay - currentBaseSum;
     }
 
-    calcDeductions(): number {
+    private calcDeductions(): number {
         const deductions = this.getDeductions();
         const { deductions: currentDeductions } = getTotals(this.current);
         return deductions - currentDeductions;
     }
 
-    calcFunds(): number {
+    private calcFunds(): number {
         const funds = this.getFunds();
         const { funds: currentFunds } = getTotals(this.current);
         return funds - currentFunds;
     }
 
-    calcPaySum(paymentPosition: PaymentPosition): number {
+    private calcPaySum(paymentPosition: PaymentPosition): number {
         return paymentPosition.baseSum - paymentPosition.deductions;
     }
 
-    getGrossPay(): number {
+    private getGrossPay(): number {
         return payPeriodFactSum(
             this.ctx.payPeriod,
             this.ctx.payrolls,
@@ -57,7 +57,7 @@ export class PaymentCalc_Regular extends PaymentCalc {
         );
     }
 
-    getDeductions(): number {
+    private getDeductions(): number {
         return payPeriodFactSum(
             this.ctx.payPeriod,
             this.ctx.payrolls,
@@ -65,18 +65,18 @@ export class PaymentCalc_Regular extends PaymentCalc {
         );
     }
 
-    getFunds(): number {
+    private getFunds(): number {
         return payFundPayPeriodFactSum(this.ctx.payPeriod, this.ctx.payFunds);
     }
 
-    getGrossPayPaymentTypeIds(): number[] {
+    private getGrossPayPaymentTypeIds(): number[] {
         // TODO: Replace to Entry Table
         return this.ctx.paymentTypes
             .filter((o) => o.paymentPart === PaymentPart.ACCRUALS)
             .map((o) => o.id);
     }
 
-    getDeductionsPaymentTypeIds(): number[] {
+    private getDeductionsPaymentTypeIds(): number[] {
         // TODO: Replace to Entry Table
         return this.ctx.paymentTypes
             .filter(

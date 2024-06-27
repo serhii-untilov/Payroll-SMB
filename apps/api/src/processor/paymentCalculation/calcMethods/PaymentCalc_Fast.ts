@@ -12,7 +12,7 @@ export class PaymentCalc_Fast extends PaymentCalc {
         super(ctx, paymentType, current);
     }
 
-    calculate(): PaymentPosition {
+    public calculate(): PaymentPosition {
         const paymentPosition = this.makePaymentPosition();
         // TODO
         // paymentPosition.payment.dateFrom = null;
@@ -22,11 +22,11 @@ export class PaymentCalc_Fast extends PaymentCalc {
         return paymentPosition;
     }
 
-    calcBaseSum(): number {
+    private calcBaseSum(): number {
         return 0;
     }
 
-    calcPaySum(): number {
+    private calcPaySum(): number {
         // TODO
         return 0;
     }

@@ -19,7 +19,7 @@ export class PaymentCalc_Advance extends PaymentCalc {
         this.rate = 0.5;
     }
 
-    calculate(): PaymentPosition {
+    public calculate(): PaymentPosition {
         const paymentPosition = this.makePaymentPosition();
         paymentPosition.payment.dateFrom = getAdvancePaymentDate(this.ctx.payPeriod);
         paymentPosition.payment.dateTo = dateUTC(paymentPosition.payment.dateFrom);
@@ -30,7 +30,7 @@ export class PaymentCalc_Advance extends PaymentCalc {
         return paymentPosition;
     }
 
-    calcBaseSum(): number {
+    private calcBaseSum(): number {
         const factSum = payPeriodFactSum(
             this.ctx.payPeriod,
             this.ctx.payrolls,
@@ -40,7 +40,7 @@ export class PaymentCalc_Advance extends PaymentCalc {
         return Math.max(0, Math.trunc(factSum * this.rate));
     }
 
-    calcDeductions(): number {
+    private calcDeductions(): number {
         const factSum = payPeriodFactSum(
             this.ctx.payPeriod,
             this.ctx.payrolls,
@@ -50,17 +50,17 @@ export class PaymentCalc_Advance extends PaymentCalc {
         return Math.max(0, Math.trunc(factSum * this.rate));
     }
 
-    calcFunds(): number {
+    private calcFunds(): number {
         const funds = payFundPayPeriodFactSum(this.ctx.payPeriod, this.ctx.payFunds);
         // TODO
         return Math.max(0, Math.trunc(funds * this.rate));
     }
 
-    calcPaySum(paymentPosition: PaymentPosition): number {
+    private calcPaySum(paymentPosition: PaymentPosition): number {
         return paymentPosition.baseSum - paymentPosition.deductions;
     }
 
-    getBaseSumPaymentTypeIds(): number[] {
+    private getBaseSumPaymentTypeIds(): number[] {
         // TODO: Replace to Entry Table
         const paymentGroups: string[] = [PaymentGroup.BASIC, PaymentGroup.ADJUSTMENTS];
         return this.ctx.paymentTypes
@@ -68,7 +68,7 @@ export class PaymentCalc_Advance extends PaymentCalc {
             .map((o) => o.id);
     }
 
-    getDeductionsPaymentTypeIds(): number[] {
+    private getDeductionsPaymentTypeIds(): number[] {
         // TODO: Replace to Entry Table
         const paymentGroups: string[] = [PaymentGroup.TAXES];
         return this.ctx.paymentTypes
