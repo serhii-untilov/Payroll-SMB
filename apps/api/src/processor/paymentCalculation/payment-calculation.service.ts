@@ -57,6 +57,15 @@ export class PaymentCalculationService {
         public payPeriodCalculationService: PayPeriodCalculationService,
     ) {}
 
+    private initPaymentPositionId() {
+        this.paymentPositionId = this.paymentPositions.reduce((a, b) => Math.max(a, b.id), 0);
+    }
+
+    public getNextPaymentPositionId(): number {
+        this.paymentPositionId++;
+        return this.paymentPositionId;
+    }
+
     public async calculateCompany(userId: number, companyId: number) {
         this.logger.log(`userId: ${userId}, calculateCompany: ${companyId}`);
         this.userId = userId;
@@ -102,13 +111,63 @@ export class PaymentCalculationService {
         );
     }
 
-    private initPaymentPositionId() {
-        this.paymentPositionId = this.paymentPositions.reduce((a, b) => Math.max(a, b.id), 0);
+    private async _calculatePosition(): Promise<number[]> {
+        this.payrolls = await this.getPayrolls();
+        this.payFunds = await this.getPayFunds();
+        this.paymentPositions = await this.getPaymentPositions();
+        this.initPaymentPositionId();
+        const paymentTypeList = this.paymentTypes.filter(
+            (o) => o.paymentGroup === PaymentGroup.PAYMENTS,
+        );
+        const current: PaymentPosition[] = [];
+        for (const paymentType of paymentTypeList) {
+            // Pass copy of objects to prevent mutation
+            const calcMethod = this.calcMethodFactory({ ...paymentType }, [...current]);
+            if (calcMethod) {
+                current.push(calcMethod.calculate());
+            }
+        }
+        const { toInsert, toDelete } = this.merge(current);
+        return await this.save(toInsert, toDelete);
     }
 
-    public getNextPaymentPositionId(): number {
-        this.paymentPositionId++;
-        return this.paymentPositionId;
+    private calcMethodFactory(paymentType: PaymentType, current: PaymentPosition[]): PaymentCalc {
+        if (paymentType.calcMethod === CalcMethod.REGULAR_PAYMENT) {
+            return new PaymentCalc_Regular(this, paymentType, current);
+        } else if (paymentType.calcMethod === CalcMethod.ADVANCE_PAYMENT) {
+            return new PaymentCalc_Advance(this, paymentType, current);
+        } else if (paymentType.calcMethod === CalcMethod.FAST_PAYMENT) {
+            return new PaymentCalc_Fast(this, paymentType, current);
+        }
+        return null;
+    }
+
+    private async save(
+        toInsert: PaymentPosition[],
+        toDelete: PaymentPosition[],
+    ): Promise<number[]> {
+        const changedPaymentIds: number[] = [];
+        for (const paymentPosition of toDelete) {
+            changedPaymentIds.push(paymentPosition.payment.id);
+            await this.paymentPositionsService.delete([paymentPosition.id]);
+        }
+        for (const paymentPosition of toInsert) {
+            let payment = await this.paymentsService.findOneBy({
+                companyId: this.company.id,
+                paymentTypeId: paymentPosition.payment.paymentTypeId,
+                status: PaymentStatus.DRAFT,
+            });
+            if (!payment) {
+                payment = await this.createPayment(paymentPosition.payment);
+            }
+            changedPaymentIds.push(payment.id);
+            delete paymentPosition.payment;
+            delete paymentPosition.id;
+            paymentPosition.paymentId = payment.id;
+            const created = await this.paymentPositionsService.create(this.userId, paymentPosition);
+            this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
+        }
+        return changedPaymentIds;
     }
 
     private collapse(paymentPositions: PaymentPosition[]): PaymentPosition[] {
@@ -193,65 +252,6 @@ export class PaymentCalculationService {
             this.position.id,
             this.payPeriod.dateFrom,
         );
-    }
-
-    private async _calculatePosition(): Promise<number[]> {
-        this.payrolls = await this.getPayrolls();
-        this.payFunds = await this.getPayFunds();
-        this.paymentPositions = await this.getPaymentPositions();
-        this.initPaymentPositionId();
-        const paymentTypeList = this.paymentTypes.filter(
-            (o) => o.paymentGroup === PaymentGroup.PAYMENTS,
-        );
-        const current: PaymentPosition[] = [];
-        for (const paymentType of paymentTypeList) {
-            // Pass copy of objects to prevent mutation
-            const calcMethod = this.calcMethodFactory({ ...paymentType }, [...current]);
-            if (calcMethod) {
-                current.push(calcMethod.calculate());
-            }
-        }
-        const { toInsert, toDelete } = this.merge(current);
-        return await this.save(toInsert, toDelete);
-    }
-
-    private calcMethodFactory(paymentType: PaymentType, current: PaymentPosition[]): PaymentCalc {
-        if (paymentType.calcMethod === CalcMethod.REGULAR_PAYMENT) {
-            return new PaymentCalc_Regular(this, paymentType, current);
-        } else if (paymentType.calcMethod === CalcMethod.ADVANCE_PAYMENT) {
-            return new PaymentCalc_Advance(this, paymentType, current);
-        } else if (paymentType.calcMethod === CalcMethod.FAST_PAYMENT) {
-            return new PaymentCalc_Fast(this, paymentType, current);
-        }
-        return null;
-    }
-
-    private async save(
-        toInsert: PaymentPosition[],
-        toDelete: PaymentPosition[],
-    ): Promise<number[]> {
-        const changedPaymentIds: number[] = [];
-        for (const paymentPosition of toDelete) {
-            changedPaymentIds.push(paymentPosition.payment.id);
-            await this.paymentPositionsService.delete([paymentPosition.id]);
-        }
-        for (const paymentPosition of toInsert) {
-            let payment = await this.paymentsService.findOneBy({
-                companyId: this.company.id,
-                paymentTypeId: paymentPosition.payment.paymentTypeId,
-                status: PaymentStatus.DRAFT,
-            });
-            if (!payment) {
-                payment = await this.createPayment(paymentPosition.payment);
-            }
-            changedPaymentIds.push(payment.id);
-            delete paymentPosition.payment;
-            delete paymentPosition.id;
-            paymentPosition.paymentId = payment.id;
-            const created = await this.paymentPositionsService.create(this.userId, paymentPosition);
-            this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
-        }
-        return changedPaymentIds;
     }
 
     private async createPayment(payment: Payment): Promise<Payment> {
