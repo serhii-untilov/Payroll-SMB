@@ -3,9 +3,9 @@ import { payPeriodFactSum } from 'src/processor/helpers/payroll.helper';
 import { PaymentPosition } from '../../../resources/payments/entities/paymentPosition.entity';
 import { PaymentCalculationService } from '../payment-calculation.service';
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
-import { getRegularPaymentDate } from './../../helpers/payment.helper';
-import { PaymentCalc } from './abstract/PaymentCalc';
 import { payFundPayPeriodFactSum } from './../../helpers/payFund.helper';
+import { getRegularPaymentDate, getTotals } from './../../helpers/payment.helper';
+import { PaymentCalc } from './abstract/PaymentCalc';
 
 export class PaymentCalc_Regular extends PaymentCalc {
     constructor(
@@ -29,19 +29,19 @@ export class PaymentCalc_Regular extends PaymentCalc {
 
     calcBaseSum(): number {
         const grossPay = this.getGrossPay();
-        const { baseSum: currentBaseSum } = this.getTotals(this.current);
+        const { baseSum: currentBaseSum } = getTotals(this.current);
         return grossPay - currentBaseSum;
     }
 
     calcDeductions(): number {
         const deductions = this.getDeductions();
-        const { deductions: currentDeductions } = this.getTotals(this.current);
+        const { deductions: currentDeductions } = getTotals(this.current);
         return deductions - currentDeductions;
     }
 
     calcFunds(): number {
         const funds = this.getFunds();
-        const { funds: currentFunds } = this.getTotals(this.current);
+        const { funds: currentFunds } = getTotals(this.current);
         return funds - currentFunds;
     }
 
@@ -85,20 +85,5 @@ export class PaymentCalc_Regular extends PaymentCalc {
                     o.paymentGroup !== PaymentGroup.PAYMENTS,
             )
             .map((o) => o.id);
-    }
-
-    getTotals(paymentPositions: PaymentPosition[]) {
-        return paymentPositions
-            .filter((o) => o.payment.accPeriod === this.ctx.payPeriod.dateFrom)
-            .reduce(
-                (a, b) => {
-                    a.baseSum += b.baseSum;
-                    a.deductions += b.deductions;
-                    a.paySum += b.paySum;
-                    a.funds += b.funds;
-                    return a;
-                },
-                { baseSum: 0, deductions: 0, paySum: 0, funds: 0 },
-            );
     }
 }
