@@ -20,7 +20,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
@@ -29,13 +29,8 @@ import { getPayments } from '../../../services/payment.service';
 import { deletePayment } from '../../../services/payment.service';
 import { sumFormatter } from '../../../services/utils';
 
-type Props = IFindPayment & {
-    companyPayments: boolean;
-    sifPayments: boolean;
-};
-
-export function PaymentList(props: Props) {
-    const { companyId, payPeriod, status } = props;
+export default function PaymentForm() {
+    const { id: paymentId } = useParams();
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -45,11 +40,14 @@ export function PaymentList(props: Props) {
 
     const columns: GridColDef[] = [
         {
-            field: 'docNumber',
-            headerName: t('Number'),
+            field: 'cardNumber',
+            headerName: t('Card Number'),
             type: 'string',
             width: 110,
             sortable: true,
+            valueGetter: (params) => {
+                return params.row.position.cardNumber;
+            },
         },
         {
             field: 'docDate',
@@ -127,11 +125,11 @@ export function PaymentList(props: Props) {
         },
     ];
 
-    const { data, isError, isLoading, error } = useQuery<IPayment[], Error>({
-        queryKey: ['payment', 'list', props],
+    const { data, isError, isLoading, error } = useQuery<IPaymentPosition[], Error>({
+        queryKey: ['payment', { paymentId }],
         queryFn: async () => {
             return (
-                await getPayments({
+                await getPaymentPositions({
                     relations: true,
                     companyId,
                     payPeriod,
@@ -162,8 +160,9 @@ export function PaymentList(props: Props) {
         console.log('onEditPayment');
     };
 
-    const onEditPayment = (id: number) => {
-        navigate(`/payments/${id}`);
+    const onEditPayment = (paymentId: number) => {
+        // navigate(`/people/payment/${paymentId}?return=true`);
+        console.log('onEditPayment');
     };
 
     const submitCallback = async (data: IPayment) => {
@@ -247,7 +246,7 @@ export function PaymentList(props: Props) {
                     details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditPayment(params.row.id);
+                        onEditPayment(params.row.paymentId);
                     }
                 }}
                 onRowDoubleClick={(
