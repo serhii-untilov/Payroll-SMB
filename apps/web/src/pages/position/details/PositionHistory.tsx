@@ -70,7 +70,7 @@ export function PositionHistory(props: Props) {
         },
         {
             field: 'paymentType',
-            headerName: t('Payment Type'),
+            headerName: t('Payment Form'),
             type: 'string',
             width: 200,
             sortable: true,

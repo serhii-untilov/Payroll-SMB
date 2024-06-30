@@ -11,9 +11,9 @@ import { PayPeriodsCalcMethodService } from './../../resources/pay-periods/payPe
 import { PayrollsService } from './../../resources/payrolls/payrolls.service';
 import { PositionsService } from './../../resources/positions/positions.service';
 import { UsersService } from './../../resources/users/users.service';
-import { PeriodListForEndOfMonthPayment } from './paymentMethods/PeriodListForEndOfMonthPayment';
-import { PeriodListForEvery15daysPayment } from './paymentMethods/PeriodListForEvery15daysPayment';
-import { PeriodListGenerator } from './paymentMethods/abstract/PeriodListGenerator';
+import { PeriodListForEndOfMonthPayment } from './genPeriodMethods/PeriodListForEndOfMonthPayment';
+import { PeriodListForEvery15daysPayment } from './genPeriodMethods/PeriodListForEvery15daysPayment';
+import { PeriodListGenerator } from './genPeriodMethods/abstract/PeriodListGenerator';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayPeriodCalculationService {

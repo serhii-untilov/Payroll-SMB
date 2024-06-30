@@ -107,18 +107,23 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
         },
     },
     '& .row-status--Deleted': {
-        backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        textDecoration: 'line-through',
+        color: theme.palette.grey['600'],
+        backgroundColor: theme.palette.background.default,
         '&:hover': {
-            backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+            backgroundColor:
+                theme.palette.mode === 'dark'
+                    ? theme.palette.grey['900']
+                    : theme.palette.grey['200'],
         },
         '&.Mui-selected': {
             backgroundColor: getSelectedBackgroundColor(
-                theme.palette.error.main,
+                theme.palette.background.default,
                 theme.palette.mode,
             ),
             '&:hover': {
                 backgroundColor: getSelectedHoverBackgroundColor(
-                    theme.palette.error.main,
+                    theme.palette.background.paper,
                     theme.palette.mode,
                 ),
             },
@@ -185,6 +190,45 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
         },
     },
     '& .row-status--Rejected': {
+        backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.error.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.error.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--Todo': {
+        backgroundColor: getBackgroundColor(theme.palette.warning.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(
+                theme.palette.warning.main,
+                theme.palette.mode,
+            ),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.warning.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.warning.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--Overdue': {
         backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
         '&:hover': {
             backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),

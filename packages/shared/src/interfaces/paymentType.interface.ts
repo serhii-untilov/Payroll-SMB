@@ -53,6 +53,7 @@ export enum CalcMethod {
     ADVANCE_PAYMENT = 'advance-payment',
     REGULAR_PAYMENT = 'regular-payment',
     FAST_PAYMENT = 'fast-payment',
+    SIF_PAYMENT = 'sif-payment',
     // DEDUCTIONS group
     ONE_TIME_DEDUCTION = 'one-time-deduction',
 }

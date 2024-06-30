@@ -1,9 +1,7 @@
 import { OutlinedInput, OutlinedInputProps } from '@mui/material';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { grey } from '@mui/material/colors';
+import { MAX_SEQUENCE_NUMBER } from '@repo/shared';
 import { Controller } from 'react-hook-form';
 import { InputLabel } from '../layout/InputLabel';
-import { MAX_SEQUENCE_NUMBER } from '@repo/shared';
 
 export type Props = OutlinedInputProps & {
     name: string;

@@ -135,7 +135,7 @@ export function SalaryReport(props: IFindPositionBalance) {
         },
         {
             field: 'compensation',
-            headerName: t('Compensation'),
+            headerName: t('Gross Pay'),
             type: 'number',
             width: 180,
             sortable: true,
@@ -144,7 +144,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             },
             renderCell: (params) => {
                 const inBalance = params.row?.inBalance || 0;
-                const compensation = params.row?.basic || 0;
+                const grossPay = params.row?.accruals || 0;
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -160,12 +160,12 @@ export function SalaryReport(props: IFindPositionBalance) {
                         </Box>
 
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography>{t('Compensation')}</Typography>
+                            <Typography>{t('Total')}</Typography>
                             <Typography
-                                sx={{ textAlign: 'right' }}
-                                color={compensation ? '' : 'warning.main'}
+                                sx={{ textAlign: 'right', fontSize: '1rem', fontWeight: 'medium' }}
+                                color={grossPay ? '' : 'warning.main'}
                             >
-                                {sumFormatter(compensation, false)}
+                                {sumFormatter(grossPay, false)}
                             </Typography>
                         </Box>
                     </Box>
@@ -284,8 +284,8 @@ export function SalaryReport(props: IFindPositionBalance) {
             },
         },
         {
-            field: 'grossPay',
-            headerName: t('Gross Pay'),
+            field: 'netPay',
+            headerName: t('Net Pay'),
             type: 'number',
             width: 220,
             sortable: true,
@@ -294,7 +294,7 @@ export function SalaryReport(props: IFindPositionBalance) {
             },
             renderCell: (params) => {
                 const accruals = params.row?.accruals || 0;
-                const grossPay =
+                const netPay =
                     (params.row?.inBalance || 0) +
                     (params.row?.accruals || 0) -
                     ((params.row?.deductions || 0) - (params.row?.payments || 0));
@@ -303,14 +303,12 @@ export function SalaryReport(props: IFindPositionBalance) {
                 return (
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <Typography color={grossPay ? '' : 'divider'}>
-                                {t('Gross Pay')}
-                            </Typography>
+                            <Typography color={netPay ? '' : 'divider'}>{t('Net Pay')}</Typography>
                             <Typography
                                 sx={{ textAlign: 'right', fontSize: '1rem', fontWeight: 'medium' }}
-                                color={grossPay ? '' : 'divider'}
+                                color={netPay ? '' : 'divider'}
                             >
-                                {sumFormatter(grossPay, false)}
+                                {sumFormatter(netPay, false)}
                             </Typography>
                         </Box>
                         {paid || accruals ? (

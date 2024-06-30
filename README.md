@@ -234,8 +234,13 @@ In **development** mode:
 |Regular Payment            |Виплата зарплати          |regularPayment     |                                                                                |
 |Fast Payment               |Виплата у міжрозрахунок   |fastPayment        |Виплата у міжрозрахунковий період: оплата відпустки, розрахунок при звільненні  |
 |Overdue Tasks              |Прострочені задачі        |overdueTasks       |                                                                                |
+|Application-calculation    |Заява-розрахунок          |appCalcSif         |Application-calculation to the Social Insurance Fund - Заява-розрахунок до ФСС  |
+|SIF                        |ФСС                       |sif                |The Social Insurance Fund - Фонд Соціального Страхування                        |
+|Mandatory Payments         |Обов'язкові платежі       |mandatoryPayments  |Обов'язкові платежі при виплаті                                                 |
+|Gross Pay                  |Разом нараховано          |grossPay           |Total amount of money an employee earns before any deductions are taken out     |
+|Net Pay                    |До виплати                |netPay             |                                                                                |
 
-## Development
+## Project Development History
 
 ### Initial script
 
@@ -341,6 +346,14 @@ npx --workspace @repo/api nest generate service taskList processor
 npx --workspace @repo/api nest generate service payPeriodCalculation processor
 npx --workspace @repo/api nest generate controller serverEvent processor
 npx --workspace @repo/api nest generate service serverEvent processor/serverEvent
+npx --workspace @repo/api nest generate resource payments resources
+npx --workspace @repo/api nest generate service paymentPositions resources/payments
+npx --workspace @repo/api nest generate service paymentDeductions resources/payments
+npx --workspace @repo/api nest generate service paymentFunds resources/payments
+npx --workspace @repo/api nest generate service paymentCalculation processor
+npx --workspace @repo/api nest generate controller paymentPositions resources/payments
+npx --workspace @repo/api nest generate controller paymentDeductions resources/payments
+npx --workspace @repo/api nest generate controller paymentFunds resources/payments
 
 ```
 
@@ -419,3 +432,4 @@ openssl rand -base64 60
 - [**VPS** - How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 - [**Redux** - Getting Started with React Redux](https://react-redux.js.org/introduction/getting-started)
 - [**Backup** - Docker Postgres Backup/Restore Guide (with examples)](https://simplebackups.com/blog/docker-postgres-backup-restore-guide-with-examples/#before-you-begin)
+- [**React Hook Form** - Combined Add/Edit (Create/Update) Form Example](https://jasonwatmore.com/post/2020/10/14/react-hook-form-combined-add-edit-create-update-form-example)

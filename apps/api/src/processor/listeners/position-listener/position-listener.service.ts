@@ -1,17 +1,18 @@
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { ServerEvent } from '@repo/shared';
 import { PositionCreatedEvent } from '../../../resources/positions/events/position-created.event';
-import { PayrollCalculationService } from './../../payrollCalculation/payrollCalculation.service';
-import { PositionUpdatedEvent } from './../../../resources/positions/events/position-updated.event';
-import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
-import { PositionDeletedEvent } from './../../../resources/positions/events/position-deleted.event';
 import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { SseService } from './../../serverSentEvents/sse.service';
+import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
 import {
     PositionEvent,
     PositionEventType,
 } from './../../../resources/positions/events/abstract/PositionEvent';
-import { ServerEvent } from '@repo/shared';
+import { PositionDeletedEvent } from './../../../resources/positions/events/position-deleted.event';
+import { PositionUpdatedEvent } from './../../../resources/positions/events/position-updated.event';
+import { PaymentCalculationService } from './../../paymentCalculation/payment-calculation.service';
+import { PayrollCalculationService } from './../../payrollCalculation/payrollCalculation.service';
+import { SseService } from './../../serverSentEvents/sse.service';
 
 @Injectable()
 export class PositionListenerService {
@@ -20,6 +21,8 @@ export class PositionListenerService {
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
         private payrollCalculationService: PayrollCalculationService,
+        @Inject(forwardRef(() => PaymentCalculationService))
+        private paymentCalculationService: PaymentCalculationService,
         @Inject(forwardRef(() => PayFundCalculationService))
         private payFundCalculationService: PayFundCalculationService,
         @Inject(forwardRef(() => TaskGenerationService))
@@ -55,6 +58,10 @@ export class PositionListenerService {
                     event.positionId,
                 );
                 await this.payFundCalculationService.calculatePosition(
+                    event.userId,
+                    event.positionId,
+                );
+                await this.paymentCalculationService.calculatePosition(
                     event.userId,
                     event.positionId,
                 );

@@ -93,7 +93,7 @@ export function PositionList(props: IFindPosition) {
         },
         {
             field: 'paymentType',
-            headerName: t('Payment Type'),
+            headerName: t('Payment Form'),
             type: 'string',
             width: 190,
             sortable: true,

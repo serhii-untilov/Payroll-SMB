@@ -7,6 +7,7 @@ import { PayPeriodsService } from '../../../resources/pay-periods/payPeriods.ser
 import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
 import { PayPeriodCalculationService } from './../../payPeriodCalculation/payPeriodCalculation.service';
 import { SseService } from './../../serverSentEvents/sse.service';
+import { PaymentCalculationService } from './../../paymentCalculation/payment-calculation.service';
 
 describe('CompanyListenerService', () => {
     let service: CompanyListenerService;
@@ -19,6 +20,11 @@ describe('CompanyListenerService', () => {
                     provide: PayrollCalculationService,
                     useValue: createMock<PayrollCalculationService>(),
                 },
+                {
+                    provide: PaymentCalculationService,
+                    useValue: createMock<PaymentCalculationService>(),
+                },
+
                 {
                     provide: PayFundCalculationService,
                     useValue: createMock<PayFundCalculationService>(),

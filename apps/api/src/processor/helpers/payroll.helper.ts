@@ -39,3 +39,18 @@ export function accPeriodFactSum(
         )
         .reduce((a, b) => a + b.factSum, 0);
 }
+
+export function payPeriodFactSum(
+    payPeriod: PayPeriod,
+    payrolls: Payroll[],
+    paymentTypeIds: number[],
+): number {
+    return payrolls
+        .filter(
+            (o) =>
+                paymentTypeIds.includes(o.paymentTypeId) &&
+                o.payPeriod.getTime() >= payPeriod.dateFrom.getTime() &&
+                o.payPeriod.getTime() <= payPeriod.dateTo.getTime(),
+        )
+        .reduce((a, b) => a + b.factSum, 0);
+}

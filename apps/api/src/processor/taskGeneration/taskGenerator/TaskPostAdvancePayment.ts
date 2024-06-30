@@ -1,8 +1,7 @@
-import { PaymentSchedule, TaskType, monthBegin } from '@repo/shared';
-import { add } from 'date-fns';
+import { PaymentSchedule, TaskType, dateUTC } from '@repo/shared';
 import { Task } from '../../../resources/tasks/entities/task.entity';
 import { TaskGenerationService } from '../taskGeneration.service';
-import { getWorkDayBeforeOrEqual } from '../../helpers/workingTime.helper';
+import { getAdvancePaymentDate } from './../../helpers/payment.helper';
 import { TaskGenerator } from './abstract/TaskGenerator';
 
 export class TaskPostAdvancePayment extends TaskGenerator {
@@ -15,10 +14,8 @@ export class TaskPostAdvancePayment extends TaskGenerator {
             return [];
         }
         const task = this.makeTask();
-        task.dateFrom = getWorkDayBeforeOrEqual(
-            add(monthBegin(this.ctx.payPeriod.dateFrom), { days: 14 }),
-        );
-        task.dateTo = new Date(task.dateFrom);
+        task.dateFrom = getAdvancePaymentDate(this.ctx.payPeriod);
+        task.dateTo = dateUTC(task.dateFrom);
         return [task];
     }
 }

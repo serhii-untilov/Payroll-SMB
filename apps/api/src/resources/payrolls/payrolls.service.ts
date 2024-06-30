@@ -70,11 +70,11 @@ export class PayrollsService extends AvailableForUserCompany {
             where: {
                 ...other,
                 ...(positionId ? { positionId } : {}),
-                ...(companyId ? { position: { companyId } } : {}),
+                ...(companyId ? { companyId } : {}),
             },
             relations: {
-                position: relations,
-                paymentType: relations,
+                position: !!relations,
+                paymentType: !!relations,
             },
         });
     }
