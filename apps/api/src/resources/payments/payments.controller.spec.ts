@@ -8,6 +8,7 @@ import { PositionsService } from '../positions/positions.service';
 import { Payment } from './entities/payment.entity';
 import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
+import { PaymentPositionsService } from './payment-positions/payment-positions.service';
 
 describe('PaymentsController', () => {
     let controller: PaymentsController;
@@ -24,6 +25,10 @@ describe('PaymentsController', () => {
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: CompaniesService, useValue: createMock<CompaniesService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                {
+                    provide: PaymentPositionsService,
+                    useValue: createMock<PaymentPositionsService>(),
+                },
             ],
         }).compile();
 
