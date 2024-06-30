@@ -299,7 +299,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                                     control={control}
                                     name="paymentTypeId"
                                     id="paymentTypeId"
-                                    label={t('Payment Type')}
+                                    label={t('Payment Form')}
                                     filter={{ groups: [PaymentGroup.BASIC] }}
                                 />
                             </Grid>

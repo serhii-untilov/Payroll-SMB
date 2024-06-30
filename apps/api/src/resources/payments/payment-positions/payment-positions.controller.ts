@@ -16,23 +16,27 @@ import {
 } from '@nestjs/common';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from './../../guards/accessToken.guard';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
-import { Payment } from './entities/payment.entity';
-import { PaymentsService } from './payments.service';
-import { FindPaymentDto } from './dto/find-payment.dto';
+import { AccessTokenGuard } from './../../../guards/accessToken.guard';
+import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
+import { FindPaymentPositionDto } from './dto/find-paymentPosition.dto';
+import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
+import { PaymentPosition } from './entities/paymentPosition.entity';
 
-@Controller('payments')
-export class PaymentsController {
-    constructor(private readonly service: PaymentsService) {}
+import { PaymentPositionsService } from './payment-positions.service';
+
+@Controller('payment-positions')
+export class PaymentPositionsController {
+    constructor(private readonly service: PaymentPositionsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() payload: CreatePaymentDto): Promise<Payment> {
+    async create(
+        @Req() req: Request,
+        @Body() payload: CreatePaymentPositionDto,
+    ): Promise<PaymentPosition> {
         const userId = req.user['sub'];
-        const companyId = await this.service.getCompanyId(payload.companyId);
+        const companyId = await this.service.getCompanyId(payload.paymentId);
         await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
@@ -44,11 +48,10 @@ export class PaymentsController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
-    ): Promise<Payment> {
+    ): Promise<PaymentPosition> {
         const userId = req.user['sub'];
-        const found = await this.service.findOne(id, relations);
-        await this.service.availableFindOneOrFail(userId, found.companyId);
-        return found;
+        await this.service.availableFindOneOrFail(userId, id);
+        return await this.service.findOne(id, relations);
     }
 
     @Patch(':id')
@@ -57,8 +60,8 @@ export class PaymentsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() payload: UpdatePaymentDto,
-    ): Promise<Payment> {
+        @Body() payload: UpdatePaymentPositionDto,
+    ): Promise<PaymentPosition> {
         const userId = req.user['sub'];
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
@@ -67,7 +70,10 @@ export class PaymentsController {
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Payment> {
+    async remove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+    ): Promise<PaymentPosition> {
         const userId = req.user['sub'];
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
@@ -76,9 +82,12 @@ export class PaymentsController {
     @Post('find')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(@Req() req: Request, @Body() params: FindPaymentDto): Promise<Payment[]> {
+    async findAll(
+        @Req() req: Request,
+        @Body() params: FindPaymentPositionDto,
+    ): Promise<PaymentPosition[]> {
         const userId = req.user['sub'];
-        await this.service.availableFindAllOrFail(userId, params.companyId);
+        await this.service.availableFindAllOrFail(userId, params.paymentId);
         return await this.service.findAll(deepStringToShortDate(params));
     }
 }

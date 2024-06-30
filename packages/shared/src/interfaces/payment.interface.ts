@@ -13,20 +13,20 @@ export interface IPayment extends ILogger {
     id: number;
     company?: ICompany;
     companyId: number;
-    payPeriod: Date;
-    accPeriod: Date;
-    docNumber: string;
-    docDate: Date;
+    payPeriod?: Date;
+    accPeriod?: Date;
+    docNumber?: string;
+    docDate?: Date;
     paymentType?: IPaymentType;
     paymentTypeId: number;
-    dateFrom: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
-    dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
+    dateFrom?: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
+    dateTo?: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
     baseSum?: number;
     deductions?: number;
     paySum?: number;
     funds?: number;
-    status: string; // See enum PaymentStatus
-    recordFlags: number; // See enum RecordFlags
+    status?: string; // See enum PaymentStatus
+    recordFlags?: number; // See enum RecordFlags
     description?: string;
 }
 

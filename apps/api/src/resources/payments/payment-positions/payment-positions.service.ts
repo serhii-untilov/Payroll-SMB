@@ -8,13 +8,13 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
-import { AccessService } from '../access/access.service';
+import { AvailableForUserCompany } from '../../abstract/availableForUserCompany';
+import { AccessService } from '../../access/access.service';
 import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
 import { FindPaymentPositionDto } from './dto/find-paymentPosition.dto';
 import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
-import { PaymentsService } from './payments.service';
+import { PaymentsService } from '../payments.service';
 
 @Injectable()
 export class PaymentPositionsService extends AvailableForUserCompany {

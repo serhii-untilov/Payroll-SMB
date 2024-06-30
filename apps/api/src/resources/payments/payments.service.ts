@@ -14,7 +14,7 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { FindPaymentDto } from './dto/find-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Payment } from './entities/payment.entity';
-import { PaymentPositionsService } from './payment-positions.service';
+import { PaymentPositionsService } from './payment-positions/payment-positions.service';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {

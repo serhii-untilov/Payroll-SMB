@@ -269,5 +269,10 @@
     "SCI Payments": "SCI Payments",
     "All Payments": "All Payments",
     "To Pay": "To Pay",
-    "Payed": "Payed"
+    "Payed": "Payed",
+    "New Payment": "New Payment",
+    "Accounting Period": "Accounting Period",
+    "Payment Details": "Details",
+    "Payment Form": "Payment Type",
+    "Type of Payment": "Type of Payment"
 }

@@ -7,8 +7,8 @@ import { CompaniesService } from './../../resources/companies/companies.service'
 import { Company } from './../../resources/companies/entities/company.entity';
 import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
 import { PaymentTypesService } from './../../resources/payment-types/payment-types.service';
-import { PaymentPosition } from './../../resources/payments/entities/paymentPosition.entity';
-import { PaymentPositionsService } from './../../resources/payments/payment-positions.service';
+import { PaymentPosition } from '../../resources/payments/payment-positions/entities/paymentPosition.entity';
+import { PaymentPositionsService } from '../../resources/payments/payment-positions/payment-positions.service';
 import { PaymentsService } from './../../resources/payments/payments.service';
 import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
 import { PayrollsService } from './../../resources/payrolls/payrolls.service';

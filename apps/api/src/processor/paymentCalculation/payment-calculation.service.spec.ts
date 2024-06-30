@@ -5,7 +5,7 @@ import { AccessService } from './../../resources/access/access.service';
 import { CompaniesService } from './../../resources/companies/companies.service';
 import { PayPeriodsService } from './../../resources/pay-periods/payPeriods.service';
 import { PaymentTypesService } from './../../resources/payment-types/payment-types.service';
-import { PaymentPositionsService } from './../../resources/payments/payment-positions.service';
+import { PaymentPositionsService } from '../../resources/payments/payment-positions/payment-positions.service';
 import { PaymentsService } from './../../resources/payments/payments.service';
 import { PayrollsService } from './../../resources/payrolls/payrolls.service';
 import { PositionsService } from './../../resources/positions/positions.service';

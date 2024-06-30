@@ -1,6 +1,6 @@
 import { PaymentGroup, PaymentPart, dateUTC } from '@repo/shared';
 import { payPeriodFactSum } from 'src/processor/helpers/payroll.helper';
-import { PaymentPosition } from '../../../resources/payments/entities/paymentPosition.entity';
+import { PaymentPosition } from '../../../resources/payments/payment-positions/entities/paymentPosition.entity';
 import { PaymentCalculationService } from '../payment-calculation.service';
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
 import { payFundPayPeriodFactSum } from './../../helpers/payFund.helper';

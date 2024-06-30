@@ -7,30 +7,23 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import {
-    CalcMethod,
-    IFindPayment,
-    IPayment,
-    PaymentStatus,
-    date2view,
-    dateUTC,
-    maxDate,
-} from '@repo/shared';
+import { CalcMethod, IPayment, PaymentStatus, date2view, dateUTC } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
-import { Loading } from '../../../components/utility/Loading';
 import useLocale from '../../../hooks/useLocale';
-import { getPayments } from '../../../services/payment.service';
-import { deletePayment } from '../../../services/payment.service';
+import { deletePayment, getPayments } from '../../../services/payment.service';
 import { sumFormatter } from '../../../services/utils';
 
-export default function PaymentForm() {
-    const { id: paymentId } = useParams();
+type Props = {
+    paymentId: number;
+};
+export function MandatoryPayments(props: Props) {
+    const { paymentId } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -40,14 +33,11 @@ export default function PaymentForm() {
 
     const columns: GridColDef[] = [
         {
-            field: 'cardNumber',
-            headerName: t('Card Number'),
+            field: 'docNumber',
+            headerName: t('Number'),
             type: 'string',
             width: 110,
             sortable: true,
-            valueGetter: (params) => {
-                return params.row.position.cardNumber;
-            },
         },
         {
             field: 'docDate',
@@ -125,24 +115,12 @@ export default function PaymentForm() {
         },
     ];
 
-    const { data, isError, isLoading, error } = useQuery<IPaymentPosition[], Error>({
-        queryKey: ['payment', { paymentId }],
+    const { data, isError, isLoading, error } = useQuery<IPayment[], Error>({
+        queryKey: ['payment', 'mandatory-list', props],
         queryFn: async () => {
-            return (
-                await getPaymentPositions({
-                    relations: true,
-                    companyId,
-                    payPeriod,
-                    ...(status ? { status } : {}),
-                })
-            ).filter(
-                (o) =>
-                    (props.companyPayments &&
-                        o.paymentType?.calcMethod !== CalcMethod.SIF_PAYMENT) ||
-                    (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SIF_PAYMENT),
-            );
+            return [];
         },
-        enabled: !!companyId && !!payPeriod,
+        enabled: !!paymentId,
     });
 
     // if (isLoading) {
@@ -160,9 +138,8 @@ export default function PaymentForm() {
         console.log('onEditPayment');
     };
 
-    const onEditPayment = (paymentId: number) => {
-        // navigate(`/people/payment/${paymentId}?return=true`);
-        console.log('onEditPayment');
+    const onEditPayment = (id: number) => {
+        navigate(`/payments/${id}`);
     };
 
     const submitCallback = async (data: IPayment) => {
@@ -196,22 +173,6 @@ export default function PaymentForm() {
         console.log('onRestoreDeleted');
     };
 
-    const getRowStatus = (params: any): string => {
-        return params.row?.deletedDate
-            ? 'Deleted'
-            : params.row?.status === PaymentStatus.PAYED
-              ? 'Normal'
-              : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
-                ? 'Overdue'
-                : params.row?.status === PaymentStatus.SUBMITTED
-                  ? 'Todo'
-                  : params.row?.status === PaymentStatus.ACCEPTED
-                    ? 'Overdue'
-                    : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
-                      ? 'Todo'
-                      : 'Normal';
-    };
-
     return (
         <>
             <Toolbar
@@ -226,7 +187,6 @@ export default function PaymentForm() {
             <DataGrid
                 checkboxSelection={true}
                 // rowHeight={80}
-                getRowStatus={getRowStatus}
                 columnVisibilityModel={{
                     // Hide columns, the other columns will remain visible
                     docNumber: false,
@@ -246,14 +206,14 @@ export default function PaymentForm() {
                     details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditPayment(params.row.paymentId);
+                        onEditPayment(params.row.id);
                     }
                 }}
                 onRowDoubleClick={(
                     params: GridRowParams,
                     event: MuiEvent,
                     details: GridCallbackDetails,
-                ) => onEditPayment(params.row.paymentId)}
+                ) => onEditPayment(params.row.id)}
             />
         </>
     );

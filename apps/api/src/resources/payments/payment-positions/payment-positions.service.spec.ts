@@ -3,11 +3,11 @@ import { PaymentPositionsService } from './payment-positions.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 import { repositoryMockFactory } from '@repo/testing';
-import { PositionsService } from '../positions/positions.service';
+import { PositionsService } from '../../positions/positions.service';
 import { createMock } from '@golevelup/ts-jest';
-import { CompaniesService } from '../companies/companies.service';
-import { AccessService } from '../access/access.service';
-import { PaymentsService } from './payments.service';
+import { CompaniesService } from '../../companies/companies.service';
+import { AccessService } from '../../access/access.service';
+import { PaymentsService } from '../payments.service';
 
 describe('PaymentPositionsService', () => {
     let service: PaymentPositionsService;

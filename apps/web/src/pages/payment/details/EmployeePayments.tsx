@@ -9,12 +9,11 @@ import {
 } from '@mui/x-data-grid';
 import {
     CalcMethod,
-    IFindPayment,
     IPayment,
+    IPaymentPosition,
     PaymentStatus,
     date2view,
     dateUTC,
-    maxDate,
 } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
@@ -23,19 +22,17 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
-import { Loading } from '../../../components/utility/Loading';
 import useLocale from '../../../hooks/useLocale';
-import { getPayments } from '../../../services/payment.service';
-import { deletePayment } from '../../../services/payment.service';
+import { deletePayment, getPayments } from '../../../services/payment.service';
 import { sumFormatter } from '../../../services/utils';
+import { getPaymentPositions } from '../../../services/paymentPosition.service';
 
-type Props = IFindPayment & {
-    companyPayments: boolean;
-    sifPayments: boolean;
+type Props = {
+    paymentId: number;
 };
 
-export function PaymentList(props: Props) {
-    const { companyId, payPeriod, status } = props;
+export function EmployeePayments(props: Props) {
+    const { paymentId } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -127,24 +124,12 @@ export function PaymentList(props: Props) {
         },
     ];
 
-    const { data, isError, isLoading, error } = useQuery<IPayment[], Error>({
-        queryKey: ['payment', 'list', props],
+    const { data, isError, isLoading, error } = useQuery<IPaymentPosition[], Error>({
+        queryKey: ['payment', 'position-list', { paymentId }],
         queryFn: async () => {
-            return (
-                await getPayments({
-                    relations: true,
-                    companyId,
-                    payPeriod,
-                    ...(status ? { status } : {}),
-                })
-            ).filter(
-                (o) =>
-                    (props.companyPayments &&
-                        o.paymentType?.calcMethod !== CalcMethod.SIF_PAYMENT) ||
-                    (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SIF_PAYMENT),
-            );
+            return await getPaymentPositions({ paymentId, relations: true });
         },
-        enabled: !!companyId && !!payPeriod,
+        enabled: !!paymentId,
     });
 
     // if (isLoading) {

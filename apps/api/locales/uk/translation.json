@@ -86,7 +86,7 @@
     "Card Number": "Таб. №",
     "Sequence Number": "Порядковий №",
     "Work Norm": "Норма робочого часу",
-    "Payment Type": "Форма оплати",
+    "Payment Type": "Вид оплати",
     "Wage": "Оклад",
     "Rate": "Ставка",
     "Middle Name": "По батькові",
@@ -268,5 +268,10 @@
     "SCI Payments": "Виплати ФСС",
     "All Payments": "Усі виплати",
     "To Pay": "До виплати",
-    "Payed": "Виплачено"
+    "Payed": "Виплачено",
+    "New Payment": "Нова Виплата",
+    "Accounting Period": "Обліковий період",
+    "Payment Details": "Параметри",
+    "Payment Form": "Форма оплати",
+    "Type of Payment": "Вид виплати"
 }

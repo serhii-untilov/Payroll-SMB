@@ -340,7 +340,9 @@ npx --workspace @repo/api nest generate service paymentPositions resources/payme
 npx --workspace @repo/api nest generate service paymentDeductions resources/payments
 npx --workspace @repo/api nest generate service paymentFunds resources/payments
 npx --workspace @repo/api nest generate service paymentCalculation processor
-npx --workspace @repo/api nest generate controller paymentPositions payments
+npx --workspace @repo/api nest generate controller paymentPositions resources/payments
+npx --workspace @repo/api nest generate controller paymentDeductions resources/payments
+npx --workspace @repo/api nest generate controller paymentFunds resources/payments
 
 ```
 
@@ -417,3 +419,4 @@ openssl rand -base64 60
 - [**VPS** - Initial Server Setup with Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-20-04)
 - [**VPS** - Disabling Password Authentication on Your Server](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04)
 - [**VPS** - How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
+- [**React Hook Form** - Combined Add/Edit (Create/Update) Form Example](https://jasonwatmore.com/post/2020/10/14/react-hook-form-combined-add-edit-create-update-form-example)

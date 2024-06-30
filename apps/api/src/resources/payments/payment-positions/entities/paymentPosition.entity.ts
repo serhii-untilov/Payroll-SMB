@@ -1,8 +1,8 @@
 import { IPaymentPosition } from '@repo/shared';
-import { Position } from './../../../resources/positions/entities/position.entity';
+import { Position } from '../../../positions/entities/position.entity';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Logger } from '../../abstract/logger.abstract';
-import { Payment } from './payment.entity';
+import { Logger } from '../../../abstract/logger.abstract';
+import { Payment } from '../../entities/payment.entity';
 
 @Entity()
 export class PaymentPosition extends Logger implements IPaymentPosition {
