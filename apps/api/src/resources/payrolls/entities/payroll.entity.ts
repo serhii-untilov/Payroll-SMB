@@ -1,10 +1,12 @@
 import { HoursByDay, IPayroll } from '@repo/shared';
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from '../../../resources/abstract/logger.abstract';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
 
 @Entity()
+@Index('IDX_PAYROLL_POSITION_PAY_PERIOD', ['positionId', 'payPeriod'])
+@Index('IDX_PAYROLL_SOURCE_TYPE_ID', ['sourceType', 'sourceId'])
 export class Payroll extends Logger implements IPayroll {
     @PrimaryGeneratedColumn('increment')
     id: number;

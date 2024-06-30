@@ -11,9 +11,22 @@ interface Props {
     id?: string;
     name?: string;
     filter?: IPaymentTypeFilter;
+    autoFocus?: boolean;
+    disabled?: boolean;
+    sx?: any;
 }
 
-export function SelectPaymentType({ companyId, control, label, id, name, filter }: Props) {
+export function SelectPaymentType({
+    companyId,
+    control,
+    label,
+    id,
+    name,
+    filter,
+    autoFocus,
+    disabled,
+    // sx,
+}: Props) {
     const {
         data: paymentTypeList,
         isError: isPaymentTypeListError,
@@ -34,6 +47,9 @@ export function SelectPaymentType({ companyId, control, label, id, name, filter 
 
     return (
         <FormAutocomplete
+            // sx={sx}
+            disabled={disabled}
+            autoFocus={autoFocus}
             valueType={'number'}
             control={control}
             label={label || ''}

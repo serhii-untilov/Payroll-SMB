@@ -87,7 +87,8 @@ export class PaymentPositionsController {
         @Body() params: FindPaymentPositionDto,
     ): Promise<PaymentPosition[]> {
         const userId = req.user['sub'];
-        await this.service.availableFindAllOrFail(userId, params.paymentId);
+        const companyId = await this.service.getPaymentCompanyId(params.paymentId);
+        await this.service.availableFindAllOrFail(userId, companyId);
         return await this.service.findAll(deepStringToShortDate(params));
     }
 }

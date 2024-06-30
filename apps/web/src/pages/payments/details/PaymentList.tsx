@@ -172,7 +172,10 @@ export function PaymentList(props: Props) {
 
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
-            await deletePayment(+id);
+            const payment = data?.find((o) => o.id === Number(id));
+            if (payment?.status === PaymentStatus.DRAFT) {
+                await deletePayment(+id);
+            }
         }
         await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
     };

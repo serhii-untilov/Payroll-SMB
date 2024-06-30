@@ -25,6 +25,7 @@ import { PayrollCalculationService } from './payrollCalculation/payrollCalculati
 import { SseController } from './serverSentEvents/sse.controller';
 import { SseService } from './serverSentEvents/sse.service';
 import { TaskGenerationService } from './taskGeneration/taskGeneration.service';
+import { PaymentListenerService } from './listeners/payment-listener/payment-listener.service';
 
 @Module({
     imports: [
@@ -50,6 +51,7 @@ import { TaskGenerationService } from './taskGeneration/taskGeneration.service';
         DepartmentListenerService,
         PositionListenerService,
         PersonListenerService,
+        PaymentListenerService,
         PayrollCalculationService,
         PayFundCalculationService,
         TaskGenerationService,

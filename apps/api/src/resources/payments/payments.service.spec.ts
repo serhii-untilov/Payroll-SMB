@@ -6,6 +6,7 @@ import { AccessService } from '../access/access.service';
 import { Payment } from './entities/payment.entity';
 import { PaymentPositionsService } from './payment-positions/payment-positions.service';
 import { PaymentsService } from './payments.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('PaymentsService', () => {
     let service: PaymentsService;
@@ -23,6 +24,7 @@ describe('PaymentsService', () => {
                     useValue: createMock<PaymentPositionsService>(),
                 },
                 { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],
         }).compile();
 

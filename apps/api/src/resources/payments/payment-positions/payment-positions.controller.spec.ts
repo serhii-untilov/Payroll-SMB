@@ -9,6 +9,7 @@ import { createMock } from '@golevelup/ts-jest';
 import { CompaniesService } from './../../../resources/companies/companies.service';
 import { AccessService } from './../../../resources/access/access.service';
 import { PaymentsService } from '../payments.service';
+import { PayrollsService } from './../../payrolls/payrolls.service';
 
 describe('PaymentPositionsController', () => {
     let controller: PaymentPositionsController;
@@ -26,6 +27,7 @@ describe('PaymentPositionsController', () => {
                 { provide: CompaniesService, useValue: createMock<CompaniesService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: PaymentsService, useValue: createMock<PaymentsService>() },
+                { provide: PayrollsService, useValue: createMock<PayrollsService>() },
             ],
         }).compile();
 

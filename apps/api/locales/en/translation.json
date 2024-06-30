@@ -274,5 +274,17 @@
     "Accounting Period": "Accounting Period",
     "Payment Details": "Details",
     "Payment Form": "Payment Type",
-    "Type of Payment": "Type of Payment"
+    "Type of Payment": "Type of Payment",
+    "Funds": "Funds",
+    "Document": "Document",
+    "Process": "Process",
+    "Withdraw": "Withdraw",
+    "draft": "To Pay",
+    "submitted": "Submitted",
+    "accepted": "Accepted",
+    "payed": "Payed",
+    "Status": "Status",
+    "Income Sum": "Income",
+    "Base Sum": "Base Sum",
+    "Payment Sum": "Payment Sum"
 }

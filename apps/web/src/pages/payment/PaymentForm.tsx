@@ -1,31 +1,23 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Grid } from '@mui/material';
-import { IPayment, PaymentGroup } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { Box, Chip } from '@mui/material';
+import { IPayment, PaymentStatus, dateUTC } from '@repo/shared';
+import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
-import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
-import * as yup from 'yup';
-import { FormTextField } from '../../components/form/FormTextField';
-import { Toolbar } from '../../components/layout/Toolbar';
-import { createPayment, getPayment, updatePayment } from '../../services/payment.service';
-import { getDirtyValues } from '../../services/utils';
-import { InputLabel } from '../../components/layout/InputLabel';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageTitle } from '../../components/layout/PageTitle';
 import { Tab } from '../../components/layout/Tab';
 import { TabPanel } from '../../components/layout/TabPanel';
 import { Tabs } from '../../components/layout/Tabs';
-import { SelectPayPeriod } from '../../components/select/SelectPayPeriod';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
+import { getPayment } from '../../services/payment.service';
 import { EmployeePayments } from './details/EmployeePayments';
 import { MandatoryPayments } from './details/MandatoryPayments';
-import { SelectPaymentType } from '../../components/select/SelectPaymentType';
 import { PaymentDetails } from './details/PaymentDetails';
+import { sumFormatter } from '../../services/utils';
+import { Toolbar } from '../../components/layout/Toolbar';
 
 export default function PaymentForm() {
     const { id } = useParams();
@@ -33,9 +25,7 @@ export default function PaymentForm() {
     const { company, payPeriod } = useAppContext();
     const { locale } = useLocale();
     const [searchParams, setSearchParams] = useSearchParams();
-    const queryClient = useQueryClient();
     const tabName = searchParams.get('tab');
-    const goBack = true;
     const [tab, setTab] = useState(
         Number(tabName ? getTabIndex(tabName) : localStorage.getItem('payment-tab-index')),
     );
@@ -46,7 +36,6 @@ export default function PaymentForm() {
     const {
         data: payment,
         isError,
-        isLoading,
         error,
     } = useQuery<Partial<IPayment>, Error>({
         queryKey: ['payment', { paymentId }],
@@ -56,73 +45,55 @@ export default function PaymentForm() {
         enabled: !!paymentId,
     });
 
-    const formSchema = yup.object().shape({
-        docNumber: yup.string(),
-        docDate: yup.date(),
-        accPeriod: yup.date().required('Accounting Period is required'),
-        paymentTypeId: yup.number().required('Payment Type is required'),
-    });
-
-    type FormType = yup.InferType<typeof formSchema>;
-
-    const {
-        control,
-        handleSubmit,
-        watch,
-        reset,
-        formState: { errors: formErrors },
-    } = useForm({
-        resolver: yupResolver<FormType>(formSchema),
-        shouldFocusError: true,
-    });
-
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('payment-tab-index', newValue.toString());
     };
 
-    const { dirtyFields, isDirty } = useFormState({ control });
-
     useEffect(() => {}, [locale]);
 
-    useEffect(() => {
-        for (const key of Object.keys(formErrors)) {
-            if (formErrors[key]?.message) {
-                enqueueSnackbar(t(formErrors[key]?.message), { variant: 'error' });
-            }
-        }
-    }, [formErrors, t]);
+    const totalSum = useMemo(() => {
+        return (payment?.paySum || 0) + (payment?.deductions || 0) + (payment?.funds || 0);
+    }, [payment]);
 
-    const onSubmit: SubmitHandler<FormType> = async (data) => {
-        if (!isDirty) return;
-        if (!company?.id) return;
-        const dirtyValues = getDirtyValues(dirtyFields, data);
-        try {
-            const updated = paymentId
-                ? await updatePayment(paymentId, { ...dirtyValues, version: payment?.version })
-                : await createPayment({ ...data, companyId: company.id });
-            reset(updated);
-            await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
-            setPaymentId(updated.id);
-        } catch (e: unknown) {
-            const error = e as AxiosError;
-            enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
-        }
-    };
+    const docTitle = useMemo(() => {
+        return `${payment?.id ? payment?.paymentType?.name : t('New Payment')} `;
+    }, [payment, t]);
 
-    const onCancel = async () => {
-        reset(payment);
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
-    };
+    const docColor = useMemo(() => {
+        const status = payment?.status || PaymentStatus.DRAFT;
+        const docDate = dateUTC(payment?.docDate || new Date());
+        const now = dateUTC(new Date());
+        return status === PaymentStatus.DRAFT && docDate.getTime() <= now.getTime()
+            ? 'warning'
+            : 'primary';
+    }, [payment]);
+
+    if (isError) {
+        enqueueSnackbar(`${error.name}\n${error.message}`, {
+            variant: 'error',
+        });
+    }
 
     return (
         company &&
         payPeriod && (
             <PageLayout>
-                <PageTitle goBack={goBack}>
-                    {payment?.id ? payment?.paymentType?.name : t('New Payment')}
+                <PageTitle goBack={true} title={docTitle}>
+                    <Chip
+                        // variant={'outlined'}
+                        label={sumFormatter(totalSum)}
+                        size={'medium'}
+                        color={docColor}
+                        sx={{
+                            display: 'inline',
+                            p: 0.5,
+                            ml: 1,
+                            fontSize: '1rem',
+                            color: (theme) => (theme.palette.mode === 'light' ? 'white' : 'black'),
+                        }}
+                    />
                 </PageTitle>
-
                 <Box
                     id="payments__tabs-box"
                     sx={{
@@ -133,7 +104,7 @@ export default function PaymentForm() {
                     }}
                 >
                     <Tabs id="payments__tabs" value={tab} onChange={handleTabChange}>
-                        <Tab label={t('Payment Details')} />
+                        <Tab label={t('Document')} />
                         <Tab label={t('Employees')} />
                         <Tab label={t('Mandatory Payments')} />
                     </Tabs>
@@ -156,6 +127,6 @@ function getTabIndex(tabName: string | null): number {
     if (!tabName) {
         return 0;
     }
-    const map = { employeePayments: 0, mandatoryPayments: 1 };
+    const map = { document: 0, employees: 1, mandatoryPayments: 2 };
     return map[tabName];
 }

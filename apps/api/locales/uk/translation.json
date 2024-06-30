@@ -273,5 +273,17 @@
     "Accounting Period": "Обліковий період",
     "Payment Details": "Параметри",
     "Payment Form": "Форма оплати",
-    "Type of Payment": "Вид виплати"
+    "Type of Payment": "Вид виплати",
+    "Funds": "ЄСВ",
+    "Document": "Документ",
+    "Process": "Провести",
+    "Withdraw": "Відкликати",
+    "draft": "До виплати",
+    "submitted": "Подано заявку",
+    "accepted": "Погоджено",
+    "payed": "Виплачено",
+    "Status": "Стан",
+    "Income Sum": "Дохід",
+    "Base Sum": "Базова сума",
+    "Payment Sum": "Сума платежу"
 }

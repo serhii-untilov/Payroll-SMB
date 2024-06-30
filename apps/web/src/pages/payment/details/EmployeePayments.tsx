@@ -42,29 +42,22 @@ export function EmployeePayments(props: Props) {
 
     const columns: GridColDef[] = [
         {
-            field: 'docNumber',
-            headerName: t('Number'),
+            field: 'cardNumber',
+            headerName: t('Card Number'),
             type: 'string',
             width: 110,
             sortable: true,
-        },
-        {
-            field: 'docDate',
-            headerName: t('Date'),
-            type: 'string',
-            width: 125,
-            sortable: true,
             valueGetter: (params) => {
-                return date2view(params.value);
+                return params.row.position.cardNumber;
             },
         },
         {
-            field: 'name',
-            headerName: t('Name'),
+            field: 'fullName',
+            headerName: t('Full Name'),
             width: 260,
             sortable: true,
             valueGetter: (params) => {
-                return params.row?.paymentType?.name;
+                return params.row.position.person.fullName;
             },
         },
         {
@@ -144,11 +137,11 @@ export function EmployeePayments(props: Props) {
 
     const onAddPayment = () => {
         // navigate('/people/payment/?tab=details&return=true');
-        console.log('onEditPayment');
+        console.log('onAddPayment');
     };
 
     const onEditPayment = (id: number) => {
-        navigate(`/payments/${id}`);
+        navigate(`/people/position/${id}?return=true`);
     };
 
     const submitCallback = async (data: IPayment) => {
@@ -232,14 +225,14 @@ export function EmployeePayments(props: Props) {
                     details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditPayment(params.row.id);
+                        onEditPayment(params.row.position.id);
                     }
                 }}
                 onRowDoubleClick={(
                     params: GridRowParams,
                     event: MuiEvent,
                     details: GridCallbackDetails,
-                ) => onEditPayment(params.row.id)}
+                ) => onEditPayment(params.row.position.id)}
             />
         </>
     );

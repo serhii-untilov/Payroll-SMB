@@ -1,4 +1,4 @@
-import { Autocomplete, OutlinedInputProps, TextField } from '@mui/material';
+import { Autocomplete, Box, OutlinedInputProps, TextField, Typography } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { InputLabel } from '../layout/InputLabel';
 
@@ -14,6 +14,9 @@ export type Props = OutlinedInputProps & {
     label: string;
     rules?: any;
     options: FormAutocompleteOption[];
+    autofocus?: boolean;
+    disabled?: boolean;
+    // sx?: any;
 };
 
 export const FormAutocomplete = (props: Props) => {
@@ -27,6 +30,8 @@ export const FormAutocomplete = (props: Props) => {
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => {
                     return (
                         <Autocomplete
+                            disabled={!!props?.disabled}
+                            autoFocus={props?.autoFocus}
                             selectOnFocus
                             clearOnEscape
                             handleHomeEndKeys
@@ -49,14 +54,18 @@ export const FormAutocomplete = (props: Props) => {
                             }}
                             renderInput={(params) => {
                                 return (
-                                    <TextField
-                                        error={error != undefined}
-                                        variant="outlined"
-                                        label=""
-                                        {...params}
-                                        size="small"
-                                        fullWidth
-                                    />
+                                    <Box sx={{ fontWeight: 'bold' }}>
+                                        <TextField
+                                            error={error != undefined}
+                                            variant="outlined"
+                                            label=""
+                                            {...params}
+                                            size="small"
+                                            fullWidth
+                                            // sx={props.sx}
+                                            // sx={{ fontWeight: 'bold' }}
+                                        />
+                                    </Box>
                                 );
                             }}
                         />

@@ -1,4 +1,4 @@
-import { TaskType } from '@repo/shared';
+import { CalcMethod, PaymentStatus, TaskStatus, TaskType } from '@repo/shared';
 import { TaskGenerationService } from '../taskGeneration.service';
 import { Task } from '../../../resources/tasks/entities/task.entity';
 import { TaskGenerator } from './abstract/TaskGenerator';
@@ -13,6 +13,15 @@ export class TaskPostRegularPayment extends TaskGenerator {
         const task = this.makeTask();
         task.dateFrom = getWorkDayBeforeOrEqual(this.ctx.payPeriod.dateTo);
         task.dateTo = task.dateFrom;
+        const count = (
+            await this.ctx.paymentsService.findAll({
+                companyId: this.ctx.company.id,
+                accPeriod: this.ctx.payPeriod.dateFrom,
+                status: PaymentStatus.DRAFT,
+                relations: true,
+            })
+        ).filter((o) => o.paymentType.calcMethod === CalcMethod.REGULAR_PAYMENT).length;
+        task.status = count ? TaskStatus.TODO : TaskStatus.DONE;
         return [task];
     }
 }

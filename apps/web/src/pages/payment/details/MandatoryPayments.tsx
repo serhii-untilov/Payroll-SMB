@@ -7,7 +7,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { CalcMethod, IPayment, PaymentStatus, date2view, dateUTC } from '@repo/shared';
+import { IPayment } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import useLocale from '../../../hooks/useLocale';
-import { deletePayment, getPayments } from '../../../services/payment.service';
+import { deletePayment } from '../../../services/payment.service';
 import { sumFormatter } from '../../../services/utils';
 
 type Props = {
@@ -33,46 +33,39 @@ export function MandatoryPayments(props: Props) {
 
     const columns: GridColDef[] = [
         {
-            field: 'docNumber',
-            headerName: t('Number'),
-            type: 'string',
-            width: 110,
-            sortable: true,
-        },
-        {
-            field: 'docDate',
-            headerName: t('Date'),
-            type: 'string',
-            width: 125,
-            sortable: true,
-            valueGetter: (params) => {
-                return date2view(params.value);
-            },
-        },
-        {
             field: 'name',
             headerName: t('Name'),
-            width: 260,
+            width: 280,
             sortable: true,
             valueGetter: (params) => {
                 return params.row?.paymentType?.name;
             },
         },
         {
-            field: 'baseSum',
-            headerName: t('Gross Pay'),
+            field: 'incomeSum',
+            headerName: t('Income Sum'),
             type: 'number',
-            width: 150,
+            width: 200,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
             },
         },
         {
-            field: 'deductions',
-            headerName: t('Deductions'),
+            field: 'baseSum',
+            headerName: t('Base Sum'),
             type: 'number',
-            width: 150,
+            width: 200,
+            sortable: true,
+            valueGetter: (params) => {
+                return sumFormatter(params.value);
+            },
+        },
+        {
+            field: 'rate',
+            headerName: t('Rate'),
+            type: 'number',
+            width: 200,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
@@ -80,37 +73,12 @@ export function MandatoryPayments(props: Props) {
         },
         {
             field: 'paySum',
-            headerName: t('Net Pay'),
+            headerName: t('Payment Sum'),
             type: 'number',
-            width: 150,
+            width: 200,
             sortable: true,
             valueGetter: (params) => {
                 return sumFormatter(params.value);
-            },
-        },
-        {
-            field: 'mandatoryPayments',
-            headerName: t('Mandatory Payments'),
-            type: 'number',
-            width: 190,
-            sortable: true,
-            valueGetter: (params) => {
-                const mandatoryPayments = (params.row?.deductions || 0) + (params.row?.funds || 0);
-                return sumFormatter(mandatoryPayments);
-            },
-        },
-        {
-            field: 'total',
-            headerName: t('Total'),
-            type: 'number',
-            width: 150,
-            sortable: true,
-            valueGetter: (params) => {
-                const total =
-                    (params.row?.paySum || 0) +
-                    (params.row?.deductions || 0) +
-                    (params.row?.funds || 0);
-                return sumFormatter(total);
             },
         },
     ];
