@@ -99,3 +99,21 @@ export function getPayPeriodName(
     }
     return `${format(dateFrom, template, { locale })} ${format(dateFrom, 'd')} - ${format(dateTo, 'd')} ${state}`;
 }
+
+export async function closePayPeriod(currentPayPeriod: IPayPeriod): Promise<IPayPeriod> {
+    const response = await api.post(
+        `/api/pay-periods/close/${currentPayPeriod.id}`,
+        { version: currentPayPeriod.version },
+        { headers: authHeader() },
+    );
+    return response.data;
+}
+
+export async function openPayPeriod(currentPayPeriod: IPayPeriod): Promise<IPayPeriod> {
+    const response = await api.post(
+        `/api/pay-periods/open/${currentPayPeriod.id}`,
+        { version: currentPayPeriod.version },
+        { headers: authHeader() },
+    );
+    return response.data;
+}

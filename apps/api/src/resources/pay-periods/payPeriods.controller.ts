@@ -102,4 +102,30 @@ export class PayPeriodsController {
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
+
+    @Post('close/:id')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async close(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Body() payload: { version: number },
+    ) {
+        const userId = req.user['sub'];
+        await this.service.availableUpdateOrFail(userId, id);
+        return await this.service.close(userId, id, payload.version);
+    }
+
+    @Post('open/:id')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async open(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Body() payload: { version: number },
+    ) {
+        const userId = req.user['sub'];
+        await this.service.availableUpdateOrFail(userId, id);
+        return await this.service.open(userId, id, payload.version);
+    }
 }

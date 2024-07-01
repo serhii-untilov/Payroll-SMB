@@ -20,7 +20,13 @@ import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { calculatePayroll } from '../../../services/company.service';
-import { getPayPeriodList, getPayPeriodName } from '../../../services/payPeriod.service';
+import {
+    closePayPeriod,
+    getCurrentPayPeriod,
+    getPayPeriodList,
+    getPayPeriodName,
+    openPayPeriod,
+} from '../../../services/payPeriod.service';
 import { sumFormatter } from '../../../services/utils';
 
 type Props = {
@@ -164,22 +170,44 @@ export function CompanyPayPeriods(params: Props) {
         gridRef.current.exportDataAsCsv();
     };
 
-    const onCalculate = async () => {
-        if (companyId) {
-            await calculatePayroll(companyId);
-            await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
-            await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
-            await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
-            await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
+    const invalidateQueries = async () => {
+        const resourceList = ['position', 'company', 'payPeriod', 'task'];
+        for (const key of resourceList) {
+            await queryClient.invalidateQueries({ queryKey: [key], refetchType: 'all' });
         }
     };
 
-    const onClose = () => {
-        console.log('onClose');
+    const onCalculate = async () => {
+        if (companyId) {
+            await calculatePayroll(companyId);
+            await invalidateQueries();
+        }
     };
 
-    const onOpen = () => {
-        console.log('onOpen');
+    const onClose = async () => {
+        if (companyId) {
+            const current = await getCurrentPayPeriod(companyId, false, true);
+            if (current.dateFrom.getTime() !== payPeriod?.getTime()) {
+                await invalidateQueries();
+                return;
+            }
+            const next = await closePayPeriod(current);
+            setPayPeriod(next.dateFrom);
+            await invalidateQueries();
+        }
+    };
+
+    const onOpen = async () => {
+        if (companyId) {
+            const current = await getCurrentPayPeriod(companyId, false, true);
+            if (current.dateFrom.getTime() !== payPeriod?.getTime()) {
+                await invalidateQueries();
+                return;
+            }
+            const prior = await openPayPeriod(current);
+            setPayPeriod(prior.dateFrom);
+            await invalidateQueries();
+        }
     };
 
     return (
