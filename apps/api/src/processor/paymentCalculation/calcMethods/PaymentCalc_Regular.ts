@@ -29,19 +29,22 @@ export class PaymentCalc_Regular extends PaymentCalc {
 
     private calcBaseSum(): number {
         const grossPay = this.getGrossPay();
-        const { baseSum: currentBaseSum } = getTotals(this.current);
+        const { baseSum: currentBaseSum } = getTotals(this.current, this.ctx.payPeriod.dateFrom);
         return grossPay - currentBaseSum;
     }
 
     private calcDeductions(): number {
         const deductions = this.getDeductions();
-        const { deductions: currentDeductions } = getTotals(this.current);
+        const { deductions: currentDeductions } = getTotals(
+            this.current,
+            this.ctx.payPeriod.dateFrom,
+        );
         return deductions - currentDeductions;
     }
 
     private calcFunds(): number {
         const funds = this.getFunds();
-        const { funds: currentFunds } = getTotals(this.current);
+        const { funds: currentFunds } = getTotals(this.current, this.ctx.payPeriod.dateFrom);
         return funds - currentFunds;
     }
 

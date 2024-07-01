@@ -15,7 +15,7 @@ export class TaskFillDepartmentList extends TaskGenerator {
         if (count) {
             const countClosed = await this.ctx.payPeriodsService.countClosed(this.ctx.company.id);
             if (countClosed) {
-                return null;
+                return [];
             }
         }
         return [task];

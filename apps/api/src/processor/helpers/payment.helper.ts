@@ -12,9 +12,9 @@ export function getRegularPaymentDate(payPeriod: PayPeriod): Date {
     return getWorkDayBeforeOrEqual(payPeriod.dateTo);
 }
 
-export function getTotals(paymentPositions: PaymentPosition[]) {
+export function getTotals(paymentPositions: PaymentPosition[], accPeriod: Date) {
     return paymentPositions
-        .filter((o) => o.payment.accPeriod === this.ctx.payPeriod.dateFrom)
+        .filter((o) => o.payment.accPeriod.getTime() === accPeriod.getTime())
         .reduce(
             (a, b) => {
                 a.baseSum += b.baseSum;

@@ -32,7 +32,9 @@ export default function Dashboard() {
     } = useQuery<ITask[], Error>({
         queryKey: ['task', 'list', { companyId: company?.id }],
         queryFn: async () => {
-            return await getTaskList(company?.id ? { companyId: company?.id } : {});
+            return await getTaskList(
+                company?.id ? { companyId: company?.id, onPayPeriodDate: company?.payPeriod } : {},
+            );
         },
         // enabled: !!company?.id,
     });

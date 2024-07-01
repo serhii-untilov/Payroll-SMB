@@ -181,7 +181,7 @@ export function CompanyDetails(props: Props) {
             reset(company);
             await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
-            if (!currentCompany) {
+            if (!currentCompany || currentCompany.id === company.id) {
                 setCurrentCompany(company);
                 // navigate(`/company/${company.id}`);
             }
