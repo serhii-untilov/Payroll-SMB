@@ -13,7 +13,7 @@ import {
     defaultPaymentGroupsTotal,
     defaultPaymentPartsTotal,
 } from '@repo/shared';
-import { Between, Repository } from 'typeorm';
+import { Between, Repository, FindOptionsWhere } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
@@ -129,6 +129,10 @@ export class PayrollsService extends AvailableForUserCompany {
 
     async delete(userId: number, id: number) {
         await this.repository.delete(id);
+    }
+
+    async deleteBy(params: FindOptionsWhere<Payroll>) {
+        await this.repository.delete(params);
     }
 
     async payrollPositionPaymentParts(

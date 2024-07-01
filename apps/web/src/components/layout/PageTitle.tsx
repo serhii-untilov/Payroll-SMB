@@ -6,10 +6,11 @@ import { AppState } from './AppState';
 
 type Props = PropsWithChildren & {
     goBack?: boolean;
+    title?: string;
 };
 
 export function PageTitle(props: Props) {
-    const { goBack, children, ...other } = props;
+    const { goBack, title, children, ...other } = props;
     const navigate = useNavigate();
 
     const onGoBack = () => {
@@ -38,6 +39,7 @@ export function PageTitle(props: Props) {
                         <ArrowBackIosNewRounded />
                     </IconButton>
                 )}
+                {title}
                 {children}
             </Typography>
             <AppState id="app-state" />

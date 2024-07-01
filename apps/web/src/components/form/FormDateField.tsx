@@ -9,6 +9,7 @@ export type FormDateFieldProps = OutlinedInputProps & {
     label: string;
     rules?: any;
     defaultValue?: string;
+    disabled?: boolean;
 };
 
 export const FormDateField = (props: FormDateFieldProps) => {
@@ -22,6 +23,7 @@ export const FormDateField = (props: FormDateFieldProps) => {
                 rules={props.rules}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                     <OutlinedInput
+                        disabled={!!props?.disabled}
                         size="small"
                         error={error != undefined}
                         onChange={(e) => {

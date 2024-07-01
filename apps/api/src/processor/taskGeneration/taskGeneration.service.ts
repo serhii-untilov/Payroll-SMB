@@ -25,6 +25,7 @@ import { TaskSendIncomeTaxReport } from './taskGenerator/TaskSendIncomeTaxReport
 import { TaskGenerator } from './taskGenerator/abstract/TaskGenerator';
 import { FixedSequenceNumber } from './taskSequenceNumber/FixedSequenceNumber';
 import { TaskSequenceNumber } from './taskSequenceNumber/abstract/TaskSequenceNumber';
+import { PaymentsService } from './../../resources/payments/payments.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskGenerationService {
@@ -52,6 +53,8 @@ export class TaskGenerationService {
         public personsService: PersonsService,
         @Inject(forwardRef(() => UsersCompanyService))
         public usersCompanyService: UsersCompanyService,
+        @Inject(forwardRef(() => PaymentsService))
+        public paymentsService: PaymentsService,
     ) {
         this._sequenceNumber = new FixedSequenceNumber();
     }

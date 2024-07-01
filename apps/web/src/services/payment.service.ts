@@ -45,3 +45,21 @@ export async function deletePayment(id: number): Promise<IPayment> {
     const response = await api.delete(`/api/payments/${id}`, { headers: authHeader() });
     return response.data;
 }
+
+export async function processPayment(id: number, version: number): Promise<IPayment> {
+    const response = await api.post(
+        `/api/payments/process/${id}`,
+        { version },
+        { headers: authHeader() },
+    );
+    return response.data;
+}
+
+export async function withdrawPayment(id: number, version: number): Promise<IPayment> {
+    const response = await api.post(
+        `/api/payments/withdraw/${id}`,
+        { version },
+        { headers: authHeader() },
+    );
+    return response.data;
+}

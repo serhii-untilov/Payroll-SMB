@@ -15,6 +15,7 @@ import { PaymentsService } from './payments.service';
 import { PaymentPositionsController } from './payment-positions/payment-positions.controller';
 import { PaymentDeductionsController } from './payment-deductions/payment-deductions.controller';
 import { PaymentFundsController } from './payment-funds/payment-funds.controller';
+import { PayrollsModule } from '../payrolls/payrolls.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { PaymentFundsController } from './payment-funds/payment-funds.controller
         forwardRef(() => PositionsModule),
         forwardRef(() => CompaniesModule),
         forwardRef(() => AccessModule),
+        forwardRef(() => PayrollsModule),
     ],
     controllers: [
         PaymentsController,

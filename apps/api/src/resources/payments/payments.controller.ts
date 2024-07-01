@@ -81,4 +81,30 @@ export class PaymentsController {
         await this.service.availableFindAllOrFail(userId, params.companyId);
         return await this.service.findAll(deepStringToShortDate(params));
     }
+
+    @Post('process/:id')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async process(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Body() params: { version: number },
+    ): Promise<Payment> {
+        const userId = req.user['sub'];
+        await this.service.availableUpdateOrFail(userId, id);
+        return this.service.process(userId, id, params.version);
+    }
+
+    @Post('withdraw/:id')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    async withdraw(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Body() params: { version: number },
+    ): Promise<Payment> {
+        const userId = req.user['sub'];
+        await this.service.availableUpdateOrFail(userId, id);
+        return this.service.withdraw(userId, id, params.version);
+    }
 }

@@ -11,10 +11,11 @@ export type Props = OutlinedInputProps & {
     step?: number;
     min?: number;
     max?: number;
+    disabled?: boolean;
 };
 
 export const FormNumberField = (props: Props) => {
-    const { label, step, min, max, name, control, rules, autoFocus, ...other } = props;
+    const { label, step, min, max, name, control, rules, autoFocus, disabled, ...other } = props;
     return (
         <>
             <InputLabel>{label}</InputLabel>
@@ -24,6 +25,7 @@ export const FormNumberField = (props: Props) => {
                 rules={props.rules}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                     <OutlinedInput
+                        disabled={!!disabled}
                         autoFocus={props?.autoFocus}
                         size="small"
                         type="number"

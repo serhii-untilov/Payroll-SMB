@@ -1,10 +1,11 @@
 import { IPayment } from '@repo/shared';
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from './../../../resources/abstract/logger.abstract';
 import { Company } from './../../../resources/companies/entities/company.entity';
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
 
 @Entity()
+@Index('IDX_PAYMENT_COMP_ACC_STATUS', ['companyId', 'accPeriod', 'status'])
 export class Payment extends Logger implements IPayment {
     @PrimaryGeneratedColumn('increment')
     id: number;

@@ -10,11 +10,13 @@ import { ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../../abstract/availableForUserCompany';
 import { AccessService } from '../../access/access.service';
+import { Payment } from '../entities/payment.entity';
+import { PaymentsService } from '../payments.service';
+import { PayrollsService } from './../../payrolls/payrolls.service';
 import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
 import { FindPaymentPositionDto } from './dto/find-paymentPosition.dto';
 import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
-import { PaymentsService } from '../payments.service';
 
 @Injectable()
 export class PaymentPositionsService extends AvailableForUserCompany {
@@ -27,6 +29,8 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         public accessService: AccessService,
         @Inject(forwardRef(() => PaymentsService))
         public paymentsService: PaymentsService,
+        @Inject(forwardRef(() => PayrollsService))
+        public payrollsService: PayrollsService,
     ) {
         super(accessService);
     }
@@ -34,6 +38,10 @@ export class PaymentPositionsService extends AvailableForUserCompany {
     async getCompanyId(entityId: number): Promise<number> {
         const paymentPosition = await this.repository.findOneOrFail({ where: { id: entityId } });
         return (await this.paymentsService.findOne(paymentPosition.paymentId)).companyId;
+    }
+
+    async getPaymentCompanyId(paymentId: number): Promise<number> {
+        return (await this.paymentsService.findOne(paymentId)).companyId;
     }
 
     async create(userId: number, payload: CreatePaymentPositionDto): Promise<PaymentPosition> {
@@ -54,7 +62,12 @@ export class PaymentPositionsService extends AvailableForUserCompany {
             where: { ...other, paymentId },
             relations: {
                 payment: relations,
-                position: relations,
+                position: relations
+                    ? {
+                          person: true,
+                          history: true,
+                      }
+                    : false,
             },
         });
     }
@@ -63,7 +76,10 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         return await this.repository.find({
             relations: {
                 payment: true,
-                position: true,
+                position: {
+                    person: true,
+                    history: true,
+                },
             },
             where: { positionId, payment: { accPeriod } },
         });
@@ -72,7 +88,15 @@ export class PaymentPositionsService extends AvailableForUserCompany {
     async findOne(id: number, relations: boolean = false): Promise<PaymentPosition> {
         const record = await this.repository.findOneOrFail({
             where: { id },
-            relations: { payment: relations, position: relations },
+            relations: {
+                payment: relations,
+                position: relations
+                    ? {
+                          person: true,
+                          history: true,
+                      }
+                    : false,
+            },
         });
         return record;
     }
@@ -121,5 +145,31 @@ export class PaymentPositionsService extends AvailableForUserCompany {
             paySum: totals.paySum || 0,
             funds: totals.funds || 0,
         };
+    }
+
+    async process(userId: number, payment: Payment) {
+        const paymentPositions = await this.findAll({ paymentId: payment.id, relations: true });
+        for (const paymentPosition of paymentPositions) {
+            await this.payrollsService.create(userId, {
+                positionId: paymentPosition.positionId,
+                payPeriod: payment.company.payPeriod,
+                accPeriod: payment.accPeriod,
+                paymentTypeId: payment.paymentTypeId,
+                dateFrom: payment.dateFrom,
+                dateTo: payment.dateTo,
+                sourceType: this.resourceType,
+                sourceId: payment.id,
+                planSum: paymentPosition.baseSum,
+                factSum: paymentPosition.paySum,
+                recordFlags: paymentPosition.recordFlags,
+            });
+        }
+    }
+
+    async withdraw(paymentId: number) {
+        await this.payrollsService.deleteBy({
+            sourceType: this.resourceType,
+            sourceId: paymentId,
+        });
     }
 }

@@ -3,10 +3,12 @@ import {
     ConflictException,
     Inject,
     Injectable,
+    Logger,
     forwardRef,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType, dateUTC } from '@repo/shared';
+import { PaymentStatus, ResourceType, dateUTC } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -14,11 +16,13 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { FindPaymentDto } from './dto/find-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Payment } from './entities/payment.entity';
+import { PaymentUpdatedEvent } from './events/payment-updated.event';
 import { PaymentPositionsService } from './payment-positions/payment-positions.service';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
     public readonly resourceType = ResourceType.PAYMENT;
+    private logger: Logger = new Logger(PaymentsService.name);
 
     constructor(
         @InjectRepository(Payment)
@@ -27,6 +31,7 @@ export class PaymentsService extends AvailableForUserCompany {
         public accessService: AccessService,
         @Inject(forwardRef(() => PaymentPositionsService))
         public paymentPositionsService: PaymentPositionsService,
+        private eventEmitter: EventEmitter2,
     ) {
         super(accessService);
     }
@@ -41,6 +46,7 @@ export class PaymentsService extends AvailableForUserCompany {
             createdUserId: userId,
             updatedUserId: userId,
         });
+        // this.eventEmitter.emit('payment.created', new PaymentCreatedEvent(userId, created));
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
@@ -88,12 +94,16 @@ export class PaymentsService extends AvailableForUserCompany {
             updatedUserId: userId,
             updatedDate: new Date(),
         });
-        return await this.repository.findOneOrFail({ where: { id } });
+        const updated = await this.repository.findOneOrFail({ where: { id } });
+        // this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
+        return updated;
     }
 
     async remove(userId: number, id: number): Promise<Payment> {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+        const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+        // this.eventEmitter.emit('payment.deleted', new PaymentDeletedEvent(userId, deleted));
+        return deleted;
     }
 
     async delete(ids: number[]) {
@@ -136,5 +146,41 @@ export class PaymentsService extends AvailableForUserCompany {
                 updatedDate: new Date(),
             });
         }
+    }
+
+    async process(userId: number, id: number, version: number): Promise<Payment> {
+        const payment = await this.repository.findOneOrFail({
+            where: { id },
+            relations: { company: true, paymentType: true },
+        });
+        if (payment.status === PaymentStatus.PAYED) {
+            return payment;
+        }
+        this.logger.log(
+            `process, id: ${id}, version: ${version}, payment.version: ${payment.version}`,
+        );
+        await this.paymentPositionsService.process(userId, payment);
+        await this.update(userId, payment.id, { status: PaymentStatus.PAYED, version });
+        const updated = await this.repository.findOneOrFail({ where: { id } });
+        this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
+        return updated;
+    }
+
+    async withdraw(userId: number, id: number, version: number): Promise<Payment> {
+        const payment = await this.repository.findOneOrFail({
+            where: { id },
+            relations: { company: true, paymentType: true },
+        });
+        if (payment.status === PaymentStatus.DRAFT) {
+            return payment;
+        }
+        this.logger.log(
+            `withdraw, id: ${id}, version: ${version}, payment.version: ${payment.version}`,
+        );
+        await this.paymentPositionsService.withdraw(id);
+        await this.update(userId, payment.id, { status: PaymentStatus.DRAFT, version });
+        const updated = await this.repository.findOneOrFail({ where: { id } });
+        this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
+        return updated;
     }
 }
