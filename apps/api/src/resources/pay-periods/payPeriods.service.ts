@@ -1,7 +1,14 @@
 import { ConflictException, Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PayPeriodState, ResourceType, formatPeriod, monthBegin, monthEnd } from '@repo/shared';
-import { addMonths, addYears, endOfYear, startOfYear, subYears } from 'date-fns';
+import {
+    PayPeriodState,
+    ResourceType,
+    dateUTC,
+    formatPeriod,
+    monthBegin,
+    monthEnd,
+} from '@repo/shared';
+import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -157,6 +164,81 @@ export class PayPeriodsService extends AvailableForUserCompany {
             .andWhere('"state" = :state', { state: PayPeriodState.CLOSED })
             .getRawOne();
         return Number(count);
+    }
+
+    async close(userId: number, currentPayPeriodId: number, version: number): Promise<PayPeriod> {
+        const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
+        if (version !== current.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try again after reloading.',
+            );
+        }
+        const company = await this.companiesService.findOne(userId, current.companyId);
+        if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
+            throw new ConflictException(
+                `The record doesn't current period. Try again after reloading.`,
+            );
+        }
+        const nextDateFrom = dateUTC(add(current.dateTo, { days: 1 }));
+        const next = await this.repository.findOneOrFail({
+            where: { companyId: current.companyId, dateFrom: nextDateFrom },
+        });
+        if (current.state !== PayPeriodState.CLOSED) {
+            await this.repository.save({
+                id: currentPayPeriodId,
+                state: PayPeriodState.CLOSED,
+                updatedUserId: userId,
+                updatedDate: new Date(),
+            });
+        }
+        if (next.state !== PayPeriodState.OPENED) {
+            await this.repository.save({
+                id: next.id,
+                state: PayPeriodState.OPENED,
+                updatedUserId: userId,
+                updatedDate: new Date(),
+            });
+        }
+        await this.companiesService.update(userId, company.id, {
+            payPeriod: next.dateFrom,
+            version: company.version,
+        });
+        return await this.repository.findOneOrFail({ where: { id: next.id } });
+    }
+
+    async open(userId: number, currentPayPeriodId: number, version: number): Promise<PayPeriod> {
+        const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
+        if (version !== current.version) {
+            throw new ConflictException(
+                'The record has been updated by another user. Try to edit it after reloading.',
+            );
+        }
+        if (current.state !== PayPeriodState.OPENED) {
+            throw new ConflictException('The given period is not opened.');
+        }
+        const company = await this.companiesService.findOne(userId, current.companyId);
+        if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
+            throw new ConflictException(
+                `The record doesn't current period. Try again after reloading.`,
+            );
+        }
+        const priorDateTo = dateUTC(sub(current.dateFrom, { days: 1 }));
+        const prior = await this.repository.findOneOrFail({
+            where: { companyId: current.companyId, dateTo: priorDateTo },
+        });
+        if (prior.state !== PayPeriodState.OPENED) {
+            await this.repository.save({
+                id: prior.id,
+                state: PayPeriodState.OPENED,
+                updatedUserId: userId,
+                updatedDate: new Date(),
+            });
+        }
+        await this.companiesService.update(userId, company.id, {
+            payPeriod: prior.dateFrom,
+            version: company.version,
+        });
+        return await this.repository.findOneOrFail({ where: { id: prior.id } });
     }
 }
 
