@@ -13,11 +13,11 @@ export enum PaymentSchedule {
 export interface ICompany extends ILogger {
     id: number;
     name: string;
-    dateFrom?: Date | null;
-    dateTo?: Date | null;
+    dateFrom: Date;
+    dateTo: Date;
     law?: ILaw;
     lawId: number;
-    taxId?: string;
+    taxId: string;
     accounting?: IAccounting;
     accountingId: number;
     paymentSchedule: string; // See PaymentSchedule

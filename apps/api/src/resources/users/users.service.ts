@@ -80,7 +80,7 @@ export class UsersService {
     }
 
     async findOne(params: FindOneOptions<User>): Promise<User> {
-        return await this.repository.findOne(params);
+        return await this.repository.findOneOrFail(params);
     }
 
     async findOneOrFail(params: FindOneOptions<User>): Promise<User> {
@@ -143,11 +143,14 @@ export class UsersService {
     }
 
     async getUserRoleType(id: number): Promise<string> {
-        const user = await this.repository.findOne({
+        const user = await this.repository.findOneOrFail({
             where: { id },
             relations: { role: true },
         });
-        return user?.role?.type;
+        if (!user?.role?.type) {
+            throw new NotFoundException('User role type not found.');
+        }
+        return user.role.type;
     }
 
     async getUserRoleTypeOrFail(id: number): Promise<string> {
@@ -159,7 +162,7 @@ export class UsersService {
     }
 
     async getSystemUserId(): Promise<number> {
-        const user = await this.repository.findOne({
+        const user = await this.repository.findOneOrFail({
             select: { id: true },
             relations: { role: true },
             where: { role: { type: RoleType.SYSTEM } },

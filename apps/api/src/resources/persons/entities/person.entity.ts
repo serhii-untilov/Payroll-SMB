@@ -23,27 +23,27 @@ export class Person extends Logger implements IPerson {
     lastName: string;
 
     @Column({ type: 'varchar', length: 30, default: '' })
-    middleName?: string;
+    middleName: string;
 
-    fullName?: string;
+    fullName: string;
 
     @Column({ type: 'date', nullable: true })
-    birthday?: Date;
+    birthday: Date | null;
 
     @Column({ type: 'varchar', length: 15, default: '' })
-    taxId?: string;
+    taxId: string;
 
     @Column({ type: 'varchar', length: 10, default: '' })
-    sex?: string;
+    sex: string;
 
     @Column({ type: 'varchar', length: 20, default: '' })
-    phone?: string;
+    phone: string;
 
     @Column({ type: 'varchar', length: 50, default: '' })
-    email?: string;
+    email: string;
 
     @Column({ type: 'varchar', length: 260, default: '' })
-    photo?: string;
+    photo: string;
 
     @OneToMany(() => Position, (position) => position.person)
     positions?: Position[];

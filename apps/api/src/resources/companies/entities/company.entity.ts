@@ -25,7 +25,7 @@ export class Company extends Logger implements ICompany {
     name: string;
 
     @Column({ type: 'varchar', length: 15, default: '' })
-    taxId?: string;
+    taxId: string;
 
     @ManyToOne(() => Law, {
         createForeignKeyConstraints: false,
@@ -47,10 +47,10 @@ export class Company extends Logger implements ICompany {
     paymentSchedule: string;
 
     @Column({ type: 'date', default: '1900-01-01' })
-    dateFrom?: Date | null;
+    dateFrom: Date;
 
     @Column({ type: 'date', default: '9999-12-31' })
-    dateTo?: Date | null;
+    dateTo: Date;
 
     @Column({ type: 'date' })
     payPeriod: Date;
@@ -86,6 +86,6 @@ export class Company extends Logger implements ICompany {
 }
 
 function normalize(record: ICompany) {
-    record.payPeriod = monthBegin(record?.payPeriod || new Date());
-    record.checkDate = monthEnd(record?.payPeriod || new Date());
+    record.payPeriod = monthBegin(record.payPeriod || new Date());
+    record.checkDate = monthEnd(record.payPeriod || new Date());
 }

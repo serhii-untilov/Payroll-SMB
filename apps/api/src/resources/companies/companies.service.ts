@@ -120,7 +120,7 @@ export class CompaniesService {
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean = false): Promise<Company | null> {
+    async findOne(userId: number, id: number, relations: boolean = false): Promise<Company> {
         const company = await this.repository.findOneOrFail({
             relations: {
                 law: !!relations,
@@ -167,7 +167,10 @@ export class CompaniesService {
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (record.createdUserId === userId) {
             await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-            const deleted = await this.repository.findOne({ where: { id }, withDeleted: true });
+            const deleted = await this.repository.findOneOrFail({
+                where: { id },
+                withDeleted: true,
+            });
             this.eventEmitter.emit('company.deleted', new CompanyDeletedEvent(userId, deleted));
             return deleted;
         }

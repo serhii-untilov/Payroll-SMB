@@ -34,7 +34,8 @@ export class AccessService {
     ) {}
 
     async create(userId: number, data: CreateAccessDto): Promise<Access> {
-        if (this.exists(data)) {
+        const exists = await this.exists(data);
+        if (exists) {
             throw new BadRequestException(`Access record already exists.`);
         }
         await this.availableForUserOrFail(userId, this.resourceType, AccessType.CREATE);
@@ -53,7 +54,7 @@ export class AccessService {
     }
 
     async findOne(id: number) {
-        return await this.repository.findOne({ where: { id } });
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async update(userId: number, id: number, data: UpdateAccessDto): Promise<Access> {
@@ -80,7 +81,7 @@ export class AccessService {
         });
     }
 
-    async exists(params: AvailableAccessDto) {
+    async exists(params: AvailableAccessDto): Promise<boolean> {
         return await this.repository.exists({
             where: params,
         });

@@ -1,8 +1,17 @@
 import { IPayment } from '@repo/shared';
-import { AfterLoad, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    Index,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Logger } from './../../../resources/abstract/logger.abstract';
 import { Company } from './../../../resources/companies/entities/company.entity';
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
+import { PaymentPosition } from '../payment-positions/entities/paymentPosition.entity';
 
 @Entity()
 @Index('IDX_PAYMENT_COMP_ACC_STATUS', ['companyId', 'accPeriod', 'status'])
@@ -30,19 +39,22 @@ export class Payment extends Logger implements IPayment {
     @Column({ type: 'date' })
     dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    baseSum?: number;
+    baseSum: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    deductions?: number;
+    deductions: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     paySum: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    funds?: number;
+    funds: number;
     @Column({ type: 'varchar', length: 10 })
     status: string; // See enum PaymentStatus
     @Column({ type: 'bigint', default: 0 })
     recordFlags: number; // See enum RecordFlags
     @Column({ type: 'varchar', length: 256, default: '' })
-    description?: string;
+    description: string;
+
+    @OneToMany(() => PaymentPosition, (paymentPosition) => paymentPosition.payment)
+    paymentPositions?: PaymentPosition[];
 
     @AfterLoad()
     transform() {

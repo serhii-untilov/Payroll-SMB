@@ -8,7 +8,7 @@ import { Payment } from '../../entities/payment.entity';
 export class PaymentPosition extends Logger implements IPaymentPosition {
     @PrimaryGeneratedColumn('increment')
     id: number;
-    @ManyToOne(() => Payment, { createForeignKeyConstraints: false })
+    @ManyToOne(() => Payment, (payment) => payment.paymentPositions)
     payment?: Payment;
     @Column({ type: 'integer' })
     paymentId: number;
@@ -17,13 +17,13 @@ export class PaymentPosition extends Logger implements IPaymentPosition {
     @Column({ type: 'integer' })
     positionId: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    baseSum?: number;
+    baseSum: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    deductions?: number;
+    deductions: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     paySum: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    funds?: number;
+    funds: number;
     @Column({ type: 'bigint', default: 0 })
     recordFlags: number; // See enum RecordFlags
 

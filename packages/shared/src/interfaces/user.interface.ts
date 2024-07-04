@@ -7,7 +7,7 @@ export interface IUser extends ILogger {
     lastName: string;
     email: string;
     password: string;
-    refreshToken: string;
+    refreshToken: string | null;
     isActive: boolean;
     language: string | null;
     role?: IRole;

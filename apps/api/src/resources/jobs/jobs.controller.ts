@@ -17,6 +17,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { JobsService } from './jobs.service';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('jobs')
 export class JobsController {
@@ -26,7 +27,7 @@ export class JobsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateJobDto) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.create(userId, payload);
     }
 
@@ -52,7 +53,7 @@ export class JobsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateJobDto,
     ) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.update(userId, id, payload);
     }
 
@@ -60,7 +61,7 @@ export class JobsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.remove(userId, id);
     }
 }

@@ -21,13 +21,13 @@ export class User extends Logger implements IUser {
     password: string;
 
     @Column({ type: 'varchar', nullable: true })
-    refreshToken: string;
+    refreshToken: string | null;
 
     @Column({ type: 'boolean', default: true })
     isActive: boolean;
 
     @Column({ type: 'varchar', length: '5', nullable: true })
-    language: string;
+    language: string | null;
 
     @ManyToOne(() => Role, { createForeignKeyConstraints: false })
     role?: IRole;

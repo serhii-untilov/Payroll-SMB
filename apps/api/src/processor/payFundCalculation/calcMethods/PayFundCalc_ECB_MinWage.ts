@@ -40,7 +40,7 @@ export class PayFundCalc_ECB_MinWage extends PayFundCalc {
         });
     }
 
-    getMinWage(): MinWage {
+    getMinWage(): MinWage | undefined {
         return this.ctx.minWages.find(
             (o) =>
                 o.dateFrom.getTime() <= this.accPeriod.dateFrom.getTime() &&

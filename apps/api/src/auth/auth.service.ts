@@ -129,8 +129,8 @@ export class AuthService {
         );
         if (process.env['DEMO_AVAILABLE'] === 'true') {
             return {
-                email: process.env['DEMO_LOGIN'],
-                password: process.env['DEMO_PASSWORD'],
+                email: process.env['DEMO_LOGIN'] || '',
+                password: process.env['DEMO_PASSWORD'] || '',
                 rememberMe: true,
             };
         }

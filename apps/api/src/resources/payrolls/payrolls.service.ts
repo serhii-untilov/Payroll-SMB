@@ -61,26 +61,25 @@ export class PayrollsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(userId: number, params: FindPayrollDto): Promise<Payroll[]> {
-        const { positionId, companyId, relations, ...other } = params;
+    async findAll(params: FindPayrollDto): Promise<Payroll[]> {
+        const { positionId, companyId, payPeriod, relations } = params;
         if (!positionId && !companyId) {
             throw new BadRequestException('Should be defined companyId or positionId');
         }
         return await this.repository.find({
-            where: {
-                ...other,
-                ...(positionId ? { positionId } : {}),
-                ...(companyId ? { companyId } : {}),
-            },
             relations: {
-                position: !!relations,
+                position: !!relations || !!companyId,
                 paymentType: !!relations,
+            },
+            where: {
+                ...(positionId ? { positionId } : {}),
+                ...(payPeriod ? { payPeriod } : {}),
+                ...(companyId ? { position: { companyId } } : {}),
             },
         });
     }
 
     async findBetween(
-        userId: number,
         positionId: number,
         dateFrom: Date,
         dateTo: Date,
@@ -98,7 +97,7 @@ export class PayrollsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean): Promise<Payroll> {
+    async findOne(id: number, relations: boolean): Promise<Payroll> {
         const payroll = await this.repository.findOneOrFail({
             where: { id },
             relations: { position: relations, paymentType: relations },
@@ -127,7 +126,7 @@ export class PayrollsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
-    async delete(userId: number, id: number) {
+    async delete(id: number) {
         await this.repository.delete(id);
     }
 

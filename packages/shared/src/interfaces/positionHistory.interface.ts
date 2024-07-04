@@ -35,15 +35,15 @@ export interface IPositionHistory extends ILogger {
     dateFrom: Date;
     dateTo: Date;
     department?: IDepartment;
-    departmentId?: number | null;
+    departmentId: number | null;
     job?: IJob;
-    jobId: number | null | undefined;
+    jobId: number | null;
     workNorm?: IWorkNorm;
-    workNormId: number | null | undefined;
+    workNormId: number | null;
     paymentType?: IPaymentType;
-    paymentTypeId: number | null | undefined;
-    wage: number | null | undefined;
-    rate: number | null | undefined;
+    paymentTypeId: number | null;
+    wage: number;
+    rate: number;
 }
 
 export type ICreatePositionHistory = Partial<
@@ -73,16 +73,9 @@ export type IUpdatePositionHistory = Partial<
     >
 >;
 
-export interface IFindPositionHistory extends Partial<IPositionHistory> {
+export type IFindPositionHistory = {
+    positionId: number;
     onDate?: Date;
     onPayPeriodDate?: Date;
     relations?: boolean;
-}
-
-export function castAsPositionHistory(obj: any): IPositionHistory {
-    const ret = { ...obj };
-    delete ret.relations;
-    delete ret.onDate;
-    delete ret.onPayPeriodDate;
-    return ret;
-}
+};

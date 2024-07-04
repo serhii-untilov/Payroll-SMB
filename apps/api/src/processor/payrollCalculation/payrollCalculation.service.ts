@@ -105,7 +105,7 @@ export class PayrollCalculationService {
         this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
-        const positions = await this.positionsService.findAll(userId, {
+        const positions = await this.positionsService.findAll({
             companyId,
             onPayPeriodDate: this.company.payPeriod,
             employeesOnly: true,
@@ -299,7 +299,6 @@ export class PayrollCalculationService {
             dateTo,
         );
         this._payrolls = await this.payrollsService.findBetween(
-            this.userId,
             this.position.id,
             dateFrom,
             dateTo,
@@ -344,17 +343,16 @@ export class PayrollCalculationService {
     private async save() {
         for (let i = 0; i < this._toDeleteIds.length; ++i) {
             this.logger.log(`PositionId: ${this.position.id}, Delete: ${this._toDeleteIds[i]}`);
-            await this.payrollsService.delete(this.userId, this._toDeleteIds[i]);
+            await this.payrollsService.delete(this._toDeleteIds[i]);
         }
         const map = {};
         this._toInsert.sort((a, b) => (a.parentId || 0) - (b.parentId || 0));
-        for (const record of this._toInsert) {
-            const id = record.id;
-            delete record.id;
-            const parentId = record.parentId
-                ? map[record.parentId.toString()] || record.parentId
-                : record.parentId;
-            const created = await this.payrollsService.create(this.userId, { ...record, parentId });
+        for (const { id, parentId, ...record } of this._toInsert) {
+            const newParentId: number = parentId ? map[parentId.toString()] || parentId : parentId;
+            const created = await this.payrollsService.create(this.userId, {
+                ...record,
+                ...(newParentId ? { parentId: newParentId } : {}),
+            });
             this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
 
             map[id.toString()] = created.id;

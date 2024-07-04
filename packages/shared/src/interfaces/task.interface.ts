@@ -34,7 +34,7 @@ export interface ITask extends ILogger {
     dateTo: Date;
     sequenceNumber: number;
     status: string; // See enum TaskStatus
-    entityId?: number;
+    entityId: number | null;
 }
 
 export type ICreateTask = Omit<

@@ -5,7 +5,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { User } from '../resources/users/entities/user.entity';
 import { langPipe } from '../utils/langPipe';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const entity = User;
 const recordList = [
     {
@@ -49,10 +49,9 @@ export class Seed1809901090804 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         for (let n = 0; n < recordList.length; n++) {
-            const values = langPipe(lang, recordList[n]);
+            const { roleType: _, ...values } = langPipe(lang, recordList[n]);
             const hashedPassword = values.password ? bcrypt.hashSync(values.password, 10) : '';
             const roleId = await getRoleIdByType(dataSource, values.roleType);
-            delete values.roleType;
             values['roleId'] = roleId;
             await dataSource
                 .createQueryBuilder()

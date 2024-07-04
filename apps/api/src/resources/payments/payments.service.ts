@@ -51,19 +51,22 @@ export class PaymentsService extends AvailableForUserCompany {
     }
 
     async findAll(params: FindPaymentDto): Promise<Payment[]> {
-        const { companyId, payPeriod, relations, ...other } = params;
+        const { companyId, positionId, payPeriod, accPeriod, status, relations } = params;
         if (!companyId) {
             throw new BadRequestException('Should be defined companyId');
         }
         return await this.repository.find({
-            where: {
-                ...other,
-                ...(payPeriod ? { payPeriod } : {}),
-                companyId,
-            },
             relations: {
                 company: relations,
                 paymentType: relations,
+            },
+            where: {
+                companyId,
+                // TODO: check result for the positionId parameter
+                ...(positionId ? { paymentPositions: { positionId } } : {}),
+                ...(payPeriod ? { payPeriod } : {}),
+                ...(accPeriod ? { accPeriod } : {}),
+                ...(status ? { status } : {}),
             },
         });
     }

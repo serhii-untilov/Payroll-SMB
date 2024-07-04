@@ -8,10 +8,10 @@ export interface IPaymentPosition extends ILogger {
     paymentId: number;
     position?: IPosition;
     positionId: number;
-    baseSum?: number;
-    deductions?: number;
+    baseSum: number;
+    deductions: number;
     paySum: number;
-    funds?: number;
+    funds: number;
     recordFlags: number; // See enum RecordFlags
 }
 
@@ -40,6 +40,7 @@ export type IUpdatePaymentPosition = Partial<
     >
 >;
 
-export type IFindPaymentPosition = Partial<IPaymentPosition> & {
+export type IFindPaymentPosition = {
+    paymentId: number;
     relations?: boolean;
 };

@@ -3,7 +3,7 @@ import { ICreatePosition } from '@repo/shared';
 
 export class CreatePositionDto implements ICreatePosition {
     @ApiProperty() companyId: number;
-    @ApiProperty() cardNumber?: string; // Identity number (Табельний номер)
+    @ApiProperty() cardNumber: string; // Identity number (Табельний номер)
     @ApiProperty() sequenceNumber?: number; // Sequence in payroll reports to place managers on top
     @ApiProperty() description?: string;
     @ApiProperty() personId?: number | null; // Vacancy if not defined

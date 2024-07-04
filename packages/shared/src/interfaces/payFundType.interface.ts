@@ -35,7 +35,7 @@ export interface IPayFundType extends ILogger {
     group: string; // See enum PayFundGroup
     calcMethod: string; // See enum PayFundCalcMethod
     sequence: number;
-    description?: string;
+    description: string;
 }
 
 export type ICreatePayFundType = Omit<

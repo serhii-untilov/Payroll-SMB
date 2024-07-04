@@ -7,17 +7,17 @@ import {
 } from '@repo/shared';
 
 export type BalanceWorkingTime = {
-    planDays?: number;
-    planHours?: number;
-    factDays?: number;
-    factHours?: number;
+    planDays: number;
+    planHours: number;
+    factDays: number;
+    factHours: number;
 };
 
 export interface IPositionBalance
     extends IPaymentPartsTotal,
         IPaymentGroupsTotal,
         BalanceWorkingTime {
-    id?: number | undefined | null;
+    id: number;
     position?: IPosition;
     positionId: number;
     payPeriod: Date;

@@ -13,34 +13,40 @@ export interface IPayment extends ILogger {
     id: number;
     company?: ICompany;
     companyId: number;
-    payPeriod?: Date;
-    accPeriod?: Date;
-    docNumber?: string;
-    docDate?: Date;
+    payPeriod: Date;
+    accPeriod: Date;
+    docNumber: string;
+    docDate: Date;
     paymentType?: IPaymentType;
     paymentTypeId: number;
-    dateFrom?: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
-    dateTo?: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
+    dateFrom: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
+    dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
+    baseSum: number;
+    deductions: number;
+    paySum: number;
+    funds: number;
+    status: string; // See enum PaymentStatus
+    recordFlags: number; // See enum RecordFlags
+    description: string;
+}
+
+export type ICreatePayment = {
+    companyId: number;
+    payPeriod: Date;
+    accPeriod: Date;
+    docNumber: string;
+    docDate: Date;
+    paymentTypeId: number;
+    dateFrom: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
+    dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
     baseSum?: number;
     deductions?: number;
     paySum?: number;
     funds?: number;
-    status?: string; // See enum PaymentStatus
-    recordFlags?: number; // See enum RecordFlags
+    status: string; // See enum PaymentStatus
+    recordFlags: number; // See enum RecordFlags
     description?: string;
-}
-
-export type ICreatePayment = Omit<
-    IPayment,
-    | 'id'
-    | 'createdDate'
-    | 'createdUserId'
-    | 'updatedDate'
-    | 'updatedUserId'
-    | 'deletedDate'
-    | 'deletedUserId'
-    | 'version'
->;
+};
 
 export type IUpdatePayment = Partial<
     Omit<
@@ -55,6 +61,12 @@ export type IUpdatePayment = Partial<
     >
 >;
 
-export type IFindPayment = Partial<IPayment> & {
+export type IFindPayment = {
+    companyId: number;
+    positionId?: number;
+    payPeriod?: Date;
+    accPeriod?: Date;
+    paymentTypeId?: number;
+    status?: string;
     relations?: boolean;
 };

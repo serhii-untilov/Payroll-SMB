@@ -19,7 +19,9 @@ export interface IPayFund {
 export type ICreatePayFund = Omit<IPayFund, 'id'>;
 export type IUpdatePayFund = Partial<Omit<IPayFund, 'id'>>;
 
-export type IFindPayFund = Partial<IPayFund> & {
+export type IFindPayFund = {
     companyId?: number;
+    positionId?: number;
+    payPeriod?: Date;
     relations?: boolean;
 };

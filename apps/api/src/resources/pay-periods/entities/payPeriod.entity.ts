@@ -41,49 +41,49 @@ export class PayPeriod extends Logger implements IPayPeriod {
     state: string;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    inBalance?: number;
+    inBalance: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    inCompanyDebt?: number;
+    inCompanyDebt: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    inEmployeeDebt?: number;
+    inEmployeeDebt: number;
 
     // See enum PaymentParts
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    accruals?: number;
+    accruals: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    deductions?: number;
+    deductions: number;
 
     // See enum PaymentGroups
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    basic?: number;
+    basic: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    adjustments?: number;
+    adjustments: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    bonuses?: number;
+    bonuses: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    vacations?: number;
+    vacations: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    sicks?: number;
+    sicks: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    refunds?: number;
+    refunds: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    other_accruals?: number;
+    other_accruals: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    taxes?: number;
+    taxes: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    payments?: number;
+    payments: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    other_deductions?: number;
+    other_deductions: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    outBalance?: number;
+    outBalance: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    outCompanyDebt?: number;
+    outCompanyDebt: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    outEmployeeDebt?: number;
+    outEmployeeDebt: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    funds?: number;
+    funds: number;
 
     @OneToMany(() => PayPeriodCalcMethod, (payPeriodCalcMethod) => payPeriodCalcMethod.payPeriod)
     calcMethods?: PayPeriodCalcMethod[];

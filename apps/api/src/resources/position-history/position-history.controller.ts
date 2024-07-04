@@ -21,6 +21,7 @@ import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindPositionHistoryDto } from './dto/find-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistoryService } from './position-history.service';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('position-history')
 export class PositionHistoryController {
@@ -33,7 +34,7 @@ export class PositionHistoryController {
         @Req() req: Request,
         @Body() payload: CreatePositionHistoryDto,
     ): Promise<IPositionHistory> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(payload.positionId);
         await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepStringToShortDate(payload));
@@ -47,10 +48,10 @@ export class PositionHistoryController {
         @Query('positionId', ParseIntPipe) positionId: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPositionHistory[]> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(positionId);
         await this.service.availableCreateOrFail(userId, companyId);
-        return await this.service.findAll(userId, positionId, !!relations);
+        return await this.service.findAll(positionId, !!relations);
     }
 
     @Get(':id')
@@ -61,7 +62,7 @@ export class PositionHistoryController {
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPositionHistory> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const found = await this.service.findOne(id, !!relations);
         const companyId = await this.service.getPositionCompanyId(found.positionId);
         await this.service.availableFindOneOrFail(userId, companyId);
@@ -76,7 +77,7 @@ export class PositionHistoryController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdatePositionHistoryDto,
     ): Promise<IPositionHistory> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
@@ -88,7 +89,7 @@ export class PositionHistoryController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
     ): Promise<IPositionHistory> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
@@ -100,10 +101,10 @@ export class PositionHistoryController {
         @Req() req: Request,
         @Body() params: FindPositionHistoryDto,
     ): Promise<IPositionHistory | null> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(params.positionId);
         await this.service.availableFindAllOrFail(userId, companyId);
-        const positionList = await this.service.find(userId, deepStringToShortDate(params));
+        const positionList = await this.service.find(deepStringToShortDate(params));
         // Will return the last positionHistory record or null
         positionList.sort((a, b) =>
             a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0,

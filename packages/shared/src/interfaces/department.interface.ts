@@ -6,8 +6,8 @@ export interface IDepartment extends ILogger {
     name: string;
     company?: ICompany;
     companyId: number;
-    dateFrom?: Date | null;
-    dateTo?: Date | null;
+    dateFrom: Date;
+    dateTo: Date;
     parentDepartment?: IDepartment | null;
     parentDepartmentId?: number | null;
     childDepartments?: IDepartment[];

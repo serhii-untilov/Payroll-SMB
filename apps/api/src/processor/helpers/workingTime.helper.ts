@@ -13,15 +13,18 @@ import {
 import { add, sub } from 'date-fns';
 import { WorkNorm } from '../../resources/work-norms/entities/work-norm.entity';
 import { PayrollCalculationService } from '../payrollCalculation/payrollCalculation.service';
+import { PositionHistory } from './../../resources/position-history/entities/position-history.entity';
 
 export function getWorkingTimePlan(
     ctx: PayrollCalculationService,
-    workNormId: number,
+    workNormId: number | null,
     onDate: Date,
 ): WorkingTime {
-    const workNorm = ctx.workNorms.find((o) => o.id === workNormId);
-    if (workNorm?.type === WorkNormType.WEEKLY) {
-        return getPlanForWeekly(workNorm, onDate);
+    if (workNormId) {
+        const workNorm = ctx.workNorms.find((o) => o.id === workNormId);
+        if (workNorm?.type === WorkNormType.WEEKLY) {
+            return getPlanForWeekly(workNorm, onDate);
+        }
     }
     return { days: 0, hours: 0, mask: 0, hoursByDay: {} };
 }
@@ -49,11 +52,12 @@ export function getWorkingTimeFact(plan: WorkingTime, dateFrom: Date, dateTo: Da
 export function calcBalanceWorkingTime(ctx: PayrollCalculationService): BalanceWorkingTime {
     let plan = new WorkingTime();
     let fact = new WorkingTime();
-    const assignments = ctx.position.history.filter(
-        (o) =>
-            o.dateFrom.getTime() <= ctx.payPeriod.dateTo.getTime() &&
-            o.dateTo.getTime() >= ctx.payPeriod.dateFrom.getTime(),
-    );
+    const assignments: PositionHistory[] =
+        ctx.position?.history?.filter(
+            (o) =>
+                o.dateFrom.getTime() <= ctx.payPeriod.dateTo.getTime() &&
+                o.dateTo.getTime() >= ctx.payPeriod.dateFrom.getTime(),
+        ) || [];
     for (const assignment of assignments) {
         const dateFrom = getMaxDate(
             assignment.dateFrom,
@@ -111,7 +115,7 @@ function getPlanForWeekly(workNorm: WorkNorm, onDate: Date): WorkingTime {
     const hoursByDay: HoursByDay = {};
     for (let day = dateFrom.getDate(); day <= dateTo.getDate(); day++) {
         const dayOfWeek = add(dateFrom, { days: day - 1 }).getDay();
-        const dayHours = workNorm.periods.find((o) => o.day === dayOfWeek)?.hours || 0;
+        const dayHours = workNorm?.periods?.find((o) => o.day === dayOfWeek)?.hours || 0;
         if (dayHours) {
             days++;
             hours = hours + dayHours;

@@ -15,10 +15,10 @@ export class WorkNorm extends Logger implements IWorkNorm {
     type: string;
 
     @Column({ type: 'date', default: '1900-01-01' })
-    dateFrom?: Date;
+    dateFrom: Date;
 
     @Column({ type: 'date', default: '9999-12-31' })
-    dateTo?: Date;
+    dateTo: Date;
 
     @OneToMany(() => WorkNormPeriod, (workNormPeriod) => workNormPeriod.workNorm, {
         cascade: true,

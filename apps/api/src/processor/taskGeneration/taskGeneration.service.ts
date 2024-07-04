@@ -92,7 +92,7 @@ export class TaskGenerationService {
         this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
-        this._priorTaskList = await this.tasksService.findAll(userId, {
+        this._priorTaskList = await this.tasksService.findAll({
             companyId,
             onPayPeriodDate: this.payPeriod.dateFrom,
             relations: false,
@@ -130,8 +130,8 @@ export class TaskGenerationService {
     }
 
     private _merge(): { toInsert: Task[]; toDelete: number[] } {
-        const toDelete = [];
-        const processed = [];
+        const toDelete: number[] = [];
+        const processed: number[] = [];
         for (const task of this.priorTaskList) {
             const found = this.currentTaskList.find(
                 (o) =>
@@ -158,8 +158,7 @@ export class TaskGenerationService {
         for (const id of toDelete) {
             this.tasksService.delete(id);
         }
-        for (const task of toInsert) {
-            delete task.id;
+        for (const { id: _, ...task } of toInsert) {
             this.tasksService.create(this.userId, task);
         }
     }

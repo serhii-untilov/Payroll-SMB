@@ -20,6 +20,7 @@ import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNormsService } from './work-norms.service';
 import { deepStringToShortDate } from '@repo/shared';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('work-norms')
 export class WorkNormsController {
@@ -29,7 +30,7 @@ export class WorkNormsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateWorkNormDto) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
@@ -58,7 +59,7 @@ export class WorkNormsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateWorkNormDto,
     ) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
@@ -66,7 +67,7 @@ export class WorkNormsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.remove(userId, id);
     }
 }

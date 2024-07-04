@@ -96,7 +96,10 @@ export class PersonsService extends AvailableForUser {
         return await this.repository.findOne({ where: params });
     }
 
-    async findByBirthdayInMonth(companyId: number, date: Date): Promise<Person[]> {
+    async findByBirthdayInMonth(
+        companyId: number,
+        date: Date,
+    ): Promise<{ id: number; birthday: Date }[]> {
         const dateFrom = monthBegin(date);
         const dateTo = monthEnd(date);
         const personList = await this.repository.query(
@@ -119,7 +122,9 @@ export class PersonsService extends AvailableForUser {
             )`,
             [formatDate(dateFrom), formatDate(dateTo), companyId],
         );
-        personList.forEach((o) => (o.birthday = new Date(o.birthday)));
-        return personList;
+        // personList.forEach((o) => (o.birthday = new Date(o.birthday)));
+        return personList.map((o) => {
+            return { id: o.id, birthday: new Date(o.birthday) };
+        });
     }
 }

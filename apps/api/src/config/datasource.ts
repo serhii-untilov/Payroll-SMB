@@ -1,6 +1,6 @@
 // This file used for typeorm migrations only
-import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
 dotenv.config();
 
@@ -8,7 +8,7 @@ export const dbConfig = {
     type: process.env['DATABASE_TYPE'],
     language: process.env['LANGUAGE'],
     host: process.env['DATABASE_HOST'],
-    port: +process.env['DATABASE_PORT'],
+    port: Number(process.env['DATABASE_PORT']) || 3000,
     password: process.env['DATABASE_PASSWORD'],
     name: process.env['DATABASE_NAME'],
     path: process.env['DATABASE_PATH'],
@@ -24,14 +24,4 @@ export const dbConfig = {
     // subscribers: ['./src/subscribers/*subscriber.ts', './src/resources/**/*subscriber.ts'],
 };
 
-export const AppDataSource = new DataSource({
-    ...dbConfig,
-    type:
-        dbConfig.type === 'postgres'
-            ? 'postgres'
-            : dbConfig.type === 'mssql'
-              ? 'mssql'
-              : dbConfig.type === 'mysql'
-                ? 'mysql'
-                : 'sqlite',
-});
+export const AppDataSource = new DataSource({ type: dbConfig.type } as DataSourceOptions);

@@ -22,6 +22,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { TasksService } from './tasks.service';
 import { FindTaskDto } from './dto/find-task.dto';
 import { Task } from './entities/task.entity';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('tasks')
 export class TasksController {
@@ -31,7 +32,7 @@ export class TasksController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateTaskDto): Promise<Task> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.tasksService.availableCreateOrFail(userId, payload.companyId);
         return await this.tasksService.create(userId, deepStringToShortDate(payload));
     }
@@ -40,10 +41,10 @@ export class TasksController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() payload: FindTaskDto): Promise<Task[]> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         payload.companyId &&
             (await this.tasksService.availableFindAllOrFail(userId, payload.companyId));
-        return await this.tasksService.findAll(userId, deepStringToShortDate(payload));
+        return await this.tasksService.findAll(deepStringToShortDate(payload));
     }
 
     @Get(':id')
@@ -54,8 +55,8 @@ export class TasksController {
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<Task> {
-        const userId = req.user['sub'];
-        const found = await this.tasksService.findOne(userId, id, !!relations);
+        const userId = getUserId(req);
+        const found = await this.tasksService.findOne(id, !!relations);
         await this.tasksService.availableFindAllOrFail(userId, found.companyId);
         return found;
     }
@@ -68,7 +69,7 @@ export class TasksController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateTaskDto,
     ): Promise<Task> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.tasksService.availableUpdateOrFail(userId, id);
         return await this.tasksService.update(userId, id, deepStringToShortDate(payload));
     }
@@ -77,7 +78,7 @@ export class TasksController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Task> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.tasksService.availableDeleteOrFail(userId, id);
         return await this.tasksService.remove(userId, id);
     }

@@ -12,37 +12,52 @@ export interface IPayroll extends ILogger {
     paymentTypeId: number;
     dateFrom: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
     dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
-    sourceType?: string; // See enum ResourceType
-    sourceId?: number; // Depends on sourceType
-    dateBegin?: Date; // Start date of Vacation, Sick, etc.
-    dateEnd?: Date; // Finish date of Vacation, Sick, etc.
+    sourceType: string | null; // See enum ResourceType
+    sourceId: number | null; // Depends on sourceType
+    dateBegin: Date | null; // Start date of Vacation, Sick, etc.
+    dateEnd: Date | null; // Finish date of Vacation, Sick, etc.
+    planDays: number;
+    planHours: number;
+    planSum: number;
+    rate: number;
+    factDays: number;
+    factHours: number;
+    factSum: number;
+    mask1: number;
+    mask2: number;
+    recordFlags: number;
+    fixedFlags: number;
+    planHoursByDay: HoursByDay | null;
+    factHoursByDay: HoursByDay | null;
+    parentId: number | null; // Link to fully or partially cancelled record, etc.
+}
+
+export type ICreatePayroll = {
+    positionId: number;
+    payPeriod: Date;
+    accPeriod: Date;
+    paymentTypeId: number;
+    dateFrom: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
+    dateTo: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
+    sourceType?: string | null; // See enum ResourceType
+    sourceId?: number | null; // Depends on sourceType
+    dateBegin?: Date | null; // Start date of Vacation, Sick, etc.
+    dateEnd?: Date | null; // Finish date of Vacation, Sick, etc.
     planDays?: number;
     planHours?: number;
     planSum?: number;
     rate?: number;
     factDays?: number;
     factHours?: number;
-    factSum?: number;
+    factSum: number;
     mask1?: number;
     mask2?: number;
-    recordFlags?: number;
+    recordFlags: number;
     fixedFlags?: number;
-    planHoursByDay?: HoursByDay;
-    factHoursByDay?: HoursByDay;
-    parentId?: number; // Link to fully or partially cancelled record, etc.
-}
-
-export type ICreatePayroll = Omit<
-    IPayroll,
-    | 'id'
-    | 'createdDate'
-    | 'createdUserId'
-    | 'updatedDate'
-    | 'updatedUserId'
-    | 'deletedDate'
-    | 'deletedUserId'
-    | 'version'
->;
+    planHoursByDay?: HoursByDay | null;
+    factHoursByDay?: HoursByDay | null;
+    parentId?: number | null; // Link to fully or partially cancelled record, etc.
+};
 
 export type IUpdatePayroll = Partial<
     Omit<
@@ -57,8 +72,10 @@ export type IUpdatePayroll = Partial<
     >
 >;
 
-export type IFindPayroll = Partial<IPayroll> & {
+export type IFindPayroll = {
     companyId?: number;
+    positionId?: number;
+    payPeriod?: Date;
     relations?: boolean;
 };
 

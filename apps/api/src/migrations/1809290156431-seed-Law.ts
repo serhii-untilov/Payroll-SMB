@@ -3,7 +3,7 @@ import { Law } from '../resources/laws/entities/law.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { LawType } from '@repo/shared';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const entity = Law;
 const recordList = [{ id: 1, name: { en: 'Ukraine', uk: 'Україна' }, type: LawType.UKRAINE }];
 

@@ -33,6 +33,7 @@ export class PaymentCalculationService {
     accPeriods: PayPeriod[];
     payrolls: Payroll[];
     payFunds: PayFund[];
+    payments: Payment[];
     paymentPositions: PaymentPosition[];
     paymentPositionId: number;
 
@@ -74,11 +75,15 @@ export class PaymentCalculationService {
         this.payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
-        const positions = await this.positionsService.findAll(userId, {
+        const positions = await this.positionsService.findAll({
             companyId,
             onPayPeriodDate: this.company.payPeriod,
             employeesOnly: true,
             relations: true,
+        });
+        this.payments = await this.paymentsService.findAll({
+            companyId,
+            accPeriod: this.payPeriod.dateFrom,
         });
         const changedPaymentIds: number[] = [];
         for (const position of positions) {
@@ -101,6 +106,11 @@ export class PaymentCalculationService {
         await this.loadResources();
         this.payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
+        });
+        this.payments = await this.paymentsService.findAll({
+            companyId: this.position.companyId,
+            positionId,
+            accPeriod: this.payPeriod.dateFrom,
         });
         const changedPaymentIds = await this._calculatePosition();
         await this.paymentsService.updateTotals(
@@ -139,7 +149,7 @@ export class PaymentCalculationService {
         } else if (paymentType.calcMethod === CalcMethod.FAST_PAYMENT) {
             return new PaymentCalc_Fast(this, paymentType, current);
         }
-        return null;
+        throw new Error('Undefined calc method.');
     }
 
     private async save(
@@ -148,21 +158,27 @@ export class PaymentCalculationService {
     ): Promise<number[]> {
         const changedPaymentIds: number[] = [];
         for (const paymentPosition of toDelete) {
-            changedPaymentIds.push(paymentPosition.payment.id);
-            await this.paymentPositionsService.delete([paymentPosition.id]);
+            if (paymentPosition?.payment?.id) {
+                changedPaymentIds.push(paymentPosition.payment.id);
+                await this.paymentPositionsService.delete([paymentPosition.id]);
+            }
         }
-        for (const paymentPosition of toInsert) {
-            let payment = await this.paymentsService.findOneBy({
-                companyId: this.company.id,
-                paymentTypeId: paymentPosition.payment.paymentTypeId,
-                status: PaymentStatus.DRAFT,
-            });
-            if (!payment) {
+        for (const { id: _, ...paymentPosition } of toInsert) {
+            let payment = this.payments.find(
+                (o) =>
+                    o.companyId === this.company.id &&
+                    o.accPeriod.getTime() === paymentPosition?.payment?.accPeriod.getTime() &&
+                    o.paymentTypeId === paymentPosition?.payment?.paymentTypeId &&
+                    o.status === PaymentStatus.DRAFT,
+            );
+            if (!payment && paymentPosition?.payment) {
                 payment = await this.createPayment(paymentPosition.payment);
+            }
+            if (!payment) {
+                throw new Error('Payment not defined');
             }
             changedPaymentIds.push(payment.id);
             delete paymentPosition.payment;
-            delete paymentPosition.id;
             paymentPosition.paymentId = payment.id;
             const created = await this.paymentPositionsService.create(this.userId, paymentPosition);
             this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
@@ -172,14 +188,14 @@ export class PaymentCalculationService {
 
     private collapse(paymentPositions: PaymentPosition[]): PaymentPosition[] {
         return paymentPositions.reduce((a, b) => {
-            const found = a.find((o) => o.payment.paymentTypeId === b.payment.paymentTypeId);
+            const found = a.find((o) => o?.payment?.paymentTypeId === b?.payment?.paymentTypeId);
             if (found) {
                 found.paySum = found.paySum + b.paySum;
             } else {
                 a.push(b);
             }
             return a;
-        }, []);
+        }, [] as PaymentPosition[]);
     }
 
     private merge(current: PaymentPosition[]): {
@@ -188,10 +204,10 @@ export class PaymentCalculationService {
     } {
         const toDelete: PaymentPosition[] = this.paymentPositions.filter(
             (p) =>
-                p.payment.status === PaymentStatus.DRAFT &&
+                p?.payment?.status === PaymentStatus.DRAFT &&
                 !current.find(
                     (c) =>
-                        c.payment.paymentTypeId === p.payment.paymentTypeId &&
+                        c?.payment?.paymentTypeId === p?.payment?.paymentTypeId &&
                         c.baseSum === p.baseSum &&
                         c.deductions === p.deductions &&
                         c.funds === p.funds &&
@@ -206,7 +222,7 @@ export class PaymentCalculationService {
                 (c) =>
                     !paymentPositions.find(
                         (p) =>
-                            p.payment.paymentTypeId === c.payment.paymentTypeId &&
+                            p?.payment?.paymentTypeId === c?.payment?.paymentTypeId &&
                             p.baseSum === c.baseSum &&
                             p.deductions === c.deductions &&
                             p.funds === c.funds &&
@@ -215,7 +231,7 @@ export class PaymentCalculationService {
             )
             .map((c) => {
                 const found = paymentPositions.find(
-                    (p) => p.payment.paymentTypeId === c.payment.paymentTypeId,
+                    (p) => p?.payment?.paymentTypeId === c?.payment?.paymentTypeId,
                 );
                 if (found) {
                     c.baseSum = c.baseSum - found.baseSum;
@@ -234,14 +250,14 @@ export class PaymentCalculationService {
     }
 
     private async getPayrolls(): Promise<Payroll[]> {
-        return await this.payrollsService.findAll(this.userId, {
+        return await this.payrollsService.findAll({
             positionId: this.position.id,
             payPeriod: this.payPeriod.dateFrom,
         });
     }
 
     private async getPayFunds(): Promise<PayFund[]> {
-        return await this.payFundsService.findAll(this.userId, {
+        return await this.payFundsService.findAll({
             positionId: this.position.id,
             payPeriod: this.payPeriod.dateFrom,
         });
@@ -254,8 +270,8 @@ export class PaymentCalculationService {
         );
     }
 
-    private async createPayment(payment: Payment): Promise<Payment> {
-        delete payment.id;
+    private async createPayment(payload: Payment): Promise<Payment> {
+        const { id: _, ...payment } = payload;
         payment.docNumber = await this.paymentsService.getNextDocNumber(
             this.company.id,
             this.payPeriod.dateFrom,
