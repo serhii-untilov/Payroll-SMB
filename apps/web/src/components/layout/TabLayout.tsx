@@ -1,11 +1,7 @@
 import { Box } from '@mui/material';
 import { FC, PropsWithChildren } from 'react';
 
-interface Props extends PropsWithChildren {
-    title?: string;
-}
-
-const TabLayout: FC<Props> = ({ title, children }) => {
+const TabLayout: FC<PropsWithChildren> = ({ children }) => {
     return <Box id="tab-layout">{children}</Box>;
 };
 

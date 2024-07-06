@@ -41,7 +41,7 @@ export const FormInputDropdown: React.FC<FormInputDropdownProps> = (
             <Controller
                 name={props.name}
                 control={props.control}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <Select
                         size="small"
                         margin="none"

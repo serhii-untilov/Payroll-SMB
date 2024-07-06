@@ -16,7 +16,7 @@ import { useSearchParams } from 'react-router-dom';
 export default function Payroll() {
     const { company, payPeriod } = useAppContext();
     const { locale } = useLocale();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
     const goBack = searchParams.get('return') === 'true';
     const [tab, setTab] = useState(
@@ -26,7 +26,7 @@ export default function Payroll() {
 
     useEffect(() => {}, [locale]);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('people-tab-index', newValue.toString());
     };

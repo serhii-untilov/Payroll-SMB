@@ -21,7 +21,7 @@ export const FormDateField = (props: FormDateFieldProps) => {
                 name={props.name}
                 control={props.control}
                 rules={props.rules}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <OutlinedInput
                         disabled={!!props?.disabled}
                         size="small"

@@ -40,7 +40,7 @@ api.interceptors.response.use(
                 // Retry the original request with the new token
                 originalRequest.headers.Authorization = authHeader().Authorization;
                 return axios(originalRequest);
-            } catch (error) {
+            } catch (_error) {
                 // Handle refresh token error or redirect to login
                 removeUserTokens();
                 delete originalRequest.headers.Authorization;

@@ -42,7 +42,7 @@ export function PageTitle(props: Props) {
                 {title}
                 {children}
             </Typography>
-            <AppState id="app-state" />
+            <AppState />
         </Box>
     );
 }

@@ -1,4 +1,4 @@
-import { ICompany, IPublicUserData, IUpdateUser, IUserCompany } from '@repo/shared';
+import { IPublicUserData, IUpdateUser, IUserCompany } from '@repo/shared';
 import { api } from '../api';
 import authHeader from './auth-header';
 

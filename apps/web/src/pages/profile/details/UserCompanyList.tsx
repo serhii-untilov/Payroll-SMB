@@ -1,15 +1,13 @@
-import { Typography } from '@mui/material';
 import {
     GridCallbackDetails,
     GridCellParams,
     GridColDef,
-    GridRowId,
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { ICompany, IUserCompany, date2view } from '@repo/shared';
+import { IUserCompany, date2view } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -141,10 +139,6 @@ export function UserCompanyList(params: Props) {
         navigate(`/company/${companyId}?tab=details&return=true`);
     };
 
-    const submitCallback = async (data: ICompany) => {
-        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
-    };
-
     const onDeleteCompany = async () => {
         let attemptToDeleteCurrentCompany = false;
         for (const id of notDeletedSelection()) {
@@ -240,7 +234,7 @@ export function UserCompanyList(params: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
+                    _details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onSelectCompany(params.row.id);
@@ -248,8 +242,8 @@ export function UserCompanyList(params: Props) {
                 }}
                 onRowDoubleClick={(
                     params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
+                    _event: MuiEvent,
+                    _details: GridCallbackDetails,
                 ) => onSelectCompany(params.row.id)}
             />
         </>

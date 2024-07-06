@@ -1,5 +1,4 @@
 import {
-    GridCallbackDetails,
     GridCellParams,
     GridColDef,
     GridRowParams,
@@ -15,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
-import useLocale from '../../../hooks/useLocale';
 import { deletePayment } from '../../../services/payment.service';
 import { sumFormatter } from '../../../services/utils';
 
@@ -29,7 +27,6 @@ export function MandatoryPayments(props: Props) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
-    const { locale } = useLocale();
 
     const columns: GridColDef[] = [
         {
@@ -83,7 +80,7 @@ export function MandatoryPayments(props: Props) {
         },
     ];
 
-    const { data, isError, isLoading, error } = useQuery<IPayment[], Error>({
+    const { data, isError, error } = useQuery<IPayment[], Error>({
         queryKey: ['payment', 'mandatory-list', props],
         queryFn: async () => {
             return [];
@@ -110,10 +107,6 @@ export function MandatoryPayments(props: Props) {
         navigate(`/payments/${id}`);
     };
 
-    const submitCallback = async (data: IPayment) => {
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
-    };
-
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
             await deletePayment(+id);
@@ -127,18 +120,6 @@ export function MandatoryPayments(props: Props) {
 
     const onExport = () => {
         gridRef.current.exportDataAsCsv();
-    };
-
-    const onShowHistory = () => {
-        console.log('onShowHistory');
-    };
-
-    const onShowDeleted = () => {
-        console.log('onShowDeleted');
-    };
-
-    const onRestoreDeleted = () => {
-        console.log('onRestoreDeleted');
     };
 
     return (
@@ -171,17 +152,12 @@ export function MandatoryPayments(props: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEditPayment(params.row.id);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
-                ) => onEditPayment(params.row.id)}
+                onRowDoubleClick={(params: GridRowParams) => onEditPayment(params.row.id)}
             />
         </>
     );

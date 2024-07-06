@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid, OutlinedInput, TextField } from '@mui/material';
+import { Grid, OutlinedInput } from '@mui/material';
 import { IPayment, PaymentGroup, PaymentStatus } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -11,6 +11,7 @@ import * as yup from 'yup';
 import { FormDateField } from '../../../components/form/FormDateField';
 import { FormNumberField } from '../../../components/form/FormNumberField';
 import { FormTextField } from '../../../components/form/FormTextField';
+import { InputLabel } from '../../../components/layout/InputLabel';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { SelectAccPeriod } from '../../../components/select/SelectAccPeriod';
 import { SelectPaymentType } from '../../../components/select/SelectPaymentType';
@@ -24,9 +25,6 @@ import {
     withdrawPayment,
 } from '../../../services/payment.service';
 import { getDirtyValues } from '../../../services/utils';
-import { Button } from '../../../components/layout/Button';
-import { Send } from '@mui/icons-material';
-import { InputLabel } from '../../../components/layout/InputLabel';
 
 type Props = {
     paymentId: number;
@@ -42,12 +40,7 @@ export function PaymentDetails(props: Props) {
 
     useEffect(() => {}, [locale]);
 
-    const {
-        data: payment,
-        isError,
-        isLoading,
-        error,
-    } = useQuery<Partial<IPayment>, Error>({
+    const { data: payment } = useQuery<Partial<IPayment>, Error>({
         queryKey: ['payment', { paymentId }],
         queryFn: async () => {
             const payment = await getPayment({ id: paymentId, relations: true });
@@ -80,7 +73,6 @@ export function PaymentDetails(props: Props) {
     const {
         control,
         handleSubmit,
-        watch,
         reset,
         formState: { errors: formErrors },
     } = useForm({
@@ -105,11 +97,16 @@ export function PaymentDetails(props: Props) {
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
         if (!company?.id) return;
+        if (!payPeriod) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const updated = paymentId
                 ? await updatePayment(paymentId, { ...dirtyValues, version: payment?.version })
-                : await createPayment({ ...data, companyId: company.id });
+                : await createPayment({
+                      ...data,
+                      companyId: company.id,
+                      payPeriod: payPeriod,
+                  });
             reset(updated);
             await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
             setPaymentId(updated.id);

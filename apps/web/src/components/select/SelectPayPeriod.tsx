@@ -17,7 +17,7 @@ export function SelectPayPeriod(props: PayPeriodOption) {
     const { company, payPeriod, setPayPeriod } = useAppContext();
     const { locale } = useLocale();
 
-    const { data, isError, isLoading, error } = useQuery<IPayPeriod[], Error>({
+    const { data, isError, error } = useQuery<IPayPeriod[], Error>({
         queryKey: ['payPeriod', 'list', { companyId, payPeriod: company?.payPeriod }],
         queryFn: async () => await getPayPeriodList(companyId),
     });

@@ -5,9 +5,9 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany, IUserCompany, ServerEvent, monthBegin } from '@repo/shared';
+import { ICompany, IUserCompany, monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
-import { format, startOfMonth } from 'date-fns';
+import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import useLocale from '../hooks/useLocale';
@@ -134,12 +134,12 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         if (eventSource) {
-            eventSource.onerror = function (event) {
-                // setServerEvent(ServerEvent.COMMUNICATION_ERROR);
-                // console.log(
-                //     `SSE: ${JSON.stringify(event, ['message', 'arguments', 'type', 'name'])}`,
-                // );
-            };
+            // eventSource.onerror = function (event) {
+            //     setServerEvent(ServerEvent.COMMUNICATION_ERROR);
+            //     console.log(
+            //         `SSE: ${JSON.stringify(event, ['message', 'arguments', 'type', 'name'])}`,
+            //     );
+            // };
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
                     [

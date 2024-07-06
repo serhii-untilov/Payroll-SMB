@@ -1,16 +1,13 @@
 import { CheckCircle } from '@mui/icons-material';
-import { Box, CircularProgress, CircularProgressProps, IconButton } from '@mui/material';
+import { Box, CircularProgress, IconButton } from '@mui/material';
 import { ServerEvent } from '@repo/shared';
-import { BaseVariant } from 'notistack';
-import { PropsWithChildren, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import useAppContext from '../../hooks/useAppContext';
 import { Tooltip } from './Tooltip';
 
-type Props = CircularProgressProps & PropsWithChildren;
-
-export function AppState(props: Props) {
+export function AppState() {
     const { t } = useTranslation();
     const { serverEvent: event } = useAppContext();
     const navigate = useNavigate();

@@ -435,3 +435,4 @@ openssl rand -base64 60
 - [**React Hook Form** - Combined Add/Edit (Create/Update) Form Example](https://jasonwatmore.com/post/2020/10/14/react-hook-form-combined-add-edit-create-update-form-example)
 - [**ESLint** - ESLint no-unused-vars: _ ignore prefix](https://johnnyreilly.com/typescript-eslint-no-unused-vars)
 - [**TypeScript** - How to Remove a Property from an Object in TypeScript](https://bobbyhadz.com/blog/typescript-object-remove-property)
+- [**Yup** - Schema builder for runtime value parsing and validation](https://yup-docs.vercel.app/docs/intro)

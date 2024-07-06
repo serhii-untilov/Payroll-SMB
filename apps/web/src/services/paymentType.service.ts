@@ -1,10 +1,9 @@
 import {
-    IPaymentType,
-    ICreatePaymentType,
-    IUpdatePaymentType,
-    IPaymentTypeFilter,
-    PaymentGroup,
     CalcMethod,
+    ICreatePaymentType,
+    IPaymentType,
+    IPaymentTypeFilter,
+    IUpdatePaymentType,
 } from '@repo/shared';
 import { api } from '../api';
 import authHeader from './auth-header';

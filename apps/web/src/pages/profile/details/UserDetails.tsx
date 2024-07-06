@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { IUpdateUser } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
@@ -12,16 +11,11 @@ import { FormInputDropdown } from '../../../components/form/FormInputDropdown';
 import { FormTextField } from '../../../components/form/FormTextField';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
-import { supportedLanguages } from '../../../context/LocaleContext';
 import useAuth from '../../../hooks/useAuth';
 import useLocale from '../../../hooks/useLocale';
 import { getCurrentUser } from '../../../services/auth.service';
 import { updateUser } from '../../../services/user.service';
 import { getDirtyValues } from '../../../services/utils';
-
-type Props = {
-    userId: number | undefined;
-};
 
 const formSchema = Yup.object().shape({
     id: Yup.number(),
@@ -42,7 +36,7 @@ const defaultValues: FormType = {
     language: '',
 };
 
-export function UserDetails(props: Props) {
+export function UserDetails() {
     const { supportedLocales, setLanguage } = useLocale();
     const { locale } = useLocale();
     const { t } = useTranslation();
@@ -64,7 +58,6 @@ export function UserDetails(props: Props) {
     const {
         control,
         handleSubmit,
-        watch,
         reset,
         formState: { errors: formErrors },
     } = useForm({

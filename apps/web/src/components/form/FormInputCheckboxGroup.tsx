@@ -53,7 +53,7 @@ export const FormInputCheckboxGroup: React.FC<FormInputCheckboxGroupProps> = ({
                             control={
                                 <Controller
                                     name={name}
-                                    render={({ field }) => {
+                                    render={() => {
                                         return (
                                             <Checkbox
                                                 checked={selectedItems.includes(option.value)}

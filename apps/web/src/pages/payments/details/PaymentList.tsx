@@ -1,5 +1,4 @@
 import {
-    GridCallbackDetails,
     GridCellParams,
     GridColDef,
     GridRowParams,
@@ -14,7 +13,6 @@ import {
     PaymentStatus,
     date2view,
     dateUTC,
-    maxDate,
 } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
@@ -23,10 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
-import { Loading } from '../../../components/utility/Loading';
-import useLocale from '../../../hooks/useLocale';
-import { getPayments } from '../../../services/payment.service';
-import { deletePayment } from '../../../services/payment.service';
+import { deletePayment, getPayments } from '../../../services/payment.service';
 import { sumFormatter } from '../../../services/utils';
 
 type Props = IFindPayment & {
@@ -41,7 +36,6 @@ export function PaymentList(props: Props) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
-    const { locale } = useLocale();
 
     const columns: GridColDef[] = [
         {
@@ -127,7 +121,7 @@ export function PaymentList(props: Props) {
         },
     ];
 
-    const { data, isError, isLoading, error } = useQuery<IPayment[], Error>({
+    const { data, isError, error } = useQuery<IPayment[], Error>({
         queryKey: ['payment', 'list', props],
         queryFn: async () => {
             return (
@@ -147,10 +141,6 @@ export function PaymentList(props: Props) {
         enabled: !!companyId && !!payPeriod,
     });
 
-    // if (isLoading) {
-    //     return <Loading />;
-    // }
-
     if (isError) {
         return enqueueSnackbar(`${error.name}\n${error.message}`, {
             variant: 'error',
@@ -164,10 +154,6 @@ export function PaymentList(props: Props) {
 
     const onEditPayment = (id: number) => {
         navigate(`/payments/${id}`);
-    };
-
-    const submitCallback = async (data: IPayment) => {
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
     };
 
     const onDeletePayment = async () => {
@@ -186,18 +172,6 @@ export function PaymentList(props: Props) {
 
     const onExport = () => {
         gridRef.current.exportDataAsCsv();
-    };
-
-    const onShowHistory = () => {
-        console.log('onShowHistory');
-    };
-
-    const onShowDeleted = () => {
-        console.log('onShowDeleted');
-    };
-
-    const onRestoreDeleted = () => {
-        console.log('onRestoreDeleted');
     };
 
     const getRowStatus = (params: any): string => {
@@ -247,17 +221,12 @@ export function PaymentList(props: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEditPayment(params.row.id);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
-                ) => onEditPayment(params.row.id)}
+                onRowDoubleClick={(params: GridRowParams) => onEditPayment(params.row.id)}
             />
         </>
     );

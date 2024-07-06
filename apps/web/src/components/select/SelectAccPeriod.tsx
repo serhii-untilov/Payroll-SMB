@@ -21,10 +21,10 @@ export type PayPeriodOption = SelectProps<string> & {
 
 export function SelectAccPeriod(props: PayPeriodOption) {
     const { companyId, control, label, id, name, disabled, ...other } = props;
-    const { company, payPeriod } = useAppContext();
+    const { company } = useAppContext();
     const { locale } = useLocale();
 
-    const { data, isError, isLoading, error } = useQuery<IPayPeriod[], Error>({
+    const { data, isError, error } = useQuery<IPayPeriod[], Error>({
         queryKey: ['payPeriod', 'list', { companyId, payPeriod: company?.payPeriod }],
         queryFn: async () => await getPayPeriodList(companyId),
     });
@@ -59,7 +59,7 @@ export function SelectAccPeriod(props: PayPeriodOption) {
             <Controller
                 name={name}
                 control={control}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => {
+                render={({ field: { value } }) => {
                     return (
                         <Select
                             disabled={!!disabled}

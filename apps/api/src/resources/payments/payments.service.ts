@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaymentStatus, ResourceType, dateUTC } from '@repo/shared';
+import { PaymentStatus, ResourceType, dateUTC, RecordFlags } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -18,6 +18,7 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Payment } from './entities/payment.entity';
 import { PaymentUpdatedEvent } from './events/payment-updated.event';
 import { PaymentPositionsService } from './payment-positions/payment-positions.service';
+import { PayPeriodsService } from '../pay-periods/payPeriods.service';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
@@ -31,6 +32,8 @@ export class PaymentsService extends AvailableForUserCompany {
         public accessService: AccessService,
         @Inject(forwardRef(() => PaymentPositionsService))
         public paymentPositionsService: PaymentPositionsService,
+        @Inject(forwardRef(() => PayPeriodsService))
+        public payPeriodsService: PayPeriodsService,
         private eventEmitter: EventEmitter2,
     ) {
         super(accessService);
@@ -41,12 +44,25 @@ export class PaymentsService extends AvailableForUserCompany {
     }
 
     async create(userId: number, payload: CreatePaymentDto): Promise<Payment> {
+        const accPeriod = await this.payPeriodsService.findOne({
+            where: {
+                companyId: payload.companyId,
+                dateFrom: payload.accPeriod || payload.payPeriod,
+            },
+        });
         const created = await this.repository.save({
             ...payload,
+            docNumber:
+                payload.docNumber ||
+                (await this.getNextDocNumber(payload.companyId, payload.payPeriod)),
+            docDate: payload.docDate || dateUTC(new Date()),
+            dateFrom: payload.dateFrom || accPeriod.dateFrom,
+            dateTo: payload.dateTo || accPeriod.dateTo,
+            status: payload.status || PaymentStatus.DRAFT,
+            recordFlags: payload.recordFlags || RecordFlags.AUTO,
             createdUserId: userId,
             updatedUserId: userId,
         });
-        // this.eventEmitter.emit('payment.created', new PaymentCreatedEvent(userId, created));
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
@@ -98,14 +114,12 @@ export class PaymentsService extends AvailableForUserCompany {
             updatedDate: new Date(),
         });
         const updated = await this.repository.findOneOrFail({ where: { id } });
-        // this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
         return updated;
     }
 
     async remove(userId: number, id: number): Promise<Payment> {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
-        // this.eventEmitter.emit('payment.deleted', new PaymentDeletedEvent(userId, deleted));
         return deleted;
     }
 

@@ -39,7 +39,7 @@ const defaultValues: FormType = {
 };
 
 export default function Profile() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
     const goBack = searchParams.get('return') === 'true';
     const [tab, setTab] = useState(
@@ -94,7 +94,7 @@ export default function Profile() {
         return user?.id ? userName || user?.email || t('Profile') : t('New user');
     };
 
-    const handleChange = (event: SyntheticEvent, newValue: number) => {
+    const handleChange = (_event: SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('profile-tab-index', newValue.toString());
     };
@@ -108,7 +108,7 @@ export default function Profile() {
                 <Tab label={t('Companies')} disabled={!user?.id} />
             </Tabs>
             <TabPanel value={tab} index={0}>
-                <UserDetails userId={user?.id} />
+                <UserDetails />
             </TabPanel>
             <TabPanel value={tab} index={1}>
                 <UserCompanyList userId={user?.id} />

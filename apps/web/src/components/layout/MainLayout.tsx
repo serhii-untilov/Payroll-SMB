@@ -23,9 +23,9 @@ import { Sidebar } from './Sidebar';
 
 export default function MainLayout() {
     const { logout } = useAuth();
-    const { locale, toggleLanguage } = useLocale();
+    const { locale } = useLocale();
     const { t } = useTranslation();
-    const { compactView, setCompactView, themeMode, theme, switchThemeMode } = useAppContext();
+    const { compactView, setCompactView, themeMode, switchThemeMode } = useAppContext();
     const navigate = useNavigate();
 
     useEffect(() => {}, [locale, t]);
@@ -34,14 +34,8 @@ export default function MainLayout() {
         setCompactView(!compactView);
     };
 
-    // const onToggleLanguage = () => {
-    //     toggleLanguage();
-    // };
-
     function onLogout() {
         logout();
-        // redirect('/signin');
-        // redirect('/welcome');
         navigate('/');
     }
 
@@ -105,14 +99,6 @@ export default function MainLayout() {
                                 primary={t('Profile')}
                                 icon={<PersonOutlined />}
                             />
-
-                            {/* <ListItemButton
-                                onClick={() => {
-                                    onToggleLanguage();
-                                }}
-                                primary={locale.language === 'en' ? 'Українська' : 'English'}
-                                icon={<Language />}
-                            /> */}
 
                             <ListItemButton
                                 onClick={switchThemeMode}

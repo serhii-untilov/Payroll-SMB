@@ -56,7 +56,7 @@ export async function findLastPositionHistoryOnPayPeriodDate(
     positionId: number,
     date: Date,
     relations: boolean,
-): Promise<IPositionHistory | null> {
+): Promise<IPositionHistory> {
     const params: IFindPositionHistory = { positionId, onPayPeriodDate: date, relations };
     const response = await api.post(`/api/position-history/find-last`, params, {
         headers: authHeader(),

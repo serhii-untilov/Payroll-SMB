@@ -1,4 +1,4 @@
-import { Autocomplete, Box, OutlinedInputProps, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, OutlinedInputProps, TextField } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { InputLabel } from '../layout/InputLabel';
 
@@ -27,7 +27,7 @@ export const FormAutocomplete = (props: Props) => {
                 name={props.name}
                 control={props.control}
                 rules={props.rules}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => {
+                render={({ field: { onChange, value }, fieldState: { error } }) => {
                     return (
                         <Autocomplete
                             disabled={!!props?.disabled}
@@ -49,7 +49,7 @@ export const FormAutocomplete = (props: Props) => {
                                     option?.value && value?.value && option?.value === value?.value
                                 );
                             }}
-                            onChange={(event, item) => {
+                            onChange={(_event, item) => {
                                 onChange(item?.value || (props.valueType === 'number' ? null : ''));
                             }}
                             renderInput={(params) => {

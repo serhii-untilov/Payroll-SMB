@@ -20,20 +20,30 @@ export interface IPosition extends ILogger {
     balance?: IPositionBalance[];
 }
 
-export type ICreatePosition = {
-    companyId: number;
-    cardNumber: string; // (Табельний номер)
-    sequenceNumber?: number; // Sequence in payroll reports to place managers on top (Порядковий номер)
-    description?: string;
-    personId?: number | null; // Vacancy if not defined
-    dateFrom?: Date; // Hire date or date of open vacancy
-    dateTo?: Date; // Dismissal date or date of close vacancy
-};
+export type ICreatePosition = Omit<
+    IPosition,
+    | 'id'
+    | 'company'
+    | 'person'
+    | 'history'
+    | 'balance'
+    | 'createdDate'
+    | 'createdUserId'
+    | 'updatedDate'
+    | 'updatedUserId'
+    | 'deletedDate'
+    | 'deletedUserId'
+    | 'version'
+>;
 
 export type IUpdatePosition = Partial<
     Omit<
         IPosition,
         | 'id'
+        | 'company'
+        | 'person'
+        | 'history'
+        | 'balance'
         | 'createdDate'
         | 'createdUserId'
         | 'updatedDate'

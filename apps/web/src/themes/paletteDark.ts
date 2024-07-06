@@ -1,4 +1,3 @@
-import { PaletteOptions } from '@mui/material';
 import { rgba } from '../services/utils';
 import { ExtPaletteOptions } from './paletteLight';
 

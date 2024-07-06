@@ -7,7 +7,13 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BalanceWorkingTime, PaymentPart, ResourceType, maxDate } from '@repo/shared';
+import {
+    BalanceWorkingTime,
+    MAX_SEQUENCE_NUMBER,
+    PaymentPart,
+    ResourceType,
+    maxDate,
+} from '@repo/shared';
 import { sub } from 'date-fns';
 import {
     FindManyOptions,
@@ -75,9 +81,11 @@ export class PositionsService extends AvailableForUserCompany {
         }
 
         const cardNumber = payload?.cardNumber || (await this.getNextCardNumber(payload.companyId));
+        const sequenceNumber = payload.sequenceNumber || MAX_SEQUENCE_NUMBER;
         const created = await this.repository.save({
             ...payload,
             cardNumber,
+            sequenceNumber,
             createdUserId: userId,
             updatedUserId: userId,
         });

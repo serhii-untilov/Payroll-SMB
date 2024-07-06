@@ -14,7 +14,7 @@ import useLocale from '../../hooks/useLocale';
 import { PositionList } from './details/PositionList';
 
 export default function People() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
     const goBack = searchParams.get('return') === 'true';
     const { company } = useAppContext();
@@ -27,7 +27,7 @@ export default function People() {
 
     useEffect(() => {}, [locale]);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('people-tab-index', newValue.toString());
     };

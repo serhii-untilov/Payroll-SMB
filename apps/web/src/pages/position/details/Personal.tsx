@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
+import { IUpdatePerson } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
@@ -12,18 +13,18 @@ import { FormDateField } from '../../../components/form/FormDateField';
 import { FormTextField } from '../../../components/form/FormTextField';
 import TabLayout from '../../../components/layout/TabLayout';
 import { Toolbar } from '../../../components/layout/Toolbar';
+import { SelectSex } from '../../../components/select/SelectSex';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
-import { createPerson, getPerson, updatePerson } from '../../../services/person.service';
+import { getPerson, updatePerson } from '../../../services/person.service';
 import { getDirtyValues } from '../../../services/utils';
-import { SelectSex } from '../../../components/select/SelectSex';
 
 interface Props {
     personId: number;
 }
 
 const formSchema = yup.object().shape({
-    id: yup.number().nullable(),
+    id: yup.number().required(),
     lastName: yup.string().required(),
     firstName: yup.string().required(),
     middleName: yup.string().nullable(),
@@ -33,8 +34,7 @@ const formSchema = yup.object().shape({
     phone: yup.string().nullable(),
     email: yup.string().nullable(),
     photo: yup.string().nullable(),
-    deletedUserId: yup.number().nullable(),
-    version: yup.number().nullable(),
+    version: yup.number().required(),
 });
 
 type FormType = yup.InferType<typeof formSchema>;
@@ -47,26 +47,11 @@ export function Personal({ personId }: Props) {
 
     useEffect(() => {}, [company]);
 
-    // To prevent Warning: A component is changing an uncontrolled input to be controlled.
-    const defaultValues = {
-        id: null,
-        lastName: '',
-        firstName: '',
-        middleName: '',
-        birthday: null,
-        taxId: '',
-        sex: '',
-        phone: '',
-        email: '',
-        photo: '',
-    };
-
     const { data, isError, error } = useQuery<FormType, Error>({
         queryKey: ['person', { personId }],
         queryFn: async () => {
             return formSchema.cast(await getPerson(personId, true));
         },
-        enabled: !!personId,
     });
 
     const {
@@ -75,8 +60,8 @@ export function Personal({ personId }: Props) {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: data, // || defaultValues,
-        values: data, // || defaultValues,
+        defaultValues: data,
+        values: data,
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -98,16 +83,16 @@ export function Personal({ personId }: Props) {
         });
     }
     const onSubmit: SubmitHandler<FormType> = async (data) => {
-        if (!isDirty) {
-            reset(data);
-        }
+        if (!isDirty) return;
+        if (!data) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const person = data.id
-                ? await updatePerson(data.id, { ...dirtyValues, version: data.version })
-                : await createPerson(data);
-            const updated = await getPerson(person.id, true);
-            reset(updated);
+            await updatePerson(data.id, {
+                ...(dirtyValues as IUpdatePerson),
+                version: data.version,
+            });
+            const updated = await getPerson(personId, true);
+            reset(updated as FormType);
             await queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
@@ -120,22 +105,6 @@ export function Personal({ personId }: Props) {
         await queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
     };
 
-    const onPrint = () => {
-        console.log('onPrint');
-    };
-
-    const onExport = () => {
-        console.log('onExport');
-    };
-
-    const onDelete = () => {
-        console.log('onDelete');
-    };
-
-    const onRestoreDeleted = () => {
-        console.log('onRestoreDeleted');
-    };
-
     return (
         <>
             <TabLayout>
@@ -144,8 +113,6 @@ export function Personal({ personId }: Props) {
                     onCancel={isDirty ? onCancel : 'disabled'}
                     onPrint={'disabled'}
                     onExport={'disabled'}
-                    // onDelete={'disabled'}
-                    // onRestoreDeleted={'disabled'}
                 />
 
                 <Grid container md={12} lg={10} xl={8} spacing={2}>
@@ -158,7 +125,6 @@ export function Personal({ personId }: Props) {
                             label={t('Last Name')}
                             type="text"
                             autoFocus
-                            // sx={{ fontWeight: 'bold' }}
                         />
                     </Grid>
                     <Grid item xs={12} md={4}>
@@ -169,8 +135,6 @@ export function Personal({ personId }: Props) {
                             id="firstName"
                             label={t('First Name')}
                             type="text"
-
-                            // sx={{ fontWeight: 'bold' }}
                         />
                     </Grid>
                     <Grid item xs={12} md={4}>
@@ -181,8 +145,6 @@ export function Personal({ personId }: Props) {
                             id="middleName"
                             label={t('Middle Name')}
                             type="text"
-
-                            // sx={{ fontWeight: 'bold' }}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12} md={4}>

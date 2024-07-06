@@ -16,24 +16,15 @@ export interface IDepartment extends ILogger {
 export type ICreateDepartment = Omit<
     IDepartment,
     | 'id'
+    | 'company'
+    | 'parentDepartment'
+    | 'childDepartments'
     | 'createdDate'
     | 'createdUserId'
     | 'updatedDate'
     | 'updatedUserId'
     | 'deletedDate'
     | 'deletedUserId'
-    | 'version'
 >;
 
-export type IUpdateDepartment = Partial<
-    Omit<
-        IDepartment,
-        | 'id'
-        | 'createdDate'
-        | 'createdUserId'
-        | 'updatedDate'
-        | 'updatedUserId'
-        | 'deletedDate'
-        | 'deletedUserId'
-    >
->;
+export type IUpdateDepartment = Partial<ICreateDepartment>;

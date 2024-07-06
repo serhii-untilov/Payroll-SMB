@@ -1,15 +1,6 @@
-import {
-    GridCallbackDetails,
-    GridCellParams,
-    GridColDef,
-    GridRowParams,
-    GridRowSelectionModel,
-    MuiEvent,
-} from '@mui/x-data-grid';
-import { ICompanyManager } from '@repo/shared';
+import { GridCellParams, GridColDef, GridRowSelectionModel, MuiEvent } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from '@tanstack/react-query';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 
@@ -17,16 +8,10 @@ type Props = {
     companyId: number | undefined;
 };
 
-export function CompanyManagers(params: Props) {
-    const { companyId } = params;
+export function CompanyManagers(_params: Props) {
     const { t } = useTranslation();
-    const [openForm, setOpenForm] = useState(false);
-    const [managerId, setManagerId] = useState<number | null>(null);
-    const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-
     const columns: GridColDef[] = [
-        // { field: 'id', headerName: t('ID'), type: 'number', width: 70 },
         {
             field: 'fullName',
             headerName: t('Full Name'),
@@ -43,7 +28,7 @@ export function CompanyManagers(params: Props) {
             type: 'string',
             width: 240,
             sortable: true,
-            valueGetter: (params) => {
+            valueGetter: (_params) => {
                 return '';
             },
         },
@@ -53,7 +38,7 @@ export function CompanyManagers(params: Props) {
             type: 'string',
             width: 240,
             sortable: true,
-            valueGetter: (params) => {
+            valueGetter: (_params) => {
                 return '';
             },
         },
@@ -63,7 +48,7 @@ export function CompanyManagers(params: Props) {
             type: 'string',
             width: 220,
             sortable: true,
-            valueGetter: (params) => {
+            valueGetter: (_params) => {
                 return '';
             },
         },
@@ -73,7 +58,7 @@ export function CompanyManagers(params: Props) {
             type: 'string',
             width: 160,
             sortable: true,
-            valueGetter: (params) => {
+            valueGetter: (_params) => {
                 return '';
             },
         },
@@ -83,7 +68,7 @@ export function CompanyManagers(params: Props) {
             type: 'string',
             width: 220,
             sortable: true,
-            valueGetter: (params) => {
+            valueGetter: (_params) => {
                 return '';
             },
         },
@@ -93,16 +78,8 @@ export function CompanyManagers(params: Props) {
         console.log('onAdd');
     };
 
-    const onEditManager = (managerId: number) => {
+    const onEditManager = (_managerId: number) => {
         console.log('onEdit');
-    };
-
-    const submitCallback = (data: ICompanyManager) => {
-        console.log('submitCallback');
-    };
-
-    const onDeleteManager = async () => {
-        console.log('onDelete');
     };
 
     const onPrint = () => {
@@ -135,17 +112,12 @@ export function CompanyManagers(params: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEditManager(params.row.id);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
-                ) => {
+                onRowDoubleClick={() => {
                     // onEditManager(params.row.id)
                 }}
             />

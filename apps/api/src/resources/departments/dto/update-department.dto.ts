@@ -6,6 +6,9 @@ export class UpdateDepartmentDto
     extends PartialType(
         OmitType(Department, [
             'id',
+            'company',
+            'parentDepartment',
+            'childDepartments',
             'createdDate',
             'createdUserId',
             'updatedDate',

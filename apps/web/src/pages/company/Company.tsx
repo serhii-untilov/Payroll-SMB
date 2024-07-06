@@ -2,7 +2,7 @@ import { ICompany } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
 import { PageTitle } from '../../components/layout/PageTitle';
 import { Tab } from '../../components/layout/Tab';
@@ -20,7 +20,7 @@ import { CompanyPayPeriods } from './details/CompanyPayPeriods';
 export default function Company() {
     const params = useParams();
     const [companyId, setCompanyId] = useState(Number(params.companyId));
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
     const goBack = searchParams.get('return') === 'true';
     const [tab, setTab] = useState(
@@ -31,7 +31,7 @@ export default function Company() {
 
     useEffect(() => {}, [locale]);
 
-    const { data, isError, isLoading, error } = useQuery<Partial<ICompany>, Error>({
+    const { data, isLoading } = useQuery<Partial<ICompany>, Error>({
         queryKey: ['company', { companyId }],
         queryFn: async () => {
             return companyId ? await getCompany(companyId) : {};
@@ -46,7 +46,7 @@ export default function Company() {
         return <Loading />;
     }
 
-    const handleChange = (event: SyntheticEvent, newValue: number) => {
+    const handleChange = (_event: SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('company-tab-index', newValue.toString());
     };

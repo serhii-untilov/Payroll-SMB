@@ -2,7 +2,6 @@ import {
     AccountTreeRounded,
     AddCircleRounded,
     CalculateRounded,
-    CancelScheduleSend,
     CheckCircleRounded,
     DeleteRounded,
     DeleteSweepRounded,
@@ -12,15 +11,14 @@ import {
     PrintRounded,
     RedoRounded,
     RestoreFromTrashRounded,
-    Send,
     UndoRounded,
 } from '@mui/icons-material';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Box, IconButton, Stack, StackProps } from '@mui/material';
 import { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tooltip } from './Tooltip';
 import { Button } from './Button';
+import { Tooltip } from './Tooltip';
 
 type Func<T> = (value: T) => void;
 

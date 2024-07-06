@@ -23,7 +23,7 @@ export const FormSequenceField = (props: Props) => {
                 name={props.name}
                 control={props.control}
                 rules={props.rules}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <OutlinedInput
                         autoFocus={props?.autoFocus}
                         size="small"

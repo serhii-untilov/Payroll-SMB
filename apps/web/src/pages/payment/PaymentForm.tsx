@@ -13,18 +13,17 @@ import { Tabs } from '../../components/layout/Tabs';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import { getPayment } from '../../services/payment.service';
+import { sumFormatter } from '../../services/utils';
 import { EmployeePayments } from './details/EmployeePayments';
 import { MandatoryPayments } from './details/MandatoryPayments';
 import { PaymentDetails } from './details/PaymentDetails';
-import { sumFormatter } from '../../services/utils';
-import { Toolbar } from '../../components/layout/Toolbar';
 
 export default function PaymentForm() {
     const { id } = useParams();
     const [paymentId, setPaymentId] = useState<number>(Number(id));
     const { company, payPeriod } = useAppContext();
     const { locale } = useLocale();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
     const [tab, setTab] = useState(
         Number(tabName ? getTabIndex(tabName) : localStorage.getItem('payment-tab-index')),
@@ -45,7 +44,7 @@ export default function PaymentForm() {
         enabled: !!paymentId,
     });
 
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('payment-tab-index', newValue.toString());
     };

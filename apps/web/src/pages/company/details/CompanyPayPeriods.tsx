@@ -1,5 +1,4 @@
 import {
-    GridCallbackDetails,
     GridCellParams,
     GridColDef,
     GridRowParams,
@@ -157,7 +156,7 @@ export function CompanyPayPeriods(params: Props) {
         });
     }
 
-    const onEdit = (id: number) => {
+    const onEdit = (_id: number) => {
         console.log('onEdit');
         navigate('/payroll?tab=payroll&return=true');
     };
@@ -235,17 +234,12 @@ export function CompanyPayPeriods(params: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEdit(params.row.id);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
-                ) => onEdit(params.row.id)}
+                onRowDoubleClick={(params: GridRowParams) => onEdit(params.row.id)}
             />
         </>
     );

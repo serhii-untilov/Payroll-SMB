@@ -16,7 +16,7 @@ export const FormInputSlider = ({ name, control, setValue, label }: FormInputSli
         if (sliderValue) setValue(name, sliderValue);
     }, [name, setValue, sliderValue]);
 
-    const handleChange = (event: any, newValue: number | number[]) => {
+    const handleChange = (_event: any, newValue: number | number[]) => {
         setSliderValue(newValue as number);
     };
 

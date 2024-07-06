@@ -3,7 +3,10 @@ import { Grid } from '@mui/material';
 import {
     AccountingType,
     IAccounting,
+    ICompany,
+    ICreateCompany,
     ILaw,
+    LawType,
     PaymentSchedule,
     maxDate,
     minDate,
@@ -12,12 +15,11 @@ import {
 } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { format, startOfMonth } from 'date-fns';
+import { format } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { FormInputDropdown } from '../../../components/form/FormInputDropdown';
 import { FormTextField } from '../../../components/form/FormTextField';
@@ -31,102 +33,83 @@ import { getAccountingList } from '../../../services/accounting.service';
 import { createCompany, getCompany, updateCompany } from '../../../services/company.service';
 import { getLawList } from '../../../services/law.service';
 import { getDirtyValues } from '../../../services/utils';
-
-const formSchema = yup.object().shape({
-    id: yup.number().nullable(),
-    name: yup.string().required('Name is required'),
-    lawId: yup.number().positive('Law is required').required(),
-    taxId: yup.string(),
-    accountingId: yup.number().positive('Accounting is required').required(),
-    paymentSchedule: yup.string().required(),
-    dateFrom: yup.date().nullable(),
-    dateTo: yup.date().nullable(),
-    payPeriod: yup.date().required(),
-    checkDate: yup.date().required(),
-    version: yup.number().nullable(),
-});
-
-type FormType = yup.InferType<typeof formSchema>;
+import { snackbarError, snackbarFormErrors } from '../../../utils/snackbar';
 
 type Props = {
-    companyId: number | undefined;
+    companyId: number | null;
     submitCallback: (companyId: number) => void;
 };
 
 export function CompanyDetails(props: Props) {
-    const { companyId } = props;
-    // const [companyId, setCompanyId] = useState(props.companyId);
+    const [companyId, setCompanyId] = useState(Number(props.companyId));
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const { locale } = useLocale();
     const { t } = useTranslation();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
 
     useEffect(() => {});
 
-    const {
-        data: lawList,
-        isError: isLawListError,
-        isLoading: isLawListLoading,
-        error: lawListError,
-    } = useQuery<ILaw[], Error>({
-        queryKey: ['lawList'],
-        queryFn: async () => {
-            return await getLawList();
-        },
+    const { data: lawList } = useQuery<ILaw[]>({
+        queryKey: ['law', 'list'],
+        queryFn: async () => await getLawList(),
     });
 
-    const {
-        data: accountingList,
-        isError: isAccountingListError,
-        isLoading: isAccountingListLoading,
-        error: accountingListError,
-    } = useQuery<IAccounting[], Error>({
+    const { data: accountingList } = useQuery<IAccounting[]>({
         queryKey: ['accounting', 'list'],
-        queryFn: async () => {
-            return await getAccountingList();
-        },
+        queryFn: async () => await getAccountingList(),
     });
 
-    // To prevent Warning: A component is changing an uncontrolled input to be controlled.
-    const defaultValues = useMemo((): FormType => {
-        return {
-            id: null,
-            name: '',
-            lawId: lawList ? lawList[0].id : 0,
-            taxId: '',
-            accountingId: accountingList
-                ? accountingList.find((o) => o.type === AccountingType.GENERIC)?.id || 0
-                : 0,
-            paymentSchedule: PaymentSchedule.LAST_DAY,
-            dateFrom: minDate(),
-            dateTo: maxDate(),
-            payPeriod: monthBegin(new Date()),
-            checkDate: monthEnd(new Date()),
-        };
-    }, [lawList, accountingList]);
+    const defaultLawId = useMemo(
+        () => lawList?.find((o) => o.type === LawType.UKRAINE)?.id || 0,
+        [lawList],
+    );
+
+    const defaultAccountingId = useMemo(
+        () => accountingList?.find((o) => o.type === AccountingType.GENERIC)?.id || 0,
+        [accountingList],
+    );
 
     const {
         data: company,
-        isError: isCompanyError,
-        isLoading: isCompanyLoading,
-        error: companyError,
-    } = useQuery<FormType, Error>({
-        queryKey: ['company', { companyId, defaultValues }],
-        queryFn: async () => {
-            return formSchema.cast(companyId ? await getCompany(companyId) : defaultValues);
-        },
+        isError,
+        isLoading,
+        error: error,
+    } = useQuery<ICompany, Error>({
+        queryKey: ['company', { companyId }],
+        queryFn: async () => await getCompany(companyId),
+        enabled: !!companyId,
     });
+
+    const formSchema: yup.ObjectSchema<ICreateCompany> = yup.object({
+        name: yup.string().required('Name is required'),
+        lawId: yup.number().positive('Law is required').required().default(defaultLawId),
+        taxId: yup.string().default(''),
+        accountingId: yup
+            .number()
+            .positive('Accounting is required')
+            .required()
+            .default(defaultAccountingId),
+        paymentSchedule: yup
+            .string()
+            .required('Payment Schedule required')
+            .default(PaymentSchedule.LAST_DAY),
+        dateFrom: yup.date().default(minDate()),
+        dateTo: yup.date().default(maxDate()),
+        payPeriod: yup.date().required('Pay Period required').default(monthBegin(new Date())),
+        checkDate: yup.date().required('Check Date required').default(monthEnd(new Date())),
+        version: yup.number(),
+    });
+
+    type FormType = yup.InferType<typeof formSchema>;
 
     const {
         control,
         handleSubmit,
-        watch,
         reset,
         formState: { errors: formErrors },
     } = useForm({
         defaultValues: company || {},
-        values: company || defaultValues,
+        values: formSchema.cast(company || {}),
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -136,56 +119,32 @@ export function CompanyDetails(props: Props) {
     useEffect(() => {}, [locale]);
 
     useEffect(() => {
-        formErrors.name?.message &&
-            enqueueSnackbar(t(formErrors.name?.message), { variant: 'error' });
-        formErrors.lawId?.message &&
-            enqueueSnackbar(t(formErrors.lawId?.message), { variant: 'error' });
-        formErrors.accountingId?.message &&
-            enqueueSnackbar(t(formErrors.accountingId?.message), { variant: 'error' });
-        formErrors.payPeriod?.message &&
-            enqueueSnackbar(t(formErrors.payPeriod?.message), { variant: 'error' });
-        formErrors.checkDate?.message &&
-            enqueueSnackbar(t(formErrors.checkDate?.message), { variant: 'error' });
+        snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    if (isCompanyLoading || isLawListLoading || isAccountingListLoading) {
+    if (isLoading) {
         return <Loading />;
     }
 
-    if (isCompanyError) {
-        // setCurrentCompany(null);
-        return enqueueSnackbar(`${companyError.name}\n${companyError.message}`, {
-            variant: 'error',
-        });
-    }
-
-    if (isLawListError) {
-        return enqueueSnackbar(`${lawListError.name}\n${lawListError.message}`, {
-            variant: 'error',
-        });
-    }
-
-    if (isAccountingListError) {
-        return enqueueSnackbar(`${accountingListError.name}\n${accountingListError.message}`, {
-            variant: 'error',
-        });
+    if (isError) {
+        snackbarError(`${error.name}\n${error.message}`);
     }
 
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const company = data.id
-                ? await updateCompany(data.id, { ...dirtyValues, version: data.version })
+            const response = company
+                ? await updateCompany(company.id, dirtyValues)
                 : await createCompany(data);
-            reset(company);
+            setCompanyId(response.id);
+            reset(response);
             await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
-            if (!currentCompany || currentCompany.id === company.id) {
-                setCurrentCompany(company);
-                // navigate(`/company/${company.id}`);
+            if (!currentCompany || currentCompany.id === response.id) {
+                setCurrentCompany(response);
             }
-            props.submitCallback(company?.id);
+            props.submitCallback(response?.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -193,6 +152,7 @@ export function CompanyDetails(props: Props) {
     };
 
     const onCancel = async () => {
+        setCompanyId(Number(company?.id));
         reset(company);
         await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
     };
@@ -202,9 +162,6 @@ export function CompanyDetails(props: Props) {
             <Toolbar
                 onSave={isDirty || !currentCompany ? handleSubmit(onSubmit) : 'disabled'}
                 onCancel={isDirty || !currentCompany ? onCancel : 'disabled'}
-                // onDelete={'disabled'}
-                // onRestoreDeleted={'disabled'}
-                // onShowHistory={'disabled'}
             />
             <Grid
                 container
@@ -270,11 +227,7 @@ export function CompanyDetails(props: Props) {
                         <Controller
                             name={'payPeriod'}
                             control={control}
-                            render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                                formState,
-                            }) => (
+                            render={({ field: { onChange, value }, fieldState: { error } }) => (
                                 <SelectPayPeriod
                                     companyId={companyId}
                                     label={''}

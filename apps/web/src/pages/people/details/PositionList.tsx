@@ -188,10 +188,6 @@ export function PositionList(props: IFindPosition) {
         navigate(`/people/position/${positionId}?return=true`);
     };
 
-    const submitCallback = async (data: IPosition) => {
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
-    };
-
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
             await deletePosition(+id);
@@ -205,18 +201,6 @@ export function PositionList(props: IFindPosition) {
 
     const onExport = () => {
         gridRef.current.exportDataAsCsv();
-    };
-
-    const onShowHistory = () => {
-        console.log('onShowHistory');
-    };
-
-    const onShowDeleted = () => {
-        console.log('onShowDeleted');
-    };
-
-    const onRestoreDeleted = () => {
-        console.log('onRestoreDeleted');
     };
 
     const getRowStatus = (params: any): string => {
@@ -259,7 +243,7 @@ export function PositionList(props: IFindPosition) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
+                    _details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEditPosition(params.row.id);
@@ -267,8 +251,8 @@ export function PositionList(props: IFindPosition) {
                 }}
                 onRowDoubleClick={(
                     params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
+                    _event: MuiEvent,
+                    _details: GridCallbackDetails,
                 ) => onEditPosition(params.row.id)}
             />
         </>

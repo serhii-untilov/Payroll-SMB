@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import PageLayout from '../../components/layout/PageLayout';
@@ -8,12 +8,8 @@ import useLocale from '../../hooks/useLocale';
 export default function TimeSheet() {
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const tabName = searchParams.get('tab');
+    const [searchParams] = useSearchParams();
     const goBack = searchParams.get('return') === 'true';
-    const [tab, setTab] = useState(
-        tabName ? getTabIndex(tabName) : Number(localStorage.getItem('time-sheet-tab-index')),
-    );
 
     useEffect(() => {}, [locale]);
 
@@ -24,14 +20,4 @@ export default function TimeSheet() {
             </PageLayout>
         </>
     );
-}
-
-function getTabIndex(tabName: string | null): number {
-    if (!tabName) {
-        return 0;
-    }
-    // TODO
-    // const map = { details: 0, periods: 1, departments: 2, managers: 3, accounts: 4 };
-    // return map[tabName];
-    return 0;
 }
