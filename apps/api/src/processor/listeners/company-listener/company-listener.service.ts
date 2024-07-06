@@ -65,7 +65,7 @@ export class CompanyListenerService {
             await this.taskListService.generate(userId, companyId);
             this._logger.log(`companyId ${companyId} ${ServerEvent.PAYROLL_FINISHED}`);
             this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FINISHED });
-        } catch (e) {
+        } catch (_e) {
             this._logger.fatal(`companyId ${companyId} ${ServerEvent.PAYROLL_FAILED}`);
             this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FAILED });
         }

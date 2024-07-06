@@ -17,7 +17,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
 import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';
 import { PayFundTypesService } from './pay-fund-types.service';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('pay-fund-types')
 export class PayFundTypesController {

@@ -23,7 +23,7 @@ import { Request } from 'express';
 import { deepStringToShortDate } from '@repo/shared';
 import { FindPayrollDto } from './dto/find-payroll.dto';
 import { Payroll } from './entities/payroll.entity';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('payroll')
 export class PayrollsController {

@@ -22,7 +22,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { TasksService } from './tasks.service';
 import { FindTaskDto } from './dto/find-task.dto';
 import { Task } from './entities/task.entity';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('tasks')
 export class TasksController {

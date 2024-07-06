@@ -20,7 +20,7 @@ import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { deepStringToShortDate } from '@repo/shared';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('departments')
 export class DepartmentsController {
@@ -45,7 +45,7 @@ export class DepartmentsController {
     ) {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, companyId);
-        return await this.service.findAll(userId, companyId, !!relations);
+        return await this.service.findAll(companyId, !!relations);
     }
 
     @Get(':id')
@@ -57,7 +57,7 @@ export class DepartmentsController {
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ) {
         const userId = getUserId(req);
-        const found = await this.service.findOne(userId, id, !!relations);
+        const found = await this.service.findOne(id, !!relations);
         await this.service.availableFindOneOrFail(userId, found.companyId);
         return found;
     }

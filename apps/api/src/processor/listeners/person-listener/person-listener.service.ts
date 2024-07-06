@@ -72,7 +72,7 @@ export class PersonListenerService {
                 );
                 await this.taskListService.generate(event.userId, companyId);
                 this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FINISHED });
-            } catch (e) {
+            } catch (_e) {
                 this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FAILED });
             }
         }

@@ -18,7 +18,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
 import { PaymentTypesService } from './payment-types.service';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('payment-types')
 export class PaymentTypesController {

@@ -72,7 +72,7 @@ export class PositionListenerService {
             );
             await this.taskListService.generate(event.userId, event.companyId);
             this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_FINISHED });
-        } catch (e) {
+        } catch (_e) {
             this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_FAILED });
         }
     }

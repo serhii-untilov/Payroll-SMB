@@ -6,8 +6,8 @@ import { CreateUserDto } from '../resources/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';
-import { getUserId } from 'src/utils/getUserId';
-import { getRefreshToken } from 'src/utils/getRefreshToken';
+import { getUserId } from './../utils/getUserId';
+import { getRefreshToken } from './../utils/getRefreshToken';
 
 @Controller('auth')
 export class AuthController {

@@ -19,7 +19,7 @@ import { UpdateMinWageDto } from './dto/update-min-wage.dto';
 import { MinWage } from './entities/min-wage.entity';
 import { MinWageService } from './min-wage.service';
 import { deepStringToShortDate } from '@repo/shared';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('min-wage')
 export class MinWageController {

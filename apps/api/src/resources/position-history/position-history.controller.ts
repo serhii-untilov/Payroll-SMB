@@ -21,7 +21,7 @@ import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindPositionHistoryDto } from './dto/find-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistoryService } from './position-history.service';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('position-history')
 export class PositionHistoryController {

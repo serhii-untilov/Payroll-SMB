@@ -21,7 +21,7 @@ import { CreatePayPeriodDto } from './dto/createPayPeriod.dto';
 import { UpdatePayPeriodDto } from './dto/updatePayPeriod.dto';
 import { defaultFieldList } from './entities/payPeriod.entity';
 import { PayPeriodsService } from './payPeriods.service';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('pay-periods')
 export class PayPeriodsController {

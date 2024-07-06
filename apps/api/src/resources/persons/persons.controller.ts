@@ -19,7 +19,7 @@ import { CreatePersonDto } from './dto/create-person.dto';
 import { FindPersonDto } from './dto/find-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { PersonsService } from './persons.service';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('persons')
 export class PersonsController {

@@ -42,7 +42,7 @@ export class DepartmentListenerService {
             this.sseService.event(companyId, { data: ServerEvent.TASKLIST_STARTED });
             await this.taskListService.generate(userId, companyId);
             this.sseService.event(companyId, { data: ServerEvent.TASKLIST_FINISHED });
-        } catch (e) {
+        } catch (_e) {
             this.sseService.event(companyId, { data: ServerEvent.TASKLIST_FAILED });
         }
     }

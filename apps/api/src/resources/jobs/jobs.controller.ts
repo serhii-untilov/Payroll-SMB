@@ -17,7 +17,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { JobsService } from './jobs.service';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('jobs')
 export class JobsController {

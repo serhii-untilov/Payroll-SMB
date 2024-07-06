@@ -20,7 +20,7 @@ import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNormsService } from './work-norms.service';
 import { deepStringToShortDate } from '@repo/shared';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('work-norms')
 export class WorkNormsController {

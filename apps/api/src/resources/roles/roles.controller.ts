@@ -18,7 +18,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RolesService } from './roles.service';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('roles')
 export class RolesController {

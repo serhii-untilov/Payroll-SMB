@@ -22,7 +22,7 @@ import { FindPositionDto } from './dto/find-position.dto';
 import { FindAllPositionBalanceDto } from './dto/position-balance.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionsService } from './positions.service';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('positions')
 export class PositionsController {

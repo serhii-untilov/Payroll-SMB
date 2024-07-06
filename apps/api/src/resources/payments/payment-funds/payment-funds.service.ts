@@ -75,7 +75,7 @@ export class PaymentFundsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<void> {
+    async remove(id: number): Promise<void> {
         await this.repository.delete(id);
     }
 }

@@ -22,7 +22,7 @@ import { IPublicUserData, IUserCompany } from '@repo/shared';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { Request } from 'express';
 import { UsersCompanyService } from './users-company.service';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('users')
 export class UsersController {

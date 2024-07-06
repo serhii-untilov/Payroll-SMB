@@ -52,11 +52,7 @@ export class DepartmentsService extends AvailableForUserCompany {
         return created;
     }
 
-    async findAll(
-        userId: number,
-        companyId: number,
-        relations: boolean = false,
-    ): Promise<Department[]> {
+    async findAll(companyId: number, relations: boolean = false): Promise<Department[]> {
         return await this.repository.find({
             relations: {
                 company: relations,
@@ -67,7 +63,7 @@ export class DepartmentsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean = false): Promise<Department> {
+    async findOne(id: number, relations: boolean = false): Promise<Department> {
         return await this.repository.findOneOrFail({
             relations: {
                 company: relations,

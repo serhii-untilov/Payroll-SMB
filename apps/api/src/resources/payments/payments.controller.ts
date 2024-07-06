@@ -22,7 +22,7 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Payment } from './entities/payment.entity';
 import { PaymentsService } from './payments.service';
 import { FindPaymentDto } from './dto/find-payment.dto';
-import { getUserId } from 'src/utils/getUserId';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('payments')
 export class PaymentsController {

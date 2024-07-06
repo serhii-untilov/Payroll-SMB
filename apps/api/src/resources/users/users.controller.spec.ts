@@ -60,7 +60,7 @@ describe('UsersController', () => {
         const user = createMockUser();
         const publicUser = UsersService.toPublic(user);
         jest.spyOn(service, 'findOne').mockReturnValue(Promise.resolve(user));
-        const res = await controller.findOne({ body: {} } as any as Request, user.id);
+        const res = await controller.findOne(user.id);
         expect(res).toStrictEqual(publicUser);
     });
 
