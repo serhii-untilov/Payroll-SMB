@@ -25,6 +25,21 @@ export type ICreateDepartment = Omit<
     | 'updatedUserId'
     | 'deletedDate'
     | 'deletedUserId'
+    | 'version'
 >;
 
-export type IUpdateDepartment = Partial<ICreateDepartment>;
+export type IUpdateDepartment = Partial<
+    Omit<
+        IDepartment,
+        | 'id'
+        | 'company'
+        | 'parentDepartment'
+        | 'childDepartments'
+        | 'createdDate'
+        | 'createdUserId'
+        | 'updatedDate'
+        | 'updatedUserId'
+        | 'deletedDate'
+        | 'deletedUserId'
+    >
+>;

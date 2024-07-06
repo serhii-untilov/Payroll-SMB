@@ -46,21 +46,20 @@ export default function DepartmentForm(params: Params) {
         data: department,
         isError,
         error,
-    } = useQuery<IDepartment, Error>({
+    } = useQuery<IDepartment | null, Error>({
         queryKey: ['department', { departmentId }],
         queryFn: async () => {
-            return await getDepartment(departmentId);
+            return departmentId ? await getDepartment(departmentId) : null;
         },
         enabled: !!departmentId,
     });
 
     const formSchema: ObjectSchema<ICreateDepartment> = object({
-        name: string().required('Name is required'),
-        companyId: number().required('Company is required'),
+        name: string().required('Name is required').default(''),
+        companyId: number().required('Company is required').default(company?.id),
         dateFrom: date().required('DateFrom is required').default(minDate()),
         dateTo: date().required('DateTo is required').default(maxDate()),
         parentDepartmentId: number().nullable(),
-        version: number(),
     });
 
     type FormType = InferType<typeof formSchema>;
@@ -97,7 +96,10 @@ export default function DepartmentForm(params: Params) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const response = department
-                ? await updateDepartment(department.id, dirtyValues)
+                ? await updateDepartment(department.id, {
+                      ...dirtyValues,
+                      version: department.version,
+                  })
                 : await createDepartment(data);
             if (submitCallback) submitCallback(response);
             params.setOpen(false);
@@ -122,7 +124,7 @@ export default function DepartmentForm(params: Params) {
                 open={params.open}
                 onClose={async () => {
                     params.setOpen(false);
-                    reset(department);
+                    reset();
                     await queryClient.invalidateQueries({
                         queryKey: ['department'],
                         refetchType: 'all',
