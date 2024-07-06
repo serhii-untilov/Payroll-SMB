@@ -1,7 +1,6 @@
-import { OmitType } from '@nestjs/mapped-types';
-import { PartialType } from '@nestjs/swagger';
-import { Payment } from '../entities/payment.entity';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { IUpdatePayment } from '@repo/shared';
+import { Payment } from '../entities/payment.entity';
 
 export class UpdatePaymentDto
     extends PartialType(

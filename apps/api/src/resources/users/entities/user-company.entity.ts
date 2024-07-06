@@ -1,6 +1,6 @@
 import { IRole, IUserCompany } from '@repo/shared';
 import { Company } from '../../companies/entities/company.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 import { Logger } from '../../../resources/abstract/logger.abstract';
 import { User } from './user.entity';
@@ -11,7 +11,7 @@ export class UserCompany extends Logger implements IUserCompany {
     id: number;
 
     @ManyToOne(() => User, { createForeignKeyConstraints: false })
-    user?: User;
+    user?: Relation<User>;
 
     @Column()
     userId: number;
@@ -19,13 +19,13 @@ export class UserCompany extends Logger implements IUserCompany {
     // @ManyToOne(() => Company, { createForeignKeyConstraints: false })
     @ManyToOne(() => Company, (company) => company.users)
     @JoinColumn()
-    company?: Company;
+    company?: Relation<Company>;
 
     @Column()
     companyId: number;
 
     @ManyToOne(() => Role, { createForeignKeyConstraints: false })
-    role?: IRole;
+    role?: Relation<IRole>;
 
     @Column()
     roleId: number;

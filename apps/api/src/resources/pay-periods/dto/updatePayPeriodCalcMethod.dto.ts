@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { IUpdatePayPeriodCalcMethod } from '@repo/shared';
 import { CreatePayPeriodCalcMethodDto } from './createPayPeriodCalcMethod.dto';
 

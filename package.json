@@ -33,9 +33,11 @@
     "m:run": "./scripts/docker_db && turbo run m:run --filter=@repo/api",
     "m:revert": "./scripts/docker_db && turbo run m:revert --filter=@repo/api",
     "d:build": "docker compose build",
-    "d:push": "docker compose push"
+    "d:push": "docker compose push",
+    "codegen": "rm -rf ./packages/openapi && npx openapi-generator-cli generate -i ./swagger.yaml -o ./packages/openapi -g typescript-axios --skip-validate-spec"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-no-loops": "^0.3.0",
     "eslint-plugin-prettier": "^5.1.3",

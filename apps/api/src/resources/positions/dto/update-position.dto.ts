@@ -1,5 +1,4 @@
-import { OmitType } from '@nestjs/mapped-types';
-import { PartialType } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { IUpdatePosition } from '@repo/shared';
 import { Position } from '../entities/position.entity';
 

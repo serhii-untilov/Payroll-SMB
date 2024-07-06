@@ -271,6 +271,7 @@ npm i --workspace @repo/api --save-dev webpack-node-externals run-script-webpack
 npm i --workspace @repo/api --save-dev webpack webpack-cli
 npm i --workspace @repo/api --save @nestjs/event-emitter
 npm i --workspace @repo/api --save-dev tsconfig-paths
+npm i --workspace @repo/api --save-dev @swc/cli @swc/core
 
 # Init "web" application for front-end
 npm --workspace @repo/web i @tanstack/react-query
@@ -281,7 +282,6 @@ npm i --workspace @repo/web --save @mui/material @emotion/react @emotion/styled
 npm i --workspace @repo/web --save @fontsource/roboto
 npm i --workspace @repo/web --save @mui/icons-material
 npm i --workspace @repo/web --save @mui/x-data-grid
-# npm i --workspace @repo/web --save @mui/x-date-pickers
 npm i --workspace @repo/web --save notistack
 npm i --workspace @repo/web --save-dev typescript jest ts-jest @types/jest
 npm i --workspace @repo/web --save avvvatars-react
@@ -305,6 +305,10 @@ npm i --workspace @repo/shared --save date-fns
 mkdir packages/utils
 npm i --workspace @repo/shared --save ts-loader
 npm i --workspace @repo/shared --save-dev ts-node typescript jest
+
+# Common packages
+npm i @openapitools/openapi-generator-cli -D
+
 
 ```
 
@@ -436,3 +440,6 @@ openssl rand -base64 60
 - [**ESLint** - ESLint no-unused-vars: _ ignore prefix](https://johnnyreilly.com/typescript-eslint-no-unused-vars)
 - [**TypeScript** - How to Remove a Property from an Object in TypeScript](https://bobbyhadz.com/blog/typescript-object-remove-property)
 - [**Yup** - Schema builder for runtime value parsing and validation](https://yup-docs.vercel.app/docs/intro)
+- [**React** - Path To A Clean(er) React Architecture](https://profy.dev/article/react-architecture-api-client)
+- [**Shared DTO** - Domain Entities & DTOs](https://profy.dev/article/react-architecture-domain-entities-and-dtos)
+- [**Shared DTO** - A Guide to OpenAPI Code Generation for TypeScript](https://www.stefanwille.com/2021/05/2021-05-30-openapi-code-generator-for-typescript)

@@ -1,6 +1,6 @@
 import { IRole, IUser } from '@repo/shared';
 import { Role } from '../../roles/entities/role.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Logger } from '../../../resources/abstract/logger.abstract';
 
 @Entity()
@@ -30,7 +30,7 @@ export class User extends Logger implements IUser {
     language: string | null;
 
     @ManyToOne(() => Role, { createForeignKeyConstraints: false })
-    role?: IRole;
+    role?: Relation<IRole>;
 
     @Column()
     roleId: number;

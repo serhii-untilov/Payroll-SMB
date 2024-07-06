@@ -1,5 +1,13 @@
 import { HoursByDay, IPayroll } from '@repo/shared';
-import { AfterLoad, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    Index,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Relation,
+} from 'typeorm';
 import { Logger } from '../../../resources/abstract/logger.abstract';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
@@ -12,7 +20,7 @@ export class Payroll extends Logger implements IPayroll {
     id: number;
 
     @ManyToOne(() => Position, { createForeignKeyConstraints: false })
-    position?: Position;
+    position?: Relation<Position>;
 
     @Column({ type: 'integer' })
     positionId: number;
@@ -24,7 +32,7 @@ export class Payroll extends Logger implements IPayroll {
     accPeriod: Date;
 
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
-    paymentType?: PaymentType;
+    paymentType?: Relation<PaymentType>;
 
     @Column({ type: 'integer' })
     paymentTypeId: number;

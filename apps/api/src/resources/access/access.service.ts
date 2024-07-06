@@ -19,6 +19,7 @@ import { CreateAccessDto } from './dto/create-access.dto';
 import { UpdateAccessDto } from './dto/update-access.dto';
 import { Access } from './entities/access.entity';
 import { UsersCompanyService } from '../users/users-company.service';
+import { WrapperType } from 'src/types/WrapperType';
 
 @Injectable()
 export class AccessService {
@@ -28,9 +29,9 @@ export class AccessService {
         @InjectRepository(Access)
         private repository: Repository<Access>,
         @Inject(forwardRef(() => UsersService))
-        private readonly usersService: UsersService,
+        private readonly usersService: WrapperType<UsersService>,
         @Inject(forwardRef(() => UsersCompanyService))
-        private readonly usersCompanyService: UsersCompanyService,
+        private readonly usersCompanyService: WrapperType<UsersCompanyService>,
     ) {}
 
     async create(userId: number, data: CreateAccessDto): Promise<Access> {

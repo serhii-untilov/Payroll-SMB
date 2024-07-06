@@ -1,6 +1,6 @@
 import { IPaymentPosition } from '@repo/shared';
 import { Position } from '../../../positions/entities/position.entity';
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Logger } from '../../../abstract/logger.abstract';
 import { Payment } from '../../entities/payment.entity';
 
@@ -9,11 +9,11 @@ export class PaymentPosition extends Logger implements IPaymentPosition {
     @PrimaryGeneratedColumn('increment')
     id: number;
     @ManyToOne(() => Payment, (payment) => payment.paymentPositions)
-    payment?: Payment;
+    payment?: Relation<Payment>;
     @Column({ type: 'integer' })
     paymentId: number;
     @ManyToOne(() => Position, { createForeignKeyConstraints: false })
-    position?: Position;
+    position?: Relation<Position>;
     @Column({ type: 'integer' })
     positionId: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })

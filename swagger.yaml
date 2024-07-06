@@ -1,0 +1,4306 @@
+openapi: 3.0.0
+paths:
+  /api:
+    get:
+      operationId: AppController_getHello
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/title:
+    get:
+      operationId: AppController_getTitle
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/locales/{lang}/{ns}.json:
+    get:
+      operationId: AppController_getLocales
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /api/locales/add/{lng}/{ns}:
+    post:
+      operationId: AppController_addLocales
+      parameters: []
+      responses:
+        '201':
+          description: ''
+  /api/auth/register:
+    post:
+      operationId: AuthController_register
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokensDto'
+  /api/auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokensDto'
+  /api/auth/logout:
+    get:
+      operationId: AuthController_logout
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /api/auth/refresh:
+    get:
+      operationId: AuthController_refreshTokens
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokensDto'
+  /api/auth/preview:
+    post:
+      operationId: AuthController_demo
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthDto'
+  /api/users:
+    post:
+      operationId: UsersController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    get:
+      operationId: UsersController_findAll
+      parameters:
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/users/user:
+    get:
+      operationId: UsersController_getCurrentUser
+      parameters:
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/users/{id}:
+    get:
+      operationId: UsersController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    patch:
+      operationId: UsersController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      operationId: UsersController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/users/{id}/companies:
+    get:
+      operationId: UsersController_userCompanyList
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+        - name: deleted
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/users/company/{id}:
+    delete:
+      operationId: UsersController_userCompanyRemove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCompany'
+  /api/users/company/{id}/restore:
+    post:
+      operationId: UsersController_userCompanyRestore
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCompany'
+  /api/access:
+    post:
+      operationId: AccessController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccessDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    get:
+      operationId: AccessController_findAll
+      parameters:
+        - name: roleType
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: resourceType
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/access/{id}:
+    get:
+      operationId: AccessController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    patch:
+      operationId: AccessController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccessDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      operationId: AccessController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/access/available:
+    post:
+      operationId: AccessController_available
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailableAccessDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /api/access/available-user:
+    post:
+      operationId: AccessController_availableForUser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailableAccessUserDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /api/access/available-user-company:
+    post:
+      operationId: AccessController_availableForUserCompany
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailableAccessUserCompanyDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /api/roles:
+    post:
+      operationId: RolesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    get:
+      operationId: RolesController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/roles/{id}:
+    get:
+      operationId: RolesController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    patch:
+      operationId: RolesController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      operationId: RolesController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/laws:
+    get:
+      operationId: LawsController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/laws/{id}:
+    get:
+      operationId: LawsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/accounting:
+    get:
+      operationId: AccountingController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/accounting/{id}:
+    get:
+      operationId: AccountingController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/companies:
+    post:
+      operationId: CompaniesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompanyDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    get:
+      operationId: CompaniesController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+  /api/companies/{id}:
+    get:
+      operationId: CompaniesController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    patch:
+      operationId: CompaniesController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompanyDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    delete:
+      operationId: CompaniesController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+  /api/companies/{id}/calculate-payroll:
+    get:
+      operationId: CompaniesController_salaryCalculate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+  /api/server-events/company-stream/{companyId}:
+    get:
+      operationId: SseController_getCompanyStream
+      parameters:
+        - name: companyId
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/payment-types:
+    post:
+      operationId: PaymentTypesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentTypeDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentType'
+    get:
+      operationId: PaymentTypesController_findAll
+      parameters:
+        - name: part
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: groups
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: methods
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: ids
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentType'
+  /api/payment-types/{id}:
+    get:
+      operationId: PaymentTypesController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentType'
+    patch:
+      operationId: PaymentTypesController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentTypeDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentType'
+    delete:
+      operationId: PaymentTypesController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentType'
+  /api/pay-fund-types:
+    post:
+      operationId: PayFundTypesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePayFundTypeDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayFundType'
+    get:
+      operationId: PayFundTypesController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PayFundType'
+  /api/pay-fund-types/{id}:
+    get:
+      operationId: PayFundTypesController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayFundType'
+    patch:
+      operationId: PayFundTypesController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePayFundTypeDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayFundType'
+    delete:
+      operationId: PayFundTypesController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayFundType'
+  /api/positions:
+    post:
+      operationId: PositionsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePositionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/positions/find:
+    post:
+      operationId: PositionsController_findAll
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindPositionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/positions/{id}:
+    get:
+      operationId: PositionsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+        - name: onDate
+          required: true
+          in: query
+          schema:
+            format: date-time
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    patch:
+      operationId: PositionsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePositionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      operationId: PositionsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/positions/balance:
+    post:
+      operationId: PositionsController_findBalance
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindAllPositionBalanceDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/positions/person/{id}:
+    post:
+      operationId: PositionsController_findFirstByPersonId
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+        - name: onDate
+          required: true
+          in: query
+          schema:
+            format: date-time
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/pay-periods:
+    post:
+      operationId: PayPeriodsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePayPeriodDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayPeriod'
+    get:
+      operationId: PayPeriodsController_findAll
+      parameters:
+        - name: companyId
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+        - name: fullFieldList
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PayPeriod'
+  /api/pay-periods/current:
+    get:
+      operationId: PayPeriodsController_findCurrent
+      parameters:
+        - name: companyId
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+        - name: fullFieldList
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayPeriod'
+  /api/pay-periods/{id}:
+    get:
+      operationId: PayPeriodsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+        - name: fullFieldList
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayPeriod'
+    patch:
+      operationId: PayPeriodsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePayPeriodDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayPeriod'
+    delete:
+      operationId: PayPeriodsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayPeriod'
+  /api/pay-periods/close/{id}:
+    post:
+      operationId: PayPeriodsController_close
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayPeriod'
+  /api/pay-periods/open/{id}:
+    post:
+      operationId: PayPeriodsController_open
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayPeriod'
+  /api/payroll:
+    post:
+      operationId: PayrollsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePayrollDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payroll'
+  /api/payroll/{id}:
+    get:
+      operationId: PayrollsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payroll'
+    patch:
+      operationId: PayrollsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePayrollDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payroll'
+    delete:
+      operationId: PayrollsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payroll'
+  /api/payroll/find-all:
+    post:
+      operationId: PayrollsController_findAll
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindPayrollDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payroll'
+  /api/fund:
+    post:
+      operationId: PayFundsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePayFundDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayFund'
+  /api/fund/{id}:
+    get:
+      operationId: PayFundsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayFund'
+    patch:
+      operationId: PayFundsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePayFundDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayFund'
+    delete:
+      operationId: PayFundsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayFund'
+  /api/fund/find-all:
+    post:
+      operationId: PayFundsController_findAll
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindPayFundDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PayFund'
+  /api/work-norms:
+    post:
+      operationId: WorkNormsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkNormDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkNorm'
+    get:
+      operationId: WorkNormsController_findAll
+      parameters:
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkNorm'
+  /api/work-norms/{id}:
+    get:
+      operationId: WorkNormsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkNorm'
+    patch:
+      operationId: WorkNormsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWorkNormDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkNorm'
+    delete:
+      operationId: WorkNormsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkNorm'
+  /api/min-wage:
+    post:
+      operationId: MinWageController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MinWage'
+  /api/min-wage/{id}:
+    get:
+      operationId: MinWageController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinWage'
+    patch:
+      operationId: MinWageController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMinWageDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinWage'
+    delete:
+      operationId: MinWageController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinWage'
+  /api/tasks:
+    post:
+      operationId: TasksController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+  /api/tasks/find:
+    post:
+      operationId: TasksController_findAll
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindTaskDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+  /api/tasks/{id}:
+    get:
+      operationId: TasksController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    patch:
+      operationId: TasksController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    delete:
+      operationId: TasksController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+  /api/departments:
+    post:
+      operationId: DepartmentsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDepartmentDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+    get:
+      operationId: DepartmentsController_findAll
+      parameters:
+        - name: companyId
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Department'
+  /api/departments/{id}:
+    get:
+      operationId: DepartmentsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+    patch:
+      operationId: DepartmentsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDepartmentDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+    delete:
+      operationId: DepartmentsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+  /api/persons:
+    post:
+      operationId: PersonsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    get:
+      operationId: PersonsController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/persons/{id}:
+    get:
+      operationId: PersonsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    patch:
+      operationId: PersonsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePersonDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      operationId: PersonsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/persons/find:
+    post:
+      operationId: PersonsController_find
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindPersonDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/payments:
+    post:
+      operationId: PaymentsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /api/payments/{id}:
+    get:
+      operationId: PaymentsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+    patch:
+      operationId: PaymentsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+    delete:
+      operationId: PaymentsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /api/payments/find:
+    post:
+      operationId: PaymentsController_findAll
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindPaymentDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+  /api/payments/process/{id}:
+    post:
+      operationId: PaymentsController_process
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /api/payments/withdraw/{id}:
+    post:
+      operationId: PaymentsController_withdraw
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /api/payment-positions:
+    post:
+      operationId: PaymentPositionsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentPositionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPosition'
+  /api/payment-positions/{id}:
+    get:
+      operationId: PaymentPositionsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPosition'
+    patch:
+      operationId: PaymentPositionsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentPositionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPosition'
+    delete:
+      operationId: PaymentPositionsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPosition'
+  /api/payment-positions/find:
+    post:
+      operationId: PaymentPositionsController_findAll
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindPaymentPositionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentPosition'
+  /api/jobs:
+    post:
+      operationId: JobsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateJobDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+    get:
+      operationId: JobsController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Job'
+  /api/jobs/{id}:
+    get:
+      operationId: JobsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+    patch:
+      operationId: JobsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateJobDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+    delete:
+      operationId: JobsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+  /api/position-history:
+    post:
+      operationId: PositionHistoryController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePositionHistoryDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    get:
+      operationId: PositionHistoryController_findAll
+      parameters:
+        - name: positionId
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /api/position-history/{id}:
+    get:
+      operationId: PositionHistoryController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+        - name: relations
+          required: true
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    patch:
+      operationId: PositionHistoryController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePositionHistoryDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      operationId: PositionHistoryController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/position-history/find-last:
+    post:
+      operationId: PositionHistoryController_findLast
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindPositionHistoryDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+info:
+  title: Payroll SMB REST API
+  description: ''
+  version: '1.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    CreateUserDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        roleId:
+          type: number
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+        - roleId
+    TokensDto:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+          nullable: true
+      required:
+        - accessToken
+        - refreshToken
+    AuthDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        rememberMe:
+          type: boolean
+      required:
+        - email
+        - password
+        - rememberMe
+    UpdateUserDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        refreshToken:
+          type: string
+          nullable: true
+        isActive:
+          type: boolean
+        language:
+          type: string
+          nullable: true
+        roleId:
+          type: number
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        refreshToken:
+          type: string
+          nullable: true
+        isActive:
+          type: boolean
+        language:
+          type: string
+          nullable: true
+        roleId:
+          type: number
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - password
+        - refreshToken
+        - isActive
+        - language
+        - roleId
+    Law:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+      required:
+        - id
+        - name
+        - type
+    Accounting:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+      required:
+        - id
+        - name
+        - type
+    Department:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        parentDepartment:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Department'
+        parentDepartmentId:
+          type: number
+          nullable: true
+        childDepartments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Department'
+      required:
+        - id
+        - name
+        - companyId
+        - dateFrom
+        - dateTo
+    Person:
+      type: object
+      properties:
+        id:
+          type: number
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        fullName:
+          type: string
+        birthday:
+          format: date-time
+          type: string
+          nullable: true
+        taxId:
+          type: string
+        sex:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        photo:
+          type: string
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+      required:
+        - id
+        - firstName
+        - lastName
+        - middleName
+        - fullName
+        - birthday
+        - taxId
+        - sex
+        - phone
+        - email
+        - photo
+    Job:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+      required:
+        - id
+        - name
+    WorkNormPeriod:
+      type: object
+      properties:
+        id:
+          type: number
+        workNormId:
+          type: number
+        day:
+          type: number
+        hours:
+          type: number
+      required:
+        - id
+        - workNormId
+        - day
+        - hours
+    WorkNorm:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkNormPeriod'
+      required:
+        - id
+        - name
+        - type
+        - dateFrom
+        - dateTo
+    PaymentType:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        paymentPart:
+          type: string
+        paymentGroup:
+          type: string
+        calcMethod:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+        - name
+        - paymentPart
+        - paymentGroup
+        - calcMethod
+        - description
+    PositionHistory:
+      type: object
+      properties:
+        id:
+          type: number
+        position:
+          $ref: '#/components/schemas/Position'
+        positionId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        department:
+          $ref: '#/components/schemas/Department'
+        departmentId:
+          type: number
+          nullable: true
+        job:
+          $ref: '#/components/schemas/Job'
+        jobId:
+          type: number
+          nullable: true
+        workNorm:
+          $ref: '#/components/schemas/WorkNorm'
+        workNormId:
+          type: number
+          nullable: true
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        paymentTypeId:
+          type: number
+          nullable: true
+        wage:
+          type: number
+        rate:
+          type: number
+      required:
+        - id
+        - positionId
+        - dateFrom
+        - dateTo
+        - departmentId
+        - jobId
+        - workNormId
+        - paymentTypeId
+        - wage
+        - rate
+    PositionBalance:
+      type: object
+      properties:
+        id:
+          type: number
+        position:
+          $ref: '#/components/schemas/Position'
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        inBalance:
+          type: number
+        planDays:
+          type: number
+        planHours:
+          type: number
+        factDays:
+          type: number
+        factHours:
+          type: number
+        accruals:
+          type: number
+        deductions:
+          type: number
+        basic:
+          type: number
+        adjustments:
+          type: number
+        bonuses:
+          type: number
+        vacations:
+          type: number
+        sicks:
+          type: number
+        refunds:
+          type: number
+        other_accruals:
+          type: number
+        taxes:
+          type: number
+        payments:
+          type: number
+        other_deductions:
+          type: number
+        outBalance:
+          type: number
+      required:
+        - id
+        - positionId
+        - payPeriod
+        - planDays
+        - planHours
+        - factDays
+        - factHours
+        - accruals
+        - deductions
+        - basic
+        - adjustments
+        - bonuses
+        - vacations
+        - sicks
+        - refunds
+        - other_accruals
+        - taxes
+        - payments
+        - other_deductions
+        - outBalance
+    Position:
+      type: object
+      properties:
+        id:
+          type: number
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        cardNumber:
+          type: string
+        sequenceNumber:
+          type: number
+        description:
+          type: string
+        person:
+          $ref: '#/components/schemas/Person'
+        personId:
+          type: number
+          nullable: true
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionHistory'
+        balance:
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionBalance'
+      required:
+        - id
+        - companyId
+        - cardNumber
+        - sequenceNumber
+        - description
+        - personId
+        - dateFrom
+        - dateTo
+    UserCompany:
+      type: object
+      properties:
+        id:
+          type: number
+        user:
+          $ref: '#/components/schemas/User'
+        userId:
+          type: number
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        roleId:
+          type: number
+      required:
+        - id
+        - userId
+        - companyId
+        - roleId
+    Company:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        taxId:
+          type: string
+        law:
+          $ref: '#/components/schemas/Law'
+        lawId:
+          type: number
+        accounting:
+          $ref: '#/components/schemas/Accounting'
+        accountingId:
+          type: number
+        paymentSchedule:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        payPeriod:
+          format: date-time
+          type: string
+        checkDate:
+          format: date-time
+          type: string
+        departments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Department'
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserCompany'
+      required:
+        - id
+        - name
+        - taxId
+        - lawId
+        - accountingId
+        - paymentSchedule
+        - dateFrom
+        - dateTo
+        - payPeriod
+        - checkDate
+    CreateAccessDto:
+      type: object
+      properties:
+        roleType:
+          type: string
+        resourceType:
+          type: string
+        accessType:
+          type: string
+      required:
+        - roleType
+        - resourceType
+        - accessType
+    UpdateAccessDto:
+      type: object
+      properties:
+        roleType:
+          type: string
+        resourceType:
+          type: string
+        accessType:
+          type: string
+    AvailableAccessDto:
+      type: object
+      properties:
+        roleType:
+          type: string
+        resourceType:
+          type: string
+        accessType:
+          type: string
+      required:
+        - roleType
+        - resourceType
+        - accessType
+    AvailableAccessUserDto:
+      type: object
+      properties:
+        userId:
+          type: number
+        resourceType:
+          type: string
+        accessType:
+          type: string
+      required:
+        - userId
+        - resourceType
+        - accessType
+    AvailableAccessUserCompanyDto:
+      type: object
+      properties:
+        userId:
+          type: number
+        companyId:
+          type: number
+        resourceType:
+          type: string
+        accessType:
+          type: string
+      required:
+        - userId
+        - companyId
+        - resourceType
+        - accessType
+    CreateRoleDto:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+      required:
+        - name
+        - type
+    UpdateRoleDto:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+    CreateCompanyDto:
+      type: object
+      properties:
+        name:
+          type: string
+        lawId:
+          type: number
+        taxId:
+          type: string
+        accountingId:
+          type: number
+        paymentSchedule:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        payPeriod:
+          format: date-time
+          type: string
+        checkDate:
+          format: date-time
+          type: string
+      required:
+        - name
+        - lawId
+        - taxId
+        - accountingId
+        - paymentSchedule
+        - dateFrom
+        - dateTo
+        - payPeriod
+        - checkDate
+    UpdateCompanyDto:
+      type: object
+      properties:
+        name:
+          type: string
+        lawId:
+          type: number
+        taxId:
+          type: string
+        accountingId:
+          type: number
+        paymentSchedule:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        payPeriod:
+          format: date-time
+          type: string
+        checkDate:
+          format: date-time
+          type: string
+    CreatePaymentTypeDto:
+      type: object
+      properties:
+        name:
+          type: string
+        paymentPart:
+          type: string
+        paymentGroup:
+          type: string
+        calcMethod:
+          type: string
+        description:
+          type: string
+      required:
+        - name
+        - paymentPart
+        - paymentGroup
+        - calcMethod
+        - description
+    UpdatePaymentTypeDto:
+      type: object
+      properties:
+        name:
+          type: string
+        paymentPart:
+          type: string
+        paymentGroup:
+          type: string
+        calcMethod:
+          type: string
+        description:
+          type: string
+    CreatePayFundTypeDto:
+      type: object
+      properties:
+        name:
+          type: string
+        group:
+          type: string
+        calcMethod:
+          type: string
+        sequence:
+          type: number
+        description:
+          type: string
+      required:
+        - name
+        - group
+        - calcMethod
+        - sequence
+        - description
+    PayFundType:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        group:
+          type: string
+        calcMethod:
+          type: string
+        sequence:
+          type: number
+        description:
+          type: string
+      required:
+        - id
+        - name
+        - group
+        - calcMethod
+        - sequence
+        - description
+    UpdatePayFundTypeDto:
+      type: object
+      properties:
+        name:
+          type: string
+        group:
+          type: string
+        calcMethod:
+          type: string
+        sequence:
+          type: number
+        description:
+          type: string
+    CreatePositionDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        cardNumber:
+          type: string
+        sequenceNumber:
+          type: number
+        description:
+          type: string
+        personId:
+          type: object
+          nullable: true
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+      required:
+        - companyId
+        - cardNumber
+        - sequenceNumber
+        - description
+        - personId
+        - dateFrom
+        - dateTo
+    FindPositionDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        onDate:
+          format: date-time
+          type: string
+        onPayPeriodDate:
+          format: date-time
+          type: string
+        relations:
+          type: boolean
+        employeesOnly:
+          type: boolean
+        vacanciesOnly:
+          type: boolean
+        dismissedOnly:
+          type: boolean
+        deletedOnly:
+          type: boolean
+        includeDeleted:
+          type: boolean
+        id:
+          type: number
+        company:
+          $ref: '#/components/schemas/Company'
+        cardNumber:
+          type: string
+        sequenceNumber:
+          type: number
+        description:
+          type: string
+        person:
+          $ref: '#/components/schemas/Person'
+        personId:
+          type: number
+          nullable: true
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionHistory'
+        balance:
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionBalance'
+      required:
+        - companyId
+    UpdatePositionDto:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        cardNumber:
+          type: string
+        sequenceNumber:
+          type: number
+        description:
+          type: string
+        person:
+          $ref: '#/components/schemas/Person'
+        personId:
+          type: number
+          nullable: true
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionHistory'
+        balance:
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionBalance'
+    FindAllPositionBalanceDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+      required:
+        - companyId
+    CreatePayPeriodDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        state:
+          type: string
+        inBalance:
+          type: number
+        inCompanyDebt:
+          type: number
+        inEmployeeDebt:
+          type: number
+        accruals:
+          type: number
+        deductions:
+          type: number
+        basic:
+          type: number
+        adjustments:
+          type: number
+        bonuses:
+          type: number
+        vacations:
+          type: number
+        sicks:
+          type: number
+        refunds:
+          type: number
+        other_accruals:
+          type: number
+        taxes:
+          type: number
+        payments:
+          type: number
+        other_deductions:
+          type: number
+        outBalance:
+          type: number
+        outCompanyDebt:
+          type: number
+        outEmployeeDebt:
+          type: number
+        funds:
+          type: number
+      required:
+        - companyId
+        - dateFrom
+        - dateTo
+        - state
+    PayPeriod:
+      type: object
+      properties:
+        id:
+          type: number
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        state:
+          type: string
+        inBalance:
+          type: number
+        inCompanyDebt:
+          type: number
+        inEmployeeDebt:
+          type: number
+        accruals:
+          type: number
+        deductions:
+          type: number
+        basic:
+          type: number
+        adjustments:
+          type: number
+        bonuses:
+          type: number
+        vacations:
+          type: number
+        sicks:
+          type: number
+        refunds:
+          type: number
+        other_accruals:
+          type: number
+        taxes:
+          type: number
+        payments:
+          type: number
+        other_deductions:
+          type: number
+        outBalance:
+          type: number
+        outCompanyDebt:
+          type: number
+        outEmployeeDebt:
+          type: number
+        funds:
+          type: number
+        calcMethods:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayPeriodCalcMethod'
+      required:
+        - id
+        - companyId
+        - dateFrom
+        - dateTo
+        - state
+        - inBalance
+        - inCompanyDebt
+        - inEmployeeDebt
+        - accruals
+        - deductions
+        - basic
+        - adjustments
+        - bonuses
+        - vacations
+        - sicks
+        - refunds
+        - other_accruals
+        - taxes
+        - payments
+        - other_deductions
+        - outBalance
+        - outCompanyDebt
+        - outEmployeeDebt
+        - funds
+    PayPeriodCalcMethod:
+      type: object
+      properties:
+        id:
+          type: number
+        payPeriod:
+          $ref: '#/components/schemas/PayPeriod'
+        payPeriodId:
+          type: number
+        calcMethod:
+          type: string
+        factSum:
+          type: number
+      required:
+        - id
+        - payPeriodId
+        - calcMethod
+        - factSum
+    UpdatePayPeriodDto:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        state:
+          type: string
+        inBalance:
+          type: number
+        inCompanyDebt:
+          type: number
+        inEmployeeDebt:
+          type: number
+        accruals:
+          type: number
+        deductions:
+          type: number
+        basic:
+          type: number
+        adjustments:
+          type: number
+        bonuses:
+          type: number
+        vacations:
+          type: number
+        sicks:
+          type: number
+        refunds:
+          type: number
+        other_accruals:
+          type: number
+        taxes:
+          type: number
+        payments:
+          type: number
+        other_deductions:
+          type: number
+        outBalance:
+          type: number
+        outCompanyDebt:
+          type: number
+        outEmployeeDebt:
+          type: number
+        funds:
+          type: number
+        calcMethods:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayPeriodCalcMethod'
+    CreatePayrollDto:
+      type: object
+      properties:
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        paymentTypeId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        sourceType:
+          type: object
+          nullable: true
+        sourceId:
+          type: object
+          nullable: true
+        dateBegin:
+          type: object
+          nullable: true
+        dateEnd:
+          type: object
+          nullable: true
+        planDays:
+          type: number
+        planHours:
+          type: number
+        planSum:
+          type: number
+        rate:
+          type: number
+        factDays:
+          type: number
+        factHours:
+          type: number
+        factSum:
+          type: number
+        mask1:
+          type: number
+        mask2:
+          type: number
+        recordFlags:
+          type: number
+        fixedFlags:
+          type: number
+        planHoursByDay:
+          type: object
+          nullable: true
+        factHoursByDay:
+          type: object
+          nullable: true
+        parentId:
+          type: object
+          nullable: true
+      required:
+        - positionId
+        - payPeriod
+        - accPeriod
+        - paymentTypeId
+        - dateFrom
+        - dateTo
+        - factSum
+        - recordFlags
+    Payroll:
+      type: object
+      properties:
+        id:
+          type: number
+        position:
+          $ref: '#/components/schemas/Position'
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        paymentTypeId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        sourceType:
+          type: string
+          nullable: true
+        sourceId:
+          type: number
+          nullable: true
+        dateBegin:
+          format: date-time
+          type: string
+          nullable: true
+        dateEnd:
+          format: date-time
+          type: string
+          nullable: true
+        planDays:
+          type: number
+        planHours:
+          type: number
+        planSum:
+          type: number
+        rate:
+          type: number
+        factDays:
+          type: number
+        factHours:
+          type: number
+        factSum:
+          type: number
+        mask1:
+          type: number
+        mask2:
+          type: number
+        recordFlags:
+          type: number
+        fixedFlags:
+          type: number
+        planHoursByDay:
+          type: object
+          nullable: true
+        factHoursByDay:
+          type: object
+          nullable: true
+        parentId:
+          type: number
+          nullable: true
+      required:
+        - id
+        - positionId
+        - payPeriod
+        - accPeriod
+        - paymentTypeId
+        - dateFrom
+        - dateTo
+        - sourceType
+        - sourceId
+        - dateBegin
+        - dateEnd
+        - planDays
+        - planHours
+        - planSum
+        - rate
+        - factDays
+        - factHours
+        - factSum
+        - mask1
+        - mask2
+        - recordFlags
+        - fixedFlags
+        - planHoursByDay
+        - factHoursByDay
+        - parentId
+    UpdatePayrollDto:
+      type: object
+      properties:
+        position:
+          $ref: '#/components/schemas/Position'
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        paymentTypeId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        sourceType:
+          type: string
+          nullable: true
+        sourceId:
+          type: number
+          nullable: true
+        dateBegin:
+          format: date-time
+          type: string
+          nullable: true
+        dateEnd:
+          format: date-time
+          type: string
+          nullable: true
+        planDays:
+          type: number
+        planHours:
+          type: number
+        planSum:
+          type: number
+        rate:
+          type: number
+        factDays:
+          type: number
+        factHours:
+          type: number
+        factSum:
+          type: number
+        mask1:
+          type: number
+        mask2:
+          type: number
+        recordFlags:
+          type: number
+        fixedFlags:
+          type: number
+        planHoursByDay:
+          type: object
+          nullable: true
+        factHoursByDay:
+          type: object
+          nullable: true
+        parentId:
+          type: number
+          nullable: true
+    FindPayrollDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        relations:
+          type: boolean
+    CreatePayFundDto:
+      type: object
+      properties:
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        payFundTypeId:
+          type: number
+        payFundCategory:
+          type: string
+        incomeSum:
+          type: number
+        baseSum:
+          type: number
+        rate:
+          type: number
+        paySum:
+          type: number
+      required:
+        - positionId
+        - payPeriod
+        - accPeriod
+        - payFundTypeId
+        - payFundCategory
+        - incomeSum
+        - baseSum
+        - rate
+        - paySum
+    PayFund:
+      type: object
+      properties:
+        id:
+          type: number
+        position:
+          $ref: '#/components/schemas/Position'
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        payFundType:
+          $ref: '#/components/schemas/PayFundType'
+        payFundTypeId:
+          type: number
+        payFundCategory:
+          type: string
+        incomeSum:
+          type: number
+        baseSum:
+          type: number
+        rate:
+          type: number
+        paySum:
+          type: number
+      required:
+        - id
+        - positionId
+        - payPeriod
+        - accPeriod
+        - payFundTypeId
+        - payFundCategory
+        - incomeSum
+        - baseSum
+        - rate
+        - paySum
+    UpdatePayFundDto:
+      type: object
+      properties:
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        payFundTypeId:
+          type: number
+        payFundCategory:
+          type: string
+        incomeSum:
+          type: number
+        baseSum:
+          type: number
+        rate:
+          type: number
+        paySum:
+          type: number
+    FindPayFundDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        relations:
+          type: boolean
+    CreateWorkNormDto:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+      required:
+        - id
+        - name
+        - type
+        - dateFrom
+        - dateTo
+    UpdateWorkNormDto:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+    CreateMinWageDto:
+      type: object
+      properties:
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        paySum:
+          type: number
+      required:
+        - dateFrom
+        - dateTo
+        - paySum
+    MinWage:
+      type: object
+      properties:
+        id:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        paySum:
+          type: number
+      required:
+        - id
+        - dateFrom
+        - dateTo
+        - paySum
+    UpdateMinWageDto:
+      type: object
+      properties:
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        paySum:
+          type: number
+        version:
+          type: number
+      required:
+        - version
+    CreateTaskDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        type:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        sequenceNumber:
+          type: number
+        status:
+          type: string
+        entityId:
+          type: object
+          nullable: true
+      required:
+        - companyId
+        - type
+        - dateFrom
+        - dateTo
+        - sequenceNumber
+        - status
+        - entityId
+    Task:
+      type: object
+      properties:
+        id:
+          type: number
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        type:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        sequenceNumber:
+          type: number
+        status:
+          type: string
+        entityId:
+          type: number
+          nullable: true
+      required:
+        - id
+        - companyId
+        - type
+        - dateFrom
+        - dateTo
+        - sequenceNumber
+        - status
+        - entityId
+    FindTaskDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        onDate:
+          format: date-time
+          type: string
+        onPayPeriodDate:
+          format: date-time
+          type: string
+        relations:
+          type: boolean
+        id:
+          type: number
+        company:
+          $ref: '#/components/schemas/Company'
+        type:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        sequenceNumber:
+          type: number
+        status:
+          type: string
+        entityId:
+          type: number
+          nullable: true
+      required:
+        - companyId
+    UpdateTaskDto:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        type:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        sequenceNumber:
+          type: number
+        status:
+          type: string
+        entityId:
+          type: number
+          nullable: true
+    CreateDepartmentDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        name:
+          type: string
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        parent:
+          type: object
+      required:
+        - companyId
+        - name
+        - dateFrom
+        - dateTo
+        - parent
+    UpdateDepartmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+        companyId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        parentDepartmentId:
+          type: number
+          nullable: true
+    CreatePersonDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        birthday:
+          format: date-time
+          type: string
+        taxId:
+          type: string
+        sex:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        photo:
+          type: string
+      required:
+        - firstName
+        - lastName
+    UpdatePersonDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        fullName:
+          type: string
+        birthday:
+          format: date-time
+          type: string
+          nullable: true
+        taxId:
+          type: string
+        sex:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        photo:
+          type: string
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+    FindPersonDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        birthday:
+          format: date-time
+          type: string
+        taxId:
+          type: string
+        sex:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        photo:
+          type: string
+    CreatePaymentDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        docNumber:
+          type: string
+        docDate:
+          format: date-time
+          type: string
+        paymentTypeId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        baseSum:
+          type: number
+        deductions:
+          type: number
+        paySum:
+          type: number
+        funds:
+          type: number
+        status:
+          type: string
+        recordFlags:
+          type: number
+        description:
+          type: string
+      required:
+        - companyId
+        - payPeriod
+        - accPeriod
+        - paymentTypeId
+    Payment:
+      type: object
+      properties:
+        id:
+          type: number
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        docNumber:
+          type: string
+        docDate:
+          format: date-time
+          type: string
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        paymentTypeId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        baseSum:
+          type: number
+        deductions:
+          type: number
+        paySum:
+          type: number
+        funds:
+          type: number
+        status:
+          type: string
+        recordFlags:
+          type: number
+        description:
+          type: string
+        paymentPositions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentPosition'
+      required:
+        - id
+        - companyId
+        - payPeriod
+        - accPeriod
+        - docNumber
+        - docDate
+        - paymentTypeId
+        - dateFrom
+        - dateTo
+        - baseSum
+        - deductions
+        - paySum
+        - funds
+        - status
+        - recordFlags
+        - description
+    PaymentPosition:
+      type: object
+      properties:
+        id:
+          type: number
+        payment:
+          $ref: '#/components/schemas/Payment'
+        paymentId:
+          type: number
+        position:
+          $ref: '#/components/schemas/Position'
+        positionId:
+          type: number
+        baseSum:
+          type: number
+        deductions:
+          type: number
+        paySum:
+          type: number
+        funds:
+          type: number
+        recordFlags:
+          type: number
+      required:
+        - id
+        - paymentId
+        - positionId
+        - baseSum
+        - deductions
+        - paySum
+        - funds
+        - recordFlags
+    UpdatePaymentDto:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/Company'
+        companyId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        docNumber:
+          type: string
+        docDate:
+          format: date-time
+          type: string
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        paymentTypeId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        baseSum:
+          type: number
+        deductions:
+          type: number
+        paySum:
+          type: number
+        funds:
+          type: number
+        status:
+          type: string
+        recordFlags:
+          type: number
+        description:
+          type: string
+        paymentPositions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentPosition'
+    FindPaymentDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        positionId:
+          type: number
+        payPeriod:
+          format: date-time
+          type: string
+        accPeriod:
+          format: date-time
+          type: string
+        paymentTypeId:
+          type: number
+        status:
+          type: string
+        relations:
+          type: boolean
+      required:
+        - companyId
+    CreatePaymentPositionDto:
+      type: object
+      properties:
+        paymentId:
+          type: number
+        positionId:
+          type: number
+        baseSum:
+          type: number
+        deductions:
+          type: number
+        paySum:
+          type: number
+        funds:
+          type: number
+        recordFlags:
+          type: number
+      required:
+        - paymentId
+        - positionId
+        - baseSum
+        - deductions
+        - paySum
+        - funds
+        - recordFlags
+    UpdatePaymentPositionDto:
+      type: object
+      properties:
+        payment:
+          $ref: '#/components/schemas/Payment'
+        paymentId:
+          type: number
+        position:
+          $ref: '#/components/schemas/Position'
+        positionId:
+          type: number
+        baseSum:
+          type: number
+        deductions:
+          type: number
+        paySum:
+          type: number
+        funds:
+          type: number
+        recordFlags:
+          type: number
+    FindPaymentPositionDto:
+      type: object
+      properties:
+        paymentId:
+          type: number
+        relations:
+          type: boolean
+      required:
+        - paymentId
+    CreateJobDto:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    UpdateJobDto:
+      type: object
+      properties:
+        name:
+          type: string
+    CreatePositionHistoryDto:
+      type: object
+      properties:
+        positionId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        departmentId:
+          type: object
+          nullable: true
+        jobId:
+          type: object
+          nullable: true
+        workNormId:
+          type: number
+        paymentTypeId:
+          type: number
+        wage:
+          type: number
+        rate:
+          type: number
+      required:
+        - positionId
+        - dateFrom
+        - dateTo
+        - jobId
+        - workNormId
+        - paymentTypeId
+        - wage
+        - rate
+    UpdatePositionHistoryDto:
+      type: object
+      properties:
+        position:
+          $ref: '#/components/schemas/Position'
+        positionId:
+          type: number
+        dateFrom:
+          format: date-time
+          type: string
+        dateTo:
+          format: date-time
+          type: string
+        department:
+          $ref: '#/components/schemas/Department'
+        departmentId:
+          type: number
+          nullable: true
+        job:
+          $ref: '#/components/schemas/Job'
+        jobId:
+          type: number
+          nullable: true
+        workNorm:
+          $ref: '#/components/schemas/WorkNorm'
+        workNormId:
+          type: number
+          nullable: true
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        paymentTypeId:
+          type: number
+          nullable: true
+        wage:
+          type: number
+        rate:
+          type: number
+    FindPositionHistoryDto:
+      type: object
+      properties:
+        positionId:
+          type: number
+        onDate:
+          format: date-time
+          type: string
+        onPayPeriodDate:
+          format: date-time
+          type: string
+        relations:
+          type: boolean
+      required:
+        - positionId

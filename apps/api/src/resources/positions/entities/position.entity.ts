@@ -7,6 +7,7 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    Relation,
 } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Company } from '../../companies/entities/company.entity';
@@ -22,7 +23,7 @@ export class Position extends Logger implements IPosition {
     @ManyToOne(() => Company, (company) => company.positions)
     // @ManyToOne(() => Company, { createForeignKeyConstraints: false })
     @JoinColumn()
-    company?: Company;
+    company?: Relation<Company>;
 
     @Column({ type: 'integer' })
     companyId: number;
@@ -38,7 +39,7 @@ export class Position extends Logger implements IPosition {
 
     @ManyToOne(() => Person, (person) => person.positions)
     @JoinColumn()
-    person?: Person;
+    person?: Relation<Person>;
 
     @Column({ type: 'integer', nullable: true })
     personId: number | null; // Vacancy, if not defined
@@ -50,10 +51,10 @@ export class Position extends Logger implements IPosition {
     dateTo: Date;
 
     @OneToMany(() => PositionHistory, (history) => history.position)
-    history?: PositionHistory[];
+    history?: Relation<PositionHistory>[];
 
     @OneToMany(() => PositionBalance, (balance) => balance.position)
-    balance?: PositionBalance[];
+    balance?: Relation<PositionBalance>[];
 
     @AfterLoad()
     transform() {

@@ -13,15 +13,15 @@ import {
     defaultPaymentGroupsTotal,
     defaultPaymentPartsTotal,
 } from '@repo/shared';
-import { Between, Repository, FindOptionsWhere } from 'typeorm';
+import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
-import { CompaniesService } from '../companies/companies.service';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { FindPayrollDto } from './dto/find-payroll.dto';
 import { UpdatePayrollDto } from './dto/update-payroll.dto';
 import { Payroll } from './entities/payroll.entity';
+import { WrapperType } from 'src/types/WrapperType';
 
 @Injectable()
 export class PayrollsService extends AvailableForUserCompany {
@@ -31,11 +31,9 @@ export class PayrollsService extends AvailableForUserCompany {
         @InjectRepository(Payroll)
         private repository: Repository<Payroll>,
         @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
+        public accessService: WrapperType<AccessService>,
         @Inject(forwardRef(() => PositionsService))
-        private positionsService: PositionsService,
-        @Inject(forwardRef(() => CompaniesService))
-        private companiesService: CompaniesService,
+        private positionsService: WrapperType<PositionsService>,
     ) {
         super(accessService);
     }

@@ -8,6 +8,7 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    Relation,
 } from 'typeorm';
 import { UserCompany } from '../../../resources/users/entities/user-company.entity';
 import { Logger } from '../../abstract/logger.abstract';
@@ -30,7 +31,7 @@ export class Company extends Logger implements ICompany {
     @ManyToOne(() => Law, {
         createForeignKeyConstraints: false,
     })
-    law?: Law;
+    law?: Relation<Law>;
 
     @Column({ type: 'integer', nullable: true })
     lawId: number;
@@ -38,7 +39,7 @@ export class Company extends Logger implements ICompany {
     @ManyToOne(() => Accounting, {
         createForeignKeyConstraints: false,
     })
-    accounting?: Accounting;
+    accounting?: Relation<Accounting>;
 
     @Column({ type: 'integer', nullable: true })
     accountingId: number;
@@ -59,13 +60,13 @@ export class Company extends Logger implements ICompany {
     checkDate: Date;
 
     @OneToMany(() => Department, (department) => department.company)
-    departments?: Department[];
+    departments?: Relation<Department>[];
 
     @OneToMany(() => Position, (position) => position.company)
-    positions?: Position[];
+    positions?: Relation<Position>[];
 
     @OneToMany(() => UserCompany, (userCompany) => userCompany.company)
-    users?: UserCompany[];
+    users?: Relation<UserCompany>[];
 
     @BeforeInsert()
     beforeInsert() {
