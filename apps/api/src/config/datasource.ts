@@ -1,6 +1,8 @@
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 // This file used for typeorm migrations only
 import * as dotenv from 'dotenv';
-import { DataSource, DataSourceOptions } from 'typeorm';
+import { DatabaseType, DataSource, DataSourceOptions } from 'typeorm';
+import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
 
 dotenv.config();
 
@@ -21,7 +23,28 @@ export const dbConfig = {
             : process.env['DATABASE_NAME'],
     entities: ['./src/resources/**/*entity.ts'],
     migrations: ['./src/migrations/**/*.ts'],
-    // subscribers: ['./src/subscribers/*subscriber.ts', './src/resources/**/*subscriber.ts'],
 };
 
-export const AppDataSource = new DataSource({ type: dbConfig.type } as DataSourceOptions);
+export const AppDataSource = new DataSource(getDataSource(dbConfig));
+
+function getDataSource(dbConfig: any): DataSourceOptions {
+    if (dbConfig.type === 'postgres') {
+        return getPostgresDataSource(dbConfig);
+    } else {
+        return getSqliteDataSource(dbConfig);
+    }
+}
+
+function getPostgresDataSource(dbConfig: any): PostgresConnectionOptions {
+    return {
+        ...dbConfig,
+        type: dbConfig.type as DatabaseType,
+    } as PostgresConnectionOptions;
+}
+
+function getSqliteDataSource(dbConfig: any): SqliteConnectionOptions {
+    return {
+        ...dbConfig,
+        type: dbConfig.type as DatabaseType,
+    } as SqliteConnectionOptions;
+}
