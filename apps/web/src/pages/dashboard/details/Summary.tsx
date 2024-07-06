@@ -1,13 +1,12 @@
-import { Box, Grid, Typography } from '@mui/material';
-import { IPayPeriod, formatDateTime, getPeriodName, monthBegin } from '@repo/shared';
+import { Grid, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { sub } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Link } from '../../../components/layout/Link';
 import useAppContext from '../../../hooks/useAppContext';
-import { getCurrentPayPeriod, getPayPeriodName } from '../../../services/payPeriod.service';
-import { useQuery } from '@tanstack/react-query';
 import useLocale from '../../../hooks/useLocale';
+import { getCurrentPayPeriod, getPayPeriodName } from '../../../services/payPeriod.service';
 import { capitalizeFirstChar, sumFormatter } from '../../../services/utils';
-import { sub } from 'date-fns';
 
 export function Summary() {
     const { company } = useAppContext();

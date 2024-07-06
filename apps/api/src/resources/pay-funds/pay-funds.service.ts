@@ -55,20 +55,20 @@ export class PayFundsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(userId: number, params: FindPayFundDto): Promise<PayFund[]> {
-        const { positionId, companyId, relations, ...other } = params;
+    async findAll(params: FindPayFundDto): Promise<PayFund[]> {
+        const { positionId, companyId, payPeriod, relations } = params;
         if (!positionId && !companyId) {
             throw new BadRequestException('Should be defined companyId or positionId');
         }
         return await this.repository.find({
-            where: {
-                ...other,
-                ...(positionId ? { positionId } : {}),
-                ...(companyId ? { position: { companyId } } : {}),
-            },
             relations: {
                 position: relations,
                 payFundType: relations,
+            },
+            where: {
+                ...(positionId ? { positionId } : {}),
+                ...(payPeriod ? { payPeriod } : {}),
+                ...(companyId ? { position: { companyId } } : {}),
             },
         });
     }
@@ -91,7 +91,7 @@ export class PayFundsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean): Promise<PayFund> {
+    async findOne(id: number, relations: boolean): Promise<PayFund> {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: { position: relations, payFundType: relations },
@@ -110,11 +110,11 @@ export class PayFundsService extends AvailableForUserCompany {
 
     async remove(userId: number, id: number) {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-        return await this.repository.findOneOrFail({ where: { id } });
+        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
-    async delete(userId: number, id: number) {
-        await this.repository.delete(id);
+    async delete(ids: number[]) {
+        await this.repository.delete(ids);
     }
 
     async payFundPositionPayFundCategories(

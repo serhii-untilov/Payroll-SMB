@@ -108,14 +108,13 @@ export class PayPeriodCalculationService {
         if (toDelete.length) {
             this.payPeriodsService.delete(toDelete);
         }
-        for (const period of toInsert) {
-            delete period.id;
+        for (const { id: _, ...period } of toInsert) {
             this.payPeriodsService.create(this.userId, period);
         }
     }
 
     async updateBalance(id: number): Promise<PayPeriod> {
-        const payPeriod = await this.payPeriodsService.find({ where: { id } });
+        const payPeriod = await this.payPeriodsService.findOne({ where: { id } });
         // Calculate In Balance
         const prior = await this.payPeriodsService.find({
             where: { companyId: payPeriod.companyId, dateTo: sub(payPeriod.dateFrom, { days: 1 }) },
@@ -136,7 +135,9 @@ export class PayPeriodCalculationService {
         );
         // Calculate Out Balance
         const outBalance =
-            inBalance + paymentParts[PaymentPart.ACCRUALS] - paymentParts[PaymentPart.DEDUCTIONS];
+            inBalance +
+            (paymentParts[PaymentPart.ACCRUALS] || 0) -
+            (paymentParts[PaymentPart.DEDUCTIONS] || 0);
         const outCompanyDebt = await this.positionsService.calcCompanyDebt(
             payPeriod.companyId,
             payPeriod.dateFrom,
@@ -162,7 +163,7 @@ export class PayPeriodCalculationService {
     }
 
     async updateCalcMethods(id: number): Promise<PayPeriodCalcMethod[]> {
-        const payPeriod = await this.payPeriodsService.find({ where: { id } });
+        const payPeriod = await this.payPeriodsService.findOne({ where: { id } });
         const calculatedRecords = await this.payrollsService.payrollCompanyCalcMethods(
             payPeriod.companyId,
             payPeriod.dateFrom,

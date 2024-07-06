@@ -21,6 +21,7 @@ export class PaymentCalc_Advance extends PaymentCalc {
 
     public calculate(): PaymentPosition {
         const paymentPosition = this.makePaymentPosition();
+        paymentPosition.payment = this.makePayment();
         paymentPosition.payment.dateFrom = getAdvancePaymentDate(this.ctx.payPeriod);
         paymentPosition.payment.dateTo = dateUTC(paymentPosition.payment.dateFrom);
         paymentPosition.baseSum = this.calcBaseSum();

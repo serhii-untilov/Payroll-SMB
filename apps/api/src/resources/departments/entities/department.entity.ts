@@ -20,7 +20,6 @@ export class Department extends Logger implements IDepartment {
     name: string;
 
     @ManyToOne(() => Company, (company) => company.departments)
-    // @ManyToOne(() => Company, { createForeignKeyConstraints: false })
     @JoinColumn()
     company?: Company;
 
@@ -28,10 +27,10 @@ export class Department extends Logger implements IDepartment {
     companyId: number;
 
     @Column({ type: 'date', default: '1900-01-01' })
-    dateFrom?: Date | null;
+    dateFrom: Date;
 
     @Column({ type: 'date', default: '9999-12-31' })
-    dateTo?: Date | null;
+    dateTo: Date;
 
     @ManyToOne(() => Department, (department) => department.childDepartments, { nullable: true })
     @JoinColumn()

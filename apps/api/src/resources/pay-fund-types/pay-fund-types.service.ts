@@ -44,7 +44,7 @@ export class PayFundTypesService extends AvailableForUser {
     }
 
     async findOne(id: number): Promise<PayFundType> {
-        return await this.repository.findOneBy({ id });
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async update(userId: number, id: number, payload: UpdatePayFundTypeDto): Promise<PayFundType> {

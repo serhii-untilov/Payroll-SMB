@@ -11,15 +11,17 @@ import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
 import { PositionHistory } from '../../../resources/position-history/entities/position-history.entity';
 import { PayrollCalculationService } from '../payrollCalculation.service';
 import { getWorkingTimeFact, getWorkingTimePlan } from '../../helpers/workingTime.helper';
+import { NotFoundException } from '@nestjs/common';
 
 export function calculateBasics(ctx: PayrollCalculationService) {
     for (const accPeriod of ctx.accPeriods) {
-        const assignments = ctx.position.history.filter(
-            (o) =>
-                o.dateFrom.getTime() <= accPeriod.dateTo.getTime() &&
-                o.dateTo.getTime() >= accPeriod.dateFrom.getTime() &&
-                o.paymentTypeId,
-        );
+        const assignments =
+            ctx.position.history?.filter(
+                (o) =>
+                    o.dateFrom.getTime() <= accPeriod.dateTo.getTime() &&
+                    o.dateTo.getTime() >= accPeriod.dateFrom.getTime() &&
+                    o.paymentTypeId,
+            ) || [];
         const payrolls: Payroll[] = [];
         for (const assignment of assignments) {
             const dateFrom = getMaxDate(
@@ -34,7 +36,10 @@ export function calculateBasics(ctx: PayrollCalculationService) {
             const fact = getWorkingTimeFact(plan, dateFrom, dateTo);
             const payroll = makePayroll(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact);
             const paymentType = ctx.paymentTypes.find((o) => o.id === payroll.paymentTypeId);
-            const calcMethod = getCalcMethod(paymentType?.calcMethod);
+            if (!paymentType) {
+                throw new NotFoundException('paymentType not found.');
+            }
+            const calcMethod = getCalcMethod(paymentType.calcMethod);
             payroll.factSum = calcMethod ? calcMethod(payroll) : 0;
             payrolls.push(payroll);
         }
@@ -86,8 +91,7 @@ function getCalcMethod(calcMethod: string): (payroll: Payroll) => number {
         case CalcMethod.COMMISSION:
             return calcCommission;
     }
-    // throw new NotFoundException('Calc method not found.');
-    return null;
+    throw new NotFoundException('Calc method not found.');
 }
 
 function calcSalary(payroll: Payroll) {

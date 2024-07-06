@@ -23,6 +23,7 @@ import {
 } from './dto/available-access.dto';
 import { CreateAccessDto } from './dto/create-access.dto';
 import { UpdateAccessDto } from './dto/update-access.dto';
+import { getUserId } from './../../utils/getUserId';
 
 @Controller('access')
 export class AccessController {
@@ -32,7 +33,7 @@ export class AccessController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateAccessDto): Promise<IAccess> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.accessService.create(userId, payload);
     }
 
@@ -61,7 +62,7 @@ export class AccessController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateAccessDto,
     ): Promise<IAccess> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.accessService.update(userId, id, payload);
     }
 
@@ -69,7 +70,7 @@ export class AccessController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IAccess> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.accessService.remove(userId, id);
     }
 

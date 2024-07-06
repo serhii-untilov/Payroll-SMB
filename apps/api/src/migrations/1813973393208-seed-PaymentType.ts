@@ -4,7 +4,7 @@ import { PaymentType } from '../resources/payment-types/entities/payment-type.en
 import { getSystemUserId } from '../utils/getSystemUserId';
 import { langPipe } from '../utils/langPipe';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const law = process.env.LAW;
 const entity = PaymentType;
 const recordList = [

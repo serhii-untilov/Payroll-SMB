@@ -1,11 +1,11 @@
+import { WorkNorm } from './../resources/work-norms/entities/work-norm.entity';
 import { getSystemUserId } from '../utils/getSystemUserId';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { WorkNorm } from '../resources/work-norms/entities/work-norm.entity';
 import { langPipe } from '../utils/langPipe';
 import { WorkNormType } from '@repo/shared';
 import { WorkNormPeriod } from '../resources/work-norms/entities/work-norm-period.entity';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const entity = WorkNorm;
 const recordList = [
     {
@@ -88,18 +88,14 @@ export class Seed1813965395397 implements MigrationInterface {
         const dataSource = queryRunner.connection;
         const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
-            const workNorm = {
-                ...recordList[n],
-                createdUserId: userId,
-                updatedUserId: userId,
-            };
-            delete workNorm.workNormPeriod;
+            const { workNormPeriod: _, ...workNorm } = recordList[n];
+            workNorm['createdUserId'] = userId;
+            workNorm['updatedUserId'] = userId;
             const result = await dataSource
                 .createQueryBuilder()
                 .insert()
                 .into(entity)
                 .values(langPipe(lang, workNorm))
-                // .orUpdate(['name', 'type', 'dateFrom', 'dateTo'], ['id'])
                 .execute();
             const { id: workNormId } = result.identifiers[0];
             for (let m = 0; m < recordList[n].workNormPeriod.length; m++) {

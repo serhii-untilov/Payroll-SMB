@@ -18,6 +18,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RolesService } from './roles.service';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('roles')
 export class RolesController {
@@ -27,21 +28,21 @@ export class RolesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateRoleDto): Promise<IRole> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.create(userId, payload);
     }
 
     @Get()
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request): Promise<IRole[]> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.findAll(userId);
     }
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IRole> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.findOne(userId, id);
     }
 
@@ -53,7 +54,7 @@ export class RolesController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateRoleDto,
     ): Promise<IRole> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.update(userId, id, payload);
     }
 
@@ -61,7 +62,7 @@ export class RolesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IRole> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.remove(userId, id);
     }
 }

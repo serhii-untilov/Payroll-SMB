@@ -18,6 +18,7 @@ export class PaymentCalc_Regular extends PaymentCalc {
 
     public calculate(): PaymentPosition {
         const paymentPosition = this.makePaymentPosition();
+        paymentPosition.payment = this.makePayment();
         paymentPosition.payment.dateFrom = getRegularPaymentDate(this.ctx.payPeriod);
         paymentPosition.payment.dateTo = dateUTC(paymentPosition.payment.dateFrom);
         paymentPosition.baseSum = this.calcBaseSum();

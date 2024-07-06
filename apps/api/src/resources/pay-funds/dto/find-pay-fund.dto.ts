@@ -1,12 +1,9 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IFindPayFund } from '@repo/shared';
-import { PayFund } from '../entities/pay-fund.entity';
-import { OmitType } from '@nestjs/mapped-types';
 
-export class FindPayFundDto
-    extends PartialType(OmitType(PayFund, ['transform']))
-    implements IFindPayFund
-{
+export class FindPayFundDto implements IFindPayFund {
     @ApiProperty() companyId?: number;
+    @ApiProperty() positionId?: number;
+    @ApiProperty() payPeriod?: Date;
     @ApiProperty() relations?: boolean;
 }

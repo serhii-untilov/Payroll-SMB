@@ -54,10 +54,10 @@ export class PositionHistory extends Logger implements IPositionHistory {
     paymentTypeId: number | null;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    wage: number | null;
+    wage: number;
 
     @Column({ type: 'decimal', precision: 4, scale: 2, default: 1 })
-    rate: number | null;
+    rate: number;
 
     @AfterLoad()
     transform() {

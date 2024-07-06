@@ -116,7 +116,7 @@ export function PositionHistory(props: Props) {
         console.log('onAdd');
     };
 
-    const onEdit = (id: number) => {
+    const onEdit = (_id: number) => {
         console.log('onEdit');
     };
 
@@ -134,7 +134,7 @@ export function PositionHistory(props: Props) {
         gridRef.current.exportDataAsCsv();
     };
 
-    const getRowStatus = (params: any): string => {
+    const getRowStatus = (_params: any): string => {
         return 'Normal';
     };
 
@@ -159,7 +159,7 @@ export function PositionHistory(props: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
+                    _details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEdit(params.row.id);
@@ -167,8 +167,8 @@ export function PositionHistory(props: Props) {
                 }}
                 onRowDoubleClick={(
                     params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
+                    _event: MuiEvent,
+                    _details: GridCallbackDetails,
                 ) => onEdit(params.row.id)}
             />
         </>

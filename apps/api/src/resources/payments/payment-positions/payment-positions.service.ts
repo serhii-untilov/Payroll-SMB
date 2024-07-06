@@ -54,12 +54,12 @@ export class PaymentPositionsService extends AvailableForUserCompany {
     }
 
     async findAll(params: FindPaymentPositionDto): Promise<PaymentPosition[]> {
-        const { paymentId, relations, ...other } = params;
+        const { paymentId, relations } = params;
         if (!paymentId) {
             throw new BadRequestException('Should be defined paymentId');
         }
         return await this.repository.find({
-            where: { ...other, paymentId },
+            where: { paymentId },
             relations: {
                 payment: relations,
                 position: relations
@@ -150,6 +150,9 @@ export class PaymentPositionsService extends AvailableForUserCompany {
     async process(userId: number, payment: Payment) {
         const paymentPositions = await this.findAll({ paymentId: payment.id, relations: true });
         for (const paymentPosition of paymentPositions) {
+            if (!payment?.company?.payPeriod) {
+                throw new Error('Undefined Pay Period.');
+            }
             await this.payrollsService.create(userId, {
                 positionId: paymentPosition.positionId,
                 payPeriod: payment.company.payPeriod,

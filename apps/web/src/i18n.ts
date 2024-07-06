@@ -1,6 +1,6 @@
 import i18n from 'i18next';
-import HttpBackend, { HttpBackendOptions } from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import HttpBackend, { HttpBackendOptions } from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 // import enJSON from './locale/en.json';
 // import ukJSON from './locale/uk.json';
@@ -51,13 +51,13 @@ i18n.use(LanguageDetector)
             // },
 
             // parse data before it has been sent by addPath
-            parsePayload: function (namespace, key, fallbackValue) {
+            parsePayload: function (_namespace, _key, fallbackValue) {
                 return { key: fallbackValue || '' };
             },
 
             // parse data before it has been sent by loadPath
             // if value returned it will send a POST request
-            parseLoadPayload: function (languages, namespaces) {
+            parseLoadPayload: function (_languages, _namespaces) {
                 return undefined;
             },
 

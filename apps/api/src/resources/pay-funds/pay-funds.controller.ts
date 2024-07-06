@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     Body,
     Controller,
     Delete,
@@ -22,6 +23,7 @@ import { Request } from 'express';
 import { deepStringToShortDate } from '@repo/shared';
 import { PayFund } from './entities/pay-fund.entity';
 import { FindPayFundDto } from './dto/find-pay-fund.dto';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('fund')
 export class PayFundsController {
@@ -31,7 +33,7 @@ export class PayFundsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreatePayFundDto): Promise<PayFund> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(payload.positionId);
         await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepStringToShortDate(payload));
@@ -45,9 +47,9 @@ export class PayFundsController {
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
     ): Promise<PayFund> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId, id);
-        return await this.service.findOne(userId, id, relations);
+        return await this.service.findOne(id, relations);
     }
 
     @Patch(':id')
@@ -58,7 +60,7 @@ export class PayFundsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdatePayFundDto,
     ): Promise<PayFund> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
@@ -67,7 +69,7 @@ export class PayFundsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<PayFund> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
@@ -76,8 +78,15 @@ export class PayFundsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() params: FindPayFundDto): Promise<PayFund[]> {
-        const userId = req.user['sub'];
-        await this.service.availableFindAllOrFail(userId, params.companyId);
-        return await this.service.findAll(userId, deepStringToShortDate(params));
+        const userId = getUserId(req);
+        if (params.companyId) {
+            await this.service.availableFindAllOrFail(userId, params.companyId);
+        } else if (params.positionId) {
+            const companyId = await this.service.getPositionCompanyId(params.positionId);
+            await this.service.availableFindAllOrFail(userId, companyId);
+        } else {
+            throw new BadRequestException('Company or Position should be defined.');
+        }
+        return await this.service.findAll(deepStringToShortDate(params));
     }
 }

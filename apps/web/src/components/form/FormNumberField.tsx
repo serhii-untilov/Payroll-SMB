@@ -23,7 +23,7 @@ export const FormNumberField = (props: Props) => {
                 name={props.name}
                 control={props.control}
                 rules={props.rules}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <OutlinedInput
                         disabled={!!disabled}
                         autoFocus={props?.autoFocus}

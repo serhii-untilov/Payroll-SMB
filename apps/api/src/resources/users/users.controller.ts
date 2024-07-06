@@ -22,6 +22,7 @@ import { IPublicUserData, IUserCompany } from '@repo/shared';
 import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { Request } from 'express';
 import { UsersCompanyService } from './users-company.service';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('users')
 export class UsersController {
@@ -34,7 +35,7 @@ export class UsersController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateUserDto): Promise<IPublicUserData> {
-        const userId: number = req.user['sub'];
+        const userId: number = getUserId(req);
         const user = await this.usersService.create(userId, payload);
         return UsersService.toPublic(user);
     }
@@ -46,7 +47,7 @@ export class UsersController {
         @Req() req: Request,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPublicUserData[]> {
-        const userId: number = req.user['sub'];
+        const userId: number = getUserId(req);
         const users = await this.usersService.findAll(userId, { relations: { role: !!relations } });
         return users.map((user) => UsersService.toPublic(user));
     }
@@ -58,7 +59,7 @@ export class UsersController {
         @Req() req: Request,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPublicUserData> {
-        const id: number = req.user['sub'];
+        const id: number = getUserId(req);
         const user = await this.usersService.findOne({
             where: { id },
             relations: { role: !!relations },
@@ -70,7 +71,6 @@ export class UsersController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(
-        @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations?: boolean,
     ): Promise<IPublicUserData> {
@@ -89,7 +89,7 @@ export class UsersController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateUserDto,
     ): Promise<IPublicUserData> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const user = await this.usersService.update(userId, id, payload);
         return UsersService.toPublic(user);
     }
@@ -101,7 +101,7 @@ export class UsersController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
     ): Promise<IPublicUserData> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const user = await this.usersService.remove(userId, id);
         return UsersService.toPublic(user);
     }
@@ -115,7 +115,7 @@ export class UsersController {
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
         @Query('deleted', new ParseBoolPipe({ optional: true })) deleted: boolean,
     ): Promise<IUserCompany[]> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.usersCompanyService.getUserCompanyList(
             userId,
             id,
@@ -131,7 +131,7 @@ export class UsersController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
     ): Promise<UserCompany> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.usersCompanyService.remove(userId, id);
     }
 
@@ -142,7 +142,7 @@ export class UsersController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
     ): Promise<UserCompany> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.usersCompanyService.restore(userId, id);
     }
 }

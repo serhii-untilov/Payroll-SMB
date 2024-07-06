@@ -4,7 +4,7 @@ import { PayFundType } from './../resources/pay-fund-types/entities/pay-fund-typ
 import { getSystemUserId } from './../utils/getSystemUserId';
 import { langPipe } from './../utils/langPipe';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const law = process.env.LAW;
 const entity = PayFundType;
 const recordList = [
@@ -105,18 +105,14 @@ export class Seed1816557460889 implements MigrationInterface {
         const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
             if (recordList[n].law && recordList[n].law !== law) continue;
-            const record = {
-                ...recordList[n],
-                createdUserId: userId,
-                updatedUserId: userId,
-            };
-            delete record.law;
+            const { law: _, ...record } = recordList[n];
+            record['createdUserId'] = userId;
+            record['updatedUserId'] = userId;
             await dataSource
                 .createQueryBuilder()
                 .insert()
                 .into(entity)
                 .values(langPipe(lang, record))
-                // .orUpdate(['name'], ['id'])
                 .execute();
         }
     }

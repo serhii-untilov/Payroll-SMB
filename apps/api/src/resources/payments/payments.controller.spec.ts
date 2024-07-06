@@ -10,6 +10,7 @@ import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
 import { PaymentPositionsService } from './payment-positions/payment-positions.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PayPeriodsService } from '../pay-periods/payPeriods.service';
 
 describe('PaymentsController', () => {
     let controller: PaymentsController;
@@ -31,6 +32,7 @@ describe('PaymentsController', () => {
                     useValue: createMock<PaymentPositionsService>(),
                 },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
+                { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
             ],
         }).compile();
 

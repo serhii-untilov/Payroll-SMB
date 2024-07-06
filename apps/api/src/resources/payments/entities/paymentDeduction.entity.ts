@@ -16,11 +16,11 @@ export class PaymentDeduction implements IPaymentDeduction {
     @Column({ type: 'integer' })
     paymentTypeId: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    baseSum?: number;
+    baseSum: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    paySum?: number;
+    paySum: number;
     @Column({ type: 'bigint', default: 0 })
-    recordFlags?: number; // See enum RecordFlags
+    recordFlags: number; // See enum RecordFlags
 
     @AfterLoad()
     transform() {

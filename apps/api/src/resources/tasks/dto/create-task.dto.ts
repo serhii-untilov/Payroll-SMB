@@ -8,4 +8,5 @@ export class CreateTaskDto implements ICreateTask {
     @ApiProperty() dateTo: Date;
     @ApiProperty() sequenceNumber: number;
     @ApiProperty() status: string; // See enum TaskStatus
+    @ApiProperty() entityId: number | null;
 }

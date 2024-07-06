@@ -6,6 +6,8 @@ import { CreateUserDto } from '../resources/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';
+import { getUserId } from 'src/utils/getUserId';
+import { getRefreshToken } from 'src/utils/getRefreshToken';
 
 @Controller('auth')
 export class AuthController {
@@ -27,15 +29,16 @@ export class AuthController {
     @UseGuards(AccessTokenGuard)
     @Get('logout')
     async logout(@Req() req: Request): Promise<null> {
-        return this.authService.logout(req.user['sub']);
+        const userId = getUserId(req);
+        return this.authService.logout(userId);
     }
 
     @HttpCode(HttpStatus.OK)
     @UseGuards(RefreshTokenGuard)
     @Get('refresh')
     refreshTokens(@Req() req: Request) {
-        const userId = req.user['sub'];
-        const refreshToken = req.user['refreshToken'];
+        const userId = getUserId(req);
+        const refreshToken = getRefreshToken(req);
         return this.authService.refreshTokens(userId, refreshToken);
     }
 

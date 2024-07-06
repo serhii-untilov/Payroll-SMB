@@ -4,18 +4,17 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { IDepartment, formatDate, maxDate, minDate } from '@repo/shared';
+import { ICreateDepartment, IDepartment, maxDate, minDate } from '@repo/shared';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { enqueueSnackbar } from 'notistack';
-import { Dispatch, Fragment, useEffect, useMemo } from 'react';
+import { Dispatch, Fragment, useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import * as yup from 'yup';
-import { SelectDepartment } from '../../components/select/SelectDepartment';
+import { InferType, ObjectSchema, date, number, object, string } from 'yup';
 import { FormDateField } from '../../components/form/FormDateField';
 import { FormTextField } from '../../components/form/FormTextField';
 import { Button } from '../../components/layout/Button';
+import { SelectDepartment } from '../../components/select/SelectDepartment';
 import useAppContext from '../../hooks/useAppContext';
 import useLocale from '../../hooks/useLocale';
 import {
@@ -24,6 +23,7 @@ import {
     updateDepartment,
 } from '../../services/department.service';
 import { getDirtyValues } from '../../services/utils';
+import { snackbarError, snackbarFormErrors } from '../../utils/snackbar';
 
 export interface Params {
     open: boolean;
@@ -32,20 +32,9 @@ export interface Params {
     submitCallback?: Dispatch<IDepartment>;
 }
 
-const formSchema = yup.object().shape({
-    id: yup.number().nullable(),
-    name: yup.string().required('Name is required'),
-    companyId: yup.number().positive('Company is required').required(),
-    dateFrom: yup.date().nullable(),
-    dateTo: yup.date().nullable(),
-    parentDepartmentId: yup.number().nullable(),
-    version: yup.number().nullable(),
-});
-
-type FormType = yup.InferType<typeof formSchema>;
-
 export default function DepartmentForm(params: Params) {
-    const { departmentId, submitCallback } = params;
+    const { submitCallback } = params;
+    const departmentId = Number(params.departmentId);
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company } = useAppContext();
@@ -53,34 +42,27 @@ export default function DepartmentForm(params: Params) {
 
     useEffect(() => {}, [company]);
 
-    // To prevent Warning: A component is changing an uncontrolled input to be controlled.
-    const defaultValues = useMemo((): FormType => {
-        return {
-            id: null,
-            name: '',
-            companyId: company?.id || 0,
-            dateFrom: minDate(),
-            dateTo: maxDate(),
-            parentDepartmentId: null,
-            version: null,
-        };
-    }, [company]);
-
     const {
         data: department,
-        isError: isDepartmentError,
-        error: departmentError,
-    } = useQuery<FormType, Error>({
-        queryKey: ['department', { departmentId, companyId: company?.id }],
+        isError,
+        error,
+    } = useQuery<IDepartment | null, Error>({
+        queryKey: ['department', { departmentId }],
         queryFn: async () => {
-            return formSchema.cast(
-                departmentId
-                    ? await getDepartment(departmentId)
-                    : { ...defaultValues, companyId: company?.id },
-            );
+            return departmentId ? await getDepartment(departmentId) : null;
         },
-        enabled: !!company?.id,
+        enabled: !!departmentId,
     });
+
+    const formSchema: ObjectSchema<ICreateDepartment> = object({
+        name: string().required('Name is required').default(''),
+        companyId: number().required('Company is required').default(company?.id),
+        dateFrom: date().required('DateFrom is required').default(minDate()),
+        dateTo: date().required('DateTo is required').default(maxDate()),
+        parentDepartmentId: number().nullable(),
+    });
+
+    type FormType = InferType<typeof formSchema>;
 
     const {
         control,
@@ -88,8 +70,8 @@ export default function DepartmentForm(params: Params) {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: department || defaultValues,
-        values: department || defaultValues,
+        defaultValues: department || {},
+        values: formSchema.cast(department || {}),
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -99,45 +81,38 @@ export default function DepartmentForm(params: Params) {
     useEffect(() => {}, [locale]);
 
     useEffect(() => {
-        formErrors.name?.message &&
-            enqueueSnackbar(t(formErrors.name?.message), { variant: 'error' });
-        formErrors.companyId?.message &&
-            enqueueSnackbar(t(formErrors.companyId?.message), { variant: 'error' });
-        formErrors.dateFrom?.message &&
-            enqueueSnackbar(t(formErrors.dateFrom?.message), { variant: 'error' });
-        formErrors.dateTo?.message &&
-            enqueueSnackbar(t(formErrors.dateTo?.message), { variant: 'error' });
+        snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    if (isDepartmentError) {
-        return enqueueSnackbar(`${departmentError.name}\n${departmentError.message}`, {
-            variant: 'error',
-        });
+    if (isError) {
+        snackbarError(`${error.name}\n${error.message}`);
     }
 
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) {
-            reset(department);
             params.setOpen(false);
+            return;
         }
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const department = data.id
-                ? await updateDepartment(data.id, { ...dirtyValues, version: data.version })
+            const response = department
+                ? await updateDepartment(department.id, {
+                      ...dirtyValues,
+                      version: department.version,
+                  })
                 : await createDepartment(data);
-            reset(department);
-            if (submitCallback) submitCallback(department);
+            if (submitCallback) submitCallback(response);
             params.setOpen(false);
-            reset(defaultValues);
+            reset();
             await queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
-            enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
+            snackbarError(`${error.code}\n${error.message}`);
         }
     };
 
     const onCancel = async () => {
-        reset(defaultValues);
+        reset();
         params.setOpen(false);
         await queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
@@ -149,27 +124,15 @@ export default function DepartmentForm(params: Params) {
                 open={params.open}
                 onClose={async () => {
                     params.setOpen(false);
-                    reset(department);
+                    reset();
                     await queryClient.invalidateQueries({
                         queryKey: ['department'],
                         refetchType: 'all',
                     });
                 }}
-                // PaperProps={{
-                //     component: 'form',
-                //     onSubmit: (event: FormEvent<HTMLFormElement>) => {
-                //         event.preventDefault();
-                //         handleSubmit(onSubmit);
-                //         params.setOpen(false);
-                //     },
-                // }}
             >
                 <DialogTitle>{t('Department')}</DialogTitle>
                 <DialogContent>
-                    {/* <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We will
-                        send updates occasionally.
-                    </DialogContentText> */}
                     <Grid container item xs={12} spacing={2}>
                         <Grid item xs={12}>
                             <FormTextField
@@ -190,7 +153,6 @@ export default function DepartmentForm(params: Params) {
                                 name="dateFrom"
                                 id="dateFrom"
                                 label={t('Date From')}
-                                // defaultValue={formatDate(minDate())}
                             />
                         </Grid>
 
@@ -201,7 +163,6 @@ export default function DepartmentForm(params: Params) {
                                 name="dateTo"
                                 id="dateTo"
                                 label={t('Date To')}
-                                // defaultValue={formatDate(maxDate())}
                             />
                         </Grid>
 
@@ -217,9 +178,6 @@ export default function DepartmentForm(params: Params) {
                     </Grid>
                 </DialogContent>
                 <DialogActions sx={{ mb: 2, mr: 2, pt: 0 }}>
-                    {/* <Button disabled={!isDirty} type="submit">
-                        Subscribe
-                    </Button> */}
                     <Button onClick={handleSubmit(onSubmit)}>{t('Update')}</Button>
                     <Button color="secondary" onClick={onCancel}>
                         {t('Cancel')}

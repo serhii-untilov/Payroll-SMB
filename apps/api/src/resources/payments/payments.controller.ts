@@ -22,6 +22,7 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Payment } from './entities/payment.entity';
 import { PaymentsService } from './payments.service';
 import { FindPaymentDto } from './dto/find-payment.dto';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('payments')
 export class PaymentsController {
@@ -31,7 +32,7 @@ export class PaymentsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreatePaymentDto): Promise<Payment> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const companyId = await this.service.getCompanyId(payload.companyId);
         await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepStringToShortDate(payload));
@@ -45,7 +46,7 @@ export class PaymentsController {
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
     ): Promise<Payment> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const found = await this.service.findOne(id, relations);
         await this.service.availableFindOneOrFail(userId, found.companyId);
         return found;
@@ -59,7 +60,7 @@ export class PaymentsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdatePaymentDto,
     ): Promise<Payment> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
@@ -68,7 +69,7 @@ export class PaymentsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Payment> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
@@ -77,7 +78,7 @@ export class PaymentsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Body() params: FindPaymentDto): Promise<Payment[]> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, params.companyId);
         return await this.service.findAll(deepStringToShortDate(params));
     }
@@ -90,7 +91,7 @@ export class PaymentsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() params: { version: number },
     ): Promise<Payment> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return this.service.process(userId, id, params.version);
     }
@@ -103,7 +104,7 @@ export class PaymentsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() params: { version: number },
     ): Promise<Payment> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return this.service.withdraw(userId, id, params.version);
     }

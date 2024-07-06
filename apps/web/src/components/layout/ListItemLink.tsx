@@ -5,7 +5,6 @@ import * as React from 'react';
 import { NavLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 import useAppContext from '../../hooks/useAppContext';
 import { Tooltip } from './Tooltip';
-import { grey } from '@mui/material/colors';
 
 interface ListItemLinkProps extends ListItemProps {
     icon?: React.ReactElement;

@@ -19,6 +19,7 @@ import { CreatePersonDto } from './dto/create-person.dto';
 import { FindPersonDto } from './dto/find-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { PersonsService } from './persons.service';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('persons')
 export class PersonsController {
@@ -28,7 +29,7 @@ export class PersonsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreatePersonDto): Promise<IPerson> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
@@ -37,7 +38,7 @@ export class PersonsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request): Promise<IPerson[]> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId);
         return await this.service.findAll();
     }
@@ -46,7 +47,7 @@ export class PersonsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);
         return await this.service.findOne(id);
     }
@@ -59,7 +60,7 @@ export class PersonsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdatePersonDto,
     ): Promise<IPerson> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
@@ -68,7 +69,7 @@ export class PersonsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId);
         return await this.service.remove(userId, id);
     }
@@ -77,7 +78,7 @@ export class PersonsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async find(@Req() req: Request, @Body() params: FindPersonDto): Promise<IPerson | null> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);
         return await this.service.findOneBy(params);
     }

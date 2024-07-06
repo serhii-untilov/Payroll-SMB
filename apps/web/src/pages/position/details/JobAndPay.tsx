@@ -1,23 +1,26 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
-import { Box, Button, Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import {
+    formatDate,
+    ICreatePosition,
+    ICreatePositionHistory,
     IPosition,
     IPositionHistory,
-    PaymentGroup,
-    formatDate,
+    MAX_SEQUENCE_NUMBER,
     maxDate,
     minDate,
+    PaymentGroup,
 } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { enqueueSnackbar } from 'notistack';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
+import { date, InferType, number, object, string } from 'yup';
 import { FormDateField } from '../../../components/form/FormDateField';
 import { FormNumberField } from '../../../components/form/FormNumberField';
+import { FormSequenceField } from '../../../components/form/FormSequenceField';
 import { FormTextField } from '../../../components/form/FormTextField';
 import TabLayout from '../../../components/layout/TabLayout';
 import { Toolbar } from '../../../components/layout/Toolbar';
@@ -35,86 +38,111 @@ import {
     updatePositionHistory,
 } from '../../../services/positionHistory.service';
 import { getDirtyValues } from '../../../services/utils';
-import { FormSequenceField } from '../../../components/form/FormSequenceField';
-
-const formSchema = yup.object().shape({
-    // Position
-    id: yup.number().nullable(),
-    companyId: yup.number().positive('Company is required').required(),
-    cardNumber: yup.string().nullable(),
-    sequenceNumber: yup.number().nullable(),
-    description: yup.string().nullable(),
-    personId: yup.number().nullable(),
-    fullName: yup.string().nullable(),
-    dateFrom: yup.date().required(),
-    dateTo: yup.date().required(),
-    deletedUserId: yup.number().nullable(),
-    name: yup.string().nullable(),
-    version: yup.number().nullable(),
-    // A PositionHistory record actual on the current PayPeriod
-    positionHistoryId: yup.number().nullable(),
-    departmentId: yup.number().nullable(),
-    jobId: yup.number().nullable(),
-    workNormId: yup.number().nullable(),
-    paymentTypeId: yup.number().nullable(),
-    wage: yup.number().nullable().notRequired().optional(),
-    rate: yup.number().nullable().notRequired().optional().min(0).max(2),
-    positionHistoryVersion: yup.number().nullable(),
-});
-
-type FormType = yup.InferType<typeof formSchema>;
+import { snackbarError, snackbarFormErrors } from '../../../utils/snackbar';
 
 interface Props {
-    positionId: number | null | undefined;
+    positionId?: number | null;
     onSubmitCallback: (positionId) => void;
 }
 
-export function JobAndPay({ positionId, onSubmitCallback }: Props) {
+export function JobAndPay(props: Props) {
+    const { onSubmitCallback } = props;
+    const [positionId, setPositionId] = useState(Number(props.positionId));
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { company, payPeriod } = useAppContext();
+    const { company } = useAppContext();
     const queryClient = useQueryClient();
 
     useEffect(() => {}, [company]);
 
-    const getDefaultPosition = () => {
-        return {
-            companyId: company?.id,
-            dateFrom: minDate(),
-            dateTo: maxDate(),
-            rate: 1,
-            personId: null,
-        };
-    };
-
-    const getFormData = async (positionId: number | null | undefined): Promise<FormType> => {
-        const position = positionId
-            ? await getPosition({ id: positionId, relations: true })
-            : getDefaultPosition();
-        const positionHistory =
-            positionId && payPeriod
-                ? (await findLastPositionHistoryOnPayPeriodDate(positionId, payPeriod, true)) || {}
-                : {};
-        return formSchema.cast({ ...position_formData(position, positionHistory) });
-    };
-
-    const { data, isError, error, isLoading } = useQuery<FormType, Error>({
-        queryKey: ['position', { companyId: company?.id, positionId }],
-        queryFn: () => {
-            return getFormData(positionId);
-        },
-        enabled: !!company && !!payPeriod,
+    const {
+        data: position,
+        isError: isPositionError,
+        error: positionError,
+        isLoading: isPositionLoading,
+    } = useQuery<IPosition, Error>({
+        queryKey: ['position', { positionId }],
+        queryFn: async () => await getPosition({ id: positionId, relations: true }),
+        enabled: !!positionId,
     });
+
+    const {
+        data: positionHistory,
+        isError: isPositionHistoryError,
+        error: positionHistoryError,
+        isLoading: isPositionHistoryLoading,
+    } = useQuery<IPositionHistory, Error>({
+        queryKey: ['positionHistory', 'last', { positionId }],
+        queryFn: async () => {
+            return await findLastPositionHistoryOnPayPeriodDate(
+                positionId,
+                company?.payPeriod || new Date(),
+                true,
+            );
+        },
+        enabled: !!positionId && !!company?.payPeriod,
+    });
+
+    const formSchema = object().shape({
+        // Position
+        cardNumber: string().ensure(),
+        sequenceNumber: number().default(MAX_SEQUENCE_NUMBER),
+        description: string().ensure(),
+        personId: number().required().nullable(),
+        fullName: string().nullable(),
+        dateFrom: date().required().default(minDate()),
+        dateTo: date().required().default(maxDate()),
+        name: string().nullable(),
+        // A PositionHistory record actual on the current PayPeriod
+        departmentId: number().nullable(),
+        jobId: number().nullable(),
+        workNormId: number().nullable(),
+        paymentTypeId: number().nullable(),
+        wage: number().nullable().notRequired().optional(),
+        rate: number().nullable().notRequired().optional().min(0).max(2),
+        positionHistoryVersion: number().nullable(),
+    });
+
+    type FormType = InferType<typeof formSchema>;
+
+    const position_formData = useCallback(
+        (
+            position: IPosition | undefined,
+            positionHistory: IPositionHistory | undefined,
+        ): FormType => {
+            return {
+                // Position fields
+                cardNumber: position?.cardNumber || '',
+                sequenceNumber: position?.sequenceNumber || MAX_SEQUENCE_NUMBER,
+                description: position?.description || '',
+                personId: position?.personId || null,
+                fullName: position?.person?.fullName || null,
+                dateFrom: position?.dateFrom || minDate(),
+                dateTo: position?.dateTo || maxDate(),
+                // Position history fields
+                departmentId: positionHistory?.departmentId || null,
+                jobId: positionHistory?.jobId || null,
+                workNormId: positionHistory?.workNormId || null,
+                paymentTypeId: positionHistory?.paymentTypeId || null,
+                wage: positionHistory?.wage || 0,
+                rate: positionHistory?.rate || 0,
+            };
+        },
+        [],
+    );
+
+    const formData = useMemo<FormType>(() => {
+        return position_formData(position, positionHistory);
+    }, [position, positionHistory, position_formData]);
 
     const {
         control,
         handleSubmit,
         reset,
         formState: { errors: formErrors },
-        watch,
     } = useForm({
-        defaultValues: data,
-        values: data,
+        defaultValues: formData,
+        values: formData,
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -126,26 +154,33 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
     useEffect(() => {}, [locale]);
 
     useEffect(() => {
-        formErrors.companyId?.message &&
-            enqueueSnackbar(t(formErrors.companyId?.message), { variant: 'error' });
-        formErrors.dateFrom?.message &&
-            enqueueSnackbar(t(formErrors.dateFrom?.message), { variant: 'error' });
-        formErrors.dateTo?.message &&
-            enqueueSnackbar(t(formErrors.dateTo?.message), { variant: 'error' });
-        formErrors.rate?.message && enqueueSnackbar(t('Rate error'), { variant: 'error' });
+        snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    if (isLoading) {
+    if (isPositionLoading || isPositionHistoryLoading) {
         return <></>;
     }
 
-    if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
+    if (isPositionError) {
+        snackbarError(`${positionError.name}\n${positionError.message}`);
+        return <></>;
     }
 
-    // console.log('watch(personId)', watch('personId'));
+    if (isPositionHistoryError) {
+        snackbarError(`${positionHistoryError.name}\n${positionHistoryError.message}`);
+        return <></>;
+    }
+
+    const formData_Position = (data: FormType): ICreatePosition => {
+        const { cardNumber, sequenceNumber, description, personId, dateFrom, dateTo } = data;
+        const companyId = company?.id || 0;
+        return { companyId, cardNumber, sequenceNumber, description, personId, dateFrom, dateTo };
+    };
+
+    const formData_PositionHistory = (data: FormType): ICreatePositionHistory => {
+        const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = data;
+        return { departmentId, jobId, workNormId, paymentTypeId, wage: wage || 0, rate: rate || 1 };
+    };
 
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) {
@@ -159,60 +194,52 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
         const positionDirtyValues = getDirtyValues(dirtyFields, positionData, true);
         const positionHistoryDirtyValues = getDirtyValues(dirtyFields, positionHistoryData, true);
         try {
-            let pos = positionData;
-            if (Object.keys(positionDirtyValues).length || !pos.id) {
-                pos = positionData.id
-                    ? await updatePosition(positionData.id, {
+            let pos = position;
+            if (Object.keys(positionDirtyValues).length || !position) {
+                pos = position
+                    ? await updatePosition(position.id, {
                           ...positionDirtyValues,
-                          version: positionData.version,
+                          version: position.version,
                       })
                     : await createPosition(positionData);
             }
+            let history = positionHistory;
             if (Object.keys(positionHistoryDirtyValues).length) {
-                if (!pos.id) {
+                if (!pos?.id) {
                     throw Error('positionId not defined');
                 }
-                data.positionHistoryId
-                    ? await updatePositionHistory(data.positionHistoryId, {
+                history = positionHistory
+                    ? await updatePositionHistory(positionHistory.id, {
                           ...positionHistoryDirtyValues,
-                          version: positionHistoryData.version,
+                          version: positionHistory.version,
                       })
                     : await createPositionHistory({
+                          ...positionHistoryDirtyValues,
                           positionId: pos.id,
                           dateFrom: pos.dateFrom,
                           dateTo: pos.dateTo,
-                          ...positionHistoryDirtyValues,
                       });
             }
-            reset(await getFormData(pos?.id));
+            if (pos && history) {
+                setPositionId(pos.id);
+                reset(formSchema.cast(position_formData(pos, history)));
+            }
             await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
-            await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
+            await queryClient.invalidateQueries({
+                queryKey: ['positionHistory'],
+                refetchType: 'all',
+            });
             onSubmitCallback(pos?.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
-            enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
+            snackbarError(`${error.code}\n${error.message}`);
         }
     };
 
     const onCancel = async () => {
-        reset(await getFormData(data?.id));
+        reset(formData);
         await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
-    };
-
-    const onDelete = () => {
-        console.log('onDelete');
-    };
-
-    const onRestoreDeleted = () => {
-        console.log('onRestoreDeleted');
-    };
-
-    const onPrint = () => {
-        console.log('onPrint');
-    };
-
-    const onExport = () => {
-        console.log('onExport');
+        await queryClient.invalidateQueries({ queryKey: ['positionHistory'], refetchType: 'all' });
     };
 
     return (
@@ -246,7 +273,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                                     control={control}
                                     name="personId"
                                     label={t('Full Name')}
-                                    autoFocus={!data?.personId}
+                                    autoFocus={!position?.personId}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={3}>
@@ -323,7 +350,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                                     // defaultValue={0}
                                     step={500}
                                     min={0}
-                                    autoFocus={!!data?.personId}
+                                    autoFocus={!!position?.personId}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6} md={3}>
@@ -367,7 +394,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                     <Grid item md={12} lg={10} xl={8}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={6}>
-                                {positionId && data?.personId ? (
+                                {positionId && position?.personId ? (
                                     <Grid item xs={12}>
                                         <Button startIcon={<HistoryRounded />}>
                                             {t('Assignments History')}
@@ -386,7 +413,7 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
                                         {t('Add Additional Earning Type')}
                                     </Button>
                                 </Grid>
-                                {positionId && data?.personId ? (
+                                {positionId && position?.personId ? (
                                     <Grid item xs={12}>
                                         <Button startIcon={<AddCircleRounded />}>
                                             {t('Add Additional Deduction Type')}
@@ -400,87 +427,4 @@ export function JobAndPay({ positionId, onSubmitCallback }: Props) {
             </TabLayout>
         </>
     );
-}
-
-function position_formData(
-    position: Partial<IPosition>,
-    positionHistory: Partial<IPositionHistory>,
-): Partial<FormType> {
-    const {
-        id,
-        companyId,
-        cardNumber,
-        sequenceNumber,
-        description,
-        personId,
-        dateFrom,
-        dateTo,
-        deletedUserId,
-        version,
-    } = position;
-    const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = positionHistory;
-    return {
-        // Position fields
-        id,
-        companyId,
-        cardNumber,
-        sequenceNumber,
-        description,
-        personId,
-        fullName: position?.person?.fullName || '',
-        dateFrom: dateFrom || minDate(),
-        dateTo: dateTo || maxDate(),
-        deletedUserId,
-        version,
-        // Position history fields
-        positionHistoryId: positionHistory?.id,
-        departmentId,
-        jobId,
-        workNormId,
-        paymentTypeId,
-        wage,
-        rate,
-        positionHistoryVersion: positionHistory?.version,
-    };
-}
-
-function formData_Position(formData: FormType): IPosition {
-    const {
-        id,
-        companyId,
-        cardNumber,
-        sequenceNumber,
-        description,
-        personId,
-        dateFrom,
-        dateTo,
-        deletedUserId,
-        version,
-    } = formData;
-    return {
-        id,
-        companyId,
-        cardNumber,
-        sequenceNumber,
-        description,
-        personId,
-        dateFrom,
-        dateTo,
-        deletedUserId,
-        version,
-    };
-}
-
-function formData_PositionHistory(data: FormType): Partial<IPositionHistory> {
-    const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = data;
-    return {
-        id: data.positionHistoryId,
-        departmentId,
-        jobId,
-        workNormId,
-        paymentTypeId,
-        wage,
-        rate,
-        version: data.positionHistoryVersion,
-    };
 }

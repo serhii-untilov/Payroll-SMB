@@ -1,8 +1,8 @@
 import { PaymentStatus, RecordFlags } from '@repo/shared';
-import { Payment } from './../../../../resources/payments/entities/payment.entity';
 import { PaymentPosition } from '../../../../resources/payments/payment-positions/entities/paymentPosition.entity';
-import { PaymentCalculationService } from './../../payment-calculation.service';
 import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
+import { Payment } from './../../../../resources/payments/entities/payment.entity';
+import { PaymentCalculationService } from './../../payment-calculation.service';
 
 export abstract class PaymentCalc {
     ctx: PaymentCalculationService;
@@ -45,7 +45,7 @@ export abstract class PaymentCalc {
     public makePaymentPosition(): PaymentPosition {
         return Object.assign({
             id: this.ctx.getNextPaymentPositionId(),
-            payment: this.makePayment(),
+            payment: null, // this.makePayment()
             paymentId: 0,
             positionId: this.ctx.position.id,
             baseSum: 0,

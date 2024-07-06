@@ -18,6 +18,7 @@ import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
 import { PaymentTypesService } from './payment-types.service';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('payment-types')
 export class PaymentTypesController {
@@ -27,7 +28,7 @@ export class PaymentTypesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreatePaymentTypeDto) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.create(userId, payload);
     }
 
@@ -69,7 +70,7 @@ export class PaymentTypesController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updatePaymentTypeDto: UpdatePaymentTypeDto,
     ) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.update(userId, id, updatePaymentTypeDto);
     }
 
@@ -77,7 +78,7 @@ export class PaymentTypesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         return await this.service.remove(userId, id);
     }
 }

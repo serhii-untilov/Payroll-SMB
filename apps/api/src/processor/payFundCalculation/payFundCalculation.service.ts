@@ -99,7 +99,7 @@ export class PayFundCalculationService {
         this._payPeriod = await this.payPeriodsService.findOne({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
-        const positions = await this.positionsService.findAll(userId, {
+        const positions = await this.positionsService.findAll({
             companyId,
             onPayPeriodDate: this.company.payPeriod,
             employeesOnly: true,
@@ -210,13 +210,13 @@ export class PayFundCalculationService {
                 .reduce((a, b) => {
                     a.push(b);
                     return a;
-                }, []),
+                }, [] as PayFund[]),
         );
         return { toInsert, toDeleteIds };
     }
 
     private async loadResources() {
-        this._paymentTypes = await this.paymentTypesService.findAll(null);
+        this._paymentTypes = await this.paymentTypesService.findAll();
         this._payFundTypes = (await this.payFundTypesService.findAll()).sort(
             (a, b) => a.sequence - b.sequence,
         );
@@ -237,7 +237,7 @@ export class PayFundCalculationService {
         } else if (payFundType.calcMethod === PayFundCalcMethod.ECB_MIN_WAGE) {
             return new PayFundCalc_ECB_MinWage(this, accPeriod, payFundType, current);
         }
-        return null;
+        throw new Error(`Bad PayFund calc method ${payFundType.calcMethod}.`);
     }
 
     private async _calculatePosition() {
@@ -251,7 +251,6 @@ export class PayFundCalculationService {
             dateTo,
         );
         this._payrolls = await this.payrollsService.findBetween(
-            this.userId,
             this.position.id,
             dateFrom,
             dateTo,
@@ -290,14 +289,10 @@ export class PayFundCalculationService {
     }
 
     private async save(toInsert: PayFund[], toDeleteIds: number[]) {
-        for (let i = 0; i < toDeleteIds.length; ++i) {
-            this.logger.log(`PositionId: ${this.position.id}, Delete: ${toDeleteIds[i]}`);
-            await this.payFundsService.delete(this.userId, toDeleteIds[i]);
-        }
+        await this.payFundsService.delete(toDeleteIds);
         for (const record of toInsert) {
-            delete record.id;
-            const created = await this.payFundsService.create(this.userId, record);
-            this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
+            const { id: _, ...payload } = record;
+            await this.payFundsService.create(this.userId, payload);
         }
     }
 }

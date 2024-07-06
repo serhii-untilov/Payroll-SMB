@@ -1,11 +1,8 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IFindPositionHistory } from '@repo/shared';
-import { PositionHistory } from '../entities/position-history.entity';
 
-export class FindPositionHistoryDto
-    extends PartialType(PositionHistory)
-    implements IFindPositionHistory
-{
+export class FindPositionHistoryDto implements IFindPositionHistory {
+    @ApiProperty() positionId: number;
     @ApiProperty() onDate?: Date;
     @ApiProperty() onPayPeriodDate?: Date;
     @ApiProperty() relations?: boolean;

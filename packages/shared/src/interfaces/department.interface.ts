@@ -6,8 +6,8 @@ export interface IDepartment extends ILogger {
     name: string;
     company?: ICompany;
     companyId: number;
-    dateFrom?: Date | null;
-    dateTo?: Date | null;
+    dateFrom: Date;
+    dateTo: Date;
     parentDepartment?: IDepartment | null;
     parentDepartmentId?: number | null;
     childDepartments?: IDepartment[];
@@ -16,6 +16,9 @@ export interface IDepartment extends ILogger {
 export type ICreateDepartment = Omit<
     IDepartment,
     | 'id'
+    | 'company'
+    | 'parentDepartment'
+    | 'childDepartments'
     | 'createdDate'
     | 'createdUserId'
     | 'updatedDate'
@@ -29,6 +32,9 @@ export type IUpdateDepartment = Partial<
     Omit<
         IDepartment,
         | 'id'
+        | 'company'
+        | 'parentDepartment'
+        | 'childDepartments'
         | 'createdDate'
         | 'createdUserId'
         | 'updatedDate'

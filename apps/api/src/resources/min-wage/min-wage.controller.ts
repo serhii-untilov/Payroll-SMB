@@ -19,6 +19,7 @@ import { UpdateMinWageDto } from './dto/update-min-wage.dto';
 import { MinWage } from './entities/min-wage.entity';
 import { MinWageService } from './min-wage.service';
 import { deepStringToShortDate } from '@repo/shared';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('min-wage')
 export class MinWageController {
@@ -28,7 +29,7 @@ export class MinWageController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateMinWageDto): Promise<MinWage> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
@@ -37,7 +38,7 @@ export class MinWageController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request): Promise<MinWage[]> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId);
         return this.service.findAll();
     }
@@ -46,7 +47,7 @@ export class MinWageController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<MinWage> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);
         return await this.service.findOne(id);
     }
@@ -59,7 +60,7 @@ export class MinWageController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateMinWageDto,
     ): Promise<MinWage> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
@@ -68,7 +69,7 @@ export class MinWageController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<MinWage> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId);
         return await this.service.remove(userId, id);
     }

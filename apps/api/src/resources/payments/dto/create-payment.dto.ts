@@ -3,8 +3,8 @@ import { ICreatePayment } from '@repo/shared';
 
 export class CreatePaymentDto implements ICreatePayment {
     @ApiProperty() companyId: number;
-    @ApiProperty() payPeriod?: Date;
-    @ApiProperty() accPeriod?: Date;
+    @ApiProperty() payPeriod: Date;
+    @ApiProperty() accPeriod: Date;
     @ApiProperty() docNumber?: string;
     @ApiProperty() docDate?: Date;
     @ApiProperty() paymentTypeId: number;

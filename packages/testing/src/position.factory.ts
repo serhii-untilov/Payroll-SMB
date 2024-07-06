@@ -19,6 +19,8 @@ export const createMockPosition = (data?: Partial<IPosition>): IPosition => {
         dateFrom: new Date(), // Hire date or date of open vacancy
         dateTo: new Date(), // Dismissal date or date of close vacancy
 
+        personId: null,
+
         createdDate: currentDate,
         createdUserId: user.id,
         updatedDate: currentDate,

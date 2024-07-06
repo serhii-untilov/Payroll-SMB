@@ -7,9 +7,9 @@ export interface IPaymentDeduction {
     paymentPositionId: number;
     paymentType?: IPaymentType;
     paymentTypeId: number;
-    baseSum?: number;
-    paySum?: number;
-    recordFlags?: number; // See enum RecordFlags
+    baseSum: number;
+    paySum: number;
+    recordFlags: number; // See enum RecordFlags
 }
 
 export type ICreatePaymentDeduction = Omit<IPaymentDeduction, 'id'>;

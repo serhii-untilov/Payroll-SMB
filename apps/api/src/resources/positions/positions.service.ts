@@ -7,10 +7,15 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BalanceWorkingTime, PaymentPart, ResourceType, maxDate } from '@repo/shared';
+import {
+    BalanceWorkingTime,
+    MAX_SEQUENCE_NUMBER,
+    PaymentPart,
+    ResourceType,
+    maxDate,
+} from '@repo/shared';
 import { sub } from 'date-fns';
 import {
-    And,
     FindManyOptions,
     FindOneOptions,
     IsNull,
@@ -22,8 +27,8 @@ import {
 } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
-import { PayrollsService } from '../payrolls/payrolls.service';
 import { PayPeriodsService } from '../pay-periods/payPeriods.service';
+import { PayrollsService } from '../payrolls/payrolls.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { FindPositionDto } from './dto/find-position.dto';
 import { FindAllPositionBalanceDto, PositionBalanceExtended } from './dto/position-balance.dto';
@@ -76,9 +81,11 @@ export class PositionsService extends AvailableForUserCompany {
         }
 
         const cardNumber = payload?.cardNumber || (await this.getNextCardNumber(payload.companyId));
+        const sequenceNumber = payload.sequenceNumber || MAX_SEQUENCE_NUMBER;
         const created = await this.repository.save({
             ...payload,
             cardNumber,
+            sequenceNumber,
             createdUserId: userId,
             updatedUserId: userId,
         });
@@ -86,7 +93,7 @@ export class PositionsService extends AvailableForUserCompany {
         return created;
     }
 
-    async findAll(userId: number, payload: FindPositionDto): Promise<Position[]> {
+    async findAll(payload: FindPositionDto): Promise<Position[]> {
         const {
             companyId,
             onDate,
@@ -98,6 +105,14 @@ export class PositionsService extends AvailableForUserCompany {
             deletedOnly,
             includeDeleted,
         } = payload;
+        const payPeriod = onPayPeriodDate
+            ? await this.payPeriodsService.findOne({
+                  where: {
+                      companyId,
+                      dateFrom: onPayPeriodDate,
+                  },
+              })
+            : null;
         const options: FindManyOptions<Partial<Position>> = {
             relations: {
                 company: !!relations,
@@ -110,73 +125,65 @@ export class PositionsService extends AvailableForUserCompany {
                           paymentType: true,
                       }
                     : false,
+                ...(onDate
+                    ? {
+                          history: {
+                              department: true,
+                              job: true,
+                              workNorm: true,
+                              paymentType: true,
+                          },
+                      }
+                    : {}),
+                ...(onPayPeriodDate
+                    ? {
+                          history: {
+                              department: true,
+                              job: true,
+                              workNorm: true,
+                              paymentType: true,
+                          },
+                      }
+                    : {}),
             },
-            where: { companyId },
+            where: {
+                companyId,
+                ...(deletedOnly ? { withDeleted: true, deletedDate: Not(IsNull()) } : {}),
+                ...(includeDeleted ? { withDeleted: true } : {}),
+                ...(employeesOnly ? { personId: Not(IsNull()) } : {}),
+                ...(vacanciesOnly ? { personId: IsNull() } : {}),
+                ...(onDate
+                    ? {
+                          dateFrom: LessThanOrEqual(onDate),
+                          dateTo: MoreThanOrEqual(onDate),
+                          history: {
+                              dateTo: MoreThanOrEqual(onDate),
+                              dateFrom: LessThanOrEqual(onDate),
+                          },
+                      }
+                    : {}),
+                ...(onPayPeriodDate && payPeriod
+                    ? {
+                          dateFrom: LessThanOrEqual(payPeriod?.dateTo),
+                          dateTo: MoreThanOrEqual(payPeriod?.dateFrom),
+                          history: {
+                              dateTo: MoreThanOrEqual(payPeriod?.dateFrom),
+                              dateFrom: LessThanOrEqual(payPeriod?.dateTo),
+                          },
+                      }
+                    : {}),
+                ...(dismissedOnly ? {} : {}),
+            },
+            ...(dismissedOnly ? { andWhere: { dateTo: LessThan(maxDate()) } } : {}),
         };
-        if (deletedOnly) {
-            options['withDeleted'] = true;
-            options.where['deletedDate'] = Not(IsNull());
-        }
-        if (includeDeleted) {
-            options['withDeleted'] = true;
-        }
-        if (employeesOnly) {
-            options.where['personId'] = Not(IsNull());
-        }
-        if (vacanciesOnly) {
-            options.where['personId'] = IsNull();
-        }
-        if (onDate) {
-            options.where['dateFrom'] = LessThanOrEqual(onDate);
-            options.where['dateTo'] = MoreThanOrEqual(onDate);
-            if (relations) {
-                options.relations['history'] = {
-                    department: true,
-                    job: true,
-                    workNorm: true,
-                    paymentType: true,
-                };
-                options.where['history'] = {
-                    dateTo: MoreThanOrEqual(onDate),
-                    dateFrom: LessThanOrEqual(onDate),
-                };
-            }
-        }
-        if (onPayPeriodDate) {
-            const payPeriod = await this.payPeriodsService.findOne({
-                where: {
-                    companyId,
-                    dateFrom: onPayPeriodDate,
-                },
-            });
-            options.where['dateFrom'] = LessThanOrEqual(payPeriod.dateTo);
-            options.where['dateTo'] = MoreThanOrEqual(payPeriod.dateFrom);
-            if (relations) {
-                options.relations['history'] = {
-                    department: true,
-                    job: true,
-                    workNorm: true,
-                    paymentType: true,
-                };
-                options.where['history'] = {
-                    dateTo: MoreThanOrEqual(payPeriod.dateFrom),
-                    dateFrom: LessThanOrEqual(payPeriod.dateTo),
-                };
-            }
-        }
-        if (dismissedOnly) {
-            options.where['dateTo'] = options.where['dateTo']
-                ? And(LessThan(maxDate()))
-                : LessThan(maxDate());
-        }
         return await this.repository.find(options);
     }
 
     async findOne(
         id: number,
-        relations?: boolean,
-        onDate?: Date,
-        onPayPeriodDate?: Date,
+        relations: boolean = false,
+        onDate: Date | null = null,
+        onPayPeriodDate: Date | null = null,
     ): Promise<Position> {
         const position = await this.repository.findOneOrFail({
             where: { id },
@@ -196,6 +203,14 @@ export class PositionsService extends AvailableForUserCompany {
         if (!(onDate || onPayPeriodDate)) {
             return position;
         }
+        const payPeriod = onPayPeriodDate
+            ? await this.payPeriodsService.findOne({
+                  where: {
+                      companyId: position.companyId,
+                      dateFrom: onPayPeriodDate,
+                  },
+              })
+            : null;
         const options: FindOneOptions<Partial<Position>> = {
             relations: {
                 company: true,
@@ -209,26 +224,26 @@ export class PositionsService extends AvailableForUserCompany {
                       }
                     : false,
             },
-            where: { id },
+            where: {
+                id,
+                ...(onDate
+                    ? {
+                          history: {
+                              dateTo: MoreThanOrEqual(onDate),
+                              dateFrom: LessThanOrEqual(onDate),
+                          },
+                      }
+                    : {}),
+                ...(onPayPeriodDate && payPeriod
+                    ? {
+                          history: {
+                              dateTo: MoreThanOrEqual(payPeriod.dateFrom),
+                              dateFrom: LessThanOrEqual(payPeriod.dateTo),
+                          },
+                      }
+                    : {}),
+            },
         };
-        if (onDate && relations) {
-            options.where['history'] = {
-                dateTo: MoreThanOrEqual(onDate),
-                dateFrom: LessThanOrEqual(onDate),
-            };
-        }
-        if (onPayPeriodDate && relations) {
-            const payPeriod = await this.payPeriodsService.findOne({
-                where: {
-                    companyId: position.companyId,
-                    dateFrom: onPayPeriodDate,
-                },
-            });
-            options.where['history'] = {
-                dateTo: MoreThanOrEqual(payPeriod.dateFrom),
-                dateFrom: LessThanOrEqual(payPeriod.dateTo),
-            };
-        }
         return await this.repository.findOneOrFail(options);
     }
 
@@ -329,10 +344,7 @@ export class PositionsService extends AvailableForUserCompany {
         });
     }
 
-    async findAllBalance(
-        userId: number,
-        params: FindAllPositionBalanceDto,
-    ): Promise<PositionBalanceExtended[]> {
+    async findAllBalance(params: FindAllPositionBalanceDto): Promise<PositionBalanceExtended[]> {
         const payPeriod = await this.payPeriodsService.findOne({
             where: {
                 companyId: params.companyId,
@@ -469,12 +481,11 @@ export class PositionsService extends AvailableForUserCompany {
     }
 
     async findFirstByPersonId(
-        userId: number,
         companyId: number,
         personId: number,
-        relations?: boolean,
-        onDate?: Date,
-        onPayPeriodDate?: Date,
+        relations: boolean,
+        onDate: Date | null,
+        onPayPeriodDate: Date | null,
     ): Promise<Position> {
         const position = await this.repository.findOneOrFail({
             where: { personId, companyId },
@@ -494,6 +505,14 @@ export class PositionsService extends AvailableForUserCompany {
         if (!(onDate || onPayPeriodDate)) {
             return position;
         }
+        const payPeriod = onPayPeriodDate
+            ? await this.payPeriodsService.findOne({
+                  where: {
+                      companyId: position.companyId,
+                      dateFrom: onPayPeriodDate,
+                  },
+              })
+            : null;
         const options: FindOneOptions<Partial<Position>> = {
             relations: {
                 company: true,
@@ -507,26 +526,27 @@ export class PositionsService extends AvailableForUserCompany {
                       }
                     : false,
             },
-            where: { personId, companyId },
+            where: {
+                personId,
+                companyId,
+                ...(onDate
+                    ? {
+                          history: {
+                              dateTo: MoreThanOrEqual(onDate),
+                              dateFrom: LessThanOrEqual(onDate),
+                          },
+                      }
+                    : {}),
+                ...(onPayPeriodDate && payPeriod
+                    ? {
+                          history: {
+                              dateTo: MoreThanOrEqual(payPeriod.dateFrom),
+                              dateFrom: LessThanOrEqual(payPeriod.dateTo),
+                          },
+                      }
+                    : {}),
+            },
         };
-        if (onDate && relations) {
-            options.where['history'] = {
-                dateTo: MoreThanOrEqual(onDate),
-                dateFrom: LessThanOrEqual(onDate),
-            };
-        }
-        if (onPayPeriodDate && relations) {
-            const payPeriod = await this.payPeriodsService.findOne({
-                where: {
-                    companyId: position.companyId,
-                    dateFrom: onPayPeriodDate,
-                },
-            });
-            options.where['history'] = {
-                dateTo: MoreThanOrEqual(payPeriod.dateFrom),
-                dateFrom: LessThanOrEqual(payPeriod.dateTo),
-            };
-        }
         return await this.repository.findOneOrFail(options);
     }
 }

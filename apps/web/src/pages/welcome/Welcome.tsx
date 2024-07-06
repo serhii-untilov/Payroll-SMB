@@ -1,22 +1,22 @@
 import { Box, CssBaseline } from '@mui/material';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../../components/layout/Button';
 import useAppContext from '../../hooks/useAppContext';
+import useAuth from '../../hooks/useAuth';
+import useLocale from '../../hooks/useLocale';
+import { preview } from '../../services/auth.service';
 import { Features } from './details/Features';
 import { Footer } from './details/Footer';
 import { Header } from './details/Header';
 import { ScreenshotList } from './details/ScreenshotList';
-import { useEffect } from 'react';
-import useLocale from '../../hooks/useLocale';
-import { Button } from '../../components/layout/Button';
-import { useTranslation } from 'react-i18next';
-import { preview } from '../../services/auth.service';
-import useAuth from '../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 
 function Welcome() {
     const { themeMode } = useAppContext();
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { login, logout } = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {}, [themeMode, locale]);

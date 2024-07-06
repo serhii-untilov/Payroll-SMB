@@ -21,47 +21,47 @@ export class PositionBalance implements IPositionBalance {
     inBalance?: number;
 
     @Column({ type: 'integer', default: 0 })
-    planDays?: number;
+    planDays: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    planHours?: number;
+    planHours: number;
 
     @Column({ type: 'integer', default: 0 })
-    factDays?: number;
+    factDays: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    factHours?: number;
+    factHours: number;
 
     // See enum PaymentParts
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    accruals?: number;
+    accruals: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    deductions?: number;
+    deductions: number;
 
     // See enum PaymentGroups
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    basic?: number;
+    basic: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    adjustments?: number;
+    adjustments: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    bonuses?: number;
+    bonuses: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    vacations?: number;
+    vacations: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    sicks?: number;
+    sicks: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    refunds?: number;
+    refunds: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    other_accruals?: number;
+    other_accruals: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    taxes?: number;
+    taxes: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    payments?: number;
+    payments: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    other_deductions?: number;
+    other_deductions: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    outBalance?: number;
+    outBalance: number;
 
     @AfterLoad()
     transform() {

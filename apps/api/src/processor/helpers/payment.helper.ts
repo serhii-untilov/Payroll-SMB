@@ -14,7 +14,7 @@ export function getRegularPaymentDate(payPeriod: PayPeriod): Date {
 
 export function getTotals(paymentPositions: PaymentPosition[], accPeriod: Date) {
     return paymentPositions
-        .filter((o) => o.payment.accPeriod.getTime() === accPeriod.getTime())
+        .filter((o) => o.payment?.accPeriod.getTime() === accPeriod.getTime())
         .reduce(
             (a, b) => {
                 a.baseSum += b.baseSum;

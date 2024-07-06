@@ -2,8 +2,8 @@ import {
     ForbiddenException,
     Inject,
     Injectable,
-    NotFoundException,
     forwardRef,
+    NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@repo/shared';
@@ -54,15 +54,12 @@ export class UsersCompanyService {
             this.resourceType,
             AccessType.ACCESS,
         );
-        const userCompany = this.repository.findOneBy({ id });
-        if (!userCompany) {
-            throw new NotFoundException(`User's company could not be found.`);
-        }
+        const userCompany = this.repository.findOneOrFail({ where: { id } });
         return userCompany;
     }
 
     async findOneByName(userId: number, name: string): Promise<UserCompany> {
-        return await this.repository.findOne({
+        return await this.repository.findOneOrFail({
             relations: { company: true },
             where: { userId, company: { name } },
         });
@@ -90,21 +87,12 @@ export class UsersCompanyService {
             this.resourceType,
             AccessType.DELETE,
         );
-        // const record = await this.repository.findOne({
-        //     relations: {
-        //         company: true,
-        //     },
-        //     where: { id },
-        // });
-        // if (record.company.createdUserId === userId) {
-        //     throw new BadRequestException(`The user can't delete access to his own company.`);
-        // }
         await this.repository.save({
             id,
             deletedUserId: userId,
             deletedDate: new Date(),
         });
-        return await this.repository.findOne({ where: { id }, withDeleted: true });
+        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
     async restore(userId: number, id: number): Promise<UserCompany> {
@@ -120,7 +108,7 @@ export class UsersCompanyService {
             updatedUserId: userId,
             updatedDate: new Date(),
         });
-        return await this.repository.findOne({ where: { id } });
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async getUserCompanyList(
@@ -142,11 +130,14 @@ export class UsersCompanyService {
     }
 
     async getUserCompanyRoleType(userId: number, companyId: number): Promise<string> {
-        const record = await this.repository.findOne({
+        const record = await this.repository.findOneOrFail({
             where: { userId, companyId },
             relations: { role: true },
         });
-        return record?.role?.type;
+        if (!record.role?.type) {
+            throw new NotFoundException('User role type not found.');
+        }
+        return record.role.type;
     }
 
     async getUserCompanyRoleTypeOrFail(userId: number, companyId: number): Promise<string> {

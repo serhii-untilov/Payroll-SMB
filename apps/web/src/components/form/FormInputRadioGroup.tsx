@@ -40,7 +40,7 @@ export const FormInputRadioGroup: React.FC<FormInputRadioProps> = ({
             <Controller
                 name={name}
                 control={control}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                render={({ field: { onChange, value } }) => (
                     <RadioGroup value={value} onChange={onChange}>
                         {generateRadioOptions()}
                     </RadioGroup>

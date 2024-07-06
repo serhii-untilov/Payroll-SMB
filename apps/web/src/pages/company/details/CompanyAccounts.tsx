@@ -1,15 +1,6 @@
-import {
-    GridCallbackDetails,
-    GridCellParams,
-    GridColDef,
-    GridRowParams,
-    GridRowSelectionModel,
-    MuiEvent,
-} from '@mui/x-data-grid';
-import { ICompanyAccount } from '@repo/shared';
+import { GridCellParams, GridColDef, GridRowSelectionModel, MuiEvent } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from '@tanstack/react-query';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 
@@ -17,12 +8,8 @@ type Props = {
     companyId: number | undefined;
 };
 
-export function CompanyAccounts(params: Props) {
-    const { companyId } = params;
+export function CompanyAccounts(_params: Props) {
     const { t } = useTranslation();
-    const [openForm, setOpenForm] = useState(false);
-    const [accountId, setAccountId] = useState<number | null>(null);
-    const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     const columns: GridColDef[] = [
@@ -66,16 +53,8 @@ export function CompanyAccounts(params: Props) {
         console.log('onAdd');
     };
 
-    const onEditAccount = (accountId: number) => {
+    const onEditAccount = (_accountId: number) => {
         console.log('onEdit');
-    };
-
-    const submitCallback = (data: ICompanyAccount) => {
-        console.log('submitCallback');
-    };
-
-    const onDeleteAccount = async () => {
-        console.log('onDelete');
     };
 
     const onPrint = () => {
@@ -108,17 +87,12 @@ export function CompanyAccounts(params: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEditAccount(params.row.id);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
-                ) => {
+                onRowDoubleClick={() => {
                     // onEditAccount(params.row.id)
                 }}
             />

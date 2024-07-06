@@ -42,7 +42,7 @@ export class PaymentTypesService {
         });
     }
 
-    async findAll(filter: IPaymentTypeFilter | undefined): Promise<PaymentType[]> {
+    async findAll(filter: IPaymentTypeFilter | null = null): Promise<PaymentType[]> {
         return filter?.part || filter?.groups || filter?.methods || filter?.ids
             ? await this.repository
                   .createQueryBuilder('payment_type')

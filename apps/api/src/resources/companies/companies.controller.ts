@@ -22,6 +22,7 @@ import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { deepStringToShortDate } from '@repo/shared';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('companies')
 export class CompaniesController {
@@ -36,7 +37,7 @@ export class CompaniesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateCompanyDto) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
         const payloadTransformed = deepStringToShortDate(payload);
         const company = await this.service.create(
@@ -50,7 +51,7 @@ export class CompaniesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async findAll(@Req() req: Request, @Query() relations: boolean) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId);
         return await this.service.findAll(userId, relations);
     }
@@ -63,7 +64,7 @@ export class CompaniesController {
         @Param('id', ParseIntPipe) id: number,
         @Query() relations: boolean,
     ) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId, id);
         return await this.service.findOne(userId, id, relations);
     }
@@ -76,7 +77,7 @@ export class CompaniesController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateCompanyDto,
     ) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
@@ -85,7 +86,7 @@ export class CompaniesController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
@@ -97,7 +98,7 @@ export class CompaniesController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
     ): Promise<void> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         await this.service.calculatePayroll(userId, id);
     }

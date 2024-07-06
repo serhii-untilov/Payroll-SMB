@@ -1,5 +1,5 @@
 import { ChevronRightRounded } from '@mui/icons-material';
-import { Box, Button, Link, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import useAppContext from '../../../hooks/useAppContext';

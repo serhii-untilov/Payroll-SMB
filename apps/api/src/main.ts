@@ -31,7 +31,7 @@ async function bootstrap() {
 
     // Run API
     const host = configService.get<string>('app.host');
-    const port = configService.get<number>('app.port');
+    const port = configService.get<number>('app.port') || 3000;
     await app.listen(port);
 
     logger.log(`Application is running on: http://${host}:${port}`);

@@ -1,5 +1,4 @@
 import {
-    GridCallbackDetails,
     GridCellParams,
     GridColDef,
     GridRowParams,
@@ -8,10 +7,10 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { IDepartment, date2view } from '@repo/shared';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
@@ -106,7 +105,7 @@ export function CompanyDepartments(params: Props) {
         setOpenForm(true);
     };
 
-    const submitCallback = async (data: IDepartment) => {
+    const submitCallback = async () => {
         await queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
     };
 
@@ -153,17 +152,12 @@ export function CompanyDepartments(params: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEditDepartment(params.row.id);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
-                ) => onEditDepartment(params.row.id)}
+                onRowDoubleClick={(params: GridRowParams) => onEditDepartment(params.row.id)}
             />
             <DepartmentForm
                 open={openForm}

@@ -8,8 +8,7 @@ import { useSearchParams } from 'react-router-dom';
 export default function Reports() {
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const tabName = searchParams.get('tab');
+    const [searchParams] = useSearchParams();
     const goBack = searchParams.get('return') === 'true';
 
     useEffect(() => {}, [locale]);

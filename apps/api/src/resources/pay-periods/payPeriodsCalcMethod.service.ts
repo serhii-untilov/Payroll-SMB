@@ -30,7 +30,7 @@ export class PayPeriodsCalcMethodService {
     }
 
     async findOne(params: FindOneOptions<PayPeriodCalcMethod>): Promise<PayPeriodCalcMethod> {
-        return await this.repository.findOne(params);
+        return await this.repository.findOneOrFail(params);
     }
 
     async update(id: number, payload: UpdatePayPeriodCalcMethodDto): Promise<PayPeriodCalcMethod> {

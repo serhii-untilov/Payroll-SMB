@@ -20,6 +20,7 @@ import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { deepStringToShortDate } from '@repo/shared';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('departments')
 export class DepartmentsController {
@@ -29,7 +30,7 @@ export class DepartmentsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async create(@Req() req: Request, @Body() payload: CreateDepartmentDto) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId, payload.companyId);
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
@@ -42,7 +43,7 @@ export class DepartmentsController {
         @Query('companyId', ParseIntPipe) companyId: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
     ) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, companyId);
         return await this.service.findAll(userId, companyId, !!relations);
     }
@@ -55,7 +56,7 @@ export class DepartmentsController {
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const found = await this.service.findOne(userId, id, !!relations);
         await this.service.availableFindOneOrFail(userId, found.companyId);
         return found;
@@ -69,7 +70,7 @@ export class DepartmentsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateDepartmentDto,
     ) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
@@ -78,7 +79,7 @@ export class DepartmentsController {
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }

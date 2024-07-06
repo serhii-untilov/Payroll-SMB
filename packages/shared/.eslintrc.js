@@ -4,11 +4,7 @@ module.exports = {
     plugins: ['@typescript-eslint/eslint-plugin', 'no-loops', 'prettier'],
     env: { node: true, jest: true },
     ignorePatterns: ['dist', '.eslintrc.js'],
-    extends: [
-        'plugin:@typescript-eslint/recommended',
-        'plugin:prettier/recommended',
-        'prettier',
-    ],
+    extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended', 'prettier'],
     parserOptions: {
         project: 'tsconfig.json',
         tsconfigRootDir: __dirname,
@@ -22,5 +18,17 @@ module.exports = {
         'no-console': 'warn',
         // 'no-loops/no-loops': 'warn',
         'prettier/prettier': 'warn',
+        '@typescript-eslint/no-unused-vars': [
+            'error',
+            {
+                args: 'all',
+                argsIgnorePattern: '^_',
+                caughtErrors: 'all',
+                caughtErrorsIgnorePattern: '^_',
+                destructuredArrayIgnorePattern: '^_',
+                varsIgnorePattern: '^_',
+                ignoreRestSiblings: true,
+            },
+        ],
     },
 };

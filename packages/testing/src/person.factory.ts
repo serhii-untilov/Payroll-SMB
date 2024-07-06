@@ -1,5 +1,5 @@
 import { incrementalNumber, randFirstName, randLastName } from '@ngneat/falso';
-import { IPerson } from '@repo/shared';
+import { IPerson, dateUTC } from '@repo/shared';
 import { createMockUser } from './user.factory';
 
 const factory = incrementalNumber();
@@ -15,7 +15,13 @@ export const createMockPerson = (data?: Partial<IPerson>): IPerson => {
         firstName,
         lastName,
         middleName,
-
+        fullName: `${firstName} ${lastName}`,
+        birthday: dateUTC(new Date('1970-01-01')),
+        taxId: '',
+        sex: '',
+        phone: '',
+        email: '',
+        photo: '',
         createdDate: currentDate,
         createdUserId: user.id,
         updatedDate: currentDate,

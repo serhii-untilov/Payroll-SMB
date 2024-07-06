@@ -1,7 +1,7 @@
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceType, TaskStatus, TaskType, monthBegin, monthEnd } from '@repo/shared';
-import { FindManyOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/payPeriods.service';
@@ -38,35 +38,44 @@ export class TasksService extends AvailableForUserCompany {
         return created;
     }
 
-    async findAll(userId: number, payload: FindTaskDto): Promise<Task[]> {
+    async findAll(payload: FindTaskDto): Promise<Task[]> {
         const { companyId, onDate, onPayPeriodDate, relations } = payload;
         if (!companyId) {
             return this._generateFakeTaskList();
         }
-        const options: FindManyOptions<Partial<Task>> = {
-            relations: {
-                company: !!relations,
-            },
-            where: { companyId },
-        };
-        if (onDate) {
-            options.where['dateFrom'] = LessThanOrEqual(onDate);
-            options.where['dateTo'] = MoreThanOrEqual(onDate);
-        }
-        if (onPayPeriodDate) {
-            const payPeriod = await this.payPeriodsService.findOne({
+        const payPeriod = onPayPeriodDate
+            ? await this.payPeriodsService.findOne({
+                  where: {
+                      companyId,
+                      dateFrom: onPayPeriodDate,
+                  },
+              })
+            : null;
+        return sortedTaskList(
+            await this.repository.find({
+                relations: {
+                    company: !!relations,
+                },
                 where: {
                     companyId,
-                    dateFrom: onPayPeriodDate,
+                    ...(onDate
+                        ? {
+                              dateFrom: LessThanOrEqual(onDate),
+                              dateTo: MoreThanOrEqual(onDate),
+                          }
+                        : {}),
+                    ...(onPayPeriodDate && payPeriod
+                        ? {
+                              dateFrom: LessThanOrEqual(payPeriod.dateTo),
+                              dateTo: MoreThanOrEqual(payPeriod.dateFrom),
+                          }
+                        : {}),
                 },
-            });
-            options.where['dateFrom'] = LessThanOrEqual(payPeriod.dateTo);
-            options.where['dateTo'] = MoreThanOrEqual(payPeriod.dateFrom);
-        }
-        return sortedTaskList(await this.repository.find(options));
+            }),
+        );
     }
 
-    async findOne(userId: number, id: number, relations?: boolean): Promise<Task> {
+    async findOne(id: number, relations?: boolean): Promise<Task> {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: {

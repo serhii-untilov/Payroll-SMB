@@ -9,27 +9,28 @@ export interface IPerson extends ILogger {
     id: number;
     firstName: string;
     lastName: string;
-    middleName?: string | null;
-    fullName?: string | null;
-    birthday?: Date | null;
-    taxId?: string | null;
-    sex?: string | null; // See enum Sex
-    phone?: string | null;
-    email?: string | null;
-    photo?: string | null;
+    middleName: string;
+    fullName: string;
+    birthday: Date | null;
+    taxId: string;
+    sex: string; // See enum Sex
+    phone: string;
+    email: string;
+    photo: string;
 }
 
-export type ICreatePerson = Omit<
-    IPerson,
-    | 'id'
-    | 'createdDate'
-    | 'createdUserId'
-    | 'updatedDate'
-    | 'updatedUserId'
-    | 'deletedDate'
-    | 'deletedUserId'
-    | 'version'
->;
+export type ICreatePerson = {
+    firstName: string;
+    lastName: string;
+    middleName?: string;
+    fullName?: string;
+    birthday?: Date | null;
+    taxId?: string;
+    sex?: string; // See enum Sex
+    phone?: string;
+    email?: string;
+    photo?: string;
+};
 
 export type IUpdatePerson = Partial<
     Omit<

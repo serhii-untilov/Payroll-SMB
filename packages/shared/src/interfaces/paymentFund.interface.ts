@@ -7,9 +7,9 @@ export interface IPaymentFund {
     paymentPositionId: number;
     payFundType?: IPayFundType;
     payFundTypeId: number;
-    baseSum?: number;
-    paySum?: number;
-    recordFlags?: number; // See enum RecordFlags
+    baseSum: number;
+    paySum: number;
+    recordFlags: number; // See enum RecordFlags
 }
 
 export type ICreatePaymentFund = Omit<IPaymentFund, 'id'>;

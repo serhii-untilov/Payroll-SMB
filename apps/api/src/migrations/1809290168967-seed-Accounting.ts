@@ -3,7 +3,7 @@ import { Accounting } from '../resources/accounting/entities/accounting.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { AccountingType } from '@repo/shared';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const entity = Accounting;
 const recordList = [
     { id: 1, name: { en: 'Generic', uk: 'Загальний' }, type: AccountingType.GENERIC },

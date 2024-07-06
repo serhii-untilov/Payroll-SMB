@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material';
 import {
-    GridCallbackDetails,
     GridCellParams,
     GridColDef,
     GridRowParams,
@@ -11,12 +10,12 @@ import {
 import {
     CalcMethod,
     IFindPositionBalance,
-    IPosition,
+    IPositionBalanceExtended,
     getFullName,
     getUnitByCalcMethod,
     maxDate,
 } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,19 +24,16 @@ import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
-import useLocale from '../../../hooks/useLocale';
-import { deletePosition, getPositionsBalance } from '../../../services/position.service';
+import { getPositionsBalance } from '../../../services/position.service';
 import { sumFormatter } from '../../../services/utils';
 
 export function SalaryReport(props: IFindPositionBalance) {
     const { companyId } = props;
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
     const { payPeriod } = useAppContext();
-    const { locale } = useLocale();
 
     const columns: GridColDef[] = [
         {
@@ -389,7 +385,7 @@ export function SalaryReport(props: IFindPositionBalance) {
         isError: isPositionListError,
         isLoading: isPositionListLoading,
         error: positionListError,
-    } = useQuery<IPosition[], Error>({
+    } = useQuery<IPositionBalanceExtended[], Error>({
         queryKey: ['position', 'balance', props],
         queryFn: async () => {
             return (await getPositionsBalance(props)).sort((a, b) =>
@@ -413,23 +409,8 @@ export function SalaryReport(props: IFindPositionBalance) {
         });
     }
 
-    const onAddPosition = () => {
-        navigate('/people/position/?tab=details&return=true');
-    };
-
     const onEditPosition = (positionId: number) => {
         navigate(`/people/position/${positionId}?return=true`);
-    };
-
-    const submitCallback = async (data: IPosition) => {
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
-    };
-
-    const onDeletePosition = async () => {
-        for (const id of rowSelectionModel) {
-            await deletePosition(+id);
-        }
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };
 
     const onPrint = () => {
@@ -438,18 +419,6 @@ export function SalaryReport(props: IFindPositionBalance) {
 
     const onExport = () => {
         gridRef.current.exportDataAsCsv();
-    };
-
-    const onShowHistory = () => {
-        console.log('onShowHistory');
-    };
-
-    const onShowDeleted = () => {
-        console.log('onShowDeleted');
-    };
-
-    const onRestoreDeleted = () => {
-        console.log('onRestoreDeleted');
     };
 
     const getRowStatus = (params: any): string => {
@@ -495,17 +464,12 @@ export function SalaryReport(props: IFindPositionBalance) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEditPosition(params.row.positionId);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
-                ) => onEditPosition(params.row.positionId)}
+                onRowDoubleClick={(params: GridRowParams) => onEditPosition(params.row.positionId)}
             />
         </>
     );

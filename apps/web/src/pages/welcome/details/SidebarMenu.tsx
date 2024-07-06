@@ -2,14 +2,10 @@ import {
     ArrowRightRounded,
     DarkModeOutlined,
     Language,
-    LayersRounded,
     LightModeOutlined,
-    ListRounded,
     LoginRounded,
     PersonRounded,
-    ScreenshotMonitorRounded,
     SearchRounded,
-    TurnedInNotRounded,
 } from '@mui/icons-material';
 import {
     Box,
@@ -20,11 +16,11 @@ import {
     ListItemIcon,
     ListItemText,
 } from '@mui/material';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Divider } from '../../../components/layout/Divider';
-import useLocale from '../../../hooks/useLocale';
 import useAppContext from '../../../hooks/useAppContext';
+import useLocale from '../../../hooks/useLocale';
 
 type Props = {
     setShowSidebarMenu: (show: boolean) => void;

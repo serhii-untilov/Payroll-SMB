@@ -20,7 +20,7 @@ export class TaskPostRegularPayment extends TaskGenerator {
                 status: PaymentStatus.DRAFT,
                 relations: true,
             })
-        ).filter((o) => o.paymentType.calcMethod === CalcMethod.REGULAR_PAYMENT).length;
+        ).filter((o) => o.paymentType?.calcMethod === CalcMethod.REGULAR_PAYMENT).length;
         task.status = count ? TaskStatus.TODO : TaskStatus.DONE;
         return [task];
     }

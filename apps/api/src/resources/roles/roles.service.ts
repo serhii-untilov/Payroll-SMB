@@ -84,7 +84,7 @@ export class RolesService {
     }
 
     async findRoleByType(type: string): Promise<number> {
-        const role = await this.repository.findOneBy({ type });
-        return role?.id;
+        const role = await this.repository.findOneOrFail({ where: { type } });
+        return role.id;
     }
 }

@@ -23,14 +23,14 @@ export default function Position() {
     const { t } = useTranslation();
     const { company, payPeriod } = useAppContext();
     const queryClient = useQueryClient();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
     const goBack = searchParams.get('return') === 'true';
     const [tab, setTab] = useState(
         tabName ? getTabIndex(tabName) : Number(localStorage.getItem('position-tab-index')),
     );
 
-    const handleChangeTab = (event: SyntheticEvent, newValue: number) => {
+    const handleChangeTab = (_event: SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('position-tab-index', newValue.toString());
     };

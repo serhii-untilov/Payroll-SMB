@@ -23,6 +23,7 @@ import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 
 import { PaymentPositionsService } from './payment-positions.service';
+import { getUserId } from 'src/utils/getUserId';
 
 @Controller('payment-positions')
 export class PaymentPositionsController {
@@ -35,7 +36,7 @@ export class PaymentPositionsController {
         @Req() req: Request,
         @Body() payload: CreatePaymentPositionDto,
     ): Promise<PaymentPosition> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const companyId = await this.service.getCompanyId(payload.paymentId);
         await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepStringToShortDate(payload));
@@ -49,7 +50,7 @@ export class PaymentPositionsController {
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
     ): Promise<PaymentPosition> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId, id);
         return await this.service.findOne(id, relations);
     }
@@ -62,7 +63,7 @@ export class PaymentPositionsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdatePaymentPositionDto,
     ): Promise<PaymentPosition> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
@@ -74,7 +75,7 @@ export class PaymentPositionsController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
     ): Promise<PaymentPosition> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
@@ -86,7 +87,7 @@ export class PaymentPositionsController {
         @Req() req: Request,
         @Body() params: FindPaymentPositionDto,
     ): Promise<PaymentPosition[]> {
-        const userId = req.user['sub'];
+        const userId = getUserId(req);
         const companyId = await this.service.getPaymentCompanyId(params.paymentId);
         await this.service.availableFindAllOrFail(userId, companyId);
         return await this.service.findAll(deepStringToShortDate(params));

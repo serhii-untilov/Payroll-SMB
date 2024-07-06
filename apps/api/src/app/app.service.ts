@@ -10,6 +10,6 @@ export class AppService {
     }
 
     getTitle(): string {
-        return this.configService.get<string>('app.title');
+        return this.configService.get<string>('app.title') || 'Payroll SMB';
     }
 }

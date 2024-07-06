@@ -30,7 +30,7 @@ export class Task extends Logger implements ITask {
     status: string; // See enum TaskStatus
 
     @Column({ type: 'integer', nullable: true })
-    entityId?: number | null;
+    entityId: number | null;
 
     @AfterLoad()
     transform() {

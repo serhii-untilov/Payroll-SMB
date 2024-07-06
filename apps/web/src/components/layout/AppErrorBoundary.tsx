@@ -1,9 +1,9 @@
-import { ErrorInfo, PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import { ErrorBoundary, FallbackProps, useErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 
 function ErrorFallback(props: FallbackProps) {
-    const { error, resetErrorBoundary } = props;
+    const { error } = props;
     const { resetBoundary } = useErrorBoundary();
     const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ function ErrorFallback(props: FallbackProps) {
     );
 }
 
-function logError(error: Error, info: ErrorInfo) {
+function logError(error: Error) {
     console.log(error.message);
 }
 

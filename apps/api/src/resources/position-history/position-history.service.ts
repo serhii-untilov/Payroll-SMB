@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType, castAsPositionHistory } from '@repo/shared';
+import { ResourceType } from '@repo/shared';
 import { add, sub } from 'date-fns';
-import { FindOptionsWhere, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/payPeriods.service';
@@ -63,11 +63,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return record;
     }
 
-    async findAll(
-        userId: number,
-        positionId: number,
-        relations: boolean = false,
-    ): Promise<PositionHistory[]> {
+    async findAll(positionId: number, relations: boolean = false): Promise<PositionHistory[]> {
         return await this.repository.find({
             where: {
                 positionId,
@@ -131,31 +127,39 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return record;
     }
 
-    async find(userId: number, params: FindPositionHistoryDto): Promise<PositionHistory[]> {
+    async find(params: FindPositionHistoryDto): Promise<PositionHistory[]> {
         const position = await this.positionsService.findOne(params.positionId);
-        const where: FindOptionsWhere<PositionHistory> = castAsPositionHistory(params);
-        if (params.onDate) {
-            where.dateFrom = LessThanOrEqual(params.onDate);
-            where.dateTo = MoreThanOrEqual(params.onDate);
-        }
-        if (params.onPayPeriodDate) {
-            const payPeriod = await this.payPeriodsService.findOne({
-                where: {
-                    companyId: position.companyId,
-                    dateFrom: params.onPayPeriodDate,
-                },
-            });
-            where.dateFrom = LessThanOrEqual(payPeriod.dateTo);
-            where.dateTo = MoreThanOrEqual(payPeriod.dateFrom);
-        }
+        const payPeriod = params.onPayPeriodDate
+            ? await this.payPeriodsService.findOne({
+                  where: {
+                      companyId: position.companyId,
+                      dateFrom: params.onPayPeriodDate,
+                  },
+              })
+            : null;
+        const relations = !!params.relations;
         return this.repository.find({
-            where,
             relations: {
-                position: !!params.relations,
-                department: !!params.relations,
-                job: !!params.relations,
-                workNorm: !!params.relations,
-                paymentType: !!params.relations,
+                position: relations,
+                department: relations,
+                job: relations,
+                workNorm: relations,
+                paymentType: relations,
+            },
+            where: {
+                positionId: params.positionId,
+                ...(params.onDate
+                    ? {
+                          dateFrom: LessThanOrEqual(params.onDate),
+                          dateTo: MoreThanOrEqual(params.onDate),
+                      }
+                    : {}),
+                ...(params.onPayPeriodDate && payPeriod
+                    ? {
+                          dateFrom: LessThanOrEqual(payPeriod.dateTo),
+                          dateTo: MoreThanOrEqual(payPeriod.dateFrom),
+                      }
+                    : {}),
             },
         });
     }

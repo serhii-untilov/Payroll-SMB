@@ -1,5 +1,4 @@
 import {
-    GridCallbackDetails,
     GridCellParams,
     GridColDef,
     GridRowParams,
@@ -7,14 +6,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import {
-    CalcMethod,
-    IPayment,
-    IPaymentPosition,
-    PaymentStatus,
-    date2view,
-    dateUTC,
-} from '@repo/shared';
+import { IPaymentPosition, PaymentStatus, dateUTC } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -22,10 +14,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '../../../components/grid/DataGrid';
 import { Toolbar } from '../../../components/layout/Toolbar';
-import useLocale from '../../../hooks/useLocale';
-import { deletePayment, getPayments } from '../../../services/payment.service';
-import { sumFormatter } from '../../../services/utils';
+import { deletePayment } from '../../../services/payment.service';
 import { getPaymentPositions } from '../../../services/paymentPosition.service';
+import { sumFormatter } from '../../../services/utils';
 
 type Props = {
     paymentId: number;
@@ -38,7 +29,6 @@ export function EmployeePayments(props: Props) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
-    const { locale } = useLocale();
 
     const columns: GridColDef[] = [
         {
@@ -117,17 +107,13 @@ export function EmployeePayments(props: Props) {
         },
     ];
 
-    const { data, isError, isLoading, error } = useQuery<IPaymentPosition[], Error>({
+    const { data, isError, error } = useQuery<IPaymentPosition[], Error>({
         queryKey: ['payment', 'position-list', { paymentId }],
         queryFn: async () => {
             return await getPaymentPositions({ paymentId, relations: true });
         },
         enabled: !!paymentId,
     });
-
-    // if (isLoading) {
-    //     return <Loading />;
-    // }
 
     if (isError) {
         return enqueueSnackbar(`${error.name}\n${error.message}`, {
@@ -144,10 +130,6 @@ export function EmployeePayments(props: Props) {
         navigate(`/people/position/${id}?return=true`);
     };
 
-    const submitCallback = async (data: IPayment) => {
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
-    };
-
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
             await deletePayment(+id);
@@ -161,18 +143,6 @@ export function EmployeePayments(props: Props) {
 
     const onExport = () => {
         gridRef.current.exportDataAsCsv();
-    };
-
-    const onShowHistory = () => {
-        console.log('onShowHistory');
-    };
-
-    const onShowDeleted = () => {
-        console.log('onShowDeleted');
-    };
-
-    const onRestoreDeleted = () => {
-        console.log('onRestoreDeleted');
     };
 
     const getRowStatus = (params: any): string => {
@@ -222,17 +192,12 @@ export function EmployeePayments(props: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                    details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
                         onEditPayment(params.row.position.id);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    event: MuiEvent,
-                    details: GridCallbackDetails,
-                ) => onEditPayment(params.row.position.id)}
+                onRowDoubleClick={(params: GridRowParams) => onEditPayment(params.row.position.id)}
             />
         </>
     );

@@ -5,7 +5,7 @@ export class CreatePaymentFundDto implements ICreatePaymentFund {
     @ApiProperty() id: number;
     @ApiProperty() paymentPositionId: number;
     @ApiProperty() payFundTypeId: number;
-    @ApiProperty() baseSum?: number;
-    @ApiProperty() paySum?: number;
-    @ApiProperty() recordFlags?: number; // See enum RecordFlags
+    @ApiProperty() baseSum: number;
+    @ApiProperty() paySum: number;
+    @ApiProperty() recordFlags: number; // See enum RecordFlags
 }

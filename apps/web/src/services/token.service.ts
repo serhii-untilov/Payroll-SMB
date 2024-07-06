@@ -14,10 +14,10 @@ export function removeUserTokens() {
     localStorage.removeItem('user');
 }
 
-export function getUserAccessToken() {
-    return getUserTokens()?.accessToken;
+export function getUserAccessToken(): string {
+    return getUserTokens()?.accessToken || '';
 }
 
-export function getUserRefreshToken() {
-    return getUserTokens()?.refreshToken;
+export function getUserRefreshToken(): string {
+    return getUserTokens()?.refreshToken || '';
 }

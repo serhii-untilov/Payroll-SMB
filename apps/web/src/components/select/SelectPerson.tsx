@@ -86,7 +86,7 @@ export const SelectPerson = (props: Props) => {
             <Controller
                 name={props.name}
                 control={props.control}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => {
+                render={({ field: { onChange, value }, fieldState: { error } }) => {
                     return (
                         <>
                             <Autocomplete
@@ -116,7 +116,7 @@ export const SelectPerson = (props: Props) => {
                                 isOptionEqualToValue={(option, value) =>
                                     option?.value === value?.value
                                 }
-                                onChange={(event, option) => {
+                                onChange={(_event, option) => {
                                     console.log('onChange', option);
                                     if (typeof option === 'string') {
                                         const [lastName, firstName, middleName] = (

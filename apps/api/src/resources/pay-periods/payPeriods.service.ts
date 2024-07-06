@@ -69,8 +69,8 @@ export class PayPeriodsService extends AvailableForUserCompany {
         companyId: number,
         relations: boolean = false,
         fullFieldList: boolean = false,
-        dateFrom: Date = null,
-        dateTo: Date = null,
+        dateFrom: Date | null = null,
+        dateTo: Date | null = null,
     ): Promise<PayPeriod[]> {
         if (companyId) {
             return await this.repository.find({
