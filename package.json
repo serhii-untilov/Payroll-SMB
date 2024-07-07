@@ -22,6 +22,10 @@
   "scripts": {
     "dev": "./scripts/docker_db && npm --workspace @repo/api run m:run && turbo run dev",
     "db": "./scripts/docker_db",
+    "build:": "turbo run build",
+    "lint:": "turbo run lint",
+    "test:": "turbo run test",
+    "deploy:": "turbo run deploy",
     "start": "./scripts/docker_db && npm --workspace @repo/api run m:run && npm --workspace @repo/api start",
     "m:crt": "turbo run m:crt --filter=@repo/api",
     "m:gen": "./scripts/docker_db && turbo run m:gen --filter=@repo/api",
@@ -37,6 +41,7 @@
     "eslint-plugin-no-loops": "^0.3.0",
     "eslint-plugin-prettier": "^5.1.3",
     "prettier": "^3.2.5",
-    "turbo": "^1.12.2"
-  }
+    "turbo": "^2.0.6"
+  },
+  "packageManager": "npm@10.8.1"
 }
