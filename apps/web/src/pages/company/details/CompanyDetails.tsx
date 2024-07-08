@@ -4,14 +4,13 @@ import {
     AccountingType,
     IAccounting,
     ICompany,
-    ICreateCompany,
     ILaw,
     LawType,
-    PaymentSchedule,
     maxDate,
     minDate,
     monthBegin,
     monthEnd,
+    PaymentSchedule,
 } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -20,7 +19,8 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
+import { date, InferType, number, object, string } from 'yup';
+import { api } from '../../../api';
 import { FormInputDropdown } from '../../../components/form/FormInputDropdown';
 import { FormTextField } from '../../../components/form/FormTextField';
 import { InputLabel } from '../../../components/layout/InputLabel';
@@ -30,7 +30,7 @@ import { Loading } from '../../../components/utility/Loading';
 import useAppContext from '../../../hooks/useAppContext';
 import useLocale from '../../../hooks/useLocale';
 import { getAccountingList } from '../../../services/accounting.service';
-import { createCompany, getCompany, updateCompany } from '../../../services/company.service';
+import { createCompany, updateCompany } from '../../../services/company.service';
 import { getLawList } from '../../../services/law.service';
 import { getDirtyValues } from '../../../services/utils';
 import { snackbarError, snackbarFormErrors } from '../../../utils/snackbar';
@@ -74,33 +74,32 @@ export function CompanyDetails(props: Props) {
         isError,
         isLoading,
         error: error,
-    } = useQuery<ICompany, Error>({
+    } = useQuery<Partial<ICompany>, Error>({
         queryKey: ['company', { companyId }],
-        queryFn: async () => await getCompany(companyId),
+        // queryFn: async () => (companyId ? await getCompany(companyId) : {}),
+        queryFn: async () => (companyId ? await api.companiesFindOne(companyId) : {}),
         enabled: !!companyId,
     });
 
-    const formSchema: yup.ObjectSchema<ICreateCompany> = yup.object({
-        name: yup.string().required('Name is required'),
-        lawId: yup.number().positive('Law is required').required().default(defaultLawId),
-        taxId: yup.string().default(''),
-        accountingId: yup
-            .number()
+    const formSchema = object().shape({
+        name: string().required('Name is required'),
+        lawId: number().positive('Law is required').required().default(defaultLawId),
+        taxId: string().default(''),
+        accountingId: number()
             .positive('Accounting is required')
             .required()
             .default(defaultAccountingId),
-        paymentSchedule: yup
-            .string()
+        paymentSchedule: string()
             .required('Payment Schedule required')
             .default(PaymentSchedule.LAST_DAY),
-        dateFrom: yup.date().default(minDate()),
-        dateTo: yup.date().default(maxDate()),
-        payPeriod: yup.date().required('Pay Period required').default(monthBegin(new Date())),
-        checkDate: yup.date().required('Check Date required').default(monthEnd(new Date())),
-        version: yup.number(),
+        dateFrom: date().default(minDate()).required(),
+        dateTo: date().default(maxDate()).required(),
+        payPeriod: date().required('Pay Period required').default(monthBegin(new Date())),
+        checkDate: date().required('Check Date required').default(monthEnd(new Date())),
+        version: number().optional(),
     });
 
-    type FormType = yup.InferType<typeof formSchema>;
+    type FormType = InferType<typeof formSchema>;
 
     const {
         control,
@@ -108,8 +107,8 @@ export function CompanyDetails(props: Props) {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: company || {},
-        values: formSchema.cast(company || {}),
+        defaultValues: formSchema.cast(company) || {},
+        values: formSchema.cast(company) || {},
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -134,11 +133,11 @@ export function CompanyDetails(props: Props) {
         if (!isDirty) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const response = company
+            const response = company?.id
                 ? await updateCompany(company.id, dirtyValues)
                 : await createCompany(data);
             setCompanyId(response.id);
-            reset(response);
+            reset(formSchema.cast(response));
             await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
             await queryClient.invalidateQueries({ queryKey: ['payPeriod'], refetchType: 'all' });
             if (!currentCompany || currentCompany.id === response.id) {
@@ -153,7 +152,7 @@ export function CompanyDetails(props: Props) {
 
     const onCancel = async () => {
         setCompanyId(Number(company?.id));
-        reset(company);
+        reset(formSchema.cast(company));
         await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
     };
 

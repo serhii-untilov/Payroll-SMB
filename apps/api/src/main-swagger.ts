@@ -6,6 +6,7 @@ import { AppModule } from './app/app.module';
 import metadata from './metadata';
 import path from 'path';
 import { writeFileSync } from 'fs';
+import { capitalizeFirstLetter } from '@repo/shared';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -22,10 +23,14 @@ async function bootstrap() {
     const config = new DocumentBuilder()
         .setTitle(`${title} REST API`)
         .setVersion('1.0')
+        // .addTag('payrollSmb')
         .addBearerAuth()
         .build();
     await SwaggerModule.loadPluginMetadata(metadata);
-    const document = SwaggerModule.createDocument(app, config);
+    const document = SwaggerModule.createDocument(app, config, {
+        operationIdFactory: (controllerKey, methodKey) =>
+            `${controllerKey}${capitalizeFirstLetter(methodKey)}`.replace('Controller', ''),
+    });
     const apiVersion = 'v1';
     const apiFileName = 'swagger';
     SwaggerModule.setup(`${globalPrefix}/${apiVersion}`, app, document, {
