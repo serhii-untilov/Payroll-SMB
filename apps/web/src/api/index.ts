@@ -3,6 +3,7 @@ import { redirect } from 'react-router-dom';
 import { getUserRefreshToken, removeUserTokens, saveUserTokens } from '../services/token.service';
 import authHeader from '../services/auth-header';
 import { deepStringToDate } from '@repo/shared';
+import { DefaultApi as PayrollApi } from '@repo/openapi';
 
 export type ApiError = {
     error?: string;
@@ -10,17 +11,21 @@ export type ApiError = {
     statusCode?: string;
 };
 
-console.log('import.meta.env.VITE_APP_URL:', import.meta.env.VITE_APP_URL);
+const baseURL = import.meta.env.VITE_APP_URL;
 
-export const api = axios.create({
-    baseURL: import.meta.env.VITE_APP_URL,
+console.log('baseURL:', baseURL);
+
+export const axiosInstance = axios.create({
+    baseURL,
     // timeout: 1000,
     headers: {
         'Content-type': 'application/json',
     },
 });
 
-api.interceptors.response.use(
+export const api = new PayrollApi(undefined, baseURL, axiosInstance);
+
+axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
@@ -88,7 +93,7 @@ function getApiError(apiError: ApiError): ApiError {
 // Casting dates properly from an API response in typescript
 // https://stackoverflow.com/questions/65692061/casting-dates-properly-from-an-api-response-in-typescript
 
-api.interceptors.response.use((originalResponse) => {
+axiosInstance.interceptors.response.use((originalResponse) => {
     deepStringToDate(originalResponse.data);
     return originalResponse;
 });

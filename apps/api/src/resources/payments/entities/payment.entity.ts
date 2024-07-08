@@ -7,6 +7,7 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    Relation,
 } from 'typeorm';
 import { Logger } from './../../../resources/abstract/logger.abstract';
 import { Company } from './../../../resources/companies/entities/company.entity';
@@ -19,7 +20,7 @@ export class Payment extends Logger implements IPayment {
     @PrimaryGeneratedColumn('increment')
     id: number;
     @ManyToOne(() => Company, { createForeignKeyConstraints: false })
-    company?: Company;
+    company?: Relation<Company>;
     @Column({ type: 'integer' })
     companyId: number;
     @Column({ type: 'date' })
@@ -54,7 +55,7 @@ export class Payment extends Logger implements IPayment {
     description: string;
 
     @OneToMany(() => PaymentPosition, (paymentPosition) => paymentPosition.payment)
-    paymentPositions?: PaymentPosition[];
+    paymentPositions?: Relation<PaymentPosition>[];
 
     @AfterLoad()
     transform() {

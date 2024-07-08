@@ -5,11 +5,13 @@ import {
     IPaymentTypeFilter,
     IUpdatePaymentType,
 } from '@repo/shared';
-import { api } from '../api';
+import { axiosInstance } from '../api';
 import authHeader from './auth-header';
 
 export async function createPaymentType(paymentType: ICreatePaymentType): Promise<IPaymentType> {
-    const response = await api.post(`/api/payment-types/`, paymentType, { headers: authHeader() });
+    const response = await axiosInstance.post(`/api/payment-types/`, paymentType, {
+        headers: authHeader(),
+    });
     return response.data;
 }
 
@@ -24,16 +26,19 @@ export async function getPaymentTypeList(
         ? `?methods=${encodeURIComponent(JSON.stringify(filter?.methods))}`
         : '';
     const ids = filter?.ids ? `?ids=${encodeURIComponent(JSON.stringify(filter?.ids))}` : '';
-    const response = await api.get(`/api/payment-types/${part}${groups}${methods}${ids}`, {
-        headers: authHeader(),
-    });
+    const response = await axiosInstance.get(
+        `/api/payment-types/${part}${groups}${methods}${ids}`,
+        {
+            headers: authHeader(),
+        },
+    );
     return response.data.sort((a: IPaymentType, b: IPaymentType) =>
         a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
     );
 }
 
 export async function getPaymentType(id: number): Promise<IPaymentType> {
-    const response = await api.get(`/api/payment-types/${id}`, { headers: authHeader() });
+    const response = await axiosInstance.get(`/api/payment-types/${id}`, { headers: authHeader() });
     return response.data;
 }
 
@@ -41,14 +46,16 @@ export async function updatePaymentType(
     id: number,
     paymentType: IUpdatePaymentType,
 ): Promise<IPaymentType> {
-    const response = await api.patch(`/api/payment-types/${id}`, paymentType, {
+    const response = await axiosInstance.patch(`/api/payment-types/${id}`, paymentType, {
         headers: authHeader(),
     });
     return response.data;
 }
 
 export async function deletePaymentType(id: number): Promise<IPaymentType> {
-    const response = await api.delete(`/api/payment-types/${id}`, { headers: authHeader() });
+    const response = await axiosInstance.delete(`/api/payment-types/${id}`, {
+        headers: authHeader(),
+    });
     return response.data;
 }
 

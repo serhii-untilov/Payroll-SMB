@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
 import { Task } from '../entities/task.entity';
-import { OmitType } from '@nestjs/mapped-types';
+import { OmitType } from '@nestjs/swagger';
 import { IUpdateTask } from '@repo/shared';
 
 export class UpdateTaskDto

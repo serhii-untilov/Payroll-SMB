@@ -1,4 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { IUpdateWorkNorm } from '@repo/shared';
 import { WorkNorm } from '../entities/work-norm.entity';
 

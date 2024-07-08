@@ -17,6 +17,7 @@ import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
 import { FindPaymentPositionDto } from './dto/find-paymentPosition.dto';
 import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
+import { WrapperType } from 'src/types/WrapperType';
 
 @Injectable()
 export class PaymentPositionsService extends AvailableForUserCompany {
@@ -26,11 +27,11 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         @InjectRepository(PaymentPosition)
         private repository: Repository<PaymentPosition>,
         @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
+        public accessService: WrapperType<AccessService>,
         @Inject(forwardRef(() => PaymentsService))
-        public paymentsService: PaymentsService,
+        public paymentsService: WrapperType<PaymentsService>,
         @Inject(forwardRef(() => PayrollsService))
-        public payrollsService: PayrollsService,
+        public payrollsService: WrapperType<PayrollsService>,
     ) {
         super(accessService);
     }

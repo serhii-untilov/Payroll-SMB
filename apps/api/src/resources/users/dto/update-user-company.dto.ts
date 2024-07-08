@@ -1,4 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { UserCompany } from '../entities/user-company.entity';
 import { IUpdateUserCompany } from '@repo/shared';
 

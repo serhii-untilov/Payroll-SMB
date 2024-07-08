@@ -36,6 +36,7 @@ export default function Company() {
         queryFn: async () => {
             return companyId ? await getCompany(companyId) : {};
         },
+        enabled: !!companyId,
     });
 
     const pageTitle = useMemo(() => {

@@ -1,4 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { IUpdateJob } from '@repo/shared';
 import { Job } from '../entities/job.entity';
 

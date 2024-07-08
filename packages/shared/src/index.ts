@@ -36,3 +36,4 @@ export * from './interfaces/paymentFund.interface';
 export * from './utils/date';
 export * from './utils/bitwise';
 export * from './utils/getFullName';
+export * from './utils/capitalizeFirstLetter';

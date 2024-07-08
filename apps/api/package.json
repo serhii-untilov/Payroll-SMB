@@ -21,7 +21,8 @@
     "m:crt": "NODE_ENV=development typeorm migration:create ./src/migrations/seed",
     "m:gen": "NODE_ENV=development npm run m:run && typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:generate ./src/migrations/gen --pretty",
     "m:run": "NODE_ENV=development typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:run --transaction each",
-    "m:revert": "NODE_ENV=development typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:revert"
+    "m:revert": "NODE_ENV=development typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:revert",
+    "swagger": "NODE_ENV=development nest start --debug --entryFile main-swagger.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -54,6 +55,8 @@
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
     "@repo/testing": "*",
+    "@swc/cli": "^0.3.14",
+    "@swc/core": "^1.6.7",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.12",

@@ -3,6 +3,7 @@ import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import metadata from './metadata';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -22,11 +23,13 @@ async function bootstrap() {
         .setVersion('1.0')
         .addBearerAuth()
         .build();
+    await SwaggerModule.loadPluginMetadata(metadata);
     const document = SwaggerModule.createDocument(app, config);
     const apiVersion = 'v1';
-    const apiFileName = 'swagger.json';
+    const apiFileName = 'swagger';
     SwaggerModule.setup(`${globalPrefix}/${apiVersion}`, app, document, {
-        jsonDocumentUrl: `${globalPrefix}/${apiVersion}/${apiFileName}`,
+        jsonDocumentUrl: `${globalPrefix}/${apiVersion}/${apiFileName}.json`,
+        yamlDocumentUrl: `${globalPrefix}/${apiVersion}/${apiFileName}.yaml`,
     });
 
     // Run API
@@ -38,7 +41,10 @@ async function bootstrap() {
     logger.log(`API is running on: http://${host}:${port}/${globalPrefix}`);
     logger.log(`Swagger is running on: http://${host}:${port}/${globalPrefix}/${apiVersion}`);
     logger.log(
-        `Swagger JSON file on: http://${host}:${port}/${globalPrefix}/${apiVersion}/${apiFileName}`,
+        `Swagger JSON file on: http://${host}:${port}/${globalPrefix}/${apiVersion}/${apiFileName}.json`,
+    );
+    logger.log(
+        `Swagger YAML file on: http://${host}:${port}/${globalPrefix}/${apiVersion}/${apiFileName}.yaml`,
     );
 }
 bootstrap();

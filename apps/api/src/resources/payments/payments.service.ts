@@ -19,6 +19,7 @@ import { Payment } from './entities/payment.entity';
 import { PaymentUpdatedEvent } from './events/payment-updated.event';
 import { PaymentPositionsService } from './payment-positions/payment-positions.service';
 import { PayPeriodsService } from '../pay-periods/payPeriods.service';
+import { WrapperType } from 'src/types/WrapperType';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
@@ -29,11 +30,11 @@ export class PaymentsService extends AvailableForUserCompany {
         @InjectRepository(Payment)
         private repository: Repository<Payment>,
         @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
+        public accessService: WrapperType<AccessService>,
         @Inject(forwardRef(() => PaymentPositionsService))
-        public paymentPositionsService: PaymentPositionsService,
+        public paymentPositionsService: WrapperType<PaymentPositionsService>,
         @Inject(forwardRef(() => PayPeriodsService))
-        public payPeriodsService: PayPeriodsService,
+        public payPeriodsService: WrapperType<PayPeriodsService>,
         private eventEmitter: EventEmitter2,
     ) {
         super(accessService);

@@ -8,11 +8,13 @@ import {
 } from '@repo/shared';
 import { format, isEqual } from 'date-fns';
 import { t } from 'i18next';
-import { api } from '../api';
+import { axiosInstance } from '../api';
 import authHeader from './auth-header';
 
 export async function createPayPeriod(payPeriod: ICreatePayPeriod): Promise<IPayPeriod> {
-    const response = await api.post(`/api/pay-periods/`, payPeriod, { headers: authHeader() });
+    const response = await axiosInstance.post(`/api/pay-periods/`, payPeriod, {
+        headers: authHeader(),
+    });
     return response.data;
 }
 
@@ -21,7 +23,7 @@ export async function getPayPeriodList(
     relations: boolean = false,
     fullFieldList: boolean = false,
 ): Promise<IPayPeriod[]> {
-    const response = await api.get(
+    const response = await axiosInstance.get(
         companyId
             ? `/api/pay-periods/?companyId=${companyId}&relations=${relations}&fullFieldList=${!!fullFieldList}`
             : `/api/pay-periods/`,
@@ -40,7 +42,7 @@ export async function getPayPeriod(
     relations: boolean = false,
     fullFieldList: boolean = false,
 ): Promise<IPayPeriod> {
-    const response = await api.get(
+    const response = await axiosInstance.get(
         companyId
             ? `/api/pay-periods/${id}/&companyId=${companyId}&relations=${!!relations}&fullFieldList=${!!fullFieldList}`
             : `/api/pay-periods/${id}`,
@@ -54,7 +56,7 @@ export async function getCurrentPayPeriod(
     relations: boolean = false,
     fullFieldList: boolean = false,
 ): Promise<IPayPeriod> {
-    const response = await api.get(
+    const response = await axiosInstance.get(
         `/api/pay-periods/current/?companyId=${companyId}&relations=${!!relations}&fullFieldList=${!!fullFieldList}`,
         { headers: authHeader() },
     );
@@ -72,14 +74,16 @@ export async function updatePayPeriod(
     id: number,
     payPeriod: IUpdatePayPeriod,
 ): Promise<IPayPeriod> {
-    const response = await api.patch(`/api/pay-periods/${id}`, payPeriod, {
+    const response = await axiosInstance.patch(`/api/pay-periods/${id}`, payPeriod, {
         headers: authHeader(),
     });
     return response.data;
 }
 
 export async function deletePayPeriod(id: number): Promise<IPayPeriod> {
-    const response = await api.delete(`/api/pay-periods/${id}`, { headers: authHeader() });
+    const response = await axiosInstance.delete(`/api/pay-periods/${id}`, {
+        headers: authHeader(),
+    });
     return response.data;
 }
 
@@ -101,7 +105,7 @@ export function getPayPeriodName(
 }
 
 export async function closePayPeriod(currentPayPeriod: IPayPeriod): Promise<IPayPeriod> {
-    const response = await api.post(
+    const response = await axiosInstance.post(
         `/api/pay-periods/close/${currentPayPeriod.id}`,
         { version: currentPayPeriod.version },
         { headers: authHeader() },
@@ -110,7 +114,7 @@ export async function closePayPeriod(currentPayPeriod: IPayPeriod): Promise<IPay
 }
 
 export async function openPayPeriod(currentPayPeriod: IPayPeriod): Promise<IPayPeriod> {
-    const response = await api.post(
+    const response = await axiosInstance.post(
         `/api/pay-periods/open/${currentPayPeriod.id}`,
         { version: currentPayPeriod.version },
         { headers: authHeader() },

@@ -1,5 +1,13 @@
 import { IPositionBalance } from '@repo/shared';
-import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Relation,
+} from 'typeorm';
 import { Position } from './position.entity';
 
 @Entity()
@@ -9,7 +17,7 @@ export class PositionBalance implements IPositionBalance {
 
     @ManyToOne(() => Position, (position) => position.balance)
     @JoinColumn()
-    position?: Position;
+    position?: Relation<Position>;
 
     @Column({ type: 'integer' })
     positionId: number;

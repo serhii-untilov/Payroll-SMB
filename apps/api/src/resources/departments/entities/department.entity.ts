@@ -8,6 +8,7 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    Relation,
 } from 'typeorm';
 import { Company } from '../../companies/entities/company.entity';
 
@@ -21,7 +22,7 @@ export class Department extends Logger implements IDepartment {
 
     @ManyToOne(() => Company, (company) => company.departments)
     @JoinColumn()
-    company?: Company;
+    company?: Relation<Company>;
 
     @Column({ type: 'integer' })
     companyId: number;
@@ -34,13 +35,13 @@ export class Department extends Logger implements IDepartment {
 
     @ManyToOne(() => Department, (department) => department.childDepartments, { nullable: true })
     @JoinColumn()
-    parentDepartment?: Department | null;
+    parentDepartment?: Relation<Department> | null;
 
     @Column({ type: 'integer', nullable: true })
     parentDepartmentId?: number | null;
 
     @OneToMany(() => Department, (department) => department.parentDepartment)
-    childDepartments?: Department[];
+    childDepartments?: Relation<Department>[];
 
     @AfterLoad()
     transform() {

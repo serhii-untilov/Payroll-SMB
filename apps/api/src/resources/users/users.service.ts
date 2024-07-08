@@ -16,6 +16,7 @@ import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { WrapperType } from 'src/types/WrapperType';
 
 @Injectable()
 export class UsersService {
@@ -25,9 +26,9 @@ export class UsersService {
         @InjectRepository(User)
         private repository: Repository<User>,
         @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
+        private accessService: WrapperType<AccessService>,
         @Inject(forwardRef(() => RolesService))
-        private rolesService: RolesService,
+        private rolesService: WrapperType<RolesService>,
     ) {}
 
     async register(payload: CreateUserDto): Promise<User> {
