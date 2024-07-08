@@ -10,6 +10,7 @@ export enum AccessType {
 
 export enum ResourceType {
     ACCESS = 'Access',
+    APP_TITLE = 'App Title',
     ROLE = 'Role',
     ROLE_ACCESS = 'Role Access',
     USER_ACCESS = 'User Access',

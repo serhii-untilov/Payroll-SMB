@@ -9031,7 +9031,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountingFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async accountingFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Accounting>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountingFindAll(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accountingFindAll']?.[localVarOperationServerIndex]?.url;
@@ -9043,7 +9043,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountingFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async accountingFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Accounting>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountingFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accountingFindOne']?.[localVarOperationServerIndex]?.url;
@@ -9350,7 +9350,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async lawsFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async lawsFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Law>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lawsFindAll(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.lawsFindAll']?.[localVarOperationServerIndex]?.url;
@@ -9362,7 +9362,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async lawsFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async lawsFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Law>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lawsFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.lawsFindOne']?.[localVarOperationServerIndex]?.url;
@@ -10548,7 +10548,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountingFindAll(options?: any): AxiosPromise<Array<object>> {
+        accountingFindAll(options?: any): AxiosPromise<Array<Accounting>> {
             return localVarFp.accountingFindAll(options).then((request) => request(axios, basePath));
         },
         /**
@@ -10557,7 +10557,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountingFindOne(id: number, options?: any): AxiosPromise<object> {
+        accountingFindOne(id: number, options?: any): AxiosPromise<Accounting> {
             return localVarFp.accountingFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10786,7 +10786,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lawsFindAll(options?: any): AxiosPromise<Array<object>> {
+        lawsFindAll(options?: any): AxiosPromise<Array<Law>> {
             return localVarFp.lawsFindAll(options).then((request) => request(axios, basePath));
         },
         /**
@@ -10795,7 +10795,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lawsFindOne(id: number, options?: any): AxiosPromise<object> {
+        lawsFindOne(id: number, options?: any): AxiosPromise<Law> {
             return localVarFp.lawsFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**

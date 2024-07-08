@@ -6,7 +6,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IDepartment, date2view } from '@repo/shared';
+import { IDepartment, ResourceType, date2view } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -16,6 +16,7 @@ import { Toolbar } from '../../../components/layout/Toolbar';
 import { Loading } from '../../../components/utility/Loading';
 import { deleteDepartment, getDepartmentList } from '../../../services/department.service';
 import DepartmentForm from '../../department/DepartmentForm';
+import { invalidateQueries } from '../../../utils/invalidateQueries';
 
 type Props = {
     companyId: number | undefined;
@@ -25,7 +26,6 @@ export function CompanyDepartments(params: Props) {
     const { companyId } = params;
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
-
     const [departmentId, setDepartmentId] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -67,7 +67,7 @@ export function CompanyDepartments(params: Props) {
             width: 250,
             sortable: true,
             valueGetter: (params) => {
-                return params.row.parentDepartment?.name || '';
+                return params.row.parentDepartment?.name ?? '';
             },
         },
     ];
@@ -78,7 +78,7 @@ export function CompanyDepartments(params: Props) {
         isLoading: isDepartmentListLoading,
         error: departmentListError,
     } = useQuery<IDepartment[], Error>({
-        queryKey: ['department', 'list', { companyId, relations: true }],
+        queryKey: [ResourceType.DEPARTMENT, 'list', { companyId, relations: true }],
         queryFn: async () => {
             return companyId ? await getDepartmentList(companyId, true) : [];
         },
@@ -106,7 +106,7 @@ export function CompanyDepartments(params: Props) {
     };
 
     const submitCallback = async () => {
-        await queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
     };
 
     const onDeleteDepartment = async () => {
@@ -142,7 +142,7 @@ export function CompanyDepartments(params: Props) {
             />
             <DataGrid
                 apiRef={gridRef}
-                rows={departmentList || []}
+                rows={departmentList ?? []}
                 columns={columns}
                 checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {

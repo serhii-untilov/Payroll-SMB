@@ -1,6 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe } from '@nestjs/common';
-import { IAccounting } from '@repo/shared';
 import { AccountingService } from './accounting.service';
+import { Accounting } from './entities/accounting.entity';
 
 @Controller('accounting')
 export class AccountingController {
@@ -8,13 +8,13 @@ export class AccountingController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    async findAll(): Promise<IAccounting[]> {
+    async findAll(): Promise<Accounting[]> {
         return await this.accountingService.findAll();
     }
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<IAccounting> {
+    async findOne(@Param('id', ParseIntPipe) id: number): Promise<Accounting> {
         return await this.accountingService.findOne(id);
     }
 }

@@ -1,5 +1,3 @@
-import { ICompany } from '@repo/shared';
-import { useQuery } from '@tanstack/react-query';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -9,8 +7,8 @@ import { Tab } from '../../components/layout/Tab';
 import { TabPanel } from '../../components/layout/TabPanel';
 import { Tabs } from '../../components/layout/Tabs';
 import { Loading } from '../../components/utility/Loading';
+import { useCompany } from '../../hooks/useCompany';
 import useLocale from '../../hooks/useLocale';
-import { getCompany } from '../../services/company.service';
 import { CompanyAccounts } from './details/CompanyAccounts';
 import { CompanyDepartments } from './details/CompanyDepartments';
 import { CompanyDetails } from './details/CompanyDetails';
@@ -28,19 +26,12 @@ export default function Company() {
     );
     const { t } = useTranslation();
     const { locale } = useLocale();
+    const { data, isLoading } = useCompany(companyId);
 
     useEffect(() => {}, [locale]);
 
-    const { data, isLoading } = useQuery<Partial<ICompany>, Error>({
-        queryKey: ['company', { companyId }],
-        queryFn: async () => {
-            return companyId ? await getCompany(companyId) : {};
-        },
-        enabled: !!companyId,
-    });
-
     const pageTitle = useMemo(() => {
-        return data?.id ? data?.name || '' : t('New Company');
+        return data?.id ? data?.name ?? '' : t('New Company');
     }, [data, t]);
 
     if (isLoading) {
