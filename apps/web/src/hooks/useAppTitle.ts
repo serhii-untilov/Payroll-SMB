@@ -8,7 +8,10 @@ type Result = { data: string; isLoading: boolean };
 export function useAppTitle(): Result {
     const { data, isLoading, isError, error } = useQuery<string, Error>({
         queryKey: [ResourceType.APP_TITLE],
-        queryFn: async () => (await api.appGetTitle()).data,
+        queryFn: async () => {
+            const title = (await api.appGetTitle()).data;
+            return title;
+        },
     });
     if (isError) {
         snackbarError(`${error.name}\n${error.message}`);

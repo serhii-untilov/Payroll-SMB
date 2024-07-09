@@ -1,4 +1,4 @@
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
 import { IPaymentDeduction } from '@repo/shared';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PaymentPosition } from '../payment-positions/entities/paymentPosition.entity';

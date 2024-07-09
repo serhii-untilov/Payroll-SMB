@@ -270,8 +270,8 @@ npm i --workspace @repo/api --save-dev @golevelup/ts-jest
 npm i --workspace @repo/api --save-dev webpack-node-externals run-script-webpack-plugin webpack
 npm i --workspace @repo/api --save-dev webpack webpack-cli
 npm i --workspace @repo/api --save @nestjs/event-emitter
-npm i --workspace @repo/api --save-dev tsconfig-paths
 npm i --workspace @repo/api --save-dev @swc/cli @swc/core
+npm i --workspace @repo/api --save-dev tsconfig-paths
 
 # Init "web" application for front-end
 npm --workspace @repo/web i @tanstack/react-query
@@ -443,3 +443,4 @@ openssl rand -base64 60
 - [**React** - Path To A Clean(er) React Architecture](https://profy.dev/article/react-architecture-api-client)
 - [**Shared DTO** - Domain Entities & DTOs](https://profy.dev/article/react-architecture-domain-entities-and-dtos)
 - [**Shared DTO** - A Guide to OpenAPI Code Generation for TypeScript](https://www.stefanwille.com/2021/05/2021-05-30-openapi-code-generator-for-typescript)
+- [**Jest** - Jest with TypeScript and aliased imports (custom paths)](https://dev.to/mliakos/jest-with-typescript-and-aliased-imports-custom-paths-40d4)

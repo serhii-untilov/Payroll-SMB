@@ -8,7 +8,7 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Logger } from '@/resources/abstract/logger.abstract';
+import { Logger } from './../../../resources/abstract/logger.abstract';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
 

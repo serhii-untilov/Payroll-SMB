@@ -1,5 +1,5 @@
-import { Logger } from '@/resources/abstract/logger.abstract';
-import { Company } from '@/resources/companies/entities/company.entity';
+import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Company } from './../../../resources/companies/entities/company.entity';
 import { IDepartment } from '@repo/shared';
 import {
     AfterLoad,

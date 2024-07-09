@@ -2,7 +2,7 @@ import { RoleType } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
 import { getRoleIdByType } from '../utils/getSystemRoleId';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { User } from '@/resources/users/entities/user.entity';
+import { User } from './../resources/users/entities/user.entity';
 import { langPipe } from '../utils/langPipe';
 
 const lang = process.env.LANGUAGE || 'uk';

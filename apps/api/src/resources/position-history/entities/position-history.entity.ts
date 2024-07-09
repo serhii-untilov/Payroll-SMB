@@ -1,3 +1,10 @@
+import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Department } from './../../../resources/departments/entities/department.entity';
+import { Job } from './../../../resources/jobs/entities/job.entity';
+import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
+import { Position } from './../../../resources/positions/entities/position.entity';
+import { WorkNorm } from './../../../resources/work-norms/entities/work-norm.entity';
+import { IPositionHistory } from '@repo/shared';
 import {
     AfterLoad,
     Column,
@@ -7,13 +14,6 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Position } from '../../positions/entities/position.entity';
-import { Department } from '../../departments/entities/department.entity';
-import { Job } from '../../jobs/entities/job.entity';
-import { WorkNorm } from '../../work-norms/entities/work-norm.entity';
-import { PaymentType } from '../../payment-types/entities/payment-type.entity';
-import { Logger } from '@/resources/logger.abstract';
-import { IPositionHistory } from '@repo/shared';
 
 @Entity()
 export class PositionHistory extends Logger implements IPositionHistory {

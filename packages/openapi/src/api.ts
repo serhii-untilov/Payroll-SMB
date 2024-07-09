@@ -3120,16 +3120,28 @@ export interface UpdateCompanyDto {
     'name'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof UpdateCompanyDto
+     */
+    'taxId'?: string;
+    /**
+     * 
+     * @type {Law}
+     * @memberof UpdateCompanyDto
+     */
+    'law'?: Law;
+    /**
+     * 
      * @type {number}
      * @memberof UpdateCompanyDto
      */
     'lawId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Accounting}
      * @memberof UpdateCompanyDto
      */
-    'taxId'?: string;
+    'accounting'?: Accounting;
     /**
      * 
      * @type {number}
@@ -3166,6 +3178,24 @@ export interface UpdateCompanyDto {
      * @memberof UpdateCompanyDto
      */
     'checkDate'?: string;
+    /**
+     * 
+     * @type {Array<Department>}
+     * @memberof UpdateCompanyDto
+     */
+    'departments'?: Array<Department>;
+    /**
+     * 
+     * @type {Array<Position>}
+     * @memberof UpdateCompanyDto
+     */
+    'positions'?: Array<Position>;
+    /**
+     * 
+     * @type {Array<UserCompany>}
+     * @memberof UpdateCompanyDto
+     */
+    'users'?: Array<UserCompany>;
 }
 /**
  * 

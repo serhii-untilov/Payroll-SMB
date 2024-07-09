@@ -1,5 +1,5 @@
 import { langPipe } from '../utils/langPipe';
-import { Accounting } from '@/resources/accounting/entities/accounting.entity';
+import { Accounting } from './../resources/accounting/entities/accounting.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { AccountingType } from '@repo/shared';
 

@@ -1,5 +1,5 @@
-import { Logger } from '@/resources/abstract/logger.abstract';
-import { Position } from '@/resources/positions/entities/position.entity';
+import { Logger } from './../../../../resources/abstract/logger.abstract';
+import { Position } from './../../../../resources/positions/entities/position.entity';
 import { IPaymentPosition } from '@repo/shared';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Payment } from '../../entities/payment.entity';

@@ -9,7 +9,7 @@
         "target": "ES2021",
         "sourceMap": true,
         "outDir": "./dist",
-        "baseUrl": ".",
+        "baseUrl": "./",
         "incremental": true,
         "skipLibCheck": true,
         "strictNullChecks": true,
@@ -20,9 +20,9 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "paths": {
-            "@/*": ["./src/*"],
-            "@resources/*": ["./resources/*"]
+            "@/*": ["./src/*"]
         }
     },
-    "include": ["src", "test"]
+    "include": ["src", "test", "jest.config.ts", "tsconfig-paths-bootstrap.js"],
+    "types": ["@types/jest"]
 }

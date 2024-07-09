@@ -1,5 +1,6 @@
+import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Position } from './../../../resources/positions/entities/position.entity';
 import { IPerson, getFullName } from '@repo/shared';
-import { Logger } from '@/resources/logger.abstract';
 import {
     AfterInsert,
     AfterLoad,
@@ -9,7 +10,6 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Position } from '../../positions/entities/position.entity';
 
 @Entity()
 export class Person extends Logger implements IPerson {

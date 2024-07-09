@@ -1,3 +1,7 @@
+import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Company } from './../../../resources/companies/entities/company.entity';
+import { Person } from './../../../resources/persons/entities/person.entity';
+import { PositionHistory } from './../../../resources/position-history/entities/position-history.entity';
 import { IPosition } from '@repo/shared';
 import {
     AfterLoad,
@@ -9,10 +13,6 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Logger } from '@/resources/logger.abstract';
-import { Company } from '../../companies/entities/company.entity';
-import { Person } from '../../persons/entities/person.entity';
-import { PositionHistory } from '../../position-history/entities/position-history.entity';
 import { PositionBalance } from './position-balance.entity';
 
 @Entity()

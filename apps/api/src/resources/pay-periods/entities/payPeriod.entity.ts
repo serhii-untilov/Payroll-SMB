@@ -1,5 +1,5 @@
-import { Logger } from '@/resources/abstract/logger.abstract';
-import { Company } from '@/resources/companies/entities/company.entity';
+import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Company } from './../../../resources/companies/entities/company.entity';
 import { IPayPeriod, PayPeriodState } from '@repo/shared';
 import {
     AfterLoad,
@@ -9,6 +9,7 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    Relation,
 } from 'typeorm';
 import { PayPeriodCalcMethod } from './payPeriodCalcMethod.entity';
 
@@ -28,7 +29,8 @@ export class PayPeriod extends Logger implements IPayPeriod {
 
     @ManyToOne(() => Company, (company) => company.departments)
     @JoinColumn()
-    company?: Company;
+    company?: Relation<Company>;
+
     @Column({ type: 'integer' })
     companyId: number;
 
@@ -86,7 +88,7 @@ export class PayPeriod extends Logger implements IPayPeriod {
     funds: number;
 
     @OneToMany(() => PayPeriodCalcMethod, (payPeriodCalcMethod) => payPeriodCalcMethod.payPeriod)
-    calcMethods?: PayPeriodCalcMethod[];
+    calcMethods?: Relation<PayPeriodCalcMethod>[];
 
     @AfterLoad()
     transform() {

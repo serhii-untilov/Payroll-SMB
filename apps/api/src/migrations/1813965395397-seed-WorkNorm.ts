@@ -1,9 +1,9 @@
-import { WorkNorm } from '@/resources/work-norms/entities/work-norm.entity';
+import { WorkNorm } from './../resources/work-norms/entities/work-norm.entity';
 import { getSystemUserId } from '../utils/getSystemUserId';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { langPipe } from '../utils/langPipe';
 import { WorkNormType } from '@repo/shared';
-import { WorkNormPeriod } from '@/resources/work-norms/entities/work-norm-period.entity';
+import { WorkNormPeriod } from './../resources/work-norms/entities/work-norm-period.entity';
 
 const lang = process.env.LANGUAGE || 'uk';
 const entity = WorkNorm;

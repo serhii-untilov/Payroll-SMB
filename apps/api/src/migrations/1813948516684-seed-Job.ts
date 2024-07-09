@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Job } from '@/resources/jobs/entities/job.entity';
+import { Job } from './../resources/jobs/entities/job.entity';
 import { getSystemUserId } from '../utils/getSystemUserId';
 import { langPipe } from '../utils/langPipe';
 

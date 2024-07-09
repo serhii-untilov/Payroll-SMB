@@ -60,7 +60,7 @@ export class UsersController {
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<IPublicUserData> {
         const id: number = getUserId(req);
-        const user = await this.usersService.findOne({
+        const user = await this.usersService.findOneOrFail({
             where: { id },
             relations: { role: !!relations },
         });
@@ -74,7 +74,7 @@ export class UsersController {
         @Param('id', ParseIntPipe) id: number,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations?: boolean,
     ): Promise<IPublicUserData> {
-        const user = await this.usersService.findOne({
+        const user = await this.usersService.findOneOrFail({
             where: { id },
             relations: { role: !!relations },
         });

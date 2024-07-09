@@ -1,5 +1,5 @@
 import { RoleType } from '@repo/shared';
-import { Role } from '@/resources/roles/entities/role.entity';
+import { Role } from './../resources/roles/entities/role.entity';
 import { langPipe } from '../utils/langPipe';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 

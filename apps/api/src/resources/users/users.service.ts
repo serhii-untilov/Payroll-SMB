@@ -80,8 +80,8 @@ export class UsersService {
         return await this.repository.find(params);
     }
 
-    async findOne(params: FindOneOptions<User>): Promise<User> {
-        return await this.repository.findOneOrFail(params);
+    async findOne(params: FindOneOptions<User>): Promise<User | null> {
+        return await this.repository.findOne(params);
     }
 
     async findOneOrFail(params: FindOneOptions<User>): Promise<User> {

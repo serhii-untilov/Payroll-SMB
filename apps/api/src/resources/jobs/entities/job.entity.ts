@@ -1,4 +1,4 @@
-import { Logger } from '@/resources/abstract/logger.abstract';
+import { Logger } from './../../../resources/abstract/logger.abstract';
 import { IJob } from '@repo/shared';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 

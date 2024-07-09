@@ -1,6 +1,6 @@
 import { ResourceType, RoleType } from '@repo/shared';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Access } from '@/resources/access/entities/access.entity';
+import { Access } from './../resources/access/entities/access.entity';
 import { getSystemUserId } from '../utils/getSystemUserId';
 import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/access';
 

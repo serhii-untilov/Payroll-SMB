@@ -1,7 +1,7 @@
+import { Logger } from './../../../resources/abstract/logger.abstract';
 import { IWorkNorm, IWorkNormPeriod } from '@repo/shared';
-import { Logger } from '@/resources/logger.abstract';
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { WorkNorm } from './work-norm.entity';
-import { Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn, Entity, AfterLoad } from 'typeorm';
 
 @Entity()
 export class WorkNormPeriod extends Logger implements IWorkNormPeriod {

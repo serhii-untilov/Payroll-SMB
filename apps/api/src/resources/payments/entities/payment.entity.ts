@@ -1,6 +1,6 @@
-import { Logger } from '@/resources/abstract/logger.abstract';
-import { Company } from '@/resources/companies/entities/company.entity';
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Company } from './../../../resources/companies/entities/company.entity';
+import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
 import { IPayment } from '@repo/shared';
 import {
     AfterLoad,

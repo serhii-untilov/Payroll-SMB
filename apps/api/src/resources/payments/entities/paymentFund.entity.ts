@@ -1,4 +1,4 @@
-import { PayFundType } from '@/resources/pay-fund-types/entities/pay-fund-type.entity';
+import { PayFundType } from './../../../resources/pay-fund-types/entities/pay-fund-type.entity';
 import { IPaymentFund } from '@repo/shared';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PaymentPosition } from '../payment-positions/entities/paymentPosition.entity';

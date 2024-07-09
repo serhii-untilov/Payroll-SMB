@@ -1,5 +1,13 @@
 import { IPayPeriodCalcMethod } from '@repo/shared';
-import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Relation,
+} from 'typeorm';
 import { PayPeriod } from './payPeriod.entity';
 
 @Entity()
@@ -9,7 +17,7 @@ export class PayPeriodCalcMethod implements IPayPeriodCalcMethod {
 
     @ManyToOne(() => PayPeriod, (payPeriod) => payPeriod.calcMethods)
     @JoinColumn()
-    payPeriod?: PayPeriod;
+    payPeriod?: Relation<PayPeriod>;
 
     @Column({ type: 'integer' })
     payPeriodId: number;
