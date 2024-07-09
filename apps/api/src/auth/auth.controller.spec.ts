@@ -6,14 +6,14 @@ import { randPassword } from '@ngneat/falso';
 import { IUser } from '@repo/shared';
 import { createMockUser } from '@repo/testing';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from '../resources/users/users.service';
-import { appConfig } from '../config/app.config';
-import { authConfig } from '../config/auth.config';
-import { dbConfig } from '../config/db.config';
-import { googleConfig } from '../config/google.config';
+import { UsersService } from '@/resources/users/users.service';
+import { appConfig } from '@/config/app.config';
+import { authConfig } from '@/config/auth.config';
+import { dbConfig } from '@/config/db.config';
+import { googleConfig } from '@/config/google.config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { AccessService } from './../resources/access/access.service';
+import { AccessService } from '@/resources/access/access.service';
 
 describe('AuthController', () => {
     let controller: AuthController;

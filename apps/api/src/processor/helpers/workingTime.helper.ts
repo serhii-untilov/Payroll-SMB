@@ -1,3 +1,5 @@
+import { PositionHistory } from '@/resources/position-history/entities/position-history.entity';
+import { WorkNorm } from '@/resources/work-norms/entities/work-norm.entity';
 import { ConflictException } from '@nestjs/common';
 import {
     BalanceWorkingTime,
@@ -11,9 +13,7 @@ import {
     setBit,
 } from '@repo/shared';
 import { add, sub } from 'date-fns';
-import { WorkNorm } from '../../resources/work-norms/entities/work-norm.entity';
 import { PayrollCalculationService } from '../payrollCalculation/payrollCalculation.service';
-import { PositionHistory } from './../../resources/position-history/entities/position-history.entity';
 
 export function getWorkingTimePlan(
     ctx: PayrollCalculationService,

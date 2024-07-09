@@ -1,3 +1,5 @@
+import { Logger } from '@/resources/abstract/logger.abstract';
+import { Company } from '@/resources/companies/entities/company.entity';
 import { IPayPeriod, PayPeriodState } from '@repo/shared';
 import {
     AfterLoad,
@@ -8,8 +10,6 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Logger } from '../../abstract/logger.abstract';
-import { Company } from '../../companies/entities/company.entity';
 import { PayPeriodCalcMethod } from './payPeriodCalcMethod.entity';
 
 export const defaultFieldList = {

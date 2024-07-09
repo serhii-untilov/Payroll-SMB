@@ -16,13 +16,13 @@ import {
 } from '@nestjs/common';
 import { IPosition, IPositionBalanceExtended, deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { FindPositionDto } from './dto/find-position.dto';
 import { FindAllPositionBalanceDto } from './dto/position-balance.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionsService } from './positions.service';
-import { getUserId } from './../../utils/getUserId';
+import { getUserId } from '@/utils/getUserId';
 
 @Controller('positions')
 export class PositionsController {

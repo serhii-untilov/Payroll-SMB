@@ -15,12 +15,12 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNormsService } from './work-norms.service';
 import { deepStringToShortDate } from '@repo/shared';
-import { getUserId } from './../../utils/getUserId';
+import { getUserId } from '@/utils/getUserId';
 
 @Controller('work-norms')
 export class WorkNormsController {

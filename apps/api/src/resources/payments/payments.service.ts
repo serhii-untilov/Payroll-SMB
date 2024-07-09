@@ -19,7 +19,7 @@ import { Payment } from './entities/payment.entity';
 import { PaymentUpdatedEvent } from './events/payment-updated.event';
 import { PaymentPositionsService } from './payment-positions/payment-positions.service';
 import { PayPeriodsService } from '../pay-periods/payPeriods.service';
-import { WrapperType } from 'src/types/WrapperType';
+import { WrapperType } from '@/types/WrapperType';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {

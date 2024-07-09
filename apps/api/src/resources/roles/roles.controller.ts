@@ -14,11 +14,11 @@ import {
 } from '@nestjs/common';
 import { IRole } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RolesService } from './roles.service';
-import { getUserId } from './../../utils/getUserId';
+import { getUserId } from '@/utils/getUserId';
 
 @Controller('roles')
 export class RolesController {

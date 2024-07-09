@@ -14,5 +14,4 @@ export const dbConfig = registerAs('db', () => ({
 
     entities: ['./src/resources/**/*entity.ts'],
     migrations: ['./src/migrations/**/*.ts'],
-    // subscribers: ['./src/subscribers/*subscriber.ts', './src/resources/**/*subscriber.ts'],
 }));

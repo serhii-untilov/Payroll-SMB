@@ -9,7 +9,7 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Logger } from '../../abstract/logger.abstract';
+import { Logger } from '@/resources/logger.abstract';
 import { Company } from '../../companies/entities/company.entity';
 import { Person } from '../../persons/entities/person.entity';
 import { PositionHistory } from '../../position-history/entities/position-history.entity';

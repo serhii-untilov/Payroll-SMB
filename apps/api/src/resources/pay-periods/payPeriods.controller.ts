@@ -1,3 +1,5 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
@@ -16,12 +18,10 @@ import {
 } from '@nestjs/common';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePayPeriodDto } from './dto/createPayPeriod.dto';
 import { UpdatePayPeriodDto } from './dto/updatePayPeriod.dto';
 import { defaultFieldList } from './entities/payPeriod.entity';
 import { PayPeriodsService } from './payPeriods.service';
-import { getUserId } from './../../utils/getUserId';
 
 @Controller('pay-periods')
 export class PayPeriodsController {

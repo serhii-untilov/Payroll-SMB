@@ -1,15 +1,15 @@
+import { PayFundCalculationService } from '@/processor/payFundCalculation/payFundCalculation.service';
+import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
+import { SseService } from '@/processor/serverSentEvents/sse.service';
+import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
+import { PersonEvent } from '@/resources/persons/events/abstract/PersonEvent';
+import { PersonCreatedEvent } from '@/resources/persons/events/person-created.event';
+import { PersonDeletedEvent } from '@/resources/persons/events/person-deleted.event';
+import { PersonUpdatedEvent } from '@/resources/persons/events/person-updated.event';
+import { PositionsService } from '@/resources/positions/positions.service';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ServerEvent } from '@repo/shared';
-import { PersonCreatedEvent } from '../../../resources/persons/events/person-created.event';
-import { PersonDeletedEvent } from '../../../resources/persons/events/person-deleted.event';
-import { PersonUpdatedEvent } from '../../../resources/persons/events/person-updated.event';
-import { PayFundCalculationService } from '../../payFundCalculation/payFundCalculation.service';
-import { PayrollCalculationService } from '../../payrollCalculation/payrollCalculation.service';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { PersonEvent } from './../../../resources/persons/events/abstract/PersonEvent';
-import { PositionsService } from './../../../resources/positions/positions.service';
-import { SseService } from './../../serverSentEvents/sse.service';
 
 @Injectable()
 export class PersonListenerService {

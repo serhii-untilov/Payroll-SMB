@@ -1,6 +1,6 @@
-import { PaymentPosition } from '../../../resources/payments/payment-positions/entities/paymentPosition.entity';
+import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+import { PaymentPosition } from '@/resources/payments/payment-positions/entities/paymentPosition.entity';
 import { PaymentCalculationService } from '../payment-calculation.service';
-import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
 import { PaymentCalc } from './abstract/PaymentCalc';
 
 export class PaymentCalc_Fast extends PaymentCalc {

@@ -1,13 +1,13 @@
+import { CompaniesService } from '@/resources/companies/companies.service';
+import { PayFundsService } from '@/resources/pay-funds/pay-funds.service';
+import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PayPeriodsCalcMethodService } from '@/resources/pay-periods/payPeriodsCalcMethod.service';
+import { PayrollsService } from '@/resources/payrolls/payrolls.service';
+import { PositionsService } from '@/resources/positions/positions.service';
+import { UsersService } from '@/resources/users/users.service';
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PayPeriodCalculationService } from './payPeriodCalculation.service';
-import { CompaniesService } from './../../resources/companies/companies.service';
-import { createMock } from '@golevelup/ts-jest';
-import { PayPeriodsService } from './../../resources/pay-periods/payPeriods.service';
-import { PayPeriodsCalcMethodService } from './../../resources/pay-periods/payPeriodsCalcMethod.service';
-import { PayrollsService } from './../../resources/payrolls/payrolls.service';
-import { PayFundsService } from './../../resources/pay-funds/pay-funds.service';
-import { PositionsService } from './../../resources/positions/positions.service';
-import { UsersService } from './../../resources/users/users.service';
 
 describe('PayPeriodCalculationService', () => {
     let service: PayPeriodCalculationService;

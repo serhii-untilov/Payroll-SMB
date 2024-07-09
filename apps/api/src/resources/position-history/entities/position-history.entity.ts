@@ -12,7 +12,7 @@ import { Department } from '../../departments/entities/department.entity';
 import { Job } from '../../jobs/entities/job.entity';
 import { WorkNorm } from '../../work-norms/entities/work-norm.entity';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
-import { Logger } from '../../abstract/logger.abstract';
+import { Logger } from '@/resources/logger.abstract';
 import { IPositionHistory } from '@repo/shared';
 
 @Entity()

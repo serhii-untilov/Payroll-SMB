@@ -1,9 +1,9 @@
+import { getWorkDayBeforeOrEqual } from '@/processor/helpers/workingTime.helper';
+import { Task } from '@/resources/tasks/entities/task.entity';
 import { TaskType, monthBegin } from '@repo/shared';
-import { TaskGenerationService } from '../taskGeneration.service';
-import { Task } from '../../../resources/tasks/entities/task.entity';
-import { TaskGenerator } from './abstract/TaskGenerator';
 import { add } from 'date-fns';
-import { getWorkDayBeforeOrEqual } from '../../helpers/workingTime.helper';
+import { TaskGenerationService } from '../taskGeneration.service';
+import { TaskGenerator } from './abstract/TaskGenerator';
 
 export class TaskSendIncomeTaxReport extends TaskGenerator {
     constructor(ctx: TaskGenerationService, type: TaskType) {

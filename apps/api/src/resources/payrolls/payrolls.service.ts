@@ -21,7 +21,7 @@ import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { FindPayrollDto } from './dto/find-payroll.dto';
 import { UpdatePayrollDto } from './dto/update-payroll.dto';
 import { Payroll } from './entities/payroll.entity';
-import { WrapperType } from 'src/types/WrapperType';
+import { WrapperType } from '@/types/WrapperType';
 
 @Injectable()
 export class PayrollsService extends AvailableForUserCompany {

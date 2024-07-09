@@ -16,7 +16,7 @@ import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { WrapperType } from 'src/types/WrapperType';
+import { WrapperType } from '@/types/WrapperType';
 
 @Injectable()
 export class UsersService {

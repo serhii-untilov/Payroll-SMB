@@ -1,7 +1,7 @@
-import { PayPeriod } from '../../../../resources/pay-periods/entities/payPeriod.entity';
+import { PayFundType } from '@/resources/pay-fund-types/entities/pay-fund-type.entity';
+import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
+import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
 import { PayFundCalculationService } from '../../payFundCalculation.service';
-import { PayFundType } from '../../../../resources/pay-fund-types/entities/pay-fund-type.entity';
-import { PayFund } from '../../../../resources/pay-funds/entities/pay-fund.entity';
 
 export abstract class PayFundCalc {
     ctx: PayFundCalculationService;

@@ -1,5 +1,6 @@
+import { Logger } from '@/resources/abstract/logger.abstract';
+import { Company } from '@/resources/companies/entities/company.entity';
 import { IDepartment } from '@repo/shared';
-import { Logger } from '../../abstract/logger.abstract';
 import {
     AfterLoad,
     Column,
@@ -10,7 +11,6 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Company } from '../../companies/entities/company.entity';
 
 @Entity()
 export class Department extends Logger implements IDepartment {

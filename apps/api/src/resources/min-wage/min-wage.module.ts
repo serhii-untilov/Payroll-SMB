@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { MinWageService } from './min-wage.service';
-import { MinWageController } from './min-wage.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MinWage } from './entities/min-wage.entity';
 import { AccessModule } from '../access/access.module';
+import { MinWage } from './entities/min-wage.entity';
+import { MinWageController } from './min-wage.controller';
+import { MinWageService } from './min-wage.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([MinWage]), AccessModule],

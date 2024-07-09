@@ -1,3 +1,7 @@
+import { AvailableForUserCompany } from '@/resources/abstract/availableForUserCompany';
+import { AccessService } from '@/resources/access/access.service';
+import { PayrollsService } from '@/resources/payrolls/payrolls.service';
+import { WrapperType } from '@/types/WrapperType';
 import {
     BadRequestException,
     ConflictException,
@@ -8,16 +12,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../../abstract/availableForUserCompany';
-import { AccessService } from '../../access/access.service';
 import { Payment } from '../entities/payment.entity';
 import { PaymentsService } from '../payments.service';
-import { PayrollsService } from './../../payrolls/payrolls.service';
 import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
 import { FindPaymentPositionDto } from './dto/find-paymentPosition.dto';
 import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
-import { WrapperType } from 'src/types/WrapperType';
 
 @Injectable()
 export class PaymentPositionsService extends AvailableForUserCompany {

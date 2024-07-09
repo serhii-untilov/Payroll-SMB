@@ -1,12 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { PaymentFundsService } from './payment-funds.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { PaymentFund } from '../entities/paymentFund.entity';
-import { repositoryMockFactory } from '@repo/testing';
-import { PaymentsService } from '../payments.service';
 import { createMock } from '@golevelup/ts-jest';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { repositoryMockFactory } from '@repo/testing';
+import { AccessService } from '@/resources/access/access.service';
+import { PaymentFund } from '../entities/paymentFund.entity';
 import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
-import { AccessService } from '../../access/access.service';
+import { PaymentsService } from '../payments.service';
+import { PaymentFundsService } from './payment-funds.service';
 
 describe('PaymentFundsService', () => {
     let service: PaymentFundsService;

@@ -1,6 +1,6 @@
 import { PaymentGroup, CalcMethod, PaymentPart } from '@repo/shared';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { PaymentType } from '../resources/payment-types/entities/payment-type.entity';
+import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
 import { getSystemUserId } from '../utils/getSystemUserId';
 import { langPipe } from '../utils/langPipe';
 

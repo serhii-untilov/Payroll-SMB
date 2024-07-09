@@ -1,15 +1,15 @@
+import { PayFundCalculationService } from '@/processor/payFundCalculation/payFundCalculation.service';
+import { PaymentCalculationService } from '@/processor/paymentCalculation/payment-calculation.service';
+import { PayPeriodCalculationService } from '@/processor/payPeriodCalculation/payPeriodCalculation.service';
+import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
+import { SseService } from '@/processor/serverSentEvents/sse.service';
+import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
+import { CompanyCreatedEvent } from '@/resources/companies/events/company-created.event';
+import { CompanyDeletedEvent } from '@/resources/companies/events/company-deleted.event';
+import { CompanyUpdatedEvent } from '@/resources/companies/events/company-updated.event';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ServerEvent } from '@repo/shared';
-import { CompanyCreatedEvent } from '../../../resources/companies/events/company-created.event';
-import { PaymentCalculationService } from '../../paymentCalculation/payment-calculation.service';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
-import { CompanyDeletedEvent } from './../../../resources/companies/events/company-deleted.event';
-import { CompanyUpdatedEvent } from './../../../resources/companies/events/company-updated.event';
-import { PayPeriodCalculationService } from './../../payPeriodCalculation/payPeriodCalculation.service';
-import { PayrollCalculationService } from './../../payrollCalculation/payrollCalculation.service';
-import { SseService } from './../../serverSentEvents/sse.service';
 
 @Injectable()
 export class CompanyListenerService {

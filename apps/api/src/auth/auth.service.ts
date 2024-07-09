@@ -1,3 +1,6 @@
+import { AccessService } from '@/resources/access/access.service';
+import { CreateUserDto } from '@/resources/users/dto/create-user.dto';
+import { UsersService } from '@/resources/users/users.service';
 import {
     BadRequestException,
     ConflictException,
@@ -9,13 +12,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { AccessType, ResourceType, RoleType } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from '../resources/users/dto/create-user.dto';
-import { UsersService } from '../resources/users/users.service';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';
-import { AccessService } from './../resources/access/access.service';
-import { AccessType, ResourceType, RoleType } from '@repo/shared';
 
 @Injectable()
 export class AuthService {

@@ -6,7 +6,7 @@ import { AccessService } from '../access/access.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
-import { WrapperType } from 'src/types/WrapperType';
+import { WrapperType } from '@/types/WrapperType';
 
 @Injectable()
 export class RolesService {

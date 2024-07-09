@@ -1,3 +1,5 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
@@ -12,14 +14,12 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
 import { MinWage } from './entities/min-wage.entity';
 import { MinWageService } from './min-wage.service';
-import { deepStringToShortDate } from '@repo/shared';
-import { getUserId } from './../../utils/getUserId';
 
 @Controller('min-wage')
 export class MinWageController {

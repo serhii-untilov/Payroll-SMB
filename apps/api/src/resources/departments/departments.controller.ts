@@ -1,3 +1,5 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
@@ -14,13 +16,11 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
-import { deepStringToShortDate } from '@repo/shared';
-import { getUserId } from './../../utils/getUserId';
 import { Department } from './entities/department.entity';
 
 @Controller('departments')

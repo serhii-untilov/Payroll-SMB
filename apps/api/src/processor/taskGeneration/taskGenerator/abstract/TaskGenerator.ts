@@ -1,7 +1,7 @@
+import { getWorkDayBeforeOrEqual } from '@/processor/helpers/workingTime.helper';
+import { Task } from '@/resources/tasks/entities/task.entity';
 import { TaskStatus, TaskType } from '@repo/shared';
-import { Task } from '../../../../resources/tasks/entities/task.entity';
-import { TaskGenerationService } from '../../taskGeneration.service';
-import { getWorkDayBeforeOrEqual } from '../../../helpers/workingTime.helper';
+import { TaskGenerationService } from './../../taskGeneration.service';
 
 export abstract class TaskGenerator {
     ctx: TaskGenerationService;

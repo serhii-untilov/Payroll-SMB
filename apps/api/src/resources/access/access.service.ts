@@ -1,3 +1,4 @@
+import { WrapperType } from '@/types/WrapperType';
 import {
     BadRequestException,
     ForbiddenException,
@@ -9,17 +10,16 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType, RoleType } from '@repo/shared';
 import { Repository } from 'typeorm';
+import { UsersCompanyService } from '../users/users-company.service';
 import { UsersService } from '../users/users.service';
 import {
     AvailableAccessDto,
-    AvailableAccessUserDto,
     AvailableAccessUserCompanyDto,
+    AvailableAccessUserDto,
 } from './dto/available-access.dto';
 import { CreateAccessDto } from './dto/create-access.dto';
 import { UpdateAccessDto } from './dto/update-access.dto';
 import { Access } from './entities/access.entity';
-import { UsersCompanyService } from '../users/users-company.service';
-import { WrapperType } from 'src/types/WrapperType';
 
 @Injectable()
 export class AccessService {

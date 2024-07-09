@@ -14,12 +14,12 @@ import {
 } from '@nestjs/common';
 import { IPerson, deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { FindPersonDto } from './dto/find-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { PersonsService } from './persons.service';
-import { getUserId } from './../../utils/getUserId';
+import { getUserId } from '@/utils/getUserId';
 
 @Controller('persons')
 export class PersonsController {

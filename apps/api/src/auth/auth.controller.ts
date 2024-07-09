@@ -1,13 +1,13 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { RefreshTokenGuard } from '@/guards/refreshToken.guard';
+import { CreateUserDto } from '@/resources/users/dto/create-user.dto';
+import { getRefreshToken } from '@/utils/getRefreshToken';
+import { getUserId } from '@/utils/getUserId';
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../guards/accessToken.guard';
-import { RefreshTokenGuard } from '../guards/refreshToken.guard';
-import { CreateUserDto } from '../resources/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';
-import { getUserId } from './../utils/getUserId';
-import { getRefreshToken } from './../utils/getRefreshToken';
 
 @Controller('auth')
 export class AuthController {

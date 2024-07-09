@@ -1,5 +1,5 @@
+import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
 import { PayPeriodCalculationService } from '../../payPeriodCalculation.service';
-import { PayPeriod } from '../../../../resources/pay-periods/entities/payPeriod.entity';
 
 export abstract class PeriodListGenerator {
     ctx: PayPeriodCalculationService;

@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-// import { GlobalSubscriber } from '../subscribers/global.subscriber';
 
 @Injectable()
 export class TypeormConfigService implements TypeOrmOptionsFactory {
@@ -10,11 +9,6 @@ export class TypeormConfigService implements TypeOrmOptionsFactory {
 
     createTypeOrmOptions(): TypeOrmModuleOptions {
         const dbConfig = this.configService.get('db');
-        // this.logger.debug(
-        //     `Database Config for env ${this.configService.get(
-        //         'ENVIRONMENT',
-        //     )}:\n\n${JSON.stringify(dbConfig, null, 2)}\n\n`,
-        // );
         return {
             type: dbConfig.type,
             host: dbConfig.host,
@@ -26,7 +20,6 @@ export class TypeormConfigService implements TypeOrmOptionsFactory {
             synchronize: dbConfig.synchronize,
             logging: dbConfig.logging,
             autoLoadEntities: true,
-            // subscribers: [GlobalSubscriber],
         };
     }
 }

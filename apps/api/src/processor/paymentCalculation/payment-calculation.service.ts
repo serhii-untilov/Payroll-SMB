@@ -1,26 +1,26 @@
+import { CompaniesService } from '@/resources/companies/companies.service';
+import { Company } from '@/resources/companies/entities/company.entity';
+import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
+import { PayFundsService } from '@/resources/pay-funds/pay-funds.service';
+import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
+import { Payment } from '@/resources/payments/entities/payment.entity';
+import { PaymentPosition } from '@/resources/payments/payment-positions/entities/paymentPosition.entity';
+import { PaymentPositionsService } from '@/resources/payments/payment-positions/payment-positions.service';
+import { PaymentsService } from '@/resources/payments/payments.service';
+import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
+import { PayrollsService } from '@/resources/payrolls/payrolls.service';
+import { Position } from '@/resources/positions/entities/position.entity';
+import { PositionsService } from '@/resources/positions/positions.service';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { CalcMethod, PaymentGroup, PaymentStatus, dateUTC } from '@repo/shared';
-import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
-import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
 import { PayPeriodCalculationService } from '../payPeriodCalculation/payPeriodCalculation.service';
-import { CompaniesService } from './../../resources/companies/companies.service';
-import { Company } from './../../resources/companies/entities/company.entity';
-import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
-import { PaymentTypesService } from './../../resources/payment-types/payment-types.service';
-import { PaymentPosition } from '../../resources/payments/payment-positions/entities/paymentPosition.entity';
-import { PaymentPositionsService } from '../../resources/payments/payment-positions/payment-positions.service';
-import { PaymentsService } from './../../resources/payments/payments.service';
-import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
-import { PayrollsService } from './../../resources/payrolls/payrolls.service';
-import { Position } from './../../resources/positions/entities/position.entity';
-import { PositionsService } from './../../resources/positions/positions.service';
 import { PaymentCalc_Advance } from './calcMethods/PaymentCalc_Advance';
 import { PaymentCalc_Fast } from './calcMethods/PaymentCalc_Fast';
 import { PaymentCalc_Regular } from './calcMethods/PaymentCalc_Regular';
 import { PaymentCalc } from './calcMethods/abstract/PaymentCalc';
-import { Payment } from './../../resources/payments/entities/payment.entity';
-import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
-import { PayFundsService } from './../../resources/pay-funds/pay-funds.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PaymentCalculationService {

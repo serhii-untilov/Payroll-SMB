@@ -1,14 +1,14 @@
+import { getAdvancePaymentDate } from '@/processor/helpers/payment.helper';
+import { Task } from '@/resources/tasks/entities/task.entity';
 import {
+    CalcMethod,
     PaymentSchedule,
     PaymentStatus,
+    TaskStatus,
     TaskType,
     dateUTC,
-    CalcMethod,
-    TaskStatus,
 } from '@repo/shared';
-import { Task } from '../../../resources/tasks/entities/task.entity';
 import { TaskGenerationService } from '../taskGeneration.service';
-import { getAdvancePaymentDate } from './../../helpers/payment.helper';
 import { TaskGenerator } from './abstract/TaskGenerator';
 
 export class TaskPostAdvancePayment extends TaskGenerator {

@@ -1,18 +1,18 @@
-import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@repo/shared';
-import { PositionCreatedEvent } from '../../../resources/positions/events/position-created.event';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
+import { PayFundCalculationService } from '@/processor/payFundCalculation/payFundCalculation.service';
+import { PaymentCalculationService } from '@/processor/paymentCalculation/payment-calculation.service';
+import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
+import { SseService } from '@/processor/serverSentEvents/sse.service';
+import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
 import {
     PositionEvent,
     PositionEventType,
-} from './../../../resources/positions/events/abstract/PositionEvent';
-import { PositionDeletedEvent } from './../../../resources/positions/events/position-deleted.event';
-import { PositionUpdatedEvent } from './../../../resources/positions/events/position-updated.event';
-import { PaymentCalculationService } from './../../paymentCalculation/payment-calculation.service';
-import { PayrollCalculationService } from './../../payrollCalculation/payrollCalculation.service';
-import { SseService } from './../../serverSentEvents/sse.service';
+} from '@/resources/positions/events/abstract/PositionEvent';
+import { PositionCreatedEvent } from '@/resources/positions/events/position-created.event';
+import { PositionDeletedEvent } from '@/resources/positions/events/position-deleted.event';
+import { PositionUpdatedEvent } from '@/resources/positions/events/position-updated.event';
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+import { ServerEvent } from '@repo/shared';
 
 @Injectable()
 export class PositionListenerService {

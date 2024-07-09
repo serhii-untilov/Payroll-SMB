@@ -8,6 +8,7 @@ import {
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
@@ -17,11 +18,10 @@ import { UsersService } from '../users/users.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CompanyCreatedEvent } from './events/company-created.event';
-import { CompanyUpdatedEvent } from './events/company-updated.event';
-import { CompanyDeletedEvent } from './events/company-deleted.event';
 import { CompanyCalculateEvent } from './events/company-calculate.event';
+import { CompanyCreatedEvent } from './events/company-created.event';
+import { CompanyDeletedEvent } from './events/company-deleted.event';
+import { CompanyUpdatedEvent } from './events/company-updated.event';
 
 @Injectable()
 export class CompaniesService {

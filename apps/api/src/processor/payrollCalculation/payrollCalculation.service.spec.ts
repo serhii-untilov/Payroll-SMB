@@ -1,14 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { PayrollCalculationService } from './payrollCalculation.service';
-import { AccessService } from '../../resources/access/access.service';
-import { CompaniesService } from '../../resources/companies/companies.service';
-import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
+import { AccessService } from '@/resources/access/access.service';
+import { CompaniesService } from '@/resources/companies/companies.service';
+import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
+import { PayrollsService } from '@/resources/payrolls/payrolls.service';
+import { PositionsService } from '@/resources/positions/positions.service';
+import { WorkNormsService } from '@/resources/work-norms/work-norms.service';
 import { createMock } from '@golevelup/ts-jest';
-import { PositionsService } from '../../resources/positions/positions.service';
-import { PayrollsService } from '../../resources/payrolls/payrolls.service';
-import { PaymentTypesService } from '../../resources/payment-types/payment-types.service';
-import { WorkNormsService } from '../../resources/work-norms/work-norms.service';
+import { Test, TestingModule } from '@nestjs/testing';
 import { PayPeriodCalculationService } from '../payPeriodCalculation/payPeriodCalculation.service';
+import { PayrollCalculationService } from './payrollCalculation.service';
 
 describe('ProcessorService', () => {
     let service: PayrollCalculationService;

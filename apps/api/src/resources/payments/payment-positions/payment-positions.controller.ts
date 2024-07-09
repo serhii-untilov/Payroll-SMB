@@ -1,3 +1,5 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
@@ -16,14 +18,11 @@ import {
 } from '@nestjs/common';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from './../../../guards/accessToken.guard';
 import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
 import { FindPaymentPositionDto } from './dto/find-paymentPosition.dto';
 import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
-
 import { PaymentPositionsService } from './payment-positions.service';
-import { getUserId } from './../../../utils/getUserId';
 
 @Controller('payment-positions')
 export class PaymentPositionsController {

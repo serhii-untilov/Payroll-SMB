@@ -1,3 +1,4 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import {
     Controller,
     Get,
@@ -7,9 +8,8 @@ import {
     ParseIntPipe,
     UseGuards,
 } from '@nestjs/common';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { LawsService } from './laws.service';
 import { Law } from './entities/law.entity';
+import { LawsService } from './laws.service';
 
 @Controller('laws')
 export class LawsController {

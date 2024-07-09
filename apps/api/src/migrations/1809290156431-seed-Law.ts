@@ -1,5 +1,5 @@
 import { langPipe } from '../utils/langPipe';
-import { Law } from '../resources/laws/entities/law.entity';
+import { Law } from '@/resources/laws/entities/law.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { LawType } from '@repo/shared';
 

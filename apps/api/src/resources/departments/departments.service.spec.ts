@@ -1,4 +1,5 @@
 import { createMock } from '@golevelup/ts-jest';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@repo/testing';
@@ -6,7 +7,6 @@ import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { DepartmentsService } from './departments.service';
 import { Department } from './entities/department.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('DepartmentsService', () => {
     let service: DepartmentsService;

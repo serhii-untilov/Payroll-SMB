@@ -1,5 +1,5 @@
 import { IWorkNorm, IWorkNormPeriod } from '@repo/shared';
-import { Logger } from '../../abstract/logger.abstract';
+import { Logger } from '@/resources/logger.abstract';
 import { WorkNorm } from './work-norm.entity';
 import { Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn, Entity, AfterLoad } from 'typeorm';
 

@@ -17,12 +17,12 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { deepStringToShortDate } from '@repo/shared';
-import { getUserId } from './../../utils/getUserId';
+import { getUserId } from '@/utils/getUserId';
 
 @Controller('companies')
 export class CompaniesController {

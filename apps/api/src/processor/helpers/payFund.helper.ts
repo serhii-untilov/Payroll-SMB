@@ -1,5 +1,5 @@
-import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
-import { PayFund } from '../../resources/pay-funds/entities/pay-fund.entity';
+import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
+import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
 
 export function payFundPayPeriodFactSum(payPeriod: PayPeriod, payFunds: PayFund[]): number {
     return payFunds

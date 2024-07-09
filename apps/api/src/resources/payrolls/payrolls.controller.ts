@@ -18,12 +18,12 @@ import {
 import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { UpdatePayrollDto } from './dto/update-payroll.dto';
 import { PayrollsService } from './payrolls.service';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { Request } from 'express';
 import { deepStringToShortDate } from '@repo/shared';
 import { FindPayrollDto } from './dto/find-payroll.dto';
 import { Payroll } from './entities/payroll.entity';
-import { getUserId } from './../../utils/getUserId';
+import { getUserId } from '@/utils/getUserId';
 
 @Controller('payroll')
 export class PayrollsController {

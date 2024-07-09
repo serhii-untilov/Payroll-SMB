@@ -1,11 +1,11 @@
+import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
+import { SseService } from '@/processor/serverSentEvents/sse.service';
+import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
+import { DepartmentCreatedEvent } from '@/resources/departments/events/department-created.event';
+import { DepartmentDeletedEvent } from '@/resources/departments/events/department-deleted.event';
+import { DepartmentUpdatedEvent } from '@/resources/departments/events/department-updated.event';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { DepartmentCreatedEvent } from '../../../resources/departments/events/department-created.event';
-import { DepartmentDeletedEvent } from '../../../resources/departments/events/department-deleted.event';
-import { DepartmentUpdatedEvent } from '../../../resources/departments/events/department-updated.event';
-import { PayrollCalculationService } from '../../payrollCalculation/payrollCalculation.service';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { SseService } from './../../serverSentEvents/sse.service';
 import { ServerEvent } from '@repo/shared';
 
 @Injectable()

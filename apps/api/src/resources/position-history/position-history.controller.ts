@@ -16,12 +16,12 @@ import {
 } from '@nestjs/common';
 import { IPositionHistory, deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindPositionHistoryDto } from './dto/find-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistoryService } from './position-history.service';
-import { getUserId } from './../../utils/getUserId';
+import { getUserId } from '@/utils/getUserId';
 
 @Controller('position-history')
 export class PositionHistoryController {

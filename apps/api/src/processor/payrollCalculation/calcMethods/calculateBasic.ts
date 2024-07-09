@@ -1,3 +1,8 @@
+import { getWorkingTimeFact, getWorkingTimePlan } from '@/processor/helpers/workingTime.helper';
+import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
+import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
+import { PositionHistory } from '@/resources/position-history/entities/position-history.entity';
+import { NotFoundException } from '@nestjs/common';
 import {
     CalcMethod,
     PaymentGroup,
@@ -6,12 +11,7 @@ import {
     getMaxDate,
     getMinDate,
 } from '@repo/shared';
-import { PayPeriod } from '../../../resources/pay-periods/entities/payPeriod.entity';
-import { Payroll } from '../../../resources/payrolls/entities/payroll.entity';
-import { PositionHistory } from '../../../resources/position-history/entities/position-history.entity';
 import { PayrollCalculationService } from '../payrollCalculation.service';
-import { getWorkingTimeFact, getWorkingTimePlan } from '../../helpers/workingTime.helper';
-import { NotFoundException } from '@nestjs/common';
 
 export function calculateBasics(ctx: PayrollCalculationService) {
     for (const accPeriod of ctx.accPeriods) {

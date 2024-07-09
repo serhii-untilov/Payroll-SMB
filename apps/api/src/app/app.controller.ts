@@ -2,8 +2,6 @@ import { Controller, Get, Header, Logger, Param, Post, StreamableFile } from '@n
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { AppService } from './app.service';
-// import en from './locales/en.json';
-// import uk from './locales/uk.json';
 
 @Controller()
 export class AppController {

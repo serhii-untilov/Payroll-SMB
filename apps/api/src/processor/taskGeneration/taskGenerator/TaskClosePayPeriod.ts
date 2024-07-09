@@ -1,6 +1,6 @@
+import { getWorkDayBeforeOrEqual } from '@/processor/helpers/workingTime.helper';
+import { Task } from '@/resources/tasks/entities/task.entity';
 import { TaskType } from '@repo/shared';
-import { Task } from '../../../resources/tasks/entities/task.entity';
-import { getWorkDayBeforeOrEqual } from '../../helpers/workingTime.helper';
 import { TaskGenerationService } from '../taskGeneration.service';
 import { TaskGenerator } from './abstract/TaskGenerator';
 

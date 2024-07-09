@@ -1,3 +1,5 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
@@ -13,11 +15,9 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { JobsService } from './jobs.service';
-import { getUserId } from './../../utils/getUserId';
 
 @Controller('jobs')
 export class JobsController {

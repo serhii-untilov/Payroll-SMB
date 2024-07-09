@@ -1,6 +1,6 @@
+import { Logger } from '@/resources/abstract/logger.abstract';
 import { AccountingType } from '@repo/shared';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Logger } from '../../../resources/abstract/logger.abstract';
 
 @Entity()
 export class Accounting extends Logger {

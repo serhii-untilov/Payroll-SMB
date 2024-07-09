@@ -1,6 +1,6 @@
-import { Task } from './../../../resources/tasks/entities/task.entity';
-import { TaskSequenceNumber } from './abstract/TaskSequenceNumber';
+import { Task } from '@/resources/tasks/entities/task.entity';
 import { TaskType } from '@repo/shared';
+import { TaskSequenceNumber } from './abstract/TaskSequenceNumber';
 
 // https://timmousk.com/blog/typescript-map/
 const map: { [id: string]: number } = {};

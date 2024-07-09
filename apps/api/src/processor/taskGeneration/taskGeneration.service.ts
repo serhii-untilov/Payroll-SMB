@@ -1,15 +1,16 @@
+import { CompaniesService } from '@/resources/companies/companies.service';
+import { Company } from '@/resources/companies/entities/company.entity';
+import { DepartmentsService } from '@/resources/departments/departments.service';
+import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PaymentsService } from '@/resources/payments/payments.service';
+import { PersonsService } from '@/resources/persons/persons.service';
+import { PositionsService } from '@/resources/positions/positions.service';
+import { Task } from '@/resources/tasks/entities/task.entity';
+import { TasksService } from '@/resources/tasks/tasks.service';
+import { UsersCompanyService } from '@/resources/users/users-company.service';
 import { Inject, Injectable, Logger, NotFoundException, Scope, forwardRef } from '@nestjs/common';
 import { TaskStatus, TaskType, dropTime } from '@repo/shared';
-import { CompaniesService } from '../../resources/companies/companies.service';
-import { Company } from '../../resources/companies/entities/company.entity';
-import { DepartmentsService } from '../../resources/departments/departments.service';
-import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
-import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
-import { PersonsService } from '../../resources/persons/persons.service';
-import { PositionsService } from '../../resources/positions/positions.service';
-import { Task } from '../../resources/tasks/entities/task.entity';
-import { TasksService } from '../../resources/tasks/tasks.service';
-import { UsersCompanyService } from './../../resources/users/users-company.service';
 import { TaskClosePayPeriod } from './taskGenerator/TaskClosePayPeriod';
 import { TaskCreateCompany } from './taskGenerator/TaskCreateCompany';
 import { TaskFillDepartmentList } from './taskGenerator/TaskFillDepartmentList';
@@ -25,7 +26,6 @@ import { TaskSendIncomeTaxReport } from './taskGenerator/TaskSendIncomeTaxReport
 import { TaskGenerator } from './taskGenerator/abstract/TaskGenerator';
 import { FixedSequenceNumber } from './taskSequenceNumber/FixedSequenceNumber';
 import { TaskSequenceNumber } from './taskSequenceNumber/abstract/TaskSequenceNumber';
-import { PaymentsService } from './../../resources/payments/payments.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskGenerationService {

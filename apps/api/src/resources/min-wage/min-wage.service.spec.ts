@@ -1,11 +1,11 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MinWageService } from './min-wage.service';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
-import { MinWage } from './entities/min-wage.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { AccessService } from '../access/access.service';
-import { createMock } from '@golevelup/ts-jest';
+import { MinWage } from './entities/min-wage.entity';
+import { MinWageService } from './min-wage.service';
 
 describe('MinWageService', () => {
     let service: MinWageService;

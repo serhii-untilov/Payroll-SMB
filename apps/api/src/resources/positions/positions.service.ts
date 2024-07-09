@@ -38,7 +38,7 @@ import { Position } from './entities/position.entity';
 import { PositionCreatedEvent } from './events/position-created.event';
 import { PositionDeletedEvent } from './events/position-deleted.event';
 import { PositionUpdatedEvent } from './events/position-updated.event';
-import { WrapperType } from 'src/types/WrapperType';
+import { WrapperType } from '@/types/WrapperType';
 
 @Injectable()
 export class PositionsService extends AvailableForUserCompany {

@@ -1,24 +1,24 @@
+import { AccessService } from '@/resources/access/access.service';
+import { CompaniesService } from '@/resources/companies/companies.service';
+import { Company } from '@/resources/companies/entities/company.entity';
+import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
+import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
+import { PayrollsService } from '@/resources/payrolls/payrolls.service';
+import { Position } from '@/resources/positions/entities/position.entity';
+import { PositionsService } from '@/resources/positions/positions.service';
+import { WorkNorm } from '@/resources/work-norms/entities/work-norm.entity';
+import { WorkNormsService } from '@/resources/work-norms/work-norms.service';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { RecordFlags, WorkingTime } from '@repo/shared';
-import { AccessService } from '../../resources/access/access.service';
-import { CompaniesService } from '../../resources/companies/companies.service';
-import { Company } from '../../resources/companies/entities/company.entity';
-import { PayPeriod } from '../../resources/pay-periods/entities/payPeriod.entity';
-import { PayPeriodsService } from '../../resources/pay-periods/payPeriods.service';
-import { PaymentType } from '../../resources/payment-types/entities/payment-type.entity';
-import { PaymentTypesService } from '../../resources/payment-types/payment-types.service';
-import { Payroll } from '../../resources/payrolls/entities/payroll.entity';
-import { PayrollsService } from '../../resources/payrolls/payrolls.service';
-import { Position } from '../../resources/positions/entities/position.entity';
-import { PositionsService } from '../../resources/positions/positions.service';
-import { WorkNorm } from '../../resources/work-norms/entities/work-norm.entity';
-import { WorkNormsService } from '../../resources/work-norms/work-norms.service';
+import { getPayrollUnionRecord } from '@/processor/helpers/payroll.helper';
+import { calcBalanceWorkingTime } from '@/processor/helpers/workingTime.helper';
+import { PayPeriodCalculationService } from '../payPeriodCalculation/payPeriodCalculation.service';
 import { calculateBasics } from './calcMethods/calculateBasic';
 import { calculateIncomeTax } from './calcMethods/calculateIncomeTax';
 import { calculateMilitaryTax } from './calcMethods/calculateMilitaryTax';
-import { getPayrollUnionRecord } from '../helpers/payroll.helper';
-import { calcBalanceWorkingTime } from '../helpers/workingTime.helper';
-import { PayPeriodCalculationService } from '../payPeriodCalculation/payPeriodCalculation.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {

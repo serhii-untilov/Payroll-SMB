@@ -1,5 +1,5 @@
 import { IPerson, getFullName } from '@repo/shared';
-import { Logger } from '../../abstract/logger.abstract';
+import { Logger } from '@/resources/logger.abstract';
 import {
     AfterInsert,
     AfterLoad,

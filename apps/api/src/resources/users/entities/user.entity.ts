@@ -1,7 +1,7 @@
 import { IRole, IUser } from '@repo/shared';
 import { Role } from '../../roles/entities/role.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { Logger } from '../../../resources/abstract/logger.abstract';
+import { Logger } from '@/resources/abstract/logger.abstract';
 
 @Entity()
 export class User extends Logger implements IUser {

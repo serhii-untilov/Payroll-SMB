@@ -1,7 +1,7 @@
 'use strict';
 
+import { Task } from '@/resources/tasks/entities/task.entity';
 import { TaskStatus, TaskType } from '@repo/shared';
-import { Task } from '../../../resources/tasks/entities/task.entity';
 import { TaskGenerationService } from '../taskGeneration.service';
 import { TaskGenerator } from './abstract/TaskGenerator';
 

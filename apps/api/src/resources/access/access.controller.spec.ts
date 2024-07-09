@@ -1,12 +1,12 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { repositoryMockFactory } from '@repo/testing';
+import { UsersCompanyService } from '../users/users-company.service';
+import { UsersService } from '../users/users.service';
 import { AccessController } from './access.controller';
 import { AccessService } from './access.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { Access } from './entities/access.entity';
-import { repositoryMockFactory } from '@repo/testing';
-import { UsersService } from '../users/users.service';
-import { createMock } from '@golevelup/ts-jest';
-import { UsersCompanyService } from '../users/users-company.service';
 
 describe('AccessController', () => {
     let controller: AccessController;

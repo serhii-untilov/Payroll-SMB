@@ -1,3 +1,5 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
@@ -14,7 +16,6 @@ import {
 } from '@nestjs/common';
 import { IAccess } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { AccessService } from './access.service';
 import {
     AvailableAccessDto,
@@ -23,7 +24,6 @@ import {
 } from './dto/available-access.dto';
 import { CreateAccessDto } from './dto/create-access.dto';
 import { UpdateAccessDto } from './dto/update-access.dto';
-import { getUserId } from './../../utils/getUserId';
 
 @Controller('access')
 export class AccessController {

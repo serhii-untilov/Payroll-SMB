@@ -1,7 +1,7 @@
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { PayFundType } from '../../pay-fund-types/entities/pay-fund-type.entity';
-import { Position } from '../../positions/entities/position.entity';
+import { PayFundType } from '@/resources/pay-fund-types/entities/pay-fund-type.entity';
+import { Position } from '@/resources/positions/entities/position.entity';
 import { IPayFund } from '@repo/shared';
+import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class PayFund implements IPayFund {
