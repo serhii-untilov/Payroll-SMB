@@ -1,12 +1,12 @@
+import { Button } from '@/components/layout/Button';
+import useAppContext from '@/hooks/useAppContext';
+import useAuth from '@/hooks/useAuth';
+import useLocale from '@/hooks/useLocale';
+import { preview } from '@/services/auth.service';
 import { Box, CssBaseline } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../../components/layout/Button';
-import useAppContext from '../../hooks/useAppContext';
-import useAuth from '../../hooks/useAuth';
-import useLocale from '../../hooks/useLocale';
-import { preview } from '../../services/auth.service';
 import { Features } from './details/Features';
 import { Footer } from './details/Footer';
 import { Header } from './details/Header';

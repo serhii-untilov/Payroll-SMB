@@ -1,3 +1,6 @@
+import { Divider } from '@/components/layout/Divider';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
 import {
     ArrowRightRounded,
     DarkModeOutlined,
@@ -18,9 +21,6 @@ import {
 } from '@mui/material';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Divider } from '../../../components/layout/Divider';
-import useAppContext from '../../../hooks/useAppContext';
-import useLocale from '../../../hooks/useLocale';
 
 type Props = {
     setShowSidebarMenu: (show: boolean) => void;
@@ -50,17 +50,17 @@ export function SidebarMenu(props: Props) {
             { label: 'divider' },
             {
                 label: t('Main features'),
-                icon: <ArrowRightRounded />, // <ListRounded />,
+                icon: <ArrowRightRounded />,
                 href: '#features',
             },
             {
                 label: t('Usage scenarios'),
-                icon: <ArrowRightRounded />, // <LayersRounded />,
+                icon: <ArrowRightRounded />,
                 href: '#usage-scenarios',
             },
             {
                 label: t('Screenshots'),
-                icon: <ArrowRightRounded />, // <ScreenshotMonitorRounded />,
+                icon: <ArrowRightRounded />,
                 href: '#screenshot-list',
             },
             { label: 'divider' },
@@ -75,7 +75,6 @@ export function SidebarMenu(props: Props) {
 
     return (
         <Box
-            // sx={{ minWidth: 320 }}
             role="presentation"
             onClick={() => {
                 setShowSidebarMenu(false);

@@ -1,3 +1,12 @@
+import PageLayout from '@/components/layout/PageLayout';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Tab } from '@/components/layout/Tab';
+import { TabPanel } from '@/components/layout/TabPanel';
+import { Tabs } from '@/components/layout/Tabs';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
+import { getPayment } from '@/services/payment.service';
+import { sumFormatter } from '@/services/utils';
 import { Box, Chip } from '@mui/material';
 import { IPayment, PaymentStatus, dateUTC } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
@@ -5,15 +14,6 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
-import PageLayout from '../../components/layout/PageLayout';
-import { PageTitle } from '../../components/layout/PageTitle';
-import { Tab } from '../../components/layout/Tab';
-import { TabPanel } from '../../components/layout/TabPanel';
-import { Tabs } from '../../components/layout/Tabs';
-import useAppContext from '../../hooks/useAppContext';
-import useLocale from '../../hooks/useLocale';
-import { getPayment } from '../../services/payment.service';
-import { sumFormatter } from '../../services/utils';
 import { EmployeePayments } from './details/EmployeePayments';
 import { MandatoryPayments } from './details/MandatoryPayments';
 import { PaymentDetails } from './details/PaymentDetails';
@@ -80,7 +80,6 @@ export default function PaymentForm() {
             <PageLayout>
                 <PageTitle goBack={true} title={docTitle}>
                     <Chip
-                        // variant={'outlined'}
                         label={sumFormatter(totalSum)}
                         size={'medium'}
                         color={docColor}

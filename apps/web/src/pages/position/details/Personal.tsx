@@ -1,3 +1,12 @@
+import { FormDateField } from '@/components/form/FormDateField';
+import { FormTextField } from '@/components/form/FormTextField';
+import TabLayout from '@/components/layout/TabLayout';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { SelectSex } from '@/components/select/SelectSex';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
+import { getPerson, updatePerson } from '@/services/person.service';
+import { getDirtyValues } from '@/services/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
@@ -9,15 +18,6 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { FormDateField } from '../../../components/form/FormDateField';
-import { FormTextField } from '../../../components/form/FormTextField';
-import TabLayout from '../../../components/layout/TabLayout';
-import { Toolbar } from '../../../components/layout/Toolbar';
-import { SelectSex } from '../../../components/select/SelectSex';
-import useAppContext from '../../../hooks/useAppContext';
-import useLocale from '../../../hooks/useLocale';
-import { getPerson, updatePerson } from '../../../services/person.service';
-import { getDirtyValues } from '../../../services/utils';
 
 interface Props {
     personId: number;

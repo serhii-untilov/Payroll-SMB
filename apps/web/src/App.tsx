@@ -3,7 +3,7 @@ import { IconButton } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { SnackbarProvider, closeSnackbar } from 'notistack';
 import { useRoutes } from 'react-router-dom';
-import { AppProvider } from './context/AppContext.tsx';
+import { AppProvider } from '@/context/AppContext.tsx';
 import './index.css';
 import router from './router/router';
 

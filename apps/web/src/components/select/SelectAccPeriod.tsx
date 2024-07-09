@@ -1,3 +1,7 @@
+import { InputLabel } from '@/components/layout/InputLabel';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
+import { getPayPeriodList, getPayPeriodName } from '@/services/payPeriod.service';
 import { MenuItem, Select, SelectProps } from '@mui/material';
 import { IPayPeriod, monthBegin } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
@@ -5,10 +9,6 @@ import { format, isEqual } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { useMemo } from 'react';
 import { Controller } from 'react-hook-form';
-import useAppContext from '../../hooks/useAppContext';
-import useLocale from '../../hooks/useLocale';
-import { getPayPeriodList, getPayPeriodName } from '../../services/payPeriod.service';
-import { InputLabel } from '../layout/InputLabel';
 
 export type PayPeriodOption = SelectProps<string> & {
     companyId: number | undefined;

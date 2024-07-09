@@ -1,3 +1,20 @@
+import { FormDateField } from '@/components/form/FormDateField';
+import { FormNumberField } from '@/components/form/FormNumberField';
+import { FormTextField } from '@/components/form/FormTextField';
+import { InputLabel } from '@/components/layout/InputLabel';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { SelectAccPeriod } from '@/components/select/SelectAccPeriod';
+import { SelectPaymentType } from '@/components/select/SelectPaymentType';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
+import {
+    createPayment,
+    getPayment,
+    processPayment,
+    updatePayment,
+    withdrawPayment,
+} from '@/services/payment.service';
+import { getDirtyValues } from '@/services/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, OutlinedInput } from '@mui/material';
 import { IPayment, PaymentGroup, PaymentStatus } from '@repo/shared';
@@ -8,23 +25,6 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { FormDateField } from '../../../components/form/FormDateField';
-import { FormNumberField } from '../../../components/form/FormNumberField';
-import { FormTextField } from '../../../components/form/FormTextField';
-import { InputLabel } from '../../../components/layout/InputLabel';
-import { Toolbar } from '../../../components/layout/Toolbar';
-import { SelectAccPeriod } from '../../../components/select/SelectAccPeriod';
-import { SelectPaymentType } from '../../../components/select/SelectPaymentType';
-import useAppContext from '../../../hooks/useAppContext';
-import useLocale from '../../../hooks/useLocale';
-import {
-    createPayment,
-    getPayment,
-    processPayment,
-    updatePayment,
-    withdrawPayment,
-} from '../../../services/payment.service';
-import { getDirtyValues } from '../../../services/utils';
 
 type Props = {
     paymentId: number;
@@ -144,9 +144,6 @@ export function PaymentDetails(props: Props) {
                     onCancel={isDirty ? onCancel : 'disabled'}
                     onProcess={payment?.status === PaymentStatus.DRAFT ? onProcess : 'disabled'}
                     onWithdraw={payment?.status !== PaymentStatus.DRAFT ? onWithdraw : 'disabled'}
-                    // onDelete={'disabled'}
-                    // onRestoreDeleted={'disabled'}
-                    // onShowHistory={'disabled'}
                 />
                 <Grid
                     container
@@ -198,7 +195,6 @@ export function PaymentDetails(props: Props) {
                                     control={control}
                                     label={t('Type of Payment')}
                                     filter={{ groups: [PaymentGroup.PAYMENTS] }}
-                                    // sx={{ fontWeight: 'bold' }}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={12} lg={6}>

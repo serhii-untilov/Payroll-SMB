@@ -1,8 +1,8 @@
-import { enqueueSnackbar } from 'notistack';
-import { FormAutocomplete } from '../form/FormAutocomplete';
+import { FormAutocomplete } from '@/components/form/FormAutocomplete';
+import { getWorkNormList } from '@/services/workNorm.service';
 import { IWorkNorm } from '@repo/shared';
-import { getWorkNormList } from '../../services/workNorm.service';
 import { useQuery } from '@tanstack/react-query';
+import { enqueueSnackbar } from 'notistack';
 
 interface Props {
     companyId: number | undefined;

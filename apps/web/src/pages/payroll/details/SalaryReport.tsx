@@ -1,3 +1,9 @@
+import { DataGrid } from '@/components/grid/DataGrid';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { Loading } from '@/components/utility/Loading';
+import useAppContext from '@/hooks/useAppContext';
+import { getPositionsBalance } from '@/services/position.service';
+import { sumFormatter } from '@/services/utils';
 import { Box, Typography } from '@mui/material';
 import {
     GridCellParams,
@@ -20,12 +26,6 @@ import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { DataGrid } from '../../../components/grid/DataGrid';
-import { Toolbar } from '../../../components/layout/Toolbar';
-import { Loading } from '../../../components/utility/Loading';
-import useAppContext from '../../../hooks/useAppContext';
-import { getPositionsBalance } from '../../../services/position.service';
-import { sumFormatter } from '../../../services/utils';
 
 export function SalaryReport(props: IFindPositionBalance) {
     const { companyId } = props;

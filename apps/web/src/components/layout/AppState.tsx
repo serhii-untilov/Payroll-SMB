@@ -1,10 +1,10 @@
+import useAppContext from '@/hooks/useAppContext';
 import { CheckCircle } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton } from '@mui/material';
 import { ServerEvent } from '@repo/shared';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import useAppContext from '../../hooks/useAppContext';
 import { Tooltip } from './Tooltip';
 
 export function AppState() {
@@ -22,7 +22,7 @@ export function AppState() {
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Tooltip placement="bottom" title={t(event || ServerEvent.PAYROLL_FINISHED)}>
+            <Tooltip placement="bottom" title={t(event ?? ServerEvent.PAYROLL_FINISHED)}>
                 {!event || event.includes('finished') ? (
                     <IconButton
                         size="small"

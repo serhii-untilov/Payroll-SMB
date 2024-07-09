@@ -1,8 +1,8 @@
+import { FormAutocomplete } from '@/components/form/FormAutocomplete';
+import { getPaymentTypeList } from '@/services/paymentType.service';
 import { IPaymentType, IPaymentTypeFilter } from '@repo/shared';
-import { enqueueSnackbar } from 'notistack';
 import { useQuery } from '@tanstack/react-query';
-import { getPaymentTypeList } from '../../services/paymentType.service';
-import { FormAutocomplete } from '../form/FormAutocomplete';
+import { enqueueSnackbar } from 'notistack';
 
 interface Props {
     companyId: number | undefined;
@@ -47,7 +47,6 @@ export function SelectPaymentType({
 
     return (
         <FormAutocomplete
-            // sx={sx}
             disabled={disabled}
             autoFocus={autoFocus}
             valueType={'number'}

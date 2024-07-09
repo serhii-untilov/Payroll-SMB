@@ -1,8 +1,8 @@
+import { FormAutocomplete } from '@/components/form/FormAutocomplete';
+import { getDepartmentList } from '@/services/department.service';
 import { IDepartment } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
-import { getDepartmentList } from '../../services/department.service';
 import { enqueueSnackbar } from 'notistack';
-import { FormAutocomplete } from '../form/FormAutocomplete';
 
 interface Props {
     companyId: number | undefined;

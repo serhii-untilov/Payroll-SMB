@@ -1,3 +1,4 @@
+import useLocale from '@/hooks/useLocale';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 import BusinessCenterOutlined from '@mui/icons-material/BusinessCenterOutlined';
 import { Box, Menu, MenuItem, Typography } from '@mui/material';
@@ -5,7 +6,6 @@ import { grey } from '@mui/material/colors';
 import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
 import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import useLocale from '../../hooks/useLocale';
 import { Divider } from './Divider';
 import { ListItemButton } from './ListItemButton';
 import { ListItemLink } from './ListItemLink';

@@ -1,5 +1,5 @@
 import { IJob, ICreateJob, IUpdateJob } from '@repo/shared';
-import { axiosInstance } from '../api';
+import { axiosInstance } from '@/api';
 import authHeader from './auth-header';
 
 export async function createJob(job: ICreateJob): Promise<IJob> {

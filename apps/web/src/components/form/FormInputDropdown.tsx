@@ -1,6 +1,6 @@
+import { InputLabel } from '@/components/layout/InputLabel';
 import { MenuItem, Select, SelectProps } from '@mui/material';
 import { Controller } from 'react-hook-form';
-import { InputLabel } from '../layout/InputLabel';
 
 /**
  * {

@@ -1,5 +1,5 @@
 import { PaletteOptions } from '@mui/material';
-import { rgba } from '../services/utils';
+import { rgba } from '@/services/utils';
 
 export interface ExtPaletteOptions extends PaletteOptions {
     tabsBorder: string;

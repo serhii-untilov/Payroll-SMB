@@ -1,5 +1,5 @@
+import { axiosInstance } from '@/api';
 import { IAccounting, ICreateAccounting, IUpdateAccounting } from '@repo/shared';
-import { axiosInstance } from '../api';
 import authHeader from './auth-header';
 
 export async function createAccounting(accounting: ICreateAccounting): Promise<IAccounting> {

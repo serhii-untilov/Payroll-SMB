@@ -1,5 +1,5 @@
 import { ICreateTask, IFindTask, ITask, IUpdateTask } from '@repo/shared';
-import { axiosInstance } from '../api';
+import { axiosInstance } from '@/api';
 import authHeader from './auth-header';
 
 export async function createTask(task: ICreateTask): Promise<ITask> {

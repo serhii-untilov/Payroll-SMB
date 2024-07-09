@@ -1,7 +1,7 @@
+import useLocale from '@/hooks/useLocale';
 import { Box, Typography } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import useLocale from '../../../hooks/useLocale';
 
 export function UseCases() {
     const { t } = useTranslation();
@@ -108,7 +108,7 @@ export function UseCases() {
                                 width: '100%',
                                 height: 'auto',
                                 mx: ['auto'],
-                                border: 1, // '1px solid rgba(255, 255, 255, 0.1)',
+                                border: 1,
                                 borderColor: 'grey.200',
                                 borderRadius: 2,
                                 p: 2,

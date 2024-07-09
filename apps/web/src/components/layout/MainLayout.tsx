@@ -1,3 +1,6 @@
+import useAppContext from '@/hooks/useAppContext';
+import useAuth from '@/hooks/useAuth';
+import useLocale from '@/hooks/useLocale';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
@@ -9,9 +12,6 @@ import Toolbar from '@mui/material/Toolbar';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
-import useAppContext from '../../hooks/useAppContext';
-import useAuth from '../../hooks/useAuth';
-import useLocale from '../../hooks/useLocale';
 import { AppTitle } from './AppTitle';
 import { Copyright } from './Copyright';
 import { Link } from './Link';

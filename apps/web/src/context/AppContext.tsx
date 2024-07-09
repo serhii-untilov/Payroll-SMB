@@ -1,3 +1,10 @@
+import useAuth from '@/hooks/useAuth';
+import useLocale from '@/hooks/useLocale';
+import { getCompany } from '@/services/company.service';
+import { getCurrentPayPeriodDateFrom } from '@/services/payPeriod.service';
+import { getUserCompanyList } from '@/services/user.service';
+import { defaultTheme } from '@/themes/defaultTheme';
+import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     ThemeOptions,
     ThemeProvider,
@@ -5,16 +12,10 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany, IUserCompany, monthBegin } from '@repo/shared';
+import { ICompany, IUserCompany, ResourceType, monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
-import useAuth from '../hooks/useAuth';
-import useLocale from '../hooks/useLocale';
-import { getCompany } from '../services/company.service';
-import { getCurrentPayPeriodDateFrom } from '../services/payPeriod.service';
-import { getUserCompanyList } from '../services/user.service';
-import { defaultTheme } from '../themes/defaultTheme';
 
 export type AppContextType = {
     compactView: boolean;
@@ -54,7 +55,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     const wideScreen = useMediaQuery('(min-width:900px)');
     const [userCompanyList, setUserCompanyList] = useState<IUserCompany[]>([]);
     const [company, setCompany] = useState<ICompany | null | undefined>(null);
-    const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') || 'light');
+    const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') ?? 'light');
     const { user } = useAuth();
     const { locale } = useLocale();
     const theme = useMemo(
@@ -79,10 +80,10 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initCompany = async () => {
-            const companyId = +(localStorage.getItem('company') || 0);
+            const companyId = +(localStorage.getItem('company') ?? 0);
             if (userCompanyList.length) {
                 const userCompany =
-                    userCompanyList.find((o) => o.companyId === companyId) || userCompanyList[0];
+                    userCompanyList.find((o) => o.companyId === companyId) ?? userCompanyList[0];
                 const currentCompany = await getCompany(userCompany.companyId);
                 setCompany(currentCompany);
                 localStorage.setItem('company', currentCompany.id.toString());
@@ -104,7 +105,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     useEffect(() => {
         const initPayPeriod = async () => {
             const current: Date =
-                (await getCurrentPayPeriodDateFrom(company?.id)) || monthBegin(new Date());
+                (await getCurrentPayPeriodDateFrom(company?.id)) ?? monthBegin(new Date());
             const currentPeriodString = localStorage.getItem('currentPayPeriod');
             const lastCurrent: Date = monthBegin(
                 currentPeriodString ? new Date(currentPeriodString) : new Date(),
@@ -142,23 +143,17 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             // };
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
-                    [
-                        'company',
-                        'department',
-                        'payPeriod',
-                        'position',
-                        'person',
-                        'task',
-                        'payment',
-                    ].forEach(async (key) => {
-                        await queryClient.invalidateQueries({
-                            queryKey: [key],
-                            refetchType: 'all',
-                        });
-                    });
+                    invalidateQueries(queryClient, [
+                        ResourceType.COMPANY,
+                        ResourceType.DEPARTMENT,
+                        ResourceType.PAY_PERIOD,
+                        ResourceType.POSITION,
+                        ResourceType.PERSON,
+                        ResourceType.TASK,
+                        ResourceType.PAYMENT,
+                    ]);
                 }
                 setServerEvent(event.data);
-                // console.log(`New company ${company?.id} message:`, event.data);
             };
         }
     }, [eventSource, company, queryClient]);

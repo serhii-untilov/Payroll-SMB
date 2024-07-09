@@ -1,5 +1,5 @@
 import { IPerson, ICreatePerson, IUpdatePerson, IFindPerson } from '@repo/shared';
-import { axiosInstance } from '../api';
+import { axiosInstance } from '@/api';
 import authHeader from './auth-header';
 
 export async function createPerson(person: ICreatePerson): Promise<IPerson> {

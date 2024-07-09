@@ -1,3 +1,5 @@
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
 import BusinessCenterOutlined from '@mui/icons-material/BusinessCenterOutlined';
 import CalculateOutlined from '@mui/icons-material/CalculateOutlined';
 import CreditScore from '@mui/icons-material/CreditScore';
@@ -8,8 +10,6 @@ import Schedule from '@mui/icons-material/Schedule';
 import List from '@mui/material/List';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import useAppContext from '../../hooks/useAppContext';
-import useLocale from '../../hooks/useLocale';
 import { ListItemLink } from './ListItemLink';
 
 export function MainMenu() {

@@ -13,10 +13,7 @@ export function Reminder(props: Props) {
     const { t } = useTranslation();
     const typeList = useMemo(() => [TaskType.HAPPY_BIRTHDAY.toString()], []);
     const taskList: ITask[] = useMemo(
-        () =>
-            props.taskList
-                // ?.filter((o) => dropTime(o.dateFrom) <= dropTime(new Date()))
-                .filter((o) => typeList.includes(o.type)),
+        () => props.taskList.filter((o) => typeList.includes(o.type)),
         [props, typeList],
     );
 

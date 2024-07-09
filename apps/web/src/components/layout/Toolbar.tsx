@@ -54,7 +54,6 @@ function ToolbarItem({ item, title, color, children, button }: ToolbarItemProps)
     if (!item) return null;
     return button ? (
         <Button
-            // size="small"
             variant="text"
             sx={{ textTransform: 'none' }}
             endIcon={children}
@@ -68,7 +67,6 @@ function ToolbarItem({ item, title, color, children, button }: ToolbarItemProps)
         <Tooltip placement="top-start" title={title}>
             <Box sx={{ color: 'action.disabledBackground' }}>
                 <IconButton
-                    // size={'large'}
                     color={item === 'disabled' ? 'inherit' : color || 'primary'}
                     disabled={item === 'disabled'}
                     onClick={typeof item === 'function' ? item : () => {}}
@@ -126,12 +124,7 @@ export function Toolbar(props: Props) {
                         <UndoRounded />
                     </ToolbarItem>
 
-                    <ToolbarItem
-                        // button={props?.onProcess !== 'disabled'}
-                        item={props?.onProcess}
-                        title={t('Process')}
-                        color={'success'}
-                    >
+                    <ToolbarItem item={props?.onProcess} title={t('Process')} color={'success'}>
                         <RedoRounded />
                     </ToolbarItem>
 

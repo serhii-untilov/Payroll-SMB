@@ -1,15 +1,15 @@
+import { AppTitle } from '@/components/layout/AppTitle';
+import { Button } from '@/components/layout/Button';
+import { Logo } from '@/components/layout/Logo';
+import useAppContext from '@/hooks/useAppContext';
+import useAuth from '@/hooks/useAuth';
+import useLocale from '@/hooks/useLocale';
+import { preview } from '@/services/auth.service';
 import { Language, MenuRounded } from '@mui/icons-material';
 import { Box, Drawer, IconButton } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AppTitle } from '../../../components/layout/AppTitle';
-import { Button } from '../../../components/layout/Button';
-import { Logo } from '../../../components/layout/Logo';
-import useAppContext from '../../../hooks/useAppContext';
-import useAuth from '../../../hooks/useAuth';
-import useLocale from '../../../hooks/useLocale';
-import { preview } from '../../../services/auth.service';
 import { SidebarMenu } from './SidebarMenu';
 
 export function Header() {
@@ -73,13 +73,11 @@ export function Header() {
                         boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                         backdropFilter: 'blur(5px)',
                         webkitBackdropFilter: 'blur(5px)',
-                        // border: '1px solid rgba(255, 255, 255, 0.3)',
                         border: '1px solid rgba(25, 118, 210, 0.3)',
                     }}
                 >
                     <Box id="header__left-side" sx={{ display: 'flex', align: 'center', px: 1 }}>
                         <Logo disabled={true} onClick={letsGo} />
-                        {/* {wideScreen && ( */}
                         <AppTitle
                             onClick={letsGo}
                             align="left"
@@ -91,7 +89,6 @@ export function Header() {
                                 cursor: 'pointer',
                             }}
                         />
-                        {/* )} */}
                     </Box>
                     <Box
                         id="header__right-side"

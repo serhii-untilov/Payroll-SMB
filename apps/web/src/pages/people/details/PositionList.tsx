@@ -1,3 +1,8 @@
+import { DataGrid } from '@/components/grid/DataGrid';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { Loading } from '@/components/utility/Loading';
+import useAppContext from '@/hooks/useAppContext';
+import { deletePosition, getPositions } from '@/services/position.service';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -8,16 +13,11 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { IFindPosition, IPosition, date2view, maxDate } from '@repo/shared';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { DataGrid } from '../../../components/grid/DataGrid';
-import { Toolbar } from '../../../components/layout/Toolbar';
-import { Loading } from '../../../components/utility/Loading';
-import { deletePosition, getPositions } from '../../../services/position.service';
-import useAppContext from '../../../hooks/useAppContext';
 
 export function PositionList(props: IFindPosition) {
     const { companyId } = props;
@@ -220,7 +220,6 @@ export function PositionList(props: IFindPosition) {
                 onPrint={data?.length ? onPrint : 'disabled'}
                 onExport={data?.length ? onExport : 'disabled'}
                 onDelete={rowSelectionModel.length ? onDeletePosition : 'disabled'}
-                // onShowDeleted={'disabled'}
                 onRestoreDeleted={'disabled'}
                 onShowHistory={'disabled'}
             />

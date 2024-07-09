@@ -1,3 +1,9 @@
+import { FormTextField } from '@/components/form/FormTextField';
+import { AppTitle } from '@/components/layout/AppTitle';
+import { Copyright } from '@/components/layout/Copyright';
+import useAuth from '@/hooks/useAuth';
+import useLocale from '@/hooks/useLocale';
+import { errorMessage } from '@/services/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Visibility from '@mui/icons-material/Visibility';
@@ -21,12 +27,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { FormTextField } from '../../components/form/FormTextField';
-import { AppTitle } from '../../components/layout/AppTitle';
-import { Copyright } from '../../components/layout/Copyright';
-import useAuth from '../../hooks/useAuth';
-import useLocale from '../../hooks/useLocale';
-import { errorMessage } from '../../services/utils';
 
 const formSchema = yup.object().shape({
     email: yup.string().required('Email is required').email('Email is invalid'),
@@ -78,7 +78,6 @@ export default function SignIn() {
     const onSubmit: SubmitHandler<IAuth> = async (data) => {
         try {
             await login({ ...data, rememberMe });
-            // redirect('/dashboard');
             navigate('/dashboard');
         } catch (e) {
             enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
@@ -100,7 +99,6 @@ export default function SignIn() {
                 <Avatar sx={{ m: 1, mb: 2, bgcolor: 'secondary.main' }}>
                     <LockOutlinedIcon />
                 </Avatar>
-                {/* <FormTitle title={t('Sign In')} /> */}
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
                     <FormTextField
                         control={control}

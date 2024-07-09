@@ -1,13 +1,13 @@
+import { Link } from '@/components/layout/Link';
+import { Loading } from '@/components/utility/Loading';
+import useAuth from '@/hooks/useAuth';
+import { getCurrentUser } from '@/services/auth.service';
+import { capitalizeFirstChar, getPartOfDay } from '@/services/utils';
+import { Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
-import { useTranslation } from 'react-i18next';
-import { Loading } from '../../../components/utility/Loading';
-import useAuth from '../../../hooks/useAuth';
-import { getCurrentUser } from '../../../services/auth.service';
-import { capitalizeFirstChar, getPartOfDay } from '../../../services/utils';
 import { useMemo } from 'react';
-import { Link } from '../../../components/layout/Link';
-import { Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export function Greeting() {
     const { user: currentUser } = useAuth();

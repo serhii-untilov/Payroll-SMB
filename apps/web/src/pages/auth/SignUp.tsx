@@ -1,3 +1,9 @@
+import { FormTextField } from '@/components/form/FormTextField';
+import { AppTitle } from '@/components/layout/AppTitle';
+import { Copyright } from '@/components/layout/Copyright';
+import useAuth from '@/hooks/useAuth';
+import useLocale from '@/hooks/useLocale';
+import { errorMessage } from '@/services/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Visibility from '@mui/icons-material/Visibility';
@@ -19,12 +25,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { FormTextField } from '../../components/form/FormTextField';
-import { AppTitle } from '../../components/layout/AppTitle';
-import { Copyright } from '../../components/layout/Copyright';
-import useAuth from '../../hooks/useAuth';
-import useLocale from '../../hooks/useLocale';
-import { errorMessage } from '../../services/utils';
 
 const formSchema = Yup.object().shape({
     firstName: Yup.string().required('First name is required'),
@@ -41,7 +41,6 @@ const defaultValues: FormType = {
     lastName: '',
     email: '',
     password: '',
-    // roles: [],
 };
 
 export default function SignUp() {
@@ -85,9 +84,7 @@ export default function SignUp() {
         if (data.email) {
             try {
                 await register(data);
-                // redirect('/dashboard');
                 navigate('/dashboard');
-                // return redirect('/dashboard');
             } catch (e) {
                 enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
             }
@@ -109,7 +106,6 @@ export default function SignUp() {
                 <Avatar sx={{ m: 1, mb: 2, bgcolor: 'secondary.main' }}>
                     <LockOutlinedIcon />
                 </Avatar>
-                {/* <FormTitle title="Sign up" /> */}
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
                     <Grid container spacing={2}>
                         <Grid container item spacing={2}>

@@ -1,12 +1,6 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
-/**
- * {
- *     label: 'Radio Option 1',
- *     value: '1',
- * },
- */
 export type RadioOption = {
     label: string;
     value: number | string;

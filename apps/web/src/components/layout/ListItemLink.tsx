@@ -1,9 +1,9 @@
+import useAppContext from '@/hooks/useAppContext';
 import { ListItem, ListItemProps } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
 import { NavLink, LinkProps as RouterLinkProps } from 'react-router-dom';
-import useAppContext from '../../hooks/useAppContext';
 import { Tooltip } from './Tooltip';
 
 interface ListItemLinkProps extends ListItemProps {
@@ -25,7 +25,6 @@ export function ListItemLink(props: ListItemLinkProps) {
     return (
         <li>
             <ListItem
-                // button
                 component={Link}
                 target={target}
                 to={to}
@@ -36,7 +35,6 @@ export function ListItemLink(props: ListItemLinkProps) {
                             theme.palette.mode === 'light'
                                 ? theme.palette.common.white
                                 : theme.palette.common.black,
-                        // bgcolor: (theme) => theme.palette.mode === 'light' ? '#1976d2' : '#1976d2',
                         bgcolor: 'primary.main',
                         opacity: 1,
                         borderRadius: '3px',
@@ -62,7 +60,6 @@ export function ListItemLink(props: ListItemLinkProps) {
                     },
                     transition: 'none',
                     height: 40,
-                    // opacity: 1,
                     py: [0.5],
                     my: [0.3],
                     px: [1],
@@ -81,17 +78,7 @@ export function ListItemLink(props: ListItemLinkProps) {
                         placement="right"
                         title={primary}
                     >
-                        <ListItemIcon
-                            sx={{
-                                minWidth: 39,
-                                // color: (theme) =>
-                                //     theme.palette.mode === 'light'
-                                //         ? theme.palette.grey[700]
-                                //         : theme.palette.grey[500],
-                            }}
-                        >
-                            {icon}
-                        </ListItemIcon>
+                        <ListItemIcon sx={{ minWidth: 39 }}>{icon}</ListItemIcon>
                     </Tooltip>
                 ) : null}
 

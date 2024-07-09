@@ -1,5 +1,5 @@
 import { ILaw, ICreateLaw, IUpdateLaw } from '@repo/shared';
-import { axiosInstance } from '../api';
+import { axiosInstance } from '@/api';
 import authHeader from './auth-header';
 
 export async function createLaw(law: ICreateLaw): Promise<ILaw> {

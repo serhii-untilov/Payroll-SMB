@@ -1,3 +1,12 @@
+import { FormInputDropdown } from '@/components/form/FormInputDropdown';
+import { FormTextField } from '@/components/form/FormTextField';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { Loading } from '@/components/utility/Loading';
+import useAuth from '@/hooks/useAuth';
+import useLocale from '@/hooks/useLocale';
+import { getCurrentUser } from '@/services/auth.service';
+import { updateUser } from '@/services/user.service';
+import { getDirtyValues } from '@/services/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -7,15 +16,6 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import { FormInputDropdown } from '../../../components/form/FormInputDropdown';
-import { FormTextField } from '../../../components/form/FormTextField';
-import { Toolbar } from '../../../components/layout/Toolbar';
-import { Loading } from '../../../components/utility/Loading';
-import useAuth from '../../../hooks/useAuth';
-import useLocale from '../../../hooks/useLocale';
-import { getCurrentUser } from '../../../services/auth.service';
-import { updateUser } from '../../../services/user.service';
-import { getDirtyValues } from '../../../services/utils';
 
 const formSchema = Yup.object().shape({
     id: Yup.number(),

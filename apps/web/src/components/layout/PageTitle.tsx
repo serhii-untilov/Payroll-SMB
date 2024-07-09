@@ -17,7 +17,6 @@ export function PageTitle(props: Props) {
         navigate(-1);
     };
     return (
-        // <Box sx={{ height: 48, display: 'flex', alignItems: 'center' }}>
         <Box
             id="page-title"
             sx={{

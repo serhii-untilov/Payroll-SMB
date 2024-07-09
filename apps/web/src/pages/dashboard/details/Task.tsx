@@ -1,3 +1,8 @@
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
+import { getPerson } from '@/services/person.service';
+import { getPositionByPersonId } from '@/services/position.service';
+import { updateTask } from '@/services/task.service';
 import {
     CropSquare,
     DoneRounded,
@@ -13,11 +18,6 @@ import { add, differenceInYears } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import useAppContext from '../../../hooks/useAppContext';
-import useLocale from '../../../hooks/useLocale';
-import { getPerson } from '../../../services/person.service';
-import { getPositionByPersonId } from '../../../services/position.service';
-import { updateTask } from '../../../services/task.service';
 
 export type TaskView = 'todo' | 'reminder' | 'upcoming';
 

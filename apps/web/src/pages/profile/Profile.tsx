@@ -1,23 +1,23 @@
+import PageLayout from '@/components/layout/PageLayout';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Tab } from '@/components/layout/Tab';
+import { TabPanel } from '@/components/layout/TabPanel';
+import { Tabs } from '@/components/layout/Tabs';
+import { AvatarBox } from '@/components/utility/AvatarBox';
+import { Loading } from '@/components/utility/Loading';
+import useAuth from '@/hooks/useAuth';
+import useLocale from '@/hooks/useLocale';
+import { getCurrentUser } from '@/services/auth.service';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import * as Yup from 'yup';
-import PageLayout from '../../components/layout/PageLayout';
-import { PageTitle } from '../../components/layout/PageTitle';
-import { Tab } from '../../components/layout/Tab';
-import { TabPanel } from '../../components/layout/TabPanel';
-import { Tabs } from '../../components/layout/Tabs';
-import { AvatarBox } from '../../components/utility/AvatarBox';
-import { Loading } from '../../components/utility/Loading';
-import useAuth from '../../hooks/useAuth';
-import useLocale from '../../hooks/useLocale';
-import { getCurrentUser } from '../../services/auth.service';
 import { UserCompanyList } from './details/UserCompanyList';
 import { UserDetails } from './details/UserDetails';
-import { useSearchParams } from 'react-router-dom';
 
 const formSchema = Yup.object().shape({
     id: Yup.number(),
