@@ -1,8 +1,8 @@
+import { api } from '@/api';
+import { snackbarError } from '@/utils/snackbar';
 import { Company } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { api } from '../api';
-import { snackbarError } from '../utils/snackbar';
 
 type Result = { data: Company | undefined; isLoading: boolean };
 

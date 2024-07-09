@@ -1,9 +1,9 @@
+import useAuth from '@/hooks/useAuth';
+import SignIn from '@/pages/auth/SignIn';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';
 import { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
-import SignIn from '../pages/auth/SignIn';
 
 interface AuthGuardProps {
     children: ReactNode;

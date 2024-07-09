@@ -1,8 +1,8 @@
+import { useAppTitle } from '@/hooks/useAppTitle';
+import useLocale from '@/hooks/useLocale';
 import { Typography, TypographyProps } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppTitle } from '../../hooks/useAppTitle';
-import useLocale from '../../hooks/useLocale';
 
 export function AppTitle(props: TypographyProps) {
     const { locale } = useLocale();

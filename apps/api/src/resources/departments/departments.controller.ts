@@ -21,6 +21,7 @@ import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { deepStringToShortDate } from '@repo/shared';
 import { getUserId } from './../../utils/getUserId';
+import { Department } from './entities/department.entity';
 
 @Controller('departments')
 export class DepartmentsController {
@@ -42,7 +43,7 @@ export class DepartmentsController {
         @Req() req: Request,
         @Query('companyId', ParseIntPipe) companyId: number,
         @Query('relations', ParseBoolPipe) relations: boolean,
-    ) {
+    ): Promise<Department[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, companyId);
         return await this.service.findAll(companyId, !!relations);

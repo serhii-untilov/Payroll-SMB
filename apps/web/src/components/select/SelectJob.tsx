@@ -1,8 +1,8 @@
-import { enqueueSnackbar } from 'notistack';
-import { FormAutocomplete } from '../form/FormAutocomplete';
+import { FormAutocomplete } from '@/components/form/FormAutocomplete';
+import { getJobList } from '@/services/job.service';
 import { IJob } from '@repo/shared';
-import { getJobList } from '../../services/job.service';
 import { useQuery } from '@tanstack/react-query';
+import { enqueueSnackbar } from 'notistack';
 
 interface Props {
     companyId: number | undefined;

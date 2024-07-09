@@ -1,4 +1,4 @@
-import { rgba } from '../services/utils';
+import { rgba } from '@/services/utils';
 import { ExtPaletteOptions } from './paletteLight';
 
 export function paletteDark(): ExtPaletteOptions {
@@ -15,9 +15,6 @@ export function paletteDark(): ExtPaletteOptions {
             contrastText: rgba(0, 0, 0, 0.87),
         },
         secondary: {
-            // main: '#ce93d8',
-            // light: '#f3e5f5',
-            // dark: '#ab47bc',
             light: '#ffa733',
             main: '#ff9100',
             dark: '#b26500',
@@ -64,15 +61,12 @@ export function paletteDark(): ExtPaletteOptions {
             A700: '#616161',
         },
         contrastThreshold: 3,
-        // getContrastText: f L(),
-        // augmentColor: f R(),
         tonalOffset: 0.2,
         text: {
             primary: '#fff',
             secondary: rgba(255, 255, 255, 0.7),
             disabled: rgba(255, 255, 255, 0.5),
         },
-        // icon: rgba(255, 255, 255, 0.5),
         divider: '#424242', // rgba(255, 255, 255, 0.12),
         background: {
             paper: '#151515',

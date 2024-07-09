@@ -1,3 +1,24 @@
+import { FormDateField } from '@/components/form/FormDateField';
+import { FormNumberField } from '@/components/form/FormNumberField';
+import { FormSequenceField } from '@/components/form/FormSequenceField';
+import { FormTextField } from '@/components/form/FormTextField';
+import TabLayout from '@/components/layout/TabLayout';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { SelectDepartment } from '@/components/select/SelectDepartment';
+import { SelectJob } from '@/components/select/SelectJob';
+import { SelectPaymentType } from '@/components/select/SelectPaymentType';
+import { SelectPerson } from '@/components/select/SelectPerson';
+import { SelectWorkNorm } from '@/components/select/SelectWorkNorm';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
+import { createPosition, getPosition, updatePosition } from '@/services/position.service';
+import {
+    createPositionHistory,
+    findLastPositionHistoryOnPayPeriodDate,
+    updatePositionHistory,
+} from '@/services/positionHistory.service';
+import { getDirtyValues } from '@/services/utils';
+import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
@@ -18,27 +39,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { date, InferType, number, object, string } from 'yup';
-import { FormDateField } from '../../../components/form/FormDateField';
-import { FormNumberField } from '../../../components/form/FormNumberField';
-import { FormSequenceField } from '../../../components/form/FormSequenceField';
-import { FormTextField } from '../../../components/form/FormTextField';
-import TabLayout from '../../../components/layout/TabLayout';
-import { Toolbar } from '../../../components/layout/Toolbar';
-import { SelectDepartment } from '../../../components/select/SelectDepartment';
-import { SelectJob } from '../../../components/select/SelectJob';
-import { SelectPaymentType } from '../../../components/select/SelectPaymentType';
-import { SelectPerson } from '../../../components/select/SelectPerson';
-import { SelectWorkNorm } from '../../../components/select/SelectWorkNorm';
-import useAppContext from '../../../hooks/useAppContext';
-import useLocale from '../../../hooks/useLocale';
-import { createPosition, getPosition, updatePosition } from '../../../services/position.service';
-import {
-    createPositionHistory,
-    findLastPositionHistoryOnPayPeriodDate,
-    updatePositionHistory,
-} from '../../../services/positionHistory.service';
-import { getDirtyValues } from '../../../services/utils';
-import { snackbarError, snackbarFormErrors } from '../../../utils/snackbar';
 
 interface Props {
     positionId?: number | null;
@@ -248,27 +248,12 @@ export function JobAndPay(props: Props) {
                 <Toolbar
                     onSave={isDirty ? handleSubmit(onSubmit) : 'disabled'}
                     onCancel={isDirty ? onCancel : 'disabled'}
-                    // onDelete={!!data?.id && !data?.deletedUserId ? onDelete : 'disabled'}
-                    // onRestoreDeleted={
-                    //     !!data?.id && data?.deletedUserId ? onRestoreDeleted : 'disabled'
-                    // }
                 />
 
                 <Grid container>
                     <Grid item md={12} lg={10} xl={8}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={6}>
-                                {/* <FormTextField
-                            control={control}
-                            autoComplete="full-name"
-                            name="name"
-                            id="name"
-                            label={t('Full Name')}
-                            type="text"
-                            autoFocus
-                            sx={{ fontWeight: 'bold' }}
-                            placeholder={t('Vacancy')}
-                        /> */}
                                 <SelectPerson
                                     control={control}
                                     name="personId"
@@ -346,8 +331,6 @@ export function JobAndPay(props: Props) {
                                     name="wage"
                                     id="wage"
                                     label={t('Wage')}
-                                    // type="number"
-                                    // defaultValue={0}
                                     step={500}
                                     min={0}
                                     autoFocus={!!position?.personId}
@@ -359,8 +342,6 @@ export function JobAndPay(props: Props) {
                                     name="rate"
                                     id="rate"
                                     label={t('Rate')}
-                                    // type="number"
-                                    // defaultValue={0}
                                     step={0.25}
                                     min={0}
                                     max={2}

@@ -1,3 +1,9 @@
+import { DataGrid } from '@/components/grid/DataGrid';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { Loading } from '@/components/utility/Loading';
+import useAppContext from '@/hooks/useAppContext';
+import { getCompany } from '@/services/company.service';
+import { deleteUserCompany, getUserCompanyList, restoreUserCompany } from '@/services/user.service';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -13,16 +19,6 @@ import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { DataGrid } from '../../../components/grid/DataGrid';
-import { Toolbar } from '../../../components/layout/Toolbar';
-import { Loading } from '../../../components/utility/Loading';
-import useAppContext from '../../../hooks/useAppContext';
-import { getCompany } from '../../../services/company.service';
-import {
-    deleteUserCompany,
-    getUserCompanyList,
-    restoreUserCompany,
-} from '../../../services/user.service';
 
 type Props = {
     userId: number | undefined;
@@ -49,17 +45,6 @@ export function UserCompanyList(params: Props) {
             valueGetter: (params) => {
                 return params.row.company?.name;
             },
-            // renderCell: (params) => {
-            //     const isCurrentCompany = params.row.company?.id === currentCompany?.id;
-            //     return (
-            //         <Typography
-            //             sx={isCurrentCompany ? { fontSize: '1rem', fontWeight: 'medium' } : {}}
-            //             color={params.row.company?.id === currentCompany?.id ? 'primary' : ''}
-            //         >
-            //             {params.row.company?.name}
-            //         </Typography>
-            //     );
-            // },
         },
         {
             field: 'roleName',

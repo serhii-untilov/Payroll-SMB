@@ -1,8 +1,8 @@
+import useLocale from '@/hooks/useLocale';
 import { KeyboardArrowLeftRounded, KeyboardArrowRightRounded } from '@mui/icons-material';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import useLocale from '../../../hooks/useLocale';
 
 export function ScreenshotList() {
     const { t } = useTranslation();

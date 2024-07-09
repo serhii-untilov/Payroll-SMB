@@ -1,3 +1,11 @@
+import { FormDateField } from '@/components/form/FormDateField';
+import { FormTextField } from '@/components/form/FormTextField';
+import { Button } from '@/components/layout/Button';
+import { SelectDepartment } from '@/components/select/SelectDepartment';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
+import { createDepartment, getDepartment, updateDepartment } from '@/services/department.service';
+import { getDirtyValues } from '@/services/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
@@ -11,18 +19,6 @@ import { Dispatch, Fragment, useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { InferType, ObjectSchema, date, number, object, string } from 'yup';
-import { FormDateField } from '../../components/form/FormDateField';
-import { FormTextField } from '../../components/form/FormTextField';
-import { Button } from '../../components/layout/Button';
-import { SelectDepartment } from '../../components/select/SelectDepartment';
-import useAppContext from '../../hooks/useAppContext';
-import useLocale from '../../hooks/useLocale';
-import {
-    createDepartment,
-    getDepartment,
-    updateDepartment,
-} from '../../services/department.service';
-import { getDirtyValues } from '../../services/utils';
 import { snackbarError, snackbarFormErrors } from '../../utils/snackbar';
 
 export interface Params {

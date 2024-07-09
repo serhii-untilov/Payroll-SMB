@@ -12,7 +12,6 @@ export function TabsVertical({ value, onChange, children, sx, ...other }: TabsPr
     return (
         <Tabs
             orientation="vertical"
-            // variant="scrollable"
             value={value}
             onChange={onChange}
             sx={{

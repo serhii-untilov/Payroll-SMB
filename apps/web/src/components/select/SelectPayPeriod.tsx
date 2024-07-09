@@ -1,12 +1,12 @@
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
+import { getPayPeriodList, getPayPeriodName } from '@/services/payPeriod.service';
 import { MenuItem, Select, SelectProps } from '@mui/material';
 import { IPayPeriod, monthBegin } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { format, isEqual } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { useMemo } from 'react';
-import useAppContext from '../../hooks/useAppContext';
-import useLocale from '../../hooks/useLocale';
-import { getPayPeriodList, getPayPeriodName } from '../../services/payPeriod.service';
 
 export type PayPeriodOption = SelectProps<string> & {
     companyId: number | undefined;
@@ -45,10 +45,6 @@ export function SelectPayPeriod(props: PayPeriodOption) {
             variant: 'error',
         });
     }
-
-    // if (isLoading) {
-    //     return <Skeleton animation={'wave'} />;
-    // }
 
     return (
         <Select

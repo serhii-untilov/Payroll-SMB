@@ -1,3 +1,18 @@
+import { FormInputDropdown } from '@/components/form/FormInputDropdown';
+import { FormTextField } from '@/components/form/FormTextField';
+import { InputLabel } from '@/components/layout/InputLabel';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
+import { Loading } from '@/components/utility/Loading';
+import { useAccountingList } from '@/hooks/useAccountingList';
+import useAppContext from '@/hooks/useAppContext';
+import { useCompany } from '@/hooks/useCompany';
+import { useLawList } from '@/hooks/useLawList';
+import useLocale from '@/hooks/useLocale';
+import { createCompany, updateCompany } from '@/services/company.service';
+import { getDirtyValues } from '@/services/utils';
+import { invalidateQueries } from '@/utils/invalidateQueries';
+import { snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import {
@@ -18,21 +33,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { date, InferType, number, object, string } from 'yup';
-import { FormInputDropdown } from '../../../components/form/FormInputDropdown';
-import { FormTextField } from '../../../components/form/FormTextField';
-import { InputLabel } from '../../../components/layout/InputLabel';
-import { Toolbar } from '../../../components/layout/Toolbar';
-import { SelectPayPeriod } from '../../../components/select/SelectPayPeriod';
-import { Loading } from '../../../components/utility/Loading';
-import { useAccountingList } from '../../../hooks/useAccountingList';
-import useAppContext from '../../../hooks/useAppContext';
-import { useCompany } from '../../../hooks/useCompany';
-import { useLawList } from '../../../hooks/useLawList';
-import useLocale from '../../../hooks/useLocale';
-import { createCompany, updateCompany } from '../../../services/company.service';
-import { getDirtyValues } from '../../../services/utils';
-import { snackbarFormErrors } from '../../../utils/snackbar';
-import { invalidateQueries } from '../../../utils/invalidateQueries';
 
 type Props = {
     companyId: number | null;

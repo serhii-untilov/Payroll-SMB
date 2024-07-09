@@ -1,3 +1,6 @@
+import { Button } from '@/components/layout/Button';
+import { InputLabel } from '@/components/layout/InputLabel';
+import { createPerson, getPersonList } from '@/services/person.service';
 import {
     Autocomplete,
     Dialog,
@@ -15,9 +18,6 @@ import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { createPerson, getPersonList } from '../../services/person.service';
-import { Button } from '../layout/Button';
-import { InputLabel } from '../layout/InputLabel';
 
 export interface Props {
     name: string;
@@ -94,8 +94,6 @@ export const SelectPerson = (props: Props) => {
                                 clearOnEscape
                                 handleHomeEndKeys
                                 disablePortal
-                                // autoSelect !!!
-                                // autoHighlight !!!
                                 autoComplete
                                 options={options || []}
                                 defaultValue={null}
@@ -132,9 +130,7 @@ export const SelectPerson = (props: Props) => {
                                                 middleName,
                                             });
                                         });
-                                        // onChange(null);
                                     } else if (option && option.inputValue) {
-                                        // onChange(null);
                                         // Create a new value from the user input
                                         const [lastName, firstName, middleName] =
                                             option.inputValue.split(' ', 3);

@@ -1,7 +1,7 @@
+import { api } from '@/api';
+import { snackbarError } from '@/utils/snackbar';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
-import { snackbarError } from '../utils/snackbar';
-import { api } from '../api';
 
 type Result = { data: string; isLoading: boolean };
 

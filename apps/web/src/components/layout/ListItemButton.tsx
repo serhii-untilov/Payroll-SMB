@@ -1,7 +1,7 @@
+import useAppContext from '@/hooks/useAppContext';
 import { ListItem } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import useAppContext from '../../hooks/useAppContext';
 import { Tooltip } from './Tooltip';
 
 interface ListItemButtonProps {
@@ -18,7 +18,6 @@ export function ListItemButton(props: ListItemButtonProps) {
         <li>
             <ListItem
                 button
-                // dense
                 component="button"
                 onClick={onClick}
                 sx={{
@@ -28,7 +27,6 @@ export function ListItemButton(props: ListItemButtonProps) {
                             theme.palette.mode === 'dark'
                                 ? theme.palette.primary.dark
                                 : theme.palette.primary.main,
-                        // opacity: 0.85,
                         borderRadius: '5px',
                         py: [0.5],
                         my: [0.3],
@@ -48,9 +46,7 @@ export function ListItemButton(props: ListItemButtonProps) {
                         my: [0.3],
                     },
                     transition: 'none',
-                    // border: 'none',
                     height: 40,
-                    // opacity: 0.85,
                     py: [0.5],
                     my: [0.3],
                     px: [1],
@@ -65,17 +61,7 @@ export function ListItemButton(props: ListItemButtonProps) {
                         placement="right"
                         title={primary}
                     >
-                        <ListItemIcon
-                            sx={{
-                                minWidth: 39,
-                                // color: (theme) =>
-                                //     theme.palette.mode === 'light'
-                                //         ? theme.palette.grey[700]
-                                //         : theme.palette.grey[500],
-                            }}
-                        >
-                            {icon}
-                        </ListItemIcon>
+                        <ListItemIcon sx={{ minWidth: 39 }}>{icon}</ListItemIcon>
                     </Tooltip>
                 ) : null}
                 <ListItemText primary={primary} />

@@ -1,16 +1,16 @@
+import { InputLabel } from '@/components/layout/InputLabel';
+import PageLayout from '@/components/layout/PageLayout';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Tab } from '@/components/layout/Tab';
+import { TabPanel } from '@/components/layout/TabPanel';
+import { Tabs } from '@/components/layout/Tabs';
+import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
 import { Box, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { InputLabel } from '../../components/layout/InputLabel';
-import PageLayout from '../../components/layout/PageLayout';
-import { PageTitle } from '../../components/layout/PageTitle';
-import { Tab } from '../../components/layout/Tab';
-import { TabPanel } from '../../components/layout/TabPanel';
-import { Tabs } from '../../components/layout/Tabs';
-import { SelectPayPeriod } from '../../components/select/SelectPayPeriod';
-import useAppContext from '../../hooks/useAppContext';
-import useLocale from '../../hooks/useLocale';
 import { PositionList } from './details/PositionList';
 
 export default function People() {

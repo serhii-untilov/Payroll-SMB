@@ -1,3 +1,4 @@
+import useAppContext from '@/hooks/useAppContext';
 import { BusinessCenterOutlined, PeopleOutlined, Settings } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
@@ -7,7 +8,6 @@ import { UseCases } from './UseCases';
 import AccountantFeatures from './featuresByRole/AccountantFeatures';
 import AdministratorFeatures from './featuresByRole/AdministratorFeatures';
 import EmployeeFeatures from './featuresByRole/EmployeeFeatures';
-import useAppContext from '../../../hooks/useAppContext';
 
 export function Features() {
     const { themeMode } = useAppContext();

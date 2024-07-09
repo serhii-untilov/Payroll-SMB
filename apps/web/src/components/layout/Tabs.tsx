@@ -7,7 +7,6 @@ export function Tabs({ value, onChange, children, sx, ...other }: TabsProps) {
             allowScrollButtonsMobile
             value={value}
             onChange={onChange}
-            // textColor={'inherit'}
             indicatorColor={'primary'}
             sx={{
                 ...{
@@ -19,14 +18,10 @@ export function Tabs({ value, onChange, children, sx, ...other }: TabsProps) {
                         height: '3px',
                     },
                     '.MuiTab-wrapped': {
-                        // alignItems: 'self-center',
-                        // justifyContent: 'flex-center',
                         fontSize: '0.875rem',
-                        // textTransform: 'capitalize',
                         fontWeight: 500,
                     },
                     '.Mui-disabled': {
-                        // color: (theme) => theme.palette.grey[500],
                         opacity: 0.5,
                     },
                     '.Mui-selected': {

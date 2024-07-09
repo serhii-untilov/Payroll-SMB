@@ -1,7 +1,7 @@
+import { api } from '@/api';
+import { snackbarError } from '@/utils/snackbar';
 import { Accounting } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../api';
-import { snackbarError } from '../utils/snackbar';
 
 type Result = { data: Accounting[]; isLoading: boolean };
 

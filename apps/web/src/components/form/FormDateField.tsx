@@ -1,7 +1,7 @@
+import { InputLabel } from '@/components/layout/InputLabel';
 import { OutlinedInput, OutlinedInputProps } from '@mui/material';
 import { date2view, view2date } from '@repo/shared';
 import { Controller } from 'react-hook-form';
-import { InputLabel } from '../layout/InputLabel';
 
 export type FormDateFieldProps = OutlinedInputProps & {
     name: string;

@@ -1,9 +1,9 @@
+import { getCurrentUser, loginUser, logoutUser, registerUser } from '@/services/auth.service';
+import { getUserAccessToken } from '@/services/token.service';
 import { IAuth, ICreateUser, IPublicUserData } from '@repo/shared';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';
 import { createContext, useEffect, useReducer } from 'react';
-import { getCurrentUser, loginUser, logoutUser, registerUser } from '../services/auth.service';
-import { getUserAccessToken } from '../services/token.service';
 
 interface State {
     isInitialized: boolean;

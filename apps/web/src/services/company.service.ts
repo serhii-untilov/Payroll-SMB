@@ -1,5 +1,5 @@
 import { ICompany, ICreateCompany, IUpdateCompany } from '@repo/shared';
-import { axiosInstance } from '../api';
+import { axiosInstance } from '@/api';
 import authHeader from './auth-header';
 
 export async function createCompany(company: ICreateCompany): Promise<ICompany> {

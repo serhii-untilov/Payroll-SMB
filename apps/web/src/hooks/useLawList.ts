@@ -1,8 +1,8 @@
+import { api } from '@/api';
+import { snackbarError } from '@/utils/snackbar';
 import { Law } from '@repo/openapi';
-import { useQuery } from '@tanstack/react-query';
-import { api } from '../api';
-import { snackbarError } from '../utils/snackbar';
 import { ResourceType } from '@repo/shared';
+import { useQuery } from '@tanstack/react-query';
 
 type Result = { data: Law[]; isLoading: boolean };
 

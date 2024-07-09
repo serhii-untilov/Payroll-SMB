@@ -8,7 +8,7 @@ import {
 } from '@repo/shared';
 import { format, isEqual } from 'date-fns';
 import { t } from 'i18next';
-import { axiosInstance } from '../api';
+import { axiosInstance } from '@/api';
 import authHeader from './auth-header';
 
 export async function createPayPeriod(payPeriod: ICreatePayPeriod): Promise<IPayPeriod> {

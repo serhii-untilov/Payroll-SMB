@@ -1,8 +1,8 @@
+import useAppContext from '@/hooks/useAppContext';
 import { ChevronRightRounded } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import useAppContext from '../../../hooks/useAppContext';
 
 type Props = {
     name: string;
@@ -22,7 +22,6 @@ export function FeatureBox(props: Props) {
 
     return (
         <Box
-            // component={'button'}
             onClick={() => {
                 onClick(index);
             }}
@@ -110,13 +109,11 @@ export function FeatureBox(props: Props) {
                         onClick={() => {
                             navigate(details);
                         }}
-                        // variant="text"
                         size="small"
                         endIcon={<ChevronRightRounded />}
                         sx={{
                             display: { xs: 'inline-flex', sm: 'inline-flex', md: 'none' },
                             alignSelf: 'flex-end',
-                            // zIndex: 50,
                             m: 0,
                             p: 0,
                             textTransform: 'none',

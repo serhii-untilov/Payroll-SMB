@@ -1,8 +1,8 @@
+import { DataGrid } from '@/components/grid/DataGrid';
+import { Toolbar } from '@/components/layout/Toolbar';
 import { GridCellParams, GridColDef, GridRowSelectionModel, MuiEvent } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DataGrid } from '../../../components/grid/DataGrid';
-import { Toolbar } from '../../../components/layout/Toolbar';
 
 type Props = {
     companyId: number | undefined;

@@ -1,3 +1,10 @@
+import useAuth from '@/hooks/useAuth';
+import useLocale from '@/hooks/useLocale';
+import { getCompany } from '@/services/company.service';
+import { getCurrentPayPeriodDateFrom } from '@/services/payPeriod.service';
+import { getUserCompanyList } from '@/services/user.service';
+import { defaultTheme } from '@/themes/defaultTheme';
+import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     ThemeOptions,
     ThemeProvider,
@@ -5,17 +12,10 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany, IUserCompany, monthBegin, ResourceType } from '@repo/shared';
+import { ICompany, IUserCompany, ResourceType, monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
-import useAuth from '../hooks/useAuth';
-import useLocale from '../hooks/useLocale';
-import { getCompany } from '../services/company.service';
-import { getCurrentPayPeriodDateFrom } from '../services/payPeriod.service';
-import { getUserCompanyList } from '../services/user.service';
-import { defaultTheme } from '../themes/defaultTheme';
-import { invalidateQueries } from '../utils/invalidateQueries';
 
 export type AppContextType = {
     compactView: boolean;

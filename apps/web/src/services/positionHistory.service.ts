@@ -4,7 +4,7 @@ import {
     IPositionHistory,
     IUpdatePositionHistory,
 } from '@repo/shared';
-import { axiosInstance } from '../api';
+import { axiosInstance } from '@/api';
 import authHeader from './auth-header';
 
 export async function createPositionHistory(

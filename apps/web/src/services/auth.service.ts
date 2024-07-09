@@ -1,5 +1,5 @@
 import { IAuth, ICreateUser, IPublicUserData, ITokens } from '@repo/shared';
-import { axiosInstance } from '../api';
+import { axiosInstance } from '@/api';
 import authHeader from './auth-header';
 import { removeUserTokens, saveUserTokens } from './token.service';
 

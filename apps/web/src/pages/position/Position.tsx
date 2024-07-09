@@ -1,18 +1,18 @@
+import PageLayout from '@/components/layout/PageLayout';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Tab } from '@/components/layout/Tab';
+import { TabPanel } from '@/components/layout/TabPanel';
+import { Tabs } from '@/components/layout/Tabs';
+import { AvatarBox } from '@/components/utility/AvatarBox';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
+import { getPosition } from '@/services/position.service';
 import { IPosition, maxDate, minDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
-import PageLayout from '../../components/layout/PageLayout';
-import { PageTitle } from '../../components/layout/PageTitle';
-import { Tab } from '../../components/layout/Tab';
-import { TabPanel } from '../../components/layout/TabPanel';
-import { Tabs } from '../../components/layout/Tabs';
-import { AvatarBox } from '../../components/utility/AvatarBox';
-import useAppContext from '../../hooks/useAppContext';
-import useLocale from '../../hooks/useLocale';
-import { getPosition } from '../../services/position.service';
 import { JobAndPay } from './details/JobAndPay';
 import { Personal } from './details/Personal';
 

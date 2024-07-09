@@ -1,10 +1,10 @@
+import useAuth from '@/hooks/useAuth';
 import { enUS } from '@mui/material/locale';
 import { ukUA } from '@mui/x-data-grid/locales';
 import { enUS as dateEn } from 'date-fns/locale/en-US';
 import { uk as dateUk } from 'date-fns/locale/uk';
 import { Dispatch, FC, ReactNode, SetStateAction, createContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import useAuth from '../hooks/useAuth';
 
 export type supportedLanguages = 'en' | 'uk';
 

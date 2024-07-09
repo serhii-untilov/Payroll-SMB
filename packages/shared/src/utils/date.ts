@@ -81,19 +81,20 @@ export function deepStringToShortDate(obj: any): any {
     return obj;
 }
 
+export function toDate(value: string): Date {
+    if (isIsoDateString(value)) return parseISO(value);
+    return new Date(value);
+}
+
 export function dateUTC(date: Date): Date {
     return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
 }
 
 export function monthBegin(date: Date): Date {
-    // return new Date(date.getFullYear(), date.getMonth(), 1);
-    // return startOfMonth(date);
     return new Date(Date.UTC(date.getFullYear(), date.getMonth(), 1));
 }
 
 export function monthEnd(date: Date): Date {
-    // return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    // return startOfDay(endOfMonth(date));
     return new Date(Date.UTC(date.getFullYear(), date.getMonth() + 1, 0));
 }
 
