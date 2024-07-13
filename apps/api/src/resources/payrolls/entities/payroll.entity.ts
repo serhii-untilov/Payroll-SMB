@@ -1,4 +1,4 @@
-import { HoursByDay, IPayroll } from '@repo/shared';
+import { HoursByDay } from '@repo/shared';
 import {
     AfterLoad,
     Column,
@@ -8,14 +8,14 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Logger } from './../../../resources/abstract/logger.abstract';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
+import { Logger } from './../../../resources/abstract/logger.abstract';
 
 @Entity()
 @Index('IDX_PAYROLL_POSITION_PAY_PERIOD', ['positionId', 'payPeriod'])
 @Index('IDX_PAYROLL_SOURCE_TYPE_ID', ['sourceType', 'sourceId'])
-export class Payroll extends Logger implements IPayroll {
+export class Payroll extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

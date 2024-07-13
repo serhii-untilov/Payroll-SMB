@@ -1,4 +1,3 @@
-import { IPayPeriodCalcMethod } from '@repo/shared';
 import {
     AfterLoad,
     Column,
@@ -11,7 +10,7 @@ import {
 import { PayPeriod } from './payPeriod.entity';
 
 @Entity()
-export class PayPeriodCalcMethod implements IPayPeriodCalcMethod {
+export class PayPeriodCalcMethod {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

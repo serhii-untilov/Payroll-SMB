@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ICreateAccounting } from '@repo/shared';
 
-export class CreateAccountingDto implements ICreateAccounting {
-    @ApiProperty()
-    name: string;
-
-    @ApiProperty()
-    type: string;
+export class CreateAccountingDto {
+    @ApiProperty() name: string;
+    @ApiProperty() type: string;
 }

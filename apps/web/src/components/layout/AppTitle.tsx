@@ -13,9 +13,18 @@ export function AppTitle(props: TypographyProps) {
 
     return (
         <>
-            <Typography component="h1" variant="h2" noWrap align="center" sx={{ mb: 2 }} {...props}>
-                {t(title ?? 'Payroll')}
-            </Typography>
+            {title && (
+                <Typography
+                    component="h1"
+                    variant="h2"
+                    noWrap
+                    align="center"
+                    sx={{ mb: 2 }}
+                    {...props}
+                >
+                    {t(title)}
+                </Typography>
+            )}
         </>
     );
 }

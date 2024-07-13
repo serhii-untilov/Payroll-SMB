@@ -1,8 +1,7 @@
-import { ICreateCompany } from '@repo/shared';
 import { ApiProperty } from '@nestjs/swagger';
 import { Logger } from '@/resources/abstract/logger.abstract';
 
-export class CreateCompanyDto extends Logger implements ICreateCompany {
+export class CreateCompanyDto extends Logger {
     @ApiProperty() name: string;
     @ApiProperty() lawId: number;
     @ApiProperty() taxId: string;

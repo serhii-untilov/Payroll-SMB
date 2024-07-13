@@ -1,10 +1,9 @@
-import { ITask } from '@repo/shared';
 import { Logger } from './../../../resources/abstract/logger.abstract';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Company } from './../../../resources/companies/entities/company.entity';
 
 @Entity()
-export class Task extends Logger implements ITask {
+export class Task extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

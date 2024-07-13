@@ -1,8 +1,8 @@
-import { ILaw, LawType } from '@repo/shared';
+import { LawType } from '@repo/shared';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Law implements ILaw {
+export class Law {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

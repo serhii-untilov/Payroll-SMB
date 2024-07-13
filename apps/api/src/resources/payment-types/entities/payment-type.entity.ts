@@ -1,9 +1,8 @@
 import { Logger } from './../../../resources/abstract/logger.abstract';
-import { IPaymentType } from '@repo/shared';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class PaymentType extends Logger implements IPaymentType {
+export class PaymentType extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

@@ -6,12 +6,13 @@ import { useState } from 'react';
 
 type Result = { data: Company | undefined; isLoading: boolean };
 
-export function useCompany(companyId: number | null): Result {
+export function useCompany(companyId: number | undefined): Result {
     const [id] = useState(Number(companyId));
     const { data, isError, isLoading, error } = useQuery<Company | undefined, Error>({
         queryKey: ['company', { id }],
         queryFn: async () => {
-            return id ? (await api.companiesFindOne(id)).data : undefined;
+            const response = id ? (await api.companiesFindOne(id)).data : undefined;
+            return response;
         },
     });
     if (isError) {

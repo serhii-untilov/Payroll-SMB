@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ICreatePositionHistory } from '@repo/shared';
 
-export class CreatePositionHistoryDto implements ICreatePositionHistory {
+export class CreatePositionHistoryDto {
     @ApiProperty() positionId: number;
     @ApiProperty() dateFrom: Date;
     @ApiProperty() dateTo: Date;

@@ -12,7 +12,8 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany, IUserCompany, ResourceType, monthBegin } from '@repo/shared';
+import { Company, UserCompany } from '@repo/openapi';
+import { ResourceType, monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
@@ -20,8 +21,8 @@ import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } 
 export type AppContextType = {
     compactView: boolean;
     setCompactView: Dispatch<boolean>;
-    company: ICompany | null | undefined;
-    setCompany: Dispatch<ICompany | null>;
+    company: Company | undefined;
+    setCompany: Dispatch<Company | undefined>;
     theme: ThemeOptions;
     themeMode: string;
     setThemeMode: Dispatch<string>;
@@ -53,8 +54,8 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     const { children } = props;
     const [compactView, setCompactView] = useState(false);
     const wideScreen = useMediaQuery('(min-width:900px)');
-    const [userCompanyList, setUserCompanyList] = useState<IUserCompany[]>([]);
-    const [company, setCompany] = useState<ICompany | null | undefined>(null);
+    const [userCompanyList, setUserCompanyList] = useState<UserCompany[]>([]);
+    const [company, setCompany] = useState<Company | undefined>();
     const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') ?? 'light');
     const { user } = useAuth();
     const { locale } = useLocale();

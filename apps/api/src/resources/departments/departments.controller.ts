@@ -5,8 +5,6 @@ import {
     Controller,
     Delete,
     Get,
-    HttpCode,
-    HttpStatus,
     Param,
     ParseBoolPipe,
     ParseIntPipe,
@@ -16,6 +14,15 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { DepartmentsService } from './departments.service';
@@ -24,12 +31,18 @@ import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Department } from './entities/department.entity';
 
 @Controller('departments')
+@ApiBearerAuth()
 export class DepartmentsController {
     constructor(private readonly service: DepartmentsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create department' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: Department,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreateDepartmentDto) {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId, payload.companyId);
@@ -38,7 +51,11 @@ export class DepartmentsController {
 
     @Get()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(Department) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(
         @Req() req: Request,
         @Query('companyId', ParseIntPipe) companyId: number,
@@ -51,7 +68,9 @@ export class DepartmentsController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: Department })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -65,7 +84,10 @@ export class DepartmentsController {
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a department' })
+    @ApiOkResponse({ description: 'The updated record', type: Department })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -78,7 +100,10 @@ export class DepartmentsController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Soft delete a department' })
+    @ApiOkResponse({ description: 'The record has been successfully deleted', type: Department })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);

@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ICreatePerson } from '@repo/shared';
 
-export class CreatePersonDto implements ICreatePerson {
+export class CreatePersonDto {
     @ApiProperty() firstName: string;
     @ApiProperty() lastName: string;
     @ApiProperty() middleName?: string;

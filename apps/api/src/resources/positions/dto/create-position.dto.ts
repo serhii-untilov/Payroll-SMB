@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ICreatePosition } from '@repo/shared';
 
-export class CreatePositionDto implements ICreatePosition {
+export class CreatePositionDto {
     @ApiProperty() companyId: number;
     @ApiProperty() cardNumber: string; // Identity number (Табельний номер)
     @ApiProperty() sequenceNumber: number; // Sequence in payroll reports to place managers on top

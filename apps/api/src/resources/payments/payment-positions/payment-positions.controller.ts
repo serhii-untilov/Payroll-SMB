@@ -5,8 +5,6 @@ import {
     Controller,
     Delete,
     Get,
-    HttpCode,
-    HttpStatus,
     Param,
     ParseBoolPipe,
     ParseIntPipe,
@@ -16,6 +14,15 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
@@ -25,12 +32,18 @@ import { PaymentPosition } from './entities/paymentPosition.entity';
 import { PaymentPositionsService } from './payment-positions.service';
 
 @Controller('payment-positions')
+@ApiBearerAuth()
 export class PaymentPositionsController {
     constructor(private readonly service: PaymentPositionsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create a Payment Position record' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: PaymentPosition,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(
         @Req() req: Request,
         @Body() payload: CreatePaymentPositionDto,
@@ -41,9 +54,28 @@ export class PaymentPositionsController {
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
+    @Post('find')
+    @UseGuards(AccessTokenGuard)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(PaymentPosition) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    async findAll(
+        @Req() req: Request,
+        @Body() params: FindPaymentPositionDto,
+    ): Promise<PaymentPosition[]> {
+        const userId = getUserId(req);
+        const companyId = await this.service.getPaymentCompanyId(params.paymentId);
+        await this.service.availableFindAllOrFail(userId, companyId);
+        return await this.service.findAll(deepStringToShortDate(params));
+    }
+
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: PaymentPosition })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -56,7 +88,10 @@ export class PaymentPositionsController {
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a Payment Position record' })
+    @ApiOkResponse({ description: 'The updated record', type: PaymentPosition })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -69,7 +104,13 @@ export class PaymentPositionsController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Soft delete a Payment Position record' })
+    @ApiOkResponse({
+        description: 'The record has been successfully deleted',
+        type: PaymentPosition,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -77,18 +118,5 @@ export class PaymentPositionsController {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
-    }
-
-    @Post('find')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async findAll(
-        @Req() req: Request,
-        @Body() params: FindPaymentPositionDto,
-    ): Promise<PaymentPosition[]> {
-        const userId = getUserId(req);
-        const companyId = await this.service.getPaymentCompanyId(params.paymentId);
-        await this.service.availableFindAllOrFail(userId, companyId);
-        return await this.service.findAll(deepStringToShortDate(params));
     }
 }

@@ -1,9 +1,8 @@
 import { Logger } from './../../../resources/abstract/logger.abstract';
-import { IAccess } from '@repo/shared';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Access extends Logger implements IAccess {
+export class Access extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

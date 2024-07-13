@@ -1,10 +1,11 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { PositionHistory } from '@/resources/position-history/entities/position-history.entity';
+import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
     Delete,
     Get,
-    HttpCode,
-    HttpStatus,
     Param,
     ParseBoolPipe,
     ParseIntPipe,
@@ -14,22 +15,35 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
 import { IPositionHistory, deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindPositionHistoryDto } from './dto/find-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistoryService } from './position-history.service';
-import { getUserId } from '@/utils/getUserId';
 
 @Controller('position-history')
+@ApiBearerAuth()
 export class PositionHistoryController {
     constructor(private readonly service: PositionHistoryService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create Position History record' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: PositionHistory,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(
         @Req() req: Request,
         @Body() payload: CreatePositionHistoryDto,
@@ -42,7 +56,11 @@ export class PositionHistoryController {
 
     @Get()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(PositionHistory) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(
         @Req() req: Request,
         @Query('positionId', ParseIntPipe) positionId: number,
@@ -56,7 +74,9 @@ export class PositionHistoryController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: PositionHistory })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -71,7 +91,10 @@ export class PositionHistoryController {
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a Position History record' })
+    @ApiOkResponse({ description: 'The updated record', type: PositionHistory })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -84,7 +107,13 @@ export class PositionHistoryController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Soft delete a Position History record' })
+    @ApiOkResponse({
+        description: 'The record has been successfully deleted',
+        type: PositionHistory,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -96,7 +125,9 @@ export class PositionHistoryController {
 
     @Post('find-last')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: PositionHistory })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findLast(
         @Req() req: Request,
         @Body() params: FindPositionHistoryDto,

@@ -1,20 +1,20 @@
-import { IAvailableAccess, IAvailableAccessUser, IAvailableAccessUserCompany } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class AvailableAccessDto implements IAvailableAccess {
-    roleType: string; // See enum RoleType
-    resourceType: string; // See enum ResourceType
-    accessType: string; // See enum AccessType
+export class AvailableAccessDto {
+    @ApiProperty() roleType: string; // See enum RoleType
+    @ApiProperty() resourceType: string; // See enum ResourceType
+    @ApiProperty() accessType: string; // See enum AccessType
 }
 
-export class AvailableAccessUserDto implements IAvailableAccessUser {
-    userId: number;
-    resourceType: string; // See enum ResourceType
-    accessType: string; // See enum AccessType
+export class AvailableAccessUserDto {
+    @ApiProperty() userId: number;
+    @ApiProperty() resourceType: string; // See enum ResourceType
+    @ApiProperty() accessType: string; // See enum AccessType
 }
 
-export class AvailableAccessUserCompanyDto implements IAvailableAccessUserCompany {
-    userId: number;
-    companyId: number;
-    resourceType: string; // See enum ResourceType
-    accessType: string; // See enum AccessType
+export class AvailableAccessUserCompanyDto {
+    @ApiProperty() userId: number;
+    @ApiProperty() companyId: number;
+    @ApiProperty() resourceType: string; // See enum ResourceType
+    @ApiProperty() accessType: string; // See enum AccessType
 }

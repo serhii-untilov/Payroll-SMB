@@ -1,6 +1,6 @@
 import { Logger } from './../../../resources/abstract/logger.abstract';
 import { Company } from './../../../resources/companies/entities/company.entity';
-import { IPayPeriod, PayPeriodState } from '@repo/shared';
+import { PayPeriodState } from '@repo/shared';
 import {
     AfterLoad,
     Column,
@@ -23,7 +23,7 @@ export const defaultFieldList = {
 };
 
 @Entity()
-export class PayPeriod extends Logger implements IPayPeriod {
+export class PayPeriod extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

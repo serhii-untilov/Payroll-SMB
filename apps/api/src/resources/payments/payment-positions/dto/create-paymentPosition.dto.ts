@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ICreatePaymentPosition } from '@repo/shared';
 
-export class CreatePaymentPositionDto implements ICreatePaymentPosition {
+export class CreatePaymentPositionDto {
     @ApiProperty() paymentId: number;
     @ApiProperty() positionId: number;
     @ApiProperty() baseSum: number;

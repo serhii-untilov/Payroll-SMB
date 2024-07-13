@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { HoursByDay, ICreatePayroll } from '@repo/shared';
+import { HoursByDay } from '@repo/shared';
 
-export class CreatePayrollDto implements ICreatePayroll {
+export class CreatePayrollDto {
     @ApiProperty() positionId: number;
     @ApiProperty() payPeriod: Date;
     @ApiProperty() accPeriod: Date;

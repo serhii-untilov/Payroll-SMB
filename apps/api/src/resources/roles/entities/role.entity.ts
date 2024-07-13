@@ -1,8 +1,8 @@
-import { IRole, RoleType } from '@repo/shared';
+import { RoleType } from '@repo/shared';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Role implements IRole {
+export class Role {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

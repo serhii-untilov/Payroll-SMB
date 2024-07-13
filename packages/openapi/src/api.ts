@@ -26,6 +26,37 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface Access
+ */
+export interface Access {
+    /**
+     * 
+     * @type {number}
+     * @memberof Access
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Access
+     */
+    'roleType': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Access
+     */
+    'resourceType': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Access
+     */
+    'accessType': string;
+}
+/**
+ * 
+ * @export
  * @interface Accounting
  */
 export interface Accounting {
@@ -369,10 +400,10 @@ export interface CreateDepartmentDto {
     'dateTo': string;
     /**
      * 
-     * @type {object}
+     * @type {Department}
      * @memberof CreateDepartmentDto
      */
-    'parent': object;
+    'parent': Department;
 }
 /**
  * 
@@ -3004,6 +3035,86 @@ export interface PositionHistory {
 /**
  * 
  * @export
+ * @interface PublicUserDataDto
+ */
+export interface PublicUserDataDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicUserDataDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'firstName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'lastName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PublicUserDataDto
+     */
+    'isActive'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'language'?: string | null;
+    /**
+     * 
+     * @type {Role}
+     * @memberof PublicUserDataDto
+     */
+    'role'?: Role;
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicUserDataDto
+     */
+    'roleId'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface Role
+ */
+export interface Role {
+    /**
+     * 
+     * @type {number}
+     * @memberof Role
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Role
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Role
+     */
+    'type': string;
+}
+/**
+ * 
+ * @export
  * @interface Task
  */
 export interface Task {
@@ -3076,10 +3187,10 @@ export interface TokensDto {
     'accessToken': string;
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof TokensDto
      */
-    'refreshToken': string | null;
+    'refreshToken': object | null;
 }
 /**
  * 
@@ -4270,6 +4381,12 @@ export interface UpdateUserDto {
     'language'?: string | null;
     /**
      * 
+     * @type {Role}
+     * @memberof UpdateUserDto
+     */
+    'role'?: Role;
+    /**
+     * 
      * @type {number}
      * @memberof UpdateUserDto
      */
@@ -4362,6 +4479,12 @@ export interface User {
     'language': string | null;
     /**
      * 
+     * @type {Role}
+     * @memberof User
+     */
+    'role'?: Role;
+    /**
+     * 
      * @type {number}
      * @memberof User
      */
@@ -4403,6 +4526,12 @@ export interface UserCompany {
      * @memberof UserCompany
      */
     'companyId': number;
+    /**
+     * 
+     * @type {Role}
+     * @memberof UserCompany
+     */
+    'role'?: Role;
     /**
      * 
      * @type {number}
@@ -4467,6 +4596,12 @@ export interface WorkNormPeriod {
     'id': number;
     /**
      * 
+     * @type {WorkNorm}
+     * @memberof WorkNormPeriod
+     */
+    'workNorm'?: WorkNorm;
+    /**
+     * 
      * @type {number}
      * @memberof WorkNormPeriod
      */
@@ -4493,6 +4628,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
+         * @summary Check access
          * @param {AvailableAccessDto} availableAccessDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4512,6 +4648,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -4528,6 +4668,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Check access for user
          * @param {AvailableAccessUserDto} availableAccessUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4547,6 +4688,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -4563,6 +4708,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Check access for user in a company
          * @param {AvailableAccessUserCompanyDto} availableAccessUserCompanyDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4582,6 +4728,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -4598,6 +4748,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create an access record
          * @param {CreateAccessDto} createAccessDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4616,6 +4767,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -4657,6 +4812,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -4690,6 +4849,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -4703,6 +4866,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete an access record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4723,6 +4887,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -4736,6 +4904,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update an access record
          * @param {number} id 
          * @param {UpdateAccessDto} updateAccessDto 
          * @param {*} [options] Override http request option.
@@ -4758,6 +4927,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5110,6 +5283,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create company
          * @param {CreateCompanyDto} createCompanyDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5128,6 +5302,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5160,6 +5338,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5194,6 +5376,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5207,6 +5393,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a company
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5227,6 +5414,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5240,6 +5431,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Calculate salary for a company
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5260,6 +5452,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5273,6 +5469,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a company
          * @param {number} id 
          * @param {UpdateCompanyDto} updateCompanyDto 
          * @param {*} [options] Override http request option.
@@ -5296,6 +5493,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -5312,6 +5513,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create department
          * @param {CreateDepartmentDto} createDepartmentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5330,6 +5532,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5368,6 +5574,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (companyId !== undefined) {
                 localVarQueryParameter['companyId'] = companyId;
@@ -5413,6 +5623,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -5430,6 +5644,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a department
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5450,6 +5665,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5463,6 +5682,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a department
          * @param {number} id 
          * @param {UpdateDepartmentDto} updateDepartmentDto 
          * @param {*} [options] Override http request option.
@@ -5486,6 +5706,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -5502,6 +5726,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create job
          * @param {CreateJobDto} createJobDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5520,6 +5745,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5552,6 +5781,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5586,6 +5819,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5599,6 +5836,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a job
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5619,6 +5857,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5632,6 +5874,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a job
          * @param {number} id 
          * @param {UpdateJobDto} updateJobDto 
          * @param {*} [options] Override http request option.
@@ -5654,6 +5897,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5749,6 +5996,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5782,6 +6033,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5795,6 +6050,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a Min Wage record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5815,6 +6071,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5828,6 +6088,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Min Wage record
          * @param {number} id 
          * @param {UpdateMinWageDto} updateMinWageDto 
          * @param {*} [options] Override http request option.
@@ -5851,6 +6112,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -5867,6 +6132,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create Pay Fund Type record
          * @param {CreatePayFundTypeDto} createPayFundTypeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5885,6 +6151,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5917,6 +6187,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -5951,6 +6225,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5964,6 +6242,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a Pay Fund Type record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5984,6 +6263,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -5997,6 +6280,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Pay Fund Type record
          * @param {number} id 
          * @param {UpdatePayFundTypeDto} updatePayFundTypeDto 
          * @param {*} [options] Override http request option.
@@ -6020,6 +6304,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -6036,6 +6324,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create a Pay Fund record
          * @param {CreatePayFundDto} createPayFundDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6054,6 +6343,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6089,6 +6382,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6129,6 +6426,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -6146,6 +6447,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Pay Fund record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6165,6 +6467,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6202,6 +6508,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -6218,6 +6528,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Close Pay Period
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6238,6 +6549,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -6251,6 +6566,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create a Pay Period record
          * @param {CreatePayPeriodDto} createPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6269,6 +6585,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6310,6 +6630,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (companyId !== undefined) {
                 localVarQueryParameter['companyId'] = companyId;
@@ -6360,6 +6684,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (companyId !== undefined) {
                 localVarQueryParameter['companyId'] = companyId;
@@ -6412,6 +6740,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -6433,6 +6765,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Open Pay Period
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6453,6 +6786,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -6466,6 +6803,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a Pay Period record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6486,6 +6824,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -6499,6 +6841,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Pay Period record
          * @param {number} id 
          * @param {UpdatePayPeriodDto} updatePayPeriodDto 
          * @param {*} [options] Override http request option.
@@ -6522,6 +6865,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -6538,6 +6885,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create a Payment Position record
          * @param {CreatePaymentPositionDto} createPaymentPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6556,6 +6904,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6591,6 +6943,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6631,6 +6987,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -6648,6 +7008,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a Payment Position record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6668,6 +7029,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -6681,6 +7046,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Payment Position record
          * @param {number} id 
          * @param {UpdatePaymentPositionDto} updatePaymentPositionDto 
          * @param {*} [options] Override http request option.
@@ -6704,6 +7070,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -6720,6 +7090,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create a Payment Type record
          * @param {CreatePaymentTypeDto} createPaymentTypeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6738,6 +7109,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6782,6 +7157,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (part !== undefined) {
                 localVarQueryParameter['part'] = part;
@@ -6832,6 +7211,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -6845,6 +7228,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a Payment Type record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6865,6 +7249,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -6878,6 +7266,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Payment Type record
          * @param {number} id 
          * @param {UpdatePaymentTypeDto} updatePaymentTypeDto 
          * @param {*} [options] Override http request option.
@@ -6901,6 +7290,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -6917,6 +7310,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create payment
          * @param {CreatePaymentDto} createPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6935,6 +7329,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -6970,6 +7368,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -7010,6 +7412,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -7027,6 +7433,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Process payment
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7047,6 +7454,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7060,6 +7471,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a payment record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7080,6 +7492,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7093,6 +7509,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update payment
          * @param {number} id 
          * @param {UpdatePaymentDto} updatePaymentDto 
          * @param {*} [options] Override http request option.
@@ -7116,6 +7533,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -7132,6 +7553,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Withdraw payment
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7152,6 +7574,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7165,6 +7591,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create payroll
          * @param {CreatePayrollDto} createPayrollDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7183,6 +7610,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -7218,6 +7649,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -7258,6 +7693,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -7275,6 +7714,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete payroll
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7295,6 +7735,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7308,6 +7752,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update payroll
          * @param {number} id 
          * @param {UpdatePayrollDto} updatePayrollDto 
          * @param {*} [options] Override http request option.
@@ -7331,6 +7776,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -7347,6 +7796,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create a Person record
          * @param {CreatePersonDto} createPersonDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7365,6 +7815,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -7401,6 +7855,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -7432,6 +7890,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -7466,6 +7928,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7479,6 +7945,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a Person record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7499,6 +7966,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7512,6 +7983,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Person record
          * @param {number} id 
          * @param {UpdatePersonDto} updatePersonDto 
          * @param {*} [options] Override http request option.
@@ -7535,6 +8007,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -7551,6 +8027,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create Position History record
          * @param {CreatePositionHistoryDto} createPositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7569,6 +8046,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -7607,6 +8088,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (positionId !== undefined) {
                 localVarQueryParameter['positionId'] = positionId;
@@ -7648,6 +8133,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -7687,6 +8176,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -7704,6 +8197,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a Position History record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7724,6 +8218,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7737,6 +8235,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Position History record
          * @param {number} id 
          * @param {UpdatePositionHistoryDto} updatePositionHistoryDto 
          * @param {*} [options] Override http request option.
@@ -7760,6 +8259,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -7776,6 +8279,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create Position record
          * @param {CreatePositionDto} createPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7794,6 +8298,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -7830,6 +8338,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -7864,6 +8376,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -7906,6 +8422,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
@@ -7956,6 +8476,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -7979,6 +8503,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a Position record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7999,6 +8524,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8012,6 +8541,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Position record
          * @param {number} id 
          * @param {UpdatePositionDto} updatePositionDto 
          * @param {*} [options] Override http request option.
@@ -8035,6 +8565,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -8051,6 +8585,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create role
          * @param {CreateRoleDto} createRoleDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8069,6 +8604,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -8101,6 +8640,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -8135,6 +8678,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8148,6 +8695,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a role
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8168,6 +8716,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8181,6 +8733,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a company
          * @param {number} id 
          * @param {UpdateRoleDto} updateRoleDto 
          * @param {*} [options] Override http request option.
@@ -8203,6 +8756,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -8253,6 +8810,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create task
          * @param {CreateTaskDto} createTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8271,6 +8829,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -8306,6 +8868,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -8346,6 +8912,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -8363,6 +8933,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a task
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8383,6 +8954,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8396,6 +8971,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a task
          * @param {number} id 
          * @param {UpdateTaskDto} updateTaskDto 
          * @param {*} [options] Override http request option.
@@ -8419,6 +8995,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -8435,6 +9015,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create a user
          * @param {CreateUserDto} createUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8453,6 +9034,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -8488,6 +9073,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
@@ -8529,6 +9118,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -8565,6 +9158,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -8582,6 +9179,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a user
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8602,6 +9200,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8615,6 +9217,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update user
          * @param {number} id 
          * @param {UpdateUserDto} updateUserDto 
          * @param {*} [options] Override http request option.
@@ -8637,6 +9240,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -8680,6 +9287,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -8701,6 +9312,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a User Company record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8721,6 +9333,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8734,6 +9350,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Restore a User Company record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8754,6 +9371,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8767,6 +9388,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create Work Norm record
          * @param {CreateWorkNormDto} createWorkNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8785,6 +9407,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -8820,6 +9446,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
@@ -8861,6 +9491,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (relations !== undefined) {
                 localVarQueryParameter['relations'] = relations;
             }
@@ -8878,6 +9512,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Soft delete a Work Norm record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8898,6 +9533,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -8911,6 +9550,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Update a Work Norm record
          * @param {number} id 
          * @param {UpdateWorkNormDto} updateWorkNormDto 
          * @param {*} [options] Override http request option.
@@ -8933,6 +9573,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -8960,11 +9604,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Check access
          * @param {AvailableAccessDto} availableAccessDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessAvailable(availableAccessDto: AvailableAccessDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async accessAvailable(availableAccessDto: AvailableAccessDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessAvailable(availableAccessDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessAvailable']?.[localVarOperationServerIndex]?.url;
@@ -8972,11 +9617,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Check access for user
          * @param {AvailableAccessUserDto} availableAccessUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessAvailableForUser(availableAccessUserDto: AvailableAccessUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async accessAvailableForUser(availableAccessUserDto: AvailableAccessUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessAvailableForUser(availableAccessUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessAvailableForUser']?.[localVarOperationServerIndex]?.url;
@@ -8984,11 +9630,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Check access for user in a company
          * @param {AvailableAccessUserCompanyDto} availableAccessUserCompanyDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessAvailableForUserCompany(availableAccessUserCompanyDto: AvailableAccessUserCompanyDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+        async accessAvailableForUserCompany(availableAccessUserCompanyDto: AvailableAccessUserCompanyDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessAvailableForUserCompany(availableAccessUserCompanyDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessAvailableForUserCompany']?.[localVarOperationServerIndex]?.url;
@@ -8996,11 +9643,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create an access record
          * @param {CreateAccessDto} createAccessDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessCreate(createAccessDto: CreateAccessDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async accessCreate(createAccessDto: CreateAccessDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Access>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessCreate(createAccessDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessCreate']?.[localVarOperationServerIndex]?.url;
@@ -9013,7 +9661,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessFindAll(roleType: string, resourceType: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async accessFindAll(roleType: string, resourceType: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Access>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessFindAll(roleType, resourceType, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessFindAll']?.[localVarOperationServerIndex]?.url;
@@ -9025,7 +9673,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async accessFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Access>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessFindOne']?.[localVarOperationServerIndex]?.url;
@@ -9033,11 +9681,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete an access record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async accessRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Access>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessRemove(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessRemove']?.[localVarOperationServerIndex]?.url;
@@ -9045,12 +9694,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update an access record
          * @param {number} id 
          * @param {UpdateAccessDto} updateAccessDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessUpdate(id: number, updateAccessDto: UpdateAccessDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async accessUpdate(id: number, updateAccessDto: UpdateAccessDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Access>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessUpdate(id, updateAccessDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessUpdate']?.[localVarOperationServerIndex]?.url;
@@ -9182,6 +9832,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create company
          * @param {CreateCompanyDto} createCompanyDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9217,6 +9868,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a company
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9229,6 +9881,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Calculate salary for a company
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9241,6 +9894,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a company
          * @param {number} id 
          * @param {UpdateCompanyDto} updateCompanyDto 
          * @param {*} [options] Override http request option.
@@ -9254,6 +9908,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create department
          * @param {CreateDepartmentDto} createDepartmentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9292,6 +9947,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a department
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9304,6 +9960,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a department
          * @param {number} id 
          * @param {UpdateDepartmentDto} updateDepartmentDto 
          * @param {*} [options] Override http request option.
@@ -9317,6 +9974,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create job
          * @param {CreateJobDto} createJobDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9352,6 +10010,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a job
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9364,6 +10023,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a job
          * @param {number} id 
          * @param {UpdateJobDto} updateJobDto 
          * @param {*} [options] Override http request option.
@@ -9423,6 +10083,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a Min Wage record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9435,6 +10096,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Min Wage record
          * @param {number} id 
          * @param {UpdateMinWageDto} updateMinWageDto 
          * @param {*} [options] Override http request option.
@@ -9448,6 +10110,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create Pay Fund Type record
          * @param {CreatePayFundTypeDto} createPayFundTypeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9483,6 +10146,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a Pay Fund Type record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9495,6 +10159,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Pay Fund Type record
          * @param {number} id 
          * @param {UpdatePayFundTypeDto} updatePayFundTypeDto 
          * @param {*} [options] Override http request option.
@@ -9508,6 +10173,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a Pay Fund record
          * @param {CreatePayFundDto} createPayFundDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9537,7 +10203,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async payFundsFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayFund>> {
+        async payFundsFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PayFund>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.payFundsFindOne(id, relations, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.payFundsFindOne']?.[localVarOperationServerIndex]?.url;
@@ -9545,6 +10211,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Pay Fund record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9570,6 +10237,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Close Pay Period
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9582,6 +10250,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a Pay Period record
          * @param {CreatePayPeriodDto} createPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9636,6 +10305,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Open Pay Period
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9648,6 +10318,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a Pay Period record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9660,6 +10331,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Pay Period record
          * @param {number} id 
          * @param {UpdatePayPeriodDto} updatePayPeriodDto 
          * @param {*} [options] Override http request option.
@@ -9673,6 +10345,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a Payment Position record
          * @param {CreatePaymentPositionDto} createPaymentPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9710,6 +10383,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a Payment Position record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9722,6 +10396,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Payment Position record
          * @param {number} id 
          * @param {UpdatePaymentPositionDto} updatePaymentPositionDto 
          * @param {*} [options] Override http request option.
@@ -9735,6 +10410,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a Payment Type record
          * @param {CreatePaymentTypeDto} createPaymentTypeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9774,6 +10450,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a Payment Type record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9786,6 +10463,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Payment Type record
          * @param {number} id 
          * @param {UpdatePaymentTypeDto} updatePaymentTypeDto 
          * @param {*} [options] Override http request option.
@@ -9799,6 +10477,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create payment
          * @param {CreatePaymentDto} createPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9836,6 +10515,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Process payment
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9848,6 +10528,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a payment record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9860,6 +10541,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update payment
          * @param {number} id 
          * @param {UpdatePaymentDto} updatePaymentDto 
          * @param {*} [options] Override http request option.
@@ -9873,6 +10555,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Withdraw payment
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9885,6 +10568,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create payroll
          * @param {CreatePayrollDto} createPayrollDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9922,6 +10606,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete payroll
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9934,6 +10619,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update payroll
          * @param {number} id 
          * @param {UpdatePayrollDto} updatePayrollDto 
          * @param {*} [options] Override http request option.
@@ -9947,11 +10633,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a Person record
          * @param {CreatePersonDto} createPersonDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async personsCreate(createPersonDto: CreatePersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async personsCreate(createPersonDto: CreatePersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.personsCreate(createPersonDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.personsCreate']?.[localVarOperationServerIndex]?.url;
@@ -9963,7 +10650,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async personsFind(findPersonDto: FindPersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async personsFind(findPersonDto: FindPersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.personsFind(findPersonDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.personsFind']?.[localVarOperationServerIndex]?.url;
@@ -9974,7 +10661,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async personsFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async personsFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Person>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.personsFindAll(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.personsFindAll']?.[localVarOperationServerIndex]?.url;
@@ -9986,7 +10673,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async personsFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async personsFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.personsFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.personsFindOne']?.[localVarOperationServerIndex]?.url;
@@ -9994,11 +10681,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a Person record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async personsRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async personsRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.personsRemove(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.personsRemove']?.[localVarOperationServerIndex]?.url;
@@ -10006,12 +10694,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Person record
          * @param {number} id 
          * @param {UpdatePersonDto} updatePersonDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async personsUpdate(id: number, updatePersonDto: UpdatePersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async personsUpdate(id: number, updatePersonDto: UpdatePersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.personsUpdate(id, updatePersonDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.personsUpdate']?.[localVarOperationServerIndex]?.url;
@@ -10019,11 +10708,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create Position History record
          * @param {CreatePositionHistoryDto} createPositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionHistoryCreate(createPositionHistoryDto: CreatePositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionHistoryCreate(createPositionHistoryDto: CreatePositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PositionHistory>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryCreate(createPositionHistoryDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionHistoryCreate']?.[localVarOperationServerIndex]?.url;
@@ -10036,7 +10726,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionHistoryFindAll(positionId: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async positionHistoryFindAll(positionId: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PositionHistory>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryFindAll(positionId, relations, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionHistoryFindAll']?.[localVarOperationServerIndex]?.url;
@@ -10048,7 +10738,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionHistoryFindLast(findPositionHistoryDto: FindPositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionHistoryFindLast(findPositionHistoryDto: FindPositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PositionHistory>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryFindLast(findPositionHistoryDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionHistoryFindLast']?.[localVarOperationServerIndex]?.url;
@@ -10061,7 +10751,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionHistoryFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionHistoryFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PositionHistory>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryFindOne(id, relations, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionHistoryFindOne']?.[localVarOperationServerIndex]?.url;
@@ -10069,11 +10759,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a Position History record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionHistoryRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionHistoryRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PositionHistory>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryRemove(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionHistoryRemove']?.[localVarOperationServerIndex]?.url;
@@ -10081,12 +10772,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Position History record
          * @param {number} id 
          * @param {UpdatePositionHistoryDto} updatePositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionHistoryUpdate(id: number, updatePositionHistoryDto: UpdatePositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionHistoryUpdate(id: number, updatePositionHistoryDto: UpdatePositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PositionHistory>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryUpdate(id, updatePositionHistoryDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionHistoryUpdate']?.[localVarOperationServerIndex]?.url;
@@ -10094,11 +10786,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create Position record
          * @param {CreatePositionDto} createPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsCreate(createPositionDto: CreatePositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionsCreate(createPositionDto: CreatePositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionsCreate(createPositionDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsCreate']?.[localVarOperationServerIndex]?.url;
@@ -10110,7 +10803,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsFindAll(findPositionDto: FindPositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async positionsFindAll(findPositionDto: FindPositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Position>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindAll(findPositionDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsFindAll']?.[localVarOperationServerIndex]?.url;
@@ -10122,7 +10815,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsFindBalance(findAllPositionBalanceDto: FindAllPositionBalanceDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async positionsFindBalance(findAllPositionBalanceDto: FindAllPositionBalanceDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PositionBalanceExtended>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindBalance(findAllPositionBalanceDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsFindBalance']?.[localVarOperationServerIndex]?.url;
@@ -10136,7 +10829,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsFindFirstByPersonId(id: number, relations: boolean, onDate: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionsFindFirstByPersonId(id: number, relations: boolean, onDate: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindFirstByPersonId(id, relations, onDate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsFindFirstByPersonId']?.[localVarOperationServerIndex]?.url;
@@ -10150,7 +10843,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsFindOne(id: number, relations: boolean, onDate: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionsFindOne(id: number, relations: boolean, onDate: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindOne(id, relations, onDate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsFindOne']?.[localVarOperationServerIndex]?.url;
@@ -10158,11 +10851,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a Position record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionsRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionsRemove(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsRemove']?.[localVarOperationServerIndex]?.url;
@@ -10170,12 +10864,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Position record
          * @param {number} id 
          * @param {UpdatePositionDto} updatePositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsUpdate(id: number, updatePositionDto: UpdatePositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async positionsUpdate(id: number, updatePositionDto: UpdatePositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionsUpdate(id, updatePositionDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsUpdate']?.[localVarOperationServerIndex]?.url;
@@ -10183,11 +10878,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create role
          * @param {CreateRoleDto} createRoleDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async rolesCreate(createRoleDto: CreateRoleDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async rolesCreate(createRoleDto: CreateRoleDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Role>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.rolesCreate(createRoleDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.rolesCreate']?.[localVarOperationServerIndex]?.url;
@@ -10198,7 +10894,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async rolesFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async rolesFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Role>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.rolesFindAll(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.rolesFindAll']?.[localVarOperationServerIndex]?.url;
@@ -10210,7 +10906,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async rolesFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async rolesFindOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Role>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.rolesFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.rolesFindOne']?.[localVarOperationServerIndex]?.url;
@@ -10218,11 +10914,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a role
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async rolesRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async rolesRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Role>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.rolesRemove(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.rolesRemove']?.[localVarOperationServerIndex]?.url;
@@ -10230,12 +10927,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a company
          * @param {number} id 
          * @param {UpdateRoleDto} updateRoleDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async rolesUpdate(id: number, updateRoleDto: UpdateRoleDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async rolesUpdate(id: number, updateRoleDto: UpdateRoleDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Role>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.rolesUpdate(id, updateRoleDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.rolesUpdate']?.[localVarOperationServerIndex]?.url;
@@ -10255,6 +10953,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create task
          * @param {CreateTaskDto} createTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10292,6 +10991,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a task
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10304,6 +11004,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a task
          * @param {number} id 
          * @param {UpdateTaskDto} updateTaskDto 
          * @param {*} [options] Override http request option.
@@ -10317,11 +11018,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a user
          * @param {CreateUserDto} createUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersCreate(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async usersCreate(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicUserDataDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersCreate(createUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersCreate']?.[localVarOperationServerIndex]?.url;
@@ -10333,7 +11035,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersFindAll(relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async usersFindAll(relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersFindAll(relations, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersFindAll']?.[localVarOperationServerIndex]?.url;
@@ -10346,7 +11048,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async usersFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersFindOne(id, relations, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersFindOne']?.[localVarOperationServerIndex]?.url;
@@ -10358,7 +11060,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersGetCurrentUser(relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async usersGetCurrentUser(relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersGetCurrentUser(relations, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersGetCurrentUser']?.[localVarOperationServerIndex]?.url;
@@ -10366,11 +11068,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a user
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async usersRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicUserDataDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersRemove(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersRemove']?.[localVarOperationServerIndex]?.url;
@@ -10378,12 +11081,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update user
          * @param {number} id 
          * @param {UpdateUserDto} updateUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersUpdate(id: number, updateUserDto: UpdateUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async usersUpdate(id: number, updateUserDto: UpdateUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersUpdate(id, updateUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersUpdate']?.[localVarOperationServerIndex]?.url;
@@ -10397,7 +11101,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersUserCompanyList(id: number, relations: boolean, deleted: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async usersUserCompanyList(id: number, relations: boolean, deleted: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserCompany>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersUserCompanyList(id, relations, deleted, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersUserCompanyList']?.[localVarOperationServerIndex]?.url;
@@ -10405,6 +11109,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a User Company record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10417,6 +11122,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Restore a User Company record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10429,6 +11135,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create Work Norm record
          * @param {CreateWorkNormDto} createWorkNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10466,6 +11173,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Soft delete a Work Norm record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10478,6 +11186,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update a Work Norm record
          * @param {number} id 
          * @param {UpdateWorkNormDto} updateWorkNormDto 
          * @param {*} [options] Override http request option.
@@ -10501,38 +11210,42 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @summary Check access
          * @param {AvailableAccessDto} availableAccessDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessAvailable(availableAccessDto: AvailableAccessDto, options?: any): AxiosPromise<boolean> {
+        accessAvailable(availableAccessDto: AvailableAccessDto, options?: any): AxiosPromise<object> {
             return localVarFp.accessAvailable(availableAccessDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Check access for user
          * @param {AvailableAccessUserDto} availableAccessUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessAvailableForUser(availableAccessUserDto: AvailableAccessUserDto, options?: any): AxiosPromise<boolean> {
+        accessAvailableForUser(availableAccessUserDto: AvailableAccessUserDto, options?: any): AxiosPromise<object> {
             return localVarFp.accessAvailableForUser(availableAccessUserDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Check access for user in a company
          * @param {AvailableAccessUserCompanyDto} availableAccessUserCompanyDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessAvailableForUserCompany(availableAccessUserCompanyDto: AvailableAccessUserCompanyDto, options?: any): AxiosPromise<boolean> {
+        accessAvailableForUserCompany(availableAccessUserCompanyDto: AvailableAccessUserCompanyDto, options?: any): AxiosPromise<object> {
             return localVarFp.accessAvailableForUserCompany(availableAccessUserCompanyDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Create an access record
          * @param {CreateAccessDto} createAccessDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessCreate(createAccessDto: CreateAccessDto, options?: any): AxiosPromise<object> {
+        accessCreate(createAccessDto: CreateAccessDto, options?: any): AxiosPromise<Access> {
             return localVarFp.accessCreate(createAccessDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10542,7 +11255,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessFindAll(roleType: string, resourceType: string, options?: any): AxiosPromise<Array<object>> {
+        accessFindAll(roleType: string, resourceType: string, options?: any): AxiosPromise<Array<Access>> {
             return localVarFp.accessFindAll(roleType, resourceType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10551,26 +11264,28 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessFindOne(id: number, options?: any): AxiosPromise<object> {
+        accessFindOne(id: number, options?: any): AxiosPromise<Access> {
             return localVarFp.accessFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Soft delete an access record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessRemove(id: number, options?: any): AxiosPromise<object> {
+        accessRemove(id: number, options?: any): AxiosPromise<Access> {
             return localVarFp.accessRemove(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Update an access record
          * @param {number} id 
          * @param {UpdateAccessDto} updateAccessDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessUpdate(id: number, updateAccessDto: UpdateAccessDto, options?: any): AxiosPromise<object> {
+        accessUpdate(id: number, updateAccessDto: UpdateAccessDto, options?: any): AxiosPromise<Access> {
             return localVarFp.accessUpdate(id, updateAccessDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10666,6 +11381,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create company
          * @param {CreateCompanyDto} createCompanyDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10692,6 +11408,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a company
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10701,6 +11418,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Calculate salary for a company
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10710,6 +11428,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a company
          * @param {number} id 
          * @param {UpdateCompanyDto} updateCompanyDto 
          * @param {*} [options] Override http request option.
@@ -10720,6 +11439,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create department
          * @param {CreateDepartmentDto} createDepartmentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10749,6 +11469,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a department
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10758,6 +11479,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a department
          * @param {number} id 
          * @param {UpdateDepartmentDto} updateDepartmentDto 
          * @param {*} [options] Override http request option.
@@ -10768,6 +11490,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create job
          * @param {CreateJobDto} createJobDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10794,6 +11517,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a job
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10803,6 +11527,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a job
          * @param {number} id 
          * @param {UpdateJobDto} updateJobDto 
          * @param {*} [options] Override http request option.
@@ -10847,6 +11572,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a Min Wage record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10856,6 +11582,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a Min Wage record
          * @param {number} id 
          * @param {UpdateMinWageDto} updateMinWageDto 
          * @param {*} [options] Override http request option.
@@ -10866,6 +11593,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create Pay Fund Type record
          * @param {CreatePayFundTypeDto} createPayFundTypeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10892,6 +11620,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a Pay Fund Type record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10901,6 +11630,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a Pay Fund Type record
          * @param {number} id 
          * @param {UpdatePayFundTypeDto} updatePayFundTypeDto 
          * @param {*} [options] Override http request option.
@@ -10911,6 +11641,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create a Pay Fund record
          * @param {CreatePayFundDto} createPayFundDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10934,11 +11665,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payFundsFindOne(id: number, relations: boolean, options?: any): AxiosPromise<PayFund> {
+        payFundsFindOne(id: number, relations: boolean, options?: any): AxiosPromise<Array<PayFund>> {
             return localVarFp.payFundsFindOne(id, relations, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Update a Pay Fund record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10958,6 +11690,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Close Pay Period
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10967,6 +11700,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create a Pay Period record
          * @param {CreatePayPeriodDto} createPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11009,6 +11743,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Open Pay Period
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11018,6 +11753,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a Pay Period record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11027,6 +11763,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a Pay Period record
          * @param {number} id 
          * @param {UpdatePayPeriodDto} updatePayPeriodDto 
          * @param {*} [options] Override http request option.
@@ -11037,6 +11774,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create a Payment Position record
          * @param {CreatePaymentPositionDto} createPaymentPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11065,6 +11803,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a Payment Position record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11074,6 +11813,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a Payment Position record
          * @param {number} id 
          * @param {UpdatePaymentPositionDto} updatePaymentPositionDto 
          * @param {*} [options] Override http request option.
@@ -11084,6 +11824,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create a Payment Type record
          * @param {CreatePaymentTypeDto} createPaymentTypeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11114,6 +11855,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a Payment Type record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11123,6 +11865,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a Payment Type record
          * @param {number} id 
          * @param {UpdatePaymentTypeDto} updatePaymentTypeDto 
          * @param {*} [options] Override http request option.
@@ -11133,6 +11876,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create payment
          * @param {CreatePaymentDto} createPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11161,6 +11905,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Process payment
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11170,6 +11915,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a payment record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11179,6 +11925,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update payment
          * @param {number} id 
          * @param {UpdatePaymentDto} updatePaymentDto 
          * @param {*} [options] Override http request option.
@@ -11189,6 +11936,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Withdraw payment
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11198,6 +11946,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create payroll
          * @param {CreatePayrollDto} createPayrollDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11226,6 +11975,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete payroll
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11235,6 +11985,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update payroll
          * @param {number} id 
          * @param {UpdatePayrollDto} updatePayrollDto 
          * @param {*} [options] Override http request option.
@@ -11245,11 +11996,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create a Person record
          * @param {CreatePersonDto} createPersonDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        personsCreate(createPersonDto: CreatePersonDto, options?: any): AxiosPromise<object> {
+        personsCreate(createPersonDto: CreatePersonDto, options?: any): AxiosPromise<Person> {
             return localVarFp.personsCreate(createPersonDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11258,7 +12010,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        personsFind(findPersonDto: FindPersonDto, options?: any): AxiosPromise<object> {
+        personsFind(findPersonDto: FindPersonDto, options?: any): AxiosPromise<Person> {
             return localVarFp.personsFind(findPersonDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11266,7 +12018,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        personsFindAll(options?: any): AxiosPromise<Array<object>> {
+        personsFindAll(options?: any): AxiosPromise<Array<Person>> {
             return localVarFp.personsFindAll(options).then((request) => request(axios, basePath));
         },
         /**
@@ -11275,35 +12027,38 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        personsFindOne(id: number, options?: any): AxiosPromise<object> {
+        personsFindOne(id: number, options?: any): AxiosPromise<Person> {
             return localVarFp.personsFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Soft delete a Person record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        personsRemove(id: number, options?: any): AxiosPromise<object> {
+        personsRemove(id: number, options?: any): AxiosPromise<Person> {
             return localVarFp.personsRemove(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Update a Person record
          * @param {number} id 
          * @param {UpdatePersonDto} updatePersonDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        personsUpdate(id: number, updatePersonDto: UpdatePersonDto, options?: any): AxiosPromise<object> {
+        personsUpdate(id: number, updatePersonDto: UpdatePersonDto, options?: any): AxiosPromise<Person> {
             return localVarFp.personsUpdate(id, updatePersonDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Create Position History record
          * @param {CreatePositionHistoryDto} createPositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryCreate(createPositionHistoryDto: CreatePositionHistoryDto, options?: any): AxiosPromise<object> {
+        positionHistoryCreate(createPositionHistoryDto: CreatePositionHistoryDto, options?: any): AxiosPromise<PositionHistory> {
             return localVarFp.positionHistoryCreate(createPositionHistoryDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11313,7 +12068,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryFindAll(positionId: number, relations: boolean, options?: any): AxiosPromise<Array<object>> {
+        positionHistoryFindAll(positionId: number, relations: boolean, options?: any): AxiosPromise<Array<PositionHistory>> {
             return localVarFp.positionHistoryFindAll(positionId, relations, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11322,7 +12077,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryFindLast(findPositionHistoryDto: FindPositionHistoryDto, options?: any): AxiosPromise<object> {
+        positionHistoryFindLast(findPositionHistoryDto: FindPositionHistoryDto, options?: any): AxiosPromise<PositionHistory> {
             return localVarFp.positionHistoryFindLast(findPositionHistoryDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11332,35 +12087,38 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryFindOne(id: number, relations: boolean, options?: any): AxiosPromise<object> {
+        positionHistoryFindOne(id: number, relations: boolean, options?: any): AxiosPromise<PositionHistory> {
             return localVarFp.positionHistoryFindOne(id, relations, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Soft delete a Position History record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryRemove(id: number, options?: any): AxiosPromise<object> {
+        positionHistoryRemove(id: number, options?: any): AxiosPromise<PositionHistory> {
             return localVarFp.positionHistoryRemove(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Update a Position History record
          * @param {number} id 
          * @param {UpdatePositionHistoryDto} updatePositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryUpdate(id: number, updatePositionHistoryDto: UpdatePositionHistoryDto, options?: any): AxiosPromise<object> {
+        positionHistoryUpdate(id: number, updatePositionHistoryDto: UpdatePositionHistoryDto, options?: any): AxiosPromise<PositionHistory> {
             return localVarFp.positionHistoryUpdate(id, updatePositionHistoryDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Create Position record
          * @param {CreatePositionDto} createPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsCreate(createPositionDto: CreatePositionDto, options?: any): AxiosPromise<object> {
+        positionsCreate(createPositionDto: CreatePositionDto, options?: any): AxiosPromise<Position> {
             return localVarFp.positionsCreate(createPositionDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11369,7 +12127,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindAll(findPositionDto: FindPositionDto, options?: any): AxiosPromise<Array<object>> {
+        positionsFindAll(findPositionDto: FindPositionDto, options?: any): AxiosPromise<Array<Position>> {
             return localVarFp.positionsFindAll(findPositionDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11378,7 +12136,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindBalance(findAllPositionBalanceDto: FindAllPositionBalanceDto, options?: any): AxiosPromise<Array<object>> {
+        positionsFindBalance(findAllPositionBalanceDto: FindAllPositionBalanceDto, options?: any): AxiosPromise<Array<PositionBalanceExtended>> {
             return localVarFp.positionsFindBalance(findAllPositionBalanceDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11389,7 +12147,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindFirstByPersonId(id: number, relations: boolean, onDate: string, options?: any): AxiosPromise<object> {
+        positionsFindFirstByPersonId(id: number, relations: boolean, onDate: string, options?: any): AxiosPromise<Position> {
             return localVarFp.positionsFindFirstByPersonId(id, relations, onDate, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11400,35 +12158,38 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindOne(id: number, relations: boolean, onDate: string, options?: any): AxiosPromise<object> {
+        positionsFindOne(id: number, relations: boolean, onDate: string, options?: any): AxiosPromise<Position> {
             return localVarFp.positionsFindOne(id, relations, onDate, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Soft delete a Position record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsRemove(id: number, options?: any): AxiosPromise<object> {
+        positionsRemove(id: number, options?: any): AxiosPromise<Position> {
             return localVarFp.positionsRemove(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Update a Position record
          * @param {number} id 
          * @param {UpdatePositionDto} updatePositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsUpdate(id: number, updatePositionDto: UpdatePositionDto, options?: any): AxiosPromise<object> {
+        positionsUpdate(id: number, updatePositionDto: UpdatePositionDto, options?: any): AxiosPromise<Position> {
             return localVarFp.positionsUpdate(id, updatePositionDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Create role
          * @param {CreateRoleDto} createRoleDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        rolesCreate(createRoleDto: CreateRoleDto, options?: any): AxiosPromise<object> {
+        rolesCreate(createRoleDto: CreateRoleDto, options?: any): AxiosPromise<Role> {
             return localVarFp.rolesCreate(createRoleDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11436,7 +12197,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        rolesFindAll(options?: any): AxiosPromise<Array<object>> {
+        rolesFindAll(options?: any): AxiosPromise<Array<Role>> {
             return localVarFp.rolesFindAll(options).then((request) => request(axios, basePath));
         },
         /**
@@ -11445,26 +12206,28 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        rolesFindOne(id: number, options?: any): AxiosPromise<object> {
+        rolesFindOne(id: number, options?: any): AxiosPromise<Role> {
             return localVarFp.rolesFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Soft delete a role
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        rolesRemove(id: number, options?: any): AxiosPromise<object> {
+        rolesRemove(id: number, options?: any): AxiosPromise<Role> {
             return localVarFp.rolesRemove(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Update a company
          * @param {number} id 
          * @param {UpdateRoleDto} updateRoleDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        rolesUpdate(id: number, updateRoleDto: UpdateRoleDto, options?: any): AxiosPromise<object> {
+        rolesUpdate(id: number, updateRoleDto: UpdateRoleDto, options?: any): AxiosPromise<Role> {
             return localVarFp.rolesUpdate(id, updateRoleDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11478,6 +12241,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create task
          * @param {CreateTaskDto} createTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11506,6 +12270,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a task
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11515,6 +12280,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a task
          * @param {number} id 
          * @param {UpdateTaskDto} updateTaskDto 
          * @param {*} [options] Override http request option.
@@ -11525,11 +12291,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create a user
          * @param {CreateUserDto} createUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersCreate(createUserDto: CreateUserDto, options?: any): AxiosPromise<object> {
+        usersCreate(createUserDto: CreateUserDto, options?: any): AxiosPromise<PublicUserDataDto> {
             return localVarFp.usersCreate(createUserDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11538,7 +12305,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersFindAll(relations: boolean, options?: any): AxiosPromise<Array<object>> {
+        usersFindAll(relations: boolean, options?: any): AxiosPromise<Array<User>> {
             return localVarFp.usersFindAll(relations, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11548,7 +12315,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersFindOne(id: number, relations: boolean, options?: any): AxiosPromise<object> {
+        usersFindOne(id: number, relations: boolean, options?: any): AxiosPromise<User> {
             return localVarFp.usersFindOne(id, relations, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11557,26 +12324,28 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersGetCurrentUser(relations: boolean, options?: any): AxiosPromise<object> {
+        usersGetCurrentUser(relations: boolean, options?: any): AxiosPromise<User> {
             return localVarFp.usersGetCurrentUser(relations, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Soft delete a user
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersRemove(id: number, options?: any): AxiosPromise<object> {
+        usersRemove(id: number, options?: any): AxiosPromise<PublicUserDataDto> {
             return localVarFp.usersRemove(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Update user
          * @param {number} id 
          * @param {UpdateUserDto} updateUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersUpdate(id: number, updateUserDto: UpdateUserDto, options?: any): AxiosPromise<object> {
+        usersUpdate(id: number, updateUserDto: UpdateUserDto, options?: any): AxiosPromise<User> {
             return localVarFp.usersUpdate(id, updateUserDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11587,11 +12356,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersUserCompanyList(id: number, relations: boolean, deleted: boolean, options?: any): AxiosPromise<Array<object>> {
+        usersUserCompanyList(id: number, relations: boolean, deleted: boolean, options?: any): AxiosPromise<Array<UserCompany>> {
             return localVarFp.usersUserCompanyList(id, relations, deleted, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Soft delete a User Company record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11601,6 +12371,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Restore a User Company record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11610,6 +12381,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create Work Norm record
          * @param {CreateWorkNormDto} createWorkNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11638,6 +12410,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Soft delete a Work Norm record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11647,6 +12420,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Update a Work Norm record
          * @param {number} id 
          * @param {UpdateWorkNormDto} updateWorkNormDto 
          * @param {*} [options] Override http request option.
@@ -11667,6 +12441,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
 export class DefaultApi extends BaseAPI {
     /**
      * 
+     * @summary Check access
      * @param {AvailableAccessDto} availableAccessDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11678,6 +12453,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Check access for user
      * @param {AvailableAccessUserDto} availableAccessUserDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11689,6 +12465,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Check access for user in a company
      * @param {AvailableAccessUserCompanyDto} availableAccessUserCompanyDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11700,6 +12477,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create an access record
      * @param {CreateAccessDto} createAccessDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11734,6 +12512,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete an access record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11745,6 +12524,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update an access record
      * @param {number} id 
      * @param {UpdateAccessDto} updateAccessDto 
      * @param {*} [options] Override http request option.
@@ -11870,6 +12650,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create company
      * @param {CreateCompanyDto} createCompanyDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11902,6 +12683,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a company
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11913,6 +12695,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Calculate salary for a company
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11924,6 +12707,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a company
      * @param {number} id 
      * @param {UpdateCompanyDto} updateCompanyDto 
      * @param {*} [options] Override http request option.
@@ -11936,6 +12720,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create department
      * @param {CreateDepartmentDto} createDepartmentDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11971,6 +12756,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a department
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11982,6 +12768,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a department
      * @param {number} id 
      * @param {UpdateDepartmentDto} updateDepartmentDto 
      * @param {*} [options] Override http request option.
@@ -11994,6 +12781,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create job
      * @param {CreateJobDto} createJobDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12026,6 +12814,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a job
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12037,6 +12826,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a job
      * @param {number} id 
      * @param {UpdateJobDto} updateJobDto 
      * @param {*} [options] Override http request option.
@@ -12091,6 +12881,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a Min Wage record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12102,6 +12893,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Min Wage record
      * @param {number} id 
      * @param {UpdateMinWageDto} updateMinWageDto 
      * @param {*} [options] Override http request option.
@@ -12114,6 +12906,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create Pay Fund Type record
      * @param {CreatePayFundTypeDto} createPayFundTypeDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12146,6 +12939,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a Pay Fund Type record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12157,6 +12951,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Pay Fund Type record
      * @param {number} id 
      * @param {UpdatePayFundTypeDto} updatePayFundTypeDto 
      * @param {*} [options] Override http request option.
@@ -12169,6 +12964,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create a Pay Fund record
      * @param {CreatePayFundDto} createPayFundDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12203,6 +12999,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Pay Fund record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12226,6 +13023,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Close Pay Period
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12237,6 +13035,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create a Pay Period record
      * @param {CreatePayPeriodDto} createPayPeriodDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12287,6 +13086,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Open Pay Period
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12298,6 +13098,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a Pay Period record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12309,6 +13110,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Pay Period record
      * @param {number} id 
      * @param {UpdatePayPeriodDto} updatePayPeriodDto 
      * @param {*} [options] Override http request option.
@@ -12321,6 +13123,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create a Payment Position record
      * @param {CreatePaymentPositionDto} createPaymentPositionDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12355,6 +13158,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a Payment Position record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12366,6 +13170,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Payment Position record
      * @param {number} id 
      * @param {UpdatePaymentPositionDto} updatePaymentPositionDto 
      * @param {*} [options] Override http request option.
@@ -12378,6 +13183,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create a Payment Type record
      * @param {CreatePaymentTypeDto} createPaymentTypeDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12414,6 +13220,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a Payment Type record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12425,6 +13232,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Payment Type record
      * @param {number} id 
      * @param {UpdatePaymentTypeDto} updatePaymentTypeDto 
      * @param {*} [options] Override http request option.
@@ -12437,6 +13245,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create payment
      * @param {CreatePaymentDto} createPaymentDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12471,6 +13280,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Process payment
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12482,6 +13292,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a payment record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12493,6 +13304,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update payment
      * @param {number} id 
      * @param {UpdatePaymentDto} updatePaymentDto 
      * @param {*} [options] Override http request option.
@@ -12505,6 +13317,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Withdraw payment
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12516,6 +13329,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create payroll
      * @param {CreatePayrollDto} createPayrollDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12550,6 +13364,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete payroll
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12561,6 +13376,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update payroll
      * @param {number} id 
      * @param {UpdatePayrollDto} updatePayrollDto 
      * @param {*} [options] Override http request option.
@@ -12573,6 +13389,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create a Person record
      * @param {CreatePersonDto} createPersonDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12616,6 +13433,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a Person record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12627,6 +13445,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Person record
      * @param {number} id 
      * @param {UpdatePersonDto} updatePersonDto 
      * @param {*} [options] Override http request option.
@@ -12639,6 +13458,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create Position History record
      * @param {CreatePositionHistoryDto} createPositionHistoryDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12685,6 +13505,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a Position History record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12696,6 +13517,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Position History record
      * @param {number} id 
      * @param {UpdatePositionHistoryDto} updatePositionHistoryDto 
      * @param {*} [options] Override http request option.
@@ -12708,6 +13530,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create Position record
      * @param {CreatePositionDto} createPositionDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12767,6 +13590,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a Position record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12778,6 +13602,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Position record
      * @param {number} id 
      * @param {UpdatePositionDto} updatePositionDto 
      * @param {*} [options] Override http request option.
@@ -12790,6 +13615,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create role
      * @param {CreateRoleDto} createRoleDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12822,6 +13648,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a role
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12833,6 +13660,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a company
      * @param {number} id 
      * @param {UpdateRoleDto} updateRoleDto 
      * @param {*} [options] Override http request option.
@@ -12856,6 +13684,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create task
      * @param {CreateTaskDto} createTaskDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12890,6 +13719,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a task
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12901,6 +13731,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a task
      * @param {number} id 
      * @param {UpdateTaskDto} updateTaskDto 
      * @param {*} [options] Override http request option.
@@ -12913,6 +13744,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create a user
      * @param {CreateUserDto} createUserDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12958,6 +13790,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a user
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12969,6 +13802,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update user
      * @param {number} id 
      * @param {UpdateUserDto} updateUserDto 
      * @param {*} [options] Override http request option.
@@ -12994,6 +13828,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a User Company record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13005,6 +13840,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Restore a User Company record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13016,6 +13852,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create Work Norm record
      * @param {CreateWorkNormDto} createWorkNormDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13050,6 +13887,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Soft delete a Work Norm record
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13061,6 +13899,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Update a Work Norm record
      * @param {number} id 
      * @param {UpdateWorkNormDto} updateWorkNormDto 
      * @param {*} [options] Override http request option.

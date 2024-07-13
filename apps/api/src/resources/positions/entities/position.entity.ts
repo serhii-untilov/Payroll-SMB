@@ -2,7 +2,6 @@ import { Logger } from './../../../resources/abstract/logger.abstract';
 import { Company } from './../../../resources/companies/entities/company.entity';
 import { Person } from './../../../resources/persons/entities/person.entity';
 import { PositionHistory } from './../../../resources/position-history/entities/position-history.entity';
-import { IPosition } from '@repo/shared';
 import {
     AfterLoad,
     Column,
@@ -16,7 +15,7 @@ import {
 import { PositionBalance } from './position-balance.entity';
 
 @Entity()
-export class Position extends Logger implements IPosition {
+export class Position extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

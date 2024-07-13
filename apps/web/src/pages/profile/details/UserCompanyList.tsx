@@ -13,7 +13,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IUserCompany, date2view } from '@repo/shared';
+import { UserCompany, date2view } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -94,7 +94,7 @@ export function UserCompanyList(params: Props) {
         isError,
         isLoading,
         error: error,
-    } = useQuery<IUserCompany[], Error>({
+    } = useQuery<UserCompany[], Error>({
         queryKey: ['company', 'list', { userId, showDeleted }],
         queryFn: async () => {
             return userId ? await getUserCompanyList(userId, true, showDeleted) : [];

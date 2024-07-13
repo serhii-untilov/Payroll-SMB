@@ -1,7 +1,7 @@
-import { ICreateAccess } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateAccessDto implements ICreateAccess {
-    roleType: string; // See enum RoleType
-    resourceType: string; // See enum ResourceType
-    accessType: string; // See enum AccessType
+export class CreateAccessDto {
+    @ApiProperty() roleType: string; // See enum RoleType
+    @ApiProperty() resourceType: string; // See enum ResourceType
+    @ApiProperty() accessType: string; // See enum AccessType
 }

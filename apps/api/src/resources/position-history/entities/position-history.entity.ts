@@ -4,7 +4,6 @@ import { Job } from './../../../resources/jobs/entities/job.entity';
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
 import { Position } from './../../../resources/positions/entities/position.entity';
 import { WorkNorm } from './../../../resources/work-norms/entities/work-norm.entity';
-import { IPositionHistory } from '@repo/shared';
 import {
     AfterLoad,
     Column,
@@ -16,7 +15,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class PositionHistory extends Logger implements IPositionHistory {
+export class PositionHistory extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

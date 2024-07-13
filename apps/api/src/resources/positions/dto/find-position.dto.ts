@@ -1,8 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Position } from '../entities/position.entity';
-import { IFindPosition } from '@repo/shared';
 
-export class FindPositionDto extends PartialType(Position) implements IFindPosition {
+export class FindPositionDto extends PartialType(Position) {
     @ApiProperty() companyId: number;
     @ApiProperty() onDate?: Date;
     @ApiProperty() onPayPeriodDate?: Date;

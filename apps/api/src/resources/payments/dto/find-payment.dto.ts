@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IFindPayment } from '@repo/shared';
 
-export class FindPaymentDto implements IFindPayment {
+export class FindPaymentDto {
     @ApiProperty() companyId: number;
     @ApiProperty() positionId?: number;
     @ApiProperty() payPeriod?: Date;

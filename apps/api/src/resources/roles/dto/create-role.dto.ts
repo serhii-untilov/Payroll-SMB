@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ICreateRole } from '@repo/shared';
 
-export class CreateRoleDto implements ICreateRole {
+export class CreateRoleDto {
     @ApiProperty()
     name: string;
 

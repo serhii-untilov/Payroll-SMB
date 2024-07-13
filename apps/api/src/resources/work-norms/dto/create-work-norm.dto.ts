@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ICreateWorkNorm } from '@repo/shared';
 
-export class CreateWorkNormDto implements ICreateWorkNorm {
+export class CreateWorkNormDto {
     @ApiProperty() id: number;
     @ApiProperty() name: string;
     @ApiProperty() type: string;

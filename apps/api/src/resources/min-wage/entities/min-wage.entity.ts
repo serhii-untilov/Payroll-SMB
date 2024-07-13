@@ -1,10 +1,9 @@
 import { Logger } from './../../../resources/abstract/logger.abstract';
-import { IMinWage } from '@repo/shared';
 import { AfterLoad, Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @Index('MIN_WAGE_DATE_FROM_INDEX', ['dateFrom', 'dateTo', 'paySum'], { unique: true })
-export class MinWage extends Logger implements IMinWage {
+export class MinWage extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

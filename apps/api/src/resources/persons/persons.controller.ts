@@ -1,10 +1,10 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
     Delete,
     Get,
-    HttpCode,
-    HttpStatus,
     Param,
     ParseIntPipe,
     Patch,
@@ -12,22 +12,36 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
 import { IPerson, deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { FindPersonDto } from './dto/find-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { Person } from './entities/person.entity';
 import { PersonsService } from './persons.service';
-import { getUserId } from '@/utils/getUserId';
 
 @Controller('persons')
+@ApiBearerAuth()
 export class PersonsController {
     constructor(private readonly service: PersonsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create a Person record' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: Person,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePersonDto): Promise<IPerson> {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
@@ -36,7 +50,11 @@ export class PersonsController {
 
     @Get()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(Person) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request): Promise<IPerson[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId);
@@ -45,7 +63,9 @@ export class PersonsController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: Person })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);
@@ -54,7 +74,10 @@ export class PersonsController {
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a Person record' })
+    @ApiOkResponse({ description: 'The updated record', type: Person })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -67,7 +90,10 @@ export class PersonsController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Soft delete a Person record' })
+    @ApiOkResponse({ description: 'The record has been successfully deleted', type: Person })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId);
@@ -76,7 +102,9 @@ export class PersonsController {
 
     @Post('find')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: Person })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async find(@Req() req: Request, @Body() params: FindPersonDto): Promise<IPerson | null> {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);

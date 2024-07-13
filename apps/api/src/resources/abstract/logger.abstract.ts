@@ -1,4 +1,3 @@
-import { ILogger } from '@repo/shared';
 import {
     Column,
     CreateDateColumn,
@@ -7,7 +6,7 @@ import {
     VersionColumn,
 } from 'typeorm';
 
-export abstract class Logger implements ILogger {
+export abstract class Logger {
     @CreateDateColumn()
     createdDate?: Date;
 

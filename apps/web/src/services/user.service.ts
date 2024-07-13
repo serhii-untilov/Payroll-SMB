@@ -1,4 +1,4 @@
-import { IPublicUserData, IUpdateUser, IUserCompany } from '@repo/shared';
+import { IPublicUserData, IUpdateUser, UserCompany } from '@repo/shared';
 import { axiosInstance } from '@/api';
 import authHeader from './auth-header';
 
@@ -11,14 +11,14 @@ export async function getUserCompanyList(
     id: number,
     relations: boolean = false,
     deleted: boolean = false,
-): Promise<IUserCompany[]> {
+): Promise<UserCompany[]> {
     const response = await axiosInstance.get(
         `/api/users/${id}/companies?relations=${relations}${deleted ? '&deleted=true' : ''}`,
         {
             headers: authHeader(),
         },
     );
-    return response.data.sort((a: IUserCompany, b: IUserCompany) =>
+    return response.data.sort((a: UserCompany, b: UserCompany) =>
         a.company?.name.toUpperCase().localeCompare((b.company?.name || '').toUpperCase()),
     );
 }

@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ICreatePayPeriod } from '@repo/shared';
 
-export class CreatePayPeriodDto implements ICreatePayPeriod {
+export class CreatePayPeriodDto {
     @ApiProperty() companyId: number;
     @ApiProperty() dateFrom: Date;
     @ApiProperty() dateTo: Date;

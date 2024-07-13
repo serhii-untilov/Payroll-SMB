@@ -1,12 +1,11 @@
 import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
 import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
     Delete,
     Get,
-    HttpCode,
-    HttpStatus,
     Param,
     ParseBoolPipe,
     ParseIntPipe,
@@ -16,6 +15,15 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePayPeriodDto } from './dto/createPayPeriod.dto';
@@ -24,12 +32,18 @@ import { defaultFieldList } from './entities/payPeriod.entity';
 import { PayPeriodsService } from './payPeriods.service';
 
 @Controller('pay-periods')
+@ApiBearerAuth()
 export class PayPeriodsController {
     constructor(private readonly service: PayPeriodsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create a Pay Period record' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: PayPeriod,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePayPeriodDto) {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId, payload.companyId);
@@ -38,7 +52,11 @@ export class PayPeriodsController {
 
     @Get()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(PayPeriod) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(
         @Req() req: Request,
         @Query('companyId', new ParseIntPipe({ optional: true })) companyId: number,
@@ -52,7 +70,9 @@ export class PayPeriodsController {
 
     @Get('current')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: PayPeriod })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findCurrent(
         @Req() req: Request,
         @Query('companyId', ParseIntPipe) companyId: number,
@@ -66,7 +86,9 @@ export class PayPeriodsController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: PayPeriod })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -84,7 +106,10 @@ export class PayPeriodsController {
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a Pay Period record' })
+    @ApiOkResponse({ description: 'The updated record', type: PayPeriod })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -97,7 +122,10 @@ export class PayPeriodsController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Soft delete a Pay Period record' })
+    @ApiOkResponse({ description: 'The record has been successfully deleted', type: PayPeriod })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
@@ -106,7 +134,12 @@ export class PayPeriodsController {
 
     @Post('close/:id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Close Pay Period' })
+    @ApiCreatedResponse({
+        description: 'The Pay Period has been successfully closed',
+        type: PayPeriod,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async close(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -119,7 +152,12 @@ export class PayPeriodsController {
 
     @Post('open/:id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Open Pay Period' })
+    @ApiCreatedResponse({
+        description: 'The Pay Period has been successfully opened',
+        type: PayPeriod,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async open(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,

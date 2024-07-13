@@ -1,7 +1,6 @@
 import { Logger } from './../../../resources/abstract/logger.abstract';
 import { Company } from './../../../resources/companies/entities/company.entity';
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
-import { IPayment } from '@repo/shared';
 import {
     AfterLoad,
     Column,
@@ -16,7 +15,7 @@ import { PaymentPosition } from '../payment-positions/entities/paymentPosition.e
 
 @Entity()
 @Index('IDX_PAYMENT_COMP_ACC_STATUS', ['companyId', 'accPeriod', 'status'])
-export class Payment extends Logger implements IPayment {
+export class Payment extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
     @ManyToOne(() => Company, { createForeignKeyConstraints: false })

@@ -1,10 +1,10 @@
-import { IWorkNorm, WorkNormType } from '@repo/shared';
-import { Column, PrimaryGeneratedColumn, OneToMany, Entity, AfterLoad } from 'typeorm';
+import { WorkNormType } from '@repo/shared';
+import { Column, PrimaryGeneratedColumn, OneToMany, Entity, AfterLoad, Relation } from 'typeorm';
 import { WorkNormPeriod } from './work-norm-period.entity';
 import { Logger } from './../../../resources/abstract/logger.abstract';
 
 @Entity()
-export class WorkNorm extends Logger implements IWorkNorm {
+export class WorkNorm extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -23,7 +23,7 @@ export class WorkNorm extends Logger implements IWorkNorm {
     @OneToMany(() => WorkNormPeriod, (workNormPeriod) => workNormPeriod.workNorm, {
         cascade: true,
     })
-    periods?: WorkNormPeriod[];
+    periods?: Relation<WorkNormPeriod>[];
 
     @AfterLoad()
     transform() {

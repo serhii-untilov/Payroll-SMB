@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IFindPositionHistory } from '@repo/shared';
 
-export class FindPositionHistoryDto implements IFindPositionHistory {
+export class FindPositionHistoryDto {
     @ApiProperty() positionId: number;
     @ApiProperty() onDate?: Date;
     @ApiProperty() onPayPeriodDate?: Date;

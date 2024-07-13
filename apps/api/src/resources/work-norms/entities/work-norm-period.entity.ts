@@ -1,16 +1,23 @@
 import { Logger } from './../../../resources/abstract/logger.abstract';
-import { IWorkNorm, IWorkNormPeriod } from '@repo/shared';
-import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Relation,
+} from 'typeorm';
 import { WorkNorm } from './work-norm.entity';
 
 @Entity()
-export class WorkNormPeriod extends Logger implements IWorkNormPeriod {
+export class WorkNormPeriod extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
     @ManyToOne(() => WorkNorm, (workNorm) => workNorm.periods, { onDelete: 'CASCADE' })
     @JoinColumn()
-    workNorm?: IWorkNorm;
+    workNorm?: Relation<WorkNorm>;
 
     @Column({ type: 'integer' })
     workNormId: number;

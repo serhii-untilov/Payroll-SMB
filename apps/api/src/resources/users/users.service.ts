@@ -1,3 +1,4 @@
+import { WrapperType } from '@/types/WrapperType';
 import {
     BadRequestException,
     ConflictException,
@@ -8,15 +9,15 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, IPublicUserData, IUser, ResourceType, RoleType } from '@repo/shared';
+import { AccessType, ResourceType, RoleType } from '@repo/shared';
 import * as _ from 'lodash';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { PublicUserDataDto } from './dto/public-user-date.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { WrapperType } from '@/types/WrapperType';
 
 @Injectable()
 export class UsersService {
@@ -138,7 +139,7 @@ export class UsersService {
         });
     }
 
-    public static toPublic(user: IUser): IPublicUserData {
+    public toPublic(user: User): PublicUserDataDto {
         const publicUser = _.omit(user, ['password', 'refreshToken']);
         return publicUser;
     }

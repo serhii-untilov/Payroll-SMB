@@ -4,7 +4,7 @@ import { Department } from './../../../resources/departments/entities/department
 import { Law } from './../../../resources/laws/entities/law.entity';
 import { Position } from './../../../resources/positions/entities/position.entity';
 import { UserCompany } from './../../../resources/users/entities/user-company.entity';
-import { ICompany, PaymentSchedule, monthBegin, monthEnd } from '@repo/shared';
+import { PaymentSchedule, monthBegin, monthEnd } from '@repo/shared';
 import {
     AfterLoad,
     BeforeInsert,
@@ -18,7 +18,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Company extends Logger implements ICompany {
+export class Company extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -86,7 +86,7 @@ export class Company extends Logger implements ICompany {
     }
 }
 
-function normalize(record: ICompany) {
+function normalize(record: Company) {
     record.payPeriod = monthBegin(record.payPeriod || new Date());
     record.checkDate = monthEnd(record.payPeriod || new Date());
 }

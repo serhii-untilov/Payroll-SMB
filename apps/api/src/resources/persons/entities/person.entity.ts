@@ -1,6 +1,6 @@
 import { Logger } from './../../../resources/abstract/logger.abstract';
 import { Position } from './../../../resources/positions/entities/position.entity';
-import { IPerson, getFullName } from '@repo/shared';
+import { getFullName } from '@repo/shared';
 import {
     AfterInsert,
     AfterLoad,
@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Person extends Logger implements IPerson {
+export class Person extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

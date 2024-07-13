@@ -1,10 +1,10 @@
+import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { getUserId } from '@/utils/getUserId';
 import {
     Body,
     Controller,
     Delete,
     Get,
-    HttpCode,
-    HttpStatus,
     Inject,
     Logger,
     Param,
@@ -16,15 +16,24 @@ import {
     UseGuards,
     forwardRef,
 } from '@nestjs/common';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { deepStringToShortDate } from '@repo/shared';
-import { getUserId } from '@/utils/getUserId';
+import { Company } from './entities/company.entity';
 
 @Controller('companies')
+@ApiBearerAuth()
 export class CompaniesController {
     private _logger: Logger = new Logger(CompaniesService.name);
 
@@ -35,21 +44,25 @@ export class CompaniesController {
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create company' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: Company,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreateCompanyDto) {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
-        const payloadTransformed = deepStringToShortDate(payload);
-        const company = await this.service.create(
-            userId,
-            deepStringToShortDate(payloadTransformed),
-        );
-        return company;
+        return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
     @Get()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(Company) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request, @Query() relations: boolean) {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId);
@@ -58,7 +71,9 @@ export class CompaniesController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: Company })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -71,7 +86,10 @@ export class CompaniesController {
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a company' })
+    @ApiOkResponse({ description: 'The updated record', type: Company })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -84,7 +102,10 @@ export class CompaniesController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Soft delete a company' })
+    @ApiOkResponse({ description: 'The record has been successfully deleted', type: Company })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
@@ -93,7 +114,9 @@ export class CompaniesController {
 
     @Get(':id/calculate-payroll')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Calculate salary for a company' })
+    @ApiOkResponse({ description: 'Salary has been successfully calculated' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async salaryCalculate(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,

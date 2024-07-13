@@ -13,7 +13,6 @@ import { TokensDto } from './dto/tokens.dto';
 export class AuthController {
     constructor(private authService: AuthService) {}
 
-    @HttpCode(HttpStatus.OK)
     @Post('register')
     async register(@Body() user: CreateUserDto): Promise<TokensDto> {
         return await this.authService.register(user);
@@ -25,7 +24,6 @@ export class AuthController {
         return await this.authService.login(user);
     }
 
-    @HttpCode(HttpStatus.OK)
     @UseGuards(AccessTokenGuard)
     @Get('logout')
     async logout(@Req() req: Request): Promise<null> {
@@ -33,7 +31,6 @@ export class AuthController {
         return this.authService.logout(userId);
     }
 
-    @HttpCode(HttpStatus.OK)
     @UseGuards(RefreshTokenGuard)
     @Get('refresh')
     refreshTokens(@Req() req: Request) {

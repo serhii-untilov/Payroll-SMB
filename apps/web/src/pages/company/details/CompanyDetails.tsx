@@ -1,3 +1,4 @@
+import { api } from '@/api';
 import { FormInputDropdown } from '@/components/form/FormInputDropdown';
 import { FormTextField } from '@/components/form/FormTextField';
 import { InputLabel } from '@/components/layout/InputLabel';
@@ -9,7 +10,6 @@ import useAppContext from '@/hooks/useAppContext';
 import { useCompany } from '@/hooks/useCompany';
 import { useLawList } from '@/hooks/useLawList';
 import useLocale from '@/hooks/useLocale';
-import { createCompany, updateCompany } from '@/services/company.service';
 import { getDirtyValues } from '@/services/utils';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarFormErrors } from '@/utils/snackbar';
@@ -17,6 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import {
     AccountingType,
+    formatDate,
     LawType,
     maxDate,
     minDate,
@@ -32,7 +33,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { date, InferType, number, object, string } from 'yup';
+import { InferType, number, object, string } from 'yup';
 
 type Props = {
     companyId: number | null;
@@ -72,10 +73,14 @@ export function CompanyDetails(props: Props) {
         paymentSchedule: string()
             .required('Payment Schedule required')
             .default(PaymentSchedule.LAST_DAY),
-        dateFrom: date().default(minDate()).required(),
-        dateTo: date().default(maxDate()).required(),
-        payPeriod: date().required('Pay Period required').default(monthBegin(new Date())),
-        checkDate: date().required('Check Date required').default(monthEnd(new Date())),
+        dateFrom: string().default(formatDate(minDate())).required(),
+        dateTo: string().default(formatDate(maxDate())).required(),
+        payPeriod: string()
+            .required('Pay Period required')
+            .default(formatDate(monthBegin(new Date()))),
+        checkDate: string()
+            .required('Check Date required')
+            .default(formatDate(monthEnd(new Date()))),
         version: number().optional(),
     });
 
@@ -87,8 +92,8 @@ export function CompanyDetails(props: Props) {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: formSchema.cast(company) ?? {},
-        values: formSchema.cast(company) ?? {},
+        defaultValues: formSchema.cast(company),
+        values: formSchema.cast(company),
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -110,8 +115,8 @@ export function CompanyDetails(props: Props) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const response = company?.id
-                ? await updateCompany(company.id, dirtyValues)
-                : await createCompany(data);
+                ? (await api.companiesUpdate(company.id, dirtyValues)).data
+                : (await api.companiesCreate(data)).data;
             setCompanyId(response.id);
             reset(formSchema.cast(response));
             await invalidateQueries(queryClient, [ResourceType.COMPANY, ResourceType.PAY_PERIOD]);
