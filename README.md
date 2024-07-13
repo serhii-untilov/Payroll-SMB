@@ -300,6 +300,7 @@ mkdir packages/shared
 npm i --workspace @repo/shared --save sqlite3 ts-loader typeorm
 npm i --workspace @repo/shared --save-dev ts-node typescript
 npm i --workspace @repo/shared --save date-fns
+npm i --workspace @repo/shared --save @repo/openapi
 
 # Init "utils" shared library for common functions
 mkdir packages/utils

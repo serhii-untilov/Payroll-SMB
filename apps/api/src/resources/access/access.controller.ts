@@ -101,7 +101,7 @@ export class AccessController {
 
     @Post('available')
     @ApiOperation({ summary: 'Check access' })
-    @ApiOkResponse({ description: 'Is access enabled', type: 'boolean' })
+    @ApiOkResponse({ description: 'Is access enabled' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async available(@Body() payload: AvailableAccessDto): Promise<boolean> {
         return await this.accessService.available(payload);
@@ -109,7 +109,7 @@ export class AccessController {
 
     @Post('available-user')
     @ApiOperation({ summary: 'Check access for user' })
-    @ApiOkResponse({ description: 'Is access enabled', type: 'boolean' })
+    @ApiOkResponse({ description: 'Is access enabled' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async availableForUser(@Body() payload: AvailableAccessUserDto) {
         return await this.accessService.availableForUser(payload);
@@ -117,7 +117,7 @@ export class AccessController {
 
     @Post('available-user-company')
     @ApiOperation({ summary: 'Check access for user in a company' })
-    @ApiOkResponse({ description: 'Is access enabled', type: 'boolean' })
+    @ApiOkResponse({ description: 'Is access enabled' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async availableForUserCompany(@Body() payload: AvailableAccessUserCompanyDto) {
         return await this.accessService.availableForUserCompany(payload);

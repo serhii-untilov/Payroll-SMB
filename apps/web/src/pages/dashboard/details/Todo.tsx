@@ -1,12 +1,13 @@
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { ITask, TaskType } from '@repo/shared';
+import { TaskType } from '@repo/shared';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Task } from 
 import { Task } from './Task';
 
 type Props = {
-    taskList: ITask[];
+    taskList: Task[];
 };
 
 export function Todo(props: Props) {

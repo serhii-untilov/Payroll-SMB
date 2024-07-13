@@ -1,8 +1,8 @@
-import { api, axiosInstance } from '@/api';
+import { api, axiosInstance, dto } from '@/api';
+import { Company, UpdateCompanyDto } from '@repo/openapi';
 import authHeader from './auth-header';
-import { Company, CreateCompanyDto, UpdateCompanyDto } from '@repo/openapi';
 
-export async function createCompany(company: CreateCompanyDto): Promise<Company> {
+export async function createCompany(company: dto.CreateCompanyDto): Promise<Company> {
     return (await api.companiesCreate(company)).data;
 }
 

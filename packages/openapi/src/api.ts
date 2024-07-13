@@ -53,6 +53,48 @@ export interface Access {
      * @memberof Access
      */
     'accessType': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Access
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Access
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Access
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Access
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Access
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Access
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Access
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -78,6 +120,48 @@ export interface Accounting {
      * @memberof Accounting
      */
     'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Accounting
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Accounting
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Accounting
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Accounting
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Accounting
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Accounting
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Accounting
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -281,6 +365,48 @@ export interface Company {
      * @memberof Company
      */
     'users'?: Array<UserCompany>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Company
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Company
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Company
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Company
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Company
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Company
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Company
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -367,6 +493,48 @@ export interface CreateCompanyDto {
      * @memberof CreateCompanyDto
      */
     'checkDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCompanyDto
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateCompanyDto
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCompanyDto
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateCompanyDto
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCompanyDto
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateCompanyDto
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateCompanyDto
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -913,28 +1081,28 @@ export interface CreatePayrollDto {
     'dateTo': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof CreatePayrollDto
      */
-    'sourceType'?: object | null;
+    'sourceType'?: string | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CreatePayrollDto
      */
-    'sourceId'?: object | null;
+    'sourceId'?: number | null;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof CreatePayrollDto
      */
-    'dateBegin'?: object | null;
+    'dateBegin'?: string | null;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof CreatePayrollDto
      */
-    'dateEnd'?: object | null;
+    'dateEnd'?: string | null;
     /**
      * 
      * @type {number}
@@ -1015,10 +1183,10 @@ export interface CreatePayrollDto {
     'factHoursByDay'?: object | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CreatePayrollDto
      */
-    'parentId'?: object | null;
+    'parentId'?: number | null;
 }
 /**
  * 
@@ -1113,10 +1281,10 @@ export interface CreatePositionDto {
     'description': string;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CreatePositionDto
      */
-    'personId': object | null;
+    'personId': number | null;
     /**
      * 
      * @type {string}
@@ -1156,16 +1324,16 @@ export interface CreatePositionHistoryDto {
     'dateTo': string;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CreatePositionHistoryDto
      */
-    'departmentId'?: object | null;
+    'departmentId'?: number | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CreatePositionHistoryDto
      */
-    'jobId': object | null;
+    'jobId': number | null;
     /**
      * 
      * @type {number}
@@ -1254,10 +1422,10 @@ export interface CreateTaskDto {
     'status': string;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof CreateTaskDto
      */
-    'entityId': object | null;
+    'entityId': number | null;
 }
 /**
  * 
@@ -1393,6 +1561,48 @@ export interface Department {
      * @memberof Department
      */
     'childDepartments'?: Array<Department>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Department
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Department
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Department
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Department
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Department
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Department
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Department
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -1666,6 +1876,48 @@ export interface FindPositionDto {
     'includeDeleted'?: boolean;
     /**
      * 
+     * @type {string}
+     * @memberof FindPositionDto
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindPositionDto
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FindPositionDto
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindPositionDto
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FindPositionDto
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindPositionDto
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindPositionDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {number}
      * @memberof FindPositionDto
      */
@@ -1794,6 +2046,48 @@ export interface FindTaskDto {
     'relations'?: boolean;
     /**
      * 
+     * @type {string}
+     * @memberof FindTaskDto
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindTaskDto
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FindTaskDto
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindTaskDto
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof FindTaskDto
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindTaskDto
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindTaskDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {number}
      * @memberof FindTaskDto
      */
@@ -1859,6 +2153,48 @@ export interface Job {
      * @memberof Job
      */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Job
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Job
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Job
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Job
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Job
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Job
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Job
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -1915,6 +2251,48 @@ export interface MinWage {
      * @memberof MinWage
      */
     'paySum': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MinWage
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MinWage
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MinWage
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MinWage
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MinWage
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MinWage
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MinWage
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -2037,6 +2415,48 @@ export interface PayFundType {
      * @memberof PayFundType
      */
     'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayFundType
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayFundType
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayFundType
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayFundType
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayFundType
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayFundType
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayFundType
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -2200,6 +2620,48 @@ export interface PayPeriod {
      * @memberof PayPeriod
      */
     'calcMethods'?: Array<PayPeriodCalcMethod>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayPeriod
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayPeriod
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayPeriod
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayPeriod
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayPeriod
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayPeriod
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayPeriod
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -2358,6 +2820,48 @@ export interface Payment {
      * @memberof Payment
      */
     'paymentPositions'?: Array<PaymentPosition>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payment
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payment
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payment
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payment
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payment
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payment
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payment
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -2425,6 +2929,48 @@ export interface PaymentPosition {
      * @memberof PaymentPosition
      */
     'recordFlags': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentPosition
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentPosition
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentPosition
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentPosition
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentPosition
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentPosition
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentPosition
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -2468,6 +3014,48 @@ export interface PaymentType {
      * @memberof PaymentType
      */
     'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentType
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentType
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentType
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentType
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentType
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentType
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentType
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -2637,6 +3225,48 @@ export interface Payroll {
      * @memberof Payroll
      */
     'parentId': number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payroll
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payroll
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payroll
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payroll
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payroll
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payroll
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payroll
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -2716,6 +3346,48 @@ export interface Person {
      * @memberof Person
      */
     'positions'?: Array<Position>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Person
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Person
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Person
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Person
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Person
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Person
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Person
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -2795,6 +3467,48 @@ export interface Position {
      * @memberof Position
      */
     'balance'?: Array<PositionBalance>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Position
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Position
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Position
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Position
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Position
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Position
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Position
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -2938,6 +3652,31 @@ export interface PositionBalance {
 /**
  * 
  * @export
+ * @interface PositionBalanceExtendedDto
+ */
+export interface PositionBalanceExtendedDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'positionId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'companyId': number;
+}
+/**
+ * 
+ * @export
  * @interface PositionHistory
  */
 export interface PositionHistory {
@@ -3031,6 +3770,48 @@ export interface PositionHistory {
      * @memberof PositionHistory
      */
     'rate': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionHistory
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionHistory
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionHistory
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionHistory
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionHistory
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionHistory
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionHistory
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -3038,6 +3819,48 @@ export interface PositionHistory {
  * @interface PublicUserDataDto
  */
 export interface PublicUserDataDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicUserDataDto
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicUserDataDto
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicUserDataDto
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicUserDataDto
+     */
+    'version'?: number | null;
     /**
      * 
      * @type {number}
@@ -3172,6 +3995,48 @@ export interface Task {
      * @memberof Task
      */
     'entityId': number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Task
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Task
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Task
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Task
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -3187,10 +4052,10 @@ export interface TokensDto {
     'accessToken': string;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof TokensDto
      */
-    'refreshToken': object | null;
+    'refreshToken': string | null;
 }
 /**
  * 
@@ -3198,6 +4063,48 @@ export interface TokensDto {
  * @interface UpdateAccessDto
  */
 export interface UpdateAccessDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAccessDto
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateAccessDto
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAccessDto
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateAccessDto
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAccessDto
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateAccessDto
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateAccessDto
+     */
+    'version'?: number | null;
     /**
      * 
      * @type {string}
@@ -3223,6 +4130,48 @@ export interface UpdateAccessDto {
  * @interface UpdateCompanyDto
  */
 export interface UpdateCompanyDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCompanyDto
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCompanyDto
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCompanyDto
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCompanyDto
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCompanyDto
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCompanyDto
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateCompanyDto
+     */
+    'version'?: number | null;
     /**
      * 
      * @type {string}
@@ -3316,6 +4265,12 @@ export interface UpdateCompanyDto {
 export interface UpdateDepartmentDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdateDepartmentDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateDepartmentDto
      */
@@ -3353,6 +4308,12 @@ export interface UpdateDepartmentDto {
 export interface UpdateJobDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdateJobDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateJobDto
      */
@@ -3364,6 +4325,12 @@ export interface UpdateJobDto {
  * @interface UpdateMinWageDto
  */
 export interface UpdateMinWageDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateMinWageDto
+     */
+    'version': number;
     /**
      * 
      * @type {string}
@@ -3382,12 +4349,6 @@ export interface UpdateMinWageDto {
      * @memberof UpdateMinWageDto
      */
     'paySum'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateMinWageDto
-     */
-    'version': number;
 }
 /**
  * 
@@ -3458,6 +4419,12 @@ export interface UpdatePayFundDto {
 export interface UpdatePayFundTypeDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdatePayFundTypeDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {string}
      * @memberof UpdatePayFundTypeDto
      */
@@ -3493,6 +4460,12 @@ export interface UpdatePayFundTypeDto {
  * @interface UpdatePayPeriodDto
  */
 export interface UpdatePayPeriodDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePayPeriodDto
+     */
+    'version'?: number | null;
     /**
      * 
      * @type {Company}
@@ -3652,6 +4625,12 @@ export interface UpdatePayPeriodDto {
 export interface UpdatePaymentDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdatePaymentDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {Company}
      * @memberof UpdatePaymentDto
      */
@@ -3767,6 +4746,12 @@ export interface UpdatePaymentDto {
 export interface UpdatePaymentPositionDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdatePaymentPositionDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {Payment}
      * @memberof UpdatePaymentPositionDto
      */
@@ -3828,6 +4813,12 @@ export interface UpdatePaymentPositionDto {
 export interface UpdatePaymentTypeDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdatePaymentTypeDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {string}
      * @memberof UpdatePaymentTypeDto
      */
@@ -3863,6 +4854,12 @@ export interface UpdatePaymentTypeDto {
  * @interface UpdatePayrollDto
  */
 export interface UpdatePayrollDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePayrollDto
+     */
+    'version'?: number | null;
     /**
      * 
      * @type {Position}
@@ -4028,6 +5025,12 @@ export interface UpdatePayrollDto {
 export interface UpdatePersonDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdatePersonDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {string}
      * @memberof UpdatePersonDto
      */
@@ -4101,6 +5104,12 @@ export interface UpdatePersonDto {
 export interface UpdatePositionDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdatePositionDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {Company}
      * @memberof UpdatePositionDto
      */
@@ -4172,6 +5181,12 @@ export interface UpdatePositionDto {
  * @interface UpdatePositionHistoryDto
  */
 export interface UpdatePositionHistoryDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePositionHistoryDto
+     */
+    'version'?: number | null;
     /**
      * 
      * @type {Position}
@@ -4284,6 +5299,12 @@ export interface UpdateRoleDto {
 export interface UpdateTaskDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdateTaskDto
+     */
+    'version'?: number | null;
+    /**
+     * 
      * @type {Company}
      * @memberof UpdateTaskDto
      */
@@ -4337,6 +5358,48 @@ export interface UpdateTaskDto {
  * @interface UpdateUserDto
  */
 export interface UpdateUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateUserDto
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateUserDto
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateUserDto
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateUserDto
+     */
+    'version'?: number | null;
     /**
      * 
      * @type {string}
@@ -4398,6 +5461,12 @@ export interface UpdateUserDto {
  * @interface UpdateWorkNormDto
  */
 export interface UpdateWorkNormDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateWorkNormDto
+     */
+    'version'?: number | null;
     /**
      * 
      * @type {string}
@@ -4489,6 +5558,48 @@ export interface User {
      * @memberof User
      */
     'roleId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -4538,6 +5649,48 @@ export interface UserCompany {
      * @memberof UserCompany
      */
     'roleId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserCompany
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserCompany
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserCompany
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserCompany
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserCompany
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserCompany
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserCompany
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -4581,6 +5734,48 @@ export interface WorkNorm {
      * @memberof WorkNorm
      */
     'periods'?: Array<WorkNormPeriod>;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkNorm
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkNorm
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkNorm
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkNorm
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkNorm
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkNorm
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkNorm
+     */
+    'version'?: number | null;
 }
 /**
  * 
@@ -4618,6 +5813,48 @@ export interface WorkNormPeriod {
      * @memberof WorkNormPeriod
      */
     'hours': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkNormPeriod
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkNormPeriod
+     */
+    'createdUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkNormPeriod
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkNormPeriod
+     */
+    'updatedUserId'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkNormPeriod
+     */
+    'deletedDate'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkNormPeriod
+     */
+    'deletedUserId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkNormPeriod
+     */
+    'version'?: number | null;
 }
 
 /**
@@ -5010,11 +6247,19 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} lng 
+         * @param {string} ns 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        appAddLocales: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/locales/add/{lng}/{ns}`;
+        appAddLocales: async (lng: string, ns: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lng' is not null or undefined
+            assertParamExists('appAddLocales', 'lng', lng)
+            // verify required parameter 'ns' is not null or undefined
+            assertParamExists('appAddLocales', 'ns', ns)
+            const localVarPath = `/api/locales/add/{lng}/{ns}`
+                .replace(`{${"lng"}}`, encodeURIComponent(String(lng)))
+                .replace(`{${"ns"}}`, encodeURIComponent(String(ns)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5068,11 +6313,19 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} lang 
+         * @param {string} ns 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        appGetLocales: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/locales/{lang}/{ns}.json`;
+        appGetLocales: async (lang: string, ns: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lang' is not null or undefined
+            assertParamExists('appGetLocales', 'lang', lang)
+            // verify required parameter 'ns' is not null or undefined
+            assertParamExists('appGetLocales', 'ns', ns)
+            const localVarPath = `/api/locales/{lang}/{ns}.json`
+                .replace(`{${"lang"}}`, encodeURIComponent(String(lang)))
+                .replace(`{${"ns"}}`, encodeURIComponent(String(ns)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9609,7 +10862,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessAvailable(availableAccessDto: AvailableAccessDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async accessAvailable(availableAccessDto: AvailableAccessDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessAvailable(availableAccessDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessAvailable']?.[localVarOperationServerIndex]?.url;
@@ -9622,7 +10875,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessAvailableForUser(availableAccessUserDto: AvailableAccessUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async accessAvailableForUser(availableAccessUserDto: AvailableAccessUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessAvailableForUser(availableAccessUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessAvailableForUser']?.[localVarOperationServerIndex]?.url;
@@ -9635,7 +10888,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accessAvailableForUserCompany(availableAccessUserCompanyDto: AvailableAccessUserCompanyDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async accessAvailableForUserCompany(availableAccessUserCompanyDto: AvailableAccessUserCompanyDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accessAvailableForUserCompany(availableAccessUserCompanyDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.accessAvailableForUserCompany']?.[localVarOperationServerIndex]?.url;
@@ -9731,11 +10984,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} lng 
+         * @param {string} ns 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async appAddLocales(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.appAddLocales(options);
+        async appAddLocales(lng: string, ns: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.appAddLocales(lng, ns, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.appAddLocales']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -9753,11 +11008,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} lang 
+         * @param {string} ns 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async appGetLocales(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.appGetLocales(options);
+        async appGetLocales(lang: string, ns: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.appGetLocales(lang, ns, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.appGetLocales']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -10815,7 +12072,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsFindBalance(findAllPositionBalanceDto: FindAllPositionBalanceDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PositionBalanceExtended>>> {
+        async positionsFindBalance(findAllPositionBalanceDto: FindAllPositionBalanceDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PositionBalanceExtendedDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindBalance(findAllPositionBalanceDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsFindBalance']?.[localVarOperationServerIndex]?.url;
@@ -11215,7 +12472,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessAvailable(availableAccessDto: AvailableAccessDto, options?: any): AxiosPromise<object> {
+        accessAvailable(availableAccessDto: AvailableAccessDto, options?: any): AxiosPromise<void> {
             return localVarFp.accessAvailable(availableAccessDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11225,7 +12482,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessAvailableForUser(availableAccessUserDto: AvailableAccessUserDto, options?: any): AxiosPromise<object> {
+        accessAvailableForUser(availableAccessUserDto: AvailableAccessUserDto, options?: any): AxiosPromise<void> {
             return localVarFp.accessAvailableForUser(availableAccessUserDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11235,7 +12492,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accessAvailableForUserCompany(availableAccessUserCompanyDto: AvailableAccessUserCompanyDto, options?: any): AxiosPromise<object> {
+        accessAvailableForUserCompany(availableAccessUserCompanyDto: AvailableAccessUserCompanyDto, options?: any): AxiosPromise<void> {
             return localVarFp.accessAvailableForUserCompany(availableAccessUserCompanyDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11307,11 +12564,13 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {string} lng 
+         * @param {string} ns 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        appAddLocales(options?: any): AxiosPromise<void> {
-            return localVarFp.appAddLocales(options).then((request) => request(axios, basePath));
+        appAddLocales(lng: string, ns: string, options?: any): AxiosPromise<void> {
+            return localVarFp.appAddLocales(lng, ns, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -11323,11 +12582,13 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {string} lang 
+         * @param {string} ns 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        appGetLocales(options?: any): AxiosPromise<void> {
-            return localVarFp.appGetLocales(options).then((request) => request(axios, basePath));
+        appGetLocales(lang: string, ns: string, options?: any): AxiosPromise<void> {
+            return localVarFp.appGetLocales(lang, ns, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12136,7 +13397,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindBalance(findAllPositionBalanceDto: FindAllPositionBalanceDto, options?: any): AxiosPromise<Array<PositionBalanceExtended>> {
+        positionsFindBalance(findAllPositionBalanceDto: FindAllPositionBalanceDto, options?: any): AxiosPromise<Array<PositionBalanceExtendedDto>> {
             return localVarFp.positionsFindBalance(findAllPositionBalanceDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -12558,12 +13819,14 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} lng 
+     * @param {string} ns 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public appAddLocales(options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).appAddLocales(options).then((request) => request(this.axios, this.basePath));
+    public appAddLocales(lng: string, ns: string, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).appAddLocales(lng, ns, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12578,12 +13841,14 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} lang 
+     * @param {string} ns 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public appGetLocales(options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).appGetLocales(options).then((request) => request(this.axios, this.basePath));
+    public appGetLocales(lang: string, ns: string, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).appGetLocales(lang, ns, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -10,12 +10,17 @@ import { CompaniesModule } from '@/resources/companies/companies.module';
 import { DepartmentsModule } from '@/resources/departments/departments.module';
 import { JobsModule } from '@/resources/jobs/jobs.module';
 import { LawsModule } from '@/resources/laws/laws.module';
+import { MinWageModule } from '@/resources/min-wage/min-wage.module';
+import { PayFundTypesModule } from '@/resources/pay-fund-types/pay-fund-types.module';
+import { PayFundsModule } from '@/resources/pay-funds/pay-funds.module';
 import { PayPeriodsModule } from '@/resources/pay-periods/payPeriods.module';
 import { PaymentTypesModule } from '@/resources/payment-types/payment-types.module';
+import { PayrollsModule } from '@/resources/payrolls/payrolls.module';
 import { PersonsModule } from '@/resources/persons/persons.module';
 import { PositionHistoryModule } from '@/resources/position-history/position-history.module';
 import { PositionsModule } from '@/resources/positions/positions.module';
 import { RolesModule } from '@/resources/roles/roles.module';
+import { TasksModule } from '@/resources/tasks/tasks.module';
 import { UsersModule } from '@/resources/users/users.module';
 import { WorkNormsModule } from '@/resources/work-norms/work-norms.module';
 import { Module } from '@nestjs/common';
@@ -60,21 +65,26 @@ import { AppService } from './app.service';
             // disable throwing uncaughtException if an error event is emitted and it has no listeners
             ignoreErrors: false,
         }),
-        AuthModule,
-        LawsModule,
-        RolesModule,
-        UsersModule,
         AccessModule,
         AccountingModule,
+        AuthModule,
         CompaniesModule,
         DepartmentsModule,
         JobsModule,
+        LawsModule,
+        MinWageModule,
+        PayFundsModule,
+        PayFundTypesModule,
         PaymentTypesModule,
-        WorkNormsModule,
         PayPeriodsModule,
+        PayrollsModule,
         PersonsModule,
-        PositionsModule,
         PositionHistoryModule,
+        PositionsModule,
+        RolesModule,
+        TasksModule,
+        UsersModule,
+        WorkNormsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

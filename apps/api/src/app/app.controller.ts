@@ -2,6 +2,7 @@ import { Body, Controller, Get, Header, Logger, Param, Post, StreamableFile } fr
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { AppService } from './app.service';
+import { ApiNotFoundResponse } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
@@ -21,8 +22,8 @@ export class AppController {
 
     @Get('/locales/:lang/:ns.json')
     @Header('Content-Type', 'application/json')
-    getLocales(@Param() params: { lang: string; ns: string }): StreamableFile {
-        const fileName = join(process.cwd(), 'locales', params.lang, `${params.ns}.json`);
+    getLocales(@Param('lang') lang: string, @Param('ns') ns: string): StreamableFile {
+        const fileName = join(process.cwd(), 'locales', lang, `${ns}.json`);
         const file = createReadStream(fileName);
         return new StreamableFile(file);
     }
@@ -30,10 +31,10 @@ export class AppController {
     @Post('/locales/add/:lng/:ns')
     @Header('Content-Type', 'application/json')
     async addLocales(
-        @Param() params: { lng: string; ns: string },
+        @Param('lng') lng: string,
+        @Param('ns') ns: string,
         @Body() payload: { key: string },
     ) {
-        const { lng, ns } = params;
         const { key } = payload;
         await this.service.addLocaleKey(lng, ns, key);
     }

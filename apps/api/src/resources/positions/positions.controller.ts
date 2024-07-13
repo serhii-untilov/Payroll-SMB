@@ -27,8 +27,9 @@ import {
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePositionDto } from './dto/create-position.dto';
+import { FindAllPositionBalanceDto } from './dto/find-position-balance.dto';
 import { FindPositionDto } from './dto/find-position.dto';
-import { FindAllPositionBalanceDto, PositionBalanceExtended } from './dto/position-balance.dto';
+import { PositionBalanceExtendedDto } from './dto/position-balance-extended.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionsService } from './positions.service';
 
@@ -113,17 +114,17 @@ export class PositionsController {
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({
         description: 'The found records',
-        schema: { type: 'array', items: { $ref: getSchemaPath(PositionBalanceExtended) } },
+        type: PositionBalanceExtendedDto,
+        isArray: true,
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findBalance(
         @Req() req: Request,
         @Body() payload: FindAllPositionBalanceDto,
-    ): Promise<PositionBalanceExtended[]> {
+    ): Promise<PositionBalanceExtendedDto[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, payload.companyId);
-        const response = await this.service.findAllBalance(deepStringToShortDate(payload));
-        return response;
+        return await this.service.findAllBalance(deepStringToShortDate(payload));
     }
 
     @Post('person/:id')

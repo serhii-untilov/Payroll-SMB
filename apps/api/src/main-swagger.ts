@@ -7,6 +7,7 @@ import metadata from './metadata';
 import path from 'path';
 import { writeFileSync } from 'fs';
 import { capitalizeFirstLetter } from '@repo/shared';
+import { Logger } from './resources/abstract/logger.abstract';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -28,6 +29,7 @@ async function bootstrap() {
         .build();
     await SwaggerModule.loadPluginMetadata(metadata);
     const document = SwaggerModule.createDocument(app, config, {
+        // extraModels: [Logger],
         operationIdFactory: (controllerKey, methodKey) =>
             `${controllerKey}${capitalizeFirstLetter(methodKey)}`.replace('Controller', ''),
     });

@@ -1,3 +1,4 @@
+import { api, dto } from '@/api';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { getPerson } from '@/services/person.service';
@@ -12,17 +13,17 @@ import {
 } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { green, grey, orange, red } from '@mui/material/colors';
-import { IPosition, ITask, TaskStatus, TaskType } from '@repo/shared';
+import { Task as ITask } from '@repo/openapi';
+import { TaskStatus, TaskType, toDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { add, differenceInYears } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
 export type TaskView = 'todo' | 'reminder' | 'upcoming';
 
 type Props = {
-    task: ITask;
+    task: dto.Task;
     view: TaskView;
 };
 
@@ -56,7 +57,7 @@ export function Task(props: Props) {
                       personId: task.entityId,
                       companyId: company.id,
                       relations: false,
-                      onDate: task.dateFrom,
+                      onDate: toDate(task.dateFrom),
                   })
                 : null;
         },
@@ -64,8 +65,10 @@ export function Task(props: Props) {
     });
 
     const taskDate = useMemo(() => {
-        const day = task.dateFrom.getDate();
-        const month = task.dateFrom.toLocaleString(locale.dateLocale.code, { month: 'short' });
+        const day = toDate(task.dateFrom).getDate();
+        const month = toDate(task.dateFrom).toLocaleString(locale.dateLocale.code, {
+            month: 'short',
+        });
         return `${day} ${month}`;
     }, [task, locale]);
 
@@ -104,12 +107,11 @@ export function Task(props: Props) {
     };
 
     const markDone = async () => {
-        setTask(
-            await updateTask(task.id, {
-                status: TaskStatus.DONE_BY_USER,
-                version: task.version,
-            }),
-        );
+        const updatedTask = await api.tasksUpdate(task.id, {
+            status: TaskStatus.DONE_BY_USER,
+            version: task.version,
+        }).data;
+        setTask(updatedTask);
         await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
     };
 

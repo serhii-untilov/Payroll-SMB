@@ -19,7 +19,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { monthBegin, toDate } from '@repo/shared';
+import { dateUTC, monthBegin, toDate } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { isEqual } from 'date-fns';
 import { useMemo, useState } from 'react';
@@ -38,7 +38,10 @@ export function CompanyPayPeriods(params: Props) {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const gridRef = useGridApiRef();
-    const columns = useColumns(locale.dateLocale, company?.payPeriod ?? monthBegin(new Date()));
+    const columns = useColumns(
+        locale.dateLocale,
+        company?.payPeriod ? dateUTC(new Date(company.payPeriod)) : monthBegin(new Date()),
+    );
     const { data: rawData, isLoading } = usePayPeriodList({
         companyId,
         relations: true,

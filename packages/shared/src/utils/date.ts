@@ -81,11 +81,6 @@ export function deepStringToShortDate(obj: any): any {
     return obj;
 }
 
-export function toDate(value: string): Date {
-    if (isIsoDateString(value)) return parseISO(value);
-    return new Date(value);
-}
-
 export function dateUTC(date: Date): Date {
     return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
 }
@@ -218,4 +213,17 @@ export function getMaxDate(date1: Date, date2: Date): Date {
 
 export function dropTime(date: Date): number {
     return date.setHours(0, 0, 0, 0);
+}
+
+export function toDate(date: string | undefined, defaultValue: Date | null = null): Date {
+    if (date) {
+        if (isIsoDateString(date)) {
+            return parseISO(date);
+        }
+        return dateUTC(new Date(date));
+    }
+    if (defaultValue) {
+        return dateUTC(defaultValue);
+    }
+    return dateUTC(new Date());
 }

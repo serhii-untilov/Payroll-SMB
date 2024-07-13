@@ -1,11 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
-
 export class FindPaymentDto {
-    @ApiProperty() companyId: number;
-    @ApiProperty() positionId?: number;
-    @ApiProperty() payPeriod?: Date;
-    @ApiProperty() accPeriod?: Date;
-    @ApiProperty() paymentTypeId?: number;
-    @ApiProperty() status?: string;
-    @ApiProperty() relations?: boolean;
+    companyId: number;
+    positionId?: number;
+    payPeriod?: Date;
+    accPeriod?: Date;
+    paymentTypeId?: number;
+    status?: string;
+    relations?: boolean;
 }

@@ -31,7 +31,7 @@ import { PayPeriodsService } from '../pay-periods/payPeriods.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { FindPositionDto } from './dto/find-position.dto';
-import { FindAllPositionBalanceDto, PositionBalanceExtended } from './dto/position-balance.dto';
+import { PositionBalanceExtendedDto } from './dto/position-balance-extended.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionBalance } from './entities/position-balance.entity';
 import { Position } from './entities/position.entity';
@@ -39,6 +39,7 @@ import { PositionCreatedEvent } from './events/position-created.event';
 import { PositionDeletedEvent } from './events/position-deleted.event';
 import { PositionUpdatedEvent } from './events/position-updated.event';
 import { WrapperType } from '@/types/WrapperType';
+import { FindAllPositionBalanceDto } from './dto/find-position-balance.dto';
 
 @Injectable()
 export class PositionsService extends AvailableForUserCompany {
@@ -345,7 +346,7 @@ export class PositionsService extends AvailableForUserCompany {
         });
     }
 
-    async findAllBalance(params: FindAllPositionBalanceDto): Promise<PositionBalanceExtended[]> {
+    async findAllBalance(params: FindAllPositionBalanceDto): Promise<PositionBalanceExtendedDto[]> {
         const payPeriod = await this.payPeriodsService.findOne({
             where: {
                 companyId: params.companyId,
