@@ -13,7 +13,7 @@ import { LawsModule } from '@/resources/laws/laws.module';
 import { MinWageModule } from '@/resources/min-wage/min-wage.module';
 import { PayFundTypesModule } from '@/resources/pay-fund-types/pay-fund-types.module';
 import { PayFundsModule } from '@/resources/pay-funds/pay-funds.module';
-import { PayPeriodsModule } from '@/resources/pay-periods/payPeriods.module';
+import { PayPeriodsModule } from '@/resources/pay-periods/pay-periods.module';
 import { PaymentTypesModule } from '@/resources/payment-types/payment-types.module';
 import { PayrollsModule } from '@/resources/payrolls/payrolls.module';
 import { PersonsModule } from '@/resources/persons/persons.module';

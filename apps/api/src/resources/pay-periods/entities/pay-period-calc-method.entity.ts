@@ -7,7 +7,7 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { PayPeriod } from './payPeriod.entity';
+import { PayPeriod } from './pay-period.entity';
 
 @Entity()
 export class PayPeriodCalcMethod {

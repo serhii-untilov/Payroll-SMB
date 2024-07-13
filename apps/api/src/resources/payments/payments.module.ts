@@ -16,7 +16,7 @@ import { PaymentPositionsController } from './payment-positions/payment-position
 import { PaymentDeductionsController } from './payment-deductions/payment-deductions.controller';
 import { PaymentFundsController } from './payment-funds/payment-funds.controller';
 import { PayrollsModule } from '../payrolls/payrolls.module';
-import { PayPeriodsModule } from '../pay-periods/payPeriods.module';
+import { PayPeriodsModule } from '../pay-periods/pay-periods.module';
 
 @Module({
     imports: [

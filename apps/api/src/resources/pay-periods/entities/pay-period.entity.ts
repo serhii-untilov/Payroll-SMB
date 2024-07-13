@@ -1,5 +1,5 @@
-import { Logger } from './../../../resources/abstract/logger.abstract';
-import { Company } from './../../../resources/companies/entities/company.entity';
+import { Logger } from '../../abstract/logger.abstract';
+import { Company } from '../../companies/entities/company.entity';
 import { PayPeriodState } from '@repo/shared';
 import {
     AfterLoad,
@@ -11,7 +11,7 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { PayPeriodCalcMethod } from './payPeriodCalcMethod.entity';
+import { PayPeriodCalcMethod } from './pay-period-calc-method.entity';
 
 export const defaultFieldList = {
     select: {

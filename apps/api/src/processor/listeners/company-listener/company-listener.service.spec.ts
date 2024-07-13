@@ -4,7 +4,7 @@ import { PayPeriodCalculationService } from '@/processor/payPeriodCalculation/pa
 import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
 import { SseService } from '@/processor/serverSentEvents/sse.service';
 import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
-import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyListenerService } from './company-listener.service';

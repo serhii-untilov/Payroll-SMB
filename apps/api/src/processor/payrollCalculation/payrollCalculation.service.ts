@@ -1,8 +1,8 @@
 import { AccessService } from '@/resources/access/access.service';
 import { CompaniesService } from '@/resources/companies/companies.service';
 import { Company } from '@/resources/companies/entities/company.entity';
-import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
-import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
+import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
 import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
 import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
@@ -102,7 +102,7 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne({
+        this._payPeriod = await this.payPeriodsService.findOneOrFail({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         const positions = await this.positionsService.findAll({
@@ -123,7 +123,7 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne({
+        this._payPeriod = await this.payPeriodsService.findOneOrFail({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculateCompanyTotals();
@@ -140,7 +140,7 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOne({
+        this._payPeriod = await this.payPeriodsService.findOneOrFail({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculatePosition();
@@ -291,13 +291,11 @@ export class PayrollCalculationService {
         this._toDeleteIds = [];
         const dateFrom = await this.getMinCalculateDate(this.payPeriod.dateFrom);
         const dateTo = await this.getMaxCalculateDate(this.payPeriod.dateTo);
-        this._accPeriods = await this.payPeriodsService.findAll(
-            this.company.id,
-            false,
-            false,
+        this._accPeriods = await this.payPeriodsService.findAll({
+            companyId: this.company.id,
             dateFrom,
             dateTo,
-        );
+        });
         this._payrolls = await this.payrollsService.findBetween(
             this.position.id,
             dateFrom,

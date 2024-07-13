@@ -1,9 +1,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { CreatePayPeriodCalcMethodDto } from './dto/createPayPeriodCalcMethod.dto';
-import { UpdatePayPeriodCalcMethodDto } from './dto/updatePayPeriodCalcMethod.dto';
-import { PayPeriodCalcMethod } from './entities/payPeriodCalcMethod.entity';
+import { CreatePayPeriodCalcMethodDto } from './dto/create-pay-period-calc-method.dto';
+import { UpdatePayPeriodCalcMethodDto } from './dto/update-pay-period-calc-method.dto';
+import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
 
 @Injectable()
 export class PayPeriodsCalcMethodService {

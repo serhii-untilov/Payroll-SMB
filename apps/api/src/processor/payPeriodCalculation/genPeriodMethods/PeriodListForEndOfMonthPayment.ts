@@ -1,4 +1,4 @@
-import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
 import { PayPeriodState, monthBegin, monthEnd } from '@repo/shared';
 import { addMonths } from 'date-fns';
 import { PayPeriodCalculationService } from '../payPeriodCalculation.service';

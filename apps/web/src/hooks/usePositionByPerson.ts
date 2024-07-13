@@ -3,20 +3,15 @@ import { snackbarError } from '@/utils/snackbar';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 
-const resourceType = ResourceType.POSITION;
-type Entity = dto.Position;
-const queryFn = api.positionsFindFirstByPersonId;
-type Params = dto.FindPositionByPersonDto;
+type Result = { data: dto.Position | undefined; isLoading: boolean };
 
-type Result = { data: Entity | undefined; isLoading: boolean };
-
-export function usePositionByPerson(params: Partial<Params>): Result {
-    const { data, isError, isLoading, error } = useQuery<Entity | undefined, Error>({
-        queryKey: [resourceType, params],
+export function usePositionByPerson(params: Partial<dto.FindPositionByPersonDto>): Result {
+    const { data, isError, isLoading, error } = useQuery<dto.Position | undefined, Error>({
+        queryKey: [ResourceType.POSITION, params],
         queryFn: async () => {
             return params.companyId && params.personId
                 ? (
-                      await queryFn({
+                      await api.positionsFindFirstByPersonId({
                           ...params,
                           companyId: params.companyId,
                           personId: params.personId,

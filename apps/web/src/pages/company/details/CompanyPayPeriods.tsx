@@ -1,3 +1,4 @@
+import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
@@ -5,13 +6,7 @@ import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { usePayPeriodList } from '@/hooks/usePayPeriodList';
 import { calculatePayroll } from '@/services/company.service';
-import {
-    closePayPeriod,
-    getCurrentPayPeriod,
-    getPayPeriodName,
-    openPayPeriod,
-} from '@/services/payPeriod.service';
-import { sumFormatter } from '@/services/utils';
+import { invalidateQueries, sumFormatter } from '@/utils';
 import {
     GridCellParams,
     GridRowParams,
@@ -19,7 +14,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { dateUTC, monthBegin, toDate } from '@repo/shared';
+import { dateUTC, monthBegin, ResourceType, toDate } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { isEqual } from 'date-fns';
 import { useMemo, useState } from 'react';
@@ -58,7 +53,6 @@ export function CompanyPayPeriods(params: Props) {
     }
 
     const onEdit = (_id: number) => {
-        console.log('onEdit');
         navigate('/payroll?tab=payroll&return=true');
     };
 
@@ -70,30 +64,38 @@ export function CompanyPayPeriods(params: Props) {
         gridRef.current.exportDataAsCsv();
     };
 
-    const invalidateQueries = async () => {
-        const resourceList = ['position', 'company', 'payPeriod', 'task'];
-        for (const key of resourceList) {
-            await queryClient.invalidateQueries({ queryKey: [key], refetchType: 'all' });
-        }
+    const invalidate = async () => {
+        await invalidateQueries(queryClient, [
+            ResourceType.POSITION,
+            ResourceType.COMPANY,
+            ResourceType.PAY_PERIOD,
+            ResourceType.TASK,
+        ]);
     };
 
     const onCalculate = async () => {
         if (companyId) {
             await calculatePayroll(companyId);
-            await invalidateQueries();
+            await invalidate();
         }
     };
 
     const onClose = async () => {
         if (companyId) {
-            const current = await getCurrentPayPeriod(companyId, false, true);
-            if (current.dateFrom.getTime() !== payPeriod?.getTime()) {
-                await invalidateQueries();
+            const current = (
+                await api.payPeriodsFindCurrent({
+                    companyId,
+                    relations: false,
+                    fullFieldList: true,
+                })
+            ).data;
+            if (toDate(current.dateFrom).getTime() !== payPeriod?.getTime()) {
+                await invalidate();
                 return;
             }
-            const next = await closePayPeriod(current);
-            setPayPeriod(next.dateFrom);
-            await invalidateQueries();
+            const next = (await api.payPeriodsClose(current.id)).data;
+            setPayPeriod(toDate(next.dateFrom));
+            await invalidate();
         }
     };
 

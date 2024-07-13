@@ -27,7 +27,7 @@ import {
 } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
-import { PayPeriodsService } from '../pay-periods/payPeriods.service';
+import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { FindPositionDto } from './dto/find-position.dto';
@@ -109,7 +109,7 @@ export class PositionsService extends AvailableForUserCompany {
             includeDeleted,
         } = payload;
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOne({
+            ? await this.payPeriodsService.findOneOrFail({
                   where: {
                       companyId,
                       dateFrom: onPayPeriodDate,
@@ -207,7 +207,7 @@ export class PositionsService extends AvailableForUserCompany {
             return position;
         }
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOne({
+            ? await this.payPeriodsService.findOneOrFail({
                   where: {
                       companyId: position.companyId,
                       dateFrom: onPayPeriodDate,
@@ -308,7 +308,7 @@ export class PositionsService extends AvailableForUserCompany {
         balanceWorkingTime: BalanceWorkingTime,
     ) {
         const position = await this.repository.findOneByOrFail({ id: positionId });
-        const prevPayPeriod = await this.payPeriodsService.find({
+        const prevPayPeriod = await this.payPeriodsService.findOne({
             where: {
                 companyId: position.companyId,
                 dateTo: sub(payPeriod, { days: 1 }),
@@ -348,7 +348,7 @@ export class PositionsService extends AvailableForUserCompany {
     }
 
     async findAllBalance(params: FindAllPositionBalanceDto): Promise<PositionBalanceExtendedDto[]> {
-        const payPeriod = await this.payPeriodsService.findOne({
+        const payPeriod = await this.payPeriodsService.findOneOrFail({
             where: {
                 companyId: params.companyId,
                 dateFrom: params.payPeriod,
@@ -504,7 +504,7 @@ export class PositionsService extends AvailableForUserCompany {
             return position;
         }
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOne({
+            ? await this.payPeriodsService.findOneOrFail({
                   where: {
                       companyId: position.companyId,
                       dateFrom: onPayPeriodDate,

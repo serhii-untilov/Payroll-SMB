@@ -1,6 +1,6 @@
 import { CompaniesService } from '@/resources/companies/companies.service';
 import { DepartmentsService } from '@/resources/departments/departments.service';
-import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
 import { PaymentsService } from '@/resources/payments/payments.service';
 import { PersonsService } from '@/resources/persons/persons.service';
 import { PositionsService } from '@/resources/positions/positions.service';

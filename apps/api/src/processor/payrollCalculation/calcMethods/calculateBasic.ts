@@ -1,5 +1,5 @@
 import { getWorkingTimeFact, getWorkingTimePlan } from '@/processor/helpers/workingTime.helper';
-import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { PositionHistory } from '@/resources/position-history/entities/position-history.entity';
 import { NotFoundException } from '@nestjs/common';

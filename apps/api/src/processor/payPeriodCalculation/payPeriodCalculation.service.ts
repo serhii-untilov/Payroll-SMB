@@ -1,10 +1,10 @@
 import { CompaniesService } from '@/resources/companies/companies.service';
 import { Company } from '@/resources/companies/entities/company.entity';
 import { PayFundsService } from '@/resources/pay-funds/pay-funds.service';
-import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
-import { PayPeriodCalcMethod } from '@/resources/pay-periods/entities/payPeriodCalcMethod.entity';
-import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
-import { PayPeriodsCalcMethodService } from '@/resources/pay-periods/payPeriodsCalcMethod.service';
+import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
+import { PayPeriodCalcMethod } from '@/resources/pay-periods/entities/pay-period-calc-method.entity';
+import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
+import { PayPeriodsCalcMethodService } from '@/resources/pay-periods/pay-periods-calc-method.service';
 import { PayrollsService } from '@/resources/payrolls/payrolls.service';
 import { PositionsService } from '@/resources/positions/positions.service';
 import { UsersService } from '@/resources/users/users.service';
@@ -68,13 +68,7 @@ export class PayPeriodCalculationService {
         this._userId = userId;
         const dateFrom = subYears(startOfYear(this.company.payPeriod), 1);
         const dateTo = addYears(endOfYear(this.company.payPeriod), 1);
-        const prior = await this.payPeriodsService.findAll(
-            companyId,
-            false,
-            false,
-            dateFrom,
-            dateTo,
-        );
+        const prior = await this.payPeriodsService.findAll({ companyId, dateFrom, dateTo });
         this._id = prior.reduce((a, b) => (a > b.id ? a : b.id), 0);
         const generator = this.getGenerator();
         const current = generator.getPeriodList(dateFrom, dateTo);
@@ -114,9 +108,9 @@ export class PayPeriodCalculationService {
     }
 
     async updateBalance(id: number): Promise<PayPeriod> {
-        const payPeriod = await this.payPeriodsService.findOne({ where: { id } });
+        const payPeriod = await this.payPeriodsService.findOneOrFail({ where: { id } });
         // Calculate In Balance
-        const prior = await this.payPeriodsService.find({
+        const prior = await this.payPeriodsService.findOne({
             where: { companyId: payPeriod.companyId, dateTo: sub(payPeriod.dateFrom, { days: 1 }) },
         });
         const inBalance = prior?.outBalance || 0;
@@ -163,7 +157,7 @@ export class PayPeriodCalculationService {
     }
 
     async updateCalcMethods(id: number): Promise<PayPeriodCalcMethod[]> {
-        const payPeriod = await this.payPeriodsService.findOne({ where: { id } });
+        const payPeriod = await this.payPeriodsService.findOneOrFail({ where: { id } });
         const calculatedRecords = await this.payrollsService.payrollCompanyCalcMethods(
             payPeriod.companyId,
             payPeriod.dateFrom,

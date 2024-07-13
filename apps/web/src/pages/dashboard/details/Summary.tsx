@@ -1,7 +1,7 @@
 import { Link } from '@/components/layout/Link';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getCurrentPayPeriod, getPayPeriodName } from '@/services/payPeriod.service';
+// import { getCurrentPayPeriod, getPayPeriodName } from '@/services/payPeriod.service';
 import { capitalizeFirstChar, sumFormatter } from '@/services/utils';
 import { Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';

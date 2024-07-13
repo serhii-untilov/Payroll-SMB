@@ -1,7 +1,8 @@
+import { api } from '@/api';
 import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
 import { getCompany } from '@/services/company.service';
-import { getCurrentPayPeriodDateFrom } from '@/services/payPeriod.service';
+// import { getCurrentPayPeriodDateFrom } from '@/services/payPeriod.service';
 import { getUserCompanyList } from '@/services/user.service';
 import { defaultTheme } from '@/themes/defaultTheme';
 import { invalidateQueries } from '@/utils/invalidateQueries';
@@ -13,7 +14,7 @@ import {
     useMediaQuery,
 } from '@mui/material';
 import { Company, UserCompany } from '@repo/openapi';
-import { ResourceType, monthBegin } from '@repo/shared';
+import { ResourceType, monthBegin, toDate } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
@@ -105,8 +106,12 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initPayPeriod = async () => {
-            const current: Date =
-                (await getCurrentPayPeriodDateFrom(company?.id)) ?? monthBegin(new Date());
+            const currentPayPeriod = company?.id
+                ? (await api.payPeriodsFindCurrent({ companyId: company?.id })).data
+                : null;
+            const current: Date = currentPayPeriod?.dateFrom
+                ? toDate(currentPayPeriod?.dateFrom)
+                : monthBegin(new Date());
             const currentPeriodString = localStorage.getItem('currentPayPeriod');
             const lastCurrent: Date = monthBegin(
                 currentPeriodString ? new Date(currentPeriodString) : new Date(),

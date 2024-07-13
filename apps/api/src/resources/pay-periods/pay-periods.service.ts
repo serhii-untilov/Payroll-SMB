@@ -13,9 +13,11 @@ import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'ty
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
-import { CreatePayPeriodDto } from './dto/createPayPeriod.dto';
-import { UpdatePayPeriodDto } from './dto/updatePayPeriod.dto';
-import { PayPeriod, defaultFieldList } from './entities/payPeriod.entity';
+import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
+import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
+import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
+import { FindAllPayPeriodDto } from './dto/find-all-pay-period.dto';
+import { FindCurrentPayPeriodDto } from './dto/find-current-pay-period.dto';
 
 @Injectable()
 export class PayPeriodsService extends AvailableForUserCompany {
@@ -65,18 +67,13 @@ export class PayPeriodsService extends AvailableForUserCompany {
         });
     }
 
-    async findAll(
-        companyId: number,
-        relations: boolean = false,
-        fullFieldList: boolean = false,
-        dateFrom: Date | null = null,
-        dateTo: Date | null = null,
-    ): Promise<PayPeriod[]> {
+    async findAll(params: FindAllPayPeriodDto): Promise<PayPeriod[]> {
+        const { companyId, dateFrom, dateTo, fullFieldList, relations } = params;
         if (companyId) {
             return await this.repository.find({
                 ...(fullFieldList ? {} : defaultFieldList),
                 where: {
-                    companyId,
+                    companyId: companyId,
                     ...(dateFrom ? { dateFrom: MoreThanOrEqual(dateFrom) } : {}),
                     ...(dateTo ? { dateTo: LessThanOrEqual(dateTo) } : {}),
                 },
@@ -93,11 +90,11 @@ export class PayPeriodsService extends AvailableForUserCompany {
         }
     }
 
-    async findOne(params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
+    async findOneOrFail(params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
         return await this.repository.findOneOrFail(params);
     }
 
-    async find(params: FindOneOptions<PayPeriod>): Promise<PayPeriod | null> {
+    async findOne(params: FindOneOptions<PayPeriod>): Promise<PayPeriod | null> {
         return await this.repository.findOne(params);
     }
 
@@ -127,12 +124,8 @@ export class PayPeriodsService extends AvailableForUserCompany {
         }
     }
 
-    async findCurrent(
-        userId: number,
-        companyId: number | null,
-        relations: boolean,
-        fullFieldList: boolean,
-    ): Promise<PayPeriod> {
+    async findCurrent(userId: number, params: FindCurrentPayPeriodDto): Promise<PayPeriod> {
+        const { companyId, fullFieldList, relations } = params;
         if (!companyId) {
             return Object.assign(new PayPeriod(), {
                 id: null,
@@ -149,9 +142,6 @@ export class PayPeriodsService extends AvailableForUserCompany {
             ...(fullFieldList ? {} : defaultFieldList),
         };
         const payPeriod = await this.repository.findOneOrFail(options);
-        // this._logger.log(
-        //     `findCurrent/${companyId}: payPeriod: ${company.payPeriod}, dateFrom: ${payPeriod.dateFrom}`,
-        // );
         return payPeriod;
     }
 

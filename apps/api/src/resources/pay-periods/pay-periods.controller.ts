@@ -1,5 +1,5 @@
 import { AccessTokenGuard } from '@/guards/accessToken.guard';
-import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
 import { getUserId } from '@/utils/getUserId';
 import {
     Body,
@@ -26,10 +26,12 @@ import {
 } from '@nestjs/swagger';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { CreatePayPeriodDto } from './dto/createPayPeriod.dto';
-import { UpdatePayPeriodDto } from './dto/updatePayPeriod.dto';
-import { defaultFieldList } from './entities/payPeriod.entity';
-import { PayPeriodsService } from './payPeriods.service';
+import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
+import { FindAllPayPeriodDto } from './dto/find-all-pay-period.dto';
+import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
+import { defaultFieldList } from './entities/pay-period.entity';
+import { PayPeriodsService } from './pay-periods.service';
+import { FindCurrentPayPeriodDto } from './dto/find-current-pay-period.dto';
 
 @Controller('pay-periods')
 @ApiBearerAuth()
@@ -50,38 +52,30 @@ export class PayPeriodsController {
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
-    @Get()
+    @Post()
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(PayPeriod) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(
-        @Req() req: Request,
-        @Query('companyId', new ParseIntPipe({ optional: true })) companyId: number,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
-        @Query('fullFieldList', new ParseBoolPipe({ optional: true })) fullFieldList: boolean,
-    ) {
+    async findAll(@Req() req: Request, @Body() params: FindAllPayPeriodDto) {
         const userId = getUserId(req);
-        companyId && (await this.service.availableFindAllOrFail(userId, companyId));
-        return await this.service.findAll(companyId, relations, fullFieldList);
+        params.companyId && (await this.service.availableFindAllOrFail(userId, params.companyId));
+        return await this.service.findAll(params);
     }
 
-    @Get('current')
+    @Post('current')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found record', type: PayPeriod })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findCurrent(
-        @Req() req: Request,
-        @Query('companyId', ParseIntPipe) companyId: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
-        @Query('fullFieldList', ParseBoolPipe) fullFieldList: boolean,
-    ) {
+    async findCurrent(@Req() req: Request, @Body() params: FindCurrentPayPeriodDto) {
         const userId = getUserId(req);
-        await this.service.availableFindAllOrFail(userId, companyId);
-        return await this.service.findCurrent(userId, companyId, !!relations, !!fullFieldList);
+        if (params?.companyId) {
+            await this.service.availableFindAllOrFail(userId, params.companyId);
+        }
+        return await this.service.findCurrent(userId, params);
     }
 
     @Get(':id')
@@ -97,7 +91,7 @@ export class PayPeriodsController {
     ) {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId, id);
-        return await this.service.findOne({
+        return await this.service.findOneOrFail({
             where: { id },
             relations: { company: !!relations },
             ...(!!fullFieldList ? {} : defaultFieldList),

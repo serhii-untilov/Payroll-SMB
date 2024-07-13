@@ -18,7 +18,7 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Payment } from './entities/payment.entity';
 import { PaymentUpdatedEvent } from './events/payment-updated.event';
 import { PaymentPositionsService } from './payment-positions/payment-positions.service';
-import { PayPeriodsService } from '../pay-periods/payPeriods.service';
+import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { WrapperType } from '@/types/WrapperType';
 
 @Injectable()
@@ -45,7 +45,7 @@ export class PaymentsService extends AvailableForUserCompany {
     }
 
     async create(userId: number, payload: CreatePaymentDto): Promise<Payment> {
-        const accPeriod = await this.payPeriodsService.findOne({
+        const accPeriod = await this.payPeriodsService.findOneOrFail({
             where: {
                 companyId: payload.companyId,
                 dateFrom: payload.accPeriod || payload.payPeriod,

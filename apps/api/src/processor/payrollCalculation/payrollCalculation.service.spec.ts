@@ -1,6 +1,6 @@
 import { AccessService } from '@/resources/access/access.service';
 import { CompaniesService } from '@/resources/companies/companies.service';
-import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
 import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
 import { PayrollsService } from '@/resources/payrolls/payrolls.service';
 import { PositionsService } from '@/resources/positions/positions.service';

@@ -12,7 +12,7 @@ import { add, sub } from 'date-fns';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
-import { PayPeriodsService } from '../pay-periods/payPeriods.service';
+import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
@@ -130,7 +130,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
     async find(params: FindPositionHistoryDto): Promise<PositionHistory[]> {
         const position = await this.positionsService.findOne(params.positionId);
         const payPeriod = params.onPayPeriodDate
-            ? await this.payPeriodsService.findOne({
+            ? await this.payPeriodsService.findOneOrFail({
                   where: {
                       companyId: position.companyId,
                       dateFrom: params.onPayPeriodDate,

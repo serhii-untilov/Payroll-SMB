@@ -1,8 +1,8 @@
 import { CompaniesService } from '@/resources/companies/companies.service';
 import { Company } from '@/resources/companies/entities/company.entity';
 import { DepartmentsService } from '@/resources/departments/departments.service';
-import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
-import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
+import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
 import { PaymentsService } from '@/resources/payments/payments.service';
 import { PersonsService } from '@/resources/persons/persons.service';
 import { PositionsService } from '@/resources/positions/positions.service';
@@ -89,7 +89,7 @@ export class TaskGenerationService {
         this.logger.log(`userId: ${userId}, generate for companyId: ${companyId}`);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
-        this._payPeriod = await this.payPeriodsService.findOne({
+        this._payPeriod = await this.payPeriodsService.findOneOrFail({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         this._priorTaskList = await this.tasksService.findAll({

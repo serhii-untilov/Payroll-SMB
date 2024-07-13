@@ -1607,6 +1607,43 @@ export interface Department {
 /**
  * 
  * @export
+ * @interface FindAllPayPeriodDto
+ */
+export interface FindAllPayPeriodDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPayPeriodDto
+     */
+    'relations'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPayPeriodDto
+     */
+    'fullFieldList'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPayPeriodDto
+     */
+    'companyId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof FindAllPayPeriodDto
+     */
+    'dateFrom'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FindAllPayPeriodDto
+     */
+    'dateTo'?: string;
+}
+/**
+ * 
+ * @export
  * @interface FindAllPositionBalanceDto
  */
 export interface FindAllPositionBalanceDto {
@@ -1622,6 +1659,31 @@ export interface FindAllPositionBalanceDto {
      * @memberof FindAllPositionBalanceDto
      */
     'payPeriod'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface FindCurrentPayPeriodDto
+ */
+export interface FindCurrentPayPeriodDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindCurrentPayPeriodDto
+     */
+    'relations'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindCurrentPayPeriodDto
+     */
+    'fullFieldList'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindCurrentPayPeriodDto
+     */
+    'companyId'?: number;
 }
 /**
  * 
@@ -7856,14 +7918,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create a Pay Period record
-         * @param {CreatePayPeriodDto} createPayPeriodDto 
+         * @param {FindAllPayPeriodDto} findAllPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsCreate: async (createPayPeriodDto: CreatePayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createPayPeriodDto' is not null or undefined
-            assertParamExists('payPeriodsCreate', 'createPayPeriodDto', createPayPeriodDto)
+        payPeriodsFindAll: async (findAllPayPeriodDto: FindAllPayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findAllPayPeriodDto' is not null or undefined
+            assertParamExists('payPeriodsFindAll', 'findAllPayPeriodDto', findAllPayPeriodDto)
             const localVarPath = `/api/pay-periods`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -7887,7 +7948,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createPayPeriodDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(findAllPayPeriodDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -7896,73 +7957,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {number} companyId 
-         * @param {boolean} relations 
-         * @param {boolean} fullFieldList 
+         * @param {FindCurrentPayPeriodDto} findCurrentPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsFindAll: async (companyId: number, relations: boolean, fullFieldList: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'companyId' is not null or undefined
-            assertParamExists('payPeriodsFindAll', 'companyId', companyId)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('payPeriodsFindAll', 'relations', relations)
-            // verify required parameter 'fullFieldList' is not null or undefined
-            assertParamExists('payPeriodsFindAll', 'fullFieldList', fullFieldList)
-            const localVarPath = `/api/pay-periods`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (companyId !== undefined) {
-                localVarQueryParameter['companyId'] = companyId;
-            }
-
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
-            if (fullFieldList !== undefined) {
-                localVarQueryParameter['fullFieldList'] = fullFieldList;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {number} companyId 
-         * @param {boolean} relations 
-         * @param {boolean} fullFieldList 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        payPeriodsFindCurrent: async (companyId: number, relations: boolean, fullFieldList: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'companyId' is not null or undefined
-            assertParamExists('payPeriodsFindCurrent', 'companyId', companyId)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('payPeriodsFindCurrent', 'relations', relations)
-            // verify required parameter 'fullFieldList' is not null or undefined
-            assertParamExists('payPeriodsFindCurrent', 'fullFieldList', fullFieldList)
+        payPeriodsFindCurrent: async (findCurrentPayPeriodDto: FindCurrentPayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findCurrentPayPeriodDto' is not null or undefined
+            assertParamExists('payPeriodsFindCurrent', 'findCurrentPayPeriodDto', findCurrentPayPeriodDto)
             const localVarPath = `/api/pay-periods/current`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -7971,7 +7972,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -7979,23 +7980,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (companyId !== undefined) {
-                localVarQueryParameter['companyId'] = companyId;
-            }
-
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
-            if (fullFieldList !== undefined) {
-                localVarQueryParameter['fullFieldList'] = fullFieldList;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findCurrentPayPeriodDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11530,41 +11522,24 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create a Pay Period record
-         * @param {CreatePayPeriodDto} createPayPeriodDto 
+         * @param {FindAllPayPeriodDto} findAllPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async payPeriodsCreate(createPayPeriodDto: CreatePayPeriodDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsCreate(createPayPeriodDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.payPeriodsCreate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {number} companyId 
-         * @param {boolean} relations 
-         * @param {boolean} fullFieldList 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async payPeriodsFindAll(companyId: number, relations: boolean, fullFieldList: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PayPeriod>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsFindAll(companyId, relations, fullFieldList, options);
+        async payPeriodsFindAll(findAllPayPeriodDto: FindAllPayPeriodDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PayPeriod>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsFindAll(findAllPayPeriodDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.payPeriodsFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {number} companyId 
-         * @param {boolean} relations 
-         * @param {boolean} fullFieldList 
+         * @param {FindCurrentPayPeriodDto} findCurrentPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async payPeriodsFindCurrent(companyId: number, relations: boolean, fullFieldList: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsFindCurrent(companyId, relations, fullFieldList, options);
+        async payPeriodsFindCurrent(findCurrentPayPeriodDto: FindCurrentPayPeriodDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsFindCurrent(findCurrentPayPeriodDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.payPeriodsFindCurrent']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12982,35 +12957,21 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create a Pay Period record
-         * @param {CreatePayPeriodDto} createPayPeriodDto 
+         * @param {FindAllPayPeriodDto} findAllPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsCreate(createPayPeriodDto: CreatePayPeriodDto, options?: any): AxiosPromise<PayPeriod> {
-            return localVarFp.payPeriodsCreate(createPayPeriodDto, options).then((request) => request(axios, basePath));
+        payPeriodsFindAll(findAllPayPeriodDto: FindAllPayPeriodDto, options?: any): AxiosPromise<Array<PayPeriod>> {
+            return localVarFp.payPeriodsFindAll(findAllPayPeriodDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {number} companyId 
-         * @param {boolean} relations 
-         * @param {boolean} fullFieldList 
+         * @param {FindCurrentPayPeriodDto} findCurrentPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsFindAll(companyId: number, relations: boolean, fullFieldList: boolean, options?: any): AxiosPromise<Array<PayPeriod>> {
-            return localVarFp.payPeriodsFindAll(companyId, relations, fullFieldList, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {number} companyId 
-         * @param {boolean} relations 
-         * @param {boolean} fullFieldList 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        payPeriodsFindCurrent(companyId: number, relations: boolean, fullFieldList: boolean, options?: any): AxiosPromise<PayPeriod> {
-            return localVarFp.payPeriodsFindCurrent(companyId, relations, fullFieldList, options).then((request) => request(axios, basePath));
+        payPeriodsFindCurrent(findCurrentPayPeriodDto: FindCurrentPayPeriodDto, options?: any): AxiosPromise<PayPeriod> {
+            return localVarFp.payPeriodsFindCurrent(findCurrentPayPeriodDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14319,40 +14280,24 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Create a Pay Period record
-     * @param {CreatePayPeriodDto} createPayPeriodDto 
+     * @param {FindAllPayPeriodDto} findAllPayPeriodDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public payPeriodsCreate(createPayPeriodDto: CreatePayPeriodDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).payPeriodsCreate(createPayPeriodDto, options).then((request) => request(this.axios, this.basePath));
+    public payPeriodsFindAll(findAllPayPeriodDto: FindAllPayPeriodDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).payPeriodsFindAll(findAllPayPeriodDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {number} companyId 
-     * @param {boolean} relations 
-     * @param {boolean} fullFieldList 
+     * @param {FindCurrentPayPeriodDto} findCurrentPayPeriodDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public payPeriodsFindAll(companyId: number, relations: boolean, fullFieldList: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).payPeriodsFindAll(companyId, relations, fullFieldList, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {number} companyId 
-     * @param {boolean} relations 
-     * @param {boolean} fullFieldList 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public payPeriodsFindCurrent(companyId: number, relations: boolean, fullFieldList: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).payPeriodsFindCurrent(companyId, relations, fullFieldList, options).then((request) => request(this.axios, this.basePath));
+    public payPeriodsFindCurrent(findCurrentPayPeriodDto: FindCurrentPayPeriodDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).payPeriodsFindCurrent(findCurrentPayPeriodDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

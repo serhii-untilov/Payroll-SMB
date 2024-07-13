@@ -8,9 +8,9 @@ import { PayFundsService } from '../pay-funds/pay-funds.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
 import { UsersService } from '../users/users.service';
-import { PayPeriod } from './entities/payPeriod.entity';
-import { PayPeriodsController } from './payPeriods.controller';
-import { PayPeriodsService } from './payPeriods.service';
+import { PayPeriod } from './entities/pay-period.entity';
+import { PayPeriodsController } from './pay-periods.controller';
+import { PayPeriodsService } from './pay-periods.service';
 
 describe('PayPeriodsController', () => {
     let controller: PayPeriodsController;

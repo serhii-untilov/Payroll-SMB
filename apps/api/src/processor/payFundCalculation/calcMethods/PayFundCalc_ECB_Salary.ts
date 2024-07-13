@@ -1,6 +1,6 @@
 import { PayFundType } from '@/resources/pay-fund-types/entities/pay-fund-type.entity';
 import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
-import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
+import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
 import { CalcMethod, PayFundCategory, PaymentGroup } from '@repo/shared';
 import { accPeriodFactSum } from '@/processor/helpers/payroll.helper';
 import { PayFundCalculationService } from '../payFundCalculation.service';

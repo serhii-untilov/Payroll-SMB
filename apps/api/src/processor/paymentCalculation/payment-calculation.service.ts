@@ -2,8 +2,8 @@ import { CompaniesService } from '@/resources/companies/companies.service';
 import { Company } from '@/resources/companies/entities/company.entity';
 import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
 import { PayFundsService } from '@/resources/pay-funds/pay-funds.service';
-import { PayPeriod } from '@/resources/pay-periods/entities/payPeriod.entity';
-import { PayPeriodsService } from '@/resources/pay-periods/payPeriods.service';
+import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
+import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
 import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
 import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
 import { Payment } from '@/resources/payments/entities/payment.entity';
@@ -72,7 +72,7 @@ export class PaymentCalculationService {
         this.userId = userId;
         this.company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this.payPeriod = await this.payPeriodsService.findOne({
+        this.payPeriod = await this.payPeriodsService.findOneOrFail({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         const positions = await this.positionsService.findAll({
@@ -104,7 +104,7 @@ export class PaymentCalculationService {
         this.userId = userId;
         this.company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
-        this.payPeriod = await this.payPeriodsService.findOne({
+        this.payPeriod = await this.payPeriodsService.findOneOrFail({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         this.payments = await this.paymentsService.findAll({
