@@ -32,6 +32,7 @@ import {
     maxDate,
     minDate,
     PaymentGroup,
+    toDate,
 } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -76,7 +77,7 @@ export function JobAndPay(props: Props) {
         queryFn: async () => {
             return await findLastPositionHistoryOnPayPeriodDate(
                 positionId,
-                company?.payPeriod || new Date(),
+                toDate(company?.payPeriod) || new Date(),
                 true,
             );
         },

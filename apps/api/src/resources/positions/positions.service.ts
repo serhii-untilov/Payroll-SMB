@@ -40,6 +40,7 @@ import { PositionDeletedEvent } from './events/position-deleted.event';
 import { PositionUpdatedEvent } from './events/position-updated.event';
 import { WrapperType } from '@/types/WrapperType';
 import { FindAllPositionBalanceDto } from './dto/find-position-balance.dto';
+import { FindPositionByPersonDto } from './dto/find-position-by-person.dto';
 
 @Injectable()
 export class PositionsService extends AvailableForUserCompany {
@@ -482,13 +483,8 @@ export class PositionsService extends AvailableForUserCompany {
         return this.repository.find(params);
     }
 
-    async findFirstByPersonId(
-        companyId: number,
-        personId: number,
-        relations: boolean,
-        onDate: Date | null,
-        onPayPeriodDate: Date | null,
-    ): Promise<Position> {
+    async findFirstByPersonId(params: FindPositionByPersonDto): Promise<Position> {
+        const { companyId, personId, onDate, onPayPeriodDate, relations } = params;
         const position = await this.repository.findOneOrFail({
             where: { personId, companyId },
             relations: {

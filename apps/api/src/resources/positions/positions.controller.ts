@@ -32,6 +32,7 @@ import { FindPositionDto } from './dto/find-position.dto';
 import { PositionBalanceExtendedDto } from './dto/position-balance-extended.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionsService } from './positions.service';
+import { FindPositionByPersonDto } from './dto/find-position-by-person.dto';
 
 @Controller('positions')
 @ApiBearerAuth()
@@ -127,26 +128,17 @@ export class PositionsController {
         return await this.service.findAllBalance(deepStringToShortDate(payload));
     }
 
-    @Post('person/:id')
+    @Post('position-by-person')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found record', type: Position })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findFirstByPersonId(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
-        @Query('onDate') onDate: Date,
-        @Body() payload: { companyId: number },
+        @Body() payload: FindPositionByPersonDto,
     ): Promise<Position> {
         const userId = getUserId(req);
-        const found = await this.service.findFirstByPersonId(
-            payload.companyId,
-            id,
-            !!relations,
-            onDate ? new Date(onDate) : null,
-            null,
-        );
+        const found = await this.service.findFirstByPersonId(payload);
         await this.service.availableFindAllOrFail(userId, found.companyId);
         return found;
     }

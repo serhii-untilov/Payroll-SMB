@@ -1817,6 +1817,43 @@ export interface FindPersonDto {
 /**
  * 
  * @export
+ * @interface FindPositionByPersonDto
+ */
+export interface FindPositionByPersonDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof FindPositionByPersonDto
+     */
+    'companyId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindPositionByPersonDto
+     */
+    'personId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof FindPositionByPersonDto
+     */
+    'onDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FindPositionByPersonDto
+     */
+    'onPayPeriodDate'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindPositionByPersonDto
+     */
+    'relations'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface FindPositionDto
  */
 export interface FindPositionDto {
@@ -9650,21 +9687,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {number} id 
-         * @param {boolean} relations 
-         * @param {string} onDate 
+         * @param {FindPositionByPersonDto} findPositionByPersonDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindFirstByPersonId: async (id: number, relations: boolean, onDate: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('positionsFindFirstByPersonId', 'id', id)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('positionsFindFirstByPersonId', 'relations', relations)
-            // verify required parameter 'onDate' is not null or undefined
-            assertParamExists('positionsFindFirstByPersonId', 'onDate', onDate)
-            const localVarPath = `/api/positions/person/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        positionsFindFirstByPersonId: async (findPositionByPersonDto: FindPositionByPersonDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findPositionByPersonDto' is not null or undefined
+            assertParamExists('positionsFindFirstByPersonId', 'findPositionByPersonDto', findPositionByPersonDto)
+            const localVarPath = `/api/positions/position-by-person`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9680,21 +9710,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
-            if (onDate !== undefined) {
-                localVarQueryParameter['onDate'] = (onDate as any instanceof Date) ?
-                    (onDate as any).toISOString() :
-                    onDate;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findPositionByPersonDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12080,14 +12103,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
-         * @param {boolean} relations 
-         * @param {string} onDate 
+         * @param {FindPositionByPersonDto} findPositionByPersonDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsFindFirstByPersonId(id: number, relations: boolean, onDate: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindFirstByPersonId(id, relations, onDate, options);
+        async positionsFindFirstByPersonId(findPositionByPersonDto: FindPositionByPersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindFirstByPersonId(findPositionByPersonDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsFindFirstByPersonId']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13402,14 +13423,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {number} id 
-         * @param {boolean} relations 
-         * @param {string} onDate 
+         * @param {FindPositionByPersonDto} findPositionByPersonDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindFirstByPersonId(id: number, relations: boolean, onDate: string, options?: any): AxiosPromise<Position> {
-            return localVarFp.positionsFindFirstByPersonId(id, relations, onDate, options).then((request) => request(axios, basePath));
+        positionsFindFirstByPersonId(findPositionByPersonDto: FindPositionByPersonDto, options?: any): AxiosPromise<Position> {
+            return localVarFp.positionsFindFirstByPersonId(findPositionByPersonDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14829,15 +14848,13 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} id 
-     * @param {boolean} relations 
-     * @param {string} onDate 
+     * @param {FindPositionByPersonDto} findPositionByPersonDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public positionsFindFirstByPersonId(id: number, relations: boolean, onDate: string, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).positionsFindFirstByPersonId(id, relations, onDate, options).then((request) => request(this.axios, this.basePath));
+    public positionsFindFirstByPersonId(findPositionByPersonDto: FindPositionByPersonDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).positionsFindFirstByPersonId(findPositionByPersonDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

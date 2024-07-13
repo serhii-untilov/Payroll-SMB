@@ -1,3 +1,4 @@
+import { dto } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
@@ -13,7 +14,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { UserCompany, date2view } from '@repo/shared';
+import { date2view } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -94,7 +95,7 @@ export function UserCompanyList(params: Props) {
         isError,
         isLoading,
         error: error,
-    } = useQuery<UserCompany[], Error>({
+    } = useQuery<dto.UserCompany[], Error>({
         queryKey: ['company', 'list', { userId, showDeleted }],
         queryFn: async () => {
             return userId ? await getUserCompanyList(userId, true, showDeleted) : [];

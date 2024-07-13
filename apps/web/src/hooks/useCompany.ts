@@ -11,8 +11,7 @@ export function useCompany(companyId: number | undefined): Result {
     const { data, isError, isLoading, error } = useQuery<Company | undefined, Error>({
         queryKey: ['company', { id }],
         queryFn: async () => {
-            const response = id ? (await api.companiesFindOne(id)).data : undefined;
-            return response;
+            return id ? (await api.companiesFindOne(id)).data : undefined;
         },
     });
     if (isError) {

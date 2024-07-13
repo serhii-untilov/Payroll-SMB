@@ -1,11 +1,12 @@
+import { dto } from '@/api';
 import { Box, Typography } from '@mui/material';
-import { ITask, TaskType, dropTime } from '@repo/shared';
+import { TaskType, dropTime, toDate } from '@repo/shared';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Task } from './Task';
 
 type Props = {
-    taskList: ITask[];
+    taskList: dto.Task[];
 };
 
 export function Upcoming(props: Props) {
@@ -30,7 +31,7 @@ export function Upcoming(props: Props) {
     const taskList = useMemo(
         () =>
             props.taskList
-                ?.filter((o) => dropTime(o.dateFrom) > dropTime(new Date()))
+                ?.filter((o) => dropTime(toDate(o.dateFrom)) > dropTime(new Date()))
                 .filter((o) => typeList.includes(o.type)),
         [props, typeList],
     );

@@ -1,9 +1,9 @@
 import { api, dto } from '@/api';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getPerson } from '@/services/person.service';
-import { getPositionByPersonId } from '@/services/position.service';
-import { updateTask } from '@/services/task.service';
+import { usePerson } from '@/hooks/usePerson';
+import { usePositionByPerson } from '@/hooks/usePositionByPerson';
+import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     CropSquare,
     DoneRounded,
@@ -14,12 +14,13 @@ import {
 import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { green, grey, orange, red } from '@mui/material/colors';
 import { Task as ITask } from '@repo/openapi';
-import { TaskStatus, TaskType, toDate } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { ResourceType, TaskStatus, TaskType, toDate } from '@repo/shared';
+import { useQueryClient } from '@tanstack/react-query';
 import { add, differenceInYears } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+
 export type TaskView = 'todo' | 'reminder' | 'upcoming';
 
 type Props = {
@@ -32,36 +33,18 @@ export function Task(props: Props) {
     const { view } = props;
     const queryClient = useQueryClient();
     const { t } = useTranslation();
-    const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
-    const statusIcon = useMemo(() => getStatusIcon(task, view), [task, view]);
     const navigate = useNavigate();
     const { company } = useAppContext();
     const { locale } = useLocale();
+    const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
+    const statusIcon = useMemo(() => getStatusIcon(task, view), [task, view]);
     const backgroundColor = useMemo(() => getBackgroundColor(task, view), [task, view]);
-
-    const { data: person } = useQuery({
-        queryKey: ['person', 'task', task],
-        queryFn: async () => {
-            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId
-                ? await getPerson(task.entityId)
-                : null;
-        },
-        enabled: !!task?.id,
-    });
-
-    const { data: position } = useQuery({
-        queryKey: ['position', 'task', { taskId: task.id, companyId: company?.id }],
-        queryFn: async () => {
-            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId && company?.id
-                ? await getPositionByPersonId({
-                      personId: task.entityId,
-                      companyId: company.id,
-                      relations: false,
-                      onDate: toDate(task.dateFrom),
-                  })
-                : null;
-        },
-        enabled: !!person?.id,
+    const { data: person } = usePerson({ id: task?.entityId });
+    const { data: position } = usePositionByPerson({
+        companyId: company?.id,
+        personId: person?.id,
+        onPayPeriodDate: company?.payPeriod,
+        relations: false,
     });
 
     const taskDate = useMemo(() => {
@@ -107,17 +90,22 @@ export function Task(props: Props) {
     };
 
     const markDone = async () => {
-        const updatedTask = await api.tasksUpdate(task.id, {
-            status: TaskStatus.DONE_BY_USER,
-            version: task.version,
-        }).data;
+        const updatedTask = (
+            await api.tasksUpdate(task.id, {
+                status: TaskStatus.DONE_BY_USER,
+                version: task.version,
+            })
+        ).data;
         setTask(updatedTask);
         await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
     };
 
     const markTodo = async () => {
-        setTask(await updateTask(task.id, { status: TaskStatus.TODO, version: task.version }));
-        await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
+        const updatedTask = (
+            await api.tasksUpdate(task.id, { status: TaskStatus.TODO, version: task.version })
+        ).data;
+        setTask(updatedTask);
+        await invalidateQueries(queryClient, [ResourceType.TASK]);
     };
 
     return (
@@ -242,16 +230,16 @@ function getBackgroundColor(task: ITask, view: TaskView) {
     if (task.status === TaskStatus.NOT_AVAILABLE) return grey[50];
     if (task.status === TaskStatus.DONE) return green[50];
     if (task.status === TaskStatus.DONE_BY_USER) return green[50];
-    if (task.dateTo.getTime() < new Date().getTime()) return red[50];
+    if (toDate(task.dateTo).getTime() < new Date().getTime()) return red[50];
     if (task.status === TaskStatus.TODO) return orange[50];
     if (task.status === TaskStatus.IN_PROGRESS) return orange[50];
     return red[50];
 }
 
 function getPath(
-    task: ITask,
+    task: dto.Task,
     companyId: number | null | undefined,
-    position: IPosition | null | undefined,
+    position: dto.Position | null | undefined,
 ): string {
     switch (task.type) {
         case TaskType.CREATE_COMPANY:
