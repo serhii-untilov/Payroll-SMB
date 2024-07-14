@@ -3,18 +3,14 @@ import { snackbarError } from '@/utils/snackbar';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 
-const resourceType = ResourceType.PERSON;
-type Entity = dto.Person;
-const queryFn = api.personsFindOne;
-
 type Params = { id: number | null | undefined };
-type Result = { data: Entity | undefined; isLoading: boolean };
+type Result = { data: dto.Person | undefined; isLoading: boolean };
 
 export function usePerson(params: Params): Result {
-    const { data, isError, isLoading, error } = useQuery<Entity | undefined, Error>({
-        queryKey: [resourceType, params],
+    const { data, isError, isLoading, error } = useQuery<dto.Person | undefined, Error>({
+        queryKey: [ResourceType.PERSON, params],
         queryFn: async () => {
-            return params.id ? (await queryFn(params.id)).data : undefined;
+            return params.id ? (await api.personsFindOne(params.id)).data : undefined;
         },
     });
     if (isError) {
