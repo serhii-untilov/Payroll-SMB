@@ -4,7 +4,6 @@ import { FormTextField } from '@/components/form/FormTextField';
 import { InputLabel } from '@/components/layout/InputLabel';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
-import { Loading } from '@/components/utility/Loading';
 import { useAccountingList } from '@/hooks/useAccountingList';
 import useAppContext from '@/hooks/useAppContext';
 import { useCompany } from '@/hooks/useCompany';
@@ -17,7 +16,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import {
     AccountingType,
-    formatDate,
     LawType,
     maxDate,
     minDate,
@@ -33,7 +31,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { InferType, number, object, string } from 'yup';
+import { date, InferType, number, object, string } from 'yup';
 
 type Props = {
     companyId: number | null;
@@ -47,8 +45,8 @@ export function CompanyDetails(props: Props) {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const { data: company, isLoading } = useCompany(companyId);
-    const { data: lawList } = useLawList();
-    const { data: accountingList } = useAccountingList();
+    const { data: lawList, isLoading: isLoadingLawList } = useLawList();
+    const { data: accountingList, isLoading: isLoadingAccountingList } = useAccountingList();
 
     useEffect(() => {});
 
@@ -73,15 +71,10 @@ export function CompanyDetails(props: Props) {
         paymentSchedule: string()
             .required('Payment Schedule required')
             .default(PaymentSchedule.LAST_DAY),
-        dateFrom: string().default(formatDate(minDate())).required(),
-        dateTo: string().default(formatDate(maxDate())).required(),
-        payPeriod: string()
-            .required('Pay Period required')
-            .default(formatDate(monthBegin(new Date()))),
-        checkDate: string()
-            .required('Check Date required')
-            .default(formatDate(monthEnd(new Date()))),
-        version: number().optional(),
+        dateFrom: date().default(minDate()).required(),
+        dateTo: date().default(maxDate()).required(),
+        payPeriod: date().required('Pay Period required').default(monthBegin(new Date())),
+        checkDate: date().required('Check Date required').default(monthEnd(new Date())),
     });
 
     type FormType = InferType<typeof formSchema>;
@@ -106,8 +99,8 @@ export function CompanyDetails(props: Props) {
         snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    if (isLoading) {
-        return <Loading />;
+    if (isLoading || isLoadingLawList || isLoadingAccountingList) {
+        return null;
     }
 
     const onSubmit: SubmitHandler<FormType> = async (data) => {
@@ -115,7 +108,12 @@ export function CompanyDetails(props: Props) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const response = company?.id
-                ? (await api.companiesUpdate(company.id, dirtyValues)).data
+                ? (
+                      await api.companiesUpdate(company.id, {
+                          ...dirtyValues,
+                          version: company.version,
+                      })
+                  ).data
                 : (await api.companiesCreate(data)).data;
             setCompanyId(response.id);
             reset(formSchema.cast(response));

@@ -6,7 +6,6 @@ import useAppContext from '@/hooks/useAppContext';
 import { useCurrentPayPeriod } from '@/hooks/useCurrentPayPeriod';
 import useLocale from '@/hooks/useLocale';
 import { usePayPeriodList } from '@/hooks/usePayPeriodList';
-import { calculatePayroll } from '@/services/company.service';
 import * as utils from '@/utils';
 import {
     GridCellParams,
@@ -50,8 +49,8 @@ export function CompanyPayPeriods(params: Props) {
     });
     const data = useMemo(() => {
         return rawData
-            .filter((o) => toDate(o.dateFrom).getTime() <= (payPeriod || new Date()).getTime())
-            .sort((a, b) => toDate(b.dateFrom).getTime() - toDate(a.dateFrom).getTime());
+            .filter((o) => o.dateFrom.getTime() <= (payPeriod || new Date()).getTime())
+            .sort((a, b) => b.dateFrom.getTime() - a.dateFrom.getTime());
     }, [rawData, payPeriod]);
 
     if (isLoading) {
@@ -81,31 +80,31 @@ export function CompanyPayPeriods(params: Props) {
 
     const onCalculate = async () => {
         if (companyId) {
-            await calculatePayroll(companyId);
+            await api.companiesSalaryCalculate(companyId);
             await invalidateQueries();
         }
     };
 
     const onClose = async () => {
         if (companyId && currentPayPeriod) {
-            if (toDate(currentPayPeriod.dateFrom).getTime() !== payPeriod?.getTime()) {
+            if (currentPayPeriod.dateFrom.getTime() !== payPeriod?.getTime()) {
                 await invalidateQueries();
                 return;
             }
             const next = (await api.payPeriodsClose(currentPayPeriod.id)).data;
-            setPayPeriod(toDate(next.dateFrom));
+            setPayPeriod(next.dateFrom);
             await invalidateQueries();
         }
     };
 
     const onOpen = async () => {
         if (companyId && currentPayPeriod) {
-            if (toDate(currentPayPeriod.dateFrom).getTime() !== payPeriod?.getTime()) {
+            if (currentPayPeriod.dateFrom.getTime() !== payPeriod?.getTime()) {
                 await invalidateQueries();
                 return;
             }
             const prior = (await api.payPeriodsOpen(currentPayPeriod.id)).data;
-            setPayPeriod(toDate(prior.dateFrom));
+            setPayPeriod(prior.dateFrom);
             await invalidateQueries();
         }
     };
@@ -158,8 +157,8 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 sortable: true,
                 valueGetter: (params) => {
                     return utils.getPayPeriodName(
-                        params.row.dateFrom,
-                        params.row.dateTo,
+                        toDate(params.row.dateFrom),
+                        toDate(params.row.dateTo),
                         isEqual(params.row.dateFrom, payPeriod),
                         dateLocale,
                     );

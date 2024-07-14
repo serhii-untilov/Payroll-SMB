@@ -4,15 +4,20 @@ import { Department } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 
-type Params = { companyId: number | null | undefined; relations: true };
+type Params = { companyId: number | null | undefined; relations: boolean };
 type Result = { data: Department[]; isLoading: boolean };
 
 export function useDepartmentList(params: Params): Result {
     const { companyId, relations } = params;
     const { data, isError, isLoading, error } = useQuery<Department[], Error>({
-        queryKey: [ResourceType.DEPARTMENT, 'list', params],
+        queryKey: [ResourceType.DEPARTMENT, params],
         queryFn: async () => {
-            return companyId ? (await api.departmentsFindAll(companyId, relations)).data : [];
+            const response = companyId
+                ? (await api.departmentsFindAll(companyId, relations)).data ?? []
+                : [];
+            return response.sort((a: Department, b: Department) =>
+                a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
+            );
         },
     });
     if (isError) {

@@ -55,10 +55,10 @@ export interface Access {
     'accessType': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Access
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -67,10 +67,10 @@ export interface Access {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Access
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -79,10 +79,10 @@ export interface Access {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Access
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -122,10 +122,10 @@ export interface Accounting {
     'type': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Accounting
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -134,10 +134,10 @@ export interface Accounting {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Accounting
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -146,10 +146,10 @@ export interface Accounting {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Accounting
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -325,28 +325,28 @@ export interface Company {
     'paymentSchedule': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Company
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Company
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Company
      */
-    'payPeriod': string;
+    'payPeriod': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Company
      */
-    'checkDate': string;
+    'checkDate': Date;
     /**
      * 
      * @type {Array<Department>}
@@ -367,10 +367,10 @@ export interface Company {
     'users'?: Array<UserCompany>;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Company
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -379,10 +379,10 @@ export interface Company {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Company
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -391,10 +391,10 @@ export interface Company {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Company
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -444,97 +444,73 @@ export interface CreateCompanyDto {
      * @type {string}
      * @memberof CreateCompanyDto
      */
-    'name': string;
+    'name'?: string;
     /**
      * 
      * @type {number}
      * @memberof CreateCompanyDto
      */
-    'lawId': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateCompanyDto
-     */
-    'taxId': string;
+    'lawId'?: number;
     /**
      * 
      * @type {number}
      * @memberof CreateCompanyDto
      */
-    'accountingId': number;
+    'accountingId'?: number;
     /**
      * 
      * @type {string}
      * @memberof CreateCompanyDto
      */
-    'paymentSchedule': string;
+    'taxId'?: string;
     /**
      * 
      * @type {string}
      * @memberof CreateCompanyDto
      */
-    'dateFrom': string;
+    'paymentSchedule'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateCompanyDto
      */
-    'dateTo': string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateCompanyDto
      */
-    'payPeriod': string;
+    'dateTo'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateCompanyDto
      */
-    'checkDate': string;
+    'payPeriod'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateCompanyDto
      */
-    'createdDate'?: string;
+    'checkDate'?: Date;
     /**
      * 
-     * @type {number}
+     * @type {Array<Department>}
      * @memberof CreateCompanyDto
      */
-    'createdUserId'?: number | null;
+    'departments'?: Array<Department>;
     /**
      * 
-     * @type {string}
+     * @type {Array<Position>}
      * @memberof CreateCompanyDto
      */
-    'updatedDate'?: string;
+    'positions'?: Array<Position>;
     /**
      * 
-     * @type {number}
+     * @type {Array<UserCompany>}
      * @memberof CreateCompanyDto
      */
-    'updatedUserId'?: number | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateCompanyDto
-     */
-    'deletedDate'?: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreateCompanyDto
-     */
-    'deletedUserId'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreateCompanyDto
-     */
-    'version'?: number | null;
+    'users'?: Array<UserCompany>;
 }
 /**
  * 
@@ -556,22 +532,22 @@ export interface CreateDepartmentDto {
     'name': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateDepartmentDto
      */
-    'dateFrom': string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateDepartmentDto
      */
-    'dateTo': string;
+    'dateTo'?: Date;
     /**
      * 
-     * @type {Department}
+     * @type {number}
      * @memberof CreateDepartmentDto
      */
-    'parent': Department;
+    'parentDepartmentId'?: number | null;
 }
 /**
  * 
@@ -594,16 +570,16 @@ export interface CreateJobDto {
 export interface CreateMinWageDto {
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateMinWageDto
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateMinWageDto
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {number}
@@ -625,16 +601,16 @@ export interface CreatePayFundDto {
     'positionId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayFundDto
      */
-    'payPeriod': string;
+    'payPeriod': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayFundDto
      */
-    'accPeriod': string;
+    'accPeriod': Date;
     /**
      * 
      * @type {number}
@@ -723,16 +699,16 @@ export interface CreatePayPeriodDto {
     'companyId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayPeriodDto
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayPeriodDto
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {string}
@@ -868,16 +844,16 @@ export interface CreatePaymentDto {
     'companyId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePaymentDto
      */
-    'payPeriod': string;
+    'payPeriod': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePaymentDto
      */
-    'accPeriod': string;
+    'accPeriod': Date;
     /**
      * 
      * @type {string}
@@ -886,10 +862,10 @@ export interface CreatePaymentDto {
     'docNumber'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePaymentDto
      */
-    'docDate'?: string;
+    'docDate'?: Date;
     /**
      * 
      * @type {number}
@@ -898,16 +874,16 @@ export interface CreatePaymentDto {
     'paymentTypeId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePaymentDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePaymentDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {number}
@@ -1051,16 +1027,16 @@ export interface CreatePayrollDto {
     'positionId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayrollDto
      */
-    'payPeriod': string;
+    'payPeriod': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayrollDto
      */
-    'accPeriod': string;
+    'accPeriod': Date;
     /**
      * 
      * @type {number}
@@ -1069,16 +1045,16 @@ export interface CreatePayrollDto {
     'paymentTypeId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayrollDto
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayrollDto
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {string}
@@ -1093,16 +1069,16 @@ export interface CreatePayrollDto {
     'sourceId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayrollDto
      */
-    'dateBegin'?: string | null;
+    'dateBegin'?: Date | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePayrollDto
      */
-    'dateEnd'?: string | null;
+    'dateEnd'?: Date | null;
     /**
      * 
      * @type {number}
@@ -1214,10 +1190,10 @@ export interface CreatePersonDto {
     'middleName'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePersonDto
      */
-    'birthday'?: string;
+    'birthday'?: Date;
     /**
      * 
      * @type {string}
@@ -1287,16 +1263,16 @@ export interface CreatePositionDto {
     'personId': number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePositionDto
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePositionDto
      */
-    'dateTo': string;
+    'dateTo': Date;
 }
 /**
  * 
@@ -1312,16 +1288,16 @@ export interface CreatePositionHistoryDto {
     'positionId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePositionHistoryDto
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreatePositionHistoryDto
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {number}
@@ -1398,16 +1374,16 @@ export interface CreateTaskDto {
     'type': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateTaskDto
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateTaskDto
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {number}
@@ -1490,16 +1466,16 @@ export interface CreateWorkNormDto {
     'type': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateWorkNormDto
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof CreateWorkNormDto
      */
-    'dateTo': string;
+    'dateTo': Date;
 }
 /**
  * 
@@ -1533,16 +1509,16 @@ export interface Department {
     'companyId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Department
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Department
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {Department}
@@ -1563,10 +1539,10 @@ export interface Department {
     'childDepartments'?: Array<Department>;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Department
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -1575,10 +1551,10 @@ export interface Department {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Department
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -1587,10 +1563,10 @@ export interface Department {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Department
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -1630,16 +1606,16 @@ export interface FindAllPayPeriodDto {
     'companyId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindAllPayPeriodDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindAllPayPeriodDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
 }
 /**
  * 
@@ -1655,10 +1631,10 @@ export interface FindAllPositionBalanceDto {
     'companyId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindAllPositionBalanceDto
      */
-    'payPeriod'?: string;
+    'payPeriod'?: Date;
 }
 /**
  * 
@@ -1705,10 +1681,10 @@ export interface FindPayFundDto {
     'positionId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPayFundDto
      */
-    'payPeriod'?: string;
+    'payPeriod'?: Date;
     /**
      * 
      * @type {boolean}
@@ -1736,16 +1712,16 @@ export interface FindPaymentDto {
     'positionId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPaymentDto
      */
-    'payPeriod'?: string;
+    'payPeriod'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPaymentDto
      */
-    'accPeriod'?: string;
+    'accPeriod'?: Date;
     /**
      * 
      * @type {number}
@@ -1804,10 +1780,10 @@ export interface FindPayrollDto {
     'positionId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPayrollDto
      */
-    'payPeriod'?: string;
+    'payPeriod'?: Date;
     /**
      * 
      * @type {boolean}
@@ -1841,10 +1817,10 @@ export interface FindPersonDto {
     'middleName'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPersonDto
      */
-    'birthday'?: string;
+    'birthday'?: Date;
     /**
      * 
      * @type {string}
@@ -1896,16 +1872,16 @@ export interface FindPositionByPersonDto {
     'personId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionByPersonDto
      */
-    'onDate'?: string;
+    'onDate'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionByPersonDto
      */
-    'onPayPeriodDate'?: string;
+    'onPayPeriodDate'?: Date;
     /**
      * 
      * @type {boolean}
@@ -1927,16 +1903,16 @@ export interface FindPositionDto {
     'companyId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionDto
      */
-    'onDate'?: string;
+    'onDate'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionDto
      */
-    'onPayPeriodDate'?: string;
+    'onPayPeriodDate'?: Date;
     /**
      * 
      * @type {boolean}
@@ -1975,10 +1951,10 @@ export interface FindPositionDto {
     'includeDeleted'?: boolean;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionDto
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -1987,10 +1963,10 @@ export interface FindPositionDto {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionDto
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -1999,10 +1975,10 @@ export interface FindPositionDto {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionDto
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -2059,16 +2035,16 @@ export interface FindPositionDto {
     'personId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {Array<PositionHistory>}
@@ -2096,16 +2072,16 @@ export interface FindPositionHistoryDto {
     'positionId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionHistoryDto
      */
-    'onDate'?: string;
+    'onDate'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindPositionHistoryDto
      */
-    'onPayPeriodDate'?: string;
+    'onPayPeriodDate'?: Date;
     /**
      * 
      * @type {boolean}
@@ -2127,16 +2103,16 @@ export interface FindTaskDto {
     'companyId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindTaskDto
      */
-    'onDate'?: string;
+    'onDate'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindTaskDto
      */
-    'onPayPeriodDate'?: string;
+    'onPayPeriodDate'?: Date;
     /**
      * 
      * @type {boolean}
@@ -2145,10 +2121,10 @@ export interface FindTaskDto {
     'relations'?: boolean;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindTaskDto
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2157,10 +2133,10 @@ export interface FindTaskDto {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindTaskDto
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2169,10 +2145,10 @@ export interface FindTaskDto {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindTaskDto
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -2205,16 +2181,16 @@ export interface FindTaskDto {
     'type'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindTaskDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof FindTaskDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {number}
@@ -2254,10 +2230,10 @@ export interface Job {
     'name': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Job
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2266,10 +2242,10 @@ export interface Job {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Job
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2278,10 +2254,10 @@ export interface Job {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Job
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -2334,16 +2310,16 @@ export interface MinWage {
     'id': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof MinWage
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof MinWage
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {number}
@@ -2352,10 +2328,10 @@ export interface MinWage {
     'paySum': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof MinWage
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2364,10 +2340,10 @@ export interface MinWage {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof MinWage
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2376,10 +2352,10 @@ export interface MinWage {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof MinWage
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -2419,16 +2395,16 @@ export interface PayFund {
     'positionId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayFund
      */
-    'payPeriod': string;
+    'payPeriod': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayFund
      */
-    'accPeriod': string;
+    'accPeriod': Date;
     /**
      * 
      * @type {PayFundType}
@@ -2516,10 +2492,10 @@ export interface PayFundType {
     'description': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayFundType
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2528,10 +2504,10 @@ export interface PayFundType {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayFundType
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2540,10 +2516,10 @@ export interface PayFundType {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayFundType
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -2583,16 +2559,16 @@ export interface PayPeriod {
     'companyId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayPeriod
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayPeriod
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {string}
@@ -2721,10 +2697,10 @@ export interface PayPeriod {
     'calcMethods'?: Array<PayPeriodCalcMethod>;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayPeriod
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2733,10 +2709,10 @@ export interface PayPeriod {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayPeriod
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2745,10 +2721,10 @@ export interface PayPeriod {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PayPeriod
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -2825,16 +2801,16 @@ export interface Payment {
     'companyId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payment
      */
-    'payPeriod': string;
+    'payPeriod': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payment
      */
-    'accPeriod': string;
+    'accPeriod': Date;
     /**
      * 
      * @type {string}
@@ -2843,10 +2819,10 @@ export interface Payment {
     'docNumber': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payment
      */
-    'docDate': string;
+    'docDate': Date;
     /**
      * 
      * @type {PaymentType}
@@ -2861,16 +2837,16 @@ export interface Payment {
     'paymentTypeId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payment
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payment
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {number}
@@ -2921,10 +2897,10 @@ export interface Payment {
     'paymentPositions'?: Array<PaymentPosition>;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payment
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2933,10 +2909,10 @@ export interface Payment {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payment
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -2945,10 +2921,10 @@ export interface Payment {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payment
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -3030,10 +3006,10 @@ export interface PaymentPosition {
     'recordFlags': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PaymentPosition
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3042,10 +3018,10 @@ export interface PaymentPosition {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PaymentPosition
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3054,10 +3030,10 @@ export interface PaymentPosition {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PaymentPosition
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -3115,10 +3091,10 @@ export interface PaymentType {
     'description': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PaymentType
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3127,10 +3103,10 @@ export interface PaymentType {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PaymentType
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3139,10 +3115,10 @@ export interface PaymentType {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PaymentType
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -3182,16 +3158,16 @@ export interface Payroll {
     'positionId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payroll
      */
-    'payPeriod': string;
+    'payPeriod': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payroll
      */
-    'accPeriod': string;
+    'accPeriod': Date;
     /**
      * 
      * @type {PaymentType}
@@ -3206,16 +3182,16 @@ export interface Payroll {
     'paymentTypeId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payroll
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payroll
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {string}
@@ -3230,16 +3206,16 @@ export interface Payroll {
     'sourceId': number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payroll
      */
-    'dateBegin': string | null;
+    'dateBegin': Date | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payroll
      */
-    'dateEnd': string | null;
+    'dateEnd': Date | null;
     /**
      * 
      * @type {number}
@@ -3326,10 +3302,10 @@ export interface Payroll {
     'parentId': number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payroll
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3338,10 +3314,10 @@ export interface Payroll {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payroll
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3350,10 +3326,10 @@ export interface Payroll {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Payroll
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -3405,10 +3381,10 @@ export interface Person {
     'fullName': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Person
      */
-    'birthday': string | null;
+    'birthday': Date | null;
     /**
      * 
      * @type {string}
@@ -3447,10 +3423,10 @@ export interface Person {
     'positions'?: Array<Position>;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Person
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3459,10 +3435,10 @@ export interface Person {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Person
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3471,10 +3447,10 @@ export interface Person {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Person
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -3544,16 +3520,16 @@ export interface Position {
     'personId': number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Position
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Position
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {Array<PositionHistory>}
@@ -3568,10 +3544,10 @@ export interface Position {
     'balance'?: Array<PositionBalance>;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Position
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3580,10 +3556,10 @@ export interface Position {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Position
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3592,10 +3568,10 @@ export interface Position {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Position
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -3635,10 +3611,10 @@ export interface PositionBalance {
     'positionId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PositionBalance
      */
-    'payPeriod': string;
+    'payPeriod': Date;
     /**
      * 
      * @type {number}
@@ -3799,16 +3775,16 @@ export interface PositionHistory {
     'positionId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PositionHistory
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PositionHistory
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {Department}
@@ -3871,10 +3847,10 @@ export interface PositionHistory {
     'rate': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PositionHistory
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3883,10 +3859,10 @@ export interface PositionHistory {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PositionHistory
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3895,10 +3871,10 @@ export interface PositionHistory {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PositionHistory
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -3920,10 +3896,10 @@ export interface PositionHistory {
 export interface PublicUserDataDto {
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PublicUserDataDto
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3932,10 +3908,10 @@ export interface PublicUserDataDto {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PublicUserDataDto
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -3944,10 +3920,10 @@ export interface PublicUserDataDto {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PublicUserDataDto
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -4066,16 +4042,16 @@ export interface Task {
     'type': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Task
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Task
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {number}
@@ -4096,10 +4072,10 @@ export interface Task {
     'entityId': number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Task
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -4108,10 +4084,10 @@ export interface Task {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Task
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -4120,10 +4096,10 @@ export interface Task {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof Task
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -4164,10 +4140,10 @@ export interface TokensDto {
 export interface UpdateAccessDto {
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateAccessDto
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -4176,10 +4152,10 @@ export interface UpdateAccessDto {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateAccessDto
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -4188,10 +4164,10 @@ export interface UpdateAccessDto {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateAccessDto
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -4231,42 +4207,6 @@ export interface UpdateAccessDto {
 export interface UpdateCompanyDto {
     /**
      * 
-     * @type {string}
-     * @memberof UpdateCompanyDto
-     */
-    'createdDate'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateCompanyDto
-     */
-    'createdUserId'?: number | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateCompanyDto
-     */
-    'updatedDate'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateCompanyDto
-     */
-    'updatedUserId'?: number | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateCompanyDto
-     */
-    'deletedDate'?: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateCompanyDto
-     */
-    'deletedUserId'?: number | null;
-    /**
-     * 
      * @type {number}
      * @memberof UpdateCompanyDto
      */
@@ -4285,22 +4225,10 @@ export interface UpdateCompanyDto {
     'taxId'?: string;
     /**
      * 
-     * @type {Law}
-     * @memberof UpdateCompanyDto
-     */
-    'law'?: Law;
-    /**
-     * 
      * @type {number}
      * @memberof UpdateCompanyDto
      */
     'lawId'?: number;
-    /**
-     * 
-     * @type {Accounting}
-     * @memberof UpdateCompanyDto
-     */
-    'accounting'?: Accounting;
     /**
      * 
      * @type {number}
@@ -4315,28 +4243,28 @@ export interface UpdateCompanyDto {
     'paymentSchedule'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateCompanyDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateCompanyDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateCompanyDto
      */
-    'payPeriod'?: string;
+    'payPeriod'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateCompanyDto
      */
-    'checkDate'?: string;
+    'checkDate'?: Date;
     /**
      * 
      * @type {Array<Department>}
@@ -4382,16 +4310,16 @@ export interface UpdateDepartmentDto {
     'companyId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateDepartmentDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateDepartmentDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {number}
@@ -4432,16 +4360,16 @@ export interface UpdateMinWageDto {
     'version': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateMinWageDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateMinWageDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {number}
@@ -4463,16 +4391,16 @@ export interface UpdatePayFundDto {
     'positionId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayFundDto
      */
-    'payPeriod'?: string;
+    'payPeriod'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayFundDto
      */
-    'accPeriod'?: string;
+    'accPeriod'?: Date;
     /**
      * 
      * @type {number}
@@ -4579,16 +4507,16 @@ export interface UpdatePayPeriodDto {
     'companyId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayPeriodDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayPeriodDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {string}
@@ -4742,16 +4670,16 @@ export interface UpdatePaymentDto {
     'companyId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePaymentDto
      */
-    'payPeriod'?: string;
+    'payPeriod'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePaymentDto
      */
-    'accPeriod'?: string;
+    'accPeriod'?: Date;
     /**
      * 
      * @type {string}
@@ -4760,10 +4688,10 @@ export interface UpdatePaymentDto {
     'docNumber'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePaymentDto
      */
-    'docDate'?: string;
+    'docDate'?: Date;
     /**
      * 
      * @type {PaymentType}
@@ -4778,16 +4706,16 @@ export interface UpdatePaymentDto {
     'paymentTypeId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePaymentDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePaymentDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {number}
@@ -4973,16 +4901,16 @@ export interface UpdatePayrollDto {
     'positionId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayrollDto
      */
-    'payPeriod'?: string;
+    'payPeriod'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayrollDto
      */
-    'accPeriod'?: string;
+    'accPeriod'?: Date;
     /**
      * 
      * @type {PaymentType}
@@ -4997,16 +4925,16 @@ export interface UpdatePayrollDto {
     'paymentTypeId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayrollDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayrollDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {string}
@@ -5021,16 +4949,16 @@ export interface UpdatePayrollDto {
     'sourceId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayrollDto
      */
-    'dateBegin'?: string | null;
+    'dateBegin'?: Date | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePayrollDto
      */
-    'dateEnd'?: string | null;
+    'dateEnd'?: Date | null;
     /**
      * 
      * @type {number}
@@ -5154,10 +5082,10 @@ export interface UpdatePersonDto {
     'fullName'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePersonDto
      */
-    'birthday'?: string | null;
+    'birthday'?: Date | null;
     /**
      * 
      * @type {string}
@@ -5251,16 +5179,16 @@ export interface UpdatePositionDto {
     'personId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePositionDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePositionDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {Array<PositionHistory>}
@@ -5300,16 +5228,16 @@ export interface UpdatePositionHistoryDto {
     'positionId'?: number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePositionHistoryDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdatePositionHistoryDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {Department}
@@ -5422,16 +5350,16 @@ export interface UpdateTaskDto {
     'type'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateTaskDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateTaskDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
     /**
      * 
      * @type {number}
@@ -5459,10 +5387,10 @@ export interface UpdateTaskDto {
 export interface UpdateUserDto {
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateUserDto
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5471,10 +5399,10 @@ export interface UpdateUserDto {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateUserDto
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5483,10 +5411,10 @@ export interface UpdateUserDto {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateUserDto
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -5580,16 +5508,16 @@ export interface UpdateWorkNormDto {
     'type'?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateWorkNormDto
      */
-    'dateFrom'?: string;
+    'dateFrom'?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateWorkNormDto
      */
-    'dateTo'?: string;
+    'dateTo'?: Date;
 }
 /**
  * 
@@ -5659,10 +5587,10 @@ export interface User {
     'roleId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof User
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5671,10 +5599,10 @@ export interface User {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof User
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5683,10 +5611,10 @@ export interface User {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof User
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -5750,10 +5678,10 @@ export interface UserCompany {
     'roleId': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UserCompany
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5762,10 +5690,10 @@ export interface UserCompany {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UserCompany
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5774,10 +5702,10 @@ export interface UserCompany {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UserCompany
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -5817,16 +5745,16 @@ export interface WorkNorm {
     'type': string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof WorkNorm
      */
-    'dateFrom': string;
+    'dateFrom': Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof WorkNorm
      */
-    'dateTo': string;
+    'dateTo': Date;
     /**
      * 
      * @type {Array<WorkNormPeriod>}
@@ -5835,10 +5763,10 @@ export interface WorkNorm {
     'periods'?: Array<WorkNormPeriod>;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof WorkNorm
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5847,10 +5775,10 @@ export interface WorkNorm {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof WorkNorm
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5859,10 +5787,10 @@ export interface WorkNorm {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof WorkNorm
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -5914,10 +5842,10 @@ export interface WorkNormPeriod {
     'hours': number;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof WorkNormPeriod
      */
-    'createdDate'?: string;
+    'createdDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5926,10 +5854,10 @@ export interface WorkNormPeriod {
     'createdUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof WorkNormPeriod
      */
-    'updatedDate'?: string;
+    'updatedDate'?: Date;
     /**
      * 
      * @type {number}
@@ -5938,10 +5866,10 @@ export interface WorkNormPeriod {
     'updatedUserId'?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof WorkNormPeriod
      */
-    'deletedDate'?: string | null;
+    'deletedDate'?: Date | null;
     /**
      * 
      * @type {number}
@@ -7918,6 +7846,46 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Create a Pay Period record
+         * @param {CreatePayPeriodDto} createPayPeriodDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        payPeriodsCreate: async (createPayPeriodDto: CreatePayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createPayPeriodDto' is not null or undefined
+            assertParamExists('payPeriodsCreate', 'createPayPeriodDto', createPayPeriodDto)
+            const localVarPath = `/api/pay-periods`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createPayPeriodDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {FindAllPayPeriodDto} findAllPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7925,7 +7893,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         payPeriodsFindAll: async (findAllPayPeriodDto: FindAllPayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'findAllPayPeriodDto' is not null or undefined
             assertParamExists('payPeriodsFindAll', 'findAllPayPeriodDto', findAllPayPeriodDto)
-            const localVarPath = `/api/pay-periods`;
+            const localVarPath = `/api/pay-periods/find-all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9720,11 +9688,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @param {number} id 
          * @param {boolean} relations 
-         * @param {string} onDate 
+         * @param {Date} onDate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindOne: async (id: number, relations: boolean, onDate: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        positionsFindOne: async (id: number, relations: boolean, onDate: Date, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('positionsFindOne', 'id', id)
             // verify required parameter 'relations' is not null or undefined
@@ -11522,6 +11490,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a Pay Period record
+         * @param {CreatePayPeriodDto} createPayPeriodDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async payPeriodsCreate(createPayPeriodDto: CreatePayPeriodDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsCreate(createPayPeriodDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.payPeriodsCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {FindAllPayPeriodDto} findAllPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12092,11 +12073,11 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} id 
          * @param {boolean} relations 
-         * @param {string} onDate 
+         * @param {Date} onDate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsFindOne(id: number, relations: boolean, onDate: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
+        async positionsFindOne(id: number, relations: boolean, onDate: Date, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindOne(id, relations, onDate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsFindOne']?.[localVarOperationServerIndex]?.url;
@@ -12957,6 +12938,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Create a Pay Period record
+         * @param {CreatePayPeriodDto} createPayPeriodDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        payPeriodsCreate(createPayPeriodDto: CreatePayPeriodDto, options?: any): AxiosPromise<PayPeriod> {
+            return localVarFp.payPeriodsCreate(createPayPeriodDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {FindAllPayPeriodDto} findAllPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13395,11 +13386,11 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @param {number} id 
          * @param {boolean} relations 
-         * @param {string} onDate 
+         * @param {Date} onDate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindOne(id: number, relations: boolean, onDate: string, options?: any): AxiosPromise<Position> {
+        positionsFindOne(id: number, relations: boolean, onDate: Date, options?: any): AxiosPromise<Position> {
             return localVarFp.positionsFindOne(id, relations, onDate, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14280,6 +14271,18 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary Create a Pay Period record
+     * @param {CreatePayPeriodDto} createPayPeriodDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public payPeriodsCreate(createPayPeriodDto: CreatePayPeriodDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).payPeriodsCreate(createPayPeriodDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {FindAllPayPeriodDto} findAllPayPeriodDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14806,12 +14809,12 @@ export class DefaultApi extends BaseAPI {
      * 
      * @param {number} id 
      * @param {boolean} relations 
-     * @param {string} onDate 
+     * @param {Date} onDate 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public positionsFindOne(id: number, relations: boolean, onDate: string, options?: RawAxiosRequestConfig) {
+    public positionsFindOne(id: number, relations: boolean, onDate: Date, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).positionsFindOne(id, relations, onDate, options).then((request) => request(this.axios, this.basePath));
     }
 

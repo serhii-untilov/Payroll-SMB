@@ -6,6 +6,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseBoolPipe,
     ParseIntPipe,
@@ -28,10 +30,10 @@ import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { FindAllPayPeriodDto } from './dto/find-all-pay-period.dto';
+import { FindCurrentPayPeriodDto } from './dto/find-current-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { defaultFieldList } from './entities/pay-period.entity';
 import { PayPeriodsService } from './pay-periods.service';
-import { FindCurrentPayPeriodDto } from './dto/find-current-pay-period.dto';
 
 @Controller('pay-periods')
 @ApiBearerAuth()
@@ -52,8 +54,9 @@ export class PayPeriodsController {
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
-    @Post()
+    @Post('find-all')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(PayPeriod) } },

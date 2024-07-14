@@ -3,7 +3,7 @@ import useLocale from '@/hooks/useLocale';
 import { usePayPeriodList } from '@/hooks/usePayPeriodList';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { MenuItem, Select, SelectProps } from '@mui/material';
-import { monthBegin } from '@repo/shared';
+import { formatDate, monthBegin, toDate } from '@repo/shared';
 import { format, isEqual } from 'date-fns';
 import { useMemo } from 'react';
 
@@ -15,25 +15,26 @@ export function SelectPayPeriod(props: PayPeriodOption) {
     const { companyId, ...other } = props;
     const { company, payPeriod, setPayPeriod } = useAppContext();
     const { locale } = useLocale();
-    const { data } = usePayPeriodList({ companyId });
+    const { data, isLoading } = usePayPeriodList({ companyId });
 
     const options = useMemo(() => {
         return data?.map((period: any) => {
             return (
-                <MenuItem
-                    key={format(period.dateFrom, 'yyyy-MM-dd')}
-                    value={format(period.dateFrom, 'yyyy-MM-dd')}
-                >
+                <MenuItem key={formatDate(period.dateFrom)} value={formatDate(period.dateFrom)}>
                     {getPayPeriodName(
-                        period.dateFrom,
-                        period.dateTo,
-                        isEqual(period.dateFrom, company?.payPeriod),
+                        toDate(period.dateFrom),
+                        toDate(period.dateTo),
+                        isEqual(toDate(period.dateFrom), toDate(company?.payPeriod)),
                         locale.dateLocale,
                     )}
                 </MenuItem>
             );
         });
     }, [data, company, locale.dateLocale]);
+
+    if (isLoading) {
+        return null;
+    }
 
     return (
         <Select

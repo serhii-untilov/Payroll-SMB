@@ -1,13 +1,20 @@
-import { Logger } from '@/resources/abstract/logger.abstract';
+import { IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { Company } from '../entities/company.entity';
 
-export class CreateCompanyDto extends Logger {
-    name: string;
-    lawId: number;
-    taxId: string;
-    accountingId: number;
-    paymentSchedule: string;
-    dateFrom: Date;
-    dateTo: Date;
-    payPeriod: Date;
-    checkDate: Date;
-}
+export class CreateCompanyDto extends IntersectionType(
+    PickType(Company, ['name', 'lawId', 'accountingId']),
+    PartialType(
+        OmitType(Company, [
+            'id',
+            'accounting',
+            'law',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+            'version',
+        ]),
+    ),
+) {}

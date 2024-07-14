@@ -1,3 +1,4 @@
+import { ResourceType } from '@repo/shared';
 import { api } from '@/api';
 import { snackbarError } from '@/utils/snackbar';
 import { Accounting } from '@repo/openapi';
@@ -7,9 +8,12 @@ type Result = { data: Accounting[]; isLoading: boolean };
 
 export function useAccountingList(): Result {
     const { data, isError, isLoading, error } = useQuery<Accounting[], Error>({
-        queryKey: ['accounting', 'list'],
+        queryKey: [ResourceType.ACCOUNTING],
         queryFn: async () => {
-            return (await api.accountingFindAll()).data || [];
+            const response = (await api.accountingFindAll()).data || [];
+            return response.sort((a: Accounting, b: Accounting) =>
+                a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
+            );
         },
     });
     if (isError) {

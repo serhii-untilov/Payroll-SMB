@@ -1,31 +1,32 @@
+import { api } from '@/api';
 import { FormDateField } from '@/components/form/FormDateField';
 import { FormTextField } from '@/components/form/FormTextField';
 import { Button } from '@/components/layout/Button';
 import { SelectDepartment } from '@/components/select/SelectDepartment';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { createDepartment, getDepartment, updateDepartment } from '@/services/department.service';
-import { getDirtyValues } from '@/utils';
+import { getDirtyValues, invalidateQueries } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { ICreateDepartment, IDepartment, maxDate, minDate } from '@repo/shared';
+import { CreateDepartmentDto, Department } from '@repo/openapi';
+import { maxDate, minDate, ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { Dispatch, Fragment, useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { InferType, ObjectSchema, date, number, object, string } from 'yup';
+import { date, InferType, number, object, ObjectSchema, string } from 'yup';
 import { snackbarError, snackbarFormErrors } from '../../utils/snackbar';
 
 export interface Params {
     open: boolean;
     setOpen: Dispatch<boolean>;
     departmentId: number | null;
-    submitCallback?: Dispatch<IDepartment>;
+    submitCallback?: Dispatch<Department>;
 }
 
 export default function DepartmentForm(params: Params) {
@@ -42,19 +43,21 @@ export default function DepartmentForm(params: Params) {
         data: department,
         isError,
         error,
-    } = useQuery<IDepartment | null, Error>({
+    } = useQuery<Department | null, Error>({
         queryKey: ['department', { departmentId }],
         queryFn: async () => {
-            return departmentId ? await getDepartment(departmentId) : null;
+            return departmentId
+                ? (await api.departmentsFindOne(departmentId, false)).data ?? null
+                : null;
         },
         enabled: !!departmentId,
     });
 
-    const formSchema: ObjectSchema<ICreateDepartment> = object({
+    const formSchema: ObjectSchema<CreateDepartmentDto> = object({
         name: string().required('Name is required').default(''),
         companyId: number().required('Company is required').default(company?.id),
-        dateFrom: date().required('DateFrom is required').default(minDate()),
-        dateTo: date().required('DateTo is required').default(maxDate()),
+        dateFrom: date().default(minDate()),
+        dateTo: date().default(maxDate()),
         parentDepartmentId: number().nullable(),
     });
 
@@ -92,15 +95,17 @@ export default function DepartmentForm(params: Params) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const response = department
-                ? await updateDepartment(department.id, {
-                      ...dirtyValues,
-                      version: department.version,
-                  })
-                : await createDepartment(data);
+                ? (
+                      await api.departmentsUpdate(department.id, {
+                          ...dirtyValues,
+                          version: department.version,
+                      })
+                  ).data
+                : (await api.departmentsCreate(data)).data;
             if (submitCallback) submitCallback(response);
             params.setOpen(false);
             reset();
-            await queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
+            await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
         } catch (e: unknown) {
             const error = e as AxiosError;
             snackbarError(`${error.code}\n${error.message}`);
@@ -110,7 +115,7 @@ export default function DepartmentForm(params: Params) {
     const onCancel = async () => {
         reset();
         params.setOpen(false);
-        await queryClient.invalidateQueries({ queryKey: ['department'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
     };
 
     return (
@@ -121,10 +126,7 @@ export default function DepartmentForm(params: Params) {
                 onClose={async () => {
                     params.setOpen(false);
                     reset();
-                    await queryClient.invalidateQueries({
-                        queryKey: ['department'],
-                        refetchType: 'all',
-                    });
+                    await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
                 }}
             >
                 <DialogTitle>{t('Department')}</DialogTitle>

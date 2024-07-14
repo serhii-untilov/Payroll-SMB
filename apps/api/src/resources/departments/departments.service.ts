@@ -1,7 +1,7 @@
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@repo/shared';
+import { maxDate, minDate, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -36,6 +36,7 @@ export class DepartmentsService extends AvailableForUserCompany {
     }
 
     async create(userId: number, payload: CreateDepartmentDto): Promise<Department> {
+        const { dateFrom, dateTo, ...other } = payload;
         const existing = await this.repository.findOneBy({
             companyId: payload.companyId,
             name: payload.name,
@@ -44,7 +45,9 @@ export class DepartmentsService extends AvailableForUserCompany {
             throw new ConflictException(`Department '${payload.name}' already exists.`);
         }
         const created = await this.repository.save({
-            ...payload,
+            ...other,
+            dateFrom: dateFrom ?? minDate(),
+            dateTo: dateTo ?? maxDate(),
             createdUserId: userId,
             updatedUserId: userId,
         });

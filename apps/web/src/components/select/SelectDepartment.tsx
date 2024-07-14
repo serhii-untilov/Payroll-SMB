@@ -1,8 +1,5 @@
 import { FormAutocomplete } from '@/components/form/FormAutocomplete';
-import { getDepartmentList } from '@/services/department.service';
-import { IDepartment } from '@repo/shared';
-import { useQuery } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
+import { useDepartmentList } from '@/hooks/useDepartmentList';
 
 interface Props {
     companyId: number | undefined;
@@ -13,23 +10,7 @@ interface Props {
 }
 
 export function SelectDepartment({ companyId, control, label, id, name }: Props) {
-    const {
-        data: departmentList,
-        isError: isDepartmentListError,
-        error: departmentListError,
-    } = useQuery<IDepartment[], Error>({
-        queryKey: ['department', 'list', { companyId }],
-        queryFn: async () => {
-            return companyId ? await getDepartmentList(companyId) : [];
-        },
-        enabled: !!companyId,
-    });
-
-    if (isDepartmentListError) {
-        return enqueueSnackbar(`${departmentListError.name}\n${departmentListError.message}`, {
-            variant: 'error',
-        });
-    }
+    const { data: departmentList } = useDepartmentList({ companyId, relations: false });
 
     return (
         <FormAutocomplete

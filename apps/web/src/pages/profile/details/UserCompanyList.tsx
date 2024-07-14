@@ -1,9 +1,8 @@
-import { dto } from '@/api';
+import { api, dto } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
-import { getCompany } from '@/services/company.service';
 import { deleteUserCompany, getUserCompanyList, restoreUserCompany } from '@/services/user.service';
 import {
     GridCallbackDetails,
@@ -120,7 +119,7 @@ export function UserCompanyList(params: Props) {
 
     const onSelectCompany = async (companyId: number) => {
         console.log('onEditCompany');
-        const company = await getCompany(companyId);
+        const company = (await api.companiesFindOne(companyId)).data;
         setCurrentCompany(company);
         navigate(`/company/${companyId}?tab=details&return=true`);
     };

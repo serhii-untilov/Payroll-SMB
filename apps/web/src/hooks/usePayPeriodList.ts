@@ -9,10 +9,11 @@ type Result = { data: PayPeriod[]; isLoading: boolean };
 export function usePayPeriodList(params: Partial<FindAllPayPeriodDto>): Result {
     const companyId = Number(params.companyId);
     const { data, isError, isLoading, error } = useQuery<PayPeriod[], Error>({
-        queryKey: [ResourceType.PAY_PERIOD, 'list', params],
+        queryKey: [ResourceType.PAY_PERIOD, params],
         queryFn: async () => {
             return params?.companyId
-                ? (await api.payPeriodsFindAll({ ...params, companyId: params.companyId })).data
+                ? (await api.payPeriodsFindAll({ ...params, companyId: params.companyId })).data ??
+                      []
                 : [];
         },
         enabled: !!companyId,
@@ -20,5 +21,5 @@ export function usePayPeriodList(params: Partial<FindAllPayPeriodDto>): Result {
     if (isError) {
         snackbarError(`${error.name}\n${error.message}`);
     }
-    return { data: data || [], isLoading };
+    return { data: data ?? [], isLoading };
 }

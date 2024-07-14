@@ -13,8 +13,7 @@ interface Props {
 }
 
 export function SelectJob({ companyId, control, label, id, name }: Props) {
-    const {
-        data: jobList,
+    const { data: jobList } = useJobList();
         isError: isJobListError,
         error: jobListError,
     } = useQuery<IJob[], Error>({

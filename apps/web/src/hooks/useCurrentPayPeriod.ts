@@ -3,10 +3,10 @@ import { snackbarError } from '@/utils/snackbar';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 
-type Result = { data: dto.PayPeriod | undefined; isLoading: boolean };
+type Result = { data: dto.PayPeriod | undefined | null; isLoading: boolean };
 
 export function useCurrentPayPeriod(params: Partial<dto.FindCurrentPayPeriodDto>): Result {
-    const { data, isError, isLoading, error } = useQuery<dto.PayPeriod | undefined, Error>({
+    const { data, isError, isLoading, error } = useQuery<dto.PayPeriod | null, Error>({
         queryKey: [ResourceType.PAY_PERIOD, params],
         queryFn: async () => {
             return params.companyId
@@ -15,8 +15,8 @@ export function useCurrentPayPeriod(params: Partial<dto.FindCurrentPayPeriodDto>
                           ...params,
                           companyId: params.companyId,
                       })
-                  ).data
-                : undefined;
+                  ).data ?? null
+                : null;
         },
     });
     if (isError) {

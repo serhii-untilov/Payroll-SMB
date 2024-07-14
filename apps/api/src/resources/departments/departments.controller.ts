@@ -72,9 +72,12 @@ export class DepartmentsController {
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+        @Req()
+        req: Request,
+        @Param('id', ParseIntPipe)
+        id: number,
+        @Query('relations', new ParseBoolPipe({ optional: true }))
+        relations?: boolean,
     ) {
         const userId = getUserId(req);
         const found = await this.service.findOne(id, !!relations);

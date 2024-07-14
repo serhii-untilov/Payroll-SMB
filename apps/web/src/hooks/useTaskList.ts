@@ -11,10 +11,10 @@ export function useTaskList(params: Params): Result {
     const { companyId, payPeriod } = params;
 
     const { data, isError, isLoading, error } = useQuery<Task[], Error>({
-        queryKey: [ResourceType.TASK, 'list', params],
+        queryKey: [ResourceType.TASK, params],
         queryFn: async () => {
             return companyId && payPeriod
-                ? (await api.tasksFindAll({ companyId, onPayPeriodDate: payPeriod })).data
+                ? (await api.tasksFindAll({ companyId, onPayPeriodDate: payPeriod })).data ?? []
                 : [];
         },
     });

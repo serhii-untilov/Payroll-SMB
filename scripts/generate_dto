@@ -5,4 +5,6 @@ rm -rf ./packages/openapi/src
 npm --workspace=@repo/api run swagger
 
 npx openapi-generator-cli generate -i ./apps/api/swagger.json -o ./packages/openapi/src \
-    -g typescript-axios #--skip-validate-spec
+    -g typescript-axios \
+    --type-mappings=DateTime=Date
+#--skip-validate-spec

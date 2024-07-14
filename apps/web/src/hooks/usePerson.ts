@@ -4,17 +4,22 @@ import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 
 type Params = { id: number | null | undefined };
-type Result = { data: dto.Person | undefined; isLoading: boolean };
+type Result = { person: dto.Person | null | undefined; isLoading: boolean };
 
 export function usePerson(params: Params): Result {
-    const { data, isError, isLoading, error } = useQuery<dto.Person | undefined, Error>({
+    const {
+        data: person,
+        isError,
+        isLoading,
+        error,
+    } = useQuery<dto.Person | null, Error>({
         queryKey: [ResourceType.PERSON, params],
         queryFn: async () => {
-            return params.id ? (await api.personsFindOne(params.id)).data : undefined;
+            return params.id ? (await api.personsFindOne(params.id)).data ?? null : null;
         },
     });
     if (isError) {
         snackbarError(`${error.name}\n${error.message}`);
     }
-    return { data, isLoading };
+    return { person, isLoading };
 }
