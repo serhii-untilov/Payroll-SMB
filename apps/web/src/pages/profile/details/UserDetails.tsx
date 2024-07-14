@@ -6,7 +6,7 @@ import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
 import { getCurrentUser } from '@/services/auth.service';
 import { updateUser } from '@/services/user.service';
-import { getDirtyValues } from '@/services/utils';
+import { getDirtyValues } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';

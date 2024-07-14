@@ -3,10 +3,11 @@ import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
+import { useCurrentPayPeriod } from '@/hooks/useCurrentPayPeriod';
 import useLocale from '@/hooks/useLocale';
 import { usePayPeriodList } from '@/hooks/usePayPeriodList';
 import { calculatePayroll } from '@/services/company.service';
-import { invalidateQueries, sumFormatter } from '@/utils';
+import * as utils from '@/utils';
 import {
     GridCellParams,
     GridRowParams,
@@ -29,6 +30,11 @@ export function CompanyPayPeriods(params: Props) {
     const { companyId } = params;
     const { locale } = useLocale();
     const { company, payPeriod, setPayPeriod } = useAppContext();
+    const { data: currentPayPeriod } = useCurrentPayPeriod({
+        companyId,
+        relations: false,
+        fullFieldList: true,
+    });
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -64,8 +70,8 @@ export function CompanyPayPeriods(params: Props) {
         gridRef.current.exportDataAsCsv();
     };
 
-    const invalidate = async () => {
-        await invalidateQueries(queryClient, [
+    const invalidateQueries = async () => {
+        await utils.invalidateQueries(queryClient, [
             ResourceType.POSITION,
             ResourceType.COMPANY,
             ResourceType.PAY_PERIOD,
@@ -76,38 +82,30 @@ export function CompanyPayPeriods(params: Props) {
     const onCalculate = async () => {
         if (companyId) {
             await calculatePayroll(companyId);
-            await invalidate();
+            await invalidateQueries();
         }
     };
 
     const onClose = async () => {
-        if (companyId) {
-            const current = (
-                await api.payPeriodsFindCurrent({
-                    companyId,
-                    relations: false,
-                    fullFieldList: true,
-                })
-            ).data;
-            if (toDate(current.dateFrom).getTime() !== payPeriod?.getTime()) {
-                await invalidate();
+        if (companyId && currentPayPeriod) {
+            if (toDate(currentPayPeriod.dateFrom).getTime() !== payPeriod?.getTime()) {
+                await invalidateQueries();
                 return;
             }
-            const next = (await api.payPeriodsClose(current.id)).data;
+            const next = (await api.payPeriodsClose(currentPayPeriod.id)).data;
             setPayPeriod(toDate(next.dateFrom));
-            await invalidate();
+            await invalidateQueries();
         }
     };
 
     const onOpen = async () => {
-        if (companyId) {
-            const current = await getCurrentPayPeriod(companyId, false, true);
-            if (current.dateFrom.getTime() !== payPeriod?.getTime()) {
+        if (companyId && currentPayPeriod) {
+            if (toDate(currentPayPeriod.dateFrom).getTime() !== payPeriod?.getTime()) {
                 await invalidateQueries();
                 return;
             }
-            const prior = await openPayPeriod(current);
-            setPayPeriod(prior.dateFrom);
+            const prior = (await api.payPeriodsOpen(currentPayPeriod.id)).data;
+            setPayPeriod(toDate(prior.dateFrom));
             await invalidateQueries();
         }
     };
@@ -159,7 +157,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 240,
                 sortable: true,
                 valueGetter: (params) => {
-                    return getPayPeriodName(
+                    return utils.getPayPeriodName(
                         params.row.dateFrom,
                         params.row.dateTo,
                         isEqual(params.row.dateFrom, payPeriod),
@@ -184,7 +182,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 160,
                 sortable: true,
                 valueGetter: (params) => {
-                    return sumFormatter(params.value);
+                    return utils.sumFormatter(params.value);
                 },
             },
             {
@@ -194,7 +192,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 160,
                 sortable: true,
                 valueGetter: (params) => {
-                    return sumFormatter(params.value);
+                    return utils.sumFormatter(params.value);
                 },
             },
             {
@@ -204,7 +202,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 160,
                 sortable: true,
                 valueGetter: (params) => {
-                    return sumFormatter(params.value);
+                    return utils.sumFormatter(params.value);
                 },
             },
             {
@@ -218,7 +216,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                         Number(params.row.inBalance) +
                         Number(params.row.accruals) -
                         (Number(params.row.deductions) - Number(params.row.payments));
-                    return sumFormatter(netPay);
+                    return utils.sumFormatter(netPay);
                 },
             },
             {
@@ -228,7 +226,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 160,
                 sortable: true,
                 valueGetter: (params) => {
-                    return sumFormatter(params.value);
+                    return utils.sumFormatter(params.value);
                 },
             },
             {
@@ -238,7 +236,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 190,
                 sortable: true,
                 valueGetter: (params) => {
-                    return sumFormatter(params.value);
+                    return utils.sumFormatter(params.value);
                 },
             },
         ];

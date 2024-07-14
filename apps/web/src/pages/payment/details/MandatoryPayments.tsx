@@ -1,7 +1,7 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { deletePayment } from '@/services/payment.service';
-import { sumFormatter } from '@/services/utils';
+import { sumFormatter } from '@/utils';
 import {
     GridCellParams,
     GridColDef,

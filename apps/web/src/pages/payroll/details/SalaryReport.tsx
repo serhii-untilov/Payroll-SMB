@@ -3,7 +3,7 @@ import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
 import { getPositionsBalance } from '@/services/position.service';
-import { sumFormatter } from '@/services/utils';
+import { sumFormatter } from '@/utils';
 import { Box, Typography } from '@mui/material';
 import {
     GridCellParams,

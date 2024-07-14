@@ -10,7 +10,7 @@ import useAppContext from '@/hooks/useAppContext';
 import { useCompany } from '@/hooks/useCompany';
 import { useLawList } from '@/hooks/useLawList';
 import useLocale from '@/hooks/useLocale';
-import { getDirtyValues } from '@/services/utils';
+import { getDirtyValues } from '@/utils';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';

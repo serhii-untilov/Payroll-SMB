@@ -2,7 +2,7 @@ import { Link } from '@/components/layout/Link';
 import { Loading } from '@/components/utility/Loading';
 import useAuth from '@/hooks/useAuth';
 import { getCurrentUser } from '@/services/auth.service';
-import { capitalizeFirstChar, getPartOfDay } from '@/services/utils';
+import { capitalizeFirstChar, getPartOfDay } from '@/utils';
 import { Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';

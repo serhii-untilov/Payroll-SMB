@@ -6,7 +6,7 @@ import { SelectSex } from '@/components/select/SelectSex';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { getPerson, updatePerson } from '@/services/person.service';
-import { getDirtyValues } from '@/services/utils';
+import { getDirtyValues } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';

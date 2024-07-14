@@ -5,7 +5,7 @@ import { SelectDepartment } from '@/components/select/SelectDepartment';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { createDepartment, getDepartment, updateDepartment } from '@/services/department.service';
-import { getDirtyValues } from '@/services/utils';
+import { getDirtyValues } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import Dialog from '@mui/material/Dialog';

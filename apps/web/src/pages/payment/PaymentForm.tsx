@@ -6,7 +6,7 @@ import { Tabs } from '@/components/layout/Tabs';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { getPayment } from '@/services/payment.service';
-import { sumFormatter } from '@/services/utils';
+import { sumFormatter } from '@/utils';
 import { Box, Chip } from '@mui/material';
 import { IPayment, PaymentStatus, dateUTC } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';

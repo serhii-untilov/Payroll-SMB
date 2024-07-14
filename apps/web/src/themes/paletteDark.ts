@@ -1,4 +1,4 @@
-import { rgba } from '@/services/utils';
+import { rgba } from '@/utils';
 import { ExtPaletteOptions } from './paletteLight';
 
 export function paletteDark(): ExtPaletteOptions {
