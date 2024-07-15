@@ -32,7 +32,6 @@ export function UserCompanyList(params: Props) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const [showDeleted, setShowDeleted] = useState<boolean>(false);
-
     const gridRef = useGridApiRef();
 
     const columns: GridColDef[] = [
