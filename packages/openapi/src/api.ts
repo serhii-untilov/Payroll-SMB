@@ -58,7 +58,7 @@ export interface Access {
      * @type {Date}
      * @memberof Access
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -70,7 +70,7 @@ export interface Access {
      * @type {Date}
      * @memberof Access
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -94,7 +94,7 @@ export interface Access {
      * @type {number}
      * @memberof Access
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -125,7 +125,7 @@ export interface Accounting {
      * @type {Date}
      * @memberof Accounting
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -137,7 +137,7 @@ export interface Accounting {
      * @type {Date}
      * @memberof Accounting
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -161,7 +161,7 @@ export interface Accounting {
      * @type {number}
      * @memberof Accounting
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -272,6 +272,25 @@ export interface AvailableAccessUserDto {
 /**
  * 
  * @export
+ * @interface CalcMethodBalanceDto
+ */
+export interface CalcMethodBalanceDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CalcMethodBalanceDto
+     */
+    'calcMethod': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CalcMethodBalanceDto
+     */
+    'factSum': number;
+}
+/**
+ * 
+ * @export
  * @interface Company
  */
 export interface Company {
@@ -370,7 +389,7 @@ export interface Company {
      * @type {Date}
      * @memberof Company
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -382,7 +401,7 @@ export interface Company {
      * @type {Date}
      * @memberof Company
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -406,7 +425,7 @@ export interface Company {
      * @type {number}
      * @memberof Company
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -493,24 +512,6 @@ export interface CreateCompanyDto {
      * @memberof CreateCompanyDto
      */
     'checkDate'?: Date;
-    /**
-     * 
-     * @type {Array<Department>}
-     * @memberof CreateCompanyDto
-     */
-    'departments'?: Array<Department>;
-    /**
-     * 
-     * @type {Array<Position>}
-     * @memberof CreateCompanyDto
-     */
-    'positions'?: Array<Position>;
-    /**
-     * 
-     * @type {Array<UserCompany>}
-     * @memberof CreateCompanyDto
-     */
-    'users'?: Array<UserCompany>;
 }
 /**
  * 
@@ -523,13 +524,13 @@ export interface CreateDepartmentDto {
      * @type {number}
      * @memberof CreateDepartmentDto
      */
-    'companyId': number;
+    'companyId'?: number;
     /**
      * 
      * @type {string}
      * @memberof CreateDepartmentDto
      */
-    'name': string;
+    'name'?: string;
     /**
      * 
      * @type {Date}
@@ -841,19 +842,25 @@ export interface CreatePaymentDto {
      * @type {number}
      * @memberof CreatePaymentDto
      */
-    'companyId': number;
+    'companyId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreatePaymentDto
+     */
+    'paymentTypeId'?: number;
     /**
      * 
      * @type {Date}
      * @memberof CreatePaymentDto
      */
-    'payPeriod': Date;
+    'payPeriod'?: Date;
     /**
      * 
      * @type {Date}
      * @memberof CreatePaymentDto
      */
-    'accPeriod': Date;
+    'accPeriod'?: Date;
     /**
      * 
      * @type {string}
@@ -866,12 +873,6 @@ export interface CreatePaymentDto {
      * @memberof CreatePaymentDto
      */
     'docDate'?: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreatePaymentDto
-     */
-    'paymentTypeId': number;
     /**
      * 
      * @type {Date}
@@ -1175,13 +1176,13 @@ export interface CreatePersonDto {
      * @type {string}
      * @memberof CreatePersonDto
      */
-    'firstName': string;
+    'firstName'?: string;
     /**
      * 
      * @type {string}
      * @memberof CreatePersonDto
      */
-    'lastName': string;
+    'lastName'?: string;
     /**
      * 
      * @type {string}
@@ -1190,10 +1191,16 @@ export interface CreatePersonDto {
     'middleName'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof CreatePersonDto
+     */
+    'fullName'?: string;
+    /**
+     * 
      * @type {Date}
      * @memberof CreatePersonDto
      */
-    'birthday'?: Date;
+    'birthday'?: Date | null;
     /**
      * 
      * @type {string}
@@ -1242,37 +1249,37 @@ export interface CreatePositionDto {
      * @type {string}
      * @memberof CreatePositionDto
      */
-    'cardNumber': string;
+    'cardNumber'?: string;
     /**
      * 
      * @type {number}
      * @memberof CreatePositionDto
      */
-    'sequenceNumber': number;
+    'sequenceNumber'?: number;
     /**
      * 
      * @type {string}
      * @memberof CreatePositionDto
      */
-    'description': string;
+    'description'?: string;
     /**
      * 
      * @type {number}
      * @memberof CreatePositionDto
      */
-    'personId': number | null;
+    'personId'?: number | null;
     /**
      * 
      * @type {Date}
      * @memberof CreatePositionDto
      */
-    'dateFrom': Date;
+    'dateFrom'?: Date;
     /**
      * 
      * @type {Date}
      * @memberof CreatePositionDto
      */
-    'dateTo': Date;
+    'dateTo'?: Date;
 }
 /**
  * 
@@ -1285,19 +1292,19 @@ export interface CreatePositionHistoryDto {
      * @type {number}
      * @memberof CreatePositionHistoryDto
      */
-    'positionId': number;
+    'positionId'?: number;
     /**
      * 
      * @type {Date}
      * @memberof CreatePositionHistoryDto
      */
-    'dateFrom': Date;
+    'dateFrom'?: Date;
     /**
      * 
      * @type {Date}
      * @memberof CreatePositionHistoryDto
      */
-    'dateTo': Date;
+    'dateTo'?: Date;
     /**
      * 
      * @type {number}
@@ -1309,31 +1316,31 @@ export interface CreatePositionHistoryDto {
      * @type {number}
      * @memberof CreatePositionHistoryDto
      */
-    'jobId': number | null;
+    'jobId'?: number | null;
     /**
      * 
      * @type {number}
      * @memberof CreatePositionHistoryDto
      */
-    'workNormId': number;
+    'workNormId'?: number | null;
     /**
      * 
      * @type {number}
      * @memberof CreatePositionHistoryDto
      */
-    'paymentTypeId': number;
+    'paymentTypeId'?: number | null;
     /**
      * 
      * @type {number}
      * @memberof CreatePositionHistoryDto
      */
-    'wage': number;
+    'wage'?: number;
     /**
      * 
      * @type {number}
      * @memberof CreatePositionHistoryDto
      */
-    'rate': number;
+    'rate'?: number;
 }
 /**
  * 
@@ -1542,7 +1549,7 @@ export interface Department {
      * @type {Date}
      * @memberof Department
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -1554,7 +1561,7 @@ export interface Department {
      * @type {Date}
      * @memberof Department
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -1578,7 +1585,7 @@ export interface Department {
      * @type {number}
      * @memberof Department
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -1620,6 +1627,55 @@ export interface FindAllPayPeriodDto {
 /**
  * 
  * @export
+ * @interface FindAllPaymentDto
+ */
+export interface FindAllPaymentDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPaymentDto
+     */
+    'companyId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPaymentDto
+     */
+    'positionId'?: number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllPaymentDto
+     */
+    'payPeriod'?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllPaymentDto
+     */
+    'accPeriod'?: Date;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPaymentDto
+     */
+    'paymentTypeId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof FindAllPaymentDto
+     */
+    'status'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPaymentDto
+     */
+    'relations'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface FindAllPositionBalanceDto
  */
 export interface FindAllPositionBalanceDto {
@@ -1635,6 +1691,152 @@ export interface FindAllPositionBalanceDto {
      * @memberof FindAllPositionBalanceDto
      */
     'payPeriod'?: Date;
+}
+/**
+ * 
+ * @export
+ * @interface FindAllPositionDto
+ */
+export interface FindAllPositionDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPositionDto
+     */
+    'companyId': number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllPositionDto
+     */
+    'onDate'?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllPositionDto
+     */
+    'onPayPeriodDate'?: Date;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPositionDto
+     */
+    'relations'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPositionDto
+     */
+    'employeesOnly'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPositionDto
+     */
+    'vacanciesOnly'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPositionDto
+     */
+    'dismissedOnly'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPositionDto
+     */
+    'deletedOnly'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPositionDto
+     */
+    'includeDeleted'?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface FindAllPositionHistoryDto
+ */
+export interface FindAllPositionHistoryDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'positionId'?: number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'dateFrom'?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'dateTo'?: Date;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'departmentId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'jobId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'workNormId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'paymentTypeId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'wage'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'rate'?: number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'onDate'?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'onPayPeriodDate'?: Date;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'last'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'relations'?: boolean;
 }
 /**
  * 
@@ -1664,6 +1866,44 @@ export interface FindCurrentPayPeriodDto {
 /**
  * 
  * @export
+ * @interface FindOnePositionDto
+ */
+export interface FindOnePositionDto {
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindOnePositionDto
+     */
+    'onDate'?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindOnePositionDto
+     */
+    'onPayPeriodDate'?: Date;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOnePositionDto
+     */
+    'relations'?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface FindOnePositionHistoryDto
+ */
+export interface FindOnePositionHistoryDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOnePositionHistoryDto
+     */
+    'relations'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface FindPayFundDto
  */
 export interface FindPayFundDto {
@@ -1689,55 +1929,6 @@ export interface FindPayFundDto {
      * 
      * @type {boolean}
      * @memberof FindPayFundDto
-     */
-    'relations'?: boolean;
-}
-/**
- * 
- * @export
- * @interface FindPaymentDto
- */
-export interface FindPaymentDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPaymentDto
-     */
-    'companyId': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPaymentDto
-     */
-    'positionId'?: number;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPaymentDto
-     */
-    'payPeriod'?: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPaymentDto
-     */
-    'accPeriod'?: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPaymentDto
-     */
-    'paymentTypeId'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPaymentDto
-     */
-    'status'?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FindPaymentDto
      */
     'relations'?: boolean;
 }
@@ -1794,67 +1985,6 @@ export interface FindPayrollDto {
 /**
  * 
  * @export
- * @interface FindPersonDto
- */
-export interface FindPersonDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPersonDto
-     */
-    'firstName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPersonDto
-     */
-    'lastName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPersonDto
-     */
-    'middleName'?: string;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPersonDto
-     */
-    'birthday'?: Date;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPersonDto
-     */
-    'taxId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPersonDto
-     */
-    'sex'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPersonDto
-     */
-    'phone'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPersonDto
-     */
-    'email'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPersonDto
-     */
-    'photo'?: string;
-}
-/**
- * 
- * @export
  * @interface FindPositionByPersonDto
  */
 export interface FindPositionByPersonDto {
@@ -1892,206 +2022,6 @@ export interface FindPositionByPersonDto {
 /**
  * 
  * @export
- * @interface FindPositionDto
- */
-export interface FindPositionDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPositionDto
-     */
-    'companyId': number;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPositionDto
-     */
-    'onDate'?: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPositionDto
-     */
-    'onPayPeriodDate'?: Date;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FindPositionDto
-     */
-    'relations'?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FindPositionDto
-     */
-    'employeesOnly'?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FindPositionDto
-     */
-    'vacanciesOnly'?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FindPositionDto
-     */
-    'dismissedOnly'?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FindPositionDto
-     */
-    'deletedOnly'?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FindPositionDto
-     */
-    'includeDeleted'?: boolean;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPositionDto
-     */
-    'createdDate'?: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPositionDto
-     */
-    'createdUserId'?: number | null;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPositionDto
-     */
-    'updatedDate'?: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPositionDto
-     */
-    'updatedUserId'?: number | null;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPositionDto
-     */
-    'deletedDate'?: Date | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPositionDto
-     */
-    'deletedUserId'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPositionDto
-     */
-    'version'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPositionDto
-     */
-    'id'?: number;
-    /**
-     * 
-     * @type {Company}
-     * @memberof FindPositionDto
-     */
-    'company'?: Company;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPositionDto
-     */
-    'cardNumber'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPositionDto
-     */
-    'sequenceNumber'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindPositionDto
-     */
-    'description'?: string;
-    /**
-     * 
-     * @type {Person}
-     * @memberof FindPositionDto
-     */
-    'person'?: Person;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPositionDto
-     */
-    'personId'?: number | null;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPositionDto
-     */
-    'dateFrom'?: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPositionDto
-     */
-    'dateTo'?: Date;
-    /**
-     * 
-     * @type {Array<PositionHistory>}
-     * @memberof FindPositionDto
-     */
-    'history'?: Array<PositionHistory>;
-    /**
-     * 
-     * @type {Array<PositionBalance>}
-     * @memberof FindPositionDto
-     */
-    'balance'?: Array<PositionBalance>;
-}
-/**
- * 
- * @export
- * @interface FindPositionHistoryDto
- */
-export interface FindPositionHistoryDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPositionHistoryDto
-     */
-    'positionId': number;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPositionHistoryDto
-     */
-    'onDate'?: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindPositionHistoryDto
-     */
-    'onPayPeriodDate'?: Date;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FindPositionHistoryDto
-     */
-    'relations'?: boolean;
-}
-/**
- * 
- * @export
  * @interface FindTaskDto
  */
 export interface FindTaskDto {
@@ -2119,96 +2049,6 @@ export interface FindTaskDto {
      * @memberof FindTaskDto
      */
     'relations'?: boolean;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindTaskDto
-     */
-    'createdDate'?: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindTaskDto
-     */
-    'createdUserId'?: number | null;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindTaskDto
-     */
-    'updatedDate'?: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindTaskDto
-     */
-    'updatedUserId'?: number | null;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindTaskDto
-     */
-    'deletedDate'?: Date | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindTaskDto
-     */
-    'deletedUserId'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindTaskDto
-     */
-    'version'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindTaskDto
-     */
-    'id'?: number;
-    /**
-     * 
-     * @type {Company}
-     * @memberof FindTaskDto
-     */
-    'company'?: Company;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindTaskDto
-     */
-    'type'?: string;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindTaskDto
-     */
-    'dateFrom'?: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindTaskDto
-     */
-    'dateTo'?: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindTaskDto
-     */
-    'sequenceNumber'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof FindTaskDto
-     */
-    'status'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindTaskDto
-     */
-    'entityId'?: number | null;
 }
 /**
  * 
@@ -2233,7 +2073,7 @@ export interface Job {
      * @type {Date}
      * @memberof Job
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -2245,7 +2085,7 @@ export interface Job {
      * @type {Date}
      * @memberof Job
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -2269,7 +2109,7 @@ export interface Job {
      * @type {number}
      * @memberof Job
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -2331,7 +2171,7 @@ export interface MinWage {
      * @type {Date}
      * @memberof MinWage
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -2343,7 +2183,7 @@ export interface MinWage {
      * @type {Date}
      * @memberof MinWage
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -2367,7 +2207,7 @@ export interface MinWage {
      * @type {number}
      * @memberof MinWage
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -2495,7 +2335,7 @@ export interface PayFundType {
      * @type {Date}
      * @memberof PayFundType
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -2507,7 +2347,7 @@ export interface PayFundType {
      * @type {Date}
      * @memberof PayFundType
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -2531,7 +2371,7 @@ export interface PayFundType {
      * @type {number}
      * @memberof PayFundType
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -2700,7 +2540,7 @@ export interface PayPeriod {
      * @type {Date}
      * @memberof PayPeriod
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -2712,7 +2552,7 @@ export interface PayPeriod {
      * @type {Date}
      * @memberof PayPeriod
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -2736,7 +2576,7 @@ export interface PayPeriod {
      * @type {number}
      * @memberof PayPeriod
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -2900,7 +2740,7 @@ export interface Payment {
      * @type {Date}
      * @memberof Payment
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -2912,7 +2752,7 @@ export interface Payment {
      * @type {Date}
      * @memberof Payment
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -2936,7 +2776,7 @@ export interface Payment {
      * @type {number}
      * @memberof Payment
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -3009,7 +2849,7 @@ export interface PaymentPosition {
      * @type {Date}
      * @memberof PaymentPosition
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -3021,7 +2861,7 @@ export interface PaymentPosition {
      * @type {Date}
      * @memberof PaymentPosition
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -3045,7 +2885,7 @@ export interface PaymentPosition {
      * @type {number}
      * @memberof PaymentPosition
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -3094,7 +2934,7 @@ export interface PaymentType {
      * @type {Date}
      * @memberof PaymentType
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -3106,7 +2946,7 @@ export interface PaymentType {
      * @type {Date}
      * @memberof PaymentType
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -3130,7 +2970,38 @@ export interface PaymentType {
      * @type {number}
      * @memberof PaymentType
      */
-    'version'?: number | null;
+    'version': number;
+}
+/**
+ * 
+ * @export
+ * @interface PaymentTypeFilter
+ */
+export interface PaymentTypeFilter {
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentTypeFilter
+     */
+    'part'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PaymentTypeFilter
+     */
+    'groups'?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PaymentTypeFilter
+     */
+    'methods'?: Array<string>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof PaymentTypeFilter
+     */
+    'ids'?: Array<number>;
 }
 /**
  * 
@@ -3305,7 +3176,7 @@ export interface Payroll {
      * @type {Date}
      * @memberof Payroll
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -3317,7 +3188,7 @@ export interface Payroll {
      * @type {Date}
      * @memberof Payroll
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -3341,7 +3212,7 @@ export interface Payroll {
      * @type {number}
      * @memberof Payroll
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -3426,7 +3297,7 @@ export interface Person {
      * @type {Date}
      * @memberof Person
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -3438,7 +3309,7 @@ export interface Person {
      * @type {Date}
      * @memberof Person
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -3462,7 +3333,7 @@ export interface Person {
      * @type {number}
      * @memberof Person
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -3547,7 +3418,7 @@ export interface Position {
      * @type {Date}
      * @memberof Position
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -3559,7 +3430,7 @@ export interface Position {
      * @type {Date}
      * @memberof Position
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -3583,7 +3454,7 @@ export interface Position {
      * @type {number}
      * @memberof Position
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -3732,10 +3603,58 @@ export interface PositionBalance {
 export interface PositionBalanceExtendedDto {
     /**
      * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'departmentName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'jobName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'workNormName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'paymentTypeName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'calcMethod'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'paySumECB'?: number;
+    /**
+     * 
+     * @type {Array<CalcMethodBalanceDto>}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'calcMethodBalance': Array<CalcMethodBalanceDto>;
+    /**
+     * 
      * @type {number}
      * @memberof PositionBalanceExtendedDto
      */
     'id': number;
+    /**
+     * 
+     * @type {Position}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'position'?: Position;
     /**
      * 
      * @type {number}
@@ -3744,10 +3663,214 @@ export interface PositionBalanceExtendedDto {
     'positionId': number;
     /**
      * 
+     * @type {Date}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'payPeriod': Date;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'inBalance'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'planDays': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'planHours': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'factDays': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'factHours': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'accruals': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'deductions': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'basic': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'adjustments': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'bonuses': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'vacations': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'sicks': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'refunds': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'other_accruals': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'taxes': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'payments': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'other_deductions': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'outBalance': number;
+    /**
+     * 
      * @type {number}
      * @memberof PositionBalanceExtendedDto
      */
     'companyId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'cardNumber': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'sequenceNumber': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'personId': number | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'dateFrom': Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'dateTo': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'firstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'lastName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'middleName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'taxId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'departmentId': number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'jobId': number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'workNormId': number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'paymentTypeId': number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'wage': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionBalanceExtendedDto
+     */
+    'rate': number;
 }
 /**
  * 
@@ -3850,7 +3973,7 @@ export interface PositionHistory {
      * @type {Date}
      * @memberof PositionHistory
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -3862,7 +3985,7 @@ export interface PositionHistory {
      * @type {Date}
      * @memberof PositionHistory
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -3886,7 +4009,20 @@ export interface PositionHistory {
      * @type {number}
      * @memberof PositionHistory
      */
-    'version'?: number | null;
+    'version': number;
+}
+/**
+ * 
+ * @export
+ * @interface ProcessPaymentDto
+ */
+export interface ProcessPaymentDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ProcessPaymentDto
+     */
+    'version': number;
 }
 /**
  * 
@@ -3935,7 +4071,7 @@ export interface PublicUserDataDto {
      * @type {number}
      * @memberof PublicUserDataDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {number}
@@ -4075,7 +4211,7 @@ export interface Task {
      * @type {Date}
      * @memberof Task
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -4087,7 +4223,7 @@ export interface Task {
      * @type {Date}
      * @memberof Task
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -4111,7 +4247,7 @@ export interface Task {
      * @type {number}
      * @memberof Task
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -4179,7 +4315,7 @@ export interface UpdateAccessDto {
      * @type {number}
      * @memberof UpdateAccessDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {string}
@@ -4210,19 +4346,13 @@ export interface UpdateCompanyDto {
      * @type {number}
      * @memberof UpdateCompanyDto
      */
-    'version'?: number | null;
+    'version': number;
     /**
      * 
      * @type {string}
      * @memberof UpdateCompanyDto
      */
     'name'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateCompanyDto
-     */
-    'taxId'?: string;
     /**
      * 
      * @type {number}
@@ -4235,6 +4365,12 @@ export interface UpdateCompanyDto {
      * @memberof UpdateCompanyDto
      */
     'accountingId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCompanyDto
+     */
+    'taxId'?: string;
     /**
      * 
      * @type {string}
@@ -4265,24 +4401,6 @@ export interface UpdateCompanyDto {
      * @memberof UpdateCompanyDto
      */
     'checkDate'?: Date;
-    /**
-     * 
-     * @type {Array<Department>}
-     * @memberof UpdateCompanyDto
-     */
-    'departments'?: Array<Department>;
-    /**
-     * 
-     * @type {Array<Position>}
-     * @memberof UpdateCompanyDto
-     */
-    'positions'?: Array<Position>;
-    /**
-     * 
-     * @type {Array<UserCompany>}
-     * @memberof UpdateCompanyDto
-     */
-    'users'?: Array<UserCompany>;
 }
 /**
  * 
@@ -4295,19 +4413,19 @@ export interface UpdateDepartmentDto {
      * @type {number}
      * @memberof UpdateDepartmentDto
      */
-    'version'?: number | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateDepartmentDto
-     */
-    'name'?: string;
+    'version': number;
     /**
      * 
      * @type {number}
      * @memberof UpdateDepartmentDto
      */
     'companyId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateDepartmentDto
+     */
+    'name'?: string;
     /**
      * 
      * @type {Date}
@@ -4338,7 +4456,7 @@ export interface UpdateJobDto {
      * @type {number}
      * @memberof UpdateJobDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {string}
@@ -4449,7 +4567,7 @@ export interface UpdatePayFundTypeDto {
      * @type {number}
      * @memberof UpdatePayFundTypeDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {string}
@@ -4492,7 +4610,7 @@ export interface UpdatePayPeriodDto {
      * @type {number}
      * @memberof UpdatePayPeriodDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {Company}
@@ -4655,19 +4773,19 @@ export interface UpdatePaymentDto {
      * @type {number}
      * @memberof UpdatePaymentDto
      */
-    'version'?: number | null;
-    /**
-     * 
-     * @type {Company}
-     * @memberof UpdatePaymentDto
-     */
-    'company'?: Company;
+    'version': number;
     /**
      * 
      * @type {number}
      * @memberof UpdatePaymentDto
      */
     'companyId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePaymentDto
+     */
+    'paymentTypeId'?: number;
     /**
      * 
      * @type {Date}
@@ -4692,18 +4810,6 @@ export interface UpdatePaymentDto {
      * @memberof UpdatePaymentDto
      */
     'docDate'?: Date;
-    /**
-     * 
-     * @type {PaymentType}
-     * @memberof UpdatePaymentDto
-     */
-    'paymentType'?: PaymentType;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdatePaymentDto
-     */
-    'paymentTypeId'?: number;
     /**
      * 
      * @type {Date}
@@ -4758,12 +4864,6 @@ export interface UpdatePaymentDto {
      * @memberof UpdatePaymentDto
      */
     'description'?: string;
-    /**
-     * 
-     * @type {Array<PaymentPosition>}
-     * @memberof UpdatePaymentDto
-     */
-    'paymentPositions'?: Array<PaymentPosition>;
 }
 /**
  * 
@@ -4776,7 +4876,7 @@ export interface UpdatePaymentPositionDto {
      * @type {number}
      * @memberof UpdatePaymentPositionDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {Payment}
@@ -4843,7 +4943,7 @@ export interface UpdatePaymentTypeDto {
      * @type {number}
      * @memberof UpdatePaymentTypeDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {string}
@@ -4886,7 +4986,7 @@ export interface UpdatePayrollDto {
      * @type {number}
      * @memberof UpdatePayrollDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {Position}
@@ -5055,7 +5155,7 @@ export interface UpdatePersonDto {
      * @type {number}
      * @memberof UpdatePersonDto
      */
-    'version'?: number | null;
+    'version': number;
     /**
      * 
      * @type {string}
@@ -5116,12 +5216,6 @@ export interface UpdatePersonDto {
      * @memberof UpdatePersonDto
      */
     'photo'?: string;
-    /**
-     * 
-     * @type {Array<Position>}
-     * @memberof UpdatePersonDto
-     */
-    'positions'?: Array<Position>;
 }
 /**
  * 
@@ -5134,13 +5228,7 @@ export interface UpdatePositionDto {
      * @type {number}
      * @memberof UpdatePositionDto
      */
-    'version'?: number | null;
-    /**
-     * 
-     * @type {Company}
-     * @memberof UpdatePositionDto
-     */
-    'company'?: Company;
+    'version': number;
     /**
      * 
      * @type {number}
@@ -5167,12 +5255,6 @@ export interface UpdatePositionDto {
     'description'?: string;
     /**
      * 
-     * @type {Person}
-     * @memberof UpdatePositionDto
-     */
-    'person'?: Person;
-    /**
-     * 
      * @type {number}
      * @memberof UpdatePositionDto
      */
@@ -5189,18 +5271,6 @@ export interface UpdatePositionDto {
      * @memberof UpdatePositionDto
      */
     'dateTo'?: Date;
-    /**
-     * 
-     * @type {Array<PositionHistory>}
-     * @memberof UpdatePositionDto
-     */
-    'history'?: Array<PositionHistory>;
-    /**
-     * 
-     * @type {Array<PositionBalance>}
-     * @memberof UpdatePositionDto
-     */
-    'balance'?: Array<PositionBalance>;
 }
 /**
  * 
@@ -5213,13 +5283,7 @@ export interface UpdatePositionHistoryDto {
      * @type {number}
      * @memberof UpdatePositionHistoryDto
      */
-    'version'?: number | null;
-    /**
-     * 
-     * @type {Position}
-     * @memberof UpdatePositionHistoryDto
-     */
-    'position'?: Position;
+    'version': number;
     /**
      * 
      * @type {number}
@@ -5240,22 +5304,10 @@ export interface UpdatePositionHistoryDto {
     'dateTo'?: Date;
     /**
      * 
-     * @type {Department}
-     * @memberof UpdatePositionHistoryDto
-     */
-    'department'?: Department;
-    /**
-     * 
      * @type {number}
      * @memberof UpdatePositionHistoryDto
      */
     'departmentId'?: number | null;
-    /**
-     * 
-     * @type {Job}
-     * @memberof UpdatePositionHistoryDto
-     */
-    'job'?: Job;
     /**
      * 
      * @type {number}
@@ -5264,22 +5316,10 @@ export interface UpdatePositionHistoryDto {
     'jobId'?: number | null;
     /**
      * 
-     * @type {WorkNorm}
-     * @memberof UpdatePositionHistoryDto
-     */
-    'workNorm'?: WorkNorm;
-    /**
-     * 
      * @type {number}
      * @memberof UpdatePositionHistoryDto
      */
     'workNormId'?: number | null;
-    /**
-     * 
-     * @type {PaymentType}
-     * @memberof UpdatePositionHistoryDto
-     */
-    'paymentType'?: PaymentType;
     /**
      * 
      * @type {number}
@@ -5329,7 +5369,7 @@ export interface UpdateTaskDto {
      * @type {number}
      * @memberof UpdateTaskDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {Company}
@@ -5426,7 +5466,7 @@ export interface UpdateUserDto {
      * @type {number}
      * @memberof UpdateUserDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {string}
@@ -5493,7 +5533,7 @@ export interface UpdateWorkNormDto {
      * @type {number}
      * @memberof UpdateWorkNormDto
      */
-    'version'?: number | null;
+    'version'?: number;
     /**
      * 
      * @type {string}
@@ -5590,7 +5630,7 @@ export interface User {
      * @type {Date}
      * @memberof User
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -5602,7 +5642,7 @@ export interface User {
      * @type {Date}
      * @memberof User
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -5626,7 +5666,7 @@ export interface User {
      * @type {number}
      * @memberof User
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -5681,7 +5721,7 @@ export interface UserCompany {
      * @type {Date}
      * @memberof UserCompany
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -5693,7 +5733,7 @@ export interface UserCompany {
      * @type {Date}
      * @memberof UserCompany
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -5717,7 +5757,20 @@ export interface UserCompany {
      * @type {number}
      * @memberof UserCompany
      */
-    'version'?: number | null;
+    'version': number;
+}
+/**
+ * 
+ * @export
+ * @interface WithdrawPaymentDto
+ */
+export interface WithdrawPaymentDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof WithdrawPaymentDto
+     */
+    'version': number;
 }
 /**
  * 
@@ -5766,7 +5819,7 @@ export interface WorkNorm {
      * @type {Date}
      * @memberof WorkNorm
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -5778,7 +5831,7 @@ export interface WorkNorm {
      * @type {Date}
      * @memberof WorkNorm
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -5802,7 +5855,7 @@ export interface WorkNorm {
      * @type {number}
      * @memberof WorkNorm
      */
-    'version'?: number | null;
+    'version': number;
 }
 /**
  * 
@@ -5845,7 +5898,7 @@ export interface WorkNormPeriod {
      * @type {Date}
      * @memberof WorkNormPeriod
      */
-    'createdDate'?: Date;
+    'createdDate': Date;
     /**
      * 
      * @type {number}
@@ -5857,7 +5910,7 @@ export interface WorkNormPeriod {
      * @type {Date}
      * @memberof WorkNormPeriod
      */
-    'updatedDate'?: Date;
+    'updatedDate': Date;
     /**
      * 
      * @type {number}
@@ -5881,7 +5934,7 @@ export interface WorkNormPeriod {
      * @type {number}
      * @memberof WorkNormPeriod
      */
-    'version'?: number | null;
+    'version': number;
 }
 
 /**
@@ -8340,14 +8393,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create a Payment Type record
-         * @param {CreatePaymentTypeDto} createPaymentTypeDto 
+         * @param {PaymentTypeFilter} paymentTypeFilter 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentTypesCreate: async (createPaymentTypeDto: CreatePaymentTypeDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createPaymentTypeDto' is not null or undefined
-            assertParamExists('paymentTypesCreate', 'createPaymentTypeDto', createPaymentTypeDto)
+        paymentTypesFindAll: async (paymentTypeFilter: PaymentTypeFilter, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paymentTypeFilter' is not null or undefined
+            assertParamExists('paymentTypesFindAll', 'paymentTypeFilter', paymentTypeFilter)
             const localVarPath = `/api/payment-types`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8371,68 +8423,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createPaymentTypeDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} part 
-         * @param {string} groups 
-         * @param {string} methods 
-         * @param {string} ids 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        paymentTypesFindAll: async (part: string, groups: string, methods: string, ids: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'part' is not null or undefined
-            assertParamExists('paymentTypesFindAll', 'part', part)
-            // verify required parameter 'groups' is not null or undefined
-            assertParamExists('paymentTypesFindAll', 'groups', groups)
-            // verify required parameter 'methods' is not null or undefined
-            assertParamExists('paymentTypesFindAll', 'methods', methods)
-            // verify required parameter 'ids' is not null or undefined
-            assertParamExists('paymentTypesFindAll', 'ids', ids)
-            const localVarPath = `/api/payment-types`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (part !== undefined) {
-                localVarQueryParameter['part'] = part;
-            }
-
-            if (groups !== undefined) {
-                localVarQueryParameter['groups'] = groups;
-            }
-
-            if (methods !== undefined) {
-                localVarQueryParameter['methods'] = methods;
-            }
-
-            if (ids !== undefined) {
-                localVarQueryParameter['ids'] = ids;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(paymentTypeFilter, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8600,13 +8591,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {FindPaymentDto} findPaymentDto 
+         * @param {FindAllPaymentDto} findAllPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsFindAll: async (findPaymentDto: FindPaymentDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'findPaymentDto' is not null or undefined
-            assertParamExists('paymentsFindAll', 'findPaymentDto', findPaymentDto)
+        paymentsFindAll: async (findAllPaymentDto: FindAllPaymentDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findAllPaymentDto' is not null or undefined
+            assertParamExists('paymentsFindAll', 'findAllPaymentDto', findAllPaymentDto)
             const localVarPath = `/api/payments/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8630,7 +8621,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(findPaymentDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(findAllPaymentDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8649,7 +8640,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('paymentsFindOne', 'id', id)
             // verify required parameter 'relations' is not null or undefined
             assertParamExists('paymentsFindOne', 'relations', relations)
-            const localVarPath = `/api/payments/{id}`
+            const localVarPath = `/api/payments/find/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8658,7 +8649,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -8685,12 +8676,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Process payment
          * @param {number} id 
+         * @param {ProcessPaymentDto} processPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsProcess: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        paymentsProcess: async (id: number, processPaymentDto: ProcessPaymentDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('paymentsProcess', 'id', id)
+            // verify required parameter 'processPaymentDto' is not null or undefined
+            assertParamExists('paymentsProcess', 'processPaymentDto', processPaymentDto)
             const localVarPath = `/api/payments/process/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8710,9 +8704,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(processPaymentDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8805,12 +8802,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Withdraw payment
          * @param {number} id 
+         * @param {WithdrawPaymentDto} withdrawPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsWithdraw: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        paymentsWithdraw: async (id: number, withdrawPaymentDto: WithdrawPaymentDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('paymentsWithdraw', 'id', id)
+            // verify required parameter 'withdrawPaymentDto' is not null or undefined
+            assertParamExists('paymentsWithdraw', 'withdrawPaymentDto', withdrawPaymentDto)
             const localVarPath = `/api/payments/withdraw/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8830,9 +8830,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(withdrawPaymentDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9086,45 +9089,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {FindPersonDto} findPersonDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personsFind: async (findPersonDto: FindPersonDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'findPersonDto' is not null or undefined
-            assertParamExists('personsFind', 'findPersonDto', findPersonDto)
-            const localVarPath = `/api/persons/find`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(findPersonDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -9317,61 +9281,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {number} positionId 
-         * @param {boolean} relations 
+         * @param {FindAllPositionHistoryDto} findAllPositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryFindAll: async (positionId: number, relations: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'positionId' is not null or undefined
-            assertParamExists('positionHistoryFindAll', 'positionId', positionId)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('positionHistoryFindAll', 'relations', relations)
-            const localVarPath = `/api/position-history`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (positionId !== undefined) {
-                localVarQueryParameter['positionId'] = positionId;
-            }
-
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {FindPositionHistoryDto} findPositionHistoryDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        positionHistoryFindLast: async (findPositionHistoryDto: FindPositionHistoryDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'findPositionHistoryDto' is not null or undefined
-            assertParamExists('positionHistoryFindLast', 'findPositionHistoryDto', findPositionHistoryDto)
-            const localVarPath = `/api/position-history/find-last`;
+        positionHistoryFindAll: async (findAllPositionHistoryDto: FindAllPositionHistoryDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findAllPositionHistoryDto' is not null or undefined
+            assertParamExists('positionHistoryFindAll', 'findAllPositionHistoryDto', findAllPositionHistoryDto)
+            const localVarPath = `/api/position-history/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9394,7 +9311,46 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(findPositionHistoryDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(findAllPositionHistoryDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {FindAllPositionHistoryDto} findAllPositionHistoryDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        positionHistoryFindLast: async (findAllPositionHistoryDto: FindAllPositionHistoryDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findAllPositionHistoryDto' is not null or undefined
+            assertParamExists('positionHistoryFindLast', 'findAllPositionHistoryDto', findAllPositionHistoryDto)
+            const localVarPath = `/api/position-history/find/last`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findAllPositionHistoryDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9404,16 +9360,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindOnePositionHistoryDto} findOnePositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryFindOne: async (id: number, relations: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        positionHistoryFindOne: async (id: number, findOnePositionHistoryDto: FindOnePositionHistoryDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('positionHistoryFindOne', 'id', id)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('positionHistoryFindOne', 'relations', relations)
-            const localVarPath = `/api/position-history/{id}`
+            // verify required parameter 'findOnePositionHistoryDto' is not null or undefined
+            assertParamExists('positionHistoryFindOne', 'findOnePositionHistoryDto', findOnePositionHistoryDto)
+            const localVarPath = `/api/position-history/find/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9422,7 +9378,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -9430,15 +9386,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findOnePositionHistoryDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9569,13 +9524,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {FindPositionDto} findPositionDto 
+         * @param {FindAllPositionDto} findAllPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindAll: async (findPositionDto: FindPositionDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'findPositionDto' is not null or undefined
-            assertParamExists('positionsFindAll', 'findPositionDto', findPositionDto)
+        positionsFindAll: async (findAllPositionDto: FindAllPositionDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findAllPositionDto' is not null or undefined
+            assertParamExists('positionsFindAll', 'findAllPositionDto', findAllPositionDto)
             const localVarPath = `/api/positions/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9599,7 +9554,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(findPositionDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(findAllPositionDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9687,19 +9642,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
-         * @param {Date} onDate 
+         * @param {FindOnePositionDto} findOnePositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindOne: async (id: number, relations: boolean, onDate: Date, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        positionsFindOne: async (id: number, findOnePositionDto: FindOnePositionDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('positionsFindOne', 'id', id)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('positionsFindOne', 'relations', relations)
-            // verify required parameter 'onDate' is not null or undefined
-            assertParamExists('positionsFindOne', 'onDate', onDate)
-            const localVarPath = `/api/positions/{id}`
+            // verify required parameter 'findOnePositionDto' is not null or undefined
+            assertParamExists('positionsFindOne', 'findOnePositionDto', findOnePositionDto)
+            const localVarPath = `/api/positions/find/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9708,7 +9660,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -9716,21 +9668,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
-            if (onDate !== undefined) {
-                localVarQueryParameter['onDate'] = (onDate as any instanceof Date) ?
-                    (onDate as any).toISOString() :
-                    onDate;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findOnePositionDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11646,28 +11591,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create a Payment Type record
-         * @param {CreatePaymentTypeDto} createPaymentTypeDto 
+         * @param {PaymentTypeFilter} paymentTypeFilter 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paymentTypesCreate(createPaymentTypeDto: CreatePaymentTypeDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaymentType>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentTypesCreate(createPaymentTypeDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentTypesCreate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} part 
-         * @param {string} groups 
-         * @param {string} methods 
-         * @param {string} ids 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async paymentTypesFindAll(part: string, groups: string, methods: string, ids: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PaymentType>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentTypesFindAll(part, groups, methods, ids, options);
+        async paymentTypesFindAll(paymentTypeFilter: PaymentTypeFilter, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PaymentType>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentTypesFindAll(paymentTypeFilter, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentTypesFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11726,12 +11655,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {FindPaymentDto} findPaymentDto 
+         * @param {FindAllPaymentDto} findAllPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paymentsFindAll(findPaymentDto: FindPaymentDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Payment>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsFindAll(findPaymentDto, options);
+        async paymentsFindAll(findAllPaymentDto: FindAllPaymentDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Payment>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsFindAll(findAllPaymentDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentsFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11753,11 +11682,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary Process payment
          * @param {number} id 
+         * @param {ProcessPaymentDto} processPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paymentsProcess(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsProcess(id, options);
+        async paymentsProcess(id: number, processPaymentDto: ProcessPaymentDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsProcess(id, processPaymentDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentsProcess']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11793,11 +11723,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary Withdraw payment
          * @param {number} id 
+         * @param {WithdrawPaymentDto} withdrawPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paymentsWithdraw(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsWithdraw(id, options);
+        async paymentsWithdraw(id: number, withdrawPaymentDto: WithdrawPaymentDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsWithdraw(id, withdrawPaymentDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentsWithdraw']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11882,18 +11813,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {FindPersonDto} findPersonDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async personsFind(findPersonDto: FindPersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.personsFind(findPersonDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.personsFind']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11957,25 +11876,24 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} positionId 
-         * @param {boolean} relations 
+         * @param {FindAllPositionHistoryDto} findAllPositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionHistoryFindAll(positionId: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PositionHistory>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryFindAll(positionId, relations, options);
+        async positionHistoryFindAll(findAllPositionHistoryDto: FindAllPositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PositionHistory>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryFindAll(findAllPositionHistoryDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionHistoryFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {FindPositionHistoryDto} findPositionHistoryDto 
+         * @param {FindAllPositionHistoryDto} findAllPositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionHistoryFindLast(findPositionHistoryDto: FindPositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PositionHistory>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryFindLast(findPositionHistoryDto, options);
+        async positionHistoryFindLast(findAllPositionHistoryDto: FindAllPositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PositionHistory>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryFindLast(findAllPositionHistoryDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionHistoryFindLast']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11983,12 +11901,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindOnePositionHistoryDto} findOnePositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionHistoryFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PositionHistory>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryFindOne(id, relations, options);
+        async positionHistoryFindOne(id: number, findOnePositionHistoryDto: FindOnePositionHistoryDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PositionHistory>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.positionHistoryFindOne(id, findOnePositionHistoryDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionHistoryFindOne']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12035,12 +11953,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {FindPositionDto} findPositionDto 
+         * @param {FindAllPositionDto} findAllPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsFindAll(findPositionDto: FindPositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Position>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindAll(findPositionDto, options);
+        async positionsFindAll(findAllPositionDto: FindAllPositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Position>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindAll(findAllPositionDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12072,13 +11990,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
-         * @param {Date} onDate 
+         * @param {FindOnePositionDto} findOnePositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async positionsFindOne(id: number, relations: boolean, onDate: Date, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindOne(id, relations, onDate, options);
+        async positionsFindOne(id: number, findOnePositionDto: FindOnePositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Position>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.positionsFindOne(id, findOnePositionDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.positionsFindOne']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13058,25 +12975,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create a Payment Type record
-         * @param {CreatePaymentTypeDto} createPaymentTypeDto 
+         * @param {PaymentTypeFilter} paymentTypeFilter 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentTypesCreate(createPaymentTypeDto: CreatePaymentTypeDto, options?: any): AxiosPromise<PaymentType> {
-            return localVarFp.paymentTypesCreate(createPaymentTypeDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} part 
-         * @param {string} groups 
-         * @param {string} methods 
-         * @param {string} ids 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        paymentTypesFindAll(part: string, groups: string, methods: string, ids: string, options?: any): AxiosPromise<Array<PaymentType>> {
-            return localVarFp.paymentTypesFindAll(part, groups, methods, ids, options).then((request) => request(axios, basePath));
+        paymentTypesFindAll(paymentTypeFilter: PaymentTypeFilter, options?: any): AxiosPromise<Array<PaymentType>> {
+            return localVarFp.paymentTypesFindAll(paymentTypeFilter, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13120,12 +13024,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {FindPaymentDto} findPaymentDto 
+         * @param {FindAllPaymentDto} findAllPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsFindAll(findPaymentDto: FindPaymentDto, options?: any): AxiosPromise<Array<Payment>> {
-            return localVarFp.paymentsFindAll(findPaymentDto, options).then((request) => request(axios, basePath));
+        paymentsFindAll(findAllPaymentDto: FindAllPaymentDto, options?: any): AxiosPromise<Array<Payment>> {
+            return localVarFp.paymentsFindAll(findAllPaymentDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13141,11 +13045,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary Process payment
          * @param {number} id 
+         * @param {ProcessPaymentDto} processPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsProcess(id: number, options?: any): AxiosPromise<Payment> {
-            return localVarFp.paymentsProcess(id, options).then((request) => request(axios, basePath));
+        paymentsProcess(id: number, processPaymentDto: ProcessPaymentDto, options?: any): AxiosPromise<Payment> {
+            return localVarFp.paymentsProcess(id, processPaymentDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13172,11 +13077,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary Withdraw payment
          * @param {number} id 
+         * @param {WithdrawPaymentDto} withdrawPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsWithdraw(id: number, options?: any): AxiosPromise<Payment> {
-            return localVarFp.paymentsWithdraw(id, options).then((request) => request(axios, basePath));
+        paymentsWithdraw(id: number, withdrawPaymentDto: WithdrawPaymentDto, options?: any): AxiosPromise<Payment> {
+            return localVarFp.paymentsWithdraw(id, withdrawPaymentDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13240,15 +13146,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {FindPersonDto} findPersonDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personsFind(findPersonDto: FindPersonDto, options?: any): AxiosPromise<Person> {
-            return localVarFp.personsFind(findPersonDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13297,32 +13194,31 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {number} positionId 
-         * @param {boolean} relations 
+         * @param {FindAllPositionHistoryDto} findAllPositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryFindAll(positionId: number, relations: boolean, options?: any): AxiosPromise<Array<PositionHistory>> {
-            return localVarFp.positionHistoryFindAll(positionId, relations, options).then((request) => request(axios, basePath));
+        positionHistoryFindAll(findAllPositionHistoryDto: FindAllPositionHistoryDto, options?: any): AxiosPromise<Array<PositionHistory>> {
+            return localVarFp.positionHistoryFindAll(findAllPositionHistoryDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {FindPositionHistoryDto} findPositionHistoryDto 
+         * @param {FindAllPositionHistoryDto} findAllPositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryFindLast(findPositionHistoryDto: FindPositionHistoryDto, options?: any): AxiosPromise<PositionHistory> {
-            return localVarFp.positionHistoryFindLast(findPositionHistoryDto, options).then((request) => request(axios, basePath));
+        positionHistoryFindLast(findAllPositionHistoryDto: FindAllPositionHistoryDto, options?: any): AxiosPromise<PositionHistory> {
+            return localVarFp.positionHistoryFindLast(findAllPositionHistoryDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindOnePositionHistoryDto} findOnePositionHistoryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionHistoryFindOne(id: number, relations: boolean, options?: any): AxiosPromise<PositionHistory> {
-            return localVarFp.positionHistoryFindOne(id, relations, options).then((request) => request(axios, basePath));
+        positionHistoryFindOne(id: number, findOnePositionHistoryDto: FindOnePositionHistoryDto, options?: any): AxiosPromise<PositionHistory> {
+            return localVarFp.positionHistoryFindOne(id, findOnePositionHistoryDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13357,12 +13253,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {FindPositionDto} findPositionDto 
+         * @param {FindAllPositionDto} findAllPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindAll(findPositionDto: FindPositionDto, options?: any): AxiosPromise<Array<Position>> {
-            return localVarFp.positionsFindAll(findPositionDto, options).then((request) => request(axios, basePath));
+        positionsFindAll(findAllPositionDto: FindAllPositionDto, options?: any): AxiosPromise<Array<Position>> {
+            return localVarFp.positionsFindAll(findAllPositionDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13385,13 +13281,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
-         * @param {Date} onDate 
+         * @param {FindOnePositionDto} findOnePositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        positionsFindOne(id: number, relations: boolean, onDate: Date, options?: any): AxiosPromise<Position> {
-            return localVarFp.positionsFindOne(id, relations, onDate, options).then((request) => request(axios, basePath));
+        positionsFindOne(id: number, findOnePositionDto: FindOnePositionDto, options?: any): AxiosPromise<Position> {
+            return localVarFp.positionsFindOne(id, findOnePositionDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14415,28 +14310,13 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Create a Payment Type record
-     * @param {CreatePaymentTypeDto} createPaymentTypeDto 
+     * @param {PaymentTypeFilter} paymentTypeFilter 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public paymentTypesCreate(createPaymentTypeDto: CreatePaymentTypeDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentTypesCreate(createPaymentTypeDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} part 
-     * @param {string} groups 
-     * @param {string} methods 
-     * @param {string} ids 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public paymentTypesFindAll(part: string, groups: string, methods: string, ids: string, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentTypesFindAll(part, groups, methods, ids, options).then((request) => request(this.axios, this.basePath));
+    public paymentTypesFindAll(paymentTypeFilter: PaymentTypeFilter, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentTypesFindAll(paymentTypeFilter, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14489,13 +14369,13 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {FindPaymentDto} findPaymentDto 
+     * @param {FindAllPaymentDto} findAllPaymentDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public paymentsFindAll(findPaymentDto: FindPaymentDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentsFindAll(findPaymentDto, options).then((request) => request(this.axios, this.basePath));
+    public paymentsFindAll(findAllPaymentDto: FindAllPaymentDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentsFindAll(findAllPaymentDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14514,12 +14394,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary Process payment
      * @param {number} id 
+     * @param {ProcessPaymentDto} processPaymentDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public paymentsProcess(id: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentsProcess(id, options).then((request) => request(this.axios, this.basePath));
+    public paymentsProcess(id: number, processPaymentDto: ProcessPaymentDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentsProcess(id, processPaymentDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14551,12 +14432,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary Withdraw payment
      * @param {number} id 
+     * @param {WithdrawPaymentDto} withdrawPaymentDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public paymentsWithdraw(id: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentsWithdraw(id, options).then((request) => request(this.axios, this.basePath));
+    public paymentsWithdraw(id: number, withdrawPaymentDto: WithdrawPaymentDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentsWithdraw(id, withdrawPaymentDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14633,17 +14515,6 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {FindPersonDto} findPersonDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public personsFind(findPersonDto: FindPersonDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).personsFind(findPersonDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
@@ -14702,37 +14573,36 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} positionId 
-     * @param {boolean} relations 
+     * @param {FindAllPositionHistoryDto} findAllPositionHistoryDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public positionHistoryFindAll(positionId: number, relations: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).positionHistoryFindAll(positionId, relations, options).then((request) => request(this.axios, this.basePath));
+    public positionHistoryFindAll(findAllPositionHistoryDto: FindAllPositionHistoryDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).positionHistoryFindAll(findAllPositionHistoryDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {FindPositionHistoryDto} findPositionHistoryDto 
+     * @param {FindAllPositionHistoryDto} findAllPositionHistoryDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public positionHistoryFindLast(findPositionHistoryDto: FindPositionHistoryDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).positionHistoryFindLast(findPositionHistoryDto, options).then((request) => request(this.axios, this.basePath));
+    public positionHistoryFindLast(findAllPositionHistoryDto: FindAllPositionHistoryDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).positionHistoryFindLast(findAllPositionHistoryDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {number} id 
-     * @param {boolean} relations 
+     * @param {FindOnePositionHistoryDto} findOnePositionHistoryDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public positionHistoryFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).positionHistoryFindOne(id, relations, options).then((request) => request(this.axios, this.basePath));
+    public positionHistoryFindOne(id: number, findOnePositionHistoryDto: FindOnePositionHistoryDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).positionHistoryFindOne(id, findOnePositionHistoryDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14774,13 +14644,13 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {FindPositionDto} findPositionDto 
+     * @param {FindAllPositionDto} findAllPositionDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public positionsFindAll(findPositionDto: FindPositionDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).positionsFindAll(findPositionDto, options).then((request) => request(this.axios, this.basePath));
+    public positionsFindAll(findAllPositionDto: FindAllPositionDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).positionsFindAll(findAllPositionDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14808,14 +14678,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @param {number} id 
-     * @param {boolean} relations 
-     * @param {Date} onDate 
+     * @param {FindOnePositionDto} findOnePositionDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public positionsFindOne(id: number, relations: boolean, onDate: Date, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).positionsFindOne(id, relations, onDate, options).then((request) => request(this.axios, this.basePath));
+    public positionsFindOne(id: number, findOnePositionDto: FindOnePositionDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).positionsFindOne(id, findOnePositionDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

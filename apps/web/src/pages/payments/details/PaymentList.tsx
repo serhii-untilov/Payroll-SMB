@@ -1,7 +1,7 @@
+import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
-import { deletePayment, getPayments } from '@/services/payment.service';
-import { sumFormatter } from '@/utils';
+import { invalidateQueries, sumFormatter } from '@/utils';
 import {
     GridCellParams,
     GridColDef,
@@ -10,21 +10,15 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import {
-    CalcMethod,
-    IFindPayment,
-    IPayment,
-    PaymentStatus,
-    date2view,
-    dateUTC,
-} from '@repo/shared';
+import { Payment } from '@repo/openapi';
+import { CalcMethod, PaymentStatus, ResourceType, date2view, dateUTC } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-type Props = IFindPayment & {
+import { FindAllPaymentDto } from '@repo/openapi';
+type Props = FindAllPaymentDto & {
     companyPayments: boolean;
     sifPayments: boolean;
 };
@@ -121,17 +115,17 @@ export function PaymentList(props: Props) {
         },
     ];
 
-    const { data, isError, error } = useQuery<IPayment[], Error>({
-        queryKey: ['payment', 'list', props],
+    const { data, isError, error } = useQuery<Payment[], Error>({
+        queryKey: [ResourceType.PAYMENT, props],
         queryFn: async () => {
             return (
-                await getPayments({
+                await api.paymentsFindAll({
                     relations: true,
                     companyId,
                     payPeriod,
                     ...(status ? { status } : {}),
                 })
-            ).filter(
+            ).data.filter(
                 (o) =>
                     (props.companyPayments &&
                         o.paymentType?.calcMethod !== CalcMethod.SIF_PAYMENT) ||
@@ -159,10 +153,10 @@ export function PaymentList(props: Props) {
         for (const id of rowSelectionModel) {
             const payment = data?.find((o) => o.id === Number(id));
             if (payment?.status === PaymentStatus.DRAFT) {
-                await deletePayment(+id);
+                await api.paymentsRemove(+id);
             }
         }
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
     };
 
     const onPrint = () => {

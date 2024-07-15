@@ -1,7 +1,8 @@
+import { api, dto } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
-import { getPositionHistoryList } from '@/services/positionHistory.service';
+import { invalidateQueries } from '@/utils';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -11,7 +12,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IPositionHistory } from '@repo/shared';
+import { ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -92,14 +93,14 @@ export function PositionHistory(props: Props) {
         },
     ];
 
-    const { data, isError, isLoading, error } = useQuery<IPositionHistory[], Error>({
-        queryKey: ['positionHistory', 'list', props],
+    const { data, isError, isLoading, error } = useQuery<dto.PositionHistory[], Error>({
+        queryKey: [ResourceType.POSITION_HISTORY, props],
         queryFn: async () => {
-            return (await getPositionHistoryList(positionId, true)).sort((a, b) =>
-                a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0,
-            );
+            const response = positionId
+                ? (await api.positionHistoryFindAll({ positionId, relations: true })).data
+                : [];
+            return response.sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
         },
-        enabled: !!positionId,
     });
 
     if (isLoading) {
@@ -123,7 +124,7 @@ export function PositionHistory(props: Props) {
     const onDelete = async () => {
         console.log('onDelete');
         // delete
-        await queryClient.invalidateQueries({ queryKey: ['positionHistory'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.POSITION_HISTORY]);
     };
 
     const onPrint = () => {

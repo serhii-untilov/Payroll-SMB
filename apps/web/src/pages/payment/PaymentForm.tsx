@@ -1,3 +1,4 @@
+import { api } from '@/api';
 import PageLayout from '@/components/layout/PageLayout';
 import { PageTitle } from '@/components/layout/PageTitle';
 import { Tab } from '@/components/layout/Tab';
@@ -5,10 +6,10 @@ import { TabPanel } from '@/components/layout/TabPanel';
 import { Tabs } from '@/components/layout/Tabs';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getPayment } from '@/services/payment.service';
 import { sumFormatter } from '@/utils';
 import { Box, Chip } from '@mui/material';
-import { IPayment, PaymentStatus, dateUTC } from '@repo/shared';
+import { Payment } from '@repo/openapi';
+import { PaymentStatus, dateUTC } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
@@ -36,10 +37,10 @@ export default function PaymentForm() {
         data: payment,
         isError,
         error,
-    } = useQuery<Partial<IPayment>, Error>({
+    } = useQuery<Partial<Payment>, Error>({
         queryKey: ['payment', { paymentId }],
         queryFn: async () => {
-            return await getPayment({ id: paymentId, relations: true });
+            return (await api.paymentsFindOne(paymentId, true)).data;
         },
         enabled: !!paymentId,
     });

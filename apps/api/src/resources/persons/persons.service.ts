@@ -12,12 +12,12 @@ import { Repository } from 'typeorm';
 import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';
 import { CreatePersonDto } from './dto/create-person.dto';
-import { FindPersonDto } from './dto/find-person.dto';
+import { FindAllPersonDto } from './dto/find-all-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { Person } from './entities/person.entity';
 import { PersonCreatedEvent } from './events/person-created.event';
-import { PersonUpdatedEvent } from './events/person-updated.event';
 import { PersonDeletedEvent } from './events/person-deleted.event';
+import { PersonUpdatedEvent } from './events/person-updated.event';
 
 @Injectable()
 export class PersonsService extends AvailableForUser {
@@ -33,17 +33,23 @@ export class PersonsService extends AvailableForUser {
         super(accessService);
     }
 
+    async exists(params: FindAllPersonDto): Promise<boolean> {
+        const { firstName, lastName, middleName, birthday, sex, taxId, email } = params;
+        const found = await this.repository
+            .createQueryBuilder('person')
+            .where('"firstName" = :firstName', { firstName })
+            .andWhere('"lastName" = :lastName', { lastName })
+            .andWhere(middleName ? '"middleName" = :middleName' : '1=1', { middleName })
+            .andWhere(birthday ? '"birthday" = :birthday' : '1=1', { birthday })
+            .andWhere(sex ? '"sex" = :sex' : '1=1', { sex })
+            .andWhere(taxId ? '"taxId" = :taxId' : '1=1', { taxId })
+            .andWhere(email ? '"email" = :email' : '1=1', { email })
+            .getRawMany();
+        return !!found.length;
+    }
+
     async create(userId: number, payload: CreatePersonDto): Promise<Person> {
-        const where: FindPersonDto[] = [
-            {
-                firstName: payload.firstName,
-                lastName: payload.lastName,
-                ...(payload.middleName ? { middleName: payload.middleName } : {}),
-                ...(payload.birthday ? { birthday: payload.birthday } : {}),
-                ...(payload.taxId ? { taxId: payload.taxId } : {}),
-            },
-        ];
-        const exists = await this.repository.findOne({ where });
+        const exists = await this.exists(payload);
         if (exists) {
             throw new BadRequestException(
                 `Person '${payload.firstName} ${payload.lastName}' already exists.`,
@@ -90,10 +96,6 @@ export class PersonsService extends AvailableForUser {
         const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
         this.eventEmitter.emit('person.deleted', new PersonDeletedEvent(userId, id));
         return deleted;
-    }
-
-    async findOneBy(params: FindPersonDto): Promise<Person | null> {
-        return await this.repository.findOne({ where: params });
     }
 
     async findByBirthdayInMonth(

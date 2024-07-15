@@ -1,6 +1,6 @@
+import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
-import { deletePayment } from '@/services/payment.service';
 import { sumFormatter } from '@/utils';
 import {
     GridCellParams,
@@ -108,7 +108,7 @@ export function MandatoryPayments(props: Props) {
 
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
-            await deletePayment(+id);
+            await api.paymentsRemove(+id);
         }
         await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
     };

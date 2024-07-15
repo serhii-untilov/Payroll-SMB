@@ -4,7 +4,7 @@ import { Task } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 
-type Params = { companyId: number | undefined; payPeriod: string | undefined };
+type Params = { companyId: number | undefined; payPeriod: Date | undefined };
 type Result = { data: Task[]; isLoading: boolean };
 
 export function useTaskList(params: Params): Result {

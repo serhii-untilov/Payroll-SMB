@@ -22,7 +22,7 @@
     "m:gen": "NODE_ENV=development npm run m:run && typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:generate ./src/migrations/gen --pretty",
     "m:run": "NODE_ENV=development typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:run --transaction each",
     "m:revert": "NODE_ENV=development typeorm-ts-node-commonjs -d ./src/config/datasource.ts migration:revert",
-    "swagger": "NODE_ENV=development nest start -b swc --type-check --entryFile main-swagger.js"
+    "codegen": "NODE_ENV=development nest start --entryFile main-swagger.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

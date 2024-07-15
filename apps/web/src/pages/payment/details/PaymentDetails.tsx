@@ -1,3 +1,4 @@
+import { api } from '@/api';
 import { FormDateField } from '@/components/form/FormDateField';
 import { FormNumberField } from '@/components/form/FormNumberField';
 import { FormTextField } from '@/components/form/FormTextField';
@@ -7,17 +8,11 @@ import { SelectAccPeriod } from '@/components/select/SelectAccPeriod';
 import { SelectPaymentType } from '@/components/select/SelectPaymentType';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import {
-    createPayment,
-    getPayment,
-    processPayment,
-    updatePayment,
-    withdrawPayment,
-} from '@/services/payment.service';
-import { getDirtyValues } from '@/utils';
+import { getDirtyValues, invalidateQueries } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, OutlinedInput } from '@mui/material';
-import { IPayment, PaymentGroup, PaymentStatus } from '@repo/shared';
+import { Payment } from '@repo/openapi';
+import { PaymentGroup, PaymentStatus, ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
@@ -40,10 +35,10 @@ export function PaymentDetails(props: Props) {
 
     useEffect(() => {}, [locale]);
 
-    const { data: payment } = useQuery<Partial<IPayment>, Error>({
-        queryKey: ['payment', { paymentId }],
+    const { data: payment } = useQuery<Payment, Error>({
+        queryKey: [ResourceType.PAYMENT, { paymentId }],
         queryFn: async () => {
-            const payment = await getPayment({ id: paymentId, relations: true });
+            const payment = (await api.paymentsFindOne(paymentId, true)).data;
             return {
                 ...payment,
                 mandatoryPayments: (payment?.deductions || 0) + (payment?.funds || 0),
@@ -100,16 +95,23 @@ export function PaymentDetails(props: Props) {
         if (!payPeriod) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const updated = paymentId
-                ? await updatePayment(paymentId, { ...dirtyValues, version: payment?.version })
-                : await createPayment({
-                      ...data,
-                      companyId: company.id,
-                      payPeriod: payPeriod,
-                  });
-            reset(updated);
-            await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
-            setPaymentId(updated.id);
+            const response = payment
+                ? (
+                      await api.paymentsUpdate(paymentId, {
+                          ...dirtyValues,
+                          version: payment.version,
+                      })
+                  ).data
+                : (
+                      await api.paymentsCreate({
+                          ...data,
+                          companyId: company.id,
+                          payPeriod: payPeriod,
+                      })
+                  ).data;
+            reset(response);
+            await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
+            setPaymentId(response.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
@@ -118,20 +120,20 @@ export function PaymentDetails(props: Props) {
 
     const onCancel = async () => {
         reset(payment);
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
     };
 
     const onProcess = async () => {
-        if (payment?.id && payment?.version) {
-            await processPayment(payment?.id, payment?.version);
-            await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        if (payment) {
+            await api.paymentsProcess(payment?.id, { version: payment.version });
+            await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
         }
     };
 
     const onWithdraw = async () => {
-        if (payment?.id && payment?.version) {
-            await withdrawPayment(payment?.id, payment?.version);
-            await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        if (payment) {
+            await api.paymentsWithdraw(payment.id, { version: payment.version });
+            await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
         }
     };
 

@@ -1,3 +1,4 @@
+import { api } from '@/api';
 import { FormDateField } from '@/components/form/FormDateField';
 import { FormTextField } from '@/components/form/FormTextField';
 import TabLayout from '@/components/layout/TabLayout';
@@ -5,15 +6,14 @@ import { Toolbar } from '@/components/layout/Toolbar';
 import { SelectSex } from '@/components/select/SelectSex';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getPerson, updatePerson } from '@/services/person.service';
-import { getDirtyValues } from '@/utils';
+import { getDirtyValues, snackbarError, snackbarFormErrors } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
-import { IUpdatePerson } from '@repo/shared';
+import { Person } from '@repo/openapi';
+import { ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -27,14 +27,13 @@ const formSchema = yup.object().shape({
     id: yup.number().required(),
     lastName: yup.string().required(),
     firstName: yup.string().required(),
-    middleName: yup.string().nullable(),
-    taxId: yup.string().nullable(),
+    middleName: yup.string(),
+    taxId: yup.string(),
     birthday: yup.date().nullable(),
-    sex: yup.string().nullable(),
-    phone: yup.string().nullable(),
-    email: yup.string().nullable(),
-    photo: yup.string().nullable(),
-    version: yup.number().required(),
+    sex: yup.string(),
+    phone: yup.string(),
+    email: yup.string(),
+    photo: yup.string(),
 });
 
 type FormType = yup.InferType<typeof formSchema>;
@@ -47,10 +46,15 @@ export function Personal({ personId }: Props) {
 
     useEffect(() => {}, [company]);
 
-    const { data, isError, error } = useQuery<FormType, Error>({
-        queryKey: ['person', { personId }],
+    const {
+        data: person,
+        isError,
+        error,
+        isLoading,
+    } = useQuery<Person, Error>({
+        queryKey: [ResourceType.PERSON, { personId }],
         queryFn: async () => {
-            return formSchema.cast(await getPerson(personId, true));
+            return (await api.personsFindOne(personId)).data;
         },
     });
 
@@ -60,8 +64,8 @@ export function Personal({ personId }: Props) {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: data,
-        values: data,
+        defaultValues: person,
+        values: person,
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -71,37 +75,33 @@ export function Personal({ personId }: Props) {
     useEffect(() => {}, [locale]);
 
     useEffect(() => {
-        formErrors.firstName?.message &&
-            enqueueSnackbar(t(formErrors.firstName?.message), { variant: 'error' });
-        formErrors.lastName?.message &&
-            enqueueSnackbar(t(formErrors.lastName?.message), { variant: 'error' });
+        snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
-    }
+    if (isError) snackbarError(`${error.name}\n${error.message}`);
+    if (isLoading) return null;
+
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
         if (!data) return;
+        if (!person) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            await updatePerson(data.id, {
-                ...(dirtyValues as IUpdatePerson),
-                version: data.version,
+            await api.personsUpdate(data.id, {
+                ...dirtyValues,
+                version: person.version,
             });
-            const updated = await getPerson(personId, true);
+            const updated = (await api.personsFindOne(personId)).data;
             reset(updated as FormType);
             await queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
         } catch (e: unknown) {
             const error = e as AxiosError;
-            enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
+            snackbarError(`${error.code}\n${error.message}`);
         }
     };
 
     const onCancel = async () => {
-        reset(data);
+        reset(person);
         await queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
     };
 

@@ -7,10 +7,11 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, IPaymentTypeFilter, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
+import { PaymentTypeFilter } from './dto/find-all-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
 import { PaymentType } from './entities/payment-type.entity';
 
@@ -42,7 +43,7 @@ export class PaymentTypesService {
         });
     }
 
-    async findAll(filter: IPaymentTypeFilter | null = null): Promise<PaymentType[]> {
+    async findAll(filter?: PaymentTypeFilter): Promise<PaymentType[]> {
         return filter?.part || filter?.groups || filter?.methods || filter?.ids
             ? await this.repository
                   .createQueryBuilder('payment_type')

@@ -44,7 +44,7 @@ export default function DepartmentForm(params: Params) {
         isError,
         error,
     } = useQuery<Department | null, Error>({
-        queryKey: ['department', { departmentId }],
+        queryKey: [ResourceType.DEPARTMENT, { departmentId }],
         queryFn: async () => {
             return departmentId
                 ? (await api.departmentsFindOne(departmentId, false)).data ?? null

@@ -1,3 +1,4 @@
+import { ProcessPaymentDto } from './dto/process-payment.dto';
 import {
     BadRequestException,
     ConflictException,
@@ -13,13 +14,15 @@ import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { FindPaymentDto } from './dto/find-payment.dto';
+import { FindAllPaymentDto } from './dto/find-all-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { Payment } from './entities/payment.entity';
 import { PaymentUpdatedEvent } from './events/payment-updated.event';
 import { PaymentPositionsService } from './payment-positions/payment-positions.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { WrapperType } from '@/types/WrapperType';
+import { CompaniesService } from '../companies/companies.service';
+import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
@@ -35,6 +38,8 @@ export class PaymentsService extends AvailableForUserCompany {
         public paymentPositionsService: WrapperType<PaymentPositionsService>,
         @Inject(forwardRef(() => PayPeriodsService))
         public payPeriodsService: WrapperType<PayPeriodsService>,
+        @Inject(forwardRef(() => CompaniesService))
+        public companiesService: WrapperType<CompaniesService>,
         private eventEmitter: EventEmitter2,
     ) {
         super(accessService);
@@ -45,20 +50,24 @@ export class PaymentsService extends AvailableForUserCompany {
     }
 
     async create(userId: number, payload: CreatePaymentDto): Promise<Payment> {
-        const accPeriod = await this.payPeriodsService.findOneOrFail({
+        const { companyId, payPeriod, accPeriod, ...other } = payload;
+        const company = await this.companiesService.findOne(userId, payload.companyId);
+        const accPeriodRecord = await this.payPeriodsService.findOneOrFail({
             where: {
-                companyId: payload.companyId,
-                dateFrom: payload.accPeriod || payload.payPeriod,
+                companyId,
+                dateFrom: accPeriod ?? payPeriod ?? company.payPeriod,
             },
         });
         const created = await this.repository.save({
-            ...payload,
+            ...other,
+            payPeriod: payPeriod ?? company.payPeriod,
+            accPeriod: accPeriod ?? payPeriod ?? company.payPeriod,
             docNumber:
                 payload.docNumber ||
-                (await this.getNextDocNumber(payload.companyId, payload.payPeriod)),
+                (await this.getNextDocNumber(payload.companyId, payPeriod ?? company.payPeriod)),
             docDate: payload.docDate || dateUTC(new Date()),
-            dateFrom: payload.dateFrom || accPeriod.dateFrom,
-            dateTo: payload.dateTo || accPeriod.dateTo,
+            dateFrom: payload.dateFrom || accPeriodRecord.dateFrom,
+            dateTo: payload.dateTo || accPeriodRecord.dateTo,
             status: payload.status || PaymentStatus.DRAFT,
             recordFlags: payload.recordFlags || RecordFlags.AUTO,
             createdUserId: userId,
@@ -67,7 +76,7 @@ export class PaymentsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(params: FindPaymentDto): Promise<Payment[]> {
+    async findAll(params: FindAllPaymentDto): Promise<Payment[]> {
         const { companyId, positionId, payPeriod, accPeriod, status, relations } = params;
         if (!companyId) {
             throw new BadRequestException('Should be defined companyId');
@@ -96,7 +105,7 @@ export class PaymentsService extends AvailableForUserCompany {
         return record;
     }
 
-    async findOneBy(params: FindPaymentDto): Promise<Payment | null> {
+    async findOneBy(params: FindAllPaymentDto): Promise<Payment | null> {
         const found = await this.findAll(params);
         return found.length ? found[0] : null;
     }
@@ -166,37 +175,27 @@ export class PaymentsService extends AvailableForUserCompany {
         }
     }
 
-    async process(userId: number, id: number, version: number): Promise<Payment> {
-        const payment = await this.repository.findOneOrFail({
+    async process(userId: number, id: number, payload: ProcessPaymentDto): Promise<Payment> {
+        const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },
         });
-        if (payment.status === PaymentStatus.PAYED) {
-            return payment;
-        }
-        this.logger.log(
-            `process, id: ${id}, version: ${version}, payment.version: ${payment.version}`,
-        );
-        await this.paymentPositionsService.process(userId, payment);
-        await this.update(userId, payment.id, { status: PaymentStatus.PAYED, version });
+        if (record.status === PaymentStatus.PAYED) return record;
+        await this.paymentPositionsService.process(userId, record);
+        await this.update(userId, id, { status: PaymentStatus.PAYED, version: payload.version });
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
         return updated;
     }
 
-    async withdraw(userId: number, id: number, version: number): Promise<Payment> {
-        const payment = await this.repository.findOneOrFail({
+    async withdraw(userId: number, id: number, payload: WithdrawPaymentDto): Promise<Payment> {
+        const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },
         });
-        if (payment.status === PaymentStatus.DRAFT) {
-            return payment;
-        }
-        this.logger.log(
-            `withdraw, id: ${id}, version: ${version}, payment.version: ${payment.version}`,
-        );
+        if (record.status === PaymentStatus.DRAFT) return record;
         await this.paymentPositionsService.withdraw(id);
-        await this.update(userId, payment.id, { status: PaymentStatus.DRAFT, version });
+        await this.update(userId, id, { status: PaymentStatus.DRAFT, version: payload.version });
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
         return updated;

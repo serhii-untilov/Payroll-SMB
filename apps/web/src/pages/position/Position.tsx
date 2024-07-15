@@ -1,3 +1,4 @@
+import { api, dto } from '@/api';
 import PageLayout from '@/components/layout/PageLayout';
 import { PageTitle } from '@/components/layout/PageTitle';
 import { Tab } from '@/components/layout/Tab';
@@ -6,10 +7,9 @@ import { Tabs } from '@/components/layout/Tabs';
 import { AvatarBox } from '@/components/utility/AvatarBox';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getPosition } from '@/services/position.service';
-import { IPosition, maxDate, minDate } from '@repo/shared';
+import { snackbarError } from '@/utils';
+import { ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -37,38 +37,30 @@ export default function Position() {
 
     useEffect(() => {}, [company, locale]);
 
-    const defaultValues = useMemo((): Partial<IPosition> => {
+    const findPositionParams = useMemo(() => {
         return {
-            companyId: company?.id || 0,
-            dateFrom: minDate(),
-            dateTo: maxDate(),
+            relations: true,
+            onPayPeriodDate: payPeriod,
         };
-    }, [company]);
+    }, [payPeriod]);
 
     const {
         data: position,
         isError: isPositionError,
         error: positionError,
-    } = useQuery<Partial<IPosition>, Error>({
-        queryKey: ['position', { companyId: company?.id, positionId, relations: true }],
+    } = useQuery<dto.Position | null, Error>({
+        queryKey: [ResourceType.POSITION, { positionId, ...findPositionParams }],
         queryFn: async () => {
             return positionId
-                ? await getPosition({
-                      id: positionId,
-                      relations: true,
-                      onPayPeriodDate: payPeriod,
-                  })
-                : defaultValues;
+                ? (await api.positionsFindOne(positionId, findPositionParams)).data
+                : null;
         },
-        enabled: !!company?.id && !!payPeriod,
     });
 
     useEffect(() => {}, [locale]);
 
     if (isPositionError) {
-        return enqueueSnackbar(`${positionError.name}\n${positionError.message}`, {
-            variant: 'error',
-        });
+        return snackbarError(`${positionError.name}\n${positionError.message}`);
     }
 
     const generatePageTitle = () => {

@@ -136,7 +136,7 @@ export class PayrollCalculationService {
 
     public async calculatePosition(userId: number, positionId: number) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
-        this._position = await this.positionsService.findOne(positionId, true);
+        this._position = await this.positionsService.findOne(positionId, { relations: true });
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
@@ -278,7 +278,7 @@ export class PayrollCalculationService {
     }
 
     private async loadResources() {
-        this._paymentTypes = await this.paymentTypesService.findAll(null);
+        this._paymentTypes = await this.paymentTypesService.findAll();
         this._workNorms = await this.workNormsService.findAll(true);
     }
 
@@ -344,7 +344,7 @@ export class PayrollCalculationService {
             await this.payrollsService.delete(this._toDeleteIds[i]);
         }
         const map = {};
-        this._toInsert.sort((a, b) => (a.parentId || 0) - (b.parentId || 0));
+        this._toInsert.sort((a, b) => (a.parentId ?? 0) - (b.parentId ?? 0));
         for (const { id, parentId, ...record } of this._toInsert) {
             const newParentId: number = parentId ? map[parentId.toString()] || parentId : parentId;
             const created = await this.payrollsService.create(this.userId, {

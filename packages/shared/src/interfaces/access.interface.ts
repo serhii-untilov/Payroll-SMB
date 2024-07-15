@@ -29,6 +29,7 @@ export enum ResourceType {
     WORK_NORM = 'Work Norm',
     PAY_PERIOD = 'Pay Period',
     POSITION = 'Position',
+    POSITION_HISTORY = 'Position History',
     PERSON = 'Person',
     VACANCY = 'Vacancy',
     CANDIDATE = 'Candidate',

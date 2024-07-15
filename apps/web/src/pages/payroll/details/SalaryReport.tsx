@@ -1,8 +1,8 @@
+import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
-import { getPositionsBalance } from '@/services/position.service';
 import { sumFormatter } from '@/utils';
 import { Box, Typography } from '@mui/material';
 import {
@@ -13,10 +13,12 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
+import { PositionBalanceExtendedDto } from '@repo/openapi';
 import {
     CalcMethod,
     IFindPositionBalance,
-    IPositionBalanceExtended,
+    MAX_SEQUENCE_NUMBER,
+    ResourceType,
     getFullName,
     getUnitByCalcMethod,
     maxDate,
@@ -385,15 +387,13 @@ export function SalaryReport(props: IFindPositionBalance) {
         isError: isPositionListError,
         isLoading: isPositionListLoading,
         error: positionListError,
-    } = useQuery<IPositionBalanceExtended[], Error>({
-        queryKey: ['position', 'balance', props],
+    } = useQuery<PositionBalanceExtendedDto[], Error>({
+        queryKey: [ResourceType.POSITION, 'balanceExtended', props],
         queryFn: async () => {
-            return (await getPositionsBalance(props)).sort((a, b) =>
-                (Number(a.cardNumber) || 2147483647) < (Number(b.cardNumber) || 2147483647)
-                    ? -1
-                    : (Number(a.cardNumber) || 2147483647) > (Number(b.cardNumber) || 2147483647)
-                      ? 1
-                      : 0,
+            return (await api.positionsFindBalance(props)).data.sort(
+                (a, b) =>
+                    (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) -
+                    (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
             );
         },
         enabled: !!companyId && !!payPeriod,

@@ -1,23 +1,23 @@
+import { appConfig } from '@/config/app.config';
+import { authConfig } from '@/config/auth.config';
+import { dbConfig } from '@/config/db.config';
+import { googleConfig } from '@/config/google.config';
+import { AccessService } from '@/resources/access/access.service';
+import { User } from '@/resources/users/entities/user.entity';
+import { UsersService } from '@/resources/users/users.service';
 import { createMock } from '@golevelup/ts-jest';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { randPassword } from '@ngneat/falso';
-import { IUser } from '@repo/shared';
 import { createMockUser } from '@repo/testing';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from '@/resources/users/users.service';
-import { appConfig } from '@/config/app.config';
-import { authConfig } from '@/config/auth.config';
-import { dbConfig } from '@/config/db.config';
-import { googleConfig } from '@/config/google.config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { AccessService } from '@/resources/access/access.service';
 
 describe('AuthController', () => {
     let controller: AuthController;
-    let mockUser: IUser;
+    let mockUser: User;
     let mockUserUnhashedPassword: string;
 
     beforeAll(async () => {

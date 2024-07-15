@@ -130,7 +130,7 @@ export class PayFundCalculationService {
 
     public async calculatePosition(userId: number, positionId: number) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
-        this._position = await this.positionsService.findOne(positionId, true);
+        this._position = await this.positionsService.findOne(positionId, { relations: true });
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();

@@ -1,6 +1,7 @@
+import { api } from '@/api';
 import { Button } from '@/components/layout/Button';
 import { InputLabel } from '@/components/layout/InputLabel';
-import { createPerson, getPersonList } from '@/services/person.service';
+import { snackbarError } from '@/utils';
 import {
     Autocomplete,
     Dialog,
@@ -13,8 +14,8 @@ import {
     TextField,
     createFilterOptions,
 } from '@mui/material';
+import { ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -59,9 +60,9 @@ export const SelectPerson = (props: Props) => {
         isError,
         error,
     } = useQuery<OptionType[], Error>({
-        queryKey: ['person', 'SelectPerson'],
+        queryKey: [ResourceType.PERSON],
         queryFn: async () => {
-            const personList = await getPersonList();
+            const personList = (await api.personsFindAll()).data;
             return personList
                 .map((o) => {
                     return {
@@ -75,9 +76,7 @@ export const SelectPerson = (props: Props) => {
     });
 
     if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
+        return snackbarError(`${error.name}\n${error.message}`);
     }
 
     return (
@@ -183,7 +182,7 @@ export const SelectPerson = (props: Props) => {
                                 <form
                                     onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
                                         event.preventDefault();
-                                        const person = await createPerson({
+                                        const person = await api.personsCreate({
                                             firstName: dialogValue.firstName,
                                             lastName: dialogValue.lastName,
                                             middleName: dialogValue.middleName,

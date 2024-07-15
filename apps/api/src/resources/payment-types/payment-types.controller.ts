@@ -6,11 +6,12 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -25,6 +26,7 @@ import {
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
+import { PaymentTypeFilter } from './dto/find-all-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
 import { PaymentTypesService } from './payment-types.service';
 
@@ -46,25 +48,16 @@ export class PaymentTypesController {
         return await this.service.create(userId, payload);
     }
 
-    @Get()
+    @Post()
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(PaymentType) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(
-        @Query('part') part: string,
-        @Query('groups') groups: string,
-        @Query('methods') methods: string,
-        @Query('ids') ids: string,
-    ) {
-        return await this.service.findAll({
-            part,
-            groups: groups ? JSON.parse(decodeURIComponent(groups)) : null,
-            methods: methods ? JSON.parse(decodeURIComponent(methods)) : null,
-            ids: ids ? JSON.parse(decodeURIComponent(ids)) : null,
-        });
+    async findAll(@Body() payload: PaymentTypeFilter) {
+        return await this.service.findAll(payload);
     }
 
     @Get(':id')

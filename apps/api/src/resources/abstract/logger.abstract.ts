@@ -8,13 +8,13 @@ import {
 
 export abstract class Logger {
     @CreateDateColumn()
-    createdDate?: Date;
+    createdDate: Date;
 
     @Column({ type: 'integer', nullable: true })
     createdUserId?: number | null;
 
     @UpdateDateColumn()
-    updatedDate?: Date;
+    updatedDate: Date;
 
     @Column({ type: 'integer', nullable: true })
     updatedUserId?: number | null;
@@ -26,5 +26,5 @@ export abstract class Logger {
     deletedUserId?: number | null;
 
     @VersionColumn({ default: 1, nullable: true })
-    version?: number | null;
+    version: number;
 }

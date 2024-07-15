@@ -1,7 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { Task } from '../entities/task.entity';
-
-export class FindTaskDto extends PartialType(Task) {
+export class FindTaskDto {
     companyId: number;
     onDate?: Date;
     onPayPeriodDate?: Date;

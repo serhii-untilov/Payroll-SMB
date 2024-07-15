@@ -5,7 +5,7 @@ import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-type Result = { data: Company | undefined | null; isLoading: boolean };
+type Result = { data: Company | undefined; isLoading: boolean };
 
 export function useCompany(companyId: number | undefined): Result {
     const [id] = useState(Number(companyId));
@@ -18,5 +18,5 @@ export function useCompany(companyId: number | undefined): Result {
     if (isError) {
         snackbarError(`${error.name}\n${error.message}`);
     }
-    return { data, isLoading };
+    return { data: data ?? undefined, isLoading };
 }

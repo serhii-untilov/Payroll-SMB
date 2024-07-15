@@ -1,3 +1,4 @@
+import { api } from '@/api';
 import { FormDateField } from '@/components/form/FormDateField';
 import { FormNumberField } from '@/components/form/FormNumberField';
 import { FormSequenceField } from '@/components/form/FormSequenceField';
@@ -11,28 +12,25 @@ import { SelectPerson } from '@/components/select/SelectPerson';
 import { SelectWorkNorm } from '@/components/select/SelectWorkNorm';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { createPosition, getPosition, updatePosition } from '@/services/position.service';
-import {
-    createPositionHistory,
-    findLastPositionHistoryOnPayPeriodDate,
-    updatePositionHistory,
-} from '@/services/positionHistory.service';
 import { getDirtyValues } from '@/utils';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
 import {
+    CreatePositionDto,
+    CreatePositionHistoryDto,
+    Position,
+    PositionHistory,
+} from '@repo/openapi';
+import {
     formatDate,
-    ICreatePosition,
-    ICreatePositionHistory,
-    IPosition,
-    IPositionHistory,
     MAX_SEQUENCE_NUMBER,
     maxDate,
     minDate,
+    monthBegin,
     PaymentGroup,
-    toDate,
+    ResourceType,
 } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -61,25 +59,30 @@ export function JobAndPay(props: Props) {
         isError: isPositionError,
         error: positionError,
         isLoading: isPositionLoading,
-    } = useQuery<IPosition, Error>({
-        queryKey: ['position', { positionId }],
-        queryFn: async () => await getPosition({ id: positionId, relations: true }),
+    } = useQuery<Position, Error>({
+        queryKey: [ResourceType.POSITION, { positionId }],
+        queryFn: async () => (await api.positionsFindOne(positionId, { relations: true })).data,
         enabled: !!positionId,
     });
+
+    const findPositionHistoryParams = useMemo(() => {
+        return {
+            positionId,
+            onPayPeriodDate: company?.payPeriod || monthBegin(new Date()),
+            last: true,
+            relations: true,
+        };
+    }, [positionId, company]);
 
     const {
         data: positionHistory,
         isError: isPositionHistoryError,
         error: positionHistoryError,
         isLoading: isPositionHistoryLoading,
-    } = useQuery<IPositionHistory, Error>({
-        queryKey: ['positionHistory', 'last', { positionId }],
+    } = useQuery<PositionHistory, Error>({
+        queryKey: [ResourceType.POSITION_HISTORY, findPositionHistoryParams],
         queryFn: async () => {
-            return await findLastPositionHistoryOnPayPeriodDate(
-                positionId,
-                toDate(company?.payPeriod) || new Date(),
-                true,
-            );
+            return (await api.positionHistoryFindLast(findPositionHistoryParams)).data;
         },
         enabled: !!positionId && !!company?.payPeriod,
     });
@@ -108,8 +111,8 @@ export function JobAndPay(props: Props) {
 
     const position_formData = useCallback(
         (
-            position: IPosition | undefined,
-            positionHistory: IPositionHistory | undefined,
+            position: Position | undefined,
+            positionHistory: PositionHistory | undefined,
         ): FormType => {
             return {
                 // Position fields
@@ -172,13 +175,13 @@ export function JobAndPay(props: Props) {
         return <></>;
     }
 
-    const formData_Position = (data: FormType): ICreatePosition => {
+    const formData_Position = (data: FormType): CreatePositionDto => {
         const { cardNumber, sequenceNumber, description, personId, dateFrom, dateTo } = data;
         const companyId = company?.id || 0;
         return { companyId, cardNumber, sequenceNumber, description, personId, dateFrom, dateTo };
     };
 
-    const formData_PositionHistory = (data: FormType): ICreatePositionHistory => {
+    const formData_PositionHistory = (data: FormType): CreatePositionHistoryDto => {
         const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = data;
         return { departmentId, jobId, workNormId, paymentTypeId, wage: wage || 0, rate: rate || 1 };
     };
@@ -198,11 +201,13 @@ export function JobAndPay(props: Props) {
             let pos = position;
             if (Object.keys(positionDirtyValues).length || !position) {
                 pos = position
-                    ? await updatePosition(position.id, {
-                          ...positionDirtyValues,
-                          version: position.version,
-                      })
-                    : await createPosition(positionData);
+                    ? (
+                          await api.positionsUpdate(position.id, {
+                              ...positionDirtyValues,
+                              version: position.version,
+                          })
+                      ).data
+                    : (await api.positionsCreate(positionData)).data;
             }
             let history = positionHistory;
             if (Object.keys(positionHistoryDirtyValues).length) {
@@ -210,16 +215,20 @@ export function JobAndPay(props: Props) {
                     throw Error('positionId not defined');
                 }
                 history = positionHistory
-                    ? await updatePositionHistory(positionHistory.id, {
-                          ...positionHistoryDirtyValues,
-                          version: positionHistory.version,
-                      })
-                    : await createPositionHistory({
-                          ...positionHistoryDirtyValues,
-                          positionId: pos.id,
-                          dateFrom: pos.dateFrom,
-                          dateTo: pos.dateTo,
-                      });
+                    ? (
+                          await api.positionHistoryUpdate(positionHistory.id, {
+                              ...positionHistoryDirtyValues,
+                              version: positionHistory.version,
+                          })
+                      ).data
+                    : (
+                          await api.positionHistoryCreate({
+                              ...positionHistoryDirtyValues,
+                              positionId: pos.id,
+                              dateFrom: pos.dateFrom,
+                              dateTo: pos.dateTo,
+                          })
+                      ).data;
             }
             if (pos && history) {
                 setPositionId(pos.id);

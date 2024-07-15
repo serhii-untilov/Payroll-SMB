@@ -1,5 +1,4 @@
-export class FindPositionHistoryDto {
-    positionId: number;
+export class FindOnePositionDto {
     onDate?: Date;
     onPayPeriodDate?: Date;
     relations?: boolean;

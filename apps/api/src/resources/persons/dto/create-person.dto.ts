@@ -1,11 +1,19 @@
-export class CreatePersonDto {
-    firstName: string;
-    lastName: string;
-    middleName?: string;
-    birthday?: Date;
-    taxId?: string;
-    sex?: string; // See enum Sex
-    phone?: string;
-    email?: string;
-    photo?: string;
-}
+import { IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { Person } from '../entities/person.entity';
+
+export class CreatePersonDto extends IntersectionType(
+    PickType(Person, ['firstName', 'lastName']),
+    PartialType(
+        OmitType(Person, [
+            'id',
+            'positions',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+            'version',
+        ]),
+    ),
+) {}

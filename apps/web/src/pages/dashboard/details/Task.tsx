@@ -14,7 +14,7 @@ import {
 import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { green, grey, orange, red } from '@mui/material/colors';
 import { Task as ITask } from '@repo/openapi';
-import { ResourceType, TaskStatus, TaskType, toDate } from '@repo/shared';
+import { ResourceType, TaskStatus, TaskType } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { add, differenceInYears } from 'date-fns';
 import { useMemo, useState } from 'react';
@@ -48,8 +48,8 @@ export function Task(props: Props) {
     });
 
     const taskDate = useMemo(() => {
-        const day = toDate(task.dateFrom).getDate();
-        const month = toDate(task.dateFrom).toLocaleString(locale.dateLocale.code, {
+        const day = task.dateFrom.getDate();
+        const month = task.dateFrom.toLocaleString(locale.dateLocale.code, {
             month: 'short',
         });
         return `${day} ${month}`;
@@ -230,7 +230,7 @@ function getBackgroundColor(task: ITask, view: TaskView) {
     if (task.status === TaskStatus.NOT_AVAILABLE) return grey[50];
     if (task.status === TaskStatus.DONE) return green[50];
     if (task.status === TaskStatus.DONE_BY_USER) return green[50];
-    if (toDate(task.dateTo).getTime() < new Date().getTime()) return red[50];
+    if (task.dateTo.getTime() < new Date().getTime()) return red[50];
     if (task.status === TaskStatus.TODO) return orange[50];
     if (task.status === TaskStatus.IN_PROGRESS) return orange[50];
     return red[50];

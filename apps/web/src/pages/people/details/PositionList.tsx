@@ -1,8 +1,8 @@
+import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
-import { deletePosition, getPositions } from '@/services/position.service';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -12,14 +12,15 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IFindPosition, IPosition, date2view, maxDate } from '@repo/shared';
+import { FindAllPositionDto, Position } from '@repo/openapi';
+import { MAX_SEQUENCE_NUMBER, ResourceType, date2view, maxDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-export function PositionList(props: IFindPosition) {
+export function PositionList(props: FindAllPositionDto) {
     const { companyId } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
@@ -156,15 +157,13 @@ export function PositionList(props: IFindPosition) {
         },
     ];
 
-    const { data, isError, isLoading, error } = useQuery<IPosition[], Error>({
-        queryKey: ['position', 'list', props],
+    const { data, isError, isLoading, error } = useQuery<Position[], Error>({
+        queryKey: [ResourceType.POSITION, props],
         queryFn: async () => {
-            return (await getPositions(props)).sort((a, b) =>
-                (Number(a.cardNumber) || 2147483647) < (Number(b.cardNumber) || 2147483647)
-                    ? -1
-                    : (Number(a.cardNumber) || 2147483647) > (Number(b.cardNumber) || 2147483647)
-                      ? 1
-                      : 0,
+            return (await api.positionsFindAll(props)).data.sort(
+                (a, b) =>
+                    (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) -
+                    (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
             );
         },
         enabled: !!companyId && !!payPeriod,
@@ -190,7 +189,7 @@ export function PositionList(props: IFindPosition) {
 
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
-            await deletePosition(+id);
+            await api.positionsRemove(+id);
         }
         await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };

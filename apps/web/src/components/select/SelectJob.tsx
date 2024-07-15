@@ -1,8 +1,5 @@
 import { FormAutocomplete } from '@/components/form/FormAutocomplete';
-import { getJobList } from '@/services/job.service';
-import { IJob } from '@repo/shared';
-import { useQuery } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
+import { useJobList } from '@/hooks/useJobList';
 
 interface Props {
     companyId: number | undefined;
@@ -13,22 +10,7 @@ interface Props {
 }
 
 export function SelectJob({ companyId, control, label, id, name }: Props) {
-    const { data: jobList } = useJobList();
-        isError: isJobListError,
-        error: jobListError,
-    } = useQuery<IJob[], Error>({
-        queryKey: ['job', 'list', { companyId }],
-        queryFn: async () => {
-            return companyId ? await getJobList() : [];
-        },
-        enabled: !!companyId,
-    });
-
-    if (isJobListError) {
-        return enqueueSnackbar(`${jobListError.name}\n${jobListError.message}`, {
-            variant: 'error',
-        });
-    }
+    const { data: jobList } = useJobList({ companyId });
 
     return (
         <FormAutocomplete

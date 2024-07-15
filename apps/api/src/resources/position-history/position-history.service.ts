@@ -16,9 +16,10 @@ import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
-import { FindPositionHistoryDto } from './dto/find-position-history.dto';
+import { FindAllPositionHistoryDto } from './dto/find-all-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistory } from './entities/position-history.entity';
+import { FindOnePositionHistoryDto } from './dto/find-one-position-history.dto';
 
 @Injectable()
 export class PositionHistoryService extends AvailableForUserCompany {
@@ -63,30 +64,52 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return record;
     }
 
-    async findAll(positionId: number, relations: boolean = false): Promise<PositionHistory[]> {
-        return await this.repository.find({
+    async findAll(params: FindAllPositionHistoryDto): Promise<PositionHistory[]> {
+        const position = params.onPayPeriodDate
+            ? await this.positionsService.findOne(params.positionId)
+            : null;
+        const payPeriod =
+            params.onPayPeriodDate && position
+                ? await this.payPeriodsService.findOne({
+                      where: { companyId: position.companyId, dateFrom: params.onPayPeriodDate },
+                  })
+                : null;
+        const response = await this.repository.find({
             where: {
-                positionId,
+                positionId: params.positionId,
+                ...(params.onDate ? { dateFrom: LessThanOrEqual(params.onDate) } : {}),
+                ...(params.onDate ? { dateTo: MoreThanOrEqual(params.onDate) } : {}),
+                ...(params.onPayPeriodDate && payPeriod
+                    ? { dateFrom: LessThanOrEqual(payPeriod.dateTo) }
+                    : {}),
+                ...(params.onPayPeriodDate && payPeriod
+                    ? { dateTo: MoreThanOrEqual(payPeriod.dateFrom) }
+                    : {}),
             },
             relations: {
-                position: relations,
-                department: relations,
-                job: relations,
-                workNorm: relations,
-                paymentType: relations,
+                position: !!params.relations,
+                department: !!params.relations,
+                job: !!params.relations,
+                workNorm: !!params.relations,
+                paymentType: !!params.relations,
             },
         });
+        if (!!params.last && response.length > 1) {
+            response.sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
+            return [response[response.length - 1]];
+        }
+        return response;
     }
 
-    async findOne(id: number, relations: boolean = false): Promise<PositionHistory> {
+    async findOne(id: number, params?: FindOnePositionHistoryDto): Promise<PositionHistory> {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: {
-                position: relations,
-                department: relations,
-                job: relations,
-                workNorm: relations,
-                paymentType: relations,
+                position: !!params?.relations,
+                department: !!params?.relations,
+                job: !!params?.relations,
+                workNorm: !!params?.relations,
+                paymentType: !!params?.relations,
             },
         });
     }
@@ -127,43 +150,6 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return record;
     }
 
-    async find(params: FindPositionHistoryDto): Promise<PositionHistory[]> {
-        const position = await this.positionsService.findOne(params.positionId);
-        const payPeriod = params.onPayPeriodDate
-            ? await this.payPeriodsService.findOneOrFail({
-                  where: {
-                      companyId: position.companyId,
-                      dateFrom: params.onPayPeriodDate,
-                  },
-              })
-            : null;
-        const relations = !!params.relations;
-        return this.repository.find({
-            relations: {
-                position: relations,
-                department: relations,
-                job: relations,
-                workNorm: relations,
-                paymentType: relations,
-            },
-            where: {
-                positionId: params.positionId,
-                ...(params.onDate
-                    ? {
-                          dateFrom: LessThanOrEqual(params.onDate),
-                          dateTo: MoreThanOrEqual(params.onDate),
-                      }
-                    : {}),
-                ...(params.onPayPeriodDate && payPeriod
-                    ? {
-                          dateFrom: LessThanOrEqual(payPeriod.dateTo),
-                          dateTo: MoreThanOrEqual(payPeriod.dateFrom),
-                      }
-                    : {}),
-            },
-        });
-    }
-
     private async normalizeAfterCreateOrUpdate(
         userId: number,
         record: PositionHistory,
@@ -174,7 +160,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         }
         const list = (
             await this.repository.find({ where: { positionId: record.positionId } })
-        ).sort((a, b) => (a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0));
+        ).sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
         // Delete out of position's period
         for (const id of list
             .filter((o) => o.id !== record.id)
@@ -218,7 +204,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         }
         const list = (
             await this.repository.find({ where: { positionId: record.positionId } })
-        ).sort((a, b) => (a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0));
+        ).sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
         // Delete out of position's period
         for (const id of list
             .filter((o) => o.id !== record.id)

@@ -21,10 +21,9 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { IPerson, deepStringToShortDate } from '@repo/shared';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePersonDto } from './dto/create-person.dto';
-import { FindPersonDto } from './dto/find-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { Person } from './entities/person.entity';
 import { PersonsService } from './persons.service';
@@ -42,7 +41,7 @@ export class PersonsController {
         type: Person,
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async create(@Req() req: Request, @Body() payload: CreatePersonDto): Promise<IPerson> {
+    async create(@Req() req: Request, @Body() payload: CreatePersonDto): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
         return await this.service.create(userId, deepStringToShortDate(payload));
@@ -55,7 +54,7 @@ export class PersonsController {
         schema: { type: 'array', items: { $ref: getSchemaPath(Person) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Req() req: Request): Promise<IPerson[]> {
+    async findAll(@Req() req: Request): Promise<Person[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId);
         return await this.service.findAll();
@@ -66,7 +65,7 @@ export class PersonsController {
     @ApiOkResponse({ description: 'The found record', type: Person })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);
         return await this.service.findOne(id);
@@ -82,7 +81,7 @@ export class PersonsController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdatePersonDto,
-    ): Promise<IPerson> {
+    ): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
@@ -94,20 +93,9 @@ export class PersonsController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Person })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId);
         return await this.service.remove(userId, id);
-    }
-
-    @Post('find')
-    @UseGuards(AccessTokenGuard)
-    @ApiOkResponse({ description: 'The found record', type: Person })
-    @ApiNotFoundResponse({ description: 'Record not found' })
-    @ApiForbiddenResponse({ description: 'Forbidden' })
-    async find(@Req() req: Request, @Body() params: FindPersonDto): Promise<IPerson | null> {
-        const userId = getUserId(req);
-        await this.service.availableFindOneOrFail(userId);
-        return await this.service.findOneBy(params);
     }
 }

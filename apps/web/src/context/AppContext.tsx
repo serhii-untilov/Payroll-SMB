@@ -13,7 +13,7 @@ import {
     useMediaQuery,
 } from '@mui/material';
 import { Company, UserCompany } from '@repo/openapi';
-import { ResourceType, monthBegin, toDate } from '@repo/shared';
+import { ResourceType, monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
@@ -109,7 +109,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
                 ? (await api.payPeriodsFindCurrent({ companyId: company?.id })).data
                 : null;
             const current: Date = currentPayPeriod?.dateFrom
-                ? toDate(currentPayPeriod?.dateFrom)
+                ? currentPayPeriod?.dateFrom
                 : monthBegin(new Date());
             const currentPeriodString = localStorage.getItem('currentPayPeriod');
             const lastCurrent: Date = monthBegin(

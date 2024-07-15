@@ -6,8 +6,11 @@ export class CreateCompanyDto extends IntersectionType(
     PartialType(
         OmitType(Company, [
             'id',
-            'accounting',
             'law',
+            'accounting',
+            'departments',
+            'positions',
+            'users',
             'createdDate',
             'createdUserId',
             'updatedDate',

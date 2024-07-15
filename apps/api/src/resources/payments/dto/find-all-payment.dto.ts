@@ -1,4 +1,4 @@
-export class FindPaymentDto {
+export class FindAllPaymentDto {
     companyId: number;
     positionId?: number;
     payPeriod?: Date;

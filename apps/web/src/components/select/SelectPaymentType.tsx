@@ -1,6 +1,7 @@
+import { api } from '@/api';
 import { FormAutocomplete } from '@/components/form/FormAutocomplete';
-import { getPaymentTypeList } from '@/services/paymentType.service';
-import { IPaymentType, IPaymentTypeFilter } from '@repo/shared';
+import { PaymentType } from '@repo/openapi';
+import { IPaymentTypeFilter, ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 
@@ -31,10 +32,15 @@ export function SelectPaymentType({
         data: paymentTypeList,
         isError: isPaymentTypeListError,
         error: paymentTypeListError,
-    } = useQuery<IPaymentType[], Error>({
-        queryKey: ['paymentType', 'list', { companyId, ...filter }],
+    } = useQuery<PaymentType[], Error>({
+        queryKey: [ResourceType.PAYMENT_TYPE, { companyId, ...(filter ?? {}) }],
         queryFn: async () => {
-            return companyId ? await getPaymentTypeList(filter) : [];
+            const response = companyId
+                ? (await api.paymentTypesFindAll(filter ?? {})).data ?? []
+                : [];
+            return response.sort((a: PaymentType, b: PaymentType) =>
+                a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
+            );
         },
         enabled: !!companyId,
     });

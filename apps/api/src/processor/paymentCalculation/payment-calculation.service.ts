@@ -100,7 +100,7 @@ export class PaymentCalculationService {
 
     public async calculatePosition(userId: number, positionId: number) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
-        this.position = await this.positionsService.findOne(positionId, true);
+        this.position = await this.positionsService.findOne(positionId, { relations: true });
         this.userId = userId;
         this.company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
@@ -246,7 +246,7 @@ export class PaymentCalculationService {
     }
 
     private async loadResources() {
-        this.paymentTypes = await this.paymentTypesService.findAll(null);
+        this.paymentTypes = await this.paymentTypesService.findAll();
     }
 
     private async getPayrolls(): Promise<Payroll[]> {

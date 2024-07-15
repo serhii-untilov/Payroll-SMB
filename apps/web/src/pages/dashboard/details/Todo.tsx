@@ -1,10 +1,10 @@
+import { dto } from '@/api';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { TaskType, toDate } from '@repo/shared';
+import { TaskType } from '@repo/shared';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Task } from './Task';
-import { dto } from '@/api';
 
 type Props = {
     taskList: dto.Task[];
@@ -32,7 +32,7 @@ export function Todo(props: Props) {
     const taskList = useMemo(
         () =>
             props.taskList
-                ?.filter((o) => toDate(o.dateFrom).getTime() <= new Date().getTime())
+                ?.filter((o) => o.dateFrom.getTime() <= new Date().getTime())
                 .filter((o) => typeList.includes(o.type)),
         [props, typeList],
     );

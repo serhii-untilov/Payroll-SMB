@@ -1,14 +1,8 @@
-import { OmitType, PartialType } from '@nestjs/swagger';
+import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
 import { Position } from '../entities/position.entity';
+import { CreatePositionDto } from './create-position.dto';
 
-export class UpdatePositionDto extends PartialType(
-    OmitType(Position, [
-        'id',
-        'createdDate',
-        'createdUserId',
-        'updatedDate',
-        'updatedUserId',
-        'deletedDate',
-        'deletedUserId',
-    ]),
+export class UpdatePositionDto extends IntersectionType(
+    PickType(Position, ['version']),
+    PartialType(CreatePositionDto),
 ) {}

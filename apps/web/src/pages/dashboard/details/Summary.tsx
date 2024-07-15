@@ -4,7 +4,6 @@ import { useCurrentPayPeriod } from '@/hooks/useCurrentPayPeriod';
 import useLocale from '@/hooks/useLocale';
 import { capitalizeFirstChar, getPayPeriodName, sumFormatter } from '@/utils';
 import { Grid, Typography } from '@mui/material';
-import { toDate } from '@repo/shared';
 import { sub } from 'date-fns';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,9 +38,7 @@ export function Summary() {
             }
             return `${day}-${month}-${year} ${t('at')} ${hours}:${minutes} `;
         };
-        return currentPayPeriod?.updatedDate
-            ? formatUpdatedDate(toDate(currentPayPeriod.updatedDate))
-            : '';
+        return currentPayPeriod?.updatedDate ? formatUpdatedDate(currentPayPeriod.updatedDate) : '';
     }, [currentPayPeriod, t]);
 
     return (
@@ -75,8 +72,8 @@ export function Summary() {
                                     >
                                         {capitalizeFirstChar(
                                             getPayPeriodName(
-                                                toDate(currentPayPeriod.dateFrom),
-                                                toDate(currentPayPeriod.dateTo),
+                                                currentPayPeriod.dateFrom,
+                                                currentPayPeriod.dateTo,
                                                 false,
                                                 locale.dateLocale,
                                                 'LLLL y',

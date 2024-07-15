@@ -5,13 +5,12 @@ import {
     Body,
     Controller,
     Delete,
-    Get,
+    HttpCode,
+    HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -27,12 +26,13 @@ import {
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePositionDto } from './dto/create-position.dto';
+import { FindAllPositionDto } from './dto/find-all-position.dto';
+import { FindOnePositionDto } from './dto/find-one-position.dto';
 import { FindAllPositionBalanceDto } from './dto/find-position-balance.dto';
-import { FindPositionDto } from './dto/find-position.dto';
+import { FindPositionByPersonDto } from './dto/find-position-by-person.dto';
 import { PositionBalanceExtendedDto } from './dto/position-balance-extended.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionsService } from './positions.service';
-import { FindPositionByPersonDto } from './dto/find-position-by-person.dto';
 
 @Controller('positions')
 @ApiBearerAuth()
@@ -60,25 +60,25 @@ export class PositionsController {
         schema: { type: 'array', items: { $ref: getSchemaPath(Position) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Req() req: Request, @Body() payload: FindPositionDto): Promise<Position[]> {
+    async findAll(@Req() req: Request, @Body() payload: FindAllPositionDto): Promise<Position[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, payload.companyId);
         return await this.service.findAll(deepStringToShortDate(payload));
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: Position })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
-        @Query('onDate') onDate: Date,
+        @Body() params: FindOnePositionDto,
     ): Promise<Position> {
         const userId = getUserId(req);
-        const found = await this.service.findOne(id, !!relations, onDate ? new Date(onDate) : null);
+        const found = await this.service.findOne(id, params);
         await this.service.availableFindAllOrFail(userId, found.companyId);
         return found;
     }
@@ -113,6 +113,7 @@ export class PositionsController {
 
     @Post('balance')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         type: PositionBalanceExtendedDto,

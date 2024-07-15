@@ -1,3 +1,4 @@
+import { WrapperType } from '@/types/WrapperType';
 import {
     BadRequestException,
     ConflictException,
@@ -30,7 +31,10 @@ import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { CreatePositionDto } from './dto/create-position.dto';
-import { FindPositionDto } from './dto/find-position.dto';
+import { FindAllPositionDto } from './dto/find-all-position.dto';
+import { FindOnePositionDto } from './dto/find-one-position.dto';
+import { FindAllPositionBalanceDto } from './dto/find-position-balance.dto';
+import { FindPositionByPersonDto } from './dto/find-position-by-person.dto';
 import { PositionBalanceExtendedDto } from './dto/position-balance-extended.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 import { PositionBalance } from './entities/position-balance.entity';
@@ -38,9 +42,6 @@ import { Position } from './entities/position.entity';
 import { PositionCreatedEvent } from './events/position-created.event';
 import { PositionDeletedEvent } from './events/position-deleted.event';
 import { PositionUpdatedEvent } from './events/position-updated.event';
-import { WrapperType } from '@/types/WrapperType';
-import { FindAllPositionBalanceDto } from './dto/find-position-balance.dto';
-import { FindPositionByPersonDto } from './dto/find-position-by-person.dto';
 
 @Injectable()
 export class PositionsService extends AvailableForUserCompany {
@@ -96,7 +97,7 @@ export class PositionsService extends AvailableForUserCompany {
         return created;
     }
 
-    async findAll(payload: FindPositionDto): Promise<Position[]> {
+    async findAll(payload: FindAllPositionDto): Promise<Position[]> {
         const {
             companyId,
             onDate,
@@ -182,18 +183,16 @@ export class PositionsService extends AvailableForUserCompany {
         return await this.repository.find(options);
     }
 
-    async findOne(
-        id: number,
-        relations: boolean = false,
-        onDate: Date | null = null,
-        onPayPeriodDate: Date | null = null,
-    ): Promise<Position> {
+    async findOne(id: number, params?: FindOnePositionDto): Promise<Position> {
+        const onDate = params?.onDate;
+        const onPayPeriodDate = params?.onPayPeriodDate;
+        const relations = params?.relations || false;
         const position = await this.repository.findOneOrFail({
             where: { id },
             relations: {
-                company: !!relations,
-                person: !!relations,
-                history: !!relations
+                company: relations,
+                person: relations,
+                history: relations
                     ? {
                           department: true,
                           job: true,

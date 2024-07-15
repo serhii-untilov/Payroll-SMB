@@ -24,7 +24,7 @@ export function SelectPayPeriod(props: PayPeriodOption) {
                     {getPayPeriodName(
                         toDate(period.dateFrom),
                         toDate(period.dateTo),
-                        isEqual(toDate(period.dateFrom), toDate(company?.payPeriod)),
+                        isEqual(period.dateFrom, company?.payPeriod),
                         locale.dateLocale,
                     )}
                 </MenuItem>

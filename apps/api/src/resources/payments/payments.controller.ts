@@ -5,7 +5,8 @@ import {
     Body,
     Controller,
     Delete,
-    Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseBoolPipe,
     ParseIntPipe,
@@ -28,8 +29,10 @@ import {
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { FindPaymentDto } from './dto/find-payment.dto';
+import { FindAllPaymentDto } from './dto/find-all-payment.dto';
+import { ProcessPaymentDto } from './dto/process-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
 import { PaymentsService } from './payments.service';
 
 @Controller('payments')
@@ -54,18 +57,19 @@ export class PaymentsController {
 
     @Post('find')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(Payment) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Req() req: Request, @Body() params: FindPaymentDto): Promise<Payment[]> {
+    async findAll(@Req() req: Request, @Body() params: FindAllPaymentDto): Promise<Payment[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, params.companyId);
         return await this.service.findAll(deepStringToShortDate(params));
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found record', type: Payment })
     @ApiNotFoundResponse({ description: 'Record not found' })
@@ -121,11 +125,11 @@ export class PaymentsController {
     async process(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() params: { version: number },
+        @Body() params: ProcessPaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return this.service.process(userId, id, params.version);
+        return this.service.process(userId, id, params);
     }
 
     @Post('withdraw/:id')
@@ -140,10 +144,10 @@ export class PaymentsController {
     async withdraw(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() params: { version: number },
+        @Body() params: WithdrawPaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return this.service.withdraw(userId, id, params.version);
+        return this.service.withdraw(userId, id, params);
     }
 }
