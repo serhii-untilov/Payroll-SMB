@@ -1,15 +1,15 @@
+import { api } from '@/api';
 import { FormInputDropdown } from '@/components/form/FormInputDropdown';
 import { FormTextField } from '@/components/form/FormTextField';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
-import useAuth from '@/hooks/useAuth';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 import useLocale from '@/hooks/useLocale';
-import { getCurrentUser } from '@/services/auth.service';
-import { updateUser } from '@/services/user.service';
-import { getDirtyValues } from '@/utils';
+import { getDirtyValues, invalidateQueries, snackbarFormErrors } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { ResourceType } from '@repo/shared';
+import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
@@ -18,7 +18,6 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 const formSchema = Yup.object().shape({
-    id: Yup.number(),
     firstName: Yup.string().required('First name is required'),
     lastName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email('Email is invalid'),
@@ -27,33 +26,12 @@ const formSchema = Yup.object().shape({
 
 type FormType = Yup.InferType<typeof formSchema>;
 
-// To prevent Warning: A component is changing an uncontrolled input to be controlled.
-const defaultValues: FormType = {
-    id: undefined,
-    firstName: '',
-    lastName: '',
-    email: '',
-    language: '',
-};
-
 export function UserDetails() {
     const { supportedLocales, setLanguage } = useLocale();
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { user: currentUser } = useAuth();
     const queryClient = useQueryClient();
-
-    const {
-        data: user,
-        isError: isQueryError,
-        isLoading,
-        error: queryError,
-    } = useQuery<FormType, Error>({
-        queryKey: ['user', 'current', currentUser],
-        queryFn: async () => {
-            return formSchema.cast(await getCurrentUser());
-        },
-    });
+    const { data: user, isLoading } = useCurrentUser();
 
     const {
         control,
@@ -61,8 +39,8 @@ export function UserDetails() {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: user || defaultValues,
-        values: user || defaultValues,
+        defaultValues: formSchema.cast(user),
+        values: formSchema.cast(user),
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -72,38 +50,28 @@ export function UserDetails() {
     useEffect(() => {}, [locale]);
 
     useEffect(() => {
-        formErrors.firstName?.message &&
-            enqueueSnackbar(t(formErrors.firstName?.message), { variant: 'error' });
-        formErrors.lastName?.message &&
-            enqueueSnackbar(t(formErrors.lastName?.message), { variant: 'error' });
-        formErrors.email?.message &&
-            enqueueSnackbar(t(formErrors.email?.message), { variant: 'error' });
+        snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
     if (isLoading) {
         return <Loading />;
     }
 
-    if (isQueryError) {
-        return enqueueSnackbar(`${queryError.name}\n${queryError.message}`, { variant: 'error' });
-    }
-
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
-        if (!data?.id) {
-            enqueueSnackbar(`!data?.id`, { variant: 'error' });
-            return;
-        }
+        if (!user) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const user = await updateUser(data.id, dirtyValues);
-            reset(user);
-            setLanguage(user?.language || null);
+            const response = (
+                await api.usersUpdate(user.id, { ...dirtyValues, version: user.version })
+            ).data;
+            reset(response);
+            setLanguage(response?.language);
         } catch (e: unknown) {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
         }
-        await queryClient.invalidateQueries({ queryKey: ['user'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.USER]);
     };
 
     const onCancel = () => {
