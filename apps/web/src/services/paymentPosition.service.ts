@@ -2,42 +2,26 @@ import {
     CreatePaymentPositionDto,
     FindAllPaymentPositionDto,
     FindOnePaymentPositionDto,
-    PaymentPosition,
+    UpdatePaymentPositionDto,
 } from '@repo/openapi';
-import { IPayment, IPaymentPosition, IUpdatePaymentPosition } from '@repo/shared';
-import { api } from '../api';
-import authHeader from './auth-header';
+import { api } from '@/api';
 
-export async function paymentPositionsCreate(
-    payload: CreatePaymentPositionDto,
-): Promise<PaymentPosition> {
+export async function paymentPositionsCreate(payload: CreatePaymentPositionDto) {
     return (await api.paymentPositionsCreate(payload)).data;
 }
 
-export async function paymentPositionsFindAll(
-    params: FindAllPaymentPositionDto,
-): Promise<PaymentPosition[]> {
+export async function paymentPositionsFindAll(params: FindAllPaymentPositionDto) {
     return (await api.paymentPositionsFindAll(params)).data;
 }
 
-export async function getPaymentPosition(
-    id: number,
-    params: FindOnePaymentPositionDto,
-): Promise<PaymentPosition> {
+export async function paymentPositionsFindOne(id: number, params: FindOnePaymentPositionDto) {
     return (await api.paymentPositionsFindOne(id, params)).data;
 }
 
-export async function updatePaymentPosition(
-    id: number,
-    payload: IUpdatePaymentPosition,
-): Promise<IPayment> {
-    const response = await api.patch(`/api/payment-positions/${id}`, payload, {
-        headers: authHeader(),
-    });
-    return response.data;
+export async function paymentPositionsUpdate(id: number, payload: UpdatePaymentPositionDto) {
+    return (await api.paymentPositionsUpdate(id, payload)).data;
 }
 
-export async function deletePayment(id: number): Promise<IPaymentPosition> {
-    const response = await api.delete(`/api/payment-positions/${id}`, { headers: authHeader() });
-    return response.data;
+export async function deletePaymentPosition(id: number) {
+    return (await api.paymentPositionsRemove(id)).data;
 }

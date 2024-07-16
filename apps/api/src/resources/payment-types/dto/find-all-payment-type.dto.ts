@@ -1,4 +1,4 @@
-export class PaymentTypeFilter {
+export class FindAllPaymentTypeDto {
     part?: string;
     groups?: string[];
     methods?: string[];

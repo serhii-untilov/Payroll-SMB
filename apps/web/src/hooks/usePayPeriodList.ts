@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { payPeriodsFindAll } from '@/services/payPeriod.service';
 import { snackbarError } from '@/utils/snackbar';
 import { FindAllPayPeriodDto, PayPeriod } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
@@ -12,11 +12,9 @@ export function usePayPeriodList(params: Partial<FindAllPayPeriodDto>): Result {
         queryKey: [ResourceType.PAY_PERIOD, params],
         queryFn: async () => {
             return params?.companyId
-                ? (await api.payPeriodsFindAll({ ...params, companyId: params.companyId })).data ??
-                      []
+                ? (await payPeriodsFindAll({ ...params, companyId })) ?? []
                 : [];
         },
-        enabled: !!companyId,
     });
     if (isError) {
         snackbarError(`${error.name}\n${error.message}`);

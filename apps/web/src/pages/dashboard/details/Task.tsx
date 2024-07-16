@@ -39,7 +39,7 @@ export function Task(props: Props) {
     const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
     const statusIcon = useMemo(() => getStatusIcon(task, view), [task, view]);
     const backgroundColor = useMemo(() => getBackgroundColor(task, view), [task, view]);
-    const { person } = usePerson({ id: task?.entityId });
+    const { data: person } = usePerson({ id: task?.entityId });
     const { position } = usePositionByPerson({
         companyId: company?.id,
         personId: person?.id,

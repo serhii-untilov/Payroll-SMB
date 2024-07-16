@@ -1,7 +1,8 @@
 import { api } from '@/api';
 import { Button } from '@/components/layout/Button';
 import { InputLabel } from '@/components/layout/InputLabel';
-import { snackbarError } from '@/utils';
+import { personsCreate, personsFindAll } from '@/services/person.service';
+import { invalidateQueries, snackbarError } from '@/utils';
 import {
     Autocomplete,
     Dialog,
@@ -62,7 +63,7 @@ export const SelectPerson = (props: Props) => {
     } = useQuery<OptionType[], Error>({
         queryKey: [ResourceType.PERSON],
         queryFn: async () => {
-            const personList = (await api.personsFindAll()).data;
+            const personList = await personsFindAll();
             return personList
                 .map((o) => {
                     return {
@@ -182,7 +183,7 @@ export const SelectPerson = (props: Props) => {
                                 <form
                                     onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
                                         event.preventDefault();
-                                        const person = await api.personsCreate({
+                                        const person = await personsCreate({
                                             firstName: dialogValue.firstName,
                                             lastName: dialogValue.lastName,
                                             middleName: dialogValue.middleName,
@@ -193,10 +194,7 @@ export const SelectPerson = (props: Props) => {
                                             sex: dialogValue.sex,
                                         });
                                         onChange(person.id);
-                                        await queryClient.invalidateQueries({
-                                            queryKey: ['person'],
-                                            refetchType: 'all',
-                                        });
+                                        await invalidateQueries(queryClient, [ResourceType.PERSON]);
                                         handleClose();
                                     }}
                                 >

@@ -1,32 +1,24 @@
 import { api } from '@/api';
-import {
-    AuthDto,
-    CreateUserDto,
-    FindOneUserDto,
-    PublicUserDataDto,
-    TokensDto,
-} from '@repo/openapi';
+import { AuthDto, CreateUserDto, FindOneUserDto } from '@repo/openapi';
 import { removeUserTokens, saveUserTokens } from './token.service';
 
-export async function authRegister(params: CreateUserDto): Promise<TokensDto> {
-    const response = await api.authRegister(params);
-    const tokens = response.data;
+export async function authRegister(params: CreateUserDto) {
+    const tokens = (await api.authRegister(params)).data;
     if (tokens.accessToken) {
         saveUserTokens(tokens);
     }
     return tokens;
 }
 
-export async function authLogin(params: AuthDto): Promise<TokensDto> {
-    const response = await api.authLogin(params);
-    const tokens: TokensDto = response.data;
+export async function authLogin(params: AuthDto) {
+    const tokens = (await api.authLogin(params)).data;
     if (tokens.accessToken) {
         saveUserTokens(tokens);
     }
     return tokens;
 }
 
-export async function authLogout(): Promise<void> {
+export async function authLogout() {
     removeUserTokens();
     try {
         await api.authLogout();
@@ -35,12 +27,10 @@ export async function authLogout(): Promise<void> {
     }
 }
 
-export async function usersFindCurrent(params?: FindOneUserDto): Promise<PublicUserDataDto> {
-    const response = await api.usersFindCurrent(params ?? {});
-    return response.data;
+export async function usersFindCurrent(params?: FindOneUserDto) {
+    return (await api.usersFindCurrent(params ?? {})).data;
 }
 
-export async function demo(): Promise<AuthDto> {
-    const response = await api.authDemo();
-    return response.data;
+export async function demo() {
+    return (await api.authDemo()).data;
 }

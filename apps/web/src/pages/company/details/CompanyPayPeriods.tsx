@@ -1,4 +1,3 @@
-import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
@@ -7,6 +6,7 @@ import { useCurrentPayPeriod } from '@/hooks/useCurrentPayPeriod';
 import useLocale from '@/hooks/useLocale';
 import { usePayPeriodList } from '@/hooks/usePayPeriodList';
 import { companiesSalaryCalculate } from '@/services/company.service';
+import { payPeriodsClose, payPeriodsOpen } from '@/services/payPeriod.service';
 import * as utils from '@/utils';
 import {
     GridCellParams,
@@ -92,7 +92,7 @@ export function CompanyPayPeriods(params: Props) {
                 await invalidateQueries();
                 return;
             }
-            const next = (await api.payPeriodsClose(currentPayPeriod.id)).data;
+            const next = await payPeriodsClose(currentPayPeriod.id);
             setPayPeriod(next.dateFrom);
             await invalidateQueries();
         }
@@ -104,7 +104,7 @@ export function CompanyPayPeriods(params: Props) {
                 await invalidateQueries();
                 return;
             }
-            const prior = (await api.payPeriodsOpen(currentPayPeriod.id)).data;
+            const prior = await payPeriodsOpen(currentPayPeriod.id);
             setPayPeriod(prior.dateFrom);
             await invalidateQueries();
         }

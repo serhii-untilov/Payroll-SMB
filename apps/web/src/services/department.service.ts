@@ -1,35 +1,28 @@
 import { api } from '@/api';
 import {
     CreateDepartmentDto,
-    Department,
     FindAllDepartmentDto,
     FindOneDepartmentDto,
     UpdateDepartmentDto,
 } from '@repo/openapi';
 
-export async function departmentsCreate(payload: CreateDepartmentDto): Promise<Department> {
+export async function departmentsCreate(payload: CreateDepartmentDto) {
     return (await api.departmentsCreate(payload)).data;
 }
 
-export async function departmentsFindAll(params: FindAllDepartmentDto): Promise<Department[]> {
-    const response = await api.departmentsFindAll(params);
-    return response.data.sort((a, b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase()));
+export async function departmentsFindAll(params: FindAllDepartmentDto) {
+    const response = (await api.departmentsFindAll(params)).data;
+    return response.sort((a, b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase()));
 }
 
-export async function departmentsFindOne(
-    id: number,
-    params?: FindOneDepartmentDto,
-): Promise<Department> {
+export async function departmentsFindOne(id: number, params?: FindOneDepartmentDto) {
     return (await api.departmentsFindOne(id, params ?? {})).data;
 }
 
-export async function departmentsUpdate(
-    id: number,
-    payload: UpdateDepartmentDto,
-): Promise<Department> {
+export async function departmentsUpdate(id: number, payload: UpdateDepartmentDto) {
     return (await api.departmentsUpdate(id, payload)).data;
 }
 
-export async function departmentsRemove(id: number): Promise<Department> {
+export async function departmentsRemove(id: number) {
     return (await api.departmentsRemove(id)).data;
 }

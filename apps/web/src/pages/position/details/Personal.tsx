@@ -1,4 +1,3 @@
-import { api } from '@/api';
 import { FormDateField } from '@/components/form/FormDateField';
 import { FormTextField } from '@/components/form/FormTextField';
 import TabLayout from '@/components/layout/TabLayout';
@@ -6,7 +5,8 @@ import { Toolbar } from '@/components/layout/Toolbar';
 import { SelectSex } from '@/components/select/SelectSex';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getDirtyValues, snackbarError, snackbarFormErrors } from '@/utils';
+import { personsFindOne, personsUpdate } from '@/services/person.service';
+import { getDirtyValues, invalidateQueries, snackbarError, snackbarFormErrors } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
@@ -54,7 +54,7 @@ export function Personal({ personId }: Props) {
     } = useQuery<Person, Error>({
         queryKey: [ResourceType.PERSON, { personId }],
         queryFn: async () => {
-            return (await api.personsFindOne(personId)).data;
+            return await personsFindOne(personId);
         },
     });
 
@@ -87,13 +87,13 @@ export function Personal({ personId }: Props) {
         if (!person) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            await api.personsUpdate(data.id, {
+            await personsUpdate(data.id, {
                 ...dirtyValues,
                 version: person.version,
             });
-            const updated = (await api.personsFindOne(personId)).data;
+            const updated = await personsFindOne(personId);
             reset(updated as FormType);
-            await queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
+            await invalidateQueries(queryClient, [ResourceType.PERSON]);
         } catch (e: unknown) {
             const error = e as AxiosError;
             snackbarError(`${error.code}\n${error.message}`);
@@ -102,7 +102,7 @@ export function Personal({ personId }: Props) {
 
     const onCancel = async () => {
         reset(person);
-        await queryClient.invalidateQueries({ queryKey: ['person'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.PERSON]);
     };
 
     return (

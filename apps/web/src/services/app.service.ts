@@ -1,6 +1,6 @@
 import { api } from '../api';
 
-export async function appGetTitle(): Promise<string> {
-    const response = await api.appGetTitle();
-    return response.data ?? '';
+export async function appGetTitle() {
+    const response = (await api.appGetTitle()).data;
+    return response ?? '';
 }

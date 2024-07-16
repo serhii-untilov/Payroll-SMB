@@ -1,4 +1,5 @@
-import { api, dto } from '@/api';
+import { dto } from '@/api';
+import { payPeriodsFindCurrent } from '@/services/payPeriod.service';
 import { snackbarError } from '@/utils/snackbar';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
@@ -10,12 +11,10 @@ export function useCurrentPayPeriod(params: Partial<dto.FindCurrentPayPeriodDto>
         queryKey: [ResourceType.PAY_PERIOD, params],
         queryFn: async () => {
             return params.companyId
-                ? (
-                      await api.payPeriodsFindCurrent({
-                          ...params,
-                          companyId: params.companyId,
-                      })
-                  ).data ?? null
+                ? (await payPeriodsFindCurrent({
+                      ...params,
+                      companyId: params.companyId,
+                  })) ?? null
                 : null;
         },
     });

@@ -1,25 +1,21 @@
-import { api, dto } from '@/api';
+import { personsFindOne } from '@/services/person.service';
 import { snackbarError } from '@/utils/snackbar';
+import { Person } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 
 type Params = { id: number | null | undefined };
-type Result = { person: dto.Person | null | undefined; isLoading: boolean };
+type Result = { data: Person | null | undefined; isLoading: boolean };
 
 export function usePerson(params: Params): Result {
-    const {
-        data: person,
-        isError,
-        isLoading,
-        error,
-    } = useQuery<dto.Person | null, Error>({
+    const { data, isError, isLoading, error } = useQuery<Person | null, Error>({
         queryKey: [ResourceType.PERSON, params],
         queryFn: async () => {
-            return params.id ? (await api.personsFindOne(params.id)).data ?? null : null;
+            return params.id ? (await personsFindOne(params.id)) ?? null : null;
         },
     });
     if (isError) {
         snackbarError(`${error.name}\n${error.message}`);
     }
-    return { person, isLoading };
+    return { data, isLoading };
 }

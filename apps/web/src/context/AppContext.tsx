@@ -1,8 +1,7 @@
-import { api } from '@/api';
 import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
 import { companiesFindOne } from '@/services/company.service';
-// import { getCurrentPayPeriodDateFrom } from '@/services/payPeriod.service';
+import { payPeriodsFindCurrent } from '@/services/payPeriod.service';
 import { usersCompanies } from '@/services/user.service';
 import { defaultTheme } from '@/themes/defaultTheme';
 import { invalidateQueries } from '@/utils/invalidateQueries';
@@ -107,7 +106,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     useEffect(() => {
         const initPayPeriod = async () => {
             const currentPayPeriod = company?.id
-                ? (await api.payPeriodsFindCurrent({ companyId: company?.id })).data
+                ? await payPeriodsFindCurrent({ companyId: company?.id })
                 : null;
             const current: Date = currentPayPeriod?.dateFrom
                 ? currentPayPeriod?.dateFrom

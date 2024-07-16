@@ -1714,6 +1714,37 @@ export interface FindAllPaymentPositionDto {
 /**
  * 
  * @export
+ * @interface FindAllPaymentTypeDto
+ */
+export interface FindAllPaymentTypeDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof FindAllPaymentTypeDto
+     */
+    'part'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof FindAllPaymentTypeDto
+     */
+    'groups'?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof FindAllPaymentTypeDto
+     */
+    'methods'?: Array<string>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof FindAllPaymentTypeDto
+     */
+    'ids'?: Array<number>;
+}
+/**
+ * 
+ * @export
  * @interface FindAllPositionBalanceDto
  */
 export interface FindAllPositionBalanceDto {
@@ -3061,37 +3092,6 @@ export interface PaymentType {
      * @memberof PaymentType
      */
     'version': number;
-}
-/**
- * 
- * @export
- * @interface PaymentTypeFilter
- */
-export interface PaymentTypeFilter {
-    /**
-     * 
-     * @type {string}
-     * @memberof PaymentTypeFilter
-     */
-    'part'?: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PaymentTypeFilter
-     */
-    'groups'?: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PaymentTypeFilter
-     */
-    'methods'?: Array<string>;
-    /**
-     * 
-     * @type {Array<number>}
-     * @memberof PaymentTypeFilter
-     */
-    'ids'?: Array<number>;
 }
 /**
  * 
@@ -8461,13 +8461,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {PaymentTypeFilter} paymentTypeFilter 
+         * @summary Create a Payment Type record
+         * @param {CreatePaymentTypeDto} createPaymentTypeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentTypesFindAll: async (paymentTypeFilter: PaymentTypeFilter, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'paymentTypeFilter' is not null or undefined
-            assertParamExists('paymentTypesFindAll', 'paymentTypeFilter', paymentTypeFilter)
+        paymentTypesCreate: async (createPaymentTypeDto: CreatePaymentTypeDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createPaymentTypeDto' is not null or undefined
+            assertParamExists('paymentTypesCreate', 'createPaymentTypeDto', createPaymentTypeDto)
             const localVarPath = `/api/payment-types`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8491,7 +8492,46 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(paymentTypeFilter, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createPaymentTypeDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {FindAllPaymentTypeDto} findAllPaymentTypeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        paymentTypesFindAll: async (findAllPaymentTypeDto: FindAllPaymentTypeDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findAllPaymentTypeDto' is not null or undefined
+            assertParamExists('paymentTypesFindAll', 'findAllPaymentTypeDto', findAllPaymentTypeDto)
+            const localVarPath = `/api/payment-types/find`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findAllPaymentTypeDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8507,7 +8547,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         paymentTypesFindOne: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('paymentTypesFindOne', 'id', id)
-            const localVarPath = `/api/payment-types/{id}`
+            const localVarPath = `/api/payment-types/id`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11648,12 +11688,25 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {PaymentTypeFilter} paymentTypeFilter 
+         * @summary Create a Payment Type record
+         * @param {CreatePaymentTypeDto} createPaymentTypeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paymentTypesFindAll(paymentTypeFilter: PaymentTypeFilter, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PaymentType>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentTypesFindAll(paymentTypeFilter, options);
+        async paymentTypesCreate(createPaymentTypeDto: CreatePaymentTypeDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaymentType>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentTypesCreate(createPaymentTypeDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentTypesCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {FindAllPaymentTypeDto} findAllPaymentTypeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async paymentTypesFindAll(findAllPaymentTypeDto: FindAllPaymentTypeDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PaymentType>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentTypesFindAll(findAllPaymentTypeDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentTypesFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13030,12 +13083,22 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {PaymentTypeFilter} paymentTypeFilter 
+         * @summary Create a Payment Type record
+         * @param {CreatePaymentTypeDto} createPaymentTypeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentTypesFindAll(paymentTypeFilter: PaymentTypeFilter, options?: any): AxiosPromise<Array<PaymentType>> {
-            return localVarFp.paymentTypesFindAll(paymentTypeFilter, options).then((request) => request(axios, basePath));
+        paymentTypesCreate(createPaymentTypeDto: CreatePaymentTypeDto, options?: any): AxiosPromise<PaymentType> {
+            return localVarFp.paymentTypesCreate(createPaymentTypeDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {FindAllPaymentTypeDto} findAllPaymentTypeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        paymentTypesFindAll(findAllPaymentTypeDto: FindAllPaymentTypeDto, options?: any): AxiosPromise<Array<PaymentType>> {
+            return localVarFp.paymentTypesFindAll(findAllPaymentTypeDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14363,13 +14426,25 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {PaymentTypeFilter} paymentTypeFilter 
+     * @summary Create a Payment Type record
+     * @param {CreatePaymentTypeDto} createPaymentTypeDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public paymentTypesFindAll(paymentTypeFilter: PaymentTypeFilter, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentTypesFindAll(paymentTypeFilter, options).then((request) => request(this.axios, this.basePath));
+    public paymentTypesCreate(createPaymentTypeDto: CreatePaymentTypeDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentTypesCreate(createPaymentTypeDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {FindAllPaymentTypeDto} findAllPaymentTypeDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public paymentTypesFindAll(findAllPaymentTypeDto: FindAllPaymentTypeDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentTypesFindAll(findAllPaymentTypeDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

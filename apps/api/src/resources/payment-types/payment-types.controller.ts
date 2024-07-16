@@ -26,7 +26,7 @@ import {
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
-import { PaymentTypeFilter } from './dto/find-all-payment-type.dto';
+import { FindAllPaymentTypeDto } from './dto/find-all-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
 import { PaymentTypesService } from './payment-types.service';
 
@@ -48,7 +48,7 @@ export class PaymentTypesController {
         return await this.service.create(userId, payload);
     }
 
-    @Post()
+    @Post('find')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
@@ -56,23 +56,17 @@ export class PaymentTypesController {
         schema: { type: 'array', items: { $ref: getSchemaPath(PaymentType) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Body() payload: PaymentTypeFilter) {
+    async findAll(@Body() payload: FindAllPaymentTypeDto): Promise<PaymentType[]> {
         return await this.service.findAll(payload);
     }
 
-    @Get(':id')
+    @Get('id')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found record', type: PaymentType })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.service.findOne({
-            where: { id },
-            relations: {
-                law: true,
-                accounting: true,
-            },
-        });
+    async findOne(@Param('id', ParseIntPipe) id: number): Promise<PaymentType> {
+        return await this.service.findOne(id);
     }
 
     @Patch(':id')
