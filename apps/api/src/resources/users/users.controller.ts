@@ -5,6 +5,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseBoolPipe,
     ParseIntPipe,
@@ -31,6 +33,7 @@ import { UserCompany } from './entities/user-company.entity';
 import { User } from './entities/user.entity';
 import { UsersCompanyService } from './users-company.service';
 import { UsersService } from './users.service';
+import { FindAllUserCompanyDto } from './dto/find-all-user-company.dto';
 
 @Controller('users')
 @ApiBearerAuth()
@@ -137,35 +140,30 @@ export class UsersController {
         return this.usersService.toPublic(user);
     }
 
-    @Get(':id/companies')
+    @Post(':id/companies')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(UserCompany) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async userCompanyList(
+    async companies(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
-        @Query('deleted', new ParseBoolPipe({ optional: true })) deleted: boolean,
+        @Body() params: FindAllUserCompanyDto,
     ): Promise<UserCompany[]> {
         const userId = getUserId(req);
-        return await this.usersCompanyService.getUserCompanyList(
-            userId,
-            id,
-            !!relations,
-            !!deleted,
-        );
+        return await this.usersCompanyService.getUserCompanyList(userId, id, params);
     }
 
-    @Delete('/company/:id')
+    @Delete('/companies/:id')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a User Company record' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: UserCompany })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async userCompanyRemove(
+    async companiesRemove(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
     ): Promise<UserCompany> {
@@ -173,13 +171,14 @@ export class UsersController {
         return await this.usersCompanyService.remove(userId, id);
     }
 
-    @Post('/company/:id/restore')
+    @Post('/companies/:id/restore')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Restore a User Company record' })
     @ApiOkResponse({ description: 'The record has been successfully restored', type: UserCompany })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async userCompanyRestore(
+    async companiesRestore(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
     ): Promise<UserCompany> {

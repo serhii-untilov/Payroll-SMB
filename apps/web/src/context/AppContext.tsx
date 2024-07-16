@@ -2,7 +2,7 @@ import { api } from '@/api';
 import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
 // import { getCurrentPayPeriodDateFrom } from '@/services/payPeriod.service';
-import { getUserCompanyList } from '@/services/user.service';
+import { usersCompanies } from '@/services/user.service';
 import { defaultTheme } from '@/themes/defaultTheme';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
@@ -73,8 +73,8 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initCompanyList = async () => {
-            const userCompanyList = user?.id ? await getUserCompanyList(user?.id, true) : [];
-            setUserCompanyList(userCompanyList);
+            const response = user?.id ? await usersCompanies(user.id, { relations: true }) : [];
+            setUserCompanyList(response);
         };
         initCompanyList();
     }, [user]);

@@ -3,7 +3,7 @@ import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
-import { deleteUserCompany, getUserCompanyList, restoreUserCompany } from '@/services/user.service';
+import { deleteUserCompany, restoreUserCompany } from '@/services/user.service';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -13,7 +13,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { date2view } from '@repo/shared';
+import { date2view, ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -94,9 +94,12 @@ export function UserCompanyList(params: Props) {
         isLoading,
         error: error,
     } = useQuery<dto.UserCompany[], Error>({
-        queryKey: ['company', 'list', { userId, showDeleted }],
+        queryKey: [ResourceType.COMPANY, { userId, showDeleted }],
         queryFn: async () => {
-            return userId ? await getUserCompanyList(userId, true, showDeleted) : [];
+            return userId
+                ? (await api.usersCompanies(userId, { relations: true, deleted: showDeleted }))
+                      .data ?? []
+                : [];
         },
         enabled: !!userId,
     });

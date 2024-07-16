@@ -1,25 +1,14 @@
-import { IPublicUserData, IUpdateUser } from '@repo/shared';
-import { axiosInstance, dto } from '@/api';
+import { api, dto } from '@/api';
 import authHeader from './auth-header';
+import { FindAllUserCompanyDto } from '@repo/openapi';
 
-export async function updateUser(id: number, user: IUpdateUser): Promise<IPublicUserData> {
-    const response = await axiosInstance.patch(`/api/users/${id}`, user, { headers: authHeader() });
-    return response.data;
-}
-
-export async function getUserCompanyList(
-    id: number,
-    relations: boolean = false,
-    deleted: boolean = false,
+export async function usersCompanies(
+    userId: number,
+    params: FindAllUserCompanyDto,
 ): Promise<dto.UserCompany[]> {
-    const response = await axiosInstance.get(
-        `/api/users/${id}/companies?relations=${relations}${deleted ? '&deleted=true' : ''}`,
-        {
-            headers: authHeader(),
-        },
-    );
-    return response.data.sort((a: dto.UserCompany, b: dto.UserCompany) =>
-        a.company?.name.toUpperCase().localeCompare((b.company?.name || '').toUpperCase()),
+    const response = (await api.usersCompanies(userId, params)).data ?? [];
+    return response.sort((a, b) =>
+        (a.company?.name ?? '').toUpperCase().localeCompare((b.company?.name ?? '').toUpperCase()),
     );
 }
 

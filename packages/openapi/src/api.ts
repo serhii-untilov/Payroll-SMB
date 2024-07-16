@@ -1841,6 +1841,25 @@ export interface FindAllPositionHistoryDto {
 /**
  * 
  * @export
+ * @interface FindAllUserCompanyDto
+ */
+export interface FindAllUserCompanyDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllUserCompanyDto
+     */
+    'relations'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllUserCompanyDto
+     */
+    'deleted'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface FindCurrentPayPeriodDto
  */
 export interface FindCurrentPayPeriodDto {
@@ -10196,6 +10215,125 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {number} id 
+         * @param {FindAllUserCompanyDto} findAllUserCompanyDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersCompanies: async (id: number, findAllUserCompanyDto: FindAllUserCompanyDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersCompanies', 'id', id)
+            // verify required parameter 'findAllUserCompanyDto' is not null or undefined
+            assertParamExists('usersCompanies', 'findAllUserCompanyDto', findAllUserCompanyDto)
+            const localVarPath = `/api/users/{id}/companies`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findAllUserCompanyDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Soft delete a User Company record
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersCompaniesRemove: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersCompaniesRemove', 'id', id)
+            const localVarPath = `/api/users/companies/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Restore a User Company record
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersCompaniesRestore: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersCompaniesRestore', 'id', id)
+            const localVarPath = `/api/users/companies/{id}/restore`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a user
          * @param {CreateUserDto} createUserDto 
          * @param {*} [options] Override http request option.
@@ -10434,133 +10572,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updateUserDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {number} id 
-         * @param {boolean} relations 
-         * @param {boolean} deleted 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        usersUserCompanyList: async (id: number, relations: boolean, deleted: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('usersUserCompanyList', 'id', id)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('usersUserCompanyList', 'relations', relations)
-            // verify required parameter 'deleted' is not null or undefined
-            assertParamExists('usersUserCompanyList', 'deleted', deleted)
-            const localVarPath = `/api/users/{id}/companies`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
-            if (deleted !== undefined) {
-                localVarQueryParameter['deleted'] = deleted;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Soft delete a User Company record
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        usersUserCompanyRemove: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('usersUserCompanyRemove', 'id', id)
-            const localVarPath = `/api/users/company/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Restore a User Company record
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        usersUserCompanyRestore: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('usersUserCompanyRestore', 'id', id)
-            const localVarPath = `/api/users/company/{id}/restore`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12169,6 +12180,45 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} id 
+         * @param {FindAllUserCompanyDto} findAllUserCompanyDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersCompanies(id: number, findAllUserCompanyDto: FindAllUserCompanyDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserCompany>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersCompanies(id, findAllUserCompanyDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersCompanies']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Soft delete a User Company record
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersCompaniesRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserCompany>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersCompaniesRemove(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersCompaniesRemove']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Restore a User Company record
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersCompaniesRestore(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserCompany>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersCompaniesRestore(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersCompaniesRestore']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Create a user
          * @param {CreateUserDto} createUserDto 
          * @param {*} [options] Override http request option.
@@ -12242,46 +12292,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersUpdate(id, updateUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersUpdate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {number} id 
-         * @param {boolean} relations 
-         * @param {boolean} deleted 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async usersUserCompanyList(id: number, relations: boolean, deleted: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserCompany>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersUserCompanyList(id, relations, deleted, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersUserCompanyList']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary Soft delete a User Company record
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async usersUserCompanyRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserCompany>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersUserCompanyRemove(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersUserCompanyRemove']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary Restore a User Company record
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async usersUserCompanyRestore(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserCompany>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersUserCompanyRestore(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersUserCompanyRestore']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -13418,6 +13428,36 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {number} id 
+         * @param {FindAllUserCompanyDto} findAllUserCompanyDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersCompanies(id: number, findAllUserCompanyDto: FindAllUserCompanyDto, options?: any): AxiosPromise<Array<UserCompany>> {
+            return localVarFp.usersCompanies(id, findAllUserCompanyDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Soft delete a User Company record
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersCompaniesRemove(id: number, options?: any): AxiosPromise<UserCompany> {
+            return localVarFp.usersCompaniesRemove(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Restore a User Company record
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersCompaniesRestore(id: number, options?: any): AxiosPromise<UserCompany> {
+            return localVarFp.usersCompaniesRestore(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Create a user
          * @param {CreateUserDto} createUserDto 
          * @param {*} [options] Override http request option.
@@ -13474,37 +13514,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         usersUpdate(id: number, updateUserDto: UpdateUserDto, options?: any): AxiosPromise<User> {
             return localVarFp.usersUpdate(id, updateUserDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {number} id 
-         * @param {boolean} relations 
-         * @param {boolean} deleted 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        usersUserCompanyList(id: number, relations: boolean, deleted: boolean, options?: any): AxiosPromise<Array<UserCompany>> {
-            return localVarFp.usersUserCompanyList(id, relations, deleted, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Soft delete a User Company record
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        usersUserCompanyRemove(id: number, options?: any): AxiosPromise<UserCompany> {
-            return localVarFp.usersUserCompanyRemove(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Restore a User Company record
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        usersUserCompanyRestore(id: number, options?: any): AxiosPromise<UserCompany> {
-            return localVarFp.usersUserCompanyRestore(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14843,6 +14852,42 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @param {number} id 
+     * @param {FindAllUserCompanyDto} findAllUserCompanyDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public usersCompanies(id: number, findAllUserCompanyDto: FindAllUserCompanyDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).usersCompanies(id, findAllUserCompanyDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Soft delete a User Company record
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public usersCompaniesRemove(id: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).usersCompaniesRemove(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Restore a User Company record
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public usersCompaniesRestore(id: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).usersCompaniesRestore(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Create a user
      * @param {CreateUserDto} createUserDto 
      * @param {*} [options] Override http request option.
@@ -14910,43 +14955,6 @@ export class DefaultApi extends BaseAPI {
      */
     public usersUpdate(id: number, updateUserDto: UpdateUserDto, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).usersUpdate(id, updateUserDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {number} id 
-     * @param {boolean} relations 
-     * @param {boolean} deleted 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public usersUserCompanyList(id: number, relations: boolean, deleted: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersUserCompanyList(id, relations, deleted, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Soft delete a User Company record
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public usersUserCompanyRemove(id: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersUserCompanyRemove(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Restore a User Company record
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public usersUserCompanyRestore(id: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersUserCompanyRestore(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

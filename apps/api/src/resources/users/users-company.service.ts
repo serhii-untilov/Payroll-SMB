@@ -12,6 +12,7 @@ import { AccessService } from '../access/access.service';
 import { CreateUserCompanyDto } from './dto/create-user-company.dto';
 import { UpdateUserCompanyDto } from './dto/update-user-company.dto';
 import { UserCompany } from './entities/user-company.entity';
+import { FindAllUserCompanyDto } from './dto/find-all-user-company.dto';
 
 @Injectable()
 export class UsersCompanyService {
@@ -114,8 +115,7 @@ export class UsersCompanyService {
     async getUserCompanyList(
         userId: number,
         id: number,
-        relations: boolean,
-        deleted: boolean,
+        params?: FindAllUserCompanyDto,
     ): Promise<UserCompany[]> {
         await this.accessService.availableForUserOrFail(
             userId,
@@ -124,8 +124,8 @@ export class UsersCompanyService {
         );
         return await this.repository.find({
             where: { userId: id },
-            withDeleted: deleted,
-            ...(relations ? { relations: { company: true, role: true } } : {}),
+            withDeleted: !!params?.deleted,
+            ...(!!params?.relations ? { relations: { company: true, role: true } } : {}),
         });
     }
 
