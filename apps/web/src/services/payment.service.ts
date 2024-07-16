@@ -8,8 +8,6 @@ import {
     UpdatePaymentDto,
     WithdrawPaymentDto,
 } from '@repo/openapi';
-import { IPayment } from '@repo/shared';
-import authHeader from './auth-header';
 
 export async function paymentsCreate(payload: CreatePaymentDto): Promise<Payment> {
     return (await api.paymentsCreate(payload)).data;

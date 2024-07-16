@@ -11,7 +11,7 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { PaymentPosition } from '../payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
 
 @Entity()
 @Index('IDX_PAYMENT_COMP_ACC_STATUS', ['companyId', 'accPeriod', 'status'])

@@ -12,11 +12,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
-import { Payment } from '../entities/payment.entity';
-import { PaymentsService } from '../payments.service';
-import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
-import { FindPaymentPositionDto } from './dto/find-paymentPosition.dto';
-import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
+import { Payment } from '../payments/entities/payment.entity';
+import { PaymentsService } from '../payments/payments.service';
+import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
+import { FindAllPaymentPositionDto } from './dto/find-all-payment-position.dto';
+import { FindOnePaymentPositionDto } from './dto/find-one-payment-position.dto';
+import { UpdatePaymentPositionDto } from './dto/update-payment-position.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 
 @Injectable()
@@ -54,7 +55,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(params: FindPaymentPositionDto): Promise<PaymentPosition[]> {
+    async findAll(params: FindAllPaymentPositionDto): Promise<PaymentPosition[]> {
         const { paymentId, relations } = params;
         if (!paymentId) {
             throw new BadRequestException('Should be defined paymentId');
@@ -86,12 +87,12 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(id: number, relations: boolean = false): Promise<PaymentPosition> {
+    async findOne(id: number, params?: FindOnePaymentPositionDto): Promise<PaymentPosition> {
         const record = await this.repository.findOneOrFail({
             where: { id },
             relations: {
-                payment: relations,
-                position: relations
+                payment: !!params?.relations,
+                position: !!params?.relations
                     ? {
                           person: true,
                           history: true,

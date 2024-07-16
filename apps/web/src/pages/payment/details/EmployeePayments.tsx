@@ -1,7 +1,7 @@
-import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { paymentsRemove } from '@/services/payment.service';
+import { paymentPositionsFindAll } from '@/services/paymentPosition.service';
 import { snackbarError, sumFormatter } from '@/utils';
 import {
     GridCellParams,
@@ -110,7 +110,7 @@ export function EmployeePayments(props: Props) {
     const { data, isError, error } = useQuery<PaymentPosition[], Error>({
         queryKey: [ResourceType.PAYMENT, { paymentId, relations: true }],
         queryFn: async () => {
-            return (await api.paymentPositionsFindAll({ paymentId, relations: true })).data;
+            return await paymentPositionsFindAll({ paymentId, relations: true });
         },
         enabled: !!paymentId,
     });

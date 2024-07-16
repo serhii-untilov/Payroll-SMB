@@ -4,13 +4,12 @@ import {
     Body,
     Controller,
     Delete,
-    Get,
+    HttpCode,
+    HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -25,9 +24,10 @@ import {
 } from '@nestjs/swagger';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { CreatePaymentPositionDto } from './dto/create-paymentPosition.dto';
-import { FindPaymentPositionDto } from './dto/find-paymentPosition.dto';
-import { UpdatePaymentPositionDto } from './dto/update-paymentPosition.dto';
+import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
+import { FindAllPaymentPositionDto } from './dto/find-all-payment-position.dto';
+import { FindOnePaymentPositionDto } from './dto/find-one-payment-position.dto';
+import { UpdatePaymentPositionDto } from './dto/update-payment-position.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 import { PaymentPositionsService } from './payment-positions.service';
 
@@ -63,7 +63,7 @@ export class PaymentPositionsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(
         @Req() req: Request,
-        @Body() params: FindPaymentPositionDto,
+        @Body() params: FindAllPaymentPositionDto,
     ): Promise<PaymentPosition[]> {
         const userId = getUserId(req);
         const companyId = await this.service.getPaymentCompanyId(params.paymentId);
@@ -71,19 +71,20 @@ export class PaymentPositionsController {
         return await this.service.findAll(deepStringToShortDate(params));
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: PaymentPosition })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Body() params: FindOnePaymentPositionDto,
     ): Promise<PaymentPosition> {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId, id);
-        return await this.service.findOne(id, relations);
+        return await this.service.findOne(id, params);
     }
 
     @Patch(':id')

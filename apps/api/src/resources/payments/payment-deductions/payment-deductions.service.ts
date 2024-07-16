@@ -6,7 +6,7 @@ import { AccessService } from '@/resources/access/access.service';
 import { CreatePaymentDeductionDto } from '../dto/create-paymentDeduction.dto';
 import { UpdatePaymentDeductionDto } from '../dto/update-paymentDeduction.dto';
 import { PaymentDeduction } from '../entities/paymentDeduction.entity';
-import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
+import { PaymentPositionsService } from '../../payment-positions/payment-positions.service';
 import { PaymentsService } from '../payments.service';
 import { AvailableForUserCompany } from '@/resources/abstract/availableForUserCompany';
 

@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '@repo/testing';
 import { AccessService } from '../access/access.service';
 import { Payment } from './entities/payment.entity';
-import { PaymentPositionsService } from './payment-positions/payment-positions.service';
+import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
 import { PaymentsService } from './payments.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';

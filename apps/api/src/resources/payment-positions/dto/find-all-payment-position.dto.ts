@@ -1,4 +1,4 @@
-export class FindPaymentPositionDto {
+export class FindAllPaymentPositionDto {
     paymentId: number;
     relations?: boolean;
 }

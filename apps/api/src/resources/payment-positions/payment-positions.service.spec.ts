@@ -6,17 +6,15 @@ import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '@repo/testing';
-import { PaymentsService } from '../payments.service';
+import { PaymentsService } from '../payments/payments.service';
 import { PaymentPosition } from './entities/paymentPosition.entity';
-import { PaymentPositionsController } from './payment-positions.controller';
 import { PaymentPositionsService } from './payment-positions.service';
 
-describe('PaymentPositionsController', () => {
-    let controller: PaymentPositionsController;
+describe('PaymentPositionsService', () => {
+    let service: PaymentPositionsService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [PaymentPositionsController],
             providers: [
                 PaymentPositionsService,
                 {
@@ -31,10 +29,10 @@ describe('PaymentPositionsController', () => {
             ],
         }).compile();
 
-        controller = module.get<PaymentPositionsController>(PaymentPositionsController);
+        service = module.get<PaymentPositionsService>(PaymentPositionsService);
     });
 
     it('should be defined', () => {
-        expect(controller).toBeDefined();
+        expect(service).toBeDefined();
     });
 });

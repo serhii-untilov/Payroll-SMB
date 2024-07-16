@@ -951,31 +951,31 @@ export interface CreatePaymentPositionDto {
      * @type {number}
      * @memberof CreatePaymentPositionDto
      */
-    'baseSum': number;
+    'baseSum'?: number;
     /**
      * 
      * @type {number}
      * @memberof CreatePaymentPositionDto
      */
-    'deductions': number;
+    'deductions'?: number;
     /**
      * 
      * @type {number}
      * @memberof CreatePaymentPositionDto
      */
-    'paySum': number;
+    'paySum'?: number;
     /**
      * 
      * @type {number}
      * @memberof CreatePaymentPositionDto
      */
-    'funds': number;
+    'funds'?: number;
     /**
      * 
      * @type {number}
      * @memberof CreatePaymentPositionDto
      */
-    'recordFlags': number;
+    'recordFlags'?: number;
 }
 /**
  * 
@@ -1695,6 +1695,25 @@ export interface FindAllPaymentDto {
 /**
  * 
  * @export
+ * @interface FindAllPaymentPositionDto
+ */
+export interface FindAllPaymentPositionDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPaymentPositionDto
+     */
+    'paymentId': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllPaymentPositionDto
+     */
+    'relations'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface FindAllPositionBalanceDto
  */
 export interface FindAllPositionBalanceDto {
@@ -1930,6 +1949,19 @@ export interface FindOnePaymentDto {
 /**
  * 
  * @export
+ * @interface FindOnePaymentPositionDto
+ */
+export interface FindOnePaymentPositionDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOnePaymentPositionDto
+     */
+    'relations'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface FindOnePositionDto
  */
 export interface FindOnePositionDto {
@@ -2006,25 +2038,6 @@ export interface FindPayFundDto {
      * 
      * @type {boolean}
      * @memberof FindPayFundDto
-     */
-    'relations'?: boolean;
-}
-/**
- * 
- * @export
- * @interface FindPaymentPositionDto
- */
-export interface FindPaymentPositionDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof FindPaymentPositionDto
-     */
-    'paymentId': number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof FindPaymentPositionDto
      */
     'relations'?: boolean;
 }
@@ -4953,25 +4966,13 @@ export interface UpdatePaymentPositionDto {
      * @type {number}
      * @memberof UpdatePaymentPositionDto
      */
-    'version'?: number;
-    /**
-     * 
-     * @type {Payment}
-     * @memberof UpdatePaymentPositionDto
-     */
-    'payment'?: Payment;
+    'version': number;
     /**
      * 
      * @type {number}
      * @memberof UpdatePaymentPositionDto
      */
     'paymentId'?: number;
-    /**
-     * 
-     * @type {Position}
-     * @memberof UpdatePaymentPositionDto
-     */
-    'position'?: Position;
     /**
      * 
      * @type {number}
@@ -8296,13 +8297,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {FindPaymentPositionDto} findPaymentPositionDto 
+         * @param {FindAllPaymentPositionDto} findAllPaymentPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentPositionsFindAll: async (findPaymentPositionDto: FindPaymentPositionDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'findPaymentPositionDto' is not null or undefined
-            assertParamExists('paymentPositionsFindAll', 'findPaymentPositionDto', findPaymentPositionDto)
+        paymentPositionsFindAll: async (findAllPaymentPositionDto: FindAllPaymentPositionDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findAllPaymentPositionDto' is not null or undefined
+            assertParamExists('paymentPositionsFindAll', 'findAllPaymentPositionDto', findAllPaymentPositionDto)
             const localVarPath = `/api/payment-positions/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8326,7 +8327,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(findPaymentPositionDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(findAllPaymentPositionDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8336,16 +8337,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindOnePaymentPositionDto} findOnePaymentPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentPositionsFindOne: async (id: number, relations: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        paymentPositionsFindOne: async (id: number, findOnePaymentPositionDto: FindOnePaymentPositionDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('paymentPositionsFindOne', 'id', id)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('paymentPositionsFindOne', 'relations', relations)
-            const localVarPath = `/api/payment-positions/{id}`
+            // verify required parameter 'findOnePaymentPositionDto' is not null or undefined
+            assertParamExists('paymentPositionsFindOne', 'findOnePaymentPositionDto', findOnePaymentPositionDto)
+            const localVarPath = `/api/payment-positions/find/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8354,7 +8355,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -8362,15 +8363,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findOnePaymentPositionDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11596,12 +11596,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {FindPaymentPositionDto} findPaymentPositionDto 
+         * @param {FindAllPaymentPositionDto} findAllPaymentPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paymentPositionsFindAll(findPaymentPositionDto: FindPaymentPositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PaymentPosition>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentPositionsFindAll(findPaymentPositionDto, options);
+        async paymentPositionsFindAll(findAllPaymentPositionDto: FindAllPaymentPositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PaymentPosition>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentPositionsFindAll(findAllPaymentPositionDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentPositionsFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11609,12 +11609,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindOnePaymentPositionDto} findOnePaymentPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paymentPositionsFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaymentPosition>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentPositionsFindOne(id, relations, options);
+        async paymentPositionsFindOne(id: number, findOnePaymentPositionDto: FindOnePaymentPositionDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaymentPosition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentPositionsFindOne(id, findOnePaymentPositionDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentPositionsFindOne']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12990,22 +12990,22 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {FindPaymentPositionDto} findPaymentPositionDto 
+         * @param {FindAllPaymentPositionDto} findAllPaymentPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentPositionsFindAll(findPaymentPositionDto: FindPaymentPositionDto, options?: any): AxiosPromise<Array<PaymentPosition>> {
-            return localVarFp.paymentPositionsFindAll(findPaymentPositionDto, options).then((request) => request(axios, basePath));
+        paymentPositionsFindAll(findAllPaymentPositionDto: FindAllPaymentPositionDto, options?: any): AxiosPromise<Array<PaymentPosition>> {
+            return localVarFp.paymentPositionsFindAll(findAllPaymentPositionDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindOnePaymentPositionDto} findOnePaymentPositionDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentPositionsFindOne(id: number, relations: boolean, options?: any): AxiosPromise<PaymentPosition> {
-            return localVarFp.paymentPositionsFindOne(id, relations, options).then((request) => request(axios, basePath));
+        paymentPositionsFindOne(id: number, findOnePaymentPositionDto: FindOnePaymentPositionDto, options?: any): AxiosPromise<PaymentPosition> {
+            return localVarFp.paymentPositionsFindOne(id, findOnePaymentPositionDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14315,25 +14315,25 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {FindPaymentPositionDto} findPaymentPositionDto 
+     * @param {FindAllPaymentPositionDto} findAllPaymentPositionDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public paymentPositionsFindAll(findPaymentPositionDto: FindPaymentPositionDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentPositionsFindAll(findPaymentPositionDto, options).then((request) => request(this.axios, this.basePath));
+    public paymentPositionsFindAll(findAllPaymentPositionDto: FindAllPaymentPositionDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentPositionsFindAll(findAllPaymentPositionDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {number} id 
-     * @param {boolean} relations 
+     * @param {FindOnePaymentPositionDto} findOnePaymentPositionDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public paymentPositionsFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentPositionsFindOne(id, relations, options).then((request) => request(this.axios, this.basePath));
+    public paymentPositionsFindOne(id: number, findOnePaymentPositionDto: FindOnePaymentPositionDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentPositionsFindOne(id, findOnePaymentPositionDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

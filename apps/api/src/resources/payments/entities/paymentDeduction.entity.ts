@@ -1,6 +1,6 @@
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { PaymentPosition } from '../payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
 
 @Entity()
 export class PaymentDeduction {

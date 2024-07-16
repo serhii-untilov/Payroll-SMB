@@ -8,7 +8,7 @@ import { CompaniesService } from '../companies/companies.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionsService } from '../positions/positions.service';
 import { Payment } from './entities/payment.entity';
-import { PaymentPositionsService } from './payment-positions/payment-positions.service';
+import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
 import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
 

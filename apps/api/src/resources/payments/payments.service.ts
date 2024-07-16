@@ -23,7 +23,7 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
 import { Payment } from './entities/payment.entity';
 import { PaymentUpdatedEvent } from './events/payment-updated.event';
-import { PaymentPositionsService } from './payment-positions/payment-positions.service';
+import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {

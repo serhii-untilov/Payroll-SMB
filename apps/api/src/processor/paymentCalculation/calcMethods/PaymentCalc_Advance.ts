@@ -2,7 +2,7 @@ import { payFundPayPeriodFactSum } from '@/processor/helpers/payFund.helper';
 import { getAdvancePaymentDate } from '@/processor/helpers/payment.helper';
 import { payPeriodFactSum } from '@/processor/helpers/payroll.helper';
 import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
-import { PaymentPosition } from '@/resources/payments/payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from '@/resources/payment-positions/entities/paymentPosition.entity';
 import { PaymentGroup, dateUTC } from '@repo/shared';
 import { PaymentCalculationService } from '../payment-calculation.service';
 import { PaymentCalc } from './abstract/PaymentCalc';

@@ -28,3 +28,13 @@ export abstract class Logger {
     @VersionColumn({ default: 1, nullable: true })
     version: number;
 }
+
+export const LoggerFields = [
+    'createdDate',
+    'createdUserId',
+    'updatedDate',
+    'updatedUserId',
+    'deletedDate',
+    'deletedUserId',
+    'version',
+];

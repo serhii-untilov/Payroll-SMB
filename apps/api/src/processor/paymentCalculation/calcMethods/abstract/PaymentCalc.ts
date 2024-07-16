@@ -1,5 +1,5 @@
 import { PaymentStatus, RecordFlags } from '@repo/shared';
-import { PaymentPosition } from '@/resources/payments/payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from '@/resources/payment-positions/entities/paymentPosition.entity';
 import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
 import { Payment } from '@/resources/payments/entities/payment.entity';
 import { PaymentCalculationService } from './../../payment-calculation.service';

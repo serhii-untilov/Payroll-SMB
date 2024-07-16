@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { CreatePaymentFundDto } from '../dto/create-paymentFund.dto';
 import { UpdatePaymentFundDto } from '../dto/update-paymentFund.dto';
 import { PaymentFund } from '../entities/paymentFund.entity';
-import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
+import { PaymentPositionsService } from '../../payment-positions/payment-positions.service';
 import { PaymentsService } from '../payments.service';
 
 @Injectable()
