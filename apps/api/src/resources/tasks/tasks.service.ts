@@ -1,3 +1,4 @@
+import { FindOneTaskDto } from './dto/find-one-task.dto';
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceType, TaskStatus, TaskType, monthBegin, monthEnd } from '@repo/shared';
@@ -6,7 +7,7 @@ import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { FindTaskDto } from './dto/find-task.dto';
+import { FindAllTaskDto } from './dto/find-all-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
 
@@ -38,7 +39,7 @@ export class TasksService extends AvailableForUserCompany {
         return created;
     }
 
-    async findAll(payload: FindTaskDto): Promise<Task[]> {
+    async findAll(payload: FindAllTaskDto): Promise<Task[]> {
         const { companyId, onDate, onPayPeriodDate, relations } = payload;
         if (!companyId) {
             return this._generateFakeTaskList();
@@ -75,16 +76,16 @@ export class TasksService extends AvailableForUserCompany {
         );
     }
 
-    async findOne(id: number, relations?: boolean): Promise<Task> {
+    async findOne(id: number, params?: FindOneTaskDto) {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: {
-                company: !!relations,
+                company: !!params?.relations,
             },
         });
     }
 
-    async update(userId: number, id: number, payload: UpdateTaskDto): Promise<Task> {
+    async update(userId: number, id: number, payload: UpdateTaskDto) {
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (payload.version !== record.version) {
             throw new ConflictException(

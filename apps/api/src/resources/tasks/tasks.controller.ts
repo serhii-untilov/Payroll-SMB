@@ -4,13 +4,12 @@ import {
     Body,
     Controller,
     Delete,
-    Get,
+    HttpCode,
+    HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -26,7 +25,8 @@ import {
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { FindTaskDto } from './dto/find-task.dto';
+import { FindAllTaskDto } from './dto/find-all-task.dto';
+import { FindOneTaskDto } from './dto/find-one-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
 import { TasksService } from './tasks.service';
@@ -52,30 +52,32 @@ export class TasksController {
 
     @Post('find')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(Task) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Req() req: Request, @Body() payload: FindTaskDto): Promise<Task[]> {
+    async findAll(@Req() req: Request, @Body() payload: FindAllTaskDto): Promise<Task[]> {
         const userId = getUserId(req);
         payload.companyId &&
             (await this.tasksService.availableFindAllOrFail(userId, payload.companyId));
         return await this.tasksService.findAll(deepStringToShortDate(payload));
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: Task })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
-    ): Promise<Task> {
+        @Body() params?: FindOneTaskDto,
+    ) {
         const userId = getUserId(req);
-        const found = await this.tasksService.findOne(id, !!relations);
+        const found = await this.tasksService.findOne(id, params);
         await this.tasksService.availableFindAllOrFail(userId, found.companyId);
         return found;
     }

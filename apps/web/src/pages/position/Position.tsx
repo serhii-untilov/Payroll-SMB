@@ -1,4 +1,4 @@
-import { api, dto } from '@/api';
+import { dto } from '@/api';
 import PageLayout from '@/components/layout/PageLayout';
 import { PageTitle } from '@/components/layout/PageTitle';
 import { Tab } from '@/components/layout/Tab';
@@ -7,6 +7,7 @@ import { Tabs } from '@/components/layout/Tabs';
 import { AvatarBox } from '@/components/utility/AvatarBox';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
+import { positionsFindOne } from '@/services/position.service';
 import { snackbarError } from '@/utils';
 import { ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -51,16 +52,14 @@ export default function Position() {
     } = useQuery<dto.Position | null, Error>({
         queryKey: [ResourceType.POSITION, { positionId, ...findPositionParams }],
         queryFn: async () => {
-            return positionId
-                ? (await api.positionsFindOne(positionId, findPositionParams)).data
-                : null;
+            return positionId ? await positionsFindOne(positionId, findPositionParams) : null;
         },
     });
 
     useEffect(() => {}, [locale]);
 
     if (isPositionError) {
-        return snackbarError(`${positionError.name}\n${positionError.message}`);
+        snackbarError(`${positionError.name}\n${positionError.message}`);
     }
 
     const generatePageTitle = () => {

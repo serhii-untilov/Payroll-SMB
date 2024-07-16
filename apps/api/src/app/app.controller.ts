@@ -2,7 +2,6 @@ import { Body, Controller, Get, Header, Logger, Param, Post, StreamableFile } fr
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { AppService } from './app.service';
-import { ApiNotFoundResponse } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {

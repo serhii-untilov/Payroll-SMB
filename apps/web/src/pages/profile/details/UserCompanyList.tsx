@@ -1,10 +1,14 @@
-import { api, dto } from '@/api';
+import { dto } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
 import { companiesFindOne } from '@/services/company.service';
-import { deleteUserCompany, restoreUserCompany } from '@/services/user.service';
+import {
+    usersCompanies,
+    usersCompaniesRemove,
+    usersCompaniesRestore,
+} from '@/services/user.service';
 import { snackbarError } from '@/utils';
 import {
     GridCallbackDetails,
@@ -99,8 +103,7 @@ export function UserCompanyList(params: Props) {
         queryKey: [ResourceType.COMPANY, { userId, showDeleted }],
         queryFn: async () => {
             return userId
-                ? (await api.usersCompanies(userId, { relations: true, deleted: showDeleted }))
-                      .data ?? []
+                ? (await usersCompanies(userId, { relations: true, deleted: showDeleted })) ?? []
                 : [];
         },
         enabled: !!userId,
@@ -111,7 +114,7 @@ export function UserCompanyList(params: Props) {
     }
 
     if (isError) {
-        return snackbarError(`${error.name}\n${error.message}`);
+        snackbarError(`${error.name}\n${error.message}`);
     }
 
     const onAddCompany = () => {
@@ -128,7 +131,7 @@ export function UserCompanyList(params: Props) {
         for (const id of notDeletedSelection()) {
             const companyId = data?.find((o) => o.id === id)?.companyId;
             if (companyId !== currentCompany?.id) {
-                await deleteUserCompany(Number(id));
+                await usersCompaniesRemove(Number(id));
             } else {
                 attemptToDeleteCurrentCompany = true;
             }
@@ -165,7 +168,7 @@ export function UserCompanyList(params: Props) {
 
     const onRestoreDeleted = async () => {
         for (const id of deletedSelection()) {
-            await restoreUserCompany(id);
+            await usersCompaniesRestore(id);
         }
         setRowSelectionModel([]);
         await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });

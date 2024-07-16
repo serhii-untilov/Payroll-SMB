@@ -1,8 +1,8 @@
-import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
+import { positionsFindAll, positionsRemove } from '@/services/position.service';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -13,7 +13,7 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { FindAllPositionDto, Position } from '@repo/openapi';
-import { MAX_SEQUENCE_NUMBER, ResourceType, date2view, maxDate } from '@repo/shared';
+import { ResourceType, date2view, maxDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -160,11 +160,7 @@ export function PositionList(props: FindAllPositionDto) {
     const { data, isError, isLoading, error } = useQuery<Position[], Error>({
         queryKey: [ResourceType.POSITION, props],
         queryFn: async () => {
-            return (await api.positionsFindAll(props)).data.sort(
-                (a, b) =>
-                    (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) -
-                    (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
-            );
+            return await positionsFindAll(props);
         },
         enabled: !!companyId && !!payPeriod,
     });
@@ -189,7 +185,7 @@ export function PositionList(props: FindAllPositionDto) {
 
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
-            await api.positionsRemove(+id);
+            await positionsRemove(+id);
         }
         await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
     };

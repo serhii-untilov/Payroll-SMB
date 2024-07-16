@@ -5,6 +5,7 @@ import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import useLocale from '@/hooks/useLocale';
+import { usersUpdate } from '@/services/user.service';
 import { getDirtyValues, invalidateQueries, snackbarFormErrors } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
@@ -62,9 +63,7 @@ export function UserDetails() {
         if (!user) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const response = (
-                await api.usersUpdate(user.id, { ...dirtyValues, version: user.version })
-            ).data;
+            const response = await usersUpdate(user.id, { ...dirtyValues, version: user.version });
             reset(response);
             setLanguage(response?.language);
         } catch (e: unknown) {

@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { tasksFindAll } from '@/services/task.service';
 import { snackbarError } from '@/utils/snackbar';
 import { Task } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
@@ -14,7 +14,7 @@ export function useTaskList(params: Params): Result {
         queryKey: [ResourceType.TASK, params],
         queryFn: async () => {
             return companyId && payPeriod
-                ? (await api.tasksFindAll({ companyId, onPayPeriodDate: payPeriod })).data ?? []
+                ? (await tasksFindAll({ companyId, onPayPeriodDate: payPeriod })) ?? []
                 : [];
         },
     });

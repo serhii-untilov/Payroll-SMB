@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { usersFindCurrent } from '@/services/auth.service';
 import { snackbarError } from '@/utils/snackbar';
 import { User } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
@@ -10,7 +10,7 @@ export function useCurrentUser(): Result {
     const { data, isError, isLoading, error } = useQuery<User | null, Error>({
         queryKey: [ResourceType.USER, 'current'],
         queryFn: async () => {
-            return (await api.usersGetCurrentUser(true)).data ?? null;
+            return (await usersFindCurrent({ relations: true })) ?? null;
         },
     });
     if (isError) {

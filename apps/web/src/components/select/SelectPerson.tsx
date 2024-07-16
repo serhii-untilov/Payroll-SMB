@@ -1,4 +1,3 @@
-import { api } from '@/api';
 import { Button } from '@/components/layout/Button';
 import { InputLabel } from '@/components/layout/InputLabel';
 import { personsCreate, personsFindAll } from '@/services/person.service';
@@ -77,7 +76,7 @@ export const SelectPerson = (props: Props) => {
     });
 
     if (isError) {
-        return snackbarError(`${error.name}\n${error.message}`);
+        snackbarError(`${error.name}\n${error.message}`);
     }
 
     return (

@@ -1,8 +1,9 @@
 import { FormAutocomplete } from '@/components/form/FormAutocomplete';
-import { getWorkNormList } from '@/services/workNorm.service';
-import { IWorkNorm } from '@repo/shared';
+import { workNormsFindAll } from '@/services/workNorm.service';
+import { snackbarError } from '@/utils';
+import { WorkNorm } from '@repo/openapi';
+import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
 
 interface Props {
     companyId: number | undefined;
@@ -13,23 +14,18 @@ interface Props {
 }
 
 export function SelectWorkNorm({ companyId, control, label, id, name }: Props) {
-    const {
-        data: workNormList,
-        isError: isWorkNormListError,
-        error: workNormListError,
-    } = useQuery<IWorkNorm[], Error>({
-        queryKey: ['workNorm', 'list', { companyId }],
+    const { data, isError, error, isLoading } = useQuery<WorkNorm[], Error>({
+        queryKey: [ResourceType.WORK_NORM, { companyId }],
         queryFn: async () => {
-            return companyId ? await getWorkNormList() : [];
+            return companyId ? await workNormsFindAll() : [];
         },
-        enabled: !!companyId,
     });
 
-    if (isWorkNormListError) {
-        return enqueueSnackbar(`${workNormListError.name}\n${workNormListError.message}`, {
-            variant: 'error',
-        });
+    if (isError) {
+        snackbarError(`${error.name}\n${error.message}`);
     }
+
+    if (isLoading) return null;
 
     return (
         <FormAutocomplete
@@ -40,7 +36,7 @@ export function SelectWorkNorm({ companyId, control, label, id, name }: Props) {
             id={id || name || ''}
             autoComplete="workNorm"
             options={
-                workNormList?.map((o) => {
+                data?.map((o) => {
                     return { label: o.name, value: o.id };
                 }) ?? []
             }

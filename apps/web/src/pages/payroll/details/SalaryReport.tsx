@@ -1,8 +1,8 @@
-import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
+import { positionsFindBalance } from '@/services/position.service';
 import { sumFormatter } from '@/utils';
 import { Box, Typography } from '@mui/material';
 import {
@@ -17,11 +17,10 @@ import { PositionBalanceExtendedDto } from '@repo/openapi';
 import {
     CalcMethod,
     IFindPositionBalance,
-    MAX_SEQUENCE_NUMBER,
     ResourceType,
     getFullName,
     getUnitByCalcMethod,
-    maxDate,
+    maxDate
 } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
@@ -390,11 +389,7 @@ export function SalaryReport(props: IFindPositionBalance) {
     } = useQuery<PositionBalanceExtendedDto[], Error>({
         queryKey: [ResourceType.POSITION, 'balanceExtended', props],
         queryFn: async () => {
-            return (await api.positionsFindBalance(props)).data.sort(
-                (a, b) =>
-                    (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) -
-                    (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
-            );
+            return await positionsFindBalance(props);
         },
         enabled: !!companyId && !!payPeriod,
     });

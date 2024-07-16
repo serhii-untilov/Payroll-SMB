@@ -116,7 +116,7 @@ export function EmployeePayments(props: Props) {
     });
 
     if (isError) {
-        return snackbarError(`${error.name}\n${error.message}`);
+        snackbarError(`${error.name}\n${error.message}`);
     }
 
     const onAddPayment = () => {

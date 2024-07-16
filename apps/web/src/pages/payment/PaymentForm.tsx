@@ -1,4 +1,3 @@
-import { api } from '@/api';
 import PageLayout from '@/components/layout/PageLayout';
 import { PageTitle } from '@/components/layout/PageTitle';
 import { Tab } from '@/components/layout/Tab';
@@ -6,6 +5,7 @@ import { TabPanel } from '@/components/layout/TabPanel';
 import { Tabs } from '@/components/layout/Tabs';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
+import { paymentsFindOne } from '@/services/payment.service';
 import { sumFormatter } from '@/utils';
 import { Box, Chip } from '@mui/material';
 import { Payment } from '@repo/openapi';
@@ -18,7 +18,6 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { EmployeePayments } from './details/EmployeePayments';
 import { MandatoryPayments } from './details/MandatoryPayments';
 import { PaymentDetails } from './details/PaymentDetails';
-import { paymentsFindOne } from '@/services/payment.service';
 
 export default function PaymentForm() {
     const { id } = useParams();

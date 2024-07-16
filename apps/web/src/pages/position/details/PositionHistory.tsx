@@ -1,7 +1,8 @@
-import { api, dto } from '@/api';
+import { dto } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
+import { positionHistoryFindAll } from '@/services/positionHistory.service';
 import { invalidateQueries } from '@/utils';
 import {
     GridCallbackDetails,
@@ -96,10 +97,7 @@ export function PositionHistory(props: Props) {
     const { data, isError, isLoading, error } = useQuery<dto.PositionHistory[], Error>({
         queryKey: [ResourceType.POSITION_HISTORY, props],
         queryFn: async () => {
-            const response = positionId
-                ? (await api.positionHistoryFindAll({ positionId, relations: true })).data
-                : [];
-            return response.sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
+            return positionId ? await positionHistoryFindAll({ positionId, relations: true }) : [];
         },
     });
 

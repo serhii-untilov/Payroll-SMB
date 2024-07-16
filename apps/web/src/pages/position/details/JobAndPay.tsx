@@ -12,6 +12,12 @@ import { SelectPerson } from '@/components/select/SelectPerson';
 import { SelectWorkNorm } from '@/components/select/SelectWorkNorm';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
+import { positionsCreate, positionsFindOne } from '@/services/position.service';
+import {
+    positionHistoryCreate,
+    positionHistoryFindLast,
+    positionHistoryUpdate,
+} from '@/services/positionHistory.service';
 import { getDirtyValues } from '@/utils';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -61,7 +67,7 @@ export function JobAndPay(props: Props) {
         isLoading: isPositionLoading,
     } = useQuery<Position, Error>({
         queryKey: [ResourceType.POSITION, { positionId }],
-        queryFn: async () => (await api.positionsFindOne(positionId, { relations: true })).data,
+        queryFn: async () => await positionsFindOne(positionId, { relations: true }),
         enabled: !!positionId,
     });
 
@@ -82,7 +88,7 @@ export function JobAndPay(props: Props) {
     } = useQuery<PositionHistory, Error>({
         queryKey: [ResourceType.POSITION_HISTORY, findPositionHistoryParams],
         queryFn: async () => {
-            return (await api.positionHistoryFindLast(findPositionHistoryParams)).data;
+            return await positionHistoryFindLast(findPositionHistoryParams);
         },
         enabled: !!positionId && !!company?.payPeriod,
     });
@@ -207,7 +213,7 @@ export function JobAndPay(props: Props) {
                               version: position.version,
                           })
                       ).data
-                    : (await api.positionsCreate(positionData)).data;
+                    : await positionsCreate(positionData);
             }
             let history = positionHistory;
             if (Object.keys(positionHistoryDirtyValues).length) {
@@ -215,20 +221,16 @@ export function JobAndPay(props: Props) {
                     throw Error('positionId not defined');
                 }
                 history = positionHistory
-                    ? (
-                          await api.positionHistoryUpdate(positionHistory.id, {
-                              ...positionHistoryDirtyValues,
-                              version: positionHistory.version,
-                          })
-                      ).data
-                    : (
-                          await api.positionHistoryCreate({
-                              ...positionHistoryDirtyValues,
-                              positionId: pos.id,
-                              dateFrom: pos.dateFrom,
-                              dateTo: pos.dateTo,
-                          })
-                      ).data;
+                    ? await positionHistoryUpdate(positionHistory.id, {
+                          ...positionHistoryDirtyValues,
+                          version: positionHistory.version,
+                      })
+                    : await positionHistoryCreate({
+                          ...positionHistoryDirtyValues,
+                          positionId: pos.id,
+                          dateFrom: pos.dateFrom,
+                          dateTo: pos.dateTo,
+                      });
             }
             if (pos && history) {
                 setPositionId(pos.id);

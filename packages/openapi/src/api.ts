@@ -1455,12 +1455,6 @@ export interface CreateUserDto {
 export interface CreateWorkNormDto {
     /**
      * 
-     * @type {number}
-     * @memberof CreateWorkNormDto
-     */
-    'id': number;
-    /**
-     * 
      * @type {string}
      * @memberof CreateWorkNormDto
      */
@@ -1476,13 +1470,13 @@ export interface CreateWorkNormDto {
      * @type {Date}
      * @memberof CreateWorkNormDto
      */
-    'dateFrom': Date;
+    'dateFrom'?: Date;
     /**
      * 
      * @type {Date}
      * @memberof CreateWorkNormDto
      */
-    'dateTo': Date;
+    'dateTo'?: Date;
 }
 /**
  * 
@@ -1910,6 +1904,37 @@ export interface FindAllPositionHistoryDto {
 /**
  * 
  * @export
+ * @interface FindAllTaskDto
+ */
+export interface FindAllTaskDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllTaskDto
+     */
+    'companyId': number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllTaskDto
+     */
+    'onDate'?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof FindAllTaskDto
+     */
+    'onPayPeriodDate'?: Date;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindAllTaskDto
+     */
+    'relations'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface FindAllUserCompanyDto
  */
 export interface FindAllUserCompanyDto {
@@ -2031,6 +2056,19 @@ export interface FindOnePositionHistoryDto {
 /**
  * 
  * @export
+ * @interface FindOneTaskDto
+ */
+export interface FindOneTaskDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOneTaskDto
+     */
+    'relations'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface FindOneUserDto
  */
 export interface FindOneUserDto {
@@ -2143,31 +2181,13 @@ export interface FindPositionByPersonDto {
 /**
  * 
  * @export
- * @interface FindTaskDto
+ * @interface FindWorkNormDto
  */
-export interface FindTaskDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof FindTaskDto
-     */
-    'companyId': number;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindTaskDto
-     */
-    'onDate'?: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindTaskDto
-     */
-    'onPayPeriodDate'?: Date;
+export interface FindWorkNormDto {
     /**
      * 
      * @type {boolean}
-     * @memberof FindTaskDto
+     * @memberof FindWorkNormDto
      */
     'relations'?: boolean;
 }
@@ -5611,7 +5631,7 @@ export interface UpdateWorkNormDto {
      * @type {number}
      * @memberof UpdateWorkNormDto
      */
-    'version'?: number;
+    'version': number;
     /**
      * 
      * @type {string}
@@ -10138,13 +10158,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {FindTaskDto} findTaskDto 
+         * @param {FindAllTaskDto} findAllTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        tasksFindAll: async (findTaskDto: FindTaskDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'findTaskDto' is not null or undefined
-            assertParamExists('tasksFindAll', 'findTaskDto', findTaskDto)
+        tasksFindAll: async (findAllTaskDto: FindAllTaskDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findAllTaskDto' is not null or undefined
+            assertParamExists('tasksFindAll', 'findAllTaskDto', findAllTaskDto)
             const localVarPath = `/api/tasks/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -10168,7 +10188,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(findTaskDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(findAllTaskDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -10178,16 +10198,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindOneTaskDto} findOneTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        tasksFindOne: async (id: number, relations: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        tasksFindOne: async (id: number, findOneTaskDto: FindOneTaskDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('tasksFindOne', 'id', id)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('tasksFindOne', 'relations', relations)
-            const localVarPath = `/api/tasks/{id}`
+            // verify required parameter 'findOneTaskDto' is not null or undefined
+            assertParamExists('tasksFindOne', 'findOneTaskDto', findOneTaskDto)
+            const localVarPath = `/api/tasks/find/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -10196,7 +10216,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -10204,15 +10224,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findOneTaskDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -10707,14 +10726,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {boolean} relations 
+         * @param {FindWorkNormDto} findWorkNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsFindAll: async (relations: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('workNormsFindAll', 'relations', relations)
-            const localVarPath = `/api/work-norms`;
+        workNormsFindAll: async (findWorkNormDto: FindWorkNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findWorkNormDto' is not null or undefined
+            assertParamExists('workNormsFindAll', 'findWorkNormDto', findWorkNormDto)
+            const localVarPath = `/api/work-norms/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10722,7 +10741,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -10730,15 +10749,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findWorkNormDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -10748,16 +10766,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindWorkNormDto} findWorkNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsFindOne: async (id: number, relations: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        workNormsFindOne: async (id: number, findWorkNormDto: FindWorkNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('workNormsFindOne', 'id', id)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('workNormsFindOne', 'relations', relations)
-            const localVarPath = `/api/work-norms/{id}`
+            // verify required parameter 'findWorkNormDto' is not null or undefined
+            assertParamExists('workNormsFindOne', 'findWorkNormDto', findWorkNormDto)
+            const localVarPath = `/api/work-norms/find/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -10766,7 +10784,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -10774,15 +10792,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findWorkNormDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12227,12 +12244,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {FindTaskDto} findTaskDto 
+         * @param {FindAllTaskDto} findAllTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async tasksFindAll(findTaskDto: FindTaskDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Task>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.tasksFindAll(findTaskDto, options);
+        async tasksFindAll(findAllTaskDto: FindAllTaskDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Task>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.tasksFindAll(findAllTaskDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.tasksFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12240,12 +12257,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindOneTaskDto} findOneTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async tasksFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Task>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.tasksFindOne(id, relations, options);
+        async tasksFindOne(id: number, findOneTaskDto: FindOneTaskDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Task>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.tasksFindOne(id, findOneTaskDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.tasksFindOne']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12408,12 +12425,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {boolean} relations 
+         * @param {FindWorkNormDto} findWorkNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async workNormsFindAll(relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WorkNorm>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.workNormsFindAll(relations, options);
+        async workNormsFindAll(findWorkNormDto: FindWorkNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WorkNorm>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.workNormsFindAll(findWorkNormDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.workNormsFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12421,12 +12438,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindWorkNormDto} findWorkNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async workNormsFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkNorm>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.workNormsFindOne(id, relations, options);
+        async workNormsFindOne(id: number, findWorkNormDto: FindWorkNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkNorm>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.workNormsFindOne(id, findWorkNormDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.workNormsFindOne']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13496,22 +13513,22 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {FindTaskDto} findTaskDto 
+         * @param {FindAllTaskDto} findAllTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        tasksFindAll(findTaskDto: FindTaskDto, options?: any): AxiosPromise<Array<Task>> {
-            return localVarFp.tasksFindAll(findTaskDto, options).then((request) => request(axios, basePath));
+        tasksFindAll(findAllTaskDto: FindAllTaskDto, options?: any): AxiosPromise<Array<Task>> {
+            return localVarFp.tasksFindAll(findAllTaskDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindOneTaskDto} findOneTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        tasksFindOne(id: number, relations: boolean, options?: any): AxiosPromise<Task> {
-            return localVarFp.tasksFindOne(id, relations, options).then((request) => request(axios, basePath));
+        tasksFindOne(id: number, findOneTaskDto: FindOneTaskDto, options?: any): AxiosPromise<Task> {
+            return localVarFp.tasksFindOne(id, findOneTaskDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13635,22 +13652,22 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {boolean} relations 
+         * @param {FindWorkNormDto} findWorkNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsFindAll(relations: boolean, options?: any): AxiosPromise<Array<WorkNorm>> {
-            return localVarFp.workNormsFindAll(relations, options).then((request) => request(axios, basePath));
+        workNormsFindAll(findWorkNormDto: FindWorkNormDto, options?: any): AxiosPromise<Array<WorkNorm>> {
+            return localVarFp.workNormsFindAll(findWorkNormDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
+         * @param {FindWorkNormDto} findWorkNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsFindOne(id: number, relations: boolean, options?: any): AxiosPromise<WorkNorm> {
-            return localVarFp.workNormsFindOne(id, relations, options).then((request) => request(axios, basePath));
+        workNormsFindOne(id: number, findWorkNormDto: FindWorkNormDto, options?: any): AxiosPromise<WorkNorm> {
+            return localVarFp.workNormsFindOne(id, findWorkNormDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14923,25 +14940,25 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {FindTaskDto} findTaskDto 
+     * @param {FindAllTaskDto} findAllTaskDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public tasksFindAll(findTaskDto: FindTaskDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).tasksFindAll(findTaskDto, options).then((request) => request(this.axios, this.basePath));
+    public tasksFindAll(findAllTaskDto: FindAllTaskDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).tasksFindAll(findAllTaskDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {number} id 
-     * @param {boolean} relations 
+     * @param {FindOneTaskDto} findOneTaskDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public tasksFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).tasksFindOne(id, relations, options).then((request) => request(this.axios, this.basePath));
+    public tasksFindOne(id: number, findOneTaskDto: FindOneTaskDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).tasksFindOne(id, findOneTaskDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15090,25 +15107,25 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {boolean} relations 
+     * @param {FindWorkNormDto} findWorkNormDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public workNormsFindAll(relations: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).workNormsFindAll(relations, options).then((request) => request(this.axios, this.basePath));
+    public workNormsFindAll(findWorkNormDto: FindWorkNormDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).workNormsFindAll(findWorkNormDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {number} id 
-     * @param {boolean} relations 
+     * @param {FindWorkNormDto} findWorkNormDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public workNormsFindOne(id: number, relations: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).workNormsFindOne(id, relations, options).then((request) => request(this.axios, this.basePath));
+    public workNormsFindOne(id: number, findWorkNormDto: FindWorkNormDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).workNormsFindOne(id, findWorkNormDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

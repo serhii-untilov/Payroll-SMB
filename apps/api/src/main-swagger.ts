@@ -2,12 +2,11 @@ import { VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { capitalizeFirstLetter } from '@repo/shared';
+import { writeFileSync } from 'fs';
+import path from 'path';
 import { AppModule } from './app/app.module';
 import metadata from './metadata';
-import path from 'path';
-import { writeFileSync } from 'fs';
-import { capitalizeFirstLetter } from '@repo/shared';
-import { Logger } from './resources/abstract/logger.abstract';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);

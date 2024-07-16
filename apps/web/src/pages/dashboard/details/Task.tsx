@@ -1,8 +1,9 @@
-import { api, dto } from '@/api';
+import { dto } from '@/api';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { usePerson } from '@/hooks/usePerson';
 import { usePositionByPerson } from '@/hooks/usePositionByPerson';
+import { tasksUpdate } from '@/services/task.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     CropSquare,
@@ -90,20 +91,19 @@ export function Task(props: Props) {
     };
 
     const markDone = async () => {
-        const updatedTask = (
-            await api.tasksUpdate(task.id, {
-                status: TaskStatus.DONE_BY_USER,
-                version: task.version,
-            })
-        ).data;
+        const updatedTask = await tasksUpdate(task.id, {
+            status: TaskStatus.DONE_BY_USER,
+            version: task.version,
+        });
         setTask(updatedTask);
-        await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.TASK]);
     };
 
     const markTodo = async () => {
-        const updatedTask = (
-            await api.tasksUpdate(task.id, { status: TaskStatus.TODO, version: task.version })
-        ).data;
+        const updatedTask = await tasksUpdate(task.id, {
+            status: TaskStatus.TODO,
+            version: task.version,
+        });
         setTask(updatedTask);
         await invalidateQueries(queryClient, [ResourceType.TASK]);
     };

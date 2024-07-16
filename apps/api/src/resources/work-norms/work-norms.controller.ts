@@ -5,13 +5,12 @@ import {
     Body,
     Controller,
     Delete,
-    Get,
+    HttpCode,
+    HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -27,6 +26,7 @@ import {
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreateWorkNormDto } from './dto/create-work-norm.dto';
+import { FindWorkNormDto } from './dto/find-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNormsService } from './work-norms.service';
 
@@ -45,30 +45,30 @@ export class WorkNormsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreateWorkNormDto) {
         const userId = getUserId(req);
+        await this.service.availableCreateOrFail(userId);
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
-    @Get()
+    @Post('find')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(WorkNorm) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean) {
-        return await this.service.findAll(!!relations);
+    async findAll(@Body() params: FindWorkNormDto) {
+        return await this.service.findAll(params);
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: WorkNorm })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(
-        @Param('id', ParseIntPipe) id: number,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
-    ) {
-        return await this.service.findOne(id, !!relations);
+    async findOne(@Param('id', ParseIntPipe) id: number, @Body() params: FindWorkNormDto) {
+        return await this.service.findOne(id, params);
     }
 
     @Patch(':id')
@@ -83,6 +83,7 @@ export class WorkNormsController {
         @Body() payload: UpdateWorkNormDto,
     ) {
         const userId = getUserId(req);
+        await this.service.availableUpdateOrFail(userId);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
     }
 
@@ -94,6 +95,7 @@ export class WorkNormsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
         const userId = getUserId(req);
+        await this.service.availableDeleteOrFail(userId);
         return await this.service.remove(userId, id);
     }
 }

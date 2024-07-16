@@ -37,7 +37,7 @@ export function SelectPaymentType({
     });
 
     if (isError) {
-        return snackbarError(`${error.name}\n${error.message}`);
+        snackbarError(`${error.name}\n${error.message}`);
     }
 
     return (

@@ -279,7 +279,7 @@ export class PayrollCalculationService {
 
     private async loadResources() {
         this._paymentTypes = await this.paymentTypesService.findAll();
-        this._workNorms = await this.workNormsService.findAll(true);
+        this._workNorms = await this.workNormsService.findAll({ relations: true });
     }
 
     private initNextPayrollId() {
