@@ -6,6 +6,7 @@ import useAppContext from '@/hooks/useAppContext';
 import { useCurrentPayPeriod } from '@/hooks/useCurrentPayPeriod';
 import useLocale from '@/hooks/useLocale';
 import { usePayPeriodList } from '@/hooks/usePayPeriodList';
+import { companiesSalaryCalculate } from '@/services/company.service';
 import * as utils from '@/utils';
 import {
     GridCellParams,
@@ -80,7 +81,7 @@ export function CompanyPayPeriods(params: Props) {
 
     const onCalculate = async () => {
         if (companyId) {
-            await api.companiesSalaryCalculate(companyId);
+            await companiesSalaryCalculate(companyId);
             await invalidateQueries();
         }
     };

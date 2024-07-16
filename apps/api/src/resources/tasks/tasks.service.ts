@@ -148,19 +148,7 @@ export class TasksService extends AvailableForUserCompany {
 }
 
 function sortedTaskList(list: Task[]): Task[] {
-    return [...list].sort((a, b) =>
-        a.sequenceNumber < b.sequenceNumber
-            ? -1
-            : a.sequenceNumber > b.sequenceNumber
-              ? 1
-              : a.dateTo.getTime() < b.dateTo.getTime()
-                ? -1
-                : a.dateTo.getTime() > b.dateTo.getTime()
-                  ? 1
-                  : a.id < b.id
-                    ? -1
-                    : a.id > b.id
-                      ? 1
-                      : 0,
+    return [...list].sort(
+        (a, b) => a.sequenceNumber - b.sequenceNumber || a.dateTo.getTime() - b.dateTo.getTime(),
     );
 }

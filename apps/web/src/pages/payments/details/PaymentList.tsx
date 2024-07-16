@@ -1,6 +1,6 @@
-import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
+import { paymentsFindAll, paymentsRemove } from '@/services/payment.service';
 import { invalidateQueries, sumFormatter } from '@/utils';
 import {
     GridCellParams,
@@ -10,14 +10,13 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { Payment } from '@repo/openapi';
+import { FindAllPaymentDto, Payment } from '@repo/openapi';
 import { CalcMethod, PaymentStatus, ResourceType, date2view, dateUTC } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { FindAllPaymentDto } from '@repo/openapi';
 type Props = FindAllPaymentDto & {
     companyPayments: boolean;
     sifPayments: boolean;
@@ -119,13 +118,13 @@ export function PaymentList(props: Props) {
         queryKey: [ResourceType.PAYMENT, props],
         queryFn: async () => {
             return (
-                await api.paymentsFindAll({
+                await paymentsFindAll({
                     relations: true,
                     companyId,
                     payPeriod,
                     ...(status ? { status } : {}),
                 })
-            ).data.filter(
+            ).filter(
                 (o) =>
                     (props.companyPayments &&
                         o.paymentType?.calcMethod !== CalcMethod.SIF_PAYMENT) ||
@@ -153,7 +152,7 @@ export function PaymentList(props: Props) {
         for (const id of rowSelectionModel) {
             const payment = data?.find((o) => o.id === Number(id));
             if (payment?.status === PaymentStatus.DRAFT) {
-                await api.paymentsRemove(+id);
+                await paymentsRemove(+id);
             }
         }
         await invalidateQueries(queryClient, [ResourceType.PAYMENT]);

@@ -4,7 +4,7 @@ import { Logo } from '@/components/layout/Logo';
 import useAppContext from '@/hooks/useAppContext';
 import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
-import { preview } from '@/services/auth.service';
+import { demo } from '@/services/auth.service';
 import { Language, MenuRounded } from '@mui/icons-material';
 import { Box, Drawer, IconButton } from '@mui/material';
 import { useState } from 'react';
@@ -29,7 +29,7 @@ export function Header() {
     };
 
     const onClickDemo = async () => {
-        const credentials = await preview();
+        const credentials = await demo();
         await login(credentials);
         navigate('/dashboard');
     };

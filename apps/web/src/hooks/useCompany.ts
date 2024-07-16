@@ -1,4 +1,5 @@
 import { api } from '@/api';
+import { companiesFindOne } from '@/services/company.service';
 import { snackbarError } from '@/utils/snackbar';
 import { Company } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
@@ -12,7 +13,7 @@ export function useCompany(companyId: number | undefined): Result {
     const { data, isError, isLoading, error } = useQuery<Company | null, Error>({
         queryKey: [ResourceType.COMPANY, { id }],
         queryFn: async () => {
-            return id ? (await api.companiesFindOne(id)).data ?? null : null;
+            return id ? await companiesFindOne(id) : null;
         },
     });
     if (isError) {

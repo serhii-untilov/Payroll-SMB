@@ -1,5 +1,6 @@
-import { getCurrentUser, loginUser, logoutUser, registerUser } from '@/services/auth.service';
+import { usersFindCurrent, authLogin, authLogout, authRegister } from '@/services/auth.service';
 import { getUserAccessToken } from '@/services/token.service';
+import { AuthDto, CreateUserDto } from '@repo/openapi';
 import { IAuth, ICreateUser, IPublicUserData } from '@repo/shared';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';
@@ -109,7 +110,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         const initialize = async (): Promise<void> => {
             try {
                 const accessToken = getUserAccessToken();
-                const user = accessToken ? await getCurrentUser() : null;
+                const user = accessToken ? await usersFindCurrent() : null;
                 if (user) {
                     dispatch({
                         type: 'INITIALIZE',
@@ -142,9 +143,9 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         initialize();
     }, []);
 
-    const login = async (params: IAuth): Promise<void> => {
-        await loginUser(params);
-        const user = await getCurrentUser();
+    const login = async (params: AuthDto): Promise<void> => {
+        await authLogin(params);
+        const user = await usersFindCurrent();
         if (user) {
             dispatch({
                 type: 'LOGIN',
@@ -156,13 +157,13 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     };
 
     const logout = async (): Promise<void> => {
-        await logoutUser();
+        await authLogout();
         dispatch({ type: 'LOGOUT' });
     };
 
-    const register = async (params: ICreateUser): Promise<void> => {
-        await registerUser(params);
-        const user = await getCurrentUser();
+    const register = async (params: CreateUserDto): Promise<void> => {
+        await authRegister(params);
+        const user = await usersFindCurrent();
         if (user) {
             dispatch({
                 type: 'REGISTER',

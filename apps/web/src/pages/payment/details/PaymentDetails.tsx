@@ -1,4 +1,3 @@
-import { api } from '@/api';
 import { FormDateField } from '@/components/form/FormDateField';
 import { FormNumberField } from '@/components/form/FormNumberField';
 import { FormTextField } from '@/components/form/FormTextField';
@@ -8,7 +7,14 @@ import { SelectAccPeriod } from '@/components/select/SelectAccPeriod';
 import { SelectPaymentType } from '@/components/select/SelectPaymentType';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getDirtyValues, invalidateQueries } from '@/utils';
+import {
+    paymentsCreate,
+    paymentsFindOne,
+    paymentsProcess,
+    paymentsUpdate,
+    paymentsWithdraw,
+} from '@/services/payment.service';
+import { getDirtyValues, invalidateQueries, snackbarError } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, OutlinedInput } from '@mui/material';
 import { Payment } from '@repo/openapi';
@@ -38,7 +44,7 @@ export function PaymentDetails(props: Props) {
     const { data: payment } = useQuery<Payment, Error>({
         queryKey: [ResourceType.PAYMENT, { paymentId }],
         queryFn: async () => {
-            const payment = (await api.paymentsFindOne(paymentId, true)).data;
+            const payment = await paymentsFindOne(paymentId, { relations: true });
             return {
                 ...payment,
                 mandatoryPayments: (payment?.deductions || 0) + (payment?.funds || 0),
@@ -96,25 +102,21 @@ export function PaymentDetails(props: Props) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const response = payment
-                ? (
-                      await api.paymentsUpdate(paymentId, {
-                          ...dirtyValues,
-                          version: payment.version,
-                      })
-                  ).data
-                : (
-                      await api.paymentsCreate({
-                          ...data,
-                          companyId: company.id,
-                          payPeriod: payPeriod,
-                      })
-                  ).data;
+                ? await paymentsUpdate(paymentId, {
+                      ...dirtyValues,
+                      version: payment.version,
+                  })
+                : await paymentsCreate({
+                      ...data,
+                      companyId: company.id,
+                      payPeriod: payPeriod,
+                  });
             reset(response);
             await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
             setPaymentId(response.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
-            enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
+            snackbarError(`${error.code}\n${error.message}`);
         }
     };
 
@@ -125,14 +127,14 @@ export function PaymentDetails(props: Props) {
 
     const onProcess = async () => {
         if (payment) {
-            await api.paymentsProcess(payment?.id, { version: payment.version });
+            await paymentsProcess(payment?.id, { version: payment.version });
             await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
         }
     };
 
     const onWithdraw = async () => {
         if (payment) {
-            await api.paymentsWithdraw(payment.id, { version: payment.version });
+            await paymentsWithdraw(payment.id, { version: payment.version });
             await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
         }
     };

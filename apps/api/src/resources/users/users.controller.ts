@@ -34,6 +34,7 @@ import { User } from './entities/user.entity';
 import { UsersCompanyService } from './users-company.service';
 import { UsersService } from './users.service';
 import { FindAllUserCompanyDto } from './dto/find-all-user-company.dto';
+import { FindOneUserDto } from './dto/find-one-user.dto';
 
 @Controller('users')
 @ApiBearerAuth()
@@ -73,19 +74,20 @@ export class UsersController {
         return users.map((user) => this.usersService.toPublic(user));
     }
 
-    @Get('user')
+    @Post('current')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: User })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async getCurrentUser(
+    async findCurrent(
         @Req() req: Request,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
+        @Body() params: FindOneUserDto,
     ): Promise<PublicUserDataDto> {
         const id: number = getUserId(req);
         const user = await this.usersService.findOneOrFail({
             where: { id },
-            relations: { role: !!relations },
+            relations: { role: !!params.relations },
         });
         return this.usersService.toPublic(user);
     }

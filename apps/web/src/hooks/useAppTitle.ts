@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { appGetTitle } from '@/services/app.service';
 import { snackbarError } from '@/utils/snackbar';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
@@ -9,7 +9,7 @@ export function useAppTitle(): Result {
     const { data, isLoading, isError, error } = useQuery<string, Error>({
         queryKey: [ResourceType.APP_TITLE],
         queryFn: async () => {
-            return (await api.appGetTitle()).data ?? null;
+            return await appGetTitle();
         },
     });
     if (isError) {

@@ -1,9 +1,9 @@
-import { api } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import { useDepartmentList } from '@/hooks/useDepartmentList';
 import DepartmentForm from '@/pages/department/DepartmentForm';
+import { departmentsRemove } from '@/services/department.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     GridCellParams,
@@ -52,7 +52,7 @@ export function CompanyDepartments(params: Props) {
 
     const onDeleteDepartment = async () => {
         for (const id of rowSelectionModel) {
-            await api.departmentsRemove(+id);
+            await departmentsRemove(+id);
         }
         await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
     };

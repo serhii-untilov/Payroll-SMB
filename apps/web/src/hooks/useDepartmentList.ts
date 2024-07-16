@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { departmentsFindAll } from '@/services/department.service';
 import { snackbarError } from '@/utils/snackbar';
 import { Department } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
@@ -13,7 +13,7 @@ export function useDepartmentList(params: Params): Result {
         queryKey: [ResourceType.DEPARTMENT, params],
         queryFn: async () => {
             const response = companyId
-                ? (await api.departmentsFindAll(companyId, relations)).data ?? []
+                ? (await departmentsFindAll({ companyId, relations })) ?? []
                 : [];
             return response.sort((a: Department, b: Department) =>
                 a.name.toUpperCase().localeCompare(b.name.toUpperCase()),

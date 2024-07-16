@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { lawsFindAll } from '@/services/law.service';
 import { snackbarError } from '@/utils/snackbar';
 import { Law } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
@@ -10,10 +10,7 @@ export function useLawList(): Result {
     const { data, isError, isLoading, error } = useQuery<Law[], Error>({
         queryKey: [ResourceType.LAW],
         queryFn: async () => {
-            const response = (await api.lawsFindAll()).data ?? [];
-            return response.sort((a: Law, b: Law) =>
-                a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
-            );
+            return (await lawsFindAll()) ?? [];
         },
     });
     if (isError) {

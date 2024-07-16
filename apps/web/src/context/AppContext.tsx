@@ -1,6 +1,7 @@
 import { api } from '@/api';
 import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
+import { companiesFindOne } from '@/services/company.service';
 // import { getCurrentPayPeriodDateFrom } from '@/services/payPeriod.service';
 import { usersCompanies } from '@/services/user.service';
 import { defaultTheme } from '@/themes/defaultTheme';
@@ -85,7 +86,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             if (userCompanyList.length) {
                 const userCompany =
                     userCompanyList.find((o) => o.companyId === companyId) ?? userCompanyList[0];
-                const currentCompany = (await api.companiesFindOne(userCompany.companyId)).data;
+                const currentCompany = await companiesFindOne(userCompany.companyId);
                 setCompany(currentCompany);
                 localStorage.setItem('company', currentCompany.id.toString());
             }

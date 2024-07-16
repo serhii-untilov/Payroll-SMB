@@ -1,10 +1,14 @@
-import { api } from '@/api';
 import { FormDateField } from '@/components/form/FormDateField';
 import { FormTextField } from '@/components/form/FormTextField';
 import { Button } from '@/components/layout/Button';
 import { SelectDepartment } from '@/components/select/SelectDepartment';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
+import {
+    departmentsCreate,
+    departmentsFindOne,
+    departmentsUpdate,
+} from '@/services/department.service';
 import { getDirtyValues, invalidateQueries } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
@@ -46,9 +50,7 @@ export default function DepartmentForm(params: Params) {
     } = useQuery<Department | null, Error>({
         queryKey: [ResourceType.DEPARTMENT, { departmentId }],
         queryFn: async () => {
-            return departmentId
-                ? (await api.departmentsFindOne(departmentId, false)).data ?? null
-                : null;
+            return departmentId ? (await departmentsFindOne(departmentId)) ?? null : null;
         },
         enabled: !!departmentId,
     });
@@ -95,13 +97,11 @@ export default function DepartmentForm(params: Params) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const response = department
-                ? (
-                      await api.departmentsUpdate(department.id, {
-                          ...dirtyValues,
-                          version: department.version,
-                      })
-                  ).data
-                : (await api.departmentsCreate(data)).data;
+                ? await departmentsUpdate(department.id, {
+                      ...dirtyValues,
+                      version: department.version,
+                  })
+                : await departmentsCreate(data);
             if (submitCallback) submitCallback(response);
             params.setOpen(false);
             reset();

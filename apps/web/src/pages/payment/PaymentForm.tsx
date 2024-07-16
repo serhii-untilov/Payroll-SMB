@@ -9,7 +9,7 @@ import useLocale from '@/hooks/useLocale';
 import { sumFormatter } from '@/utils';
 import { Box, Chip } from '@mui/material';
 import { Payment } from '@repo/openapi';
-import { PaymentStatus, dateUTC } from '@repo/shared';
+import { PaymentStatus, ResourceType, dateUTC } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
@@ -18,6 +18,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { EmployeePayments } from './details/EmployeePayments';
 import { MandatoryPayments } from './details/MandatoryPayments';
 import { PaymentDetails } from './details/PaymentDetails';
+import { paymentsFindOne } from '@/services/payment.service';
 
 export default function PaymentForm() {
     const { id } = useParams();
@@ -38,9 +39,9 @@ export default function PaymentForm() {
         isError,
         error,
     } = useQuery<Partial<Payment>, Error>({
-        queryKey: ['payment', { paymentId }],
+        queryKey: [ResourceType.PAYMENT, { paymentId }],
         queryFn: async () => {
-            return (await api.paymentsFindOne(paymentId, true)).data;
+            return await paymentsFindOne(paymentId, { relations: true });
         },
         enabled: !!paymentId,
     });

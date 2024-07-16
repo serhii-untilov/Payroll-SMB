@@ -1,4 +1,4 @@
-import { ProcessPaymentDto } from './dto/process-payment.dto';
+import { WrapperType } from '@/types/WrapperType';
 import {
     BadRequestException,
     ConflictException,
@@ -9,20 +9,21 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaymentStatus, ResourceType, dateUTC, RecordFlags } from '@repo/shared';
+import { PaymentStatus, RecordFlags, ResourceType, dateUTC } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
+import { CompaniesService } from '../companies/companies.service';
+import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { FindAllPaymentDto } from './dto/find-all-payment.dto';
+import { FindOnePaymentDto } from './dto/find-one-payment.dto';
+import { ProcessPaymentDto } from './dto/process-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
 import { Payment } from './entities/payment.entity';
 import { PaymentUpdatedEvent } from './events/payment-updated.event';
 import { PaymentPositionsService } from './payment-positions/payment-positions.service';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
-import { WrapperType } from '@/types/WrapperType';
-import { CompaniesService } from '../companies/companies.service';
-import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
@@ -97,10 +98,10 @@ export class PaymentsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(id: number, relations: boolean = false): Promise<Payment> {
+    async findOne(id: number, params?: FindOnePaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({
             where: { id },
-            relations: { company: relations, paymentType: relations },
+            relations: { company: !!params?.relations, paymentType: !!params?.relations },
         });
         return record;
     }

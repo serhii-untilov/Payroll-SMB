@@ -40,7 +40,7 @@ export class AuthController {
     }
 
     @HttpCode(HttpStatus.OK)
-    @Post('preview')
+    @Post('demo')
     async demo(): Promise<AuthDto> {
         return await this.authService.demo();
     }

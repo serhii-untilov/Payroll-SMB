@@ -3,7 +3,9 @@ import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
+import { companiesFindOne } from '@/services/company.service';
 import { deleteUserCompany, restoreUserCompany } from '@/services/user.service';
+import { snackbarError } from '@/utils';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -109,20 +111,15 @@ export function UserCompanyList(params: Props) {
     }
 
     if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
+        return snackbarError(`${error.name}\n${error.message}`);
     }
 
     const onAddCompany = () => {
-        console.log('onAddCompany');
         navigate(`/profile/company/?tab=details&return=true`);
     };
 
     const onSelectCompany = async (companyId: number) => {
-        console.log('onEditCompany');
-        const company = (await api.companiesFindOne(companyId)).data;
-        setCurrentCompany(company);
+        setCurrentCompany(await companiesFindOne(companyId));
         navigate(`/company/${companyId}?tab=details&return=true`);
     };
 

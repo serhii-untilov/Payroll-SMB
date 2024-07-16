@@ -8,11 +8,9 @@ import {
     HttpCode,
     HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -30,6 +28,7 @@ import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { FindAllPaymentDto } from './dto/find-all-payment.dto';
+import { FindOnePaymentDto } from './dto/find-one-payment.dto';
 import { ProcessPaymentDto } from './dto/process-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
@@ -77,10 +76,10 @@ export class PaymentsController {
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Body() params: FindOnePaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
-        const found = await this.service.findOne(id, relations);
+        const found = await this.service.findOne(id, params);
         await this.service.availableFindOneOrFail(userId, found.companyId);
         return found;
     }
@@ -115,6 +114,7 @@ export class PaymentsController {
 
     @Post('process/:id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Process payment' })
     @ApiOkResponse({
         description: 'The Payment has been successfully processed',
@@ -134,6 +134,7 @@ export class PaymentsController {
 
     @Post('withdraw/:id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Withdraw payment' })
     @ApiOkResponse({
         description: 'The Payment has been successfully withdraw',

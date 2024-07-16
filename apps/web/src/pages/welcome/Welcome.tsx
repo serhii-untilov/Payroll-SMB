@@ -2,7 +2,7 @@ import { Button } from '@/components/layout/Button';
 import useAppContext from '@/hooks/useAppContext';
 import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
-import { preview } from '@/services/auth.service';
+import { demo } from '@/services/auth.service';
 import { Box, CssBaseline } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ function Welcome() {
     useEffect(() => {}, [themeMode, locale]);
 
     const onClickDemo = async () => {
-        const credentials = await preview();
+        const credentials = await demo();
         await login(credentials);
         navigate('/dashboard');
     };

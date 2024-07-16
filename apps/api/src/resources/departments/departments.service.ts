@@ -11,6 +11,8 @@ import { Department } from './entities/department.entity';
 import { DepartmentCreatedEvent } from './events/department-created.event';
 import { DepartmentDeletedEvent } from './events/department-deleted.event';
 import { DepartmentUpdatedEvent } from './events/department-updated.event';
+import { FindAllDepartmentDto } from './dto/find-all-department.dto';
+import { FindOneDepartmentDto } from './dto/find-one-department.dto';
 
 @Injectable()
 export class DepartmentsService extends AvailableForUserCompany {
@@ -55,23 +57,23 @@ export class DepartmentsService extends AvailableForUserCompany {
         return created;
     }
 
-    async findAll(companyId: number, relations: boolean = false): Promise<Department[]> {
+    async findAll(params: FindAllDepartmentDto): Promise<Department[]> {
         return await this.repository.find({
             relations: {
-                company: relations,
-                parentDepartment: relations,
-                childDepartments: relations,
+                company: !!params?.relations,
+                parentDepartment: !!params?.relations,
+                childDepartments: !!params?.relations,
             },
-            where: { companyId },
+            where: { companyId: params.companyId },
         });
     }
 
-    async findOne(id: number, relations: boolean = false): Promise<Department> {
+    async findOne(id: number, params?: FindOneDepartmentDto): Promise<Department> {
         return await this.repository.findOneOrFail({
             relations: {
-                company: relations,
-                parentDepartment: relations,
-                childDepartments: relations,
+                company: !!params?.relations,
+                parentDepartment: !!params?.relations,
+                childDepartments: !!params?.relations,
             },
             where: { id },
         });

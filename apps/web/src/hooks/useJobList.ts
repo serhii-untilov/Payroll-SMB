@@ -1,4 +1,4 @@
-import { api } from '@/api';
+import { jobsFindAll } from '@/services/job.service';
 import { snackbarError } from '@/utils/snackbar';
 import { Job } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
@@ -12,10 +12,7 @@ export function useJobList(params: Params): Result {
     const { data, isError, isLoading, error } = useQuery<Job[], Error>({
         queryKey: [ResourceType.JOB, params],
         queryFn: async () => {
-            const response = companyId ? (await api.jobsFindAll()).data ?? [] : [];
-            return response.sort((a: Job, b: Job) =>
-                a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
-            );
+            return companyId ? (await jobsFindAll()) ?? [] : [];
         },
     });
     if (isError) {

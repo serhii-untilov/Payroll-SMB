@@ -4,13 +4,12 @@ import {
     Body,
     Controller,
     Delete,
-    Get,
+    HttpCode,
+    HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -27,6 +26,8 @@ import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
+import { FindAllDepartmentDto } from './dto/find-all-department.dto';
+import { FindOneDepartmentDto } from './dto/find-one-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Department } from './entities/department.entity';
 
@@ -49,8 +50,9 @@ export class DepartmentsController {
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
-    @Get()
+    @Post('find')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(Department) } },
@@ -58,16 +60,16 @@ export class DepartmentsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(
         @Req() req: Request,
-        @Query('companyId', ParseIntPipe) companyId: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Body() params: FindAllDepartmentDto,
     ): Promise<Department[]> {
         const userId = getUserId(req);
-        await this.service.availableFindAllOrFail(userId, companyId);
-        return await this.service.findAll(companyId, !!relations);
+        await this.service.availableFindAllOrFail(userId, params.companyId);
+        return await this.service.findAll(params);
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: Department })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
@@ -76,11 +78,10 @@ export class DepartmentsController {
         req: Request,
         @Param('id', ParseIntPipe)
         id: number,
-        @Query('relations', new ParseBoolPipe({ optional: true }))
-        relations?: boolean,
+        @Body() params: FindOneDepartmentDto,
     ) {
         const userId = getUserId(req);
-        const found = await this.service.findOne(id, !!relations);
+        const found = await this.service.findOne(id, params);
         await this.service.availableFindOneOrFail(userId, found.companyId);
         return found;
     }
