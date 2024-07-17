@@ -1,6 +1,5 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
-import { paymentsRemove } from '@/services/payment.service';
 import { sumFormatter } from '@/utils';
 import {
     GridCellParams,
@@ -10,9 +9,6 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IPayment } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -20,10 +16,8 @@ import { useNavigate } from 'react-router-dom';
 type Props = {
     paymentId: number;
 };
-export function MandatoryPayments(props: Props) {
-    const { paymentId } = props;
+export function MandatoryPayments(_props: Props) {
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
@@ -80,23 +74,8 @@ export function MandatoryPayments(props: Props) {
         },
     ];
 
-    const { data, isError, error } = useQuery<IPayment[], Error>({
-        queryKey: ['payment', 'mandatory-list', props],
-        queryFn: async () => {
-            return [];
-        },
-        enabled: !!paymentId,
-    });
-
-    // if (isLoading) {
-    //     return <Loading />;
-    // }
-
-    if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
-    }
+    // TODO
+    const data = [];
 
     const onAddPayment = () => {
         console.log('onEditPayment');
@@ -107,10 +86,11 @@ export function MandatoryPayments(props: Props) {
     };
 
     const onDeletePayment = async () => {
-        for (const id of rowSelectionModel) {
-            await paymentsRemove(+id);
-        }
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        // TODO
+        // for (const id of rowSelectionModel) {
+        //     await paymentsRemove(+id);
+        // }
+        // await invalidateQueries(queryClient, );
     };
 
     const onPrint = () => {

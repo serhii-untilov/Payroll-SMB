@@ -14,9 +14,10 @@ import {
     TextField,
     createFilterOptions,
 } from '@mui/material';
+import { Person } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -28,9 +29,9 @@ export interface Props {
 }
 
 interface OptionType {
-    inputValue?: string;
+    inputValue: string;
     label: string;
-    value: number | null;
+    value: number;
 }
 
 const filter = createFilterOptions<OptionType>();
@@ -55,25 +56,18 @@ export const SelectPerson = (props: Props) => {
         toggleOpen(false);
     };
 
-    const {
-        data: options,
-        isError,
-        error,
-    } = useQuery<OptionType[], Error>({
+    const { data, isError, error } = useQuery<Person[], Error>({
         queryKey: [ResourceType.PERSON],
-        queryFn: async () => {
-            const personList = await personsFindAll();
-            return personList
-                .map((o) => {
-                    return {
-                        inputValue: '',
-                        label: o.fullName || '',
-                        value: o.id,
-                    };
-                })
-                .sort((a, b) => a.label.toUpperCase().localeCompare(b.label.toUpperCase()));
-        },
+        queryFn: async () => await personsFindAll(),
     });
+
+    const options = useMemo(() => {
+        return data
+            ?.map((o) => {
+                return { inputValue: '', label: o.fullName || '', value: o.id };
+            })
+            .sort((a, b) => a.label.toUpperCase().localeCompare(b.label.toUpperCase()));
+    }, [data]);
 
     if (isError) {
         snackbarError(`${error.name}\n${error.message}`);
@@ -156,7 +150,7 @@ export const SelectPerson = (props: Props) => {
                                         filtered.push({
                                             inputValue,
                                             label: `${t('Add')} "${inputValue}"`,
-                                            value: null,
+                                            value: 0,
                                         });
                                     }
 

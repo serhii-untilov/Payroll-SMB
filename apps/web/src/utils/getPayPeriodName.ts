@@ -16,5 +16,8 @@ export function getPayPeriodName(
     ) {
         return `${format(dateFrom, template, { locale })} ${state}`;
     }
-    return `${format(dateFrom, template, { locale })} ${format(dateFrom, 'd')} - ${format(dateTo, 'd')} ${state}`;
+    const yearMonth = format(dateFrom, template, { locale });
+    const dayFrom = format(dateFrom, 'd');
+    const dayTo = format(dateTo, 'd');
+    return `${yearMonth} ${dayFrom} - ${dayTo} ${state}`;
 }

@@ -95,7 +95,7 @@ export function PositionHistory(props: Props) {
     ];
 
     const { data, isError, isLoading, error } = useQuery<dto.PositionHistory[], Error>({
-        queryKey: [ResourceType.POSITION_HISTORY, props],
+        queryKey: [ResourceType.POSITION_HISTORY, { positionId, relations: true }],
         queryFn: async () => {
             return positionId ? await positionHistoryFindAll({ positionId, relations: true }) : [];
         },

@@ -18,7 +18,7 @@ import {
     positionHistoryFindLast,
     positionHistoryUpdate,
 } from '@/services/positionHistory.service';
-import { getDirtyValues } from '@/utils';
+import { getDirtyValues, invalidateQueries } from '@/utils';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
@@ -66,7 +66,7 @@ export function JobAndPay(props: Props) {
         error: positionError,
         isLoading: isPositionLoading,
     } = useQuery<Position, Error>({
-        queryKey: [ResourceType.POSITION, { positionId }],
+        queryKey: [ResourceType.POSITION, { positionId, relations: true }],
         queryFn: async () => await positionsFindOne(positionId, { relations: true }),
         enabled: !!positionId,
     });
@@ -236,11 +236,10 @@ export function JobAndPay(props: Props) {
                 setPositionId(pos.id);
                 reset(formSchema.cast(position_formData(pos, history)));
             }
-            await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
-            await queryClient.invalidateQueries({
-                queryKey: ['positionHistory'],
-                refetchType: 'all',
-            });
+            await invalidateQueries(queryClient, [
+                ResourceType.POSITION,
+                ResourceType.POSITION_HISTORY,
+            ]);
             onSubmitCallback(pos?.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
@@ -250,8 +249,10 @@ export function JobAndPay(props: Props) {
 
     const onCancel = async () => {
         reset(formData);
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
-        await queryClient.invalidateQueries({ queryKey: ['positionHistory'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [
+            ResourceType.POSITION,
+            ResourceType.POSITION_HISTORY,
+        ]);
     };
 
     return (
@@ -300,7 +301,6 @@ export function JobAndPay(props: Props) {
 
                             <Grid item xs={12} sm={6}>
                                 <SelectJob
-                                    companyId={company?.id}
                                     control={control}
                                     name="jobId"
                                     id="jobId"

@@ -49,6 +49,7 @@ export function CompanyPayPeriods(params: Props) {
         fullFieldList: true,
     });
     const data = useMemo(() => {
+        console.log('!!!', rawData);
         return rawData
             .filter((o) => o.dateFrom.getTime() <= (payPeriod || new Date()).getTime())
             .sort((a, b) => b.dateFrom.getTime() - a.dateFrom.getTime());

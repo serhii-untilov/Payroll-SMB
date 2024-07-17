@@ -8,7 +8,7 @@ import { AvatarBox } from '@/components/utility/AvatarBox';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { positionsFindOne } from '@/services/position.service';
-import { snackbarError } from '@/utils';
+import { invalidateQueries, snackbarError } from '@/utils';
 import { ResourceType } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
@@ -75,7 +75,7 @@ export default function Position() {
     const onSubmitCallback = async (positionId) => {
         console.log('onDetailSubmit');
         setPositionId(positionId);
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.POSITION]);
     };
 
     return (

@@ -38,7 +38,7 @@ export default function PaymentForm() {
         isError,
         error,
     } = useQuery<Partial<Payment>, Error>({
-        queryKey: [ResourceType.PAYMENT, { paymentId }],
+        queryKey: [ResourceType.PAYMENT, { paymentId, relations: true }],
         queryFn: async () => {
             return await paymentsFindOne(paymentId, { relations: true });
         },

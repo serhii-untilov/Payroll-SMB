@@ -42,7 +42,7 @@ export function PaymentDetails(props: Props) {
     useEffect(() => {}, [locale]);
 
     const { data: payment } = useQuery<Payment, Error>({
-        queryKey: [ResourceType.PAYMENT, { paymentId }],
+        queryKey: [ResourceType.PAYMENT, { paymentId, relations: true }],
         queryFn: async () => {
             const payment = await paymentsFindOne(paymentId, { relations: true });
             return {

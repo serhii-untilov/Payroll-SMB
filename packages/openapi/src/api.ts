@@ -1992,6 +1992,25 @@ export interface FindOneDepartmentDto {
 /**
  * 
  * @export
+ * @interface FindOnePayPeriodDto
+ */
+export interface FindOnePayPeriodDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOnePayPeriodDto
+     */
+    'relations'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOnePayPeriodDto
+     */
+    'fullFieldList'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface FindOnePaymentDto
  */
 export interface FindOnePaymentDto {
@@ -7793,7 +7812,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         payFundsFindAll: async (findPayFundDto: FindPayFundDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'findPayFundDto' is not null or undefined
             assertParamExists('payFundsFindAll', 'findPayFundDto', findPayFundDto)
-            const localVarPath = `/api/fund/find-all`;
+            const localVarPath = `/api/fund/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8035,7 +8054,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         payPeriodsFindAll: async (findAllPayPeriodDto: FindAllPayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'findAllPayPeriodDto' is not null or undefined
             assertParamExists('payPeriodsFindAll', 'findAllPayPeriodDto', findAllPayPeriodDto)
-            const localVarPath = `/api/pay-periods/find-all`;
+            const localVarPath = `/api/pay-periods/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8107,19 +8126,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
-         * @param {boolean} fullFieldList 
+         * @param {FindOnePayPeriodDto} findOnePayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsFindOne: async (id: number, relations: boolean, fullFieldList: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        payPeriodsFindOne: async (id: number, findOnePayPeriodDto: FindOnePayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('payPeriodsFindOne', 'id', id)
-            // verify required parameter 'relations' is not null or undefined
-            assertParamExists('payPeriodsFindOne', 'relations', relations)
-            // verify required parameter 'fullFieldList' is not null or undefined
-            assertParamExists('payPeriodsFindOne', 'fullFieldList', fullFieldList)
-            const localVarPath = `/api/pay-periods/{id}`
+            // verify required parameter 'findOnePayPeriodDto' is not null or undefined
+            assertParamExists('payPeriodsFindOne', 'findOnePayPeriodDto', findOnePayPeriodDto)
+            const localVarPath = `/api/pay-periods/find/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -8128,7 +8144,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -8136,19 +8152,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (relations !== undefined) {
-                localVarQueryParameter['relations'] = relations;
-            }
-
-            if (fullFieldList !== undefined) {
-                localVarQueryParameter['fullFieldList'] = fullFieldList;
-            }
-
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findOnePayPeriodDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9018,7 +9029,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         payrollsFindAll: async (findPayrollDto: FindPayrollDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'findPayrollDto' is not null or undefined
             assertParamExists('payrollsFindAll', 'findPayrollDto', findPayrollDto)
-            const localVarPath = `/api/payroll/find-all`;
+            const localVarPath = `/api/payroll/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11587,13 +11598,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
-         * @param {boolean} fullFieldList 
+         * @param {FindOnePayPeriodDto} findOnePayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async payPeriodsFindOne(id: number, relations: boolean, fullFieldList: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsFindOne(id, relations, fullFieldList, options);
+        async payPeriodsFindOne(id: number, findOnePayPeriodDto: FindOnePayPeriodDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsFindOne(id, findOnePayPeriodDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.payPeriodsFindOne']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13009,13 +13019,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {number} id 
-         * @param {boolean} relations 
-         * @param {boolean} fullFieldList 
+         * @param {FindOnePayPeriodDto} findOnePayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsFindOne(id: number, relations: boolean, fullFieldList: boolean, options?: any): AxiosPromise<PayPeriod> {
-            return localVarFp.payPeriodsFindOne(id, relations, fullFieldList, options).then((request) => request(axios, basePath));
+        payPeriodsFindOne(id: number, findOnePayPeriodDto: FindOnePayPeriodDto, options?: any): AxiosPromise<PayPeriod> {
+            return localVarFp.payPeriodsFindOne(id, findOnePayPeriodDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14334,14 +14343,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @param {number} id 
-     * @param {boolean} relations 
-     * @param {boolean} fullFieldList 
+     * @param {FindOnePayPeriodDto} findOnePayPeriodDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public payPeriodsFindOne(id: number, relations: boolean, fullFieldList: boolean, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).payPeriodsFindOne(id, relations, fullFieldList, options).then((request) => request(this.axios, this.basePath));
+    public payPeriodsFindOne(id: number, findOnePayPeriodDto: FindOnePayPeriodDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).payPeriodsFindOne(id, findOnePayPeriodDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

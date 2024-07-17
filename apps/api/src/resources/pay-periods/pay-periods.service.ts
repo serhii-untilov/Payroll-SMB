@@ -1,4 +1,11 @@
-import { ConflictException, Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import {
+    ConflictException,
+    Inject,
+    Injectable,
+    Logger,
+    NotFoundException,
+    forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
     PayPeriodState,
@@ -18,6 +25,7 @@ import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
 import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
 import { FindAllPayPeriodDto } from './dto/find-all-pay-period.dto';
 import { FindCurrentPayPeriodDto } from './dto/find-current-pay-period.dto';
+import { FindOnePayPeriodDto } from './dto/find-one-pay-period.dto';
 
 @Injectable()
 export class PayPeriodsService extends AvailableForUserCompany {
@@ -57,7 +65,9 @@ export class PayPeriodsService extends AvailableForUserCompany {
         });
         if (intersection) {
             throw new ConflictException(
-                `Pay Period '${formatPeriod(payload.dateFrom, payload.dateTo)}' intersects with period '${formatPeriod(intersection.dateFrom, intersection.dateTo)}'.`,
+                `Pay Period '${formatPeriod(payload.dateFrom, payload.dateTo)}'
+                intersects with period
+                '${formatPeriod(intersection.dateFrom, intersection.dateTo)}'.`,
             );
         }
         return await this.repository.save({
@@ -90,12 +100,18 @@ export class PayPeriodsService extends AvailableForUserCompany {
         }
     }
 
-    async findOneOrFail(params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
-        return await this.repository.findOneOrFail(params);
+    async findOne(id: number, params?: FindOnePayPeriodDto): Promise<PayPeriod> {
+        return await this.repository.findOneOrFail({
+            where: { id },
+            relations: { company: !!params?.relations },
+            ...(!!params?.fullFieldList ? {} : defaultFieldList),
+        });
     }
 
-    async findOne(params: FindOneOptions<PayPeriod>): Promise<PayPeriod | null> {
-        return await this.repository.findOne(params);
+    async findOneBy(params: FindOneOptions<PayPeriod>): Promise<PayPeriod> {
+        const found = await this.repository.findOne(params);
+        if (!found) throw new NotFoundException('Pay Period not found');
+        return found;
     }
 
     async update(userId: number, id: number, payload: UpdatePayPeriodDto): Promise<PayPeriod> {

@@ -9,7 +9,7 @@ import {
     usersCompaniesRemove,
     usersCompaniesRestore,
 } from '@/services/user.service';
-import { snackbarError } from '@/utils';
+import { invalidateQueries, snackbarError } from '@/utils';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -100,7 +100,7 @@ export function UserCompanyList(params: Props) {
         isLoading,
         error: error,
     } = useQuery<dto.UserCompany[], Error>({
-        queryKey: [ResourceType.COMPANY, { userId, showDeleted }],
+        queryKey: [ResourceType.COMPANY, { userId, relations: true, showDeleted }],
         queryFn: async () => {
             return userId
                 ? (await usersCompanies(userId, { relations: true, deleted: showDeleted })) ?? []
@@ -137,7 +137,7 @@ export function UserCompanyList(params: Props) {
             }
         }
         setRowSelectionModel([]);
-        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.COMPANY]);
         if (attemptToDeleteCurrentCompany) {
             enqueueSnackbar(t(`Deleting the current company is not allowed.`), {
                 variant: 'error',
@@ -171,7 +171,7 @@ export function UserCompanyList(params: Props) {
             await usersCompaniesRestore(id);
         }
         setRowSelectionModel([]);
-        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.COMPANY]);
     };
 
     const onPrint = () => {
@@ -184,7 +184,7 @@ export function UserCompanyList(params: Props) {
 
     const onShowDeleted = async () => {
         setShowDeleted(!showDeleted);
-        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.COMPANY]);
     };
 
     const getRowStatus = (params: any): string => {

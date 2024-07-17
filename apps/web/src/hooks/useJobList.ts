@@ -4,15 +4,13 @@ import { Job } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 
-type Params = { companyId: number | null | undefined };
 type Result = { data: Job[]; isLoading: boolean };
 
-export function useJobList(params: Params): Result {
-    const { companyId } = params;
+export function useJobList(): Result {
     const { data, isError, isLoading, error } = useQuery<Job[], Error>({
-        queryKey: [ResourceType.JOB, params],
+        queryKey: [ResourceType.JOB],
         queryFn: async () => {
-            return companyId ? (await jobsFindAll()) ?? [] : [];
+            return await jobsFindAll();
         },
     });
     if (isError) {

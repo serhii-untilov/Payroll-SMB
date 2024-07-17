@@ -108,9 +108,9 @@ export class PayPeriodCalculationService {
     }
 
     async updateBalance(id: number): Promise<PayPeriod> {
-        const payPeriod = await this.payPeriodsService.findOneOrFail({ where: { id } });
+        const payPeriod = await this.payPeriodsService.findOneBy({ where: { id } });
         // Calculate In Balance
-        const prior = await this.payPeriodsService.findOne({
+        const prior = await this.payPeriodsService.findOneBy({
             where: { companyId: payPeriod.companyId, dateTo: sub(payPeriod.dateFrom, { days: 1 }) },
         });
         const inBalance = prior?.outBalance || 0;
@@ -157,7 +157,7 @@ export class PayPeriodCalculationService {
     }
 
     async updateCalcMethods(id: number): Promise<PayPeriodCalcMethod[]> {
-        const payPeriod = await this.payPeriodsService.findOneOrFail({ where: { id } });
+        const payPeriod = await this.payPeriodsService.findOneBy({ where: { id } });
         const calculatedRecords = await this.payrollsService.payrollCompanyCalcMethods(
             payPeriod.companyId,
             payPeriod.dateFrom,

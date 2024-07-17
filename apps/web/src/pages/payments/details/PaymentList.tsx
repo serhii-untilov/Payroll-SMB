@@ -1,7 +1,7 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { paymentsFindAll, paymentsRemove } from '@/services/payment.service';
-import { invalidateQueries, sumFormatter } from '@/utils';
+import { invalidateQueries, snackbarError, sumFormatter } from '@/utils';
 import {
     GridCellParams,
     GridColDef,
@@ -13,8 +13,7 @@ import {
 import { FindAllPaymentDto, Payment } from '@repo/openapi';
 import { CalcMethod, PaymentStatus, ResourceType, date2view, dateUTC } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 type Props = FindAllPaymentDto & {
@@ -114,31 +113,30 @@ export function PaymentList(props: Props) {
         },
     ];
 
+    const queryKey = useMemo(() => {
+        return {
+            relations: true,
+            companyId,
+            payPeriod,
+            ...(status ? { status } : {}),
+        };
+    }, [companyId, payPeriod, status]);
+
     const { data, isError, error } = useQuery<Payment[], Error>({
-        queryKey: [ResourceType.PAYMENT, props],
+        queryKey: [ResourceType.PAYMENT, queryKey],
         queryFn: async () => {
-            return (
-                await paymentsFindAll({
-                    relations: true,
-                    companyId,
-                    payPeriod,
-                    ...(status ? { status } : {}),
-                })
-            ).filter(
+            const response = companyId && payPeriod ? (await paymentsFindAll(queryKey)) ?? [] : [];
+            return response.filter(
                 (o) =>
                     (props.companyPayments &&
                         o.paymentType?.calcMethod !== CalcMethod.SIF_PAYMENT) ||
                     (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SIF_PAYMENT),
             );
         },
-        enabled: !!companyId && !!payPeriod,
+        enabled: !!queryKey,
     });
 
-    if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
-    }
+    if (isError) snackbarError(`${error.name}\n${error.message}`);
 
     const onAddPayment = () => {
         console.log('onEditPayment');

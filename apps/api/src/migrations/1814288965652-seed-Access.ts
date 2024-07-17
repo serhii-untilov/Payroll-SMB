@@ -11,7 +11,8 @@ import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/access';
 const entity = Access;
 const recordList = [
     // SYSTEM
-    // This role is used to update, migrate, and seed DB only and doesn't have access to any resource through the API.
+    // This role is used to update, migrate, and seed DB only and doesn't have access
+    // to any resource through the API.
 
     // ADMIN
     ...generateAccess_ReadOnly(RoleType.ADMIN, ResourceType.ACCESS),
@@ -170,7 +171,7 @@ export class Seed1814288965652 implements MigrationInterface {
                 .delete()
                 .from(entity)
                 .where(
-                    'roleType = :roleType AND resourceType = :resourceType AND accessType = :accessType AND createdUserId = :userId',
+                    `roleType = :roleType AND resourceType = :resourceType AND accessType = :accessType AND createdUserId = :userId`,
                     {
                         roleType: record.roleType,
                         resourceType: record.resourceType,

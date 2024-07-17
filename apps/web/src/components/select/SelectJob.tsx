@@ -2,15 +2,14 @@ import { FormAutocomplete } from '@/components/form/FormAutocomplete';
 import { useJobList } from '@/hooks/useJobList';
 
 interface Props {
-    companyId: number | undefined;
     control: any;
     label?: string;
     id?: string;
     name?: string;
 }
 
-export function SelectJob({ companyId, control, label, id, name }: Props) {
-    const { data: jobList } = useJobList({ companyId });
+export function SelectJob({ control, label, id, name }: Props) {
+    const { data: jobList } = useJobList();
 
     return (
         <FormAutocomplete

@@ -40,7 +40,7 @@ export function Task(props: Props) {
     const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
     const statusIcon = useMemo(() => getStatusIcon(task, view), [task, view]);
     const backgroundColor = useMemo(() => getBackgroundColor(task, view), [task, view]);
-    const { data: person } = usePerson({ id: task?.entityId });
+    const { data: person } = usePerson(task?.entityId);
     const { position } = usePositionByPerson({
         companyId: company?.id,
         personId: person?.id,
@@ -58,8 +58,12 @@ export function Task(props: Props) {
 
     const description = useMemo(() => {
         switch (task.type) {
-            case TaskType.HAPPY_BIRTHDAY:
-                return `${person?.fullName}, ${person?.birthday ? differenceInYears(add(task.dateTo, { days: 1 }), person?.birthday) : ''}`;
+            case TaskType.HAPPY_BIRTHDAY: {
+                const age = person?.birthday
+                    ? differenceInYears(add(task.dateTo, { days: 1 }), person?.birthday)
+                    : 0;
+                return `${person?.fullName}, ${age || ''}`;
+            }
             default:
                 return t(task.type);
         }

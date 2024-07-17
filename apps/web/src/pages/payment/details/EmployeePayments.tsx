@@ -2,7 +2,7 @@ import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { paymentsRemove } from '@/services/payment.service';
 import { paymentPositionsFindAll } from '@/services/paymentPosition.service';
-import { snackbarError, sumFormatter } from '@/utils';
+import { invalidateQueries, snackbarError, sumFormatter } from '@/utils';
 import {
     GridCellParams,
     GridColDef,
@@ -131,7 +131,7 @@ export function EmployeePayments(props: Props) {
         for (const id of rowSelectionModel) {
             await paymentsRemove(+id);
         }
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
     };
 
     const onPrint = () => {

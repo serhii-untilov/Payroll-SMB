@@ -53,7 +53,7 @@ export class PaymentsService extends AvailableForUserCompany {
     async create(userId: number, payload: CreatePaymentDto): Promise<Payment> {
         const { companyId, payPeriod, accPeriod, ...other } = payload;
         const company = await this.companiesService.findOne(userId, payload.companyId);
-        const accPeriodRecord = await this.payPeriodsService.findOneOrFail({
+        const accPeriodRecord = await this.payPeriodsService.findOneBy({
             where: {
                 companyId,
                 dateFrom: accPeriod ?? payPeriod ?? company.payPeriod,

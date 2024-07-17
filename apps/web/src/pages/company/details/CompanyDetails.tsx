@@ -132,7 +132,7 @@ export function CompanyDetails(props: Props) {
     const onCancel = async () => {
         setCompanyId(Number(company?.id));
         reset(formSchema.cast(company));
-        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.COMPANY]);
     };
 
     return (

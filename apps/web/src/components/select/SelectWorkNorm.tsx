@@ -15,7 +15,7 @@ interface Props {
 
 export function SelectWorkNorm({ companyId, control, label, id, name }: Props) {
     const { data, isError, error, isLoading } = useQuery<WorkNorm[], Error>({
-        queryKey: [ResourceType.WORK_NORM, { companyId }],
+        queryKey: [ResourceType.WORK_NORM],
         queryFn: async () => {
             return companyId ? await workNormsFindAll() : [];
         },

@@ -70,7 +70,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
             : null;
         const payPeriod =
             params.onPayPeriodDate && position
-                ? await this.payPeriodsService.findOne({
+                ? await this.payPeriodsService.findOneBy({
                       where: { companyId: position.companyId, dateFrom: params.onPayPeriodDate },
                   })
                 : null;

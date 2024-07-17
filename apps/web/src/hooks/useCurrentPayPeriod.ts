@@ -1,21 +1,17 @@
-import { dto } from '@/api';
 import { payPeriodsFindCurrent } from '@/services/payPeriod.service';
 import { snackbarError } from '@/utils/snackbar';
+import { FindCurrentPayPeriodDto, PayPeriod } from '@repo/openapi';
 import { ResourceType } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 
-type Result = { data: dto.PayPeriod | undefined | null; isLoading: boolean };
+type Result = { data: PayPeriod | undefined | null; isLoading: boolean };
 
-export function useCurrentPayPeriod(params: Partial<dto.FindCurrentPayPeriodDto>): Result {
-    const { data, isError, isLoading, error } = useQuery<dto.PayPeriod | null, Error>({
-        queryKey: [ResourceType.PAY_PERIOD, params],
+export function useCurrentPayPeriod(params: Partial<FindCurrentPayPeriodDto>): Result {
+    const { companyId } = params;
+    const { data, isError, isLoading, error } = useQuery<PayPeriod | null, Error>({
+        queryKey: [ResourceType.PAY_PERIOD, { params }],
         queryFn: async () => {
-            return params.companyId
-                ? (await payPeriodsFindCurrent({
-                      ...params,
-                      companyId: params.companyId,
-                  })) ?? null
-                : null;
+            return companyId ? (await payPeriodsFindCurrent(params)) ?? null : null;
         },
     });
     if (isError) {

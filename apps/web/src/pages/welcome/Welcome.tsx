@@ -12,6 +12,9 @@ import { Footer } from './details/Footer';
 import { Header } from './details/Header';
 import { ScreenshotList } from './details/ScreenshotList';
 
+const LINEAR_GRADIENT =
+    'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)';
+
 function Welcome() {
     const { themeMode } = useAppContext();
     const { locale } = useLocale();
@@ -50,9 +53,7 @@ function Welcome() {
                         overflow: 'auto',
                         p: [1],
                         background: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? 'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)'
-                                : '',
+                            theme.palette.mode === 'light' ? LINEAR_GRADIENT : '',
                     }}
                 >
                     <Header />

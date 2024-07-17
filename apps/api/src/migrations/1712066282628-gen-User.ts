@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class Gen1712066282628 implements MigrationInterface {

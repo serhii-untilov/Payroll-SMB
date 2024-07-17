@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 type Result = { position: Position | null | undefined; isLoading: boolean };
 
 export function usePositionByPerson(params: Partial<FindPositionByPersonDto>): Result {
+    const { companyId, personId } = params;
     const {
         data: position,
         isError,
@@ -15,11 +16,11 @@ export function usePositionByPerson(params: Partial<FindPositionByPersonDto>): R
     } = useQuery<Position | null, Error>({
         queryKey: [ResourceType.POSITION, params],
         queryFn: async () => {
-            return params.companyId && params.personId
+            return companyId && personId
                 ? (await positionsFindFirstByPersonId({
                       ...params,
-                      companyId: params.companyId,
-                      personId: params.personId,
+                      companyId,
+                      personId,
                   })) ?? null
                 : null;
         },

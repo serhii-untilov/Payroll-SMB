@@ -14,8 +14,8 @@ const recordList = [
         paymentGroup: PaymentGroup.BASIC,
         calcMethod: CalcMethod.SALARY,
         description: {
-            en: 'Salaries are fixed amounts of money paid to employees regularly, usually weekly, biweekly, or monthly, according to the worked days regardless of the number of hours worked.',
-            uk: 'Оплата за місячним окладом - фіксована грошова сума, яка виплачується працівникам регулярно, щомісяця, відповідно до відпрацьованих днів незалежно від кількості відпрацьованих годин.',
+            en: `Salaries are fixed amounts of money paid to employees regularly, usually weekly, biweekly, or monthly, according to the worked days regardless of the number of hours worked.`,
+            uk: `Оплата за місячним окладом - фіксована грошова сума, яка виплачується працівникам регулярно, щомісяця, відповідно до відпрацьованих днів незалежно від кількості відпрацьованих годин.`,
         },
     },
     {
@@ -24,7 +24,7 @@ const recordList = [
         paymentGroup: PaymentGroup.BASIC,
         calcMethod: CalcMethod.WAGE,
         description: {
-            en: 'Wages are typically paid on an hourly basis and are directly tied to the number of hours worked.',
+            en: `Wages are typically paid on an hourly basis and are directly tied to the number of hours worked.`,
             uk: `Оплата за погодинним тарифом нараховується на відпрацьовані години.`,
         },
     },
@@ -34,7 +34,7 @@ const recordList = [
         paymentGroup: PaymentGroup.ADJUSTMENTS,
         calcMethod: CalcMethod.ALLOWANCE,
         description: {
-            en: 'Salary allowance - is an amount of money paid to an employee in addition to their regular salary or wages regularly.',
+            en: `Salary allowance - is an amount of money paid to an employee in addition to their regular salary or wages regularly.`,
             uk: `Надбавка - грошова сума, яка виплачується працівнику на додаток до оплати за окладом чи тарифом.`,
         },
     },

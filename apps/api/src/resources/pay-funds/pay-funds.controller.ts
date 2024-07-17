@@ -7,6 +7,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseBoolPipe,
     ParseIntPipe,
@@ -97,8 +99,9 @@ export class PayFundsController {
         return await this.service.remove(userId, id);
     }
 
-    @Post('find-all')
+    @Post('find')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(PayFund) } },

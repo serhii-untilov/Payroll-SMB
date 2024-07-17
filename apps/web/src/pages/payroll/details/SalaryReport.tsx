@@ -20,7 +20,7 @@ import {
     ResourceType,
     getFullName,
     getUnitByCalcMethod,
-    maxDate
+    maxDate,
 } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';

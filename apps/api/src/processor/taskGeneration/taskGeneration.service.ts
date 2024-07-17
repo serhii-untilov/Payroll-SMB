@@ -89,7 +89,7 @@ export class TaskGenerationService {
         this.logger.log(`userId: ${userId}, generate for companyId: ${companyId}`);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
-        this._payPeriod = await this.payPeriodsService.findOneOrFail({
+        this._payPeriod = await this.payPeriodsService.findOneBy({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         this._priorTaskList = await this.tasksService.findAll({

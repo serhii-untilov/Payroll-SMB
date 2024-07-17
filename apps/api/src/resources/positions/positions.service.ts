@@ -110,7 +110,7 @@ export class PositionsService extends AvailableForUserCompany {
             includeDeleted,
         } = payload;
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOneOrFail({
+            ? await this.payPeriodsService.findOneBy({
                   where: {
                       companyId,
                       dateFrom: onPayPeriodDate,
@@ -206,7 +206,7 @@ export class PositionsService extends AvailableForUserCompany {
             return position;
         }
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOneOrFail({
+            ? await this.payPeriodsService.findOneBy({
                   where: {
                       companyId: position.companyId,
                       dateFrom: onPayPeriodDate,
@@ -307,7 +307,7 @@ export class PositionsService extends AvailableForUserCompany {
         balanceWorkingTime: BalanceWorkingTime,
     ) {
         const position = await this.repository.findOneByOrFail({ id: positionId });
-        const prevPayPeriod = await this.payPeriodsService.findOne({
+        const prevPayPeriod = await this.payPeriodsService.findOneBy({
             where: {
                 companyId: position.companyId,
                 dateTo: sub(payPeriod, { days: 1 }),
@@ -347,7 +347,7 @@ export class PositionsService extends AvailableForUserCompany {
     }
 
     async findAllBalance(params: FindAllPositionBalanceDto): Promise<PositionBalanceExtendedDto[]> {
-        const payPeriod = await this.payPeriodsService.findOneOrFail({
+        const payPeriod = await this.payPeriodsService.findOneBy({
             where: {
                 companyId: params.companyId,
                 dateFrom: params.payPeriod,
@@ -503,7 +503,7 @@ export class PositionsService extends AvailableForUserCompany {
             return position;
         }
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOneOrFail({
+            ? await this.payPeriodsService.findOneBy({
                   where: {
                       companyId: position.companyId,
                       dateFrom: onPayPeriodDate,

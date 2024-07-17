@@ -102,7 +102,7 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOneOrFail({
+        this._payPeriod = await this.payPeriodsService.findOneBy({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         const positions = await this.positionsService.findAll({
@@ -123,7 +123,7 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOneOrFail({
+        this._payPeriod = await this.payPeriodsService.findOneBy({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculateCompanyTotals();
@@ -140,7 +140,7 @@ export class PayrollCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOneOrFail({
+        this._payPeriod = await this.payPeriodsService.findOneBy({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculatePosition();
@@ -233,7 +233,8 @@ export class PayrollCalculationService {
                 }
             }
         }
-        // Create cancel record in payrolls for record in this.payrolls which doesn't have the same record in payrolls
+        // Create cancel record in payrolls for record in this.payrolls which
+        // doesn't have the same record in payrolls
         const toCancel: Payroll[] = this.payrolls.filter(
             (o) =>
                 o.accPeriod.getTime() >= accPeriod.dateFrom.getTime() &&

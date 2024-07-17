@@ -5,15 +5,12 @@ import {
     Body,
     Controller,
     Delete,
-    Get,
     HttpCode,
     HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -31,8 +28,8 @@ import { Request } from 'express';
 import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
 import { FindAllPayPeriodDto } from './dto/find-all-pay-period.dto';
 import { FindCurrentPayPeriodDto } from './dto/find-current-pay-period.dto';
+import { FindOnePayPeriodDto } from './dto/find-one-pay-period.dto';
 import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
-import { defaultFieldList } from './entities/pay-period.entity';
 import { PayPeriodsService } from './pay-periods.service';
 
 @Controller('pay-periods')
@@ -54,7 +51,7 @@ export class PayPeriodsController {
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
-    @Post('find-all')
+    @Post('find')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
@@ -81,24 +78,20 @@ export class PayPeriodsController {
         return await this.service.findCurrent(userId, params);
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: PayPeriod })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
-        @Query('fullFieldList', new ParseBoolPipe({ optional: true })) fullFieldList: boolean,
+        @Body() params: FindOnePayPeriodDto,
     ) {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId, id);
-        return await this.service.findOneOrFail({
-            where: { id },
-            relations: { company: !!relations },
-            ...(!!fullFieldList ? {} : defaultFieldList),
-        });
+        return await this.service.findOne(id, params);
     }
 
     @Patch(':id')

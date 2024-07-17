@@ -7,6 +7,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseBoolPipe,
     ParseIntPipe,
@@ -53,8 +55,9 @@ export class PayrollsController {
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
-    @Post('find-all')
+    @Post('find')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(Payroll) } },

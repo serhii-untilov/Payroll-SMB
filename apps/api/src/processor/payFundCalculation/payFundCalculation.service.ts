@@ -96,7 +96,7 @@ export class PayFundCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOneOrFail({
+        this._payPeriod = await this.payPeriodsService.findOneBy({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         const positions = await this.positionsService.findAll({
@@ -117,7 +117,7 @@ export class PayFundCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOneOrFail({
+        this._payPeriod = await this.payPeriodsService.findOneBy({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculateCompanyTotals();
@@ -134,7 +134,7 @@ export class PayFundCalculationService {
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, this.position.companyId);
         await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOneOrFail({
+        this._payPeriod = await this.payPeriodsService.findOneBy({
             where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
         });
         await this._calculatePosition();

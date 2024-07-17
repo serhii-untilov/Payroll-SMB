@@ -1,4 +1,3 @@
-import { api } from '@/api';
 import { companiesFindOne } from '@/services/company.service';
 import { snackbarError } from '@/utils/snackbar';
 import { Company } from '@repo/openapi';

@@ -3,6 +3,7 @@ import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
 import { positionsFindAll, positionsRemove } from '@/services/position.service';
+import { invalidateQueries } from '@/utils';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -187,7 +188,7 @@ export function PositionList(props: FindAllPositionDto) {
         for (const id of rowSelectionModel) {
             await positionsRemove(+id);
         }
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.POSITION]);
     };
 
     const onPrint = () => {

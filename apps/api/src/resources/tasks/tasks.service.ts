@@ -45,7 +45,7 @@ export class TasksService extends AvailableForUserCompany {
             return this._generateFakeTaskList();
         }
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOneOrFail({
+            ? await this.payPeriodsService.findOneBy({
                   where: {
                       companyId,
                       dateFrom: onPayPeriodDate,
