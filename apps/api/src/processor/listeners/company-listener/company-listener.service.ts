@@ -1,15 +1,13 @@
+import { PayPeriodCalculationService } from '@/processor/pay-period-calculation/pay-period-calculation.service';
 import { PayFundCalculationService } from '@/processor/payFundCalculation/payFundCalculation.service';
 import { PaymentCalculationService } from '@/processor/paymentCalculation/payment-calculation.service';
-import { PayPeriodCalculationService } from '@/processor/pay-period-calculation/pay-period-calculation.service';
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payrollCalculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
-import { CompanyCreatedEvent } from '@/resources/companies/events/company-created.event';
-import { CompanyDeletedEvent } from '@/resources/companies/events/company-deleted.event';
-import { CompanyUpdatedEvent } from '@/resources/companies/events/company-updated.event';
+import { CompanyCreatedEvent, CompanyDeletedEvent, CompanyUpdatedEvent } from '@/resources';
+import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@/types';
 
 @Injectable()
 export class CompanyListenerService {

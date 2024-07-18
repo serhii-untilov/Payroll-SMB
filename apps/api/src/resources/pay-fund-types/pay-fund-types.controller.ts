@@ -1,5 +1,5 @@
 import { AccessTokenGuard } from '@/guards';
-import { PayFundType } from '@/resources/pay-fund-types/entities/pay-fund-type.entity';
+import { PayFundType } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     Body,

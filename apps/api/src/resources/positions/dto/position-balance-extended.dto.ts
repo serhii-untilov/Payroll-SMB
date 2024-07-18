@@ -1,5 +1,4 @@
-import { Person } from '@/resources/persons/entities/person.entity';
-import { PositionHistory } from '@/resources/position-history/entities/position-history.entity';
+import { Person, PositionHistory } from '@/resources';
 import { IntersectionType, PickType } from '@nestjs/swagger';
 import { PositionBalance } from '../entities/position-balance.entity';
 import { Position } from '../entities/position.entity';

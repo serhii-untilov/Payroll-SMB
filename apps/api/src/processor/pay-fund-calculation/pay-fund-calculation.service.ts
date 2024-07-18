@@ -1,19 +1,21 @@
-import { CompaniesService } from '@/resources/companies/companies.service';
-import { Company } from '@/resources/companies/entities/company.entity';
-import { MinWage } from '@/resources/min-wage/entities/min-wage.entity';
-import { MinWageService } from '@/resources/min-wage/min-wage.service';
-import { PayFundType } from '@/resources/pay-fund-types/entities/pay-fund-type.entity';
-import { PayFundTypesService } from '@/resources/pay-fund-types/pay-fund-types.service';
-import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
-import { PayFundsService } from '@/resources/pay-funds/pay-funds.service';
-import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
-import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
-import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
-import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
-import { PayrollsService } from '@/resources/payrolls/payrolls.service';
-import { Position } from '@/resources/positions/entities/position.entity';
-import { PositionsService } from '@/resources/positions/positions.service';
+import {
+    CompaniesService,
+    Company,
+    MinWage,
+    MinWageService,
+    PayFund,
+    PayFundType,
+    PayFundTypesService,
+    PayFundsService,
+    PayPeriod,
+    PayPeriodsService,
+    PaymentType,
+    PaymentTypesService,
+    Payroll,
+    PayrollsService,
+    Position,
+    PositionsService,
+} from '@/resources';
 import { PayFundCalcMethod } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';

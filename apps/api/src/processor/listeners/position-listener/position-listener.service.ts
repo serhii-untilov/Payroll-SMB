@@ -4,15 +4,15 @@ import { PayrollCalculationService } from '@/processor/payroll-calculation/payro
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
 import {
+    PositionCreatedEvent,
+    PositionDeletedEvent,
     PositionEvent,
     PositionEventType,
-} from '@/resources/positions/events/abstract/PositionEvent';
-import { PositionCreatedEvent } from '@/resources/positions/events/position-created.event';
-import { PositionDeletedEvent } from '@/resources/positions/events/position-deleted.event';
-import { PositionUpdatedEvent } from '@/resources/positions/events/position-updated.event';
+    PositionUpdatedEvent,
+} from '@/resources';
+import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@/types';
 
 @Injectable()
 export class PositionListenerService {

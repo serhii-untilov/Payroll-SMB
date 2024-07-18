@@ -1,19 +1,21 @@
-import { CompaniesService } from '@/resources/companies/companies.service';
-import { Company } from '@/resources/companies/entities/company.entity';
-import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
-import { PayFundsService } from '@/resources/pay-funds/pay-funds.service';
-import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
-import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
-import { PaymentPosition } from '@/resources/payment-positions/entities/paymentPosition.entity';
-import { PaymentPositionsService } from '@/resources/payment-positions/payment-positions.service';
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
-import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
-import { Payment } from '@/resources/payments/entities/payment.entity';
-import { PaymentsService } from '@/resources/payments/payments.service';
-import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
-import { PayrollsService } from '@/resources/payrolls/payrolls.service';
-import { Position } from '@/resources/positions/entities/position.entity';
-import { PositionsService } from '@/resources/positions/positions.service';
+import {
+    CompaniesService,
+    Company,
+    PayFund,
+    PayFundsService,
+    PayPeriod,
+    PayPeriodsService,
+    Payment,
+    PaymentPosition,
+    PaymentPositionsService,
+    PaymentType,
+    PaymentTypesService,
+    PaymentsService,
+    Payroll,
+    PayrollsService,
+    Position,
+    PositionsService,
+} from '@/resources';
 import { CalcMethod, PaymentGroup, PaymentStatus } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dateUTC } from '@repo/shared';

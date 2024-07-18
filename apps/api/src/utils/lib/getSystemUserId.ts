@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { User } from '../../resources/users/entities/user.entity';
+import { User } from '@/resources';
 
 export async function getSystemUserId(dataSource: DataSource): Promise<number> {
     const { user_id } = await dataSource

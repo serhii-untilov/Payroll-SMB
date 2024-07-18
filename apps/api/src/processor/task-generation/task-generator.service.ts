@@ -1,14 +1,16 @@
-import { CompaniesService } from '@/resources/companies/companies.service';
-import { Company } from '@/resources/companies/entities/company.entity';
-import { DepartmentsService } from '@/resources/departments/departments.service';
-import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
-import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
-import { PaymentsService } from '@/resources/payments/payments.service';
-import { PersonsService } from '@/resources/persons/persons.service';
-import { PositionsService } from '@/resources/positions/positions.service';
-import { Task } from '@/resources/tasks/entities/task.entity';
-import { TasksService } from '@/resources/tasks/tasks.service';
-import { UsersCompanyService } from '@/resources/users/users-company.service';
+import {
+    CompaniesService,
+    Company,
+    DepartmentsService,
+    PayPeriod,
+    PayPeriodsService,
+    PaymentsService,
+    PersonsService,
+    PositionsService,
+    Task,
+    TasksService,
+    UsersCompanyService,
+} from '@/resources';
 import { TaskStatus, TaskType } from '@/types';
 import { Inject, Injectable, Logger, NotFoundException, Scope, forwardRef } from '@nestjs/common';
 import { dropTime } from '@repo/shared';

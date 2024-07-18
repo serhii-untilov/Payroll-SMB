@@ -1,3 +1,4 @@
+import { PayPeriodState, ResourceType } from '@/types';
 import {
     ConflictException,
     Inject,
@@ -7,18 +8,20 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PayPeriodState, ResourceType, dateUTC, formatPeriod, monthBegin, monthEnd } from '@/types';
+import { dateUTC, formatPeriod, monthBegin, monthEnd } from '@repo/shared';
 import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
-import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
-import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
-import { PayPeriod, defaultFieldList } from './entities/pay-period.entity';
-import { FindAllPayPeriodDto } from './dto/find-all-pay-period.dto';
-import { FindCurrentPayPeriodDto } from './dto/find-current-pay-period.dto';
-import { FindOnePayPeriodDto } from './dto/find-one-pay-period.dto';
+import {
+    CreatePayPeriodDto,
+    FindAllPayPeriodDto,
+    FindCurrentPayPeriodDto,
+    FindOnePayPeriodDto,
+    UpdatePayPeriodDto,
+} from './dto';
+import { PayPeriod, defaultFieldList } from './entities';
 
 @Injectable()
 export class PayPeriodsService extends AvailableForUserCompany {

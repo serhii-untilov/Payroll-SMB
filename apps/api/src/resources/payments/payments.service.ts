@@ -1,4 +1,11 @@
-import { WrapperType } from '@/types';
+import {
+    AccessService,
+    AvailableForUserCompany,
+    CompaniesService,
+    PayPeriodsService,
+    PaymentPositionsService,
+} from '@/resources';
+import { PaymentStatus, RecordFlags, ResourceType, WrapperType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -9,21 +16,18 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaymentStatus, RecordFlags, ResourceType, dateUTC } from '@/types';
+import { dateUTC } from '@repo/shared';
 import { Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
-import { AccessService } from '../access/access.service';
-import { CompaniesService } from '../companies/companies.service';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { FindAllPaymentDto } from './dto/find-all-payment.dto';
-import { FindOnePaymentDto } from './dto/find-one-payment.dto';
-import { ProcessPaymentDto } from './dto/process-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
-import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
+import {
+    CreatePaymentDto,
+    FindAllPaymentDto,
+    FindOnePaymentDto,
+    ProcessPaymentDto,
+    UpdatePaymentDto,
+    WithdrawPaymentDto,
+} from './dto';
 import { Payment } from './entities/payment.entity';
-import { PaymentUpdatedEvent } from './events/payment-updated.event';
-import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
+import { PaymentUpdatedEvent } from './events';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {

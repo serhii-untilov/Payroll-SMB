@@ -1,7 +1,4 @@
-import { AccessService } from '@/resources/access/access.service';
-import { CompaniesService } from '@/resources/companies/companies.service';
-import { PayrollsService } from '@/resources/payrolls/payrolls.service';
-import { PositionsService } from '@/resources/positions/positions.service';
+import { AccessService, CompaniesService, PayrollsService, PositionsService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';

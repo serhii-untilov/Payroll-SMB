@@ -1,5 +1,5 @@
 import { AccessTokenGuard } from '@/guards';
-import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
+import { Payroll } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     BadRequestException,

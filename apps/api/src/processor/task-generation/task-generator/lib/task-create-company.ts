@@ -1,6 +1,6 @@
 'use strict';
 
-import { Task } from '@/resources/tasks/entities/task.entity';
+import { Task } from '@/resources';
 import { TaskStatus, TaskType } from '@/types';
 import { TaskGenerationService } from '../../task-generator.service';
 import { TaskGenerator } from '../abstract/task-generator';

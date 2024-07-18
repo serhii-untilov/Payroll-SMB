@@ -1,4 +1,4 @@
-import { User } from '@/resources/users/entities/user.entity';
+import { User } from '@/resources';
 import { incrementalNumber, randPassword, randUser, randUuid } from '@ngneat/falso';
 
 const factory = incrementalNumber();

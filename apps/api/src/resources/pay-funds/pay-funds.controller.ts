@@ -1,5 +1,5 @@
 import { AccessTokenGuard } from '@/guards';
-import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
+import { PayFund } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     BadRequestException,

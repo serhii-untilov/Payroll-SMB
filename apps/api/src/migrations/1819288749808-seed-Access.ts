@@ -1,6 +1,6 @@
 import { ResourceType, RoleType } from '@/types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Access } from './../resources/access/entities/access.entity';
+import { Access } from '@/resources';
 import { getSystemUserId } from '../utils/lib/getSystemUserId';
 import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/lib/access';
 

@@ -1,4 +1,4 @@
-import { Task } from '@/resources/tasks/entities/task.entity';
+import { Task } from '@/resources';
 
 export abstract class TaskSequenceNumber {
     abstract get(task: Task);

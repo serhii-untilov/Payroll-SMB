@@ -1,4 +1,4 @@
-import { Law } from '@/resources/laws/entities/law.entity';
+import { Law } from '@/resources';
 import { LawType } from '@/types';
 import { incrementalNumber, randCountry } from '@ngneat/falso';
 

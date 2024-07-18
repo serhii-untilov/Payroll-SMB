@@ -1,9 +1,4 @@
-import { Logger } from './../../abstract/logger.abstract';
-import { Department } from './../../../resources/departments/entities/department.entity';
-import { Job } from './../../../resources/jobs/entities/job.entity';
-import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
-import { Position } from './../../../resources/positions/entities/position.entity';
-import { WorkNorm } from './../../../resources/work-norms/entities/work-norm.entity';
+import { Department, Job, PaymentType, Position, WorkNorm } from '@/resources';
 import {
     AfterLoad,
     Column,
@@ -13,6 +8,7 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
 export class PositionHistory extends Logger {

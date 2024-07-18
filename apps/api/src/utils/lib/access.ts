@@ -1,4 +1,4 @@
-import { CreateAccessDto } from '@/resources/access/dto/create-access.dto';
+import { CreateAccessDto } from '@/resources';
 import { AccessType, ResourceType, RoleType } from '@/types';
 
 export function generateAccess_Full(

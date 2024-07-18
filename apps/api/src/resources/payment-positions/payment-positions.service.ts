@@ -1,7 +1,5 @@
-import { AvailableForUserCompany } from '@/resources/abstract/availableForUserCompany';
-import { AccessService } from '@/resources/access/access.service';
-import { PayrollsService } from '@/resources/payrolls/payrolls.service';
-import { WrapperType } from '@/types';
+import { AccessService, AvailableForUserCompany, PayrollsService } from '@/resources';
+import { ResourceType, WrapperType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -10,14 +8,15 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@/types';
 import { Repository } from 'typeorm';
 import { Payment } from '../payments/entities/payment.entity';
 import { PaymentsService } from '../payments/payments.service';
-import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
-import { FindAllPaymentPositionDto } from './dto/find-all-payment-position.dto';
-import { FindOnePaymentPositionDto } from './dto/find-one-payment-position.dto';
-import { UpdatePaymentPositionDto } from './dto/update-payment-position.dto';
+import {
+    CreatePaymentPositionDto,
+    FindAllPaymentPositionDto,
+    FindOnePaymentPositionDto,
+    UpdatePaymentPositionDto,
+} from './dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 
 @Injectable()

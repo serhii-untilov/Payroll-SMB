@@ -9,7 +9,7 @@ import {
     Relation,
 } from 'typeorm';
 import { Logger } from './../../abstract/logger.abstract';
-import { Company } from './../../../resources/companies/entities/company.entity';
+import { Company } from '@/resources';
 
 @Entity()
 export class Department extends Logger {

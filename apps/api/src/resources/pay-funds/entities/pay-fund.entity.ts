@@ -1,8 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { PayFundType, Position } from '@/resources';
 import { PayFundCategory } from '@/types';
+import { ApiProperty } from '@nestjs/swagger';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { PayFundType } from './../../../resources/pay-fund-types/entities/pay-fund-type.entity';
-import { Position } from './../../../resources/positions/entities/position.entity';
 
 @Entity()
 export class PayFund {

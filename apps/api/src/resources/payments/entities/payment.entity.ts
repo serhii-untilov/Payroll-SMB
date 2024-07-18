@@ -1,5 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Company, PaymentType } from '@/resources';
 import { PaymentStatus, RecordFlags } from '@/types';
+import { ApiProperty } from '@nestjs/swagger';
 import {
     AfterLoad,
     Column,
@@ -12,8 +13,6 @@ import {
 } from 'typeorm';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
 import { Logger } from './../../abstract/logger.abstract';
-import { Company } from './../../../resources/companies/entities/company.entity';
-import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';
 
 @Entity()
 @Index('IDX_PAYMENT_COMP_ACC_STATUS', ['companyId', 'accPeriod', 'status'])

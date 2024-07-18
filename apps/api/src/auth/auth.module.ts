@@ -1,5 +1,4 @@
-import { AccessModule } from '@/resources/access/access.module';
-import { UsersModule } from '@/resources/users/users.module';
+import { AccessModule, UsersModule } from '@/resources';
 import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';

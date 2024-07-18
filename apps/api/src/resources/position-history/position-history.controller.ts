@@ -1,5 +1,5 @@
 import { AccessTokenGuard } from '@/guards';
-import { PositionHistory } from '@/resources/position-history/entities/position-history.entity';
+import { PositionHistory } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     Body,

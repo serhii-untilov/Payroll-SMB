@@ -1,4 +1,4 @@
-import { Task } from '@/resources/tasks/entities/task.entity';
+import { Task } from '@/resources';
 import { TaskType } from '@/types';
 import { TaskSequenceNumber } from './../abstract/task-sequence-number';
 

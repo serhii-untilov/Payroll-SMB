@@ -1,5 +1,5 @@
 import { AccessTokenGuard } from '@/guards';
-import { MinWage } from '@/resources/min-wage/entities/min-wage.entity';
+import { MinWage } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     Body,

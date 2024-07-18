@@ -1,5 +1,4 @@
-import { PaymentPosition } from '@/resources/payment-positions/entities/paymentPosition.entity';
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+import { PaymentPosition, PaymentType } from '@/resources';
 import { PaymentCalculationService } from '../../payment-calculation.service';
 import { CalcPayment } from '../abstract/calc-payment';
 

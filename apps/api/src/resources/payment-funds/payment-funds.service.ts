@@ -1,14 +1,12 @@
-import { AvailableForUserCompany } from '@/resources/abstract/availableForUserCompany';
-import { AccessService } from '@/resources/access/access.service';
+import { AccessService, AvailableForUserCompany } from '@/resources';
+import { ResourceType } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@/types';
 import { Repository } from 'typeorm';
-import { CreatePaymentFundDto } from '../dto/create-paymentFund.dto';
-import { UpdatePaymentFundDto } from '../dto/update-paymentFund.dto';
-import { PaymentFund } from '../entities/paymentFund.entity';
-import { PaymentPositionsService } from '../../payment-positions/payment-positions.service';
-import { PaymentsService } from '../payments.service';
+import { PaymentPositionsService } from '../payment-positions';
+import { PaymentsService } from '../payments';
+import { CreatePaymentFundDto, UpdatePaymentFundDto } from './dto';
+import { PaymentFund } from './entities/payment-fund.entity';
 
 @Injectable()
 export class PaymentFundsService extends AvailableForUserCompany {

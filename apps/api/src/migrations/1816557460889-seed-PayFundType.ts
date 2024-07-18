@@ -1,6 +1,6 @@
 import { PayFundCalcMethod, PayFundGroup } from '@/types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { PayFundType } from './../resources/pay-fund-types/entities/pay-fund-type.entity';
+import { PayFundType } from '@/resources';
 import { getSystemUserId } from '../utils/lib/getSystemUserId';
 import { langPipe } from '../utils/lib/langPipe';
 

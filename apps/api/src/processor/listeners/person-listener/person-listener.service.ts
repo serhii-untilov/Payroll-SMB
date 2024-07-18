@@ -2,14 +2,16 @@ import { PayFundCalculationService } from '@/processor/payFundCalculation/payFun
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payrollCalculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
-import { PersonEvent } from '@/resources/persons/events/abstract/PersonEvent';
-import { PersonCreatedEvent } from '@/resources/persons/events/person-created.event';
-import { PersonDeletedEvent } from '@/resources/persons/events/person-deleted.event';
-import { PersonUpdatedEvent } from '@/resources/persons/events/person-updated.event';
-import { PositionsService } from '@/resources/positions/positions.service';
+import {
+    PersonCreatedEvent,
+    PersonDeletedEvent,
+    PersonEvent,
+    PersonUpdatedEvent,
+    PositionsService,
+} from '@/resources';
+import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@/types';
 
 @Injectable()
 export class PersonListenerService {

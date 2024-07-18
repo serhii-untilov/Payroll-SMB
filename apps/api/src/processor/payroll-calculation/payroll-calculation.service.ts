@@ -1,17 +1,19 @@
 import { calcBalanceWorkingTime, getPayrollUnionRecord } from '@/processor/helpers';
-import { AccessService } from '@/resources/access/access.service';
-import { CompaniesService } from '@/resources/companies/companies.service';
-import { Company } from '@/resources/companies/entities/company.entity';
-import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
-import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
-import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
-import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
-import { PayrollsService } from '@/resources/payrolls/payrolls.service';
-import { Position } from '@/resources/positions/entities/position.entity';
-import { PositionsService } from '@/resources/positions/positions.service';
-import { WorkNorm } from '@/resources/work-norms/entities/work-norm.entity';
-import { WorkNormsService } from '@/resources/work-norms/work-norms.service';
+import {
+    AccessService,
+    CompaniesService,
+    Company,
+    PayPeriod,
+    PayPeriodsService,
+    PaymentType,
+    PaymentTypesService,
+    Payroll,
+    PayrollsService,
+    Position,
+    PositionsService,
+    WorkNorm,
+    WorkNormsService,
+} from '@/resources';
 import { RecordFlags, WorkingTime } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';

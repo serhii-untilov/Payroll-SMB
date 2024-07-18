@@ -1,4 +1,4 @@
-import { Person } from '@/resources/persons/entities/person.entity';
+import { Person } from '@/resources';
 import { incrementalNumber, randFirstName, randLastName } from '@ngneat/falso';
 import { dateUTC } from '@repo/shared';
 

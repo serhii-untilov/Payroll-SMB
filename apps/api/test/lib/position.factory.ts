@@ -1,4 +1,4 @@
-import { Position } from '@/resources/positions/entities/position.entity';
+import { Position } from '@/resources';
 import { incrementalNumber } from '@ngneat/falso';
 import { createMockUser } from './user.factory';
 

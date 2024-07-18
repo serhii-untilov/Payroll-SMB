@@ -1,5 +1,5 @@
 import { Logger } from './../../abstract/logger.abstract';
-import { Position } from './../../../resources/positions/entities/position.entity';
+import { Position } from '@/resources';
 import { getFullName } from '@/types';
 import {
     AfterInsert,

@@ -1,4 +1,4 @@
-import { Accounting } from '@/resources/accounting/entities/accounting.entity';
+import { Accounting } from '@/resources';
 import { AccountingType } from '@/types';
 import { incrementalNumber, randCountry } from '@ngneat/falso';
 

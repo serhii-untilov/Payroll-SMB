@@ -1,5 +1,5 @@
 import { AccessTokenGuard } from '@/guards';
-import { WorkNorm } from '@/resources/work-norms/entities/work-norm.entity';
+import { WorkNorm } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     Body,

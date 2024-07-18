@@ -3,13 +3,16 @@ import { PaymentCalculationService } from '@/processor/paymentCalculation/paymen
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payrollCalculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
-import { PaymentEvent, PaymentEventType } from '@/resources/payments/events/abstract/PaymentEvent';
-import { PaymentCreatedEvent } from '@/resources/payments/events/payment-created.event';
-import { PaymentDeletedEvent } from '@/resources/payments/events/payment-deleted.event';
-import { PaymentUpdatedEvent } from '@/resources/payments/events/payment-updated.event';
+import {
+    PaymentCreatedEvent,
+    PaymentDeletedEvent,
+    PaymentEvent,
+    PaymentEventType,
+    PaymentUpdatedEvent,
+} from '@/resources';
+import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@/types';
 
 @Injectable()
 export class PaymentListenerService {

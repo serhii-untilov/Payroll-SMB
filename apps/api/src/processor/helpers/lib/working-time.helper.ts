@@ -1,7 +1,4 @@
-import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
-import { PositionHistory } from '@/resources/position-history/entities/position-history.entity';
-import { Position } from '@/resources/positions/entities/position.entity';
-import { WorkNorm } from '@/resources/work-norms/entities/work-norm.entity';
+import { PayPeriod, Position, PositionHistory, WorkNorm } from '@/resources';
 import { BalanceWorkingTime, HoursByDay, WorkNormType, WorkingTime } from '@/types';
 import { ConflictException } from '@nestjs/common';
 import { getMaxDate, getMinDate, monthBegin, monthEnd, setBit } from '@repo/shared';

@@ -1,11 +1,11 @@
-import { PayFundType } from './../../../resources/pay-fund-types/entities/pay-fund-type.entity';
+import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
-import { ApiProperty } from '@nestjs/swagger';
 import { RecordFlags } from '@/types';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
-export class PaymentFund {
+export class PaymentDeduction {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -15,11 +15,11 @@ export class PaymentFund {
     @Column({ type: 'integer' })
     paymentPositionId: number;
 
-    @ManyToOne(() => PayFundType, { createForeignKeyConstraints: false })
-    payFundType?: PayFundType;
+    @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
+    paymentType?: PaymentType;
 
     @Column({ type: 'integer' })
-    payFundTypeId: number;
+    paymentTypeId: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     baseSum: number;

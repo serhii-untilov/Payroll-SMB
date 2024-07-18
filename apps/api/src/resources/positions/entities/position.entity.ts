@@ -1,7 +1,4 @@
-import { Logger } from './../../abstract/logger.abstract';
-import { Company } from './../../../resources/companies/entities/company.entity';
-import { Person } from './../../../resources/persons/entities/person.entity';
-import { PositionHistory } from './../../../resources/position-history/entities/position-history.entity';
+import { Company, Person, PositionHistory } from '@/resources';
 import {
     AfterLoad,
     Column,
@@ -12,6 +9,7 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
+import { Logger } from './../../abstract/logger.abstract';
 import { PositionBalance } from './position-balance.entity';
 
 @Entity()

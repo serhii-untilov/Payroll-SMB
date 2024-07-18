@@ -2,7 +2,7 @@ import { PayFundCalculationService } from '@/processor/payFundCalculation/payFun
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payrollCalculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
-import { PositionsService } from '@/resources/positions/positions.service';
+import { PositionsService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PersonListenerService } from './person-listener.service';

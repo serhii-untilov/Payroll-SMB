@@ -4,8 +4,7 @@ import {
     payFundPayPeriodFactSum,
     payPeriodFactSum,
 } from '@/processor/helpers';
-import { PaymentPosition } from '@/resources/payment-positions/entities/paymentPosition.entity';
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+import { PaymentPosition, PaymentType } from '@/resources';
 import { PaymentGroup, PaymentPart } from '@/types';
 import { dateUTC } from '@repo/shared';
 import { PaymentCalculationService } from '../../payment-calculation.service';

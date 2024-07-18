@@ -1,5 +1,5 @@
 import { AccessTokenGuard, RefreshTokenGuard } from '@/guards';
-import { CreateUserDto } from '@/resources/users/dto/create-user.dto';
+import { CreateUserDto } from '@/resources';
 import { getRefreshToken, getUserId } from '@/utils';
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';

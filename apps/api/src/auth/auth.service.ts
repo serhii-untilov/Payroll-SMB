@@ -1,6 +1,5 @@
-import { AccessService } from '@/resources/access/access.service';
-import { CreateUserDto } from '@/resources/users/dto/create-user.dto';
-import { UsersService } from '@/resources/users/users.service';
+import { AccessService, CreateUserDto, UsersService } from '@/resources';
+import { AccessType, ResourceType, RoleType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -12,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { AccessType, ResourceType, RoleType } from '@/types';
 import * as bcrypt from 'bcrypt';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';

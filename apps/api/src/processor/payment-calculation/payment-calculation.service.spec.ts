@@ -1,12 +1,14 @@
-import { AccessService } from '@/resources/access/access.service';
-import { CompaniesService } from '@/resources/companies/companies.service';
-import { PayFundsService } from '@/resources/pay-funds/pay-funds.service';
-import { PayPeriodsService } from '@/resources/pay-periods/pay-periods.service';
-import { PaymentTypesService } from '@/resources/payment-types/payment-types.service';
-import { PaymentPositionsService } from '@/resources/payment-positions/payment-positions.service';
-import { PaymentsService } from '@/resources/payments/payments.service';
-import { PayrollsService } from '@/resources/payrolls/payrolls.service';
-import { PositionsService } from '@/resources/positions/positions.service';
+import {
+    AccessService,
+    CompaniesService,
+    PayFundsService,
+    PaymentPositionsService,
+    PaymentsService,
+    PaymentTypesService,
+    PayPeriodsService,
+    PayrollsService,
+    PositionsService,
+} from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';

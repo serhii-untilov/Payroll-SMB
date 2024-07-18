@@ -1,5 +1,5 @@
 import { getAdvancePaymentDate } from '@/processor/helpers';
-import { Task } from '@/resources/tasks/entities/task.entity';
+import { Task } from '@/resources';
 import { CalcMethod, PaymentSchedule, PaymentStatus, TaskStatus, TaskType } from '@/types';
 import { dateUTC } from '@repo/shared';
 import { TaskGenerationService } from '../../task-generator.service';

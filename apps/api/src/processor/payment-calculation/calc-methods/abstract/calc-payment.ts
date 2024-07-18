@@ -1,7 +1,5 @@
+import { Payment, PaymentPosition, PaymentType } from '@/resources';
 import { PaymentStatus, RecordFlags } from '@/types';
-import { PaymentPosition } from '@/resources/payment-positions/entities/paymentPosition.entity';
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
-import { Payment } from '@/resources/payments/entities/payment.entity';
 import { PaymentCalculationService } from '../../payment-calculation.service';
 
 export abstract class CalcPayment {

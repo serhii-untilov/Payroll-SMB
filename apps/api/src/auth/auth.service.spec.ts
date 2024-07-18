@@ -1,5 +1,4 @@
-import { AccessService } from '@/resources/access/access.service';
-import { UsersService } from '@/resources/users/users.service';
+import { AccessService, UsersService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';

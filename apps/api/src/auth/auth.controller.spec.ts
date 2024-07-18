@@ -1,7 +1,5 @@
 import { appConfig, authConfig, dbConfig, googleConfig } from '@/config';
-import { AccessService } from '@/resources/access/access.service';
-import { User } from '@/resources/users/entities/user.entity';
-import { UsersService } from '@/resources/users/users.service';
+import { AccessService, User, UsersService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
