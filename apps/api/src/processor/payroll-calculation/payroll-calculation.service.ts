@@ -307,7 +307,11 @@ export class PayrollCalculationService {
         calculateIncomeTax(this);
         calculateMilitaryTax(this);
         await this.save();
-        const balanceWorkingTime = calcBalanceWorkingTime(this);
+        const balanceWorkingTime = calcBalanceWorkingTime(
+            this.workNorms,
+            this.position,
+            this.payPeriod,
+        );
         await this.positionsService.calculateBalance(
             this.position.id,
             this.payPeriod.dateFrom,

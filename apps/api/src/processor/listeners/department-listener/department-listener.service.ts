@@ -1,5 +1,5 @@
 import { SseService } from '@/processor/server-sent-events/sse.service';
-import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
+import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
 import {
     DepartmentCreatedEvent,
     DepartmentDeletedEvent,

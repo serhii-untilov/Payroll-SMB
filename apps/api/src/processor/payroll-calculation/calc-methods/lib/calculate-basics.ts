@@ -24,7 +24,7 @@ export function calculateBasics(ctx: PayrollCalculationService) {
                 assignment.dateTo,
                 getMinDate(accPeriod.dateTo, ctx.position.dateTo),
             );
-            const plan = getWorkingTimePlan(ctx, assignment.workNormId, dateFrom);
+            const plan = getWorkingTimePlan(ctx.workNorms, assignment.workNormId, dateFrom);
             const fact = getWorkingTimeFact(plan, dateFrom, dateTo);
             const payroll = makePayroll(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact);
             const paymentType = ctx.paymentTypes.find((o) => o.id === payroll.paymentTypeId);

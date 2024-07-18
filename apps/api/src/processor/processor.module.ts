@@ -23,7 +23,7 @@ import { PersonListenerService } from './listeners/person-listener/person-listen
 import { PositionListenerService } from './listeners/position-listener/position-listener.service';
 import { PayFundCalculationService } from './pay-fund-calculation/pay-fund-calculation.service';
 import { PayPeriodCalculationService } from './pay-period-calculation/pay-period-calculation.service';
-import { PaymentCalculationService } from './paymentCalculation/payment-calculation.service';
+import { PaymentCalculationService } from './payment-calculation/payment-calculation.service';
 import { PayrollCalculationService } from './payroll-calculation/payroll-calculation.service';
 import { SseController } from './server-sent-events/sse.controller';
 import { SseService } from './server-sent-events/sse.service';
