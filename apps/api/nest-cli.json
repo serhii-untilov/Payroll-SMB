@@ -10,7 +10,7 @@
         "swcrcPath": "./.swcrc"
       }
     },
-    "typeCheck": false,
+    "typeCheck": true,
     "plugins": [
       {
         "name": "@nestjs/swagger",

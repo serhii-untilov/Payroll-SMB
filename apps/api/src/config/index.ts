@@ -1,6 +1,6 @@
-export * from './app.config';
-export * from './auth.config';
+export * from './lib/app.config';
+export * from './lib/auth.config';
 // export * from './datasource';
-export * from './db.config';
-export * from './google.config';
-export * from './typeorm-config.service';
+export * from './lib/db.config';
+export * from './lib/google.config';
+export * from './lib/typeorm-config.service';

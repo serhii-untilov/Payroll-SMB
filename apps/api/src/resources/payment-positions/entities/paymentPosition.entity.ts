@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IPaymentPosition, RecordFlags } from '@/types';
+import { RecordFlags } from '@/types';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Payment } from '../../payments/entities/payment.entity';
 import { Position } from '../../positions/entities/position.entity';
 
 @Entity()
-export class PaymentPosition extends Logger implements IPaymentPosition {
+export class PaymentPosition extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

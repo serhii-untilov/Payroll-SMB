@@ -6,7 +6,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@/types';
+import { AccessType, ResourceType, RoleType } from '@/types';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CreateUserCompanyDto } from './dto/create-user-company.dto';
@@ -129,7 +129,7 @@ export class UsersCompanyService {
         });
     }
 
-    async getUserCompanyRoleType(userId: number, companyId: number): Promise<string> {
+    async getUserCompanyRoleType(userId: number, companyId: number): Promise<RoleType> {
         const record = await this.repository.findOneOrFail({
             where: { userId, companyId },
             relations: { role: true },
@@ -140,7 +140,7 @@ export class UsersCompanyService {
         return record.role.type;
     }
 
-    async getUserCompanyRoleTypeOrFail(userId: number, companyId: number): Promise<string> {
+    async getUserCompanyRoleTypeOrFail(userId: number, companyId: number): Promise<RoleType> {
         const roleType = await this.getUserCompanyRoleType(userId, companyId);
         if (!roleType) {
             throw new ForbiddenException(

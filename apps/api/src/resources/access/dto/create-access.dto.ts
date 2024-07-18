@@ -1,5 +1,4 @@
-export class CreateAccessDto {
-    roleType: string; // See enum RoleType
-    resourceType: string; // See enum ResourceType
-    accessType: string; // See enum AccessType
-}
+import { PickType } from '@nestjs/swagger';
+import { Access } from '../entities/access.entity';
+
+export class CreateAccessDto extends PickType(Access, ['roleType', 'resourceType', 'accessType']) {}

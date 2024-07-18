@@ -2,7 +2,7 @@ import { PayFundType } from '@/resources/pay-fund-types/entities/pay-fund-type.e
 import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
 import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
 import { CalcMethod, PayFundCategory, PaymentGroup } from '@/types';
-import { accPeriodFactSum } from '@/processor/helpers/payroll.helper';
+import { accPeriodFactSum } from '@/processor/helpers';
 import { PayFundCalculationService } from './../../pay-fund-calculation.service';
 import { PayFundCalc } from './../abstract/pay-fund-calc';
 

@@ -1,27 +1,19 @@
+import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
 import { PositionHistory } from '@/resources/position-history/entities/position-history.entity';
+import { Position } from '@/resources/positions/entities/position.entity';
 import { WorkNorm } from '@/resources/work-norms/entities/work-norm.entity';
+import { BalanceWorkingTime, HoursByDay, WorkNormType, WorkingTime } from '@/types';
 import { ConflictException } from '@nestjs/common';
-import {
-    BalanceWorkingTime,
-    HoursByDay,
-    WorkNormType,
-    WorkingTime,
-    getMaxDate,
-    getMinDate,
-    monthBegin,
-    monthEnd,
-    setBit,
-} from '@/types';
+import { getMaxDate, getMinDate, monthBegin, monthEnd, setBit } from '@repo/shared';
 import { add, sub } from 'date-fns';
-import { PayrollCalculationService } from '../payroll-calculation/payroll-calculation.service';
 
 export function getWorkingTimePlan(
-    ctx: PayrollCalculationService,
+    workNorms: WorkNorm[],
     workNormId: number | null,
     onDate: Date,
 ): WorkingTime {
     if (workNormId) {
-        const workNorm = ctx.workNorms.find((o) => o.id === workNormId);
+        const workNorm = workNorms.find((o) => o.id === workNormId);
         if (workNorm?.type === WorkNormType.WEEKLY) {
             return getPlanForWeekly(workNorm, onDate);
         }
@@ -49,28 +41,29 @@ export function getWorkingTimeFact(plan: WorkingTime, dateFrom: Date, dateTo: Da
     return { days, hours, mask, hoursByDay };
 }
 
-export function calcBalanceWorkingTime(ctx: PayrollCalculationService): BalanceWorkingTime {
+export function calcBalanceWorkingTime(
+    workNorms: WorkNorm[],
+    position: Position,
+    payPeriod: PayPeriod,
+): BalanceWorkingTime {
     let plan = new WorkingTime();
     let fact = new WorkingTime();
     const assignments: PositionHistory[] =
-        ctx.position?.history?.filter(
+        position?.history?.filter(
             (o) =>
-                o.dateFrom.getTime() <= ctx.payPeriod.dateTo.getTime() &&
-                o.dateTo.getTime() >= ctx.payPeriod.dateFrom.getTime(),
+                o.dateFrom.getTime() <= payPeriod.dateTo.getTime() &&
+                o.dateTo.getTime() >= payPeriod.dateFrom.getTime(),
         ) || [];
     for (const assignment of assignments) {
         const dateFrom = getMaxDate(
             assignment.dateFrom,
-            getMaxDate(ctx.payPeriod.dateFrom, ctx.position.dateFrom),
+            getMaxDate(payPeriod.dateFrom, position.dateFrom),
         );
-        const dateTo = getMinDate(
-            assignment.dateTo,
-            getMinDate(ctx.payPeriod.dateTo, ctx.position.dateTo),
-        );
+        const dateTo = getMinDate(assignment.dateTo, getMinDate(payPeriod.dateTo, position.dateTo));
         plan = sumWorkingTime(
             plan,
             getWorkingTimeFact(
-                getWorkingTimePlan(ctx, assignment.workNormId, dateFrom),
+                getWorkingTimePlan(workNorms, assignment.workNormId, dateFrom),
                 dateFrom,
                 dateTo,
             ),

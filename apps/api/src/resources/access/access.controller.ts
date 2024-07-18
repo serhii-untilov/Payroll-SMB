@@ -12,15 +12,6 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { AccessService } from './access.service';
-import {
-    AvailableAccessDto,
-    AvailableAccessUserCompanyDto,
-    AvailableAccessUserDto,
-} from './dto/available-access.dto';
-import { CreateAccessDto } from './dto/create-access.dto';
-import { UpdateAccessDto } from './dto/update-access.dto';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -30,6 +21,15 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
+import { Request } from 'express';
+import { AccessService } from './access.service';
+import {
+    AvailableAccessDto,
+    AvailableAccessUserCompanyDto,
+    AvailableAccessUserDto,
+    CreateAccessDto,
+    UpdateAccessDto,
+} from './dto';
 import { Access } from './entities/access.entity';
 
 @Controller('access')

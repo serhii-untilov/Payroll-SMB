@@ -54,7 +54,6 @@
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
-    "@repo/testing": "*",
     "@swc/cli": "^0.3.14",
     "@swc/core": "^1.6.7",
     "@types/bcrypt": "^5.0.2",

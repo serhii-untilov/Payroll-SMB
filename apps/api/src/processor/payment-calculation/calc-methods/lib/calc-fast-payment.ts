@@ -1,7 +1,7 @@
 import { PaymentPosition } from '@/resources/payment-positions/entities/paymentPosition.entity';
 import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
-import { PaymentCalculationService } from '../payment-calculation.service';
-import { CalcPayment } from './abstract/calc-payment';
+import { PaymentCalculationService } from '../../payment-calculation.service';
+import { CalcPayment } from '../abstract/calc-payment';
 
 export class CalcFastPayment extends CalcPayment {
     constructor(

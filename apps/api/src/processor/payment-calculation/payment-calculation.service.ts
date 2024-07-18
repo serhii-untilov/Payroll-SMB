@@ -18,10 +18,7 @@ import { CalcMethod, PaymentGroup, PaymentStatus } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dateUTC } from '@repo/shared';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
-import { CalcPayment } from './calc-methods/abstract/calc-payment';
-import { CalcAdvance } from './calc-methods/calc-advance';
-import { CalcFastPayment } from './calc-methods/calc-fast-payment';
-import { CalcRegularPayment } from './calc-methods/calc-regular-payment';
+import { CalcAdvance, CalcFastPayment, CalcPayment, CalcRegularPayment } from './calc-methods';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PaymentCalculationService {

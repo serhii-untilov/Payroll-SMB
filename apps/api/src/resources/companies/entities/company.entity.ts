@@ -1,10 +1,5 @@
-import { Logger } from './../../abstract/logger.abstract';
-import { Accounting } from './../../../resources/accounting/entities/accounting.entity';
-import { Department } from './../../../resources/departments/entities/department.entity';
-import { Law } from './../../../resources/laws/entities/law.entity';
-import { Position } from './../../../resources/positions/entities/position.entity';
-import { UserCompany } from './../../../resources/users/entities/user-company.entity';
-import { PaymentSchedule, monthBegin, monthEnd } from '@/types';
+import { PaymentSchedule } from '@/types';
+import { monthBegin, monthEnd } from '@repo/shared';
 import {
     AfterLoad,
     BeforeInsert,
@@ -16,6 +11,12 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
+import { Accounting } from './../../../resources/accounting/entities/accounting.entity';
+import { Department } from './../../../resources/departments/entities/department.entity';
+import { Law } from './../../../resources/laws/entities/law.entity';
+import { Position } from './../../../resources/positions/entities/position.entity';
+import { UserCompany } from './../../../resources/users/entities/user-company.entity';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
 export class Company extends Logger {

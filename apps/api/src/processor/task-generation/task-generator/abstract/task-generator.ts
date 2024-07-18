@@ -1,4 +1,4 @@
-import { getWorkDayBeforeOrEqual } from '@/processor/helpers/working-time.helper';
+import { getWorkDayBeforeOrEqual } from '@/processor/helpers';
 import { Task } from '@/resources/tasks/entities/task.entity';
 import { TaskStatus, TaskType } from '@/types';
 import { TaskGenerationService } from '../../task-generator.service';

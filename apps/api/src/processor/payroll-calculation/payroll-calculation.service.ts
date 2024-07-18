@@ -1,3 +1,4 @@
+import { calcBalanceWorkingTime, getPayrollUnionRecord } from '@/processor/helpers';
 import { AccessService } from '@/resources/access/access.service';
 import { CompaniesService } from '@/resources/companies/companies.service';
 import { Company } from '@/resources/companies/entities/company.entity';
@@ -11,14 +12,10 @@ import { Position } from '@/resources/positions/entities/position.entity';
 import { PositionsService } from '@/resources/positions/positions.service';
 import { WorkNorm } from '@/resources/work-norms/entities/work-norm.entity';
 import { WorkNormsService } from '@/resources/work-norms/work-norms.service';
-import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { RecordFlags, WorkingTime } from '@/types';
-import { getPayrollUnionRecord } from '@/processor/helpers/payroll.helper';
-import { calcBalanceWorkingTime } from '@/processor/helpers/working-time.helper';
+import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
-import { calculateBasics } from './calc-methods/calculate-basics';
-import { calculateIncomeTax } from './calc-methods/calculate-income-tax';
-import { calculateMilitaryTax } from './calc-methods/calculate-military-tax';
+import { calculateBasics, calculateIncomeTax, calculateMilitaryTax } from './calc-methods';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {

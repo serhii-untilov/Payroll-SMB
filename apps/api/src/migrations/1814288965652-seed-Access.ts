@@ -155,6 +155,7 @@ export class Seed1814288965652 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         const userId = await getSystemUserId(dataSource);
+        if (!userId) throw new Error('userId not defined.');
         for (let n = 0; n < recordList.length; n++) {
             const record = { ...recordList[n], createdUserId: userId, updatedUserId: userId };
             await dataSource.createQueryBuilder().insert().into(entity).values(record).execute();

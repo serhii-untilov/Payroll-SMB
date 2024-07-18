@@ -1,4 +1,4 @@
-import { WrapperType } from '@/types';
+import { AccessType, ResourceType, RoleType, WrapperType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -9,15 +9,12 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType, RoleType } from '@/types';
 import * as _ from 'lodash';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { RolesService } from '../roles/roles.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { PublicUserDataDto } from './dto/public-user-date.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { CreateUserDto, PublicUserDataDto, UpdateUserDto } from './dto';
+import { User } from './entities';
 
 @Injectable()
 export class UsersService {
@@ -144,7 +141,7 @@ export class UsersService {
         return publicUser;
     }
 
-    async getUserRoleType(id: number): Promise<string> {
+    async getUserRoleType(id: number): Promise<RoleType> {
         const user = await this.repository.findOneOrFail({
             where: { id },
             relations: { role: true },
@@ -155,7 +152,7 @@ export class UsersService {
         return user.role.type;
     }
 
-    async getUserRoleTypeOrFail(id: number): Promise<string> {
+    async getUserRoleTypeOrFail(id: number): Promise<RoleType> {
         const roleType = await this.getUserRoleType(id);
         if (!roleType) {
             throw new ForbiddenException(`User doesn't have access to the requested resource.`);

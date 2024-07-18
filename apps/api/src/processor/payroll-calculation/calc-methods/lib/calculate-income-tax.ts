@@ -1,10 +1,10 @@
-import { accPeriodFactSum } from '@/processor/helpers/payroll.helper';
+import { accPeriodFactSum } from '@/processor/helpers';
 import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
 import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { CalcMethod, PaymentPart, RecordFlags } from '@/types';
 import { getMaxDate, getMinDate } from '@repo/shared';
-import { PayrollCalculationService } from '../payroll-calculation.service';
+import { PayrollCalculationService } from './../../payroll-calculation.service';
 
 export function calculateIncomeTax(ctx: PayrollCalculationService) {
     const incomeTaxes = ctx.paymentTypes.filter((o) => o.calcMethod === CalcMethod.INCOME_TAX);

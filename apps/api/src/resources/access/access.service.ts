@@ -1,3 +1,4 @@
+import { AccessType, ResourceType, RoleType, WrapperType } from '@/types';
 import {
     BadRequestException,
     ForbiddenException,
@@ -7,7 +8,6 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType, RoleType } from '@/types';
 import { Repository } from 'typeorm';
 import { UsersCompanyService } from '../users/users-company.service';
 import { UsersService } from '../users/users.service';
@@ -15,11 +15,10 @@ import {
     AvailableAccessDto,
     AvailableAccessUserCompanyDto,
     AvailableAccessUserDto,
-} from './dto/available-access.dto';
-import { CreateAccessDto } from './dto/create-access.dto';
-import { UpdateAccessDto } from './dto/update-access.dto';
+    CreateAccessDto,
+    UpdateAccessDto,
+} from './dto';
 import { Access } from './entities/access.entity';
-import { WrapperType } from '@/types';
 
 @Injectable()
 export class AccessService {
@@ -95,9 +94,9 @@ export class AccessService {
     }
 
     async availableForRoleTypeOrFail(
-        roleType: string,
-        resourceType: string,
-        accessType: string,
+        roleType: RoleType,
+        resourceType: ResourceType,
+        accessType: AccessType,
     ): Promise<void> {
         if (!this.available({ roleType, resourceType, accessType })) {
             throw new ForbiddenException(`User doesn't have access to the requested resource.`);
@@ -115,8 +114,8 @@ export class AccessService {
 
     async availableForUserOrFail(
         userId: number,
-        resourceType: string,
-        accessType: string,
+        resourceType: ResourceType,
+        accessType: AccessType,
     ): Promise<void> {
         if (!(await this.availableForUser({ userId, resourceType, accessType }))) {
             throw new ForbiddenException(`User doesn't have access to the requested resource.`);
@@ -142,8 +141,8 @@ export class AccessService {
     async availableForUserCompanyOrFail(
         userId: number,
         companyId: number,
-        resourceType: string,
-        accessType: string,
+        resourceType: ResourceType,
+        accessType: AccessType,
     ): Promise<void> {
         if (
             !(await this.availableForUserCompany({ userId, companyId, resourceType, accessType }))
