@@ -1,4 +1,4 @@
-import { WrapperType } from '@/types/WrapperType';
+import { WrapperType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaymentStatus, RecordFlags, ResourceType, dateUTC } from '@repo/shared';
+import { PaymentStatus, RecordFlags, ResourceType, dateUTC } from '@/types';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';

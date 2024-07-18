@@ -1,7 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
+import { maxDate, minDate, monthBegin, monthEnd } from '@/types';
 import { MockType, createMockCompany, repositoryMockFactory } from '@repo/testing';
 import { Repository } from 'typeorm';
 import { UsersCompanyService } from '../users/users-company.service';

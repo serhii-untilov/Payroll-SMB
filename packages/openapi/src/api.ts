@@ -839,6 +839,12 @@ export interface CreatePayPeriodDto {
 export interface CreatePaymentDto {
     /**
      * 
+     * @type {string}
+     * @memberof CreatePaymentDto
+     */
+    'status'?: CreatePaymentDtoStatusEnum;
+    /**
+     * 
      * @type {number}
      * @memberof CreatePaymentDto
      */
@@ -911,12 +917,6 @@ export interface CreatePaymentDto {
     'funds'?: number;
     /**
      * 
-     * @type {string}
-     * @memberof CreatePaymentDto
-     */
-    'status'?: string;
-    /**
-     * 
      * @type {number}
      * @memberof CreatePaymentDto
      */
@@ -928,6 +928,16 @@ export interface CreatePaymentDto {
      */
     'description'?: string;
 }
+
+export const CreatePaymentDtoStatusEnum = {
+    Draft: 'draft',
+    Submitted: 'submitted',
+    Accepted: 'accepted',
+    Payed: 'payed'
+} as const;
+
+export type CreatePaymentDtoStatusEnum = typeof CreatePaymentDtoStatusEnum[keyof typeof CreatePaymentDtoStatusEnum];
+
 /**
  * 
  * @export
@@ -2783,6 +2793,12 @@ export interface PayPeriodCalcMethod {
 export interface Payment {
     /**
      * 
+     * @type {string}
+     * @memberof Payment
+     */
+    'status': PaymentStatusEnum;
+    /**
+     * 
      * @type {number}
      * @memberof Payment
      */
@@ -2873,12 +2889,6 @@ export interface Payment {
     'funds': number;
     /**
      * 
-     * @type {string}
-     * @memberof Payment
-     */
-    'status': string;
-    /**
-     * 
      * @type {number}
      * @memberof Payment
      */
@@ -2938,6 +2948,16 @@ export interface Payment {
      */
     'version': number;
 }
+
+export const PaymentStatusEnum = {
+    Draft: 'draft',
+    Submitted: 'submitted',
+    Accepted: 'accepted',
+    Payed: 'payed'
+} as const;
+
+export type PaymentStatusEnum = typeof PaymentStatusEnum[keyof typeof PaymentStatusEnum];
+
 /**
  * 
  * @export
@@ -4899,6 +4919,12 @@ export interface UpdatePayPeriodDto {
 export interface UpdatePaymentDto {
     /**
      * 
+     * @type {string}
+     * @memberof UpdatePaymentDto
+     */
+    'status'?: UpdatePaymentDtoStatusEnum;
+    /**
+     * 
      * @type {number}
      * @memberof UpdatePaymentDto
      */
@@ -4977,12 +5003,6 @@ export interface UpdatePaymentDto {
     'funds'?: number;
     /**
      * 
-     * @type {string}
-     * @memberof UpdatePaymentDto
-     */
-    'status'?: string;
-    /**
-     * 
      * @type {number}
      * @memberof UpdatePaymentDto
      */
@@ -4994,6 +5014,16 @@ export interface UpdatePaymentDto {
      */
     'description'?: string;
 }
+
+export const UpdatePaymentDtoStatusEnum = {
+    Draft: 'draft',
+    Submitted: 'submitted',
+    Accepted: 'accepted',
+    Payed: 'payed'
+} as const;
+
+export type UpdatePaymentDtoStatusEnum = typeof UpdatePaymentDtoStatusEnum[keyof typeof UpdatePaymentDtoStatusEnum];
+
 /**
  * 
  * @export

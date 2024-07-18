@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@/types';
 import { add, sub } from 'date-fns';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';

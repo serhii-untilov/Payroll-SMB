@@ -1,4 +1,4 @@
-import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Logger } from './../../abstract/logger.abstract';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

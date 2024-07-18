@@ -1,6 +1,6 @@
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards';
 import { PositionHistory } from '@/resources/position-history/entities/position-history.entity';
-import { getUserId } from '@/utils/getUserId';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,
@@ -23,7 +23,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepStringToShortDate } from '@/types';
 import { Request } from 'express';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindAllPositionHistoryDto } from './dto/find-all-position-history.dto';

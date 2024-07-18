@@ -1,7 +1,7 @@
-import { langPipe } from '../utils/langPipe';
+import { langPipe } from '../utils/lib/langPipe';
 import { Accounting } from './../resources/accounting/entities/accounting.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { AccountingType } from '@repo/shared';
+import { AccountingType } from '@/types';
 
 const lang = process.env.LANGUAGE || 'uk';
 const entity = Accounting;

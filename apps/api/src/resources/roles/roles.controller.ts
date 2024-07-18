@@ -1,5 +1,5 @@
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
-import { getUserId } from '@/utils/getUserId';
+import { AccessTokenGuard } from '@/guards';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,
@@ -21,7 +21,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { IRole } from '@repo/shared';
+import { IRole } from '@/types';
 import { Request } from 'express';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';

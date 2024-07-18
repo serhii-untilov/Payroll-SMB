@@ -1,6 +1,6 @@
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType } from '@/types';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';

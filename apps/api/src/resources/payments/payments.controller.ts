@@ -1,6 +1,6 @@
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards';
 import { Payment } from '@/resources/payments/entities/payment.entity';
-import { getUserId } from '@/utils/getUserId';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,
@@ -24,7 +24,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepStringToShortDate } from '@/types';
 import { Request } from 'express';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { FindAllPaymentDto } from './dto/find-all-payment.dto';

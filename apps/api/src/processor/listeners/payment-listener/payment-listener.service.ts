@@ -1,19 +1,19 @@
 import { PayFundCalculationService } from '@/processor/payFundCalculation/payFundCalculation.service';
 import { PaymentCalculationService } from '@/processor/paymentCalculation/payment-calculation.service';
-import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
-import { SseService } from '@/processor/serverSentEvents/sse.service';
-import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payrollCalculation.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
 import { PaymentEvent, PaymentEventType } from '@/resources/payments/events/abstract/PaymentEvent';
 import { PaymentCreatedEvent } from '@/resources/payments/events/payment-created.event';
 import { PaymentDeletedEvent } from '@/resources/payments/events/payment-deleted.event';
 import { PaymentUpdatedEvent } from '@/resources/payments/events/payment-updated.event';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@repo/shared';
+import { ServerEvent } from '@/types';
 
 @Injectable()
 export class PaymentListenerService {
-    private _logger: Logger = new Logger(PayrollCalculationService.name);
+    private _logger: Logger = new Logger(PaymentListenerService.name);
 
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
@@ -70,7 +70,8 @@ export class PaymentListenerService {
             );
             await this.taskListService.generate(event.userId, event.companyId);
             this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_FINISHED });
-        } catch (_e) {
+        } catch (e) {
+            this._logger.fatal(`companyId ${event.companyId} ${ServerEvent.PAYROLL_FAILED} ${e}`);
             this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_FAILED });
         }
     }

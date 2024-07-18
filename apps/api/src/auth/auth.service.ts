@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { AccessType, ResourceType, RoleType } from '@repo/shared';
+import { AccessType, ResourceType, RoleType } from '@/types';
 import * as bcrypt from 'bcrypt';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';

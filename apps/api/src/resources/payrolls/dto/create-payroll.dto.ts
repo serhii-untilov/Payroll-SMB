@@ -1,4 +1,4 @@
-import { HoursByDay } from '@repo/shared';
+import { HoursByDay } from '@/types';
 
 export class CreatePayrollDto {
     positionId: number;

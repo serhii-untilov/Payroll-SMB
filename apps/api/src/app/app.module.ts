@@ -1,9 +1,5 @@
 import { AuthModule } from '@/auth/auth.module';
-import { appConfig } from '@/config/app.config';
-import { authConfig } from '@/config/auth.config';
-import { dbConfig } from '@/config/db.config';
-import { googleConfig } from '@/config/google.config';
-import { TypeormConfigService } from '@/config/typeorm-config.service';
+import { appConfig, authConfig, dbConfig, googleConfig, TypeormConfigService } from '@/config';
 import { AccessModule } from '@/resources/access/access.module';
 import { AccountingModule } from '@/resources/accounting/accounting.module';
 import { CompaniesModule } from '@/resources/companies/companies.module';

@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { CalcMethod } from '@/types';
 import {
     AfterLoad,
     Column,
@@ -22,7 +24,8 @@ export class PayPeriodCalcMethod {
     payPeriodId: number;
 
     @Column({ type: 'varchar', length: 30 })
-    calcMethod: string; // See enum CalcMethod
+    @ApiProperty({ enum: CalcMethod })
+    calcMethod: CalcMethod;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     factSum: number;

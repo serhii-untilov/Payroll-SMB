@@ -1,5 +1,5 @@
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
-import { getUserId } from '@/utils/getUserId';
+import { AccessTokenGuard } from '@/guards';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,

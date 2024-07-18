@@ -1,4 +1,4 @@
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards';
 import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import {
     ApiForbiddenResponse,

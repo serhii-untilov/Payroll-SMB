@@ -7,14 +7,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-    PayPeriodState,
-    ResourceType,
-    dateUTC,
-    formatPeriod,
-    monthBegin,
-    monthEnd,
-} from '@repo/shared';
+import { PayPeriodState, ResourceType, dateUTC, formatPeriod, monthBegin, monthEnd } from '@/types';
 import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';

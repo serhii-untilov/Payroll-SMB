@@ -1,5 +1,7 @@
-import { Logger } from './../../../resources/abstract/logger.abstract';
+import { ApiProperty } from '@nestjs/swagger';
+import { PayFundCalcMethod, PayFundGroup } from '@/types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
 export class PayFundType extends Logger {
@@ -10,10 +12,12 @@ export class PayFundType extends Logger {
     name: string;
 
     @Column({ type: 'varchar', length: 30 })
-    group: string; // See enum PayFundGroup
+    @ApiProperty({ enum: PayFundGroup })
+    group: PayFundGroup;
 
     @Column({ type: 'varchar', length: 30 })
-    calcMethod: string; // See enum PayFundCalcMethod
+    @ApiProperty({ enum: PayFundCalcMethod })
+    calcMethod: PayFundCalcMethod;
 
     @Column({ type: 'integer' })
     sequence: number;

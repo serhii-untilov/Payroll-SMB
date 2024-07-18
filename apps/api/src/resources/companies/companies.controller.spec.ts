@@ -1,4 +1,4 @@
-import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payrollCalculation.service';
 import { createMock } from '@golevelup/ts-jest';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';

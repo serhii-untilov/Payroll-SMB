@@ -1,6 +1,6 @@
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
+import { AccessTokenGuard } from '@/guards';
 import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
-import { getUserId } from '@/utils/getUserId';
+import { getUserId } from '@/utils';
 import {
     BadRequestException,
     Body,
@@ -28,7 +28,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepStringToShortDate } from '@/types';
 import { Request } from 'express';
 import { CreatePayFundDto } from './dto/create-pay-fund.dto';
 import { FindPayFundDto } from './dto/find-pay-fund.dto';

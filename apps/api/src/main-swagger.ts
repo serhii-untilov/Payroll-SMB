@@ -2,7 +2,7 @@ import { VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { capitalizeFirstLetter } from '@repo/shared';
+import { capitalizeFirstLetter } from '@/types';
 import { writeFileSync } from 'fs';
 import path from 'path';
 import { AppModule } from './app/app.module';

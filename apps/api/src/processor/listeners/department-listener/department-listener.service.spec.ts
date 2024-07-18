@@ -1,5 +1,5 @@
-import { SseService } from '@/processor/serverSentEvents/sse.service';
-import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DepartmentListenerService } from './department-listener.service';

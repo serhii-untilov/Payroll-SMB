@@ -12,7 +12,7 @@ import {
     ResourceType,
     defaultPaymentGroupsTotal,
     defaultPaymentPartsTotal,
-} from '@repo/shared';
+} from '@/types';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -21,7 +21,7 @@ import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { FindPayrollDto } from './dto/find-payroll.dto';
 import { UpdatePayrollDto } from './dto/update-payroll.dto';
 import { Payroll } from './entities/payroll.entity';
-import { WrapperType } from '@/types/WrapperType';
+import { WrapperType } from '@/types';
 
 @Injectable()
 export class PayrollsService extends AvailableForUserCompany {

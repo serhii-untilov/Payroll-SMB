@@ -1,4 +1,4 @@
-import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Logger } from './../../abstract/logger.abstract';
 import { Department } from './../../../resources/departments/entities/department.entity';
 import { Job } from './../../../resources/jobs/entities/job.entity';
 import { PaymentType } from './../../../resources/payment-types/entities/payment-type.entity';

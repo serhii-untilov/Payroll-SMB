@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType, formatDate, monthBegin, monthEnd } from '@repo/shared';
+import { ResourceType, formatDate, monthBegin, monthEnd } from '@/types';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';

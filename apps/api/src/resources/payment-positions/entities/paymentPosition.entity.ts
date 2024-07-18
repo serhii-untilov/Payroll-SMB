@@ -1,31 +1,42 @@
-import { Logger } from '../../abstract/logger.abstract';
-import { Position } from '../../positions/entities/position.entity';
-import { IPaymentPosition } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
+import { IPaymentPosition, RecordFlags } from '@/types';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Logger } from '../../abstract/logger.abstract';
 import { Payment } from '../../payments/entities/payment.entity';
+import { Position } from '../../positions/entities/position.entity';
 
 @Entity()
 export class PaymentPosition extends Logger implements IPaymentPosition {
     @PrimaryGeneratedColumn('increment')
     id: number;
+
     @ManyToOne(() => Payment, (payment) => payment.paymentPositions)
     payment?: Relation<Payment>;
+
     @Column({ type: 'integer' })
     paymentId: number;
+
     @ManyToOne(() => Position, { createForeignKeyConstraints: false })
     position?: Relation<Position>;
+
     @Column({ type: 'integer' })
     positionId: number;
+
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     baseSum: number;
+
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     deductions: number;
+
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     paySum: number;
+
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     funds: number;
+
     @Column({ type: 'bigint', default: 0 })
-    recordFlags: number; // See enum RecordFlags
+    @ApiProperty({ enum: RecordFlags })
+    recordFlags: RecordFlags;
 
     @AfterLoad()
     transform() {

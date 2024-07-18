@@ -1,7 +1,4 @@
-import { appConfig } from '@/config/app.config';
-import { authConfig } from '@/config/auth.config';
-import { dbConfig } from '@/config/db.config';
-import { googleConfig } from '@/config/google.config';
+import { appConfig, authConfig, dbConfig, googleConfig } from '@/config';
 import { AccessService } from '@/resources/access/access.service';
 import { User } from '@/resources/users/entities/user.entity';
 import { UsersService } from '@/resources/users/users.service';

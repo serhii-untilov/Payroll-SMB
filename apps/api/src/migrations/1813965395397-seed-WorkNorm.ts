@@ -1,8 +1,8 @@
 import { WorkNorm } from './../resources/work-norms/entities/work-norm.entity';
-import { getSystemUserId } from '../utils/getSystemUserId';
+import { getSystemUserId } from '../utils/lib/getSystemUserId';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { langPipe } from '../utils/langPipe';
-import { WorkNormType } from '@repo/shared';
+import { langPipe } from '../utils/lib/langPipe';
+import { WorkNormType } from '@/types';
 import { WorkNormPeriod } from './../resources/work-norms/entities/work-norm-period.entity';
 
 const lang = process.env.LANGUAGE || 'uk';

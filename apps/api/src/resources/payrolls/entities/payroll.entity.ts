@@ -1,4 +1,4 @@
-import { HoursByDay } from '@repo/shared';
+import { HoursByDay, ResourceType, RecordFlags, FixedFlags } from '@/types';
 import {
     AfterLoad,
     Column,
@@ -10,7 +10,8 @@ import {
 } from 'typeorm';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
-import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Logger } from './../../abstract/logger.abstract';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 @Index('IDX_PAYROLL_POSITION_PAY_PERIOD', ['positionId', 'payPeriod'])
@@ -43,8 +44,9 @@ export class Payroll extends Logger {
     @Column({ type: 'date' })
     dateTo: Date;
 
-    @Column({ type: 'varchar', length: 10, nullable: true })
-    sourceType: string | null; // See enum ResourceType
+    @Column({ type: 'varchar', length: 10, default: '' })
+    @ApiProperty({ enum: ResourceType })
+    sourceType: ResourceType;
 
     @Column({ type: 'integer', nullable: true })
     sourceId: number | null;
@@ -83,10 +85,12 @@ export class Payroll extends Logger {
     mask2: number;
 
     @Column({ type: 'bigint' })
-    recordFlags: number;
+    @ApiProperty({ enum: RecordFlags, default: 0 })
+    recordFlags: RecordFlags;
 
     @Column({ type: 'bigint', default: 0 })
-    fixedFlags: number;
+    @ApiProperty({ enum: FixedFlags })
+    fixedFlags: FixedFlags;
 
     @Column({ type: 'jsonb', nullable: true })
     planHoursByDay: HoursByDay | null;

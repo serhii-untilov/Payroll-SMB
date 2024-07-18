@@ -1,6 +1,6 @@
-import { RoleType } from '@repo/shared';
+import { RoleType } from '@/types';
 import { Role } from './../resources/roles/entities/role.entity';
-import { langPipe } from '../utils/langPipe';
+import { langPipe } from '../utils/lib/langPipe';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 const lang = process.env.LANGUAGE || 'uk';

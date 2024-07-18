@@ -1,16 +1,15 @@
-import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
-import { SseService } from '@/processor/serverSentEvents/sse.service';
-import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
 import { DepartmentCreatedEvent } from '@/resources/departments/events/department-created.event';
 import { DepartmentDeletedEvent } from '@/resources/departments/events/department-deleted.event';
 import { DepartmentUpdatedEvent } from '@/resources/departments/events/department-updated.event';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@repo/shared';
+import { ServerEvent } from '@/types';
 
 @Injectable()
 export class DepartmentListenerService {
-    private _logger: Logger = new Logger(PayrollCalculationService.name);
+    private _logger: Logger = new Logger(DepartmentListenerService.name);
 
     constructor(
         @Inject(forwardRef(() => TaskGenerationService))
@@ -42,7 +41,8 @@ export class DepartmentListenerService {
             this.sseService.event(companyId, { data: ServerEvent.TASKLIST_STARTED });
             await this.taskListService.generate(userId, companyId);
             this.sseService.event(companyId, { data: ServerEvent.TASKLIST_FINISHED });
-        } catch (_e) {
+        } catch (e) {
+            this._logger.fatal(`companyId ${companyId} ${ServerEvent.TASKLIST_FAILED} ${e}`);
             this.sseService.event(companyId, { data: ServerEvent.TASKLIST_FAILED });
         }
     }

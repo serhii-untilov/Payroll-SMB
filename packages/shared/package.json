@@ -14,7 +14,7 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "build": "NODE_ENV=production tsc -p ./tsconfig.build.json",
+        "build": "NODE_ENV=production swc ./tsconfig.build.json",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "format": "prettier --write \"src/**/*.ts\"",
         "test": "NODE_ENV=development jest --passWithNoTests",

@@ -1,7 +1,7 @@
 import { FindOneTaskDto } from './dto/find-one-task.dto';
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType, TaskStatus, TaskType, monthBegin, monthEnd } from '@repo/shared';
+import { ResourceType, TaskStatus, TaskType, monthBegin, monthEnd } from '@/types';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';

@@ -1,4 +1,4 @@
-import { WrapperType } from '@/types/WrapperType';
+import { WrapperType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -9,7 +9,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType, RoleType } from '@repo/shared';
+import { AccessType, ResourceType, RoleType } from '@/types';
 import * as _ from 'lodash';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';

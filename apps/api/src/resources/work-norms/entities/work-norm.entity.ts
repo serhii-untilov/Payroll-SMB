@@ -1,7 +1,8 @@
-import { WorkNormType } from '@repo/shared';
+import { WorkNormType } from '@/types';
 import { Column, PrimaryGeneratedColumn, OneToMany, Entity, AfterLoad, Relation } from 'typeorm';
 import { WorkNormPeriod } from './work-norm-period.entity';
-import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Logger } from './../../abstract/logger.abstract';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class WorkNorm extends Logger {
@@ -12,7 +13,8 @@ export class WorkNorm extends Logger {
     name: string;
 
     @Column({ type: 'varchar', length: 30, default: WorkNormType.WEEKLY })
-    type: string;
+    @ApiProperty({ enum: WorkNormType })
+    type: WorkNormType;
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;

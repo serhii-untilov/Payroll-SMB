@@ -1,12 +1,12 @@
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType } from '@/types';
 import { FindManyOptions, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
-import { WrapperType } from '@/types/WrapperType';
+import { WrapperType } from '@/types';
 
 @Injectable()
 export class RolesService {

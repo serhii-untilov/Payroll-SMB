@@ -1,7 +1,7 @@
 import { PayFundCalculationService } from '@/processor/payFundCalculation/payFundCalculation.service';
-import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
-import { SseService } from '@/processor/serverSentEvents/sse.service';
-import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payrollCalculation.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
 import { PositionsService } from '@/resources/positions/positions.service';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';

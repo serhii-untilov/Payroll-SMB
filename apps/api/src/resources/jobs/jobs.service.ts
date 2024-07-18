@@ -7,7 +7,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType } from '@/types';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CreateJobDto } from './dto/create-job.dto';

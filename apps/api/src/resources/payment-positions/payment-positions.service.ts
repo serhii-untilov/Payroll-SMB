@@ -1,7 +1,7 @@
 import { AvailableForUserCompany } from '@/resources/abstract/availableForUserCompany';
 import { AccessService } from '@/resources/access/access.service';
 import { PayrollsService } from '@/resources/payrolls/payrolls.service';
-import { WrapperType } from '@/types/WrapperType';
+import { WrapperType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -10,7 +10,7 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@/types';
 import { Repository } from 'typeorm';
 import { Payment } from '../payments/entities/payment.entity';
 import { PaymentsService } from '../payments/payments.service';

@@ -1,4 +1,4 @@
-import { WrapperType } from '@/types/WrapperType';
+import { WrapperType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -14,7 +14,7 @@ import {
     PaymentPart,
     ResourceType,
     maxDate,
-} from '@repo/shared';
+} from '@/types';
 import { sub } from 'date-fns';
 import {
     FindManyOptions,

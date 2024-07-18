@@ -20,6 +20,7 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "noImplicitReturns": true,
+        "isolatedModules": true,
         "paths": {
             "@/*": ["./src/*"]
         }

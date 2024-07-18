@@ -1,4 +1,4 @@
-import { ITokens } from '@repo/shared';
+import { ITokens } from '@/types';
 
 export class TokensDto implements ITokens {
     accessToken: string;

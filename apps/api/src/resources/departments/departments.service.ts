@@ -1,7 +1,7 @@
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { maxDate, minDate, ResourceType } from '@repo/shared';
+import { maxDate, minDate, ResourceType } from '@/types';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';

@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType } from '@/types';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { UsersCompanyService } from '../users/users-company.service';

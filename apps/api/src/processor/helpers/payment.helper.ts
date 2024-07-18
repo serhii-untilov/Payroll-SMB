@@ -1,8 +1,8 @@
 import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
 import { PaymentPosition } from '@/resources/payment-positions/entities/paymentPosition.entity';
-import { monthBegin } from '@repo/shared';
+import { monthBegin } from '@/types';
 import { add } from 'date-fns';
-import { getWorkDayBeforeOrEqual } from './workingTime.helper';
+import { getWorkDayBeforeOrEqual } from './working-time.helper';
 
 export function getAdvancePaymentDate(payPeriod: PayPeriod): Date {
     return getWorkDayBeforeOrEqual(add(monthBegin(payPeriod.dateFrom), { days: 14 }));

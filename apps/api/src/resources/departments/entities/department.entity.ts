@@ -8,7 +8,7 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Logger } from './../../../resources/abstract/logger.abstract';
+import { Logger } from './../../abstract/logger.abstract';
 import { Company } from './../../../resources/companies/entities/company.entity';
 
 @Entity()

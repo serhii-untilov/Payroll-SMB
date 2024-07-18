@@ -1,7 +1,7 @@
 import { PayFundCalculationService } from '@/processor/payFundCalculation/payFundCalculation.service';
-import { PayrollCalculationService } from '@/processor/payrollCalculation/payrollCalculation.service';
-import { SseService } from '@/processor/serverSentEvents/sse.service';
-import { TaskGenerationService } from '@/processor/taskGeneration/taskGeneration.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payrollCalculation.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/taskGeneration.service';
 import { PersonEvent } from '@/resources/persons/events/abstract/PersonEvent';
 import { PersonCreatedEvent } from '@/resources/persons/events/person-created.event';
 import { PersonDeletedEvent } from '@/resources/persons/events/person-deleted.event';
@@ -9,11 +9,11 @@ import { PersonUpdatedEvent } from '@/resources/persons/events/person-updated.ev
 import { PositionsService } from '@/resources/positions/positions.service';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@repo/shared';
+import { ServerEvent } from '@/types';
 
 @Injectable()
 export class PersonListenerService {
-    private _logger: Logger = new Logger(PayrollCalculationService.name);
+    private _logger: Logger = new Logger(PersonListenerService.name);
 
     constructor(
         @Inject(forwardRef(() => PositionsService))
@@ -72,7 +72,8 @@ export class PersonListenerService {
                 );
                 await this.taskListService.generate(event.userId, companyId);
                 this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FINISHED });
-            } catch (_e) {
+            } catch (e) {
+                this._logger.fatal(`companyId ${companyId} ${ServerEvent.PAYROLL_FAILED} ${e}`);
                 this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FAILED });
             }
         }

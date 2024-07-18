@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@/types';
 import { Repository } from 'typeorm';
 import { AccessService } from '@/resources/access/access.service';
 import { CreatePaymentDeductionDto } from '../dto/create-paymentDeduction.dto';

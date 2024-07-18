@@ -1,6 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { PayFundCategory } from '@/types';
+import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PayFundType } from './../../../resources/pay-fund-types/entities/pay-fund-type.entity';
 import { Position } from './../../../resources/positions/entities/position.entity';
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class PayFund {
@@ -26,7 +28,8 @@ export class PayFund {
     payFundTypeId: number;
 
     @Column({ type: 'varchar', length: 30 })
-    payFundCategory: string; // See enum PayFundCategory
+    @ApiProperty({ enum: PayFundCategory })
+    payFundCategory: PayFundCategory;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     incomeSum: number;

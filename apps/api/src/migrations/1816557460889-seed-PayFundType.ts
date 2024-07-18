@@ -1,8 +1,8 @@
-import { PayFundCalcMethod, PayFundGroup } from '@repo/shared';
+import { PayFundCalcMethod, PayFundGroup } from '@/types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { PayFundType } from './../resources/pay-fund-types/entities/pay-fund-type.entity';
-import { getSystemUserId } from './../utils/getSystemUserId';
-import { langPipe } from './../utils/langPipe';
+import { getSystemUserId } from '../utils/lib/getSystemUserId';
+import { langPipe } from '../utils/lib/langPipe';
 
 const lang = process.env.LANGUAGE || 'uk';
 const law = process.env.LAW;

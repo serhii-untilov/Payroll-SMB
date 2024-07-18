@@ -1,8 +1,8 @@
-import { ResourceType, RoleType } from '@repo/shared';
+import { ResourceType, RoleType } from '@/types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Access } from './../resources/access/entities/access.entity';
-import { getSystemUserId } from '../utils/getSystemUserId';
-import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/access';
+import { getSystemUserId } from '../utils/lib/getSystemUserId';
+import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/lib/access';
 
 // Default access rules by Role Type.
 // This table is read only for all role types. Changes for this table available only by migrations.

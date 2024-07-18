@@ -1,5 +1,5 @@
-import { AccessTokenGuard } from '@/guards/accessToken.guard';
-import { getUserId } from '@/utils/getUserId';
+import { AccessTokenGuard } from '@/guards';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,
@@ -25,7 +25,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepStringToShortDate } from '@/types';
 import { Request } from 'express';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';

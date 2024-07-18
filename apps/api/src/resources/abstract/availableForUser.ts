@@ -1,4 +1,4 @@
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType } from '@/types';
 import { AccessService } from '../access/access.service';
 
 export abstract class AvailableForUser {

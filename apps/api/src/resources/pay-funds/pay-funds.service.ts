@@ -6,7 +6,7 @@ import {
     ResourceType,
     defaultPayFundCategoriesTotal,
     defaultPayFundGroupsTotal,
-} from '@repo/shared';
+} from '@/types';
 import { Between, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';

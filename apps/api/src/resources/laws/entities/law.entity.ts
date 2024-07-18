@@ -1,4 +1,5 @@
-import { LawType } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
+import { LawType } from '@/types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -14,5 +15,6 @@ export class Law {
         length: 15,
         default: LawType.UKRAINE,
     })
+    @ApiProperty({ enum: LawType })
     type: string;
 }
