@@ -53,7 +53,6 @@ function makePayroll(
     plan: WorkingTime,
     fact: WorkingTime,
 ): Payroll {
-    ctx.logger.log(`!!! 1`);
     const payroll = Object.assign({
         id: ctx.getNextPayrollId(),
         positionId: ctx.position.id,
@@ -74,7 +73,6 @@ function makePayroll(
         planHoursByDay: plan.hoursByDay,
         factHoursByDay: fact.hoursByDay,
     });
-    ctx.logger.log(`!!! 2`);
     return payroll;
 }
 

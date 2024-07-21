@@ -232,13 +232,14 @@ export class PayFundCalculationService {
         accPeriod: PayPeriod,
         payFundType: PayFundType,
         current: PayFund[],
-    ): PayFundCalc {
+    ): PayFundCalc | null {
         if (payFundType.calcMethod === PayFundCalcMethod.EcbSalary) {
             return new EcbSalary(this, accPeriod, payFundType, current);
         } else if (payFundType.calcMethod === PayFundCalcMethod.EcbMinWage) {
             return new EcbMinWage(this, accPeriod, payFundType, current);
         }
-        throw new Error(`Bad PayFund calc method ${payFundType.calcMethod}.`);
+        // throw new Error(`Bad PayFund calc method ${payFundType.calcMethod}.`);
+        return null;
     }
 
     private async _calculatePosition() {
@@ -288,7 +289,9 @@ export class PayFundCalculationService {
     }
 
     private async save(toInsert: PayFund[], toDeleteIds: number[]) {
-        await this.payFundsService.delete(toDeleteIds);
+        if (toDeleteIds.length) {
+            await this.payFundsService.delete(toDeleteIds);
+        }
         for (const record of toInsert) {
             const { id: _, ...payload } = record;
             await this.payFundsService.create(this.userId, payload);
