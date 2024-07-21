@@ -72,6 +72,26 @@ export class PositionHistoryController {
         return await this.service.findAll(deepStringToShortDate(params));
     }
 
+    @Post('find/last')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: PositionHistory })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    async findLast(
+        @Req() req: Request,
+        @Body() params: FindAllPositionHistoryDto,
+    ): Promise<PositionHistory | null> {
+        const userId = getUserId(req);
+        const companyId = await this.service.getPositionCompanyId(params.positionId);
+        await this.service.availableFindAllOrFail(userId, companyId);
+        const response = await this.service.findAll({
+            ...deepStringToShortDate(params),
+            last: true,
+        });
+        return response.length ? response[0] : null;
+    }
+
     @Post('find/:id')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found record', type: PositionHistory })
@@ -121,25 +141,5 @@ export class PositionHistoryController {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
-    }
-
-    @Post('find/last')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    @ApiOkResponse({ description: 'The found record', type: PositionHistory })
-    @ApiNotFoundResponse({ description: 'Record not found' })
-    @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findLast(
-        @Req() req: Request,
-        @Body() params: FindAllPositionHistoryDto,
-    ): Promise<PositionHistory | null> {
-        const userId = getUserId(req);
-        const companyId = await this.service.getPositionCompanyId(params.positionId);
-        await this.service.availableFindAllOrFail(userId, companyId);
-        const response = await this.service.findAll({
-            ...deepStringToShortDate(params),
-            last: true,
-        });
-        return response.length ? response[0] : null;
     }
 }

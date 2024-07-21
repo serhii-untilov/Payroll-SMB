@@ -1945,60 +1945,6 @@ export interface FindAllPositionDto {
 export interface FindAllPositionHistoryDto {
     /**
      * 
-     * @type {number}
-     * @memberof FindAllPositionHistoryDto
-     */
-    'positionId'?: number;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindAllPositionHistoryDto
-     */
-    'dateFrom'?: Date;
-    /**
-     * 
-     * @type {Date}
-     * @memberof FindAllPositionHistoryDto
-     */
-    'dateTo'?: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindAllPositionHistoryDto
-     */
-    'departmentId'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindAllPositionHistoryDto
-     */
-    'jobId'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindAllPositionHistoryDto
-     */
-    'workNormId'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindAllPositionHistoryDto
-     */
-    'paymentTypeId'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindAllPositionHistoryDto
-     */
-    'wage'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof FindAllPositionHistoryDto
-     */
-    'rate'?: number;
-    /**
-     * 
      * @type {Date}
      * @memberof FindAllPositionHistoryDto
      */
@@ -2021,6 +1967,12 @@ export interface FindAllPositionHistoryDto {
      * @memberof FindAllPositionHistoryDto
      */
     'relations'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof FindAllPositionHistoryDto
+     */
+    'positionId': number;
 }
 /**
  * 

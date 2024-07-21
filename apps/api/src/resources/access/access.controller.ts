@@ -1,5 +1,3 @@
-import { AccessTokenGuard } from './../../guards';
-import { getUserId } from './../../utils';
 import {
     Body,
     Controller,
@@ -22,6 +20,8 @@ import {
     getSchemaPath,
 } from '@nestjs/swagger';
 import { Request } from 'express';
+import { AccessTokenGuard } from './../../guards';
+import { getUserId } from './../../utils';
 import { AccessService } from './access.service';
 import {
     AvailableAccessDto,

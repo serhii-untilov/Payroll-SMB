@@ -4,6 +4,8 @@ import { repositoryMockFactory } from 'test';
 import { AccessController } from './access.controller';
 import { AccessService } from './access.service';
 import { Access } from './entities/access.entity';
+import { User } from '../users/entities/user.entity';
+import { UserCompany } from '../user-companies/entities/user-company.entity';
 
 describe('AccessController', () => {
     let controller: AccessController;
@@ -15,6 +17,8 @@ describe('AccessController', () => {
             providers: [
                 AccessService,
                 { provide: getRepositoryToken(Access), useFactory: repositoryMockFactory },
+                { provide: getRepositoryToken(User), useFactory: repositoryMockFactory },
+                { provide: getRepositoryToken(UserCompany), useFactory: repositoryMockFactory },
             ],
         }).compile();
 

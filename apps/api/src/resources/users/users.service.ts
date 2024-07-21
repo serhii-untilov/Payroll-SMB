@@ -57,7 +57,7 @@ export class UsersService {
             this.resourceType,
             AccessType.Create,
         );
-        const currentRoleType = await this.getUserRoleTypeOrFail(userId);
+        const currentRoleType = await this.getUserRoleType(userId);
         const newRoleType = await this.rolesService.getRoleType(payload.roleId);
         if (!this.accessService.canOperateRoleType(currentRoleType, newRoleType)) {
             throw new ForbiddenException(`User doesn't have access to the requested operation.`);
@@ -99,7 +99,7 @@ export class UsersService {
             );
         }
         if (payload?.roleId) {
-            const userRoleType = await this.getUserRoleTypeOrFail(userId);
+            const userRoleType = await this.getUserRoleType(userId);
             const updateRoleType = await this.rolesService.getRoleType(payload.roleId);
             if (userId !== id || userRoleType != updateRoleType) {
                 if (!this.accessService.canOperateRoleType(userRoleType, updateRoleType)) {
@@ -124,7 +124,7 @@ export class UsersService {
             AccessType.Delete,
         );
         const user = await this.repository.findOneOrFail({ where: { id } });
-        const userRoleType = await this.getUserRoleTypeOrFail(userId);
+        const userRoleType = await this.getUserRoleType(userId);
         const deleteRoleType = await this.rolesService.getRoleType(user.roleId);
         if (userId !== id && !this.accessService.canOperateRoleType(userRoleType, deleteRoleType)) {
             throw new ForbiddenException(`User doesn't have access to the requested operation.`);
@@ -150,14 +150,6 @@ export class UsersService {
             throw new NotFoundException('User role type not found.');
         }
         return user.role.type;
-    }
-
-    async getUserRoleTypeOrFail(id: number): Promise<RoleType> {
-        const roleType = await this.getUserRoleType(id);
-        if (!roleType) {
-            throw new ForbiddenException(`User doesn't have access to the requested resource.`);
-        }
-        return roleType;
     }
 
     async getSystemUserId(): Promise<number> {

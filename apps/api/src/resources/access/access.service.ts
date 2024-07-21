@@ -7,6 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserCompany } from '../user-companies/entities/user-company.entity';
+import { User } from '../users/entities/user.entity';
 import {
     AvailableAccessDto,
     AvailableAccessUserCompanyDto,
@@ -23,6 +25,10 @@ export class AccessService {
     constructor(
         @InjectRepository(Access)
         private repository: Repository<Access>,
+        @InjectRepository(UserCompany)
+        private userCompanyRepository: Repository<UserCompany>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
     ) {}
 
     async create(userId: number, data: CreateAccessDto): Promise<Access> {
@@ -95,23 +101,18 @@ export class AccessService {
         }
     }
 
-    async getUserRoleType(userId: number): Promise<RoleType> {
-        try {
-            const result: { type: RoleType }[] = await this.repository.query(
-                `select r.type"
-                from user
-                inner join "role" r on r.id = user."roleId"
-                where user."id" = $1`,
-                [userId],
-            );
-            return result[0].type;
-        } catch (e) {
-            throw new NotFoundException(`User role not found. ${e}`);
+    async getUserRoleType(id: number): Promise<RoleType> {
+        const user = await this.userRepository.findOneOrFail({
+            where: { id },
+            relations: { role: true },
+        });
+        if (!user?.role?.type) {
+            throw new NotFoundException('User role type not found.');
         }
+        return user.role.type;
     }
 
     async availableForUser(params: AvailableAccessUserDto): Promise<boolean> {
-        // const roleType = await this.usersService.getUserRoleTypeOrFail(params.userId);
         const roleType = await this.getUserRoleType(params.userId);
         return this.available({
             roleType,
@@ -130,19 +131,15 @@ export class AccessService {
         }
     }
 
-    async getUserCompanyRoleType(userId: number, companyId: number): Promise<RoleType | null> {
-        try {
-            const result: { type: RoleType }[] = await this.repository.query(
-                `select r.type"
-                from user_company uc
-                inner join "role" r on r.id = uc."roleId"
-                where uc."userId" = $1 and uc."companyId" = $2`,
-                [userId, companyId],
-            );
-            return result[0].type;
-        } catch (_e) {
-            return null;
+    async getUserCompanyRoleType(userId: number, companyId: number): Promise<RoleType> {
+        const record = await this.userCompanyRepository.findOneOrFail({
+            where: { userId, companyId },
+            relations: { role: true },
+        });
+        if (!record.role?.type) {
+            throw new NotFoundException('User role type not found.');
         }
+        return record.role.type;
     }
 
     async availableForUserCompany(params: AvailableAccessUserCompanyDto): Promise<boolean> {

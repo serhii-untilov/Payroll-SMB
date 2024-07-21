@@ -263,11 +263,11 @@ function getPath(
         case TaskType.PostAdvancePayment:
             return task.status === TaskStatus.Todo
                 ? '/payments?tab=pay&return=true'
-                : '/payments?tab=payed&return=true';
+                : '/payments?tab=paid&return=true';
         case TaskType.PostRegularPayment:
             return task.status === TaskStatus.Todo
                 ? '/payments?tab=pay&return=true'
-                : '/payments?tab=payed&return=true';
+                : '/payments?tab=paid&return=true';
         case TaskType.ClosePayPeriod:
             return companyId ? `/company/${companyId || ''}?tab=periods&return=true` : '#';
         case TaskType.SendIncomeTaxReport:

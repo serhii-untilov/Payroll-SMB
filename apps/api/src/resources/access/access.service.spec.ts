@@ -4,6 +4,8 @@ import { MockType, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
 import { AccessService } from './access.service';
 import { Access } from './entities/access.entity';
+import { User } from '../users/entities/user.entity';
+import { UserCompany } from '../user-companies/entities/user-company.entity';
 
 describe('AccessService', () => {
     let service: AccessService;
@@ -14,6 +16,8 @@ describe('AccessService', () => {
             providers: [
                 AccessService,
                 { provide: getRepositoryToken(Access), useFactory: repositoryMockFactory },
+                { provide: getRepositoryToken(User), useFactory: repositoryMockFactory },
+                { provide: getRepositoryToken(UserCompany), useFactory: repositoryMockFactory },
             ],
         }).compile();
 
