@@ -8,7 +8,7 @@ import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { Box, Grid } from '@mui/material';
-import { PaymentStatus } from '@repo/shared';
+import { PaymentStatus } from '@repo/openapi';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
@@ -65,7 +65,7 @@ export default function Payments() {
                             <PaymentList
                                 companyId={company?.id}
                                 payPeriod={payPeriod || new Date()}
-                                status={PaymentStatus.DRAFT}
+                                status={PaymentStatus.Draft}
                                 companyPayments={true}
                                 sifPayments={true}
                             />
@@ -76,7 +76,7 @@ export default function Payments() {
                             <PaymentList
                                 companyId={company?.id}
                                 payPeriod={payPeriod || new Date()}
-                                status={PaymentStatus.PAYED}
+                                status={PaymentStatus.Paid}
                                 companyPayments={true}
                                 sifPayments={true}
                             />

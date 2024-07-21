@@ -1,12 +1,10 @@
+import { CalcMethod, ResourceType, WrapperType } from '@/types';
 import {
-    CalcMethod,
     PaymentGroupsTotal,
     PaymentPartsTotal,
-    ResourceType,
-    WrapperType,
     defaultPaymentGroupsTotal,
     defaultPaymentPartsTotal,
-} from '@/types';
+} from '@repo/shared';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

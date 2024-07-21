@@ -1,8 +1,9 @@
-import { PaymentGroup, CalcMethod, PaymentPart } from '../types';
+import { PaymentGroup, PaymentPart } from '@repo/shared';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { PaymentType } from './../resources/payment-types/entities/payment-type.entity';
+import { CalcMethod } from '../types';
 import { getSystemUserId } from '../utils/lib/getSystemUserId';
 import { langPipe } from '../utils/lib/langPipe';
+import { PaymentType } from './../resources/payment-types/entities/payment-type.entity';
 
 const lang = process.env.LANGUAGE || 'uk';
 const law = process.env.LAW;

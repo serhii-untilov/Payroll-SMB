@@ -15,7 +15,7 @@ import {
 import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { green, grey, orange, red } from '@mui/material/colors';
 import { Task as ITask } from '@repo/openapi';
-import { ResourceType, TaskStatus, TaskType } from '@repo/shared';
+import { ResourceType, TaskStatus, TaskType } from '@repo/openapi';
 import { useQueryClient } from '@tanstack/react-query';
 import { add, differenceInYears } from 'date-fns';
 import { useMemo, useState } from 'react';
@@ -58,7 +58,7 @@ export function Task(props: Props) {
 
     const description = useMemo(() => {
         switch (task.type) {
-            case TaskType.HAPPY_BIRTHDAY: {
+            case TaskType.HappyBirthday: {
                 const age = person?.birthday
                     ? differenceInYears(add(task.dateTo, { days: 1 }), person?.birthday)
                     : 0;
@@ -70,7 +70,7 @@ export function Task(props: Props) {
     }, [person, task, t]);
 
     const onClickTask = () => {
-        if (task.status === TaskStatus.NOT_AVAILABLE) {
+        if (task.status === TaskStatus.NotAvailable) {
             return;
         }
         const path = getPath(task, company?.id, position);
@@ -80,13 +80,13 @@ export function Task(props: Props) {
     };
 
     const onClickStatus = async () => {
-        if (task.status === TaskStatus.NOT_AVAILABLE) {
+        if (task.status === TaskStatus.NotAvailable) {
             return;
         }
         if (canMarkAsDone(task, view)) {
-            if (task.status === TaskStatus.TODO || task.status === TaskStatus.IN_PROGRESS) {
+            if (task.status === TaskStatus.Todo || task.status === TaskStatus.InProgress) {
                 await markDone();
-            } else if (task.status === TaskStatus.DONE_BY_USER) {
+            } else if (task.status === TaskStatus.DoneByUser) {
                 await markTodo();
             }
         } else {
@@ -96,20 +96,20 @@ export function Task(props: Props) {
 
     const markDone = async () => {
         const updatedTask = await tasksUpdate(task.id, {
-            status: TaskStatus.DONE_BY_USER,
+            status: TaskStatus.DoneByUser,
             version: task.version,
         });
         setTask(updatedTask);
-        await invalidateQueries(queryClient, [ResourceType.TASK]);
+        await invalidateQueries(queryClient, [ResourceType.Task]);
     };
 
     const markTodo = async () => {
         const updatedTask = await tasksUpdate(task.id, {
-            status: TaskStatus.TODO,
+            status: TaskStatus.Todo,
             version: task.version,
         });
         setTask(updatedTask);
-        await invalidateQueries(queryClient, [ResourceType.TASK]);
+        await invalidateQueries(queryClient, [ResourceType.Task]);
     };
 
     return (
@@ -176,31 +176,31 @@ export function Task(props: Props) {
 
 function getTitleByTaskType(type: string) {
     switch (type) {
-        case TaskType.CREATE_USER:
+        case TaskType.CreateUser:
             return 'User';
-        case TaskType.CREATE_COMPANY:
+        case TaskType.CreateCompany:
             return 'Company';
-        case TaskType.FILL_DEPARTMENT_LIST:
+        case TaskType.FillDepartmentList:
             return 'Departments';
-        case TaskType.FILL_POSITION_LIST:
+        case TaskType.FillPositionList:
             return 'People';
-        case TaskType.POST_WORK_SHEET:
+        case TaskType.PostWorkSheet:
             return 'Time Sheet';
-        case TaskType.POST_ACCRUAL_DOCUMENT:
+        case TaskType.PostAccrualDocument:
             return 'Payroll';
-        case TaskType.SEND_APPLICATION_FSS:
+        case TaskType.SendApplicationFss:
             return 'Payments';
-        case TaskType.POST_PAYMENT_FSS:
+        case TaskType.PostPaymentFss:
             return 'Payments';
-        case TaskType.POST_ADVANCE_PAYMENT:
+        case TaskType.PostAdvancePayment:
             return 'Payments';
-        case TaskType.POST_REGULAR_PAYMENT:
+        case TaskType.PostRegularPayment:
             return 'Payments';
-        case TaskType.CLOSE_PAY_PERIOD:
+        case TaskType.ClosePayPeriod:
             return 'Company';
-        case TaskType.SEND_INCOME_TAX_REPORT:
+        case TaskType.SendIncomeTaxReport:
             return 'Reports';
-        case TaskType.HAPPY_BIRTHDAY:
+        case TaskType.HappyBirthday:
             return type;
         default:
             return type;
@@ -212,15 +212,15 @@ function getStatusIcon(task: ITask, view: TaskView) {
         return null;
     }
     switch (task.status) {
-        case TaskStatus.NOT_AVAILABLE:
+        case TaskStatus.NotAvailable:
             return <NotInterested />;
-        case TaskStatus.TODO:
+        case TaskStatus.Todo:
             return <CropSquare />;
-        case TaskStatus.IN_PROGRESS:
+        case TaskStatus.InProgress:
             return <LoopRounded />;
-        case TaskStatus.DONE:
+        case TaskStatus.Done:
             return <DoneRounded />;
-        case TaskStatus.DONE_BY_USER:
+        case TaskStatus.DoneByUser:
             return <FileDownloadDoneRounded />;
         default:
             null;
@@ -231,12 +231,12 @@ function getBackgroundColor(task: ITask, view: TaskView) {
     if (view === 'upcoming') {
         return grey[200];
     }
-    if (task.status === TaskStatus.NOT_AVAILABLE) return grey[50];
-    if (task.status === TaskStatus.DONE) return green[50];
-    if (task.status === TaskStatus.DONE_BY_USER) return green[50];
+    if (task.status === TaskStatus.NotAvailable) return grey[50];
+    if (task.status === TaskStatus.Done) return green[50];
+    if (task.status === TaskStatus.DoneByUser) return green[50];
     if (task.dateTo.getTime() < new Date().getTime()) return red[50];
-    if (task.status === TaskStatus.TODO) return orange[50];
-    if (task.status === TaskStatus.IN_PROGRESS) return orange[50];
+    if (task.status === TaskStatus.Todo) return orange[50];
+    if (task.status === TaskStatus.InProgress) return orange[50];
     return red[50];
 }
 
@@ -246,33 +246,33 @@ function getPath(
     position: dto.Position | null | undefined,
 ): string {
     switch (task.type) {
-        case TaskType.CREATE_COMPANY:
+        case TaskType.CreateCompany:
             return `/company/${companyId ? companyId : ''}?tab=details&return=true`;
-        case TaskType.FILL_DEPARTMENT_LIST:
+        case TaskType.FillDepartmentList:
             return companyId ? `/company/${companyId || ''}?tab=departments&return=true` : '#';
-        case TaskType.FILL_POSITION_LIST:
+        case TaskType.FillPositionList:
             return '/people?tab=positions&return=true';
-        case TaskType.POST_WORK_SHEET:
+        case TaskType.PostWorkSheet:
             return '/time-sheet?return=true';
-        case TaskType.POST_ACCRUAL_DOCUMENT:
+        case TaskType.PostAccrualDocument:
             return '/payroll?return=true';
-        case TaskType.SEND_APPLICATION_FSS:
+        case TaskType.SendApplicationFss:
             return '/payments?tab=sciPayments&return=true';
-        case TaskType.POST_PAYMENT_FSS:
+        case TaskType.PostPaymentFss:
             return '/payments?tab=sciPayments&return=true';
-        case TaskType.POST_ADVANCE_PAYMENT:
-            return task.status === TaskStatus.TODO
+        case TaskType.PostAdvancePayment:
+            return task.status === TaskStatus.Todo
                 ? '/payments?tab=pay&return=true'
                 : '/payments?tab=payed&return=true';
-        case TaskType.POST_REGULAR_PAYMENT:
-            return task.status === TaskStatus.TODO
+        case TaskType.PostRegularPayment:
+            return task.status === TaskStatus.Todo
                 ? '/payments?tab=pay&return=true'
                 : '/payments?tab=payed&return=true';
-        case TaskType.CLOSE_PAY_PERIOD:
+        case TaskType.ClosePayPeriod:
             return companyId ? `/company/${companyId || ''}?tab=periods&return=true` : '#';
-        case TaskType.SEND_INCOME_TAX_REPORT:
+        case TaskType.SendIncomeTaxReport:
             return '/reports?return=true';
-        case TaskType.HAPPY_BIRTHDAY:
+        case TaskType.HappyBirthday:
             return position?.id ? `/people/position/${position?.id}?return=true` : '#';
         default:
             return '#';
@@ -281,12 +281,12 @@ function getPath(
 
 function canMarkAsDone(task: ITask, view: TaskView) {
     if (view === 'upcoming') return false;
-    if (task.status === TaskStatus.NOT_AVAILABLE) return false;
+    if (task.status === TaskStatus.NotAvailable) return false;
     switch (task.type) {
-        case TaskType.FILL_DEPARTMENT_LIST:
-        case TaskType.POST_WORK_SHEET:
-        case TaskType.POST_ACCRUAL_DOCUMENT:
-        case TaskType.HAPPY_BIRTHDAY:
+        case TaskType.FillDepartmentList:
+        case TaskType.PostWorkSheet:
+        case TaskType.PostAccrualDocument:
+        case TaskType.HappyBirthday:
             return true;
     }
     return false;

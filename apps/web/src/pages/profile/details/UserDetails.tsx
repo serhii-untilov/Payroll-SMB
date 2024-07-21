@@ -8,7 +8,7 @@ import { usersUpdate } from '@/services/user.service';
 import { getDirtyValues, invalidateQueries, snackbarFormErrors } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
 import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
@@ -69,7 +69,7 @@ export function UserDetails() {
             const error = e as AxiosError;
             enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
         }
-        await invalidateQueries(queryClient, [ResourceType.USER]);
+        await invalidateQueries(queryClient, [ResourceType.User]);
     };
 
     const onCancel = () => {

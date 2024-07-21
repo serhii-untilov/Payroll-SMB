@@ -1,9 +1,9 @@
-import { Payroll } from './../../../../resources/payrolls/entities/payroll.entity';
+import { accPeriodFactSum } from '@/processor/helpers';
+import { CalcMethod, RecordFlags } from '@/types';
+import { getMaxDate, getMinDate, PaymentPart } from '@repo/shared';
 import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
 import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
-import { accPeriodFactSum } from '@/processor/helpers';
-import { CalcMethod, PaymentPart, RecordFlags } from '@/types';
-import { getMaxDate, getMinDate } from '@repo/shared';
+import { Payroll } from './../../../../resources/payrolls/entities/payroll.entity';
 import { PayrollCalculationService } from './../../payroll-calculation.service';
 
 export function calculateIncomeTax(ctx: PayrollCalculationService) {

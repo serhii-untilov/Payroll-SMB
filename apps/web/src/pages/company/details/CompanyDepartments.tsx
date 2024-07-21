@@ -13,7 +13,8 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { ResourceType, date2view } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
+import { date2view } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -47,14 +48,14 @@ export function CompanyDepartments(params: Props) {
     };
 
     const submitCallback = async () => {
-        await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
+        await invalidateQueries(queryClient, [ResourceType.Department]);
     };
 
     const onDeleteDepartment = async () => {
         for (const id of rowSelectionModel) {
             await departmentsRemove(+id);
         }
-        await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
+        await invalidateQueries(queryClient, [ResourceType.Department]);
     };
 
     const onTreeView = () => {

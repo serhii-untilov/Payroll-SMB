@@ -1,3 +1,4 @@
+import { Sex } from './../../../types/lib/Sex';
 import { Position } from './../../positions/entities/position.entity';
 import { Logger } from './../../abstract/logger.abstract';
 import {
@@ -10,6 +11,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { getFullName } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Person extends Logger {
@@ -34,7 +36,8 @@ export class Person extends Logger {
     taxId: string;
 
     @Column({ type: 'varchar', length: 10, default: '' })
-    sex: string;
+    @ApiProperty({ enum: Sex, enumName: 'Sex' })
+    sex: Sex;
 
     @Column({ type: 'varchar', length: 20, default: '' })
     phone: string;

@@ -12,7 +12,7 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { Company, ResourceTypeEnum, UserCompany } from '@repo/openapi';
+import { Company, ResourceType, UserCompany } from '@repo/openapi';
 import { monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -151,13 +151,13 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
                     invalidateQueries(queryClient, [
-                        ResourceTypeEnum.COMPANY,
-                        ResourceTypeEnum.DEPARTMENT,
-                        ResourceTypeEnum.PAY_PERIOD,
-                        ResourceTypeEnum.POSITION,
-                        ResourceTypeEnum.PERSON,
-                        ResourceTypeEnum.TASK,
-                        ResourceTypeEnum.PAYMENT,
+                        ResourceType.Company,
+                        ResourceType.Department,
+                        ResourceType.PayPeriod,
+                        ResourceType.Position,
+                        ResourceType.Person,
+                        ResourceType.Task,
+                        ResourceType.Payment,
                     ]);
                 }
                 setServerEvent(event.data);

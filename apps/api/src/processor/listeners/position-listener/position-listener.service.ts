@@ -10,7 +10,7 @@ import {
     PositionEventType,
     PositionUpdatedEvent,
 } from '@/resources';
-import { ServerEvent } from '@/types';
+import { ServerEvent } from '@repo/shared';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 

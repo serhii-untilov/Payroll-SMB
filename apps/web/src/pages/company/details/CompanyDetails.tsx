@@ -17,14 +17,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import {
     AccountingType,
+    CreateCompanyDto,
     LawType,
-    maxDate,
-    minDate,
-    monthBegin,
-    monthEnd,
     PaymentSchedule,
     ResourceType,
-} from '@repo/shared';
+    UpdateCompanyDto,
+} from '@repo/openapi';
+import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { format } from 'date-fns';
@@ -52,12 +51,12 @@ export function CompanyDetails(props: Props) {
     useEffect(() => {});
 
     const defaultLawId = useMemo(
-        () => lawList?.find((o) => o.type === LawType.UKRAINE)?.id ?? 0,
+        () => lawList?.find((o) => o.type === LawType.Ukraine)?.id ?? 0,
         [lawList],
     );
 
     const defaultAccountingId = useMemo(
-        () => accountingList?.find((o) => o.type === AccountingType.GENERIC)?.id ?? 0,
+        () => accountingList?.find((o) => o.type === AccountingType.Generic)?.id ?? 0,
         [accountingList],
     );
 
@@ -71,7 +70,7 @@ export function CompanyDetails(props: Props) {
             .default(defaultAccountingId),
         paymentSchedule: string()
             .required('Payment Schedule required')
-            .default(PaymentSchedule.LAST_DAY),
+            .default(PaymentSchedule.LastDay),
         dateFrom: date().default(minDate()).required(),
         dateTo: date().default(maxDate()).required(),
         payPeriod: date().required('Pay Period required').default(monthBegin(new Date())),
@@ -111,14 +110,14 @@ export function CompanyDetails(props: Props) {
             const response = company?.id
                 ? (
                       await api.companiesUpdate(company.id, {
-                          ...dirtyValues,
+                          ...(dirtyValues as UpdateCompanyDto),
                           version: company.version,
                       })
                   ).data
-                : await companiesCreate(data);
+                : await companiesCreate(data as CreateCompanyDto);
             setCompanyId(response.id);
             reset(formSchema.cast(response));
-            await invalidateQueries(queryClient, [ResourceType.COMPANY, ResourceType.PAY_PERIOD]);
+            await invalidateQueries(queryClient, [ResourceType.Company, ResourceType.PayPeriod]);
             if (!currentCompany || currentCompany.id === response.id) {
                 setCurrentCompany(response);
             }
@@ -132,7 +131,7 @@ export function CompanyDetails(props: Props) {
     const onCancel = async () => {
         setCompanyId(Number(company?.id));
         reset(formSchema.cast(company));
-        await invalidateQueries(queryClient, [ResourceType.COMPANY]);
+        await invalidateQueries(queryClient, [ResourceType.Company]);
     };
 
     return (

@@ -377,6 +377,12 @@ export interface CalcMethodBalanceDto {
 export interface Company {
     /**
      * 
+     * @type {PaymentSchedule}
+     * @memberof Company
+     */
+    'paymentSchedule': PaymentSchedule;
+    /**
+     * 
      * @type {number}
      * @memberof Company
      */
@@ -417,12 +423,6 @@ export interface Company {
      * @memberof Company
      */
     'accountingId': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Company
-     */
-    'paymentSchedule': string;
     /**
      * 
      * @type {Date}
@@ -508,6 +508,8 @@ export interface Company {
      */
     'version': number;
 }
+
+
 /**
  * 
  * @export
@@ -543,6 +545,12 @@ export interface CreateAccessDto {
 export interface CreateCompanyDto {
     /**
      * 
+     * @type {PaymentSchedule}
+     * @memberof CreateCompanyDto
+     */
+    'paymentSchedule'?: PaymentSchedule;
+    /**
+     * 
      * @type {string}
      * @memberof CreateCompanyDto
      */
@@ -565,12 +573,6 @@ export interface CreateCompanyDto {
      * @memberof CreateCompanyDto
      */
     'taxId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateCompanyDto
-     */
-    'paymentSchedule'?: string;
     /**
      * 
      * @type {Date}
@@ -596,6 +598,8 @@ export interface CreateCompanyDto {
      */
     'checkDate'?: Date;
 }
+
+
 /**
  * 
  * @export
@@ -1272,6 +1276,12 @@ export interface CreatePayrollDto {
 export interface CreatePersonDto {
     /**
      * 
+     * @type {Sex}
+     * @memberof CreatePersonDto
+     */
+    'sex'?: Sex;
+    /**
+     * 
      * @type {string}
      * @memberof CreatePersonDto
      */
@@ -1311,12 +1321,6 @@ export interface CreatePersonDto {
      * @type {string}
      * @memberof CreatePersonDto
      */
-    'sex'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePersonDto
-     */
     'phone'?: string;
     /**
      * 
@@ -1331,6 +1335,8 @@ export interface CreatePersonDto {
      */
     'photo'?: string;
 }
+
+
 /**
  * 
  * @export
@@ -1796,7 +1802,7 @@ export const FindAllPaymentDtoStatusEnum = {
     Draft: 'draft',
     Submitted: 'submitted',
     Accepted: 'accepted',
-    Payed: 'payed'
+    Paid: 'paid'
 } as const;
 
 export type FindAllPaymentDtoStatusEnum = typeof FindAllPaymentDtoStatusEnum[keyof typeof FindAllPaymentDtoStatusEnum];
@@ -3288,11 +3294,26 @@ export interface PaymentPosition {
  * @enum {string}
  */
 
+export const PaymentSchedule = {
+    Every15Day: 'every-15-day',
+    LastDay: 'last-day',
+    NextMonth: 'next-month'
+} as const;
+
+export type PaymentSchedule = typeof PaymentSchedule[keyof typeof PaymentSchedule];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
 export const PaymentStatus = {
     Draft: 'draft',
     Submitted: 'submitted',
     Accepted: 'accepted',
-    Payed: 'payed'
+    Paid: 'paid'
 } as const;
 
 export type PaymentStatus = typeof PaymentStatus[keyof typeof PaymentStatus];
@@ -3604,6 +3625,12 @@ export interface Payroll {
 export interface Person {
     /**
      * 
+     * @type {Sex}
+     * @memberof Person
+     */
+    'sex': Sex;
+    /**
+     * 
      * @type {number}
      * @memberof Person
      */
@@ -3644,12 +3671,6 @@ export interface Person {
      * @memberof Person
      */
     'taxId': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Person
-     */
-    'sex': string;
     /**
      * 
      * @type {string}
@@ -3717,6 +3738,8 @@ export interface Person {
      */
     'version': number;
 }
+
+
 /**
  * 
  * @export
@@ -4616,6 +4639,20 @@ export type RoleType = typeof RoleType[keyof typeof RoleType];
 /**
  * 
  * @export
+ * @enum {string}
+ */
+
+export const Sex = {
+    Male: 'male',
+    Female: 'female'
+} as const;
+
+export type Sex = typeof Sex[keyof typeof Sex];
+
+
+/**
+ * 
+ * @export
  * @interface Task
  */
 export interface Task {
@@ -4814,6 +4851,12 @@ export interface UpdateAccessDto {
 export interface UpdateCompanyDto {
     /**
      * 
+     * @type {PaymentSchedule}
+     * @memberof UpdateCompanyDto
+     */
+    'paymentSchedule'?: PaymentSchedule;
+    /**
+     * 
      * @type {number}
      * @memberof UpdateCompanyDto
      */
@@ -4844,12 +4887,6 @@ export interface UpdateCompanyDto {
     'taxId'?: string;
     /**
      * 
-     * @type {string}
-     * @memberof UpdateCompanyDto
-     */
-    'paymentSchedule'?: string;
-    /**
-     * 
      * @type {Date}
      * @memberof UpdateCompanyDto
      */
@@ -4873,6 +4910,8 @@ export interface UpdateCompanyDto {
      */
     'checkDate'?: Date;
 }
+
+
 /**
  * 
  * @export
@@ -5609,6 +5648,12 @@ export interface UpdatePayrollDto {
 export interface UpdatePersonDto {
     /**
      * 
+     * @type {Sex}
+     * @memberof UpdatePersonDto
+     */
+    'sex'?: Sex;
+    /**
+     * 
      * @type {number}
      * @memberof UpdatePersonDto
      */
@@ -5654,12 +5699,6 @@ export interface UpdatePersonDto {
      * @type {string}
      * @memberof UpdatePersonDto
      */
-    'sex'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePersonDto
-     */
     'phone'?: string;
     /**
      * 
@@ -5674,6 +5713,8 @@ export interface UpdatePersonDto {
      */
     'photo'?: string;
 }
+
+
 /**
  * 
  * @export

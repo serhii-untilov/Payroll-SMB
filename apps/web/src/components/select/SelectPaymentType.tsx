@@ -2,7 +2,7 @@ import { FormAutocomplete } from '@/components/form/FormAutocomplete';
 import { paymentTypesFindAll } from '@/services/paymentType.service';
 import { snackbarError } from '@/utils';
 import { FindAllPaymentTypeDto, PaymentType } from '@repo/openapi';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
 interface Props {
@@ -29,7 +29,7 @@ export function SelectPaymentType({
     // sx,
 }: Props) {
     const { data, isError, error } = useQuery<PaymentType[], Error>({
-        queryKey: [ResourceType.PAYMENT_TYPE, { companyId, ...(filter ?? {}) }],
+        queryKey: [ResourceType.PaymentType, { companyId, ...(filter ?? {}) }],
         queryFn: async () => {
             return companyId ? (await paymentTypesFindAll(filter ?? {})) ?? [] : [];
         },

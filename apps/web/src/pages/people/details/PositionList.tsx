@@ -14,7 +14,8 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { FindAllPositionDto, Position } from '@repo/openapi';
-import { ResourceType, date2view, maxDate } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
+import { date2view, maxDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -159,7 +160,7 @@ export function PositionList(props: FindAllPositionDto) {
     ];
 
     const { data, isError, isLoading, error } = useQuery<Position[], Error>({
-        queryKey: [ResourceType.POSITION, props],
+        queryKey: [ResourceType.Position, props],
         queryFn: async () => {
             return await positionsFindAll(props);
         },
@@ -188,7 +189,7 @@ export function PositionList(props: FindAllPositionDto) {
         for (const id of rowSelectionModel) {
             await positionsRemove(+id);
         }
-        await invalidateQueries(queryClient, [ResourceType.POSITION]);
+        await invalidateQueries(queryClient, [ResourceType.Position]);
     };
 
     const onPrint = () => {

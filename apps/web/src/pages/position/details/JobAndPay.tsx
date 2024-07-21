@@ -28,6 +28,7 @@ import {
     CreatePositionHistoryDto,
     Position,
     PositionHistory,
+    ResourceType,
 } from '@repo/openapi';
 import {
     formatDate,
@@ -36,7 +37,6 @@ import {
     minDate,
     monthBegin,
     PaymentGroup,
-    ResourceType,
 } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -66,7 +66,7 @@ export function JobAndPay(props: Props) {
         error: positionError,
         isLoading: isPositionLoading,
     } = useQuery<Position, Error>({
-        queryKey: [ResourceType.POSITION, { positionId, relations: true }],
+        queryKey: [ResourceType.Position, { positionId, relations: true }],
         queryFn: async () => await positionsFindOne(positionId, { relations: true }),
         enabled: !!positionId,
     });
@@ -86,7 +86,7 @@ export function JobAndPay(props: Props) {
         error: positionHistoryError,
         isLoading: isPositionHistoryLoading,
     } = useQuery<PositionHistory, Error>({
-        queryKey: [ResourceType.POSITION_HISTORY, findPositionHistoryParams],
+        queryKey: [ResourceType.PositionHistory, findPositionHistoryParams],
         queryFn: async () => {
             return await positionHistoryFindLast(findPositionHistoryParams);
         },
@@ -237,8 +237,8 @@ export function JobAndPay(props: Props) {
                 reset(formSchema.cast(position_formData(pos, history)));
             }
             await invalidateQueries(queryClient, [
-                ResourceType.POSITION,
-                ResourceType.POSITION_HISTORY,
+                ResourceType.Position,
+                ResourceType.PositionHistory,
             ]);
             onSubmitCallback(pos?.id);
         } catch (e: unknown) {
@@ -249,10 +249,7 @@ export function JobAndPay(props: Props) {
 
     const onCancel = async () => {
         reset(formData);
-        await invalidateQueries(queryClient, [
-            ResourceType.POSITION,
-            ResourceType.POSITION_HISTORY,
-        ]);
+        await invalidateQueries(queryClient, [ResourceType.Position, ResourceType.PositionHistory]);
     };
 
     return (
@@ -324,7 +321,7 @@ export function JobAndPay(props: Props) {
                                     name="paymentTypeId"
                                     id="paymentTypeId"
                                     label={t('Payment Form')}
-                                    filter={{ groups: [PaymentGroup.BASIC] }}
+                                    filter={{ groups: [PaymentGroup.Basic] }}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>

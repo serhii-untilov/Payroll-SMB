@@ -18,7 +18,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import { grey } from '@mui/material/colors';
-import { ICreateUser } from '@repo/shared';
+import { CreateUserDto } from '@repo/openapi';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -79,7 +79,7 @@ export default function SignUp() {
         event.preventDefault();
     };
 
-    const onSubmit: SubmitHandler<ICreateUser> = async (data) => {
+    const onSubmit: SubmitHandler<CreateUserDto> = async (data) => {
         console.log(data);
         if (data.email) {
             try {

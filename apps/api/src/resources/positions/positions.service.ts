@@ -1,9 +1,9 @@
-import { BalanceWorkingTime, PaymentPart, ResourceType, WrapperType } from '@/types';
+import { BalanceWorkingTime, ResourceType, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MAX_SEQUENCE_NUMBER, maxDate } from '@repo/shared';
+import { MAX_SEQUENCE_NUMBER, maxDate, PaymentPart } from '@repo/shared';
 import { sub } from 'date-fns';
 import {
     FindManyOptions,

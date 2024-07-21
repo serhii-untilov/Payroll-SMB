@@ -11,7 +11,8 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { FindAllPaymentDto, Payment } from '@repo/openapi';
-import { CalcMethod, PaymentStatus, ResourceType, date2view, dateUTC } from '@repo/shared';
+import { CalcMethod, PaymentStatus, ResourceType } from '@repo/openapi';
+import { date2view, dateUTC } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -123,14 +124,14 @@ export function PaymentList(props: Props) {
     }, [companyId, payPeriod, status]);
 
     const { data, isError, error } = useQuery<Payment[], Error>({
-        queryKey: [ResourceType.PAYMENT, queryKey],
+        queryKey: [ResourceType.Payment, queryKey],
         queryFn: async () => {
             const response = companyId && payPeriod ? (await paymentsFindAll(queryKey)) ?? [] : [];
             return response.filter(
                 (o) =>
                     (props.companyPayments &&
-                        o.paymentType?.calcMethod !== CalcMethod.SIF_PAYMENT) ||
-                    (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SIF_PAYMENT),
+                        o.paymentType?.calcMethod !== CalcMethod.SifPayment) ||
+                    (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SifPayment),
             );
         },
         enabled: !!queryKey,
@@ -149,11 +150,11 @@ export function PaymentList(props: Props) {
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
             const payment = data?.find((o) => o.id === Number(id));
-            if (payment?.status === PaymentStatus.DRAFT) {
+            if (payment?.status === PaymentStatus.Draft) {
                 await paymentsRemove(+id);
             }
         }
-        await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
+        await invalidateQueries(queryClient, [ResourceType.Payment]);
     };
 
     const onPrint = () => {
@@ -167,13 +168,13 @@ export function PaymentList(props: Props) {
     const getRowStatus = (params: any): string => {
         return params.row?.deletedDate
             ? 'Deleted'
-            : params.row?.status === PaymentStatus.PAYED
+            : params.row?.status === PaymentStatus.Paid
               ? 'Normal'
               : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
                 ? 'Overdue'
-                : params.row?.status === PaymentStatus.SUBMITTED
+                : params.row?.status === PaymentStatus.Submitted
                   ? 'Todo'
-                  : params.row?.status === PaymentStatus.ACCEPTED
+                  : params.row?.status === PaymentStatus.Accepted
                     ? 'Overdue'
                     : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
                       ? 'Todo'

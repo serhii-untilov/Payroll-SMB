@@ -10,8 +10,8 @@ import { getDirtyValues, invalidateQueries, snackbarError, snackbarFormErrors } 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
-import { Person } from '@repo/openapi';
-import { ResourceType } from '@repo/shared';
+import { Person, UpdatePersonDto } from '@repo/openapi';
+import { ResourceType } from '@repo/openapi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect } from 'react';
@@ -52,7 +52,7 @@ export function Personal({ personId }: Props) {
         error,
         isLoading,
     } = useQuery<Person, Error>({
-        queryKey: [ResourceType.PERSON, { personId }],
+        queryKey: [ResourceType.Person, { personId }],
         queryFn: async () => {
             return await personsFindOne(personId);
         },
@@ -88,12 +88,12 @@ export function Personal({ personId }: Props) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             await personsUpdate(data.id, {
-                ...dirtyValues,
+                ...(dirtyValues as UpdatePersonDto),
                 version: person.version,
             });
             const updated = await personsFindOne(personId);
             reset(updated as FormType);
-            await invalidateQueries(queryClient, [ResourceType.PERSON]);
+            await invalidateQueries(queryClient, [ResourceType.Person]);
         } catch (e: unknown) {
             const error = e as AxiosError;
             snackbarError(`${error.code}\n${error.message}`);
@@ -102,7 +102,7 @@ export function Personal({ personId }: Props) {
 
     const onCancel = async () => {
         reset(person);
-        await invalidateQueries(queryClient, [ResourceType.PERSON]);
+        await invalidateQueries(queryClient, [ResourceType.Person]);
     };
 
     return (

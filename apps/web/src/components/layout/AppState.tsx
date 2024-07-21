@@ -22,7 +22,7 @@ export function AppState() {
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Tooltip placement="bottom" title={t(event ?? ServerEvent.PAYROLL_FINISHED)}>
+            <Tooltip placement="bottom" title={t(event ?? ServerEvent.PayrollFinished)}>
                 {!event || event.includes('finished') ? (
                     <IconButton
                         size="small"

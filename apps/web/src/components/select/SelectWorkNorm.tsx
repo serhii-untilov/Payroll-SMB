@@ -2,7 +2,7 @@ import { FormAutocomplete } from '@/components/form/FormAutocomplete';
 import { workNormsFindAll } from '@/services/workNorm.service';
 import { snackbarError } from '@/utils';
 import { WorkNorm } from '@repo/openapi';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 
 export function SelectWorkNorm({ companyId, control, label, id, name }: Props) {
     const { data, isError, error, isLoading } = useQuery<WorkNorm[], Error>({
-        queryKey: [ResourceType.WORK_NORM],
+        queryKey: [ResourceType.WorkNorm],
         queryFn: async () => {
             return companyId ? await workNormsFindAll() : [];
         },

@@ -16,9 +16,9 @@ import {
     PayrollsService,
     PositionsService,
 } from '@/resources';
-import { CalcMethod, PaymentGroup, PaymentStatus } from '@/types';
+import { CalcMethod, PaymentStatus } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
-import { dateUTC } from '@repo/shared';
+import { dateUTC, PaymentGroup } from '@repo/shared';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { CalcAdvance, CalcFastPayment, CalcPayment, CalcRegularPayment } from './calc-methods';
 

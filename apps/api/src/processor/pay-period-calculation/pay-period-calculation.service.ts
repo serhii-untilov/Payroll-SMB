@@ -10,7 +10,8 @@ import {
     PositionsService,
     UsersService,
 } from '@/resources';
-import { PaymentPart, PaymentSchedule } from '@/types';
+import { PaymentSchedule } from '@/types';
+import { PaymentPart } from '@repo/shared';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dropTime } from '@repo/shared';
 import { addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';

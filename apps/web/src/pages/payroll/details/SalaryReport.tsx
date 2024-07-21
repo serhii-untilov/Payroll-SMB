@@ -4,6 +4,7 @@ import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
 import { positionsFindBalance } from '@/services/position.service';
 import { sumFormatter } from '@/utils';
+import { getUnitByCalcMethod } from '@/utils/getUnitByCalcMethod';
 import { Box, Typography } from '@mui/material';
 import {
     GridCellParams,
@@ -14,21 +15,15 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { PositionBalanceExtendedDto } from '@repo/openapi';
-import {
-    CalcMethod,
-    IFindPositionBalance,
-    ResourceType,
-    getFullName,
-    getUnitByCalcMethod,
-    maxDate,
-} from '@repo/shared';
+import { CalcMethod, FindAllPositionBalanceDto, ResourceType } from '@repo/openapi';
+import { getFullName, maxDate } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-export function SalaryReport(props: IFindPositionBalance) {
+export function SalaryReport(props: FindAllPositionBalanceDto) {
     const { companyId } = props;
     const { t } = useTranslation();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -218,10 +213,10 @@ export function SalaryReport(props: IFindPositionBalance) {
             renderCell: (params) => {
                 const accruals = params.row?.accruals || 0;
                 const incomeTax = params.row?.calcMethodBalance.find(
-                    (o) => o.calcMethod === CalcMethod.INCOME_TAX,
+                    (o) => o.calcMethod === CalcMethod.IncomeTax,
                 )?.factSum;
                 const militaryTax = params.row?.calcMethodBalance.find(
-                    (o) => o.calcMethod === CalcMethod.MILITARY_TAX,
+                    (o) => o.calcMethod === CalcMethod.MilitaryTax,
                 )?.factSum;
                 const otherDeductions = params.row?.other_deductions;
                 return (
@@ -387,7 +382,7 @@ export function SalaryReport(props: IFindPositionBalance) {
         isLoading: isPositionListLoading,
         error: positionListError,
     } = useQuery<PositionBalanceExtendedDto[], Error>({
-        queryKey: [ResourceType.POSITION, 'balanceExtended', props],
+        queryKey: [ResourceType.Position, 'balanceExtended', props],
         queryFn: async () => {
             return await positionsFindBalance(props);
         },

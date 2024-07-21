@@ -15,7 +15,8 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { dateUTC, monthBegin, ResourceType, toDate } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
+import { dateUTC, monthBegin, toDate } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { isEqual } from 'date-fns';
 import { useMemo, useState } from 'react';
@@ -73,10 +74,10 @@ export function CompanyPayPeriods(params: Props) {
 
     const invalidateQueries = async () => {
         await utils.invalidateQueries(queryClient, [
-            ResourceType.POSITION,
-            ResourceType.COMPANY,
-            ResourceType.PAY_PERIOD,
-            ResourceType.TASK,
+            ResourceType.Position,
+            ResourceType.Company,
+            ResourceType.PayPeriod,
+            ResourceType.Task,
         ]);
     };
 

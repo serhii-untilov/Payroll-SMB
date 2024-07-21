@@ -1,15 +1,14 @@
-import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
-import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
 import {
     getRegularPaymentDate,
     getTotals,
     payFundPayPeriodFactSum,
     payPeriodFactSum,
 } from '@/processor/helpers';
-import { PaymentGroup, PaymentPart } from '@/types';
-import { dateUTC } from '@repo/shared';
+import { dateUTC, PaymentGroup, PaymentPart } from '@repo/shared';
 import { PaymentCalculationService } from '../../payment-calculation.service';
 import { CalcPayment } from '../abstract/calc-payment';
+import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
+import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
 
 export class CalcRegularPayment extends CalcPayment {
     constructor(

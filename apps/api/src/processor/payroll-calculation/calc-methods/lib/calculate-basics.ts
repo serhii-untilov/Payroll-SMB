@@ -2,9 +2,9 @@ import { PositionHistory } from './../../../../resources/position-history/entiti
 import { Payroll } from './../../../../resources/payrolls/entities/payroll.entity';
 import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
 import { getWorkingTimeFact, getWorkingTimePlan } from '@/processor/helpers';
-import { CalcMethod, PaymentGroup, RecordFlags, WorkingTime } from '@/types';
+import { CalcMethod, RecordFlags, WorkingTime } from '@/types';
 import { NotFoundException } from '@nestjs/common';
-import { getMaxDate, getMinDate } from '@repo/shared';
+import { getMaxDate, getMinDate, PaymentGroup } from '@repo/shared';
 import { PayrollCalculationService } from './../../payroll-calculation.service';
 
 export function calculateBasics(ctx: PayrollCalculationService) {

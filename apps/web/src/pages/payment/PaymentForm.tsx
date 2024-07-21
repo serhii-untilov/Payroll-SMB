@@ -9,7 +9,8 @@ import { paymentsFindOne } from '@/services/payment.service';
 import { sumFormatter } from '@/utils';
 import { Box, Chip } from '@mui/material';
 import { Payment } from '@repo/openapi';
-import { PaymentStatus, ResourceType, dateUTC } from '@repo/shared';
+import { dateUTC } from '@repo/shared';
+import { PaymentStatus, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
@@ -38,7 +39,7 @@ export default function PaymentForm() {
         isError,
         error,
     } = useQuery<Partial<Payment>, Error>({
-        queryKey: [ResourceType.PAYMENT, { paymentId, relations: true }],
+        queryKey: [ResourceType.Payment, { paymentId, relations: true }],
         queryFn: async () => {
             return await paymentsFindOne(paymentId, { relations: true });
         },
@@ -61,10 +62,10 @@ export default function PaymentForm() {
     }, [payment, t]);
 
     const docColor = useMemo(() => {
-        const status = payment?.status || PaymentStatus.DRAFT;
+        const status = payment?.status || PaymentStatus.Draft;
         const docDate = dateUTC(payment?.docDate || new Date());
         const now = dateUTC(new Date());
-        return status === PaymentStatus.DRAFT && docDate.getTime() <= now.getTime()
+        return status === PaymentStatus.Draft && docDate.getTime() <= now.getTime()
             ? 'warning'
             : 'primary';
     }, [payment]);

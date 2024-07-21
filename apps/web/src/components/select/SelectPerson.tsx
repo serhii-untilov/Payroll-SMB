@@ -14,8 +14,8 @@ import {
     TextField,
     createFilterOptions,
 } from '@mui/material';
-import { Person } from '@repo/openapi';
-import { ResourceType } from '@repo/shared';
+import { Person, Sex } from '@repo/openapi';
+import { ResourceType } from '@repo/openapi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
@@ -57,7 +57,7 @@ export const SelectPerson = (props: Props) => {
     };
 
     const { data, isError, error } = useQuery<Person[], Error>({
-        queryKey: [ResourceType.PERSON],
+        queryKey: [ResourceType.Person],
         queryFn: async () => await personsFindAll(),
     });
 
@@ -184,10 +184,10 @@ export const SelectPerson = (props: Props) => {
                                             birthday: dialogValue.birthday
                                                 ? new Date(dialogValue.birthday)
                                                 : null,
-                                            sex: dialogValue.sex,
+                                            sex: dialogValue.sex as Sex,
                                         });
                                         onChange(person.id);
-                                        await invalidateQueries(queryClient, [ResourceType.PERSON]);
+                                        await invalidateQueries(queryClient, [ResourceType.Person]);
                                         handleClose();
                                     }}
                                 >

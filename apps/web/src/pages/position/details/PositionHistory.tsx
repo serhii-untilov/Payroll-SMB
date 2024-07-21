@@ -13,7 +13,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -95,7 +95,7 @@ export function PositionHistory(props: Props) {
     ];
 
     const { data, isError, isLoading, error } = useQuery<dto.PositionHistory[], Error>({
-        queryKey: [ResourceType.POSITION_HISTORY, { positionId, relations: true }],
+        queryKey: [ResourceType.PositionHistory, { positionId, relations: true }],
         queryFn: async () => {
             return positionId ? await positionHistoryFindAll({ positionId, relations: true }) : [];
         },
@@ -122,7 +122,7 @@ export function PositionHistory(props: Props) {
     const onDelete = async () => {
         console.log('onDelete');
         // delete
-        await invalidateQueries(queryClient, [ResourceType.POSITION_HISTORY]);
+        await invalidateQueries(queryClient, [ResourceType.PositionHistory]);
     };
 
     const onPrint = () => {

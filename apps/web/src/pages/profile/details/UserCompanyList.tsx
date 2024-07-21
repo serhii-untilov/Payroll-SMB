@@ -5,10 +5,10 @@ import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
 import { companiesFindOne } from '@/services/company.service';
 import {
-    usersCompanies,
-    usersCompaniesRemove,
-    usersCompaniesRestore,
-} from '@/services/user.service';
+    userCompaniesFindAll,
+    userCompaniesRemove,
+    userCompaniesRestore,
+} from '@/services/user-companies.service';
 import { invalidateQueries, snackbarError } from '@/utils';
 import {
     GridCallbackDetails,
@@ -19,7 +19,8 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { date2view, ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
+import { date2view } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -100,10 +101,14 @@ export function UserCompanyList(params: Props) {
         isLoading,
         error: error,
     } = useQuery<dto.UserCompany[], Error>({
-        queryKey: [ResourceType.COMPANY, { userId, relations: true, showDeleted }],
+        queryKey: [ResourceType.Company, { userId, relations: true, showDeleted }],
         queryFn: async () => {
             return userId
-                ? (await usersCompanies(userId, { relations: true, deleted: showDeleted })) ?? []
+                ? (await userCompaniesFindAll({
+                      userId,
+                      relations: true,
+                      withDeleted: showDeleted,
+                  })) ?? []
                 : [];
         },
         enabled: !!userId,
@@ -131,13 +136,13 @@ export function UserCompanyList(params: Props) {
         for (const id of notDeletedSelection()) {
             const companyId = data?.find((o) => o.id === id)?.companyId;
             if (companyId !== currentCompany?.id) {
-                await usersCompaniesRemove(Number(id));
+                await userCompaniesRemove(Number(id));
             } else {
                 attemptToDeleteCurrentCompany = true;
             }
         }
         setRowSelectionModel([]);
-        await invalidateQueries(queryClient, [ResourceType.COMPANY]);
+        await invalidateQueries(queryClient, [ResourceType.Company]);
         if (attemptToDeleteCurrentCompany) {
             enqueueSnackbar(t(`Deleting the current company is not allowed.`), {
                 variant: 'error',
@@ -168,10 +173,10 @@ export function UserCompanyList(params: Props) {
 
     const onRestoreDeleted = async () => {
         for (const id of deletedSelection()) {
-            await usersCompaniesRestore(id);
+            await userCompaniesRestore(id);
         }
         setRowSelectionModel([]);
-        await invalidateQueries(queryClient, [ResourceType.COMPANY]);
+        await invalidateQueries(queryClient, [ResourceType.Company]);
     };
 
     const onPrint = () => {
@@ -184,7 +189,7 @@ export function UserCompanyList(params: Props) {
 
     const onShowDeleted = async () => {
         setShowDeleted(!showDeleted);
-        await invalidateQueries(queryClient, [ResourceType.COMPANY]);
+        await invalidateQueries(queryClient, [ResourceType.Company]);
     };
 
     const getRowStatus = (params: any): string => {

@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Accounting } from './../../accounting/entities/accounting.entity';
 import { Department } from './../../departments/entities/department.entity';
 import { Law } from './../../laws/entities/law.entity';
@@ -46,7 +47,8 @@ export class Company extends Logger {
     accountingId: number;
 
     @Column({ type: 'varchar', length: 10, default: PaymentSchedule.LastDay })
-    paymentSchedule: string;
+    @ApiProperty({ enum: PaymentSchedule, enumName: 'PaymentSchedule' })
+    paymentSchedule: PaymentSchedule;
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;

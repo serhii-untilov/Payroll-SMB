@@ -1,6 +1,7 @@
 import { dto } from '@/api';
 import { Box, Typography } from '@mui/material';
-import { TaskType, dropTime } from '@repo/shared';
+import { TaskType } from '@repo/openapi';
+import { dropTime } from '@repo/shared';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Task } from './Task';
@@ -13,18 +14,18 @@ export function Upcoming(props: Props) {
     const { t } = useTranslation();
     const typeList = useMemo(
         () => [
-            TaskType.CREATE_USER.toString(),
-            TaskType.CREATE_COMPANY.toString(),
-            TaskType.FILL_DEPARTMENT_LIST.toString(),
-            TaskType.FILL_POSITION_LIST.toString(),
-            TaskType.POST_WORK_SHEET.toString(),
-            TaskType.POST_ACCRUAL_DOCUMENT.toString(),
-            TaskType.SEND_APPLICATION_FSS.toString(),
-            TaskType.POST_PAYMENT_FSS.toString(),
-            TaskType.POST_ADVANCE_PAYMENT.toString(),
-            TaskType.POST_REGULAR_PAYMENT.toString(),
-            TaskType.CLOSE_PAY_PERIOD.toString(),
-            TaskType.SEND_INCOME_TAX_REPORT.toString(),
+            TaskType.CreateUser.toString(),
+            TaskType.CreateCompany.toString(),
+            TaskType.FillDepartmentList.toString(),
+            TaskType.FillPositionList.toString(),
+            TaskType.PostWorkSheet.toString(),
+            TaskType.PostAccrualDocument.toString(),
+            TaskType.SendApplicationFss.toString(),
+            TaskType.PostPaymentFss.toString(),
+            TaskType.PostAdvancePayment.toString(),
+            TaskType.PostRegularPayment.toString(),
+            TaskType.ClosePayPeriod.toString(),
+            TaskType.SendIncomeTaxReport.toString(),
         ],
         [],
     );

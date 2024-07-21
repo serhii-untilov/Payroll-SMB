@@ -17,7 +17,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { CreateDepartmentDto, Department } from '@repo/openapi';
-import { maxDate, minDate, ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
+import { maxDate, minDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { Dispatch, Fragment, useEffect } from 'react';
@@ -48,7 +49,7 @@ export default function DepartmentForm(params: Params) {
         isError,
         error,
     } = useQuery<Department | null, Error>({
-        queryKey: [ResourceType.DEPARTMENT, { departmentId }],
+        queryKey: [ResourceType.Department, { departmentId }],
         queryFn: async () => {
             return departmentId ? (await departmentsFindOne(departmentId)) ?? null : null;
         },
@@ -105,7 +106,7 @@ export default function DepartmentForm(params: Params) {
             if (submitCallback) submitCallback(response);
             params.setOpen(false);
             reset();
-            await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
+            await invalidateQueries(queryClient, [ResourceType.Department]);
         } catch (e: unknown) {
             const error = e as AxiosError;
             snackbarError(`${error.code}\n${error.message}`);
@@ -115,7 +116,7 @@ export default function DepartmentForm(params: Params) {
     const onCancel = async () => {
         reset();
         params.setOpen(false);
-        await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
+        await invalidateQueries(queryClient, [ResourceType.Department]);
     };
 
     return (
@@ -126,7 +127,7 @@ export default function DepartmentForm(params: Params) {
                 onClose={async () => {
                     params.setOpen(false);
                     reset();
-                    await invalidateQueries(queryClient, [ResourceType.DEPARTMENT]);
+                    await invalidateQueries(queryClient, [ResourceType.Department]);
                 }}
             >
                 <DialogTitle>{t('Department')}</DialogTitle>

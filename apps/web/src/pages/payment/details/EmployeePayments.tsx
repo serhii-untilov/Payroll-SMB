@@ -12,7 +12,8 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { PaymentPosition } from '@repo/openapi';
-import { PaymentStatus, ResourceType, dateUTC } from '@repo/shared';
+import { PaymentStatus, ResourceType } from '@repo/openapi';
+import { dateUTC } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -108,7 +109,7 @@ export function EmployeePayments(props: Props) {
     ];
 
     const { data, isError, error } = useQuery<PaymentPosition[], Error>({
-        queryKey: [ResourceType.PAYMENT, { paymentId, relations: true }],
+        queryKey: [ResourceType.Payment, { paymentId, relations: true }],
         queryFn: async () => {
             return await paymentPositionsFindAll({ paymentId, relations: true });
         },
@@ -131,7 +132,7 @@ export function EmployeePayments(props: Props) {
         for (const id of rowSelectionModel) {
             await paymentsRemove(+id);
         }
-        await invalidateQueries(queryClient, [ResourceType.PAYMENT]);
+        await invalidateQueries(queryClient, [ResourceType.Payment]);
     };
 
     const onPrint = () => {
@@ -145,13 +146,13 @@ export function EmployeePayments(props: Props) {
     const getRowStatus = (params: any): string => {
         return params.row?.deletedDate
             ? 'Deleted'
-            : params.row?.status === PaymentStatus.PAYED
+            : params.row?.status === PaymentStatus.Paid
               ? 'Normal'
               : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
                 ? 'Overdue'
-                : params.row?.status === PaymentStatus.SUBMITTED
+                : params.row?.status === PaymentStatus.Submitted
                   ? 'Todo'
-                  : params.row?.status === PaymentStatus.ACCEPTED
+                  : params.row?.status === PaymentStatus.Accepted
                     ? 'Overdue'
                     : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
                       ? 'Todo'

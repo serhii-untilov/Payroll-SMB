@@ -9,7 +9,7 @@ import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { positionsFindOne } from '@/services/position.service';
 import { invalidateQueries, snackbarError } from '@/utils';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,7 +50,7 @@ export default function Position() {
         isError: isPositionError,
         error: positionError,
     } = useQuery<dto.Position | null, Error>({
-        queryKey: [ResourceType.POSITION, { positionId, ...findPositionParams }],
+        queryKey: [ResourceType.Position, { positionId, ...findPositionParams }],
         queryFn: async () => {
             return positionId ? await positionsFindOne(positionId, findPositionParams) : null;
         },
@@ -75,7 +75,7 @@ export default function Position() {
     const onSubmitCallback = async (positionId) => {
         console.log('onDetailSubmit');
         setPositionId(positionId);
-        await invalidateQueries(queryClient, [ResourceType.POSITION]);
+        await invalidateQueries(queryClient, [ResourceType.Position]);
     };
 
     return (

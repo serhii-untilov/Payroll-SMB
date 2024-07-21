@@ -174,10 +174,10 @@ export class PaymentsService extends AvailableForUserCompany {
             where: { id },
             relations: { company: true, paymentType: true },
         });
-        if (record.status === PaymentStatus.Payed) return record;
+        if (record.status === PaymentStatus.Paid) return record;
         // TODO startTransaction(); {
         await this.paymentPositionsService.process(userId, record);
-        await this.update(userId, id, { status: PaymentStatus.Payed, version: payload.version });
+        await this.update(userId, id, { status: PaymentStatus.Paid, version: payload.version });
         // TODO }
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
