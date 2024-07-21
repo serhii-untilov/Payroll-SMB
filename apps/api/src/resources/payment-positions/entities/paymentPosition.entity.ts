@@ -35,7 +35,7 @@ export class PaymentPosition extends Logger {
     funds: number;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: RecordFlags })
+    @ApiProperty({ enum: RecordFlags, enumName: 'RecordFlags' })
     recordFlags: RecordFlags;
 
     @AfterLoad()

@@ -32,7 +32,7 @@ export class EcbMinWage extends PayFundCalc {
             payPeriod: this.ctx.payPeriod.dateFrom,
             accPeriod: this.accPeriod.dateFrom,
             payFundTypeId: this.payFundType.id,
-            payFundCategory: PayFundCategory.EMPLOYEES,
+            payFundCategory: PayFundCategory.Employees,
             incomeSum: 0,
             baseSum: 0,
             rate: 0,
@@ -50,7 +50,7 @@ export class EcbMinWage extends PayFundCalc {
 
     getPriorBaseSum(): number {
         const payFundIds = this.ctx.payFundTypes
-            .filter((o) => o.group === PayFundGroup.ECB)
+            .filter((o) => o.group === PayFundGroup.Ecb)
             .map((o) => o.id);
         return this.current
             .filter((o) => payFundIds.includes(o.payFundTypeId))

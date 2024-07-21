@@ -12,13 +12,13 @@
 // }
 
 export enum ServerEvent {
-    COMMUNICATION_ERROR = 'communication-error',
+    CommunicationError = 'communication-error',
 
-    PAYROLL_STARTED = 'payroll-started',
-    PAYROLL_FINISHED = 'payroll-finished',
-    PAYROLL_FAILED = 'payroll-failed',
+    PayrollStarted = 'payroll-started',
+    PayrollFinished = 'payroll-finished',
+    PayrollFailed = 'payroll-failed',
 
-    TASKLIST_STARTED = 'tasklist-started',
-    TASKLIST_FINISHED = 'tasklist-finished',
-    TASKLIST_FAILED = 'tasklist-failed',
+    TasklistStarted = 'tasklist-started',
+    TasklistFinished = 'tasklist-finished',
+    TasklistFailed = 'tasklist-failed',
 }

@@ -24,7 +24,7 @@ export class PayPeriodCalcMethod {
     payPeriodId: number;
 
     @Column({ type: 'varchar', length: 30 })
-    @ApiProperty({ enum: CalcMethod })
+    @ApiProperty({ enum: CalcMethod, enumName: 'CalcMethod' })
     calcMethod: CalcMethod;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })

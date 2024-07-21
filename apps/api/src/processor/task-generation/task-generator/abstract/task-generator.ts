@@ -21,7 +21,7 @@ export abstract class TaskGenerator {
             type: this.type,
             dateFrom: new Date(this.ctx.payPeriod.dateFrom),
             dateTo: getWorkDayBeforeOrEqual(this.ctx.payPeriod.dateTo),
-            status: TaskStatus.TODO,
+            status: TaskStatus.Todo,
         });
         task.sequenceNumber = this.ctx.sequenceNumber.get(task);
         return task;

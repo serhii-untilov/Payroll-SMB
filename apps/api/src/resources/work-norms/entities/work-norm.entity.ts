@@ -12,8 +12,8 @@ export class WorkNorm extends Logger {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @Column({ type: 'varchar', length: 30, default: WorkNormType.WEEKLY })
-    @ApiProperty({ enum: WorkNormType })
+    @Column({ type: 'varchar', length: 30, default: WorkNormType.Weekly })
+    @ApiProperty({ enum: WorkNormType, enumName: 'WorkNormType' })
     type: WorkNormType;
 
     @Column({ type: 'date', default: '1900-01-01' })

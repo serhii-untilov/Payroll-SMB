@@ -15,30 +15,30 @@ const recordList = [
     // access to any resource through the API.
 
     // ADMIN
-    ...generateAccess_Full(RoleType.ADMIN, ResourceType.PayFund),
-    ...generateAccess_Full(RoleType.ADMIN, ResourceType.MinWage),
-    ...generateAccess_Full(RoleType.ADMIN, ResourceType.MaxBaseUfc),
-    ...generateAccess_Full(RoleType.ADMIN, ResourceType.Task),
+    ...generateAccess_Full(RoleType.Admin, ResourceType.PayFund),
+    ...generateAccess_Full(RoleType.Admin, ResourceType.MinWage),
+    ...generateAccess_Full(RoleType.Admin, ResourceType.MaxBaseUfc),
+    ...generateAccess_Full(RoleType.Admin, ResourceType.Task),
     // EMPLOYER
-    ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.PayFund),
-    ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.MinWage),
-    ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.MaxBaseUfc),
-    ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.Task),
+    ...generateAccess_Full(RoleType.Employer, ResourceType.PayFund),
+    ...generateAccess_Full(RoleType.Employer, ResourceType.MinWage),
+    ...generateAccess_Full(RoleType.Employer, ResourceType.MaxBaseUfc),
+    ...generateAccess_Full(RoleType.Employer, ResourceType.Task),
     // OBSERVER
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.PayFund),
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.MinWage),
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.MaxBaseUfc),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.PayFund),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.MinWage),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.MaxBaseUfc),
     // ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.TASK),
 
     // EMPLOYEE
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.PayFund),
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.MinWage),
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.MaxBaseUfc),
-    ...generateAccess_Full(RoleType.OBSERVER, ResourceType.Task),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.PayFund),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.MinWage),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.MaxBaseUfc),
+    ...generateAccess_Full(RoleType.Observer, ResourceType.Task),
     // GUEST
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.PayFund),
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.MinWage),
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.MaxBaseUfc),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.PayFund),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.MinWage),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.MaxBaseUfc),
     // ...generateAccess_Full(RoleType.OBSERVER, ResourceType.TASK),
 ];
 

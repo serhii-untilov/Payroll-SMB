@@ -233,9 +233,9 @@ export class PayFundCalculationService {
         payFundType: PayFundType,
         current: PayFund[],
     ): PayFundCalc {
-        if (payFundType.calcMethod === PayFundCalcMethod.ECB_SALARY) {
+        if (payFundType.calcMethod === PayFundCalcMethod.EcbSalary) {
             return new EcbSalary(this, accPeriod, payFundType, current);
-        } else if (payFundType.calcMethod === PayFundCalcMethod.ECB_MIN_WAGE) {
+        } else if (payFundType.calcMethod === PayFundCalcMethod.EcbMinWage) {
             return new EcbMinWage(this, accPeriod, payFundType, current);
         }
         throw new Error(`Bad PayFund calc method ${payFundType.calcMethod}.`);

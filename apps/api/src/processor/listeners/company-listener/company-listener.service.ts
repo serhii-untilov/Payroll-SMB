@@ -53,19 +53,19 @@ export class CompanyListenerService {
 
     private async runBatch(userId: number, companyId: number) {
         try {
-            this._logger.log(`companyId ${companyId} ${ServerEvent.PAYROLL_STARTED}`);
-            this.sseService.event(companyId, { data: ServerEvent.PAYROLL_STARTED });
+            this._logger.log(`companyId ${companyId} ${ServerEvent.PayrollStarted}`);
+            this.sseService.event(companyId, { data: ServerEvent.PayrollStarted });
             await this.payPeriodCalculationService.fillPeriods(userId, companyId);
             await this.payrollCalculationService.calculateCompany(userId, companyId);
             await this.payFundCalculationService.calculateCompany(userId, companyId);
             await this.paymentCalculationService.calculateCompany(userId, companyId);
             await this.payrollCalculationService.calculateCompanyTotals(userId, companyId);
             await this.taskListService.generate(userId, companyId);
-            this._logger.log(`companyId ${companyId} ${ServerEvent.PAYROLL_FINISHED}`);
-            this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FINISHED });
+            this._logger.log(`companyId ${companyId} ${ServerEvent.PayrollFinished}`);
+            this.sseService.event(companyId, { data: ServerEvent.PayrollFinished });
         } catch (e) {
-            this._logger.fatal(`companyId ${companyId} ${ServerEvent.PAYROLL_FAILED} ${e}`);
-            this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FAILED });
+            this._logger.fatal(`companyId ${companyId} ${ServerEvent.PayrollFailed} ${e}`);
+            this.sseService.event(companyId, { data: ServerEvent.PayrollFailed });
         }
     }
 }

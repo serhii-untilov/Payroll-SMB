@@ -13,7 +13,7 @@ export function getPayrollUnionRecord(
             (o) =>
                 o.parentId === payroll.id &&
                 o.payPeriod.getTime() <= payPeriod.dateTo.getTime() &&
-                o.recordFlags & RecordFlags.CANCEL,
+                o.recordFlags & RecordFlags.Cancel,
         )
         .forEach((o) => {
             result.factDays += o.factDays;

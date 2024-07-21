@@ -57,9 +57,9 @@ export class PayPeriodCalculationService {
     }
 
     private getGenerator(): PeriodListGenerator {
-        if (this.company.paymentSchedule === PaymentSchedule.EVERY_15_DAY) {
+        if (this.company.paymentSchedule === PaymentSchedule.Every15day) {
             return new Every15daysPayment(this);
-        } else if (this.company.paymentSchedule === PaymentSchedule.LAST_DAY) {
+        } else if (this.company.paymentSchedule === PaymentSchedule.LastDay) {
             return new EndOfMonthPayment(this);
         } else {
             return new EndOfMonthPayment(this);
@@ -133,8 +133,8 @@ export class PayPeriodCalculationService {
         // Calculate Out Balance
         const outBalance =
             inBalance +
-            (paymentParts[PaymentPart.ACCRUALS] || 0) -
-            (paymentParts[PaymentPart.DEDUCTIONS] || 0);
+            (paymentParts[PaymentPart.Accruals] || 0) -
+            (paymentParts[PaymentPart.Deductions] || 0);
         const outCompanyDebt = await this.positionsService.calcCompanyDebt(
             payPeriod.companyId,
             payPeriod.dateFrom,

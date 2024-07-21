@@ -326,8 +326,8 @@ export class PositionsService extends AvailableForUserCompany {
             ...paymentGroups,
             outBalance:
                 inBalance +
-                (paymentParts[PaymentPart.ACCRUALS] || 0) -
-                (paymentParts[PaymentPart.DEDUCTIONS] || 0),
+                (paymentParts[PaymentPart.Accruals] || 0) -
+                (paymentParts[PaymentPart.Deductions] || 0),
         });
     }
 

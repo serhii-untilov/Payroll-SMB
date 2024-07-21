@@ -13,7 +13,7 @@ export const createMockPayPeriod = (data?: Partial<PayPeriod>) => {
         companyId: 1,
         dateFrom: minDate(),
         dateTo: maxDate(),
-        state: PayPeriodState.OPENED,
+        state: PayPeriodState.Opened,
         inBalance: 0,
         inCompanyDebt: 0,
         inEmployeeDebt: 0,

@@ -168,7 +168,7 @@ export class PayrollCalculationService {
                     o.accPeriod.getTime() === record.accPeriod.getTime() &&
                     o.dateFrom.getTime() === record.dateFrom.getTime() &&
                     o.dateTo.getTime() === record.dateTo.getTime() &&
-                    (o.recordFlags & RecordFlags.CANCEL) === 0,
+                    (o.recordFlags & RecordFlags.Cancel) === 0,
             );
             if (!found) {
                 toInsert.push(Object.assign({ ...record, id: this.getNextPayrollId() }));
@@ -191,7 +191,7 @@ export class PayrollCalculationService {
                     // skip record
                 } else {
                     if (
-                        found.recordFlags & RecordFlags.AUTO &&
+                        found.recordFlags & RecordFlags.Auto &&
                         found.payPeriod.getTime() >= this.payPeriod.dateFrom.getTime() &&
                         found.payPeriod.getTime() <= this.payPeriod.dateTo.getTime()
                     ) {
@@ -210,7 +210,7 @@ export class PayrollCalculationService {
                             payPeriod: this.payPeriod.dateFrom,
                             sourceType: null,
                             sourceId: null,
-                            recordFlags: RecordFlags.AUTO | RecordFlags.CANCEL,
+                            recordFlags: RecordFlags.Auto | RecordFlags.Cancel,
                             fixedFlags: 0,
                             parentId: found.id,
                             factSum: -foundUnionCancel.factSum,
@@ -239,13 +239,13 @@ export class PayrollCalculationService {
                 o.accPeriod.getTime() >= accPeriod.dateFrom.getTime() &&
                 o.accPeriod.getTime() <= accPeriod.dateTo.getTime() &&
                 o.payPeriod.getTime() <= this.payPeriod.dateTo.getTime() &&
-                !(o.recordFlags & RecordFlags.CANCEL) &&
+                !(o.recordFlags & RecordFlags.Cancel) &&
                 paymentTypeIds.includes(o.paymentTypeId) &&
                 !processedIds.includes(o.id),
         );
         for (const record of toCancel) {
             if (
-                record.recordFlags & RecordFlags.AUTO &&
+                record.recordFlags & RecordFlags.Auto &&
                 record.payPeriod.getTime() >= this.payPeriod.dateFrom.getTime() &&
                 record.payPeriod.getTime() <= this.payPeriod.dateTo.getTime()
             ) {
@@ -263,7 +263,7 @@ export class PayrollCalculationService {
                         payPeriod: this.payPeriod.dateFrom,
                         sourceType: null,
                         sourceId: null,
-                        recordFlags: RecordFlags.AUTO | RecordFlags.CANCEL,
+                        recordFlags: RecordFlags.Auto | RecordFlags.Cancel,
                         fixedFlags: 0,
                         parentId: record.id,
                         factSum: -recordUnionCancel.factSum,

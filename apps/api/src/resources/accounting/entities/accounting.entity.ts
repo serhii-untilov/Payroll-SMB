@@ -16,6 +16,6 @@ export class Accounting extends Logger {
         length: 15,
         default: AccountingType.Generic,
     })
-    @ApiProperty({ enum: AccountingType })
+    @ApiProperty({ enum: AccountingType, enumName: 'AccountingType' })
     type: AccountingType;
 }

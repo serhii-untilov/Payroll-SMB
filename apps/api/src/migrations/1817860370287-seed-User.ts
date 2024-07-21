@@ -13,7 +13,7 @@ const recordList = [
         lastName: { en: 'Carefree', uk: 'Безтурботна' },
         email: 'demo@payroll.smb',
         password: 'demo',
-        roleType: RoleType.EMPLOYER || 'employer',
+        roleType: RoleType.Employer || 'employer',
     },
 ];
 

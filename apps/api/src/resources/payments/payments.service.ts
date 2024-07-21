@@ -67,8 +67,8 @@ export class PaymentsService extends AvailableForUserCompany {
             docDate: payload.docDate || dateUTC(new Date()),
             dateFrom: payload.dateFrom || accPeriodRecord.dateFrom,
             dateTo: payload.dateTo || accPeriodRecord.dateTo,
-            status: payload.status || PaymentStatus.DRAFT,
-            recordFlags: payload.recordFlags || RecordFlags.AUTO,
+            status: payload.status || PaymentStatus.Draft,
+            recordFlags: payload.recordFlags || RecordFlags.Auto,
             createdUserId: userId,
             updatedUserId: userId,
         });
@@ -174,10 +174,10 @@ export class PaymentsService extends AvailableForUserCompany {
             where: { id },
             relations: { company: true, paymentType: true },
         });
-        if (record.status === PaymentStatus.PAYED) return record;
+        if (record.status === PaymentStatus.Payed) return record;
         // TODO startTransaction(); {
         await this.paymentPositionsService.process(userId, record);
-        await this.update(userId, id, { status: PaymentStatus.PAYED, version: payload.version });
+        await this.update(userId, id, { status: PaymentStatus.Payed, version: payload.version });
         // TODO }
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
@@ -189,10 +189,10 @@ export class PaymentsService extends AvailableForUserCompany {
             where: { id },
             relations: { company: true, paymentType: true },
         });
-        if (record.status === PaymentStatus.DRAFT) return record;
+        if (record.status === PaymentStatus.Draft) return record;
         // TODO startTransaction(); {
         await this.paymentPositionsService.withdraw(id);
-        await this.update(userId, id, { status: PaymentStatus.DRAFT, version: payload.version });
+        await this.update(userId, id, { status: PaymentStatus.Draft, version: payload.version });
         const updated = await this.repository.findOneOrFail({ where: { id } });
         // TODO }
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));

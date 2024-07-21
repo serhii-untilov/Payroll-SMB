@@ -11,7 +11,7 @@ import { getSystemUserId } from '../utils/lib/getSystemUserId';
 const entity = Access;
 const recordList = [
     // EMPLOYER
-    ...generateAccess_ReadOnly(RoleType.EMPLOYER, ResourceType.Demo),
+    ...generateAccess_ReadOnly(RoleType.Employer, ResourceType.Demo),
 ];
 
 export class Seed1817862424920 implements MigrationInterface {

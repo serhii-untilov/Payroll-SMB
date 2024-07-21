@@ -38,7 +38,7 @@ export function calculateBasics(ctx: PayrollCalculationService) {
             payrolls.push(payroll);
         }
         const basicIds = ctx.paymentTypes
-            .filter((o) => o.paymentGroup === PaymentGroup.BASIC)
+            .filter((o) => o.paymentGroup === PaymentGroup.Basic)
             .map((o) => o.id);
         ctx.merge(basicIds, accPeriod, payrolls);
     }
@@ -70,7 +70,7 @@ function makePayroll(
         factHours: fact.hours,
         factSum: 0,
         mask1: fact.mask,
-        recordFlags: RecordFlags.AUTO,
+        recordFlags: RecordFlags.Auto,
         planHoursByDay: plan.hoursByDay,
         factHoursByDay: fact.hoursByDay,
     });
@@ -80,11 +80,11 @@ function makePayroll(
 
 function getCalcMethod(calcMethod: string): (payroll: Payroll) => number {
     switch (calcMethod) {
-        case CalcMethod.SALARY:
+        case CalcMethod.Salary:
             return calcSalary;
-        case CalcMethod.WAGE:
+        case CalcMethod.Wage:
             return calcWage;
-        case CalcMethod.COMMISSION:
+        case CalcMethod.Commission:
             return calcCommission;
     }
     throw new NotFoundException('Calc method not found.');

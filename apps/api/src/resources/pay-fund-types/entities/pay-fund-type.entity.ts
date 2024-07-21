@@ -12,11 +12,11 @@ export class PayFundType extends Logger {
     name: string;
 
     @Column({ type: 'varchar', length: 30 })
-    @ApiProperty({ enum: PayFundGroup })
+    @ApiProperty({ enum: PayFundGroup, enumName: 'PayFundGroup' })
     group: PayFundGroup;
 
     @Column({ type: 'varchar', length: 30 })
-    @ApiProperty({ enum: PayFundCalcMethod })
+    @ApiProperty({ enum: PayFundCalcMethod, enumName: 'PayFundCalcMethod' })
     calcMethod: PayFundCalcMethod;
 
     @Column({ type: 'integer' })

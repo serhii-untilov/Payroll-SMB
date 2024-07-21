@@ -17,11 +17,11 @@ export class TaskPostRegularPayment extends TaskGenerator {
             await this.ctx.paymentsService.findAll({
                 companyId: this.ctx.company.id,
                 accPeriod: this.ctx.payPeriod.dateFrom,
-                status: PaymentStatus.DRAFT,
+                status: PaymentStatus.Draft,
                 relations: true,
             })
-        ).filter((o) => o.paymentType?.calcMethod === CalcMethod.REGULAR_PAYMENT).length;
-        task.status = count ? TaskStatus.TODO : TaskStatus.DONE;
+        ).filter((o) => o.paymentType?.calcMethod === CalcMethod.RegularPayment).length;
+        task.status = count ? TaskStatus.Todo : TaskStatus.Done;
         return [task];
     }
 }

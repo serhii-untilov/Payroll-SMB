@@ -51,7 +51,7 @@ export class PositionListenerService {
 
     private async runBatch(event: PositionEvent) {
         try {
-            this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_STARTED });
+            this.sseService.event(event.companyId, { data: ServerEvent.PayrollStarted });
             if (event.type !== PositionEventType.DELETED) {
                 await this.payrollCalculationService.calculatePosition(
                     event.userId,
@@ -71,10 +71,10 @@ export class PositionListenerService {
                 event.companyId,
             );
             await this.taskListService.generate(event.userId, event.companyId);
-            this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_FINISHED });
+            this.sseService.event(event.companyId, { data: ServerEvent.PayrollFinished });
         } catch (e) {
-            this._logger.fatal(`companyId ${event.companyId} ${ServerEvent.PAYROLL_FAILED} ${e}`);
-            this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_FAILED });
+            this._logger.fatal(`companyId ${event.companyId} ${ServerEvent.PayrollFailed} ${e}`);
+            this.sseService.event(event.companyId, { data: ServerEvent.PayrollFailed });
         }
     }
 }

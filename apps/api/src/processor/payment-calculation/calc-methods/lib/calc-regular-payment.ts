@@ -80,7 +80,7 @@ export class CalcRegularPayment extends CalcPayment {
     private getGrossPayPaymentTypeIds(): number[] {
         // TODO: Replace to Entry Table
         return this.ctx.paymentTypes
-            .filter((o) => o.paymentPart === PaymentPart.ACCRUALS)
+            .filter((o) => o.paymentPart === PaymentPart.Accruals)
             .map((o) => o.id);
     }
 
@@ -89,8 +89,8 @@ export class CalcRegularPayment extends CalcPayment {
         return this.ctx.paymentTypes
             .filter(
                 (o) =>
-                    o.paymentPart === PaymentPart.DEDUCTIONS &&
-                    o.paymentGroup !== PaymentGroup.PAYMENTS,
+                    o.paymentPart === PaymentPart.Deductions &&
+                    o.paymentGroup !== PaymentGroup.Payments,
             )
             .map((o) => o.id);
     }

@@ -40,12 +40,12 @@ export class DepartmentListenerService {
 
     private async runBatch(userId: number, companyId: number) {
         try {
-            this.sseService.event(companyId, { data: ServerEvent.TASKLIST_STARTED });
+            this.sseService.event(companyId, { data: ServerEvent.TasklistStarted });
             await this.taskListService.generate(userId, companyId);
-            this.sseService.event(companyId, { data: ServerEvent.TASKLIST_FINISHED });
+            this.sseService.event(companyId, { data: ServerEvent.TasklistFinished });
         } catch (e) {
-            this._logger.fatal(`companyId ${companyId} ${ServerEvent.TASKLIST_FAILED} ${e}`);
-            this.sseService.event(companyId, { data: ServerEvent.TASKLIST_FAILED });
+            this._logger.fatal(`companyId ${companyId} ${ServerEvent.TasklistFailed} ${e}`);
+            this.sseService.event(companyId, { data: ServerEvent.TasklistFailed });
         }
     }
 }

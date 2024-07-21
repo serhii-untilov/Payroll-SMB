@@ -57,7 +57,7 @@ export class PersonListenerService {
             .filter((value, index, array) => array.indexOf(value) === index);
         for (const companyId of companyIds) {
             try {
-                this.sseService.event(companyId, { data: ServerEvent.PAYROLL_STARTED });
+                this.sseService.event(companyId, { data: ServerEvent.PayrollStarted });
                 for (const position of positions.filter((o) => o.companyId === companyId)) {
                     await this.payrollCalculationService.calculatePosition(
                         event.userId,
@@ -73,10 +73,10 @@ export class PersonListenerService {
                     companyId,
                 );
                 await this.taskListService.generate(event.userId, companyId);
-                this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FINISHED });
+                this.sseService.event(companyId, { data: ServerEvent.PayrollFinished });
             } catch (e) {
-                this._logger.fatal(`companyId ${companyId} ${ServerEvent.PAYROLL_FAILED} ${e}`);
-                this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FAILED });
+                this._logger.fatal(`companyId ${companyId} ${ServerEvent.PayrollFailed} ${e}`);
+                this.sseService.event(companyId, { data: ServerEvent.PayrollFailed });
             }
         }
     }

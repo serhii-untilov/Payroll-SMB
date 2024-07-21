@@ -32,7 +32,7 @@ export class EcbSalary extends PayFundCalc {
             payPeriod: this.ctx.payPeriod.dateFrom,
             accPeriod: this.accPeriod.dateFrom,
             payFundTypeId: this.payFundType.id,
-            payFundCategory: PayFundCategory.EMPLOYEES,
+            payFundCategory: PayFundCategory.Employees,
             incomeSum: 0,
             baseSum: 0,
             rate: 0,
@@ -42,14 +42,14 @@ export class EcbSalary extends PayFundCalc {
 
     getPaymentTypeIds(): number[] {
         // TODO: Replace to Entry Table
-        const calcMethods: string[] = [CalcMethod.SALARY, CalcMethod.WAGE];
+        const calcMethods: string[] = [CalcMethod.Salary, CalcMethod.Wage];
         const paymentGroups: string[] = [
-            PaymentGroup.ADJUSTMENTS,
-            PaymentGroup.BONUSES,
-            PaymentGroup.VACATIONS,
-            PaymentGroup.SICKS,
-            PaymentGroup.REFUNDS,
-            PaymentGroup.OTHER_ACCRUALS,
+            PaymentGroup.Adjustments,
+            PaymentGroup.Bonuses,
+            PaymentGroup.Vacations,
+            PaymentGroup.Sicks,
+            PaymentGroup.Refunds,
+            PaymentGroup.OtherAccruals,
         ];
         return this.ctx.paymentTypes
             .filter(

@@ -10,8 +10,8 @@ export class Role {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @Column({ type: 'varchar', length: 15, default: RoleType.GUEST })
-    @ApiProperty({ enum: RoleType })
+    @Column({ type: 'varchar', length: 15, default: RoleType.Guest })
+    @ApiProperty({ enum: RoleType, enumName: 'RoleType' })
     type: RoleType;
 
     // @ManyToMany(() => User, (user) => user.roles)

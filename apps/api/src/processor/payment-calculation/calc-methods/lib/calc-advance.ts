@@ -66,7 +66,7 @@ export class CalcAdvance extends CalcPayment {
 
     private getBaseSumPaymentTypeIds(): number[] {
         // TODO: Replace to Entry Table
-        const paymentGroups: string[] = [PaymentGroup.BASIC, PaymentGroup.ADJUSTMENTS];
+        const paymentGroups: string[] = [PaymentGroup.Basic, PaymentGroup.Adjustments];
         return this.ctx.paymentTypes
             .filter((o) => paymentGroups.includes(o.paymentGroup))
             .map((o) => o.id);
@@ -74,7 +74,7 @@ export class CalcAdvance extends CalcPayment {
 
     private getDeductionsPaymentTypeIds(): number[] {
         // TODO: Replace to Entry Table
-        const paymentGroups: string[] = [PaymentGroup.TAXES];
+        const paymentGroups: string[] = [PaymentGroup.Taxes];
         return this.ctx.paymentTypes
             .filter((o) => paymentGroups.includes(o.paymentGroup))
             .map((o) => o.id);

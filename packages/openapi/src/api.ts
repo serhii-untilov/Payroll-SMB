@@ -31,22 +31,22 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 export interface Access {
     /**
      * 
-     * @type {string}
+     * @type {RoleType}
      * @memberof Access
      */
-    'roleType': AccessRoleTypeEnum;
+    'roleType': RoleType;
     /**
      * 
-     * @type {ResourceTypeEnum}
+     * @type {ResourceType}
      * @memberof Access
      */
-    'resourceType': ResourceTypeEnum;
+    'resourceType': ResourceType;
     /**
      * 
-     * @type {string}
+     * @type {AccessType}
      * @memberof Access
      */
-    'accessType': AccessAccessTypeEnum;
+    'accessType': AccessType;
     /**
      * 
      * @type {number}
@@ -97,17 +97,14 @@ export interface Access {
     'version': number;
 }
 
-export const AccessRoleTypeEnum = {
-    System: 'system',
-    Admin: 'admin',
-    Employer: 'employer',
-    Observer: 'observer',
-    Employee: 'employee',
-    Guest: 'guest'
-} as const;
 
-export type AccessRoleTypeEnum = typeof AccessRoleTypeEnum[keyof typeof AccessRoleTypeEnum];
-export const AccessAccessTypeEnum = {
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const AccessType = {
     Create: 'create',
     Update: 'update',
     Delete: 'delete',
@@ -115,7 +112,8 @@ export const AccessAccessTypeEnum = {
     Elevated: 'elevated'
 } as const;
 
-export type AccessAccessTypeEnum = typeof AccessAccessTypeEnum[keyof typeof AccessAccessTypeEnum];
+export type AccessType = typeof AccessType[keyof typeof AccessType];
+
 
 /**
  * 
@@ -125,10 +123,10 @@ export type AccessAccessTypeEnum = typeof AccessAccessTypeEnum[keyof typeof Acce
 export interface Accounting {
     /**
      * 
-     * @type {string}
+     * @type {AccountingType}
      * @memberof Accounting
      */
-    'type': AccountingTypeEnum;
+    'type': AccountingType;
     /**
      * 
      * @type {number}
@@ -185,7 +183,14 @@ export interface Accounting {
     'version': number;
 }
 
-export const AccountingTypeEnum = {
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const AccountingType = {
     Generic: 'generic',
     Kindergarten: 'kindergarten',
     Services: 'services',
@@ -193,7 +198,8 @@ export const AccountingTypeEnum = {
     Custom: 'custom'
 } as const;
 
-export type AccountingTypeEnum = typeof AccountingTypeEnum[keyof typeof AccountingTypeEnum];
+export type AccountingType = typeof AccountingType[keyof typeof AccountingType];
+
 
 /**
  * 
@@ -228,43 +234,24 @@ export interface AuthDto {
 export interface AvailableAccessDto {
     /**
      * 
-     * @type {string}
+     * @type {RoleType}
      * @memberof AvailableAccessDto
      */
-    'roleType': AvailableAccessDtoRoleTypeEnum;
+    'roleType': RoleType;
     /**
      * 
-     * @type {ResourceTypeEnum}
+     * @type {ResourceType}
      * @memberof AvailableAccessDto
      */
-    'resourceType': ResourceTypeEnum;
+    'resourceType': ResourceType;
     /**
      * 
-     * @type {string}
+     * @type {AccessType}
      * @memberof AvailableAccessDto
      */
-    'accessType': AvailableAccessDtoAccessTypeEnum;
+    'accessType': AccessType;
 }
 
-export const AvailableAccessDtoRoleTypeEnum = {
-    System: 'system',
-    Admin: 'admin',
-    Employer: 'employer',
-    Observer: 'observer',
-    Employee: 'employee',
-    Guest: 'guest'
-} as const;
-
-export type AvailableAccessDtoRoleTypeEnum = typeof AvailableAccessDtoRoleTypeEnum[keyof typeof AvailableAccessDtoRoleTypeEnum];
-export const AvailableAccessDtoAccessTypeEnum = {
-    Create: 'create',
-    Update: 'update',
-    Delete: 'delete',
-    Access: 'access',
-    Elevated: 'elevated'
-} as const;
-
-export type AvailableAccessDtoAccessTypeEnum = typeof AvailableAccessDtoAccessTypeEnum[keyof typeof AvailableAccessDtoAccessTypeEnum];
 
 /**
  * 
@@ -274,16 +261,16 @@ export type AvailableAccessDtoAccessTypeEnum = typeof AvailableAccessDtoAccessTy
 export interface AvailableAccessUserCompanyDto {
     /**
      * 
-     * @type {ResourceTypeEnum}
+     * @type {ResourceType}
      * @memberof AvailableAccessUserCompanyDto
      */
-    'resourceType': ResourceTypeEnum;
+    'resourceType': ResourceType;
     /**
      * 
-     * @type {string}
+     * @type {AccessType}
      * @memberof AvailableAccessUserCompanyDto
      */
-    'accessType': AvailableAccessUserCompanyDtoAccessTypeEnum;
+    'accessType': AccessType;
     /**
      * 
      * @type {number}
@@ -298,15 +285,6 @@ export interface AvailableAccessUserCompanyDto {
     'companyId': number;
 }
 
-export const AvailableAccessUserCompanyDtoAccessTypeEnum = {
-    Create: 'create',
-    Update: 'update',
-    Delete: 'delete',
-    Access: 'access',
-    Elevated: 'elevated'
-} as const;
-
-export type AvailableAccessUserCompanyDtoAccessTypeEnum = typeof AvailableAccessUserCompanyDtoAccessTypeEnum[keyof typeof AvailableAccessUserCompanyDtoAccessTypeEnum];
 
 /**
  * 
@@ -316,16 +294,16 @@ export type AvailableAccessUserCompanyDtoAccessTypeEnum = typeof AvailableAccess
 export interface AvailableAccessUserDto {
     /**
      * 
-     * @type {ResourceTypeEnum}
+     * @type {ResourceType}
      * @memberof AvailableAccessUserDto
      */
-    'resourceType': ResourceTypeEnum;
+    'resourceType': ResourceType;
     /**
      * 
-     * @type {string}
+     * @type {AccessType}
      * @memberof AvailableAccessUserDto
      */
-    'accessType': AvailableAccessUserDtoAccessTypeEnum;
+    'accessType': AccessType;
     /**
      * 
      * @type {number}
@@ -334,15 +312,43 @@ export interface AvailableAccessUserDto {
     'userId': number;
 }
 
-export const AvailableAccessUserDtoAccessTypeEnum = {
-    Create: 'create',
-    Update: 'update',
-    Delete: 'delete',
-    Access: 'access',
-    Elevated: 'elevated'
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const CalcMethod = {
+    Salary: 'salary',
+    Wage: 'wage',
+    Commission: 'commission',
+    Allowance: 'allowance',
+    PayEveningHours: 'pay_evening_hours',
+    PayNightHours: 'pay_night_hours',
+    PayOvertime: 'pay_overtime',
+    PayWeekendHours: 'pay_weekend_hours',
+    PayHolidayHours: 'pay_holiday_hours',
+    Bonus: 'bonus',
+    PaidVacation: 'paid-vacation',
+    UnpaidLeave: 'unpaid-leave',
+    UnpaidLeaveCompany: 'unpaid-leave-company',
+    PaidSickByCompany: 'paid-sick-by-company',
+    PaidSickBySif: 'paid-sick-by-sif',
+    UnconfirmedSick: 'unconfirmed-sick',
+    IncomeIndexation: 'income-indexation',
+    OneTimeAccrual: 'one-time-accrual',
+    IncomeTax: 'income-tax',
+    MilitaryTax: 'military-tax',
+    AdvancePayment: 'advance-payment',
+    RegularPayment: 'regular-payment',
+    FastPayment: 'fast-payment',
+    SifPayment: 'sif-payment',
+    OneTimeDeduction: 'one-time-deduction'
 } as const;
 
-export type AvailableAccessUserDtoAccessTypeEnum = typeof AvailableAccessUserDtoAccessTypeEnum[keyof typeof AvailableAccessUserDtoAccessTypeEnum];
+export type CalcMethod = typeof CalcMethod[keyof typeof CalcMethod];
+
 
 /**
  * 
@@ -510,43 +516,24 @@ export interface Company {
 export interface CreateAccessDto {
     /**
      * 
-     * @type {string}
+     * @type {RoleType}
      * @memberof CreateAccessDto
      */
-    'roleType': CreateAccessDtoRoleTypeEnum;
+    'roleType': RoleType;
     /**
      * 
-     * @type {ResourceTypeEnum}
+     * @type {ResourceType}
      * @memberof CreateAccessDto
      */
-    'resourceType': ResourceTypeEnum;
+    'resourceType': ResourceType;
     /**
      * 
-     * @type {string}
+     * @type {AccessType}
      * @memberof CreateAccessDto
      */
-    'accessType': CreateAccessDtoAccessTypeEnum;
+    'accessType': AccessType;
 }
 
-export const CreateAccessDtoRoleTypeEnum = {
-    System: 'system',
-    Admin: 'admin',
-    Employer: 'employer',
-    Observer: 'observer',
-    Employee: 'employee',
-    Guest: 'guest'
-} as const;
-
-export type CreateAccessDtoRoleTypeEnum = typeof CreateAccessDtoRoleTypeEnum[keyof typeof CreateAccessDtoRoleTypeEnum];
-export const CreateAccessDtoAccessTypeEnum = {
-    Create: 'create',
-    Update: 'update',
-    Delete: 'delete',
-    Access: 'access',
-    Elevated: 'elevated'
-} as const;
-
-export type CreateAccessDtoAccessTypeEnum = typeof CreateAccessDtoAccessTypeEnum[keyof typeof CreateAccessDtoAccessTypeEnum];
 
 /**
  * 
@@ -692,10 +679,10 @@ export interface CreateMinWageDto {
 export interface CreatePayFundDto {
     /**
      * 
-     * @type {string}
+     * @type {PayFundCategory}
      * @memberof CreatePayFundDto
      */
-    'payFundCategory': CreatePayFundDtoPayFundCategoryEnum;
+    'payFundCategory': PayFundCategory;
     /**
      * 
      * @type {number}
@@ -746,14 +733,6 @@ export interface CreatePayFundDto {
     'paySum': number;
 }
 
-export const CreatePayFundDtoPayFundCategoryEnum = {
-    Employees: 'employees',
-    Invalidity: 'invalidity',
-    Maternity: 'maternity',
-    Government: 'government'
-} as const;
-
-export type CreatePayFundDtoPayFundCategoryEnum = typeof CreatePayFundDtoPayFundCategoryEnum[keyof typeof CreatePayFundDtoPayFundCategoryEnum];
 
 /**
  * 
@@ -763,16 +742,16 @@ export type CreatePayFundDtoPayFundCategoryEnum = typeof CreatePayFundDtoPayFund
 export interface CreatePayFundTypeDto {
     /**
      * 
-     * @type {string}
+     * @type {PayFundGroup}
      * @memberof CreatePayFundTypeDto
      */
-    'group': CreatePayFundTypeDtoGroupEnum;
+    'group': PayFundGroup;
     /**
      * 
-     * @type {string}
+     * @type {PayFundCalcMethod}
      * @memberof CreatePayFundTypeDto
      */
-    'calcMethod': CreatePayFundTypeDtoCalcMethodEnum;
+    'calcMethod': PayFundCalcMethod;
     /**
      * 
      * @type {string}
@@ -793,24 +772,6 @@ export interface CreatePayFundTypeDto {
     'description': string;
 }
 
-export const CreatePayFundTypeDtoGroupEnum = {
-    Ecb: 'ECB',
-    Custom: 'custom'
-} as const;
-
-export type CreatePayFundTypeDtoGroupEnum = typeof CreatePayFundTypeDtoGroupEnum[keyof typeof CreatePayFundTypeDtoGroupEnum];
-export const CreatePayFundTypeDtoCalcMethodEnum = {
-    EcbVacation: 'ECB-vacation',
-    EcbSalary: 'ECB-salary',
-    EcbCommission: 'ECB-commission',
-    EcbSickByCompany: 'ECB-sick-by-company',
-    EcbSickBySif: 'ECB-sick-by-SIF',
-    EcbMaternity: 'ECB-maternity',
-    EcbMinWage: 'ECB-min-wage',
-    Custom: 'custom'
-} as const;
-
-export type CreatePayFundTypeDtoCalcMethodEnum = typeof CreatePayFundTypeDtoCalcMethodEnum[keyof typeof CreatePayFundTypeDtoCalcMethodEnum];
 
 /**
  * 
@@ -965,16 +926,16 @@ export interface CreatePayPeriodDto {
 export interface CreatePaymentDto {
     /**
      * 
-     * @type {string}
+     * @type {PaymentStatus}
      * @memberof CreatePaymentDto
      */
-    'status'?: CreatePaymentDtoStatusEnum;
+    'status'?: PaymentStatus;
     /**
      * 
-     * @type {number}
+     * @type {RecordFlags}
      * @memberof CreatePaymentDto
      */
-    'recordFlags'?: CreatePaymentDtoRecordFlagsEnum;
+    'recordFlags'?: RecordFlags;
     /**
      * 
      * @type {number}
@@ -1055,22 +1016,6 @@ export interface CreatePaymentDto {
     'description'?: string;
 }
 
-export const CreatePaymentDtoStatusEnum = {
-    Draft: 'draft',
-    Submitted: 'submitted',
-    Accepted: 'accepted',
-    Payed: 'payed'
-} as const;
-
-export type CreatePaymentDtoStatusEnum = typeof CreatePaymentDtoStatusEnum[keyof typeof CreatePaymentDtoStatusEnum];
-export const CreatePaymentDtoRecordFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8
-} as const;
-
-export type CreatePaymentDtoRecordFlagsEnum = typeof CreatePaymentDtoRecordFlagsEnum[keyof typeof CreatePaymentDtoRecordFlagsEnum];
 
 /**
  * 
@@ -1080,10 +1025,10 @@ export type CreatePaymentDtoRecordFlagsEnum = typeof CreatePaymentDtoRecordFlags
 export interface CreatePaymentPositionDto {
     /**
      * 
-     * @type {number}
+     * @type {RecordFlags}
      * @memberof CreatePaymentPositionDto
      */
-    'recordFlags'?: CreatePaymentPositionDtoRecordFlagsEnum;
+    'recordFlags'?: RecordFlags;
     /**
      * 
      * @type {number}
@@ -1122,14 +1067,6 @@ export interface CreatePaymentPositionDto {
     'funds'?: number;
 }
 
-export const CreatePaymentPositionDtoRecordFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8
-} as const;
-
-export type CreatePaymentPositionDtoRecordFlagsEnum = typeof CreatePaymentPositionDtoRecordFlagsEnum[keyof typeof CreatePaymentPositionDtoRecordFlagsEnum];
 
 /**
  * 
@@ -1176,22 +1113,22 @@ export interface CreatePaymentTypeDto {
 export interface CreatePayrollDto {
     /**
      * 
-     * @type {number}
+     * @type {RecordFlags}
      * @memberof CreatePayrollDto
      */
-    'recordFlags': CreatePayrollDtoRecordFlagsEnum;
+    'recordFlags': RecordFlags;
     /**
      * 
-     * @type {ResourceTypeEnum}
+     * @type {ResourceType}
      * @memberof CreatePayrollDto
      */
-    'sourceType'?: ResourceTypeEnum;
+    'sourceType'?: ResourceType;
     /**
      * 
-     * @type {number}
+     * @type {FixedFlags}
      * @memberof CreatePayrollDto
      */
-    'fixedFlags'?: CreatePayrollDtoFixedFlagsEnum;
+    'fixedFlags'?: FixedFlags;
     /**
      * 
      * @type {number}
@@ -1326,25 +1263,6 @@ export interface CreatePayrollDto {
     'parentId'?: number | null;
 }
 
-export const CreatePayrollDtoRecordFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8
-} as const;
-
-export type CreatePayrollDtoRecordFlagsEnum = typeof CreatePayrollDtoRecordFlagsEnum[keyof typeof CreatePayrollDtoRecordFlagsEnum];
-export const CreatePayrollDtoFixedFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8,
-    NUMBER_16: 16,
-    NUMBER_32: 32,
-    NUMBER_64: 64
-} as const;
-
-export type CreatePayrollDtoFixedFlagsEnum = typeof CreatePayrollDtoFixedFlagsEnum[keyof typeof CreatePayrollDtoFixedFlagsEnum];
 
 /**
  * 
@@ -1531,10 +1449,10 @@ export interface CreatePositionHistoryDto {
 export interface CreateRoleDto {
     /**
      * 
-     * @type {string}
+     * @type {RoleType}
      * @memberof CreateRoleDto
      */
-    'type': CreateRoleDtoTypeEnum;
+    'type': RoleType;
     /**
      * 
      * @type {string}
@@ -1543,16 +1461,6 @@ export interface CreateRoleDto {
     'name': string;
 }
 
-export const CreateRoleDtoTypeEnum = {
-    System: 'system',
-    Admin: 'admin',
-    Employer: 'employer',
-    Observer: 'observer',
-    Employee: 'employee',
-    Guest: 'guest'
-} as const;
-
-export type CreateRoleDtoTypeEnum = typeof CreateRoleDtoTypeEnum[keyof typeof CreateRoleDtoTypeEnum];
 
 /**
  * 
@@ -1562,16 +1470,16 @@ export type CreateRoleDtoTypeEnum = typeof CreateRoleDtoTypeEnum[keyof typeof Cr
 export interface CreateTaskDto {
     /**
      * 
-     * @type {string}
+     * @type {TaskType}
      * @memberof CreateTaskDto
      */
-    'type': CreateTaskDtoTypeEnum;
+    'type': TaskType;
     /**
      * 
-     * @type {string}
+     * @type {TaskStatus}
      * @memberof CreateTaskDto
      */
-    'status': CreateTaskDtoStatusEnum;
+    'status': TaskStatus;
     /**
      * 
      * @type {number}
@@ -1604,32 +1512,6 @@ export interface CreateTaskDto {
     'entityId': number | null;
 }
 
-export const CreateTaskDtoTypeEnum = {
-    CreateUser: 'create-user',
-    CreateCompany: 'create-company',
-    FillDepartmentList: 'fill-department-list',
-    FillPositionList: 'fill-position-list',
-    PostWorkSheet: 'post-work-sheet',
-    PostAccrualDocument: 'post-accrual-document',
-    SendApplicationFss: 'send-application-fss',
-    PostPaymentFss: 'post-payment-fss',
-    PostAdvancePayment: 'post-advance-payment',
-    PostRegularPayment: 'post-regular-payment',
-    ClosePayPeriod: 'close-pay-period',
-    SendIncomeTaxReport: 'send-income-tax-report',
-    HappyBirthday: 'happy-birthday'
-} as const;
-
-export type CreateTaskDtoTypeEnum = typeof CreateTaskDtoTypeEnum[keyof typeof CreateTaskDtoTypeEnum];
-export const CreateTaskDtoStatusEnum = {
-    NotAvailable: 'not-available',
-    Todo: 'todo',
-    InProgress: 'in-progress',
-    Done: 'done',
-    DoneByUser: 'done-by-user'
-} as const;
-
-export type CreateTaskDtoStatusEnum = typeof CreateTaskDtoStatusEnum[keyof typeof CreateTaskDtoStatusEnum];
 
 /**
  * 
@@ -1676,10 +1558,10 @@ export interface CreateUserDto {
 export interface CreateWorkNormDto {
     /**
      * 
-     * @type {string}
+     * @type {WorkNormType}
      * @memberof CreateWorkNormDto
      */
-    'type': CreateWorkNormDtoTypeEnum;
+    'type': WorkNormType;
     /**
      * 
      * @type {string}
@@ -1700,13 +1582,6 @@ export interface CreateWorkNormDto {
     'dateTo'?: Date;
 }
 
-export const CreateWorkNormDtoTypeEnum = {
-    Weekly: 'weekly',
-    Periodic: 'periodic',
-    Shifted: 'shifted'
-} as const;
-
-export type CreateWorkNormDtoTypeEnum = typeof CreateWorkNormDtoTypeEnum[keyof typeof CreateWorkNormDtoTypeEnum];
 
 /**
  * 
@@ -2478,6 +2353,25 @@ export interface FindWorkNormDto {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+
+export const FixedFlags = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8,
+    NUMBER_16: 16,
+    NUMBER_32: 32,
+    NUMBER_64: 64
+} as const;
+
+export type FixedFlags = typeof FixedFlags[keyof typeof FixedFlags];
+
+
+/**
+ * 
+ * @export
  * @interface Job
  */
 export interface Job {
@@ -2544,10 +2438,10 @@ export interface Job {
 export interface Law {
     /**
      * 
-     * @type {string}
+     * @type {LawType}
      * @memberof Law
      */
-    'type': LawTypeEnum;
+    'type': LawType;
     /**
      * 
      * @type {number}
@@ -2562,12 +2456,20 @@ export interface Law {
     'name': string;
 }
 
-export const LawTypeEnum = {
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const LawType = {
     Ukraine: 'ukraine',
     Custom: 'custom'
 } as const;
 
-export type LawTypeEnum = typeof LawTypeEnum[keyof typeof LawTypeEnum];
+export type LawType = typeof LawType[keyof typeof LawType];
+
 
 /**
  * 
@@ -2650,10 +2552,10 @@ export interface MinWage {
 export interface PayFund {
     /**
      * 
-     * @type {string}
+     * @type {PayFundCategory}
      * @memberof PayFund
      */
-    'payFundCategory': PayFundPayFundCategoryEnum;
+    'payFundCategory': PayFundCategory;
     /**
      * 
      * @type {number}
@@ -2722,14 +2624,56 @@ export interface PayFund {
     'paySum': number;
 }
 
-export const PayFundPayFundCategoryEnum = {
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const PayFundCalcMethod = {
+    EcbVacation: 'ECB-vacation',
+    EcbSalary: 'ECB-salary',
+    EcbCommission: 'ECB-commission',
+    EcbSickByCompany: 'ECB-sick-by-company',
+    EcbSickBySif: 'ECB-sick-by-SIF',
+    EcbMaternity: 'ECB-maternity',
+    EcbMinWage: 'ECB-min-wage',
+    Custom: 'custom'
+} as const;
+
+export type PayFundCalcMethod = typeof PayFundCalcMethod[keyof typeof PayFundCalcMethod];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const PayFundCategory = {
     Employees: 'employees',
     Invalidity: 'invalidity',
     Maternity: 'maternity',
     Government: 'government'
 } as const;
 
-export type PayFundPayFundCategoryEnum = typeof PayFundPayFundCategoryEnum[keyof typeof PayFundPayFundCategoryEnum];
+export type PayFundCategory = typeof PayFundCategory[keyof typeof PayFundCategory];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const PayFundGroup = {
+    Ecb: 'ECB',
+    Custom: 'custom'
+} as const;
+
+export type PayFundGroup = typeof PayFundGroup[keyof typeof PayFundGroup];
+
 
 /**
  * 
@@ -2739,16 +2683,16 @@ export type PayFundPayFundCategoryEnum = typeof PayFundPayFundCategoryEnum[keyof
 export interface PayFundType {
     /**
      * 
-     * @type {string}
+     * @type {PayFundGroup}
      * @memberof PayFundType
      */
-    'group': PayFundTypeGroupEnum;
+    'group': PayFundGroup;
     /**
      * 
-     * @type {string}
+     * @type {PayFundCalcMethod}
      * @memberof PayFundType
      */
-    'calcMethod': PayFundTypeCalcMethodEnum;
+    'calcMethod': PayFundCalcMethod;
     /**
      * 
      * @type {number}
@@ -2817,24 +2761,6 @@ export interface PayFundType {
     'version': number;
 }
 
-export const PayFundTypeGroupEnum = {
-    Ecb: 'ECB',
-    Custom: 'custom'
-} as const;
-
-export type PayFundTypeGroupEnum = typeof PayFundTypeGroupEnum[keyof typeof PayFundTypeGroupEnum];
-export const PayFundTypeCalcMethodEnum = {
-    EcbVacation: 'ECB-vacation',
-    EcbSalary: 'ECB-salary',
-    EcbCommission: 'ECB-commission',
-    EcbSickByCompany: 'ECB-sick-by-company',
-    EcbSickBySif: 'ECB-sick-by-SIF',
-    EcbMaternity: 'ECB-maternity',
-    EcbMinWage: 'ECB-min-wage',
-    Custom: 'custom'
-} as const;
-
-export type PayFundTypeCalcMethodEnum = typeof PayFundTypeCalcMethodEnum[keyof typeof PayFundTypeCalcMethodEnum];
 
 /**
  * 
@@ -3049,10 +2975,10 @@ export interface PayPeriod {
 export interface PayPeriodCalcMethod {
     /**
      * 
-     * @type {string}
+     * @type {CalcMethod}
      * @memberof PayPeriodCalcMethod
      */
-    'calcMethod': PayPeriodCalcMethodCalcMethodEnum;
+    'calcMethod': CalcMethod;
     /**
      * 
      * @type {number}
@@ -3079,35 +3005,6 @@ export interface PayPeriodCalcMethod {
     'factSum': number;
 }
 
-export const PayPeriodCalcMethodCalcMethodEnum = {
-    Salary: 'salary',
-    Wage: 'wage',
-    Commission: 'commission',
-    Allowance: 'allowance',
-    PayEveningHours: 'pay_evening_hours',
-    PayNightHours: 'pay_night_hours',
-    PayOvertime: 'pay_overtime',
-    PayWeekendHours: 'pay_weekend_hours',
-    PayHolidayHours: 'pay_holiday_hours',
-    Bonus: 'bonus',
-    PaidVacation: 'paid-vacation',
-    UnpaidLeave: 'unpaid-leave',
-    UnpaidLeaveCompany: 'unpaid-leave-company',
-    PaidSickByCompany: 'paid-sick-by-company',
-    PaidSickBySif: 'paid-sick-by-sif',
-    UnconfirmedSick: 'unconfirmed-sick',
-    IncomeIndexation: 'income-indexation',
-    OneTimeAccrual: 'one-time-accrual',
-    IncomeTax: 'income-tax',
-    MilitaryTax: 'military-tax',
-    AdvancePayment: 'advance-payment',
-    RegularPayment: 'regular-payment',
-    FastPayment: 'fast-payment',
-    SifPayment: 'sif-payment',
-    OneTimeDeduction: 'one-time-deduction'
-} as const;
-
-export type PayPeriodCalcMethodCalcMethodEnum = typeof PayPeriodCalcMethodCalcMethodEnum[keyof typeof PayPeriodCalcMethodCalcMethodEnum];
 
 /**
  * 
@@ -3117,16 +3014,16 @@ export type PayPeriodCalcMethodCalcMethodEnum = typeof PayPeriodCalcMethodCalcMe
 export interface Payment {
     /**
      * 
-     * @type {string}
+     * @type {PaymentStatus}
      * @memberof Payment
      */
-    'status': PaymentStatusEnum;
+    'status': PaymentStatus;
     /**
      * 
-     * @type {number}
+     * @type {RecordFlags}
      * @memberof Payment
      */
-    'recordFlags': PaymentRecordFlagsEnum;
+    'recordFlags': RecordFlags;
     /**
      * 
      * @type {number}
@@ -3273,22 +3170,6 @@ export interface Payment {
     'version': number;
 }
 
-export const PaymentStatusEnum = {
-    Draft: 'draft',
-    Submitted: 'submitted',
-    Accepted: 'accepted',
-    Payed: 'payed'
-} as const;
-
-export type PaymentStatusEnum = typeof PaymentStatusEnum[keyof typeof PaymentStatusEnum];
-export const PaymentRecordFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8
-} as const;
-
-export type PaymentRecordFlagsEnum = typeof PaymentRecordFlagsEnum[keyof typeof PaymentRecordFlagsEnum];
 
 /**
  * 
@@ -3298,10 +3179,10 @@ export type PaymentRecordFlagsEnum = typeof PaymentRecordFlagsEnum[keyof typeof 
 export interface PaymentPosition {
     /**
      * 
-     * @type {number}
+     * @type {RecordFlags}
      * @memberof PaymentPosition
      */
-    'recordFlags': PaymentPositionRecordFlagsEnum;
+    'recordFlags': RecordFlags;
     /**
      * 
      * @type {number}
@@ -3400,14 +3281,22 @@ export interface PaymentPosition {
     'version': number;
 }
 
-export const PaymentPositionRecordFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const PaymentStatus = {
+    Draft: 'draft',
+    Submitted: 'submitted',
+    Accepted: 'accepted',
+    Payed: 'payed'
 } as const;
 
-export type PaymentPositionRecordFlagsEnum = typeof PaymentPositionRecordFlagsEnum[keyof typeof PaymentPositionRecordFlagsEnum];
+export type PaymentStatus = typeof PaymentStatus[keyof typeof PaymentStatus];
+
 
 /**
  * 
@@ -3502,22 +3391,22 @@ export interface PaymentType {
 export interface Payroll {
     /**
      * 
-     * @type {ResourceTypeEnum}
+     * @type {ResourceType}
      * @memberof Payroll
      */
-    'sourceType': ResourceTypeEnum;
+    'sourceType': ResourceType;
     /**
      * 
-     * @type {number}
+     * @type {RecordFlags}
      * @memberof Payroll
      */
-    'recordFlags': PayrollRecordFlagsEnum;
+    'recordFlags': RecordFlags;
     /**
      * 
-     * @type {number}
+     * @type {FixedFlags}
      * @memberof Payroll
      */
-    'fixedFlags': PayrollFixedFlagsEnum;
+    'fixedFlags': FixedFlags;
     /**
      * 
      * @type {number}
@@ -3706,25 +3595,6 @@ export interface Payroll {
     'version': number;
 }
 
-export const PayrollRecordFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8
-} as const;
-
-export type PayrollRecordFlagsEnum = typeof PayrollRecordFlagsEnum[keyof typeof PayrollRecordFlagsEnum];
-export const PayrollFixedFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8,
-    NUMBER_16: 16,
-    NUMBER_32: 32,
-    NUMBER_64: 64
-} as const;
-
-export type PayrollFixedFlagsEnum = typeof PayrollFixedFlagsEnum[keyof typeof PayrollFixedFlagsEnum];
 
 /**
  * 
@@ -4639,7 +4509,23 @@ export interface PublicUserDataDto {
  * @enum {string}
  */
 
-export const ResourceTypeEnum = {
+export const RecordFlags = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type RecordFlags = typeof RecordFlags[keyof typeof RecordFlags];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const ResourceType = {
     Access: 'Access',
     AppTitle: 'App Title',
     Role: 'Role',
@@ -4679,7 +4565,7 @@ export const ResourceTypeEnum = {
     Demo: 'Demo'
 } as const;
 
-export type ResourceTypeEnum = typeof ResourceTypeEnum[keyof typeof ResourceTypeEnum];
+export type ResourceType = typeof ResourceType[keyof typeof ResourceType];
 
 
 /**
@@ -4690,10 +4576,10 @@ export type ResourceTypeEnum = typeof ResourceTypeEnum[keyof typeof ResourceType
 export interface Role {
     /**
      * 
-     * @type {string}
+     * @type {RoleType}
      * @memberof Role
      */
-    'type': RoleTypeEnum;
+    'type': RoleType;
     /**
      * 
      * @type {number}
@@ -4708,7 +4594,14 @@ export interface Role {
     'name': string;
 }
 
-export const RoleTypeEnum = {
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const RoleType = {
     System: 'system',
     Admin: 'admin',
     Employer: 'employer',
@@ -4717,7 +4610,8 @@ export const RoleTypeEnum = {
     Guest: 'guest'
 } as const;
 
-export type RoleTypeEnum = typeof RoleTypeEnum[keyof typeof RoleTypeEnum];
+export type RoleType = typeof RoleType[keyof typeof RoleType];
+
 
 /**
  * 
@@ -4727,16 +4621,16 @@ export type RoleTypeEnum = typeof RoleTypeEnum[keyof typeof RoleTypeEnum];
 export interface Task {
     /**
      * 
-     * @type {string}
+     * @type {TaskType}
      * @memberof Task
      */
-    'type': TaskTypeEnum;
+    'type': TaskType;
     /**
      * 
-     * @type {string}
+     * @type {TaskStatus}
      * @memberof Task
      */
-    'status': TaskStatusEnum;
+    'status': TaskStatus;
     /**
      * 
      * @type {number}
@@ -4823,7 +4717,31 @@ export interface Task {
     'version': number;
 }
 
-export const TaskTypeEnum = {
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const TaskStatus = {
+    NotAvailable: 'not-available',
+    Todo: 'todo',
+    InProgress: 'in-progress',
+    Done: 'done',
+    DoneByUser: 'done-by-user'
+} as const;
+
+export type TaskStatus = typeof TaskStatus[keyof typeof TaskStatus];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const TaskType = {
     CreateUser: 'create-user',
     CreateCompany: 'create-company',
     FillDepartmentList: 'fill-department-list',
@@ -4839,16 +4757,8 @@ export const TaskTypeEnum = {
     HappyBirthday: 'happy-birthday'
 } as const;
 
-export type TaskTypeEnum = typeof TaskTypeEnum[keyof typeof TaskTypeEnum];
-export const TaskStatusEnum = {
-    NotAvailable: 'not-available',
-    Todo: 'todo',
-    InProgress: 'in-progress',
-    Done: 'done',
-    DoneByUser: 'done-by-user'
-} as const;
+export type TaskType = typeof TaskType[keyof typeof TaskType];
 
-export type TaskStatusEnum = typeof TaskStatusEnum[keyof typeof TaskStatusEnum];
 
 /**
  * 
@@ -4877,43 +4787,24 @@ export interface TokensDto {
 export interface UpdateAccessDto {
     /**
      * 
-     * @type {string}
+     * @type {RoleType}
      * @memberof UpdateAccessDto
      */
-    'roleType'?: UpdateAccessDtoRoleTypeEnum;
+    'roleType'?: RoleType;
     /**
      * 
-     * @type {ResourceTypeEnum}
+     * @type {ResourceType}
      * @memberof UpdateAccessDto
      */
-    'resourceType'?: ResourceTypeEnum;
+    'resourceType'?: ResourceType;
     /**
      * 
-     * @type {string}
+     * @type {AccessType}
      * @memberof UpdateAccessDto
      */
-    'accessType'?: UpdateAccessDtoAccessTypeEnum;
+    'accessType'?: AccessType;
 }
 
-export const UpdateAccessDtoRoleTypeEnum = {
-    System: 'system',
-    Admin: 'admin',
-    Employer: 'employer',
-    Observer: 'observer',
-    Employee: 'employee',
-    Guest: 'guest'
-} as const;
-
-export type UpdateAccessDtoRoleTypeEnum = typeof UpdateAccessDtoRoleTypeEnum[keyof typeof UpdateAccessDtoRoleTypeEnum];
-export const UpdateAccessDtoAccessTypeEnum = {
-    Create: 'create',
-    Update: 'update',
-    Delete: 'delete',
-    Access: 'access',
-    Elevated: 'elevated'
-} as const;
-
-export type UpdateAccessDtoAccessTypeEnum = typeof UpdateAccessDtoAccessTypeEnum[keyof typeof UpdateAccessDtoAccessTypeEnum];
 
 /**
  * 
@@ -5083,10 +4974,10 @@ export interface UpdateMinWageDto {
 export interface UpdatePayFundDto {
     /**
      * 
-     * @type {string}
+     * @type {PayFundCategory}
      * @memberof UpdatePayFundDto
      */
-    'payFundCategory'?: UpdatePayFundDtoPayFundCategoryEnum;
+    'payFundCategory'?: PayFundCategory;
     /**
      * 
      * @type {number}
@@ -5137,14 +5028,6 @@ export interface UpdatePayFundDto {
     'paySum'?: number;
 }
 
-export const UpdatePayFundDtoPayFundCategoryEnum = {
-    Employees: 'employees',
-    Invalidity: 'invalidity',
-    Maternity: 'maternity',
-    Government: 'government'
-} as const;
-
-export type UpdatePayFundDtoPayFundCategoryEnum = typeof UpdatePayFundDtoPayFundCategoryEnum[keyof typeof UpdatePayFundDtoPayFundCategoryEnum];
 
 /**
  * 
@@ -5154,16 +5037,16 @@ export type UpdatePayFundDtoPayFundCategoryEnum = typeof UpdatePayFundDtoPayFund
 export interface UpdatePayFundTypeDto {
     /**
      * 
-     * @type {string}
+     * @type {PayFundGroup}
      * @memberof UpdatePayFundTypeDto
      */
-    'group'?: UpdatePayFundTypeDtoGroupEnum;
+    'group'?: PayFundGroup;
     /**
      * 
-     * @type {string}
+     * @type {PayFundCalcMethod}
      * @memberof UpdatePayFundTypeDto
      */
-    'calcMethod'?: UpdatePayFundTypeDtoCalcMethodEnum;
+    'calcMethod'?: PayFundCalcMethod;
     /**
      * 
      * @type {number}
@@ -5190,24 +5073,6 @@ export interface UpdatePayFundTypeDto {
     'description'?: string;
 }
 
-export const UpdatePayFundTypeDtoGroupEnum = {
-    Ecb: 'ECB',
-    Custom: 'custom'
-} as const;
-
-export type UpdatePayFundTypeDtoGroupEnum = typeof UpdatePayFundTypeDtoGroupEnum[keyof typeof UpdatePayFundTypeDtoGroupEnum];
-export const UpdatePayFundTypeDtoCalcMethodEnum = {
-    EcbVacation: 'ECB-vacation',
-    EcbSalary: 'ECB-salary',
-    EcbCommission: 'ECB-commission',
-    EcbSickByCompany: 'ECB-sick-by-company',
-    EcbSickBySif: 'ECB-sick-by-SIF',
-    EcbMaternity: 'ECB-maternity',
-    EcbMinWage: 'ECB-min-wage',
-    Custom: 'custom'
-} as const;
-
-export type UpdatePayFundTypeDtoCalcMethodEnum = typeof UpdatePayFundTypeDtoCalcMethodEnum[keyof typeof UpdatePayFundTypeDtoCalcMethodEnum];
 
 /**
  * 
@@ -5380,16 +5245,16 @@ export interface UpdatePayPeriodDto {
 export interface UpdatePaymentDto {
     /**
      * 
-     * @type {string}
+     * @type {PaymentStatus}
      * @memberof UpdatePaymentDto
      */
-    'status'?: UpdatePaymentDtoStatusEnum;
+    'status'?: PaymentStatus;
     /**
      * 
-     * @type {number}
+     * @type {RecordFlags}
      * @memberof UpdatePaymentDto
      */
-    'recordFlags'?: UpdatePaymentDtoRecordFlagsEnum;
+    'recordFlags'?: RecordFlags;
     /**
      * 
      * @type {number}
@@ -5476,22 +5341,6 @@ export interface UpdatePaymentDto {
     'description'?: string;
 }
 
-export const UpdatePaymentDtoStatusEnum = {
-    Draft: 'draft',
-    Submitted: 'submitted',
-    Accepted: 'accepted',
-    Payed: 'payed'
-} as const;
-
-export type UpdatePaymentDtoStatusEnum = typeof UpdatePaymentDtoStatusEnum[keyof typeof UpdatePaymentDtoStatusEnum];
-export const UpdatePaymentDtoRecordFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8
-} as const;
-
-export type UpdatePaymentDtoRecordFlagsEnum = typeof UpdatePaymentDtoRecordFlagsEnum[keyof typeof UpdatePaymentDtoRecordFlagsEnum];
 
 /**
  * 
@@ -5501,10 +5350,10 @@ export type UpdatePaymentDtoRecordFlagsEnum = typeof UpdatePaymentDtoRecordFlags
 export interface UpdatePaymentPositionDto {
     /**
      * 
-     * @type {number}
+     * @type {RecordFlags}
      * @memberof UpdatePaymentPositionDto
      */
-    'recordFlags'?: UpdatePaymentPositionDtoRecordFlagsEnum;
+    'recordFlags'?: RecordFlags;
     /**
      * 
      * @type {number}
@@ -5549,14 +5398,6 @@ export interface UpdatePaymentPositionDto {
     'funds'?: number;
 }
 
-export const UpdatePaymentPositionDtoRecordFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8
-} as const;
-
-export type UpdatePaymentPositionDtoRecordFlagsEnum = typeof UpdatePaymentPositionDtoRecordFlagsEnum[keyof typeof UpdatePaymentPositionDtoRecordFlagsEnum];
 
 /**
  * 
@@ -5609,22 +5450,22 @@ export interface UpdatePaymentTypeDto {
 export interface UpdatePayrollDto {
     /**
      * 
-     * @type {ResourceTypeEnum}
+     * @type {ResourceType}
      * @memberof UpdatePayrollDto
      */
-    'sourceType'?: ResourceTypeEnum;
+    'sourceType'?: ResourceType;
     /**
      * 
-     * @type {number}
+     * @type {RecordFlags}
      * @memberof UpdatePayrollDto
      */
-    'recordFlags'?: UpdatePayrollDtoRecordFlagsEnum;
+    'recordFlags'?: RecordFlags;
     /**
      * 
-     * @type {number}
+     * @type {FixedFlags}
      * @memberof UpdatePayrollDto
      */
-    'fixedFlags'?: UpdatePayrollDtoFixedFlagsEnum;
+    'fixedFlags'?: FixedFlags;
     /**
      * 
      * @type {number}
@@ -5759,25 +5600,6 @@ export interface UpdatePayrollDto {
     'parentId'?: number | null;
 }
 
-export const UpdatePayrollDtoRecordFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8
-} as const;
-
-export type UpdatePayrollDtoRecordFlagsEnum = typeof UpdatePayrollDtoRecordFlagsEnum[keyof typeof UpdatePayrollDtoRecordFlagsEnum];
-export const UpdatePayrollDtoFixedFlagsEnum = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_4: 4,
-    NUMBER_8: 8,
-    NUMBER_16: 16,
-    NUMBER_32: 32,
-    NUMBER_64: 64
-} as const;
-
-export type UpdatePayrollDtoFixedFlagsEnum = typeof UpdatePayrollDtoFixedFlagsEnum[keyof typeof UpdatePayrollDtoFixedFlagsEnum];
 
 /**
  * 
@@ -5982,10 +5804,10 @@ export interface UpdatePositionHistoryDto {
 export interface UpdateRoleDto {
     /**
      * 
-     * @type {string}
+     * @type {RoleType}
      * @memberof UpdateRoleDto
      */
-    'type'?: UpdateRoleDtoTypeEnum;
+    'type'?: RoleType;
     /**
      * 
      * @type {string}
@@ -5994,16 +5816,6 @@ export interface UpdateRoleDto {
     'name'?: string;
 }
 
-export const UpdateRoleDtoTypeEnum = {
-    System: 'system',
-    Admin: 'admin',
-    Employer: 'employer',
-    Observer: 'observer',
-    Employee: 'employee',
-    Guest: 'guest'
-} as const;
-
-export type UpdateRoleDtoTypeEnum = typeof UpdateRoleDtoTypeEnum[keyof typeof UpdateRoleDtoTypeEnum];
 
 /**
  * 
@@ -6013,16 +5825,16 @@ export type UpdateRoleDtoTypeEnum = typeof UpdateRoleDtoTypeEnum[keyof typeof Up
 export interface UpdateTaskDto {
     /**
      * 
-     * @type {string}
+     * @type {TaskType}
      * @memberof UpdateTaskDto
      */
-    'type'?: UpdateTaskDtoTypeEnum;
+    'type'?: TaskType;
     /**
      * 
-     * @type {string}
+     * @type {TaskStatus}
      * @memberof UpdateTaskDto
      */
-    'status'?: UpdateTaskDtoStatusEnum;
+    'status'?: TaskStatus;
     /**
      * 
      * @type {number}
@@ -6061,32 +5873,6 @@ export interface UpdateTaskDto {
     'entityId'?: number | null;
 }
 
-export const UpdateTaskDtoTypeEnum = {
-    CreateUser: 'create-user',
-    CreateCompany: 'create-company',
-    FillDepartmentList: 'fill-department-list',
-    FillPositionList: 'fill-position-list',
-    PostWorkSheet: 'post-work-sheet',
-    PostAccrualDocument: 'post-accrual-document',
-    SendApplicationFss: 'send-application-fss',
-    PostPaymentFss: 'post-payment-fss',
-    PostAdvancePayment: 'post-advance-payment',
-    PostRegularPayment: 'post-regular-payment',
-    ClosePayPeriod: 'close-pay-period',
-    SendIncomeTaxReport: 'send-income-tax-report',
-    HappyBirthday: 'happy-birthday'
-} as const;
-
-export type UpdateTaskDtoTypeEnum = typeof UpdateTaskDtoTypeEnum[keyof typeof UpdateTaskDtoTypeEnum];
-export const UpdateTaskDtoStatusEnum = {
-    NotAvailable: 'not-available',
-    Todo: 'todo',
-    InProgress: 'in-progress',
-    Done: 'done',
-    DoneByUser: 'done-by-user'
-} as const;
-
-export type UpdateTaskDtoStatusEnum = typeof UpdateTaskDtoStatusEnum[keyof typeof UpdateTaskDtoStatusEnum];
 
 /**
  * 
@@ -6199,10 +5985,10 @@ export interface UpdateUserDto {
 export interface UpdateWorkNormDto {
     /**
      * 
-     * @type {string}
+     * @type {WorkNormType}
      * @memberof UpdateWorkNormDto
      */
-    'type'?: UpdateWorkNormDtoTypeEnum;
+    'type'?: WorkNormType;
     /**
      * 
      * @type {number}
@@ -6229,13 +6015,6 @@ export interface UpdateWorkNormDto {
     'dateTo'?: Date;
 }
 
-export const UpdateWorkNormDtoTypeEnum = {
-    Weekly: 'weekly',
-    Periodic: 'periodic',
-    Shifted: 'shifted'
-} as const;
-
-export type UpdateWorkNormDtoTypeEnum = typeof UpdateWorkNormDtoTypeEnum[keyof typeof UpdateWorkNormDtoTypeEnum];
 
 /**
  * 
@@ -6458,10 +6237,10 @@ export interface WithdrawPaymentDto {
 export interface WorkNorm {
     /**
      * 
-     * @type {string}
+     * @type {WorkNormType}
      * @memberof WorkNorm
      */
-    'type': WorkNormTypeEnum;
+    'type': WorkNormType;
     /**
      * 
      * @type {number}
@@ -6536,13 +6315,6 @@ export interface WorkNorm {
     'version': number;
 }
 
-export const WorkNormTypeEnum = {
-    Weekly: 'weekly',
-    Periodic: 'periodic',
-    Shifted: 'shifted'
-} as const;
-
-export type WorkNormTypeEnum = typeof WorkNormTypeEnum[keyof typeof WorkNormTypeEnum];
 
 /**
  * 
@@ -6623,6 +6395,21 @@ export interface WorkNormPeriod {
      */
     'version': number;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const WorkNormType = {
+    Weekly: 'weekly',
+    Periodic: 'periodic',
+    Shifted: 'shifted'
+} as const;
+
+export type WorkNormType = typeof WorkNormType[keyof typeof WorkNormType];
+
+
 
 /**
  * DefaultApi - axios parameter creator

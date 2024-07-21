@@ -20,7 +20,7 @@ export class EndOfMonthPayment extends PeriodListGenerator {
             const period = this.makePeriod();
             period.dateFrom = monthBegin(d);
             period.dateTo = monthEnd(d);
-            period.state = PayPeriodState.OPENED;
+            period.state = PayPeriodState.Opened;
             periodList.push(period);
         }
         return periodList;

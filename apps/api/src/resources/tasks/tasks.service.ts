@@ -122,11 +122,11 @@ export class TasksService extends AvailableForUserCompany {
     private async _generateFakeTaskList(): Promise<Task[]> {
         const dateFrom = monthBegin(new Date());
         const dateTo = monthEnd(dateFrom);
-        const availableTypeList = [TaskType.CREATE_COMPANY];
-        const notAvailableTypeList = [TaskType.FILL_DEPARTMENT_LIST, TaskType.FILL_POSITION_LIST];
+        const availableTypeList = [TaskType.CreateCompany];
+        const notAvailableTypeList = [TaskType.FillDepartmentList, TaskType.FillPositionList];
         const fakeTaskList = [
             ...availableTypeList.map((o) =>
-                Object.assign({ id: 0, type: o, dateFrom, dateTo, status: TaskStatus.TODO }),
+                Object.assign({ id: 0, type: o, dateFrom, dateTo, status: TaskStatus.Todo }),
             ),
             ...notAvailableTypeList.map((o) =>
                 Object.assign({
@@ -134,7 +134,7 @@ export class TasksService extends AvailableForUserCompany {
                     type: o,
                     dateFrom,
                     dateTo,
-                    status: TaskStatus.NOT_AVAILABLE,
+                    status: TaskStatus.NotAvailable,
                 }),
             ),
         ];

@@ -13,8 +13,8 @@ export class Law {
     @Column({
         type: 'varchar',
         length: 15,
-        default: LawType.UKRAINE,
+        default: LawType.Ukraine,
     })
-    @ApiProperty({ enum: LawType })
+    @ApiProperty({ enum: LawType, enumName: 'LawType' })
     type: string;
 }

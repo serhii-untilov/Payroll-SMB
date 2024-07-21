@@ -1,37 +1,37 @@
 export enum CalcMethod {
     // BASIC_SALARY group
-    SALARY = 'salary',
-    WAGE = 'wage',
-    COMMISSION = 'commission',
+    Salary = 'salary',
+    Wage = 'wage',
+    Commission = 'commission',
     // ADJUSTMENTS group
-    ALLOWANCE = 'allowance',
-    PAY_EVENING_HOURS = 'pay_evening_hours',
-    PAY_NIGHT_HOURS = 'pay_night_hours',
-    PAY_OVERTIME = 'pay_overtime',
-    PAY_WEEKEND_HOURS = 'pay_weekend_hours',
-    PAY_HOLIDAY_HOURS = 'pay_holiday_hours',
+    Allowance = 'allowance',
+    PaidEveningHours = 'pay_evening_hours',
+    PaidNightHours = 'pay_night_hours',
+    PaidOvertime = 'pay_overtime',
+    PaidWeekendHours = 'pay_weekend_hours',
+    PayHolidayHours = 'pay_holiday_hours',
     // BONUSES group
-    BONUS = 'bonus',
+    Bonus = 'bonus',
     // VACATIONS group
-    PAID_VACATION = 'paid-vacation',
-    UNPAID_LEAVE = 'unpaid-leave',
-    UNPAID_LEAVE_COMPANY = 'unpaid-leave-company',
+    PaidVacation = 'paid-vacation',
+    UnpaidLeave = 'unpaid-leave',
+    UnpaidLeaveCompany = 'unpaid-leave-company',
     // SICKS group
-    PAID_SICK_BY_COMPANY = 'paid-sick-by-company',
-    PAID_SICK_PAID_BY_SIF = 'paid-sick-by-sif',
-    UNCONFIRMED_SICK = 'unconfirmed-sick',
+    PaidSickByCompany = 'paid-sick-by-company',
+    PaidSickBySif = 'paid-sick-by-sif',
+    UnconfirmedSick = 'unconfirmed-sick',
     // REFUNDS group
-    INCOME_INDEXATION = 'income-indexation',
+    IncomeIndexation = 'income-indexation',
     // ONE_TIME_ACCRUALS group
-    ONE_TIME_ACCRUAL = 'one-time-accrual',
+    OneTimeAccrual = 'one-time-accrual',
     // TAXES group
-    INCOME_TAX = 'income-tax',
-    MILITARY_TAX = 'military-tax',
+    IncomeTax = 'income-tax',
+    MilitaryTax = 'military-tax',
     // PAYMENTS group
-    ADVANCE_PAYMENT = 'advance-payment',
-    REGULAR_PAYMENT = 'regular-payment',
-    FAST_PAYMENT = 'fast-payment',
-    SIF_PAYMENT = 'sif-payment',
+    AdvancedPayment = 'advance-payment',
+    RegularPayment = 'regular-payment',
+    FastPayment = 'fast-payment',
+    SifPayment = 'sif-payment',
     // DEDUCTIONS group
-    ONE_TIME_DEDUCTION = 'one-time-deduction',
+    OneTimeDeduction = 'one-time-deduction',
 }

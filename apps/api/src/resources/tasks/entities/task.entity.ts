@@ -16,7 +16,7 @@ export class Task extends Logger {
     companyId: number;
 
     @Column({ type: 'varchar', length: 30 })
-    @ApiProperty({ enum: TaskType })
+    @ApiProperty({ enum: TaskType, enumName: 'TaskType' })
     type: TaskType;
 
     @Column({ type: 'date', default: '1900-01-01' })
@@ -29,7 +29,7 @@ export class Task extends Logger {
     sequenceNumber: number;
 
     @Column({ type: 'varchar', length: 15 })
-    @ApiProperty({ enum: TaskStatus })
+    @ApiProperty({ enum: TaskStatus, enumName: 'TaskStatus' })
     status: TaskStatus;
 
     @Column({ type: 'integer', nullable: true })

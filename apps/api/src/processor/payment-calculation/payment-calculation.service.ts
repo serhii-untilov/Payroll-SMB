@@ -127,7 +127,7 @@ export class PaymentCalculationService {
         this.paymentPositions = await this.getPaymentPositions();
         this.initPaymentPositionId();
         const paymentTypeList = this.paymentTypes.filter(
-            (o) => o.paymentGroup === PaymentGroup.PAYMENTS,
+            (o) => o.paymentGroup === PaymentGroup.Payments,
         );
         const current: PaymentPosition[] = [];
         for (const paymentType of paymentTypeList) {
@@ -142,11 +142,11 @@ export class PaymentCalculationService {
     }
 
     private calcMethodFactory(paymentType: PaymentType, current: PaymentPosition[]): CalcPayment {
-        if (paymentType.calcMethod === CalcMethod.REGULAR_PAYMENT) {
+        if (paymentType.calcMethod === CalcMethod.RegularPayment) {
             return new CalcRegularPayment(this, paymentType, current);
-        } else if (paymentType.calcMethod === CalcMethod.ADVANCE_PAYMENT) {
+        } else if (paymentType.calcMethod === CalcMethod.AdvancedPayment) {
             return new CalcAdvance(this, paymentType, current);
-        } else if (paymentType.calcMethod === CalcMethod.FAST_PAYMENT) {
+        } else if (paymentType.calcMethod === CalcMethod.FastPayment) {
             return new CalcFastPayment(this, paymentType, current);
         }
         throw new Error('Undefined calc method.');
@@ -169,7 +169,7 @@ export class PaymentCalculationService {
                     o.companyId === this.company.id &&
                     o.accPeriod.getTime() === paymentPosition?.payment?.accPeriod.getTime() &&
                     o.paymentTypeId === paymentPosition?.payment?.paymentTypeId &&
-                    o.status === PaymentStatus.DRAFT,
+                    o.status === PaymentStatus.Draft,
             );
             if (!payment && paymentPosition?.payment) {
                 payment = await this.createPayment(paymentPosition.payment);
@@ -204,7 +204,7 @@ export class PaymentCalculationService {
     } {
         const toDelete: PaymentPosition[] = this.paymentPositions.filter(
             (p) =>
-                p?.payment?.status === PaymentStatus.DRAFT &&
+                p?.payment?.status === PaymentStatus.Draft &&
                 !current.find(
                     (c) =>
                         c?.payment?.paymentTypeId === p?.payment?.paymentTypeId &&

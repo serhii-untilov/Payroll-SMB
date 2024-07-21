@@ -39,7 +39,7 @@ export class PayPeriod extends Logger {
     @Column({ type: 'date', default: '9999-12-31' })
     dateTo: Date;
 
-    @Column({ type: 'varchar', length: 10, default: PayPeriodState.OPENED })
+    @Column({ type: 'varchar', length: 10, default: PayPeriodState.Opened })
     state: string;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })

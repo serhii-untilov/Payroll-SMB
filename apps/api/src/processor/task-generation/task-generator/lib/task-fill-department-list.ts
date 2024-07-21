@@ -11,7 +11,7 @@ export class TaskFillDepartmentList extends TaskGenerator {
     async getTaskList(): Promise<Task[]> {
         const task = this.makeTask();
         const count = await this.ctx.departmentsService.count(this.ctx.company.id);
-        task.status = count ? TaskStatus.DONE : TaskStatus.TODO;
+        task.status = count ? TaskStatus.Done : TaskStatus.Todo;
         if (count) {
             const countClosed = await this.ctx.payPeriodsService.countClosed(this.ctx.company.id);
             if (countClosed) {

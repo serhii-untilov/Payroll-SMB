@@ -45,7 +45,7 @@ export class Company extends Logger {
     @Column({ type: 'integer', nullable: true })
     accountingId: number;
 
-    @Column({ type: 'varchar', length: 10, default: PaymentSchedule.LAST_DAY })
+    @Column({ type: 'varchar', length: 10, default: PaymentSchedule.LastDay })
     paymentSchedule: string;
 
     @Column({ type: 'date', default: '1900-01-01' })

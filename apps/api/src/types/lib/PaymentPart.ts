@@ -1,4 +1,4 @@
 export enum PaymentPart {
-    ACCRUALS = 'accruals',
-    DEDUCTIONS = 'deductions',
+    Accruals = 'accruals',
+    Deductions = 'deductions',
 }

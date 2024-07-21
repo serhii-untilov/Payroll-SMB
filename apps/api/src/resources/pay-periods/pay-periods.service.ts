@@ -141,7 +141,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
                 companyId: null,
                 dateFrom: monthBegin(new Date()),
                 dateTo: monthEnd(new Date()),
-                state: PayPeriodState.OPENED,
+                state: PayPeriodState.Opened,
             });
         }
         const company = await this.companiesService.findOne(userId, companyId);
@@ -160,7 +160,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
             .select('COUNT(*)', 'count')
             .where('"companyId" = :companyId', { companyId })
             .andWhere('"deletedDate" is null')
-            .andWhere('"state" = :state', { state: PayPeriodState.CLOSED })
+            .andWhere('"state" = :state', { state: PayPeriodState.Closed })
             .getRawOne();
         return Number(count);
     }
@@ -178,18 +178,18 @@ export class PayPeriodsService extends AvailableForUserCompany {
         const next = await this.repository.findOneOrFail({
             where: { companyId: current.companyId, dateFrom: nextDateFrom },
         });
-        if (current.state !== PayPeriodState.CLOSED) {
+        if (current.state !== PayPeriodState.Closed) {
             await this.repository.save({
                 id: currentPayPeriodId,
-                state: PayPeriodState.CLOSED,
+                state: PayPeriodState.Closed,
                 updatedUserId: userId,
                 updatedDate: new Date(),
             });
         }
-        if (next.state !== PayPeriodState.OPENED) {
+        if (next.state !== PayPeriodState.Opened) {
             await this.repository.save({
                 id: next.id,
-                state: PayPeriodState.OPENED,
+                state: PayPeriodState.Opened,
                 updatedUserId: userId,
                 updatedDate: new Date(),
             });
@@ -204,7 +204,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
     async open(userId: number, currentPayPeriodId: number, version: number): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
         checkVersionOrFail(current, { version });
-        if (current.state !== PayPeriodState.OPENED) {
+        if (current.state !== PayPeriodState.Opened) {
             throw new ConflictException('The given period is not opened.');
         }
         const company = await this.companiesService.findOne(userId, current.companyId);
@@ -217,10 +217,10 @@ export class PayPeriodsService extends AvailableForUserCompany {
         const prior = await this.repository.findOneOrFail({
             where: { companyId: current.companyId, dateTo: priorDateTo },
         });
-        if (prior.state !== PayPeriodState.OPENED) {
+        if (prior.state !== PayPeriodState.Opened) {
             await this.repository.save({
                 id: prior.id,
-                state: PayPeriodState.OPENED,
+                state: PayPeriodState.Opened,
                 updatedUserId: userId,
                 updatedDate: new Date(),
             });
@@ -245,7 +245,7 @@ function getPeriodList(dateFrom: Date, dateTo: Date): PayPeriod[] {
             companyId: 0,
             dateFrom: monthBegin(d),
             dateTo: monthEnd(d),
-            state: PayPeriodState.OPENED,
+            state: PayPeriodState.Opened,
         });
         periodList.push(period);
     }

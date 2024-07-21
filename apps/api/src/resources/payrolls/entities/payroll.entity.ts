@@ -45,7 +45,7 @@ export class Payroll extends Logger {
     dateTo: Date;
 
     @Column({ type: 'varchar', length: 10, default: '' })
-    @ApiProperty({ enum: ResourceType, enumName: 'ResourceTypeEnum' })
+    @ApiProperty({ enum: ResourceType, enumName: 'ResourceType' })
     sourceType: ResourceType;
 
     @Column({ type: 'integer', nullable: true })
@@ -85,11 +85,11 @@ export class Payroll extends Logger {
     mask2: number;
 
     @Column({ type: 'bigint' })
-    @ApiProperty({ enum: RecordFlags, default: 0 })
+    @ApiProperty({ enum: RecordFlags, default: 0, enumName: 'RecordFlags' })
     recordFlags: RecordFlags;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: FixedFlags })
+    @ApiProperty({ enum: FixedFlags, enumName: 'FixedFlags' })
     fixedFlags: FixedFlags;
 
     @Column({ type: 'jsonb', nullable: true })

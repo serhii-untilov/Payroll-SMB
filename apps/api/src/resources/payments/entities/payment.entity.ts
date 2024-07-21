@@ -64,11 +64,11 @@ export class Payment extends Logger {
     funds: number;
 
     @Column({ type: 'varchar', length: 10 })
-    @ApiProperty({ enum: PaymentStatus })
+    @ApiProperty({ enum: PaymentStatus, enumName: 'PaymentStatus' })
     status: PaymentStatus;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: RecordFlags })
+    @ApiProperty({ enum: RecordFlags, enumName: 'RecordFlags' })
     recordFlags: RecordFlags;
 
     @Column({ type: 'varchar', length: 256, default: '' })

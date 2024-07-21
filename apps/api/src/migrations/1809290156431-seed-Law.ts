@@ -5,7 +5,7 @@ import { LawType } from '../types';
 
 const lang = process.env.LANGUAGE || 'uk';
 const entity = Law;
-const recordList = [{ id: 1, name: { en: 'Ukraine', uk: 'Україна' }, type: LawType.UKRAINE }];
+const recordList = [{ id: 1, name: { en: 'Ukraine', uk: 'Україна' }, type: LawType.Ukraine }];
 
 export class Seed1809290156431 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {

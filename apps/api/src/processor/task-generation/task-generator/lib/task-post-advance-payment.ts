@@ -11,7 +11,7 @@ export class TaskPostAdvancePayment extends TaskGenerator {
     }
 
     async getTaskList(): Promise<Task[]> {
-        if (this.ctx.company.paymentSchedule == PaymentSchedule.EVERY_15_DAY) {
+        if (this.ctx.company.paymentSchedule == PaymentSchedule.Every15day) {
             return [];
         }
         const task = this.makeTask();
@@ -21,11 +21,11 @@ export class TaskPostAdvancePayment extends TaskGenerator {
             await this.ctx.paymentsService.findAll({
                 companyId: this.ctx.company.id,
                 accPeriod: this.ctx.payPeriod.dateFrom,
-                status: PaymentStatus.DRAFT,
+                status: PaymentStatus.Draft,
                 relations: true,
             })
-        ).filter((o) => o.paymentType?.calcMethod === CalcMethod.ADVANCE_PAYMENT).length;
-        task.status = count ? TaskStatus.TODO : TaskStatus.DONE;
+        ).filter((o) => o.paymentType?.calcMethod === CalcMethod.AdvancedPayment).length;
+        task.status = count ? TaskStatus.Todo : TaskStatus.Done;
         return [task];
     }
 }

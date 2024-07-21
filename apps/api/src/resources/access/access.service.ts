@@ -173,23 +173,23 @@ export class AccessService {
     }
 
     canRegisterUserByRoleType(roleType: string): boolean {
-        const canRegister = [RoleType.EMPLOYER, RoleType.EMPLOYEE, RoleType.GUEST];
+        const canRegister = [RoleType.Employer, RoleType.Employee, RoleType.Guest];
         return canRegister.includes(roleType as RoleType);
     }
 
     canOperateRoleType(parentUserRoleType: string, childUserRoleType: string) {
         const whoMadeWho = [
             // ADMIN
-            { parent: RoleType.ADMIN, child: RoleType.ADMIN },
-            { parent: RoleType.ADMIN, child: RoleType.EMPLOYER },
-            { parent: RoleType.ADMIN, child: RoleType.OBSERVER },
-            { parent: RoleType.ADMIN, child: RoleType.EMPLOYEE },
-            { parent: RoleType.ADMIN, child: RoleType.GUEST },
+            { parent: RoleType.Admin, child: RoleType.Admin },
+            { parent: RoleType.Admin, child: RoleType.Employer },
+            { parent: RoleType.Admin, child: RoleType.Observer },
+            { parent: RoleType.Admin, child: RoleType.Employee },
+            { parent: RoleType.Admin, child: RoleType.Guest },
             // EMPLOYER
-            { parent: RoleType.EMPLOYER, child: RoleType.EMPLOYEE },
-            { parent: RoleType.EMPLOYER, child: RoleType.OBSERVER },
-            { parent: RoleType.EMPLOYER, child: RoleType.EMPLOYEE },
-            { parent: RoleType.EMPLOYER, child: RoleType.GUEST },
+            { parent: RoleType.Employer, child: RoleType.Employee },
+            { parent: RoleType.Employer, child: RoleType.Observer },
+            { parent: RoleType.Employer, child: RoleType.Employee },
+            { parent: RoleType.Employer, child: RoleType.Guest },
         ];
         return (
             whoMadeWho.findIndex(

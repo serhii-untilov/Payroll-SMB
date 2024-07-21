@@ -1,5 +1,5 @@
 export enum PayPeriodState {
-    OPENED = 'opened',
-    IMPORTED = 'imported',
-    CLOSED = 'closed',
+    Opened = 'opened',
+    Imported = 'imported',
+    Closed = 'closed',
 }

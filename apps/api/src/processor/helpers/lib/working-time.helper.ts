@@ -14,7 +14,7 @@ export function getWorkingTimePlan(
 ): WorkingTime {
     if (workNormId) {
         const workNorm = workNorms.find((o) => o.id === workNormId);
-        if (workNorm?.type === WorkNormType.WEEKLY) {
+        if (workNorm?.type === WorkNormType.Weekly) {
             return getPlanForWeekly(workNorm, onDate);
         }
     }

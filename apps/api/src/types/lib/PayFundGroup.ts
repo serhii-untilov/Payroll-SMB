@@ -1,4 +1,4 @@
 export enum PayFundGroup {
-    ECB = 'ECB',
-    CUSTOM = 'custom',
+    Ecb = 'ECB',
+    Custom = 'custom',
 }

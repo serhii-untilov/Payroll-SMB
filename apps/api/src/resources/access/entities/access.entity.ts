@@ -9,14 +9,14 @@ export class Access extends Logger {
     id: number;
 
     @Column({ type: 'varchar', length: 20 })
-    @ApiProperty({ enum: RoleType })
+    @ApiProperty({ enum: RoleType, enumName: 'RoleType' })
     roleType: RoleType;
 
     @Column({ type: 'varchar', length: 20 })
-    @ApiProperty({ enum: ResourceType, enumName: 'ResourceTypeEnum' })
+    @ApiProperty({ enum: ResourceType, enumName: 'ResourceType' })
     resourceType: ResourceType;
 
     @Column({ type: 'varchar', length: 20 })
-    @ApiProperty({ enum: AccessType })
+    @ApiProperty({ enum: AccessType, enumName: 'AccessType' })
     accessType: AccessType;
 }

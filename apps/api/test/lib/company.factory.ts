@@ -26,7 +26,7 @@ export const createMockCompany = (data?: Partial<Company>) => {
         taxId: createMockTaxId(),
         accounting: accounting,
         accountingId: accounting.id,
-        paymentSchedule: PaymentSchedule.LAST_DAY,
+        paymentSchedule: PaymentSchedule.LastDay,
         payPeriod: monthBegin(currentDate),
         checkDate: monthEnd(currentDate),
         departments: [department],

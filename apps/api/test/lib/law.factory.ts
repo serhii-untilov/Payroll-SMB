@@ -10,7 +10,7 @@ export const createMockLaw = (data?: Partial<Law>): Law => {
     return {
         id,
         name,
-        type: LawType.UKRAINE,
+        type: LawType.Ukraine,
         ...data,
     };
 };

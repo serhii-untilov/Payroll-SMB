@@ -37,8 +37,8 @@ export abstract class CalcPayment {
             deductions: 0,
             paySum: 0,
             funds: 0,
-            status: PaymentStatus.DRAFT,
-            recordFlags: RecordFlags.AUTO,
+            status: PaymentStatus.Draft,
+            recordFlags: RecordFlags.Auto,
         });
     }
 
@@ -52,7 +52,7 @@ export abstract class CalcPayment {
             deductions: 0,
             paySum: 0,
             funds: 0,
-            recordFlags: RecordFlags.AUTO,
+            recordFlags: RecordFlags.Auto,
         });
     }
 }

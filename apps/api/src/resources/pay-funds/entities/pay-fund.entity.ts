@@ -28,7 +28,7 @@ export class PayFund {
     payFundTypeId: number;
 
     @Column({ type: 'varchar', length: 30 })
-    @ApiProperty({ enum: PayFundCategory })
+    @ApiProperty({ enum: PayFundCategory, enumName: 'PayFundCategory' })
     payFundCategory: PayFundCategory;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })

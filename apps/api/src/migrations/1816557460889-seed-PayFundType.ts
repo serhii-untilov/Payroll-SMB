@@ -11,8 +11,8 @@ const recordList = [
     {
         law: 'ukraine',
         name: { en: 'ECB on vacation', uk: 'ЄСВ на оплату Відпустки' },
-        group: PayFundGroup.ECB,
-        calcMethod: PayFundCalcMethod.ECB_VACATION,
+        group: PayFundGroup.Ecb,
+        calcMethod: PayFundCalcMethod.EcbVacation,
         sequence: 1,
         description: {
             en: 'Calculation of ECB on vacation.',
@@ -22,8 +22,8 @@ const recordList = [
     {
         law: 'ukraine',
         name: { en: 'ECB on Salary', uk: 'ЄСВ на Заробітну плату' },
-        group: PayFundGroup.ECB,
-        calcMethod: PayFundCalcMethod.ECB_SALARY,
+        group: PayFundGroup.Ecb,
+        calcMethod: PayFundCalcMethod.EcbSalary,
         sequence: 2,
         description: {
             en: 'Calculation of ECB on wages.',
@@ -33,8 +33,8 @@ const recordList = [
     {
         law: 'ukraine',
         name: { en: 'ECB on commission', uk: 'ЄСВ на оплату за Договором ЦПХ' },
-        group: PayFundGroup.ECB,
-        calcMethod: PayFundCalcMethod.ECB_COMMISSION,
+        group: PayFundGroup.Ecb,
+        calcMethod: PayFundCalcMethod.EcbCommission,
         sequence: 3,
         description: {
             en: 'Calculation of ECB on commission.',
@@ -47,8 +47,8 @@ const recordList = [
             en: 'ECB on sick leave by the company',
             uk: 'ЄСВ на оплату Лікарняного за рахунок підприємства',
         },
-        group: PayFundGroup.ECB,
-        calcMethod: PayFundCalcMethod.ECB_SICK_BY_COMPANY,
+        group: PayFundGroup.Ecb,
+        calcMethod: PayFundCalcMethod.EcbSickByCompany,
         sequence: 4,
         description: {
             en: 'Calculation of ECB for payment of sick leave at the expense of the company.',
@@ -61,8 +61,8 @@ const recordList = [
             en: 'ECB on sick leave by the SIF',
             uk: 'ЄСВ на оплату Лікарняного за рахунок ФСС',
         },
-        group: PayFundGroup.ECB,
-        calcMethod: PayFundCalcMethod.ECB_SICK_BY_SIF,
+        group: PayFundGroup.Ecb,
+        calcMethod: PayFundCalcMethod.EcbSickBySif,
         sequence: 5,
         description: {
             en: 'Calculation of ECB for payment of sick leave at the expense of the SIF.',
@@ -75,8 +75,8 @@ const recordList = [
             en: 'ECB on sick leave by maternity',
             uk: 'ЄСВ на оплату Пологового лікарняного',
         },
-        group: PayFundGroup.ECB,
-        calcMethod: PayFundCalcMethod.ECB_MATERNITY,
+        group: PayFundGroup.Ecb,
+        calcMethod: PayFundCalcMethod.EcbMaternity,
         sequence: 6,
         description: {
             en: 'Calculation of ECB for payment of sick leave at the expense of the SIF.',
@@ -89,8 +89,8 @@ const recordList = [
             en: 'ECB to the minimum wage',
             uk: 'ЄСВ доплата до Мінімальної заробітної плати',
         },
-        group: PayFundGroup.ECB,
-        calcMethod: PayFundCalcMethod.ECB_MIN_WAGE,
+        group: PayFundGroup.Ecb,
+        calcMethod: PayFundCalcMethod.EcbMinWage,
         sequence: 99,
         description: {
             en: 'Calculation to the minimum wage.',

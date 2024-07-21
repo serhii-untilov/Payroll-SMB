@@ -15,15 +15,15 @@ const recordList = [
     // access to any resource through the API.
 
     // ADMIN
-    ...generateAccess_Full(RoleType.ADMIN, ResourceType.Payment),
+    ...generateAccess_Full(RoleType.Admin, ResourceType.Payment),
     // EMPLOYER
-    ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.Payment),
+    ...generateAccess_Full(RoleType.Employer, ResourceType.Payment),
     // OBSERVER
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.Payment),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.Payment),
     // EMPLOYEE
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.Payment),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.Payment),
     // GUEST
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.Payment),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.Payment),
 ];
 
 export class Seed1819288749808 implements MigrationInterface {

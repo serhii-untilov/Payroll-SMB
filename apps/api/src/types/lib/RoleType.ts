@@ -1,14 +1,14 @@
 export enum RoleType {
     // This role is used to update, migrate, and seed DB only and doesn't have
     // access to any resource through the API.
-    SYSTEM = 'system',
+    System = 'system',
 
-    ADMIN = 'admin',
+    Admin = 'admin',
 
-    EMPLOYER = 'employer',
-    OBSERVER = 'observer',
+    Employer = 'employer',
+    Observer = 'observer',
 
-    EMPLOYEE = 'employee',
+    Employee = 'employee',
 
-    GUEST = 'guest',
+    Guest = 'guest',
 }

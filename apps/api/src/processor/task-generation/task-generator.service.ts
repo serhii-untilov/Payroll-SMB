@@ -102,25 +102,25 @@ export class TaskGenerationService {
             relations: false,
         });
         this._id = this.priorTaskList
-            .filter((o) => o.status === TaskStatus.DONE_BY_USER)
+            .filter((o) => o.status === TaskStatus.DoneByUser)
             .reduce((a, b) => (a > b.id ? a : b.id), 0);
         await this._generate();
     }
 
     private async _generate() {
         const typeList = [
-            TaskType.CREATE_COMPANY,
-            TaskType.FILL_DEPARTMENT_LIST,
-            TaskType.FILL_POSITION_LIST,
-            TaskType.SEND_INCOME_TAX_REPORT,
-            TaskType.POST_WORK_SHEET,
-            TaskType.POST_ACCRUAL_DOCUMENT,
-            TaskType.SEND_APPLICATION_FSS,
-            TaskType.POST_PAYMENT_FSS,
-            TaskType.POST_ADVANCE_PAYMENT,
-            TaskType.POST_REGULAR_PAYMENT,
-            TaskType.CLOSE_PAY_PERIOD,
-            TaskType.HAPPY_BIRTHDAY,
+            TaskType.CreateCompany,
+            TaskType.FillDepartmentList,
+            TaskType.FillPositionList,
+            TaskType.SendIncomeTaxReport,
+            TaskType.PostWorkSheet,
+            TaskType.PostAccrualDocument,
+            TaskType.SendApplicationFss,
+            TaskType.PostPaymentFss,
+            TaskType.PostAdvancePayment,
+            TaskType.PostRegularPayment,
+            TaskType.ClosePayPeriod,
+            TaskType.HappyBirthday,
         ];
         for (const type of typeList) {
             const generator = this._getTaskGenerator(type);
@@ -140,7 +140,7 @@ export class TaskGenerationService {
             const found = this.currentTaskList.find(
                 (o) =>
                     o.type === task.type &&
-                    (o.status === task.status || task.status === TaskStatus.DONE_BY_USER) &&
+                    (o.status === task.status || task.status === TaskStatus.DoneByUser) &&
                     (o.entityId || 0) === (task.entityId || 0) &&
                     dropTime(o.dateFrom) === dropTime(task.dateFrom) &&
                     dropTime(o.dateTo) === dropTime(task.dateTo) &&
@@ -170,51 +170,51 @@ export class TaskGenerationService {
     private _getTaskGenerator(type: TaskType): TaskGenerator {
         const found = [
             {
-                type: TaskType.CREATE_COMPANY,
+                type: TaskType.CreateCompany,
                 generator: () => new TaskCreateCompany(this, type),
             },
             {
-                type: TaskType.CLOSE_PAY_PERIOD,
+                type: TaskType.ClosePayPeriod,
                 generator: () => new TaskClosePayPeriod(this, type),
             },
             {
-                type: TaskType.POST_ACCRUAL_DOCUMENT,
+                type: TaskType.PostAccrualDocument,
                 generator: () => new TaskPostAccrualDocument(this, type),
             },
             {
-                type: TaskType.POST_ADVANCE_PAYMENT,
+                type: TaskType.PostAdvancePayment,
                 generator: () => new TaskPostAdvancePayment(this, type),
             },
             {
-                type: TaskType.SEND_APPLICATION_FSS,
+                type: TaskType.SendApplicationFss,
                 generator: () => new TaskSendFssApplication(this, type),
             },
             {
-                type: TaskType.FILL_DEPARTMENT_LIST,
+                type: TaskType.FillDepartmentList,
                 generator: () => new TaskFillDepartmentList(this, type),
             },
             {
-                type: TaskType.SEND_INCOME_TAX_REPORT,
+                type: TaskType.SendIncomeTaxReport,
                 generator: () => new TaskSendIncomeTaxReport(this, type),
             },
             {
-                type: TaskType.POST_PAYMENT_FSS,
+                type: TaskType.PostPaymentFss,
                 generator: () => new TaskPostFssPayment(this, type),
             },
             {
-                type: TaskType.FILL_POSITION_LIST,
+                type: TaskType.FillPositionList,
                 generator: () => new TaskFillPositionList(this, type),
             },
             {
-                type: TaskType.POST_REGULAR_PAYMENT,
+                type: TaskType.PostRegularPayment,
                 generator: () => new TaskPostRegularPayment(this, type),
             },
             {
-                type: TaskType.POST_WORK_SHEET,
+                type: TaskType.PostWorkSheet,
                 generator: () => new TaskPostWorkSheet(this, type),
             },
             {
-                type: TaskType.HAPPY_BIRTHDAY,
+                type: TaskType.HappyBirthday,
                 generator: () => new TaskHappyBirthday(this, type),
             },
         ].find((o) => o.type === type);

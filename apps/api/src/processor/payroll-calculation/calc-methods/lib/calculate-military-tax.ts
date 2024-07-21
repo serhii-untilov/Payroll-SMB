@@ -7,7 +7,7 @@ import { getMaxDate, getMinDate } from '@repo/shared';
 import { PayrollCalculationService } from './../../payroll-calculation.service';
 
 export function calculateMilitaryTax(ctx: PayrollCalculationService) {
-    const militaryTaxes = ctx.paymentTypes.filter((o) => o.calcMethod === CalcMethod.MILITARY_TAX);
+    const militaryTaxes = ctx.paymentTypes.filter((o) => o.calcMethod === CalcMethod.MilitaryTax);
     for (const accPeriod of ctx.accPeriods) {
         const payrolls: Payroll[] = [];
         for (const militaryTax of militaryTaxes) {
@@ -40,7 +40,7 @@ function makePayroll(
         dateFrom,
         dateTo,
         factSum: 0,
-        recordFlags: RecordFlags.AUTO,
+        recordFlags: RecordFlags.Auto,
     });
     return payroll;
 }
@@ -48,7 +48,7 @@ function makePayroll(
 function calcPlanSum(ctx: PayrollCalculationService, accPeriod: PayPeriod) {
     // TODO: Entry Table
     const paymentTypeIds = ctx.paymentTypes
-        .filter((o) => o.paymentPart === PaymentPart.ACCRUALS)
+        .filter((o) => o.paymentPart === PaymentPart.Accruals)
         .map((o) => o.id);
     const payrolls = ctx.getPayrollsAccPeriod(accPeriod.dateFrom);
     return accPeriodFactSum(ctx.payPeriod, accPeriod, payrolls, paymentTypeIds);

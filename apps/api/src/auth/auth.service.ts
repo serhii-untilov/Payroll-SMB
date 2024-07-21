@@ -122,7 +122,7 @@ export class AuthService {
 
     async demo(): Promise<AuthDto> {
         await this.accessService.availableForRoleTypeOrFail(
-            RoleType.EMPLOYER,
+            RoleType.Employer,
             ResourceType.Demo,
             AccessType.Access,
         );

@@ -13,35 +13,35 @@ const recordList = [
         lastName: '',
         email: 'system@payroll.smb',
         password: null, // To prevent this user from logging in.
-        roleType: RoleType.SYSTEM || 'system',
+        roleType: RoleType.System || 'system',
     },
     {
         firstName: { en: 'Admin', uk: 'Адміністратор' },
         lastName: '',
         email: 'admin@payroll.smb',
         password: 'admin',
-        roleType: RoleType.ADMIN || 'admin',
+        roleType: RoleType.Admin || 'admin',
     },
     {
         firstName: { en: 'User', uk: 'Користувач' },
         lastName: '',
         email: 'user@payroll.smb',
         password: 'user',
-        roleType: RoleType.EMPLOYER || 'employer',
+        roleType: RoleType.Employer || 'employer',
     },
     {
         firstName: { en: 'User', uk: 'Працівник' },
         lastName: '',
         email: 'employee@payroll.smb',
         password: 'employee',
-        roleType: RoleType.EMPLOYEE || 'employee',
+        roleType: RoleType.Employee || 'employee',
     },
     {
         firstName: { en: 'Guest', uk: 'Гість' },
         lastName: '',
         email: 'guest@payroll.smb',
         password: 'guest',
-        roleType: RoleType.GUEST || 'guest',
+        roleType: RoleType.Guest || 'guest',
     },
 ];
 

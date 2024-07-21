@@ -1,4 +1,4 @@
 export enum LawType {
-    UKRAINE = 'ukraine',
-    CUSTOM = 'custom',
+    Ukraine = 'ukraine',
+    Custom = 'custom',
 }
