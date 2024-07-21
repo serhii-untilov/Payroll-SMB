@@ -6,7 +6,7 @@ import { Accounting } from './entities/accounting.entity';
 
 @Injectable()
 export class AccountingService {
-    public readonly resourceType = ResourceType.ACCOUNTING;
+    public readonly resourceType = ResourceType.Accounting;
 
     constructor(
         @InjectRepository(Accounting)

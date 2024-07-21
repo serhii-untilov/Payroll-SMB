@@ -1,3 +1,3 @@
 export enum BankAccountType {
-    CHECKING = 'checking',
+    Checking = 'checking',
 }

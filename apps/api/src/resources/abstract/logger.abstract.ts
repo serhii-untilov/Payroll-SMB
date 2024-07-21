@@ -25,16 +25,6 @@ export abstract class Logger {
     @Column({ type: 'integer', nullable: true })
     deletedUserId?: number | null;
 
-    @VersionColumn({ default: 1, nullable: true })
+    @VersionColumn({ default: 1 })
     version: number;
 }
-
-export const LoggerFields = [
-    'createdDate',
-    'createdUserId',
-    'updatedDate',
-    'updatedUserId',
-    'deletedDate',
-    'deletedUserId',
-    'version',
-];

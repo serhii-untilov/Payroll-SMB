@@ -1,4 +1,6 @@
-import { Payment, PaymentPosition, PaymentType } from '@/resources';
+import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
+import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
+import { Payment } from './../../../../resources/payments/entities/payment.entity';
 import { PaymentStatus, RecordFlags } from '@/types';
 import { PaymentCalculationService } from '../../payment-calculation.service';
 

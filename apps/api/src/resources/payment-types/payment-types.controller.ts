@@ -1,5 +1,5 @@
+import { PaymentType } from './entities/payment-type.entity';
 import { AccessTokenGuard } from '@/guards';
-import { PaymentType } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     Body,

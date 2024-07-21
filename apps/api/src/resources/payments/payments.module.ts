@@ -13,12 +13,12 @@ import { PaymentsService } from './payments.service';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Payment]),
-        forwardRef(() => PositionsModule),
-        forwardRef(() => CompaniesModule),
         forwardRef(() => AccessModule),
-        forwardRef(() => PayrollsModule),
-        forwardRef(() => PayPeriodsModule),
+        forwardRef(() => CompaniesModule),
         forwardRef(() => PaymentPositionsModule),
+        forwardRef(() => PayPeriodsModule),
+        forwardRef(() => PayrollsModule),
+        forwardRef(() => PositionsModule),
     ],
     controllers: [PaymentsController],
     providers: [PaymentsService],

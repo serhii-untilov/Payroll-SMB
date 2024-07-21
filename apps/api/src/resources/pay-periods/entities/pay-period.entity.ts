@@ -1,6 +1,6 @@
 import { Logger } from '../../abstract';
 import { Company } from '../../companies/entities/company.entity';
-import { PayPeriodState } from '@/types';
+import { PayPeriodState } from './../../../types';
 import {
     AfterLoad,
     Column,

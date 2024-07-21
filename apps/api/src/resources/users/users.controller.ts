@@ -27,22 +27,16 @@ import {
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FindOneUserDto } from './dto/find-one-user.dto';
 import { PublicUserDataDto } from './dto/public-user-date.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserCompany } from './entities/user-company.entity';
 import { User } from './entities/user.entity';
-import { UsersCompanyService } from './users-company.service';
 import { UsersService } from './users.service';
-import { FindAllUserCompanyDto } from './dto/find-all-user-company.dto';
-import { FindOneUserDto } from './dto/find-one-user.dto';
 
 @Controller('users')
 @ApiBearerAuth()
 export class UsersController {
-    constructor(
-        private readonly usersService: UsersService,
-        private readonly usersCompanyService: UsersCompanyService,
-    ) {}
+    constructor(private readonly usersService: UsersService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
@@ -140,51 +134,5 @@ export class UsersController {
         const userId = getUserId(req);
         const user = await this.usersService.remove(userId, id);
         return this.usersService.toPublic(user);
-    }
-
-    @Post(':id/companies')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    @ApiOkResponse({
-        description: 'The found records',
-        schema: { type: 'array', items: { $ref: getSchemaPath(UserCompany) } },
-    })
-    @ApiForbiddenResponse({ description: 'Forbidden' })
-    async companies(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
-        @Body() params: FindAllUserCompanyDto,
-    ): Promise<UserCompany[]> {
-        const userId = getUserId(req);
-        return await this.usersCompanyService.getUserCompanyList(userId, id, params);
-    }
-
-    @Delete('/companies/:id')
-    @UseGuards(AccessTokenGuard)
-    @ApiOperation({ summary: 'Soft delete a User Company record' })
-    @ApiOkResponse({ description: 'The record has been successfully deleted', type: UserCompany })
-    @ApiForbiddenResponse({ description: 'Forbidden' })
-    @ApiNotFoundResponse({ description: 'Not found' })
-    async companiesRemove(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
-    ): Promise<UserCompany> {
-        const userId = getUserId(req);
-        return await this.usersCompanyService.remove(userId, id);
-    }
-
-    @Post('/companies/:id/restore')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: 'Restore a User Company record' })
-    @ApiOkResponse({ description: 'The record has been successfully restored', type: UserCompany })
-    @ApiForbiddenResponse({ description: 'Forbidden' })
-    @ApiNotFoundResponse({ description: 'Not found' })
-    async companiesRestore(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
-    ): Promise<UserCompany> {
-        const userId = getUserId(req);
-        return await this.usersCompanyService.restore(userId, id);
     }
 }

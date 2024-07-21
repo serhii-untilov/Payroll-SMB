@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AccessType, ResourceType, RoleType } from '@/types';
+import { AccessType, ResourceType, RoleType } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from './../../abstract/logger.abstract';
 
@@ -13,7 +13,7 @@ export class Access extends Logger {
     roleType: RoleType;
 
     @Column({ type: 'varchar', length: 20 })
-    @ApiProperty({ enum: ResourceType })
+    @ApiProperty({ enum: ResourceType, enumName: 'ResourceTypeEnum' })
     resourceType: ResourceType;
 
     @Column({ type: 'varchar', length: 20 })

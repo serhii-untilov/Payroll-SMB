@@ -1,3 +1,4 @@
+import { Company } from './../../src/resources/companies/entities/company.entity';
 import { createMockDepartment } from './department.factory';
 import { incrementalNumber, randCompanyName } from '@ngneat/falso';
 import { createMockLaw } from './law.factory';
@@ -5,7 +6,6 @@ import { createMockAccounting } from './accounting.factory';
 import { createMockUser } from './user.factory';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 import { createMockTaxId } from './taxId.factory';
-import { Company } from '@/resources';
 import { PaymentSchedule } from '@/types';
 
 const factory = incrementalNumber();

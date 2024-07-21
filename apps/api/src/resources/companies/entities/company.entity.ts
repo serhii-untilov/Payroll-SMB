@@ -1,5 +1,9 @@
-import { Accounting, Department, Law, Position, UserCompany } from '@/resources';
-import { PaymentSchedule } from '@/types';
+import { Accounting } from './../../accounting/entities/accounting.entity';
+import { Department } from './../../departments/entities/department.entity';
+import { Law } from './../../laws/entities/law.entity';
+import { Position } from './../../positions/entities/position.entity';
+import { UserCompany } from './../../user-companies/entities/user-company.entity';
+import { PaymentSchedule } from './../../../types/lib/PaymentSchedule';
 import { monthBegin, monthEnd } from '@repo/shared';
 import {
     AfterLoad,

@@ -6,6 +6,7 @@ import { capitalizeFirstLetter } from '@repo/shared';
 import { writeFileSync } from 'fs';
 import path from 'path';
 import { AppModule } from './app/app.module';
+import 'reflect-metadata';
 import metadata from './metadata';
 
 async function bootstrap() {

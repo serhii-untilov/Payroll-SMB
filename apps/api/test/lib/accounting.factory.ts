@@ -1,4 +1,4 @@
-import { Accounting } from '@/resources';
+import { Accounting } from './../../src/resources/accounting/entities/accounting.entity';
 import { AccountingType } from '@/types';
 import { incrementalNumber, randCountry } from '@ngneat/falso';
 
@@ -8,7 +8,7 @@ export const createMockAccounting = (data?: Partial<Accounting>): Accounting => 
     return {
         id: factory(),
         name: randCountry(),
-        type: AccountingType.GENERIC,
+        type: AccountingType.Generic,
         createdDate: new Date(),
         updatedDate: new Date(),
         version: 1,

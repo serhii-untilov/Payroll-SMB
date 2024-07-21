@@ -20,5 +20,6 @@ export * from './position-history';
 export * from './positions';
 export * from './roles';
 export * from './tasks';
+export * from './user-companies';
 export * from './users';
 export * from './work-norms';

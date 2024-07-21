@@ -1,7 +1,6 @@
 import { usersFindCurrent, authLogin, authLogout, authRegister } from '@/services/auth.service';
 import { getUserAccessToken } from '@/services/token.service';
-import { AuthDto, CreateUserDto } from '@repo/openapi';
-import { IAuth, ICreateUser, IPublicUserData } from '@repo/shared';
+import { AuthDto, CreateUserDto, PublicUserDataDto } from '@repo/openapi';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';
 import { createContext, useEffect, useReducer } from 'react';
@@ -9,13 +8,13 @@ import { createContext, useEffect, useReducer } from 'react';
 interface State {
     isInitialized: boolean;
     isAuthenticated: boolean;
-    user: IPublicUserData | null;
+    user: PublicUserDataDto | null;
 }
 
 interface AuthContextValue extends State {
-    login: (params: IAuth) => Promise<void>;
+    login: (params: AuthDto) => Promise<void>;
     logout: () => Promise<void>;
-    register: (params: ICreateUser) => Promise<void>;
+    register: (params: CreateUserDto) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -26,14 +25,14 @@ type InitializeAction = {
     type: 'INITIALIZE';
     payload: {
         isAuthenticated: boolean;
-        user: IPublicUserData | null;
+        user: PublicUserDataDto | null;
     };
 };
 
 type LoginAction = {
     type: 'LOGIN';
     payload: {
-        user: IPublicUserData;
+        user: PublicUserDataDto;
     };
 };
 
@@ -44,7 +43,7 @@ type LogoutAction = {
 type RegisterAction = {
     type: 'REGISTER';
     payload: {
-        user: IPublicUserData;
+        user: PublicUserDataDto;
     };
 };
 

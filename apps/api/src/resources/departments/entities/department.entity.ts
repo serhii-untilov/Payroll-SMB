@@ -2,14 +2,13 @@ import {
     AfterLoad,
     Column,
     Entity,
-    JoinColumn,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
+import { Company } from './../../companies/entities/company.entity';
 import { Logger } from './../../abstract/logger.abstract';
-import { Company } from '@/resources';
 
 @Entity()
 export class Department extends Logger {
@@ -20,7 +19,6 @@ export class Department extends Logger {
     name: string;
 
     @ManyToOne(() => Company, (company) => company.departments)
-    @JoinColumn()
     company?: Relation<Company>;
 
     @Column({ type: 'integer' })
@@ -33,7 +31,6 @@ export class Department extends Logger {
     dateTo: Date;
 
     @ManyToOne(() => Department, (department) => department.childDepartments, { nullable: true })
-    @JoinColumn()
     parentDepartment?: Relation<Department> | null;
 
     @Column({ type: 'integer', nullable: true })

@@ -1,6 +1,4 @@
-'use strict';
-
-import { Task } from '@/resources';
+import { Task } from './../../../../resources/tasks/entities/task.entity';
 import { TaskStatus, TaskType } from '@/types';
 import { TaskGenerationService } from '../../task-generator.service';
 import { TaskGenerator } from '../abstract/task-generator';
@@ -12,7 +10,7 @@ export class TaskCreateCompany extends TaskGenerator {
 
     async getTaskList(): Promise<Task[]> {
         const task = this.makeTask();
-        const count = await this.ctx.usersCompanyService.count(
+        const count = await this.ctx.userCompaniesService.count(
             this.ctx.userId,
             this.ctx.company.id,
         );

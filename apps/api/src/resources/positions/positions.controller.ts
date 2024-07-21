@@ -1,5 +1,5 @@
+import { Position } from './entities/position.entity';
 import { AccessTokenGuard } from '@/guards';
-import { Position } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     Body,
@@ -23,7 +23,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@/types';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { FindAllPositionDto } from './dto/find-all-position.dto';

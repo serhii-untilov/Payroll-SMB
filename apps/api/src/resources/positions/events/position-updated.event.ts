@@ -1,4 +1,4 @@
-import { Position } from '../entities/position.entity';
+import { Position } from './../entities/position.entity';
 import { PositionEvent, PositionEventType } from './abstract/position-event';
 
 export class PositionUpdatedEvent extends PositionEvent {

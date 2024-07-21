@@ -14,16 +14,17 @@ import { DepartmentDeletedEvent } from './events/department-deleted.event';
 import { DepartmentUpdatedEvent } from './events/department-updated.event';
 import { FindAllDepartmentDto } from './dto/find-all-department.dto';
 import { FindOneDepartmentDto } from './dto/find-one-department.dto';
+import { checkVersionOrFail } from '@/utils';
 
 @Injectable()
 export class DepartmentsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.DEPARTMENT;
+    public readonly resourceType = ResourceType.Department;
 
     constructor(
-        @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
         @InjectRepository(Department)
         private repository: Repository<Department>,
+        @Inject(forwardRef(() => AccessService))
+        public accessService: AccessService,
         private eventEmitter: EventEmitter2,
     ) {
         super(accessService);
@@ -82,11 +83,7 @@ export class DepartmentsService extends AvailableForUserCompany {
 
     async update(userId: number, id: number, payload: UpdateDepartmentDto): Promise<Department> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,

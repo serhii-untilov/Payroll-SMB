@@ -21,7 +21,6 @@
         "test:watch": "NODE_ENV=development jest --watch"
     },
     "dependencies": {
-        "@repo/openapi": "^1.0.0",
         "date-fns": "^3.6.0",
         "sqlite3": "^5.1.7",
         "ts-loader": "^9.5.1",

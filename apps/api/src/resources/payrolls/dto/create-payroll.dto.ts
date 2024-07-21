@@ -1,28 +1,37 @@
-import { HoursByDay } from '@/types';
+import { IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { Payroll } from './../entities/payroll.entity';
 
-export class CreatePayrollDto {
-    positionId: number;
-    payPeriod: Date;
-    accPeriod: Date;
-    paymentTypeId: number;
-    dateFrom: Date;
-    dateTo: Date;
-    sourceType?: string | null;
-    sourceId?: number | null;
-    dateBegin?: Date | null;
-    dateEnd?: Date | null;
-    planDays?: number;
-    planHours?: number;
-    planSum?: number;
-    rate?: number;
-    factDays?: number;
-    factHours?: number;
-    factSum: number;
-    mask1?: number;
-    mask2?: number;
-    recordFlags: number;
-    fixedFlags?: number;
-    planHoursByDay?: HoursByDay | null;
-    factHoursByDay?: HoursByDay | null;
-    parentId?: number | null;
-}
+export class CreatePayrollDto extends IntersectionType(
+    PickType(Payroll, [
+        'positionId',
+        'payPeriod',
+        'accPeriod',
+        'paymentTypeId',
+        'dateFrom',
+        'dateTo',
+        'factSum',
+        'recordFlags',
+    ]),
+    PartialType(
+        OmitType(Payroll, [
+            'id',
+            'positionId',
+            'payPeriod',
+            'accPeriod',
+            'paymentTypeId',
+            'dateFrom',
+            'dateTo',
+            'factSum',
+            'recordFlags',
+            'paymentType',
+            'transform',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+            'version',
+        ]),
+    ),
+) {}

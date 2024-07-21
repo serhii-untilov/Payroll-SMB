@@ -1,5 +1,5 @@
 import { IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
-import { Person } from '../entities/person.entity';
+import { Person } from './../entities/person.entity';
 
 export class CreatePersonDto extends IntersectionType(
     PickType(Person, ['firstName', 'lastName']),

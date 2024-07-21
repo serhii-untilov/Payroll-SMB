@@ -1,13 +1,9 @@
-import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    forwardRef,
-} from '@nestjs/common';
+import { ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType, formatDate, monthBegin, monthEnd } from '@/types';
+import { formatDate, monthBegin, monthEnd } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';
@@ -21,7 +17,7 @@ import { PersonUpdatedEvent } from './events/person-updated.event';
 
 @Injectable()
 export class PersonsService extends AvailableForUser {
-    public readonly resourceType = ResourceType.PERSON;
+    public readonly resourceType = ResourceType.Person;
 
     constructor(
         @InjectRepository(Person)
@@ -75,11 +71,7 @@ export class PersonsService extends AvailableForUser {
 
     async update(userId: number, id: number, payload: UpdatePersonDto): Promise<Person> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,

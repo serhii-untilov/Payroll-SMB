@@ -25,7 +25,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@/types';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';

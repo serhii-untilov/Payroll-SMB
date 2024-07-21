@@ -1,4 +1,5 @@
-import { AccessService, CreateUserDto, UsersService } from '@/resources';
+import { CreateUserDto } from './../resources/users/dto/create-user.dto';
+import { AccessService, UsersService } from '@/resources';
 import { AccessType, ResourceType, RoleType } from '@/types';
 import {
     BadRequestException,
@@ -122,8 +123,8 @@ export class AuthService {
     async demo(): Promise<AuthDto> {
         await this.accessService.availableForRoleTypeOrFail(
             RoleType.EMPLOYER,
-            ResourceType.DEMO,
-            AccessType.ACCESS,
+            ResourceType.Demo,
+            AccessType.Access,
         );
         if (process.env['DEMO_AVAILABLE'] === 'true') {
             return {

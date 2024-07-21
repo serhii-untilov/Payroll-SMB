@@ -10,7 +10,7 @@ import { PaymentFund } from './entities/payment-fund.entity';
 
 @Injectable()
 export class PaymentFundsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.PAYMENT;
+    public readonly resourceType = ResourceType.Payment;
 
     constructor(
         @InjectRepository(PaymentFund)

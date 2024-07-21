@@ -1,4 +1,4 @@
-import { Department } from '@/resources';
+import { Department } from './../../src/resources/departments/entities/department.entity';
 import { incrementalNumber, randDepartment } from '@ngneat/falso';
 import { maxDate, minDate } from '@repo/shared';
 

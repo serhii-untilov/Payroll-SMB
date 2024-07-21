@@ -1,5 +1,5 @@
+import { Payroll } from './entities/payroll.entity';
 import { AccessTokenGuard } from '@/guards';
-import { Payroll } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     BadRequestException,
@@ -28,7 +28,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@/types';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { FindPayrollDto } from './dto/find-payroll.dto';

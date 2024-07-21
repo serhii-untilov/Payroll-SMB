@@ -1,4 +1,4 @@
-import { WorkNormType } from '@/types';
+import { WorkNormType } from './../../../types';
 import { Column, PrimaryGeneratedColumn, OneToMany, Entity, AfterLoad, Relation } from 'typeorm';
 import { WorkNormPeriod } from './work-norm-period.entity';
 import { Logger } from './../../abstract/logger.abstract';

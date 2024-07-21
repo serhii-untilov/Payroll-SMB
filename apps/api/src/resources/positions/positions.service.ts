@@ -1,20 +1,9 @@
-import { WrapperType } from '@/types';
-import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    forwardRef,
-} from '@nestjs/common';
+import { BalanceWorkingTime, PaymentPart, ResourceType, WrapperType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-    BalanceWorkingTime,
-    MAX_SEQUENCE_NUMBER,
-    PaymentPart,
-    ResourceType,
-    maxDate,
-} from '@/types';
+import { MAX_SEQUENCE_NUMBER, maxDate } from '@repo/shared';
 import { sub } from 'date-fns';
 import {
     FindManyOptions,
@@ -45,7 +34,7 @@ import { PositionUpdatedEvent } from './events/position-updated.event';
 
 @Injectable()
 export class PositionsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.POSITION;
+    public readonly resourceType = ResourceType.Position;
 
     constructor(
         @InjectRepository(Position)
@@ -251,11 +240,7 @@ export class PositionsService extends AvailableForUserCompany {
 
     async update(userId: number, id: number, payload: UpdatePositionDto): Promise<Position> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,

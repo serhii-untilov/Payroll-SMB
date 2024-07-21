@@ -2,7 +2,7 @@ import { createMock } from '@golevelup/ts-jest';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { repositoryMockFactory } from '@repo/testing';
+import { repositoryMockFactory } from 'test';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';

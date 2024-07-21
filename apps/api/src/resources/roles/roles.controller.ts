@@ -21,7 +21,6 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { IRole } from '@/types';
 import { Request } from 'express';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
@@ -40,7 +39,7 @@ export class RolesController {
         description: 'The record has been successfully created',
         type: Role,
     })
-    async create(@Req() req: Request, @Body() payload: CreateRoleDto): Promise<IRole> {
+    async create(@Req() req: Request, @Body() payload: CreateRoleDto): Promise<Role> {
         const userId = getUserId(req);
         return await this.service.create(userId, payload);
     }
@@ -50,7 +49,7 @@ export class RolesController {
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(Role) } },
     })
-    async findAll(@Req() req: Request): Promise<IRole[]> {
+    async findAll(@Req() req: Request): Promise<Role[]> {
         const userId = getUserId(req);
         return await this.service.findAll(userId);
     }
@@ -58,7 +57,7 @@ export class RolesController {
     @Get(':id')
     @ApiOkResponse({ description: 'The found record', type: Role })
     @ApiNotFoundResponse({ description: 'Record not found' })
-    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IRole> {
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Role> {
         const userId = getUserId(req);
         return await this.service.findOne(userId, id);
     }
@@ -73,7 +72,7 @@ export class RolesController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdateRoleDto,
-    ): Promise<IRole> {
+    ): Promise<Role> {
         const userId = getUserId(req);
         return await this.service.update(userId, id, payload);
     }
@@ -84,7 +83,7 @@ export class RolesController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Role })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IRole> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Role> {
         const userId = getUserId(req);
         return await this.service.remove(userId, id);
     }

@@ -1,5 +1,5 @@
 import { getSystemUserId } from '../utils/lib/getSystemUserId';
-import { MinWage } from '@/resources';
+import { MinWage } from './../resources/min-wage/entities/min-wage.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 const entity = MinWage;

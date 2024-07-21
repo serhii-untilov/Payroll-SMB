@@ -3,6 +3,7 @@ import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import 'reflect-metadata';
 import metadata from './metadata';
 
 async function bootstrap() {

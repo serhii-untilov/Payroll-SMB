@@ -1,8 +1,8 @@
-import { RoleType } from '@/types';
+import { RoleType } from '../types';
 import * as bcrypt from 'bcrypt';
 import { getRoleIdByType } from '../utils/lib/getSystemRoleId';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { User } from '@/resources';
+import { User } from './../resources/users/entities/user.entity';
 import { langPipe } from '../utils/lib/langPipe';
 
 const lang = process.env.LANGUAGE || 'uk';

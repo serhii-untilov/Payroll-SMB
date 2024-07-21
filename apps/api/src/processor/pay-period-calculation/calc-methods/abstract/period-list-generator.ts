@@ -1,4 +1,4 @@
-import { PayPeriod } from '@/resources';
+import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
 import { PayPeriodCalculationService } from '../../pay-period-calculation.service';
 
 export abstract class PeriodListGenerator {

@@ -1,11 +1,8 @@
-export class CreatePayFundDto {
-    positionId: number;
-    payPeriod: Date;
-    accPeriod: Date;
-    payFundTypeId: number;
-    payFundCategory: string; // See enum PayFundCategory
-    incomeSum: number;
-    baseSum: number;
-    rate: number;
-    paySum: number;
-}
+import { PayFund } from './../entities/pay-fund.entity';
+import { OmitType } from '@nestjs/swagger';
+export class CreatePayFundDto extends OmitType(PayFund, [
+    'id',
+    'position',
+    'payFundType',
+    'transform',
+]) {}

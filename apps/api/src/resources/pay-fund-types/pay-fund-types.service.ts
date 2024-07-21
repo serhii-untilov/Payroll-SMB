@@ -1,12 +1,7 @@
-import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    forwardRef,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';
@@ -16,7 +11,7 @@ import { PayFundType } from './entities/pay-fund-type.entity';
 
 @Injectable()
 export class PayFundTypesService extends AvailableForUser {
-    public readonly resourceType = ResourceType.FUND_TYPE;
+    public readonly resourceType = ResourceType.FundType;
 
     constructor(
         @InjectRepository(PayFundType)
@@ -48,18 +43,15 @@ export class PayFundTypesService extends AvailableForUser {
     }
 
     async update(userId: number, id: number, payload: UpdatePayFundTypeDto): Promise<PayFundType> {
-        const fundType = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== fundType.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
-        return await this.repository.save({
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        checkVersionOrFail(record, payload);
+        await this.repository.save({
             ...payload,
             id,
             updatedUserId: userId,
             updatedDate: new Date(),
         });
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: number, id: number): Promise<PayFundType> {

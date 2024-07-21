@@ -2,7 +2,7 @@ import { PayFundType } from '../../pay-fund-types/entities/pay-fund-type.entity'
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { RecordFlags } from '@/types';
+import { RecordFlags } from './../../../types';
 
 @Entity()
 export class PaymentFund {

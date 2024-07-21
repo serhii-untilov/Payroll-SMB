@@ -6,7 +6,7 @@ import { Law } from './entities/law.entity';
 
 @Injectable()
 export class LawsService {
-    public readonly resourceType = ResourceType.LAW;
+    public readonly resourceType = ResourceType.Law;
     constructor(
         @InjectRepository(Law)
         private repository: Repository<Law>,

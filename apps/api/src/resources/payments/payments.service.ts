@@ -6,14 +6,8 @@ import {
     PaymentPositionsService,
 } from '@/resources';
 import { PaymentStatus, RecordFlags, ResourceType, WrapperType } from '@/types';
-import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    Logger,
-    forwardRef,
-} from '@nestjs/common';
+import { checkVersionOrFail } from '@/utils';
+import { BadRequestException, Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { dateUTC } from '@repo/shared';
@@ -31,7 +25,7 @@ import { PaymentUpdatedEvent } from './events';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.PAYMENT;
+    public readonly resourceType = ResourceType.Payment;
     private logger: Logger = new Logger(PaymentsService.name);
 
     constructor(
@@ -117,19 +111,14 @@ export class PaymentsService extends AvailableForUserCompany {
 
     async update(userId: number, id: number, payload: UpdatePaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,
             updatedUserId: userId,
             updatedDate: new Date(),
         });
-        const updated = await this.repository.findOneOrFail({ where: { id } });
-        return updated;
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: number, id: number): Promise<Payment> {
@@ -186,8 +175,10 @@ export class PaymentsService extends AvailableForUserCompany {
             relations: { company: true, paymentType: true },
         });
         if (record.status === PaymentStatus.PAYED) return record;
+        // TODO startTransaction(); {
         await this.paymentPositionsService.process(userId, record);
         await this.update(userId, id, { status: PaymentStatus.PAYED, version: payload.version });
+        // TODO }
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
         return updated;
@@ -199,9 +190,11 @@ export class PaymentsService extends AvailableForUserCompany {
             relations: { company: true, paymentType: true },
         });
         if (record.status === PaymentStatus.DRAFT) return record;
+        // TODO startTransaction(); {
         await this.paymentPositionsService.withdraw(id);
         await this.update(userId, id, { status: PaymentStatus.DRAFT, version: payload.version });
         const updated = await this.repository.findOneOrFail({ where: { id } });
+        // TODO }
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
         return updated;
     }

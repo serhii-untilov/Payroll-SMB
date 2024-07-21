@@ -1,6 +1,5 @@
+import { Position } from './../../positions/entities/position.entity';
 import { Logger } from './../../abstract/logger.abstract';
-import { Position } from '@/resources';
-import { getFullName } from '@/types';
 import {
     AfterInsert,
     AfterLoad,
@@ -10,6 +9,7 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
+import { getFullName } from '@repo/shared';
 
 @Entity()
 export class Person extends Logger {

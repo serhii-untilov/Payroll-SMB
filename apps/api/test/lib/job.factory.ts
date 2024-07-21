@@ -1,4 +1,4 @@
-import { Job } from '@/resources';
+import { Job } from './../../src/resources/jobs/entities/job.entity';
 import { incrementalNumber, randJobTitle } from '@ngneat/falso';
 
 const factory = incrementalNumber();

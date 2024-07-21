@@ -1,12 +1,7 @@
 import { AccessService, AvailableForUserCompany, PayrollsService } from '@/resources';
 import { ResourceType, WrapperType } from '@/types';
-import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    forwardRef,
-} from '@nestjs/common';
+import { checkVersionOrFail } from '@/utils';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Payment } from '../payments/entities/payment.entity';
@@ -21,7 +16,7 @@ import { PaymentPosition } from './entities/paymentPosition.entity';
 
 @Injectable()
 export class PaymentPositionsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.PAYMENT;
+    public readonly resourceType = ResourceType.Payment;
 
     constructor(
         @InjectRepository(PaymentPosition)
@@ -102,17 +97,9 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         return record;
     }
 
-    async update(
-        userId: number,
-        id: number,
-        payload: UpdatePaymentPositionDto,
-    ): Promise<PaymentPosition> {
+    async update(userId: number, id: number, payload: UpdatePaymentPositionDto) {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,

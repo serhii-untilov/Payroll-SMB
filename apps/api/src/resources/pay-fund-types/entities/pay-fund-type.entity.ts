@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PayFundCalcMethod, PayFundGroup } from '@/types';
+import { PayFundCalcMethod, PayFundGroup } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from './../../abstract/logger.abstract';
 

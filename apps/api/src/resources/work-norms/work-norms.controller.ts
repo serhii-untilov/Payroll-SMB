@@ -1,5 +1,5 @@
+import { WorkNorm } from './entities/work-norm.entity';
 import { AccessTokenGuard } from '@/guards';
-import { WorkNorm } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     Body,
@@ -23,7 +23,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@/types';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { FindWorkNormDto } from './dto/find-work-norm.dto';

@@ -1,4 +1,4 @@
-import { HoursByDay, ResourceType, RecordFlags, FixedFlags } from '@/types';
+import { ApiProperty } from '@nestjs/swagger';
 import {
     AfterLoad,
     Column,
@@ -10,8 +10,8 @@ import {
 } from 'typeorm';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
+import { FixedFlags, HoursByDay, RecordFlags, ResourceType } from './../../../types';
 import { Logger } from './../../abstract/logger.abstract';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 @Index('IDX_PAYROLL_POSITION_PAY_PERIOD', ['positionId', 'payPeriod'])
@@ -45,7 +45,7 @@ export class Payroll extends Logger {
     dateTo: Date;
 
     @Column({ type: 'varchar', length: 10, default: '' })
-    @ApiProperty({ enum: ResourceType })
+    @ApiProperty({ enum: ResourceType, enumName: 'ResourceTypeEnum' })
     sourceType: ResourceType;
 
     @Column({ type: 'integer', nullable: true })

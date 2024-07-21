@@ -1,12 +1,7 @@
-import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    forwardRef,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
@@ -16,7 +11,7 @@ import { PaymentType } from './entities/payment-type.entity';
 
 @Injectable()
 export class PaymentTypesService {
-    public readonly resourceType = ResourceType.PAYMENT_TYPE;
+    public readonly resourceType = ResourceType.PaymentType;
 
     constructor(
         @InjectRepository(PaymentType)
@@ -33,7 +28,7 @@ export class PaymentTypesService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.CREATE,
+            AccessType.Create,
         );
         return await this.repository.save({
             ...payload,
@@ -67,30 +62,22 @@ export class PaymentTypesService {
     }
 
     async update(userId: number, id: number, payload: UpdatePaymentTypeDto): Promise<PaymentType> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
-        const paymentType = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== paymentType.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
-        return await this.repository.save({
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        checkVersionOrFail(record, payload);
+        await this.repository.save({
             ...payload,
             id,
             updatedUserId: userId,
             updatedDate: new Date(),
         });
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: number, id: number): Promise<PaymentType> {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.DELETE,
+            AccessType.Delete,
         );
         await this.repository.findOneOrFail({ where: { id } });
         return await this.repository.save({

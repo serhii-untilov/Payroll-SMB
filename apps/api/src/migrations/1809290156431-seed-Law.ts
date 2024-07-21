@@ -1,7 +1,7 @@
 import { langPipe } from '../utils/lib/langPipe';
-import { Law } from '@/resources';
+import { Law } from './../resources/laws/entities/law.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { LawType } from '@/types';
+import { LawType } from '../types';
 
 const lang = process.env.LANGUAGE || 'uk';
 const entity = Law;

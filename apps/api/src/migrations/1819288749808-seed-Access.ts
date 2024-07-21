@@ -1,6 +1,6 @@
-import { ResourceType, RoleType } from '@/types';
+import { ResourceType, RoleType } from '../types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Access } from '@/resources';
+import { Access } from './../resources/access/entities/access.entity';
 import { getSystemUserId } from '../utils/lib/getSystemUserId';
 import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/lib/access';
 
@@ -15,15 +15,15 @@ const recordList = [
     // access to any resource through the API.
 
     // ADMIN
-    ...generateAccess_Full(RoleType.ADMIN, ResourceType.PAYMENT),
+    ...generateAccess_Full(RoleType.ADMIN, ResourceType.Payment),
     // EMPLOYER
-    ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.PAYMENT),
+    ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.Payment),
     // OBSERVER
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.PAYMENT),
+    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.Payment),
     // EMPLOYEE
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.PAYMENT),
+    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.Payment),
     // GUEST
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.PAYMENT),
+    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.Payment),
 ];
 
 export class Seed1819288749808 implements MigrationInterface {

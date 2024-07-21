@@ -1,17 +1,17 @@
+import { WorkNorm } from './../../resources/work-norms/entities/work-norm.entity';
+import { Position } from './../../resources/positions/entities/position.entity';
+import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
+import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
+import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
+import { Company } from './../../resources/companies/entities/company.entity';
 import { calcBalanceWorkingTime, getPayrollUnionRecord } from '@/processor/helpers';
 import {
     AccessService,
     CompaniesService,
-    Company,
-    PayPeriod,
     PayPeriodsService,
-    PaymentType,
     PaymentTypesService,
-    Payroll,
     PayrollsService,
-    Position,
     PositionsService,
-    WorkNorm,
     WorkNormsService,
 } from '@/resources';
 import { RecordFlags, WorkingTime } from '@/types';

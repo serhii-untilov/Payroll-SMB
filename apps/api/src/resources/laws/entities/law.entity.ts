@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { LawType } from '@/types';
+import { LawType } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

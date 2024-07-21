@@ -1,19 +1,21 @@
-import { FindOneTaskDto } from './dto/find-one-task.dto';
-import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { ResourceType, TaskStatus, TaskType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType, TaskStatus, TaskType, monthBegin, monthEnd } from '@/types';
+import { monthBegin, monthEnd } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { FindAllTaskDto } from './dto/find-all-task.dto';
+import { FindOneTaskDto } from './dto/find-one-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TasksService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.TASK;
+    public readonly resourceType = ResourceType.Task;
 
     constructor(
         @InjectRepository(Task)
@@ -87,11 +89,7 @@ export class TasksService extends AvailableForUserCompany {
 
     async update(userId: number, id: number, payload: UpdateTaskDto) {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,

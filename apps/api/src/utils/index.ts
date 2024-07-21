@@ -4,4 +4,4 @@ export * from './lib/getSystemRoleId';
 export * from './lib/getSystemUserId';
 export * from './lib/getUserId';
 export * from './lib/langPipe';
-export * from './lib/langPipe.spec';
+export * from './lib/checkVersionOrFail';

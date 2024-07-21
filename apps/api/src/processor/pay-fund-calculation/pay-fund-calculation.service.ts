@@ -1,19 +1,19 @@
+import { Position } from './../../resources/positions/entities/position.entity';
+import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
+import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
+import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
+import { PayFundType } from './../../resources/pay-fund-types/entities/pay-fund-type.entity';
+import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
+import { MinWage } from './../../resources/min-wage/entities/min-wage.entity';
+import { Company } from './../../resources/companies/entities/company.entity';
 import {
     CompaniesService,
-    Company,
-    MinWage,
     MinWageService,
-    PayFund,
-    PayFundType,
     PayFundTypesService,
     PayFundsService,
-    PayPeriod,
     PayPeriodsService,
-    PaymentType,
     PaymentTypesService,
-    Payroll,
     PayrollsService,
-    Position,
     PositionsService,
 } from '@/resources';
 import { PayFundCalcMethod } from '@/types';

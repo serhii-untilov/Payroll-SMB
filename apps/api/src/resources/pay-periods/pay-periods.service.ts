@@ -22,11 +22,12 @@ import {
     UpdatePayPeriodDto,
 } from './dto';
 import { PayPeriod, defaultFieldList } from './entities';
+import { checkVersionOrFail } from '@/utils';
 
 @Injectable()
 export class PayPeriodsService extends AvailableForUserCompany {
     private _logger: Logger = new Logger(PayPeriodsService.name);
-    public readonly resourceType = ResourceType.PAY_PERIOD;
+    public readonly resourceType = ResourceType.PayPeriod;
 
     constructor(
         @InjectRepository(PayPeriod)
@@ -112,11 +113,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
 
     async update(userId: number, id: number, payload: UpdatePayPeriodDto): Promise<PayPeriod> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         return await this.repository.save({
             ...payload,
             id,
@@ -170,11 +167,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
 
     async close(userId: number, currentPayPeriodId: number, version: number): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
-        if (version !== current.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try again after reloading.',
-            );
-        }
+        checkVersionOrFail(current, { version });
         const company = await this.companiesService.findOne(userId, current.companyId);
         if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
             throw new ConflictException(
@@ -210,11 +203,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
 
     async open(userId: number, currentPayPeriodId: number, version: number): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
-        if (version !== current.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(current, { version });
         if (current.state !== PayPeriodState.OPENED) {
             throw new ConflictException('The given period is not opened.');
         }

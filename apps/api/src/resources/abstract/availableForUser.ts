@@ -1,4 +1,4 @@
-import { AccessType, ResourceType } from '@/types';
+import { AccessType, ResourceType } from './../../types';
 import { AccessService } from '../access/access.service';
 
 export abstract class AvailableForUser {
@@ -13,7 +13,7 @@ export abstract class AvailableForUser {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.CREATE,
+            AccessType.Create,
         );
     }
 
@@ -21,7 +21,7 @@ export abstract class AvailableForUser {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
     }
 
@@ -29,7 +29,7 @@ export abstract class AvailableForUser {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
     }
 
@@ -37,7 +37,7 @@ export abstract class AvailableForUser {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.UPDATE,
+            AccessType.Update,
         );
     }
 
@@ -45,7 +45,7 @@ export abstract class AvailableForUser {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.DELETE,
+            AccessType.Delete,
         );
     }
 }

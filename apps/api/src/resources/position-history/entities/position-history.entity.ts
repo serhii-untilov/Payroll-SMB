@@ -1,4 +1,8 @@
-import { Department, Job, PaymentType, Position, WorkNorm } from '@/resources';
+import { PaymentType } from './../../payment-types/entities/payment-type.entity';
+import { WorkNorm } from './../../work-norms/entities/work-norm.entity';
+import { Job } from './../../jobs/entities/job.entity';
+import { Department } from './../../departments/entities/department.entity';
+import { Position } from './../../positions/entities/position.entity';
 import {
     AfterLoad,
     Column,

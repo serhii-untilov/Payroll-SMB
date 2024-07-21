@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AccountingType } from '@/types';
+import { AccountingType } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Logger } from './../../abstract/logger.abstract';
 
@@ -14,7 +14,7 @@ export class Accounting extends Logger {
     @Column({
         type: 'varchar',
         length: 15,
-        default: AccountingType.GENERIC,
+        default: AccountingType.Generic,
     })
     @ApiProperty({ enum: AccountingType })
     type: AccountingType;

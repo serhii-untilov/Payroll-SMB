@@ -1,9 +1,10 @@
+import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
+import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
 import {
     getAdvancePaymentDate,
     payFundPayPeriodFactSum,
     payPeriodFactSum,
 } from '@/processor/helpers';
-import { PaymentPosition, PaymentType } from '@/resources';
 import { PaymentGroup } from '@/types';
 import { dateUTC } from '@repo/shared';
 import { PaymentCalculationService } from '../../payment-calculation.service';

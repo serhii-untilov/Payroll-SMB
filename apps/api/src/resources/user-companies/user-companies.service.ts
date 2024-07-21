@@ -1,36 +1,36 @@
+import { ResourceType, RoleType, WrapperType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
 import {
     ForbiddenException,
+    forwardRef,
     Inject,
     Injectable,
-    forwardRef,
     NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType, RoleType } from '@/types';
 import { Repository } from 'typeorm';
+import { AvailableForUser } from '../abstract';
 import { AccessService } from '../access/access.service';
 import { CreateUserCompanyDto } from './dto/create-user-company.dto';
+import { FindAllUserCompanyDto } from './dto/find-all-user-company.dto';
+import { FindOneUserCompanyDto } from './dto/find-one-user-company.dto';
 import { UpdateUserCompanyDto } from './dto/update-user-company.dto';
 import { UserCompany } from './entities/user-company.entity';
-import { FindAllUserCompanyDto } from './dto/find-all-user-company.dto';
 
 @Injectable()
-export class UsersCompanyService {
-    public readonly resourceType = ResourceType.COMPANY;
+export class UserCompaniesService extends AvailableForUser {
+    public readonly resourceType = ResourceType.Company;
 
     constructor(
         @InjectRepository(UserCompany)
         private repository: Repository<UserCompany>,
         @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
-    ) {}
+        public accessService: WrapperType<AccessService>,
+    ) {
+        super(accessService);
+    }
 
-    async create(userId: number, payload: CreateUserCompanyDto): Promise<UserCompany> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.CREATE,
-        );
+    async create(userId: number, payload: CreateUserCompanyDto) {
         return await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -38,56 +38,43 @@ export class UsersCompanyService {
         });
     }
 
-    async findAll(userId: number, relations: boolean): Promise<UserCompany[]> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
+    async findAll({ userId, relations, withDeleted }: FindAllUserCompanyDto) {
         return await this.repository.find({
-            ...(relations ? { relations: { company: true, role: true } } : {}),
+            where: { userId },
+            relations: { company: relations, role: relations },
+            withDeleted,
         });
     }
 
-    async findOne(userId: number, id: number): Promise<UserCompany> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-        const userCompany = this.repository.findOneOrFail({ where: { id } });
+    async findOne(id: number, { relations, withDeleted }: FindOneUserCompanyDto) {
+        const userCompany = this.repository.findOneOrFail({
+            where: { id },
+            relations: { company: relations, role: relations },
+            withDeleted,
+        });
         return userCompany;
     }
 
-    async findOneByName(userId: number, name: string): Promise<UserCompany> {
+    async findOneByCompanyName(userId: number, name: string) {
         return await this.repository.findOneOrFail({
             relations: { company: true },
             where: { userId, company: { name } },
         });
     }
 
-    async update(userId: number, id: number, payload: UpdateUserCompanyDto): Promise<UserCompany> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.UPDATE,
-        );
+    async update(userId: number, id: number, payload: UpdateUserCompanyDto) {
+        const record = await this.repository.findOneOrFail({ where: { id } });
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             id,
             ...payload,
             updatedUserId: userId,
             updatedDate: new Date(),
         });
-        // re-query the database so that the updated record is returned
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: number, id: number): Promise<UserCompany> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
         await this.repository.save({
             id,
             deletedUserId: userId,
@@ -97,11 +84,6 @@ export class UsersCompanyService {
     }
 
     async restore(userId: number, id: number): Promise<UserCompany> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.DELETE,
-        );
         await this.repository.save({
             id,
             deletedUserId: null,
@@ -110,23 +92,6 @@ export class UsersCompanyService {
             updatedDate: new Date(),
         });
         return await this.repository.findOneOrFail({ where: { id } });
-    }
-
-    async getUserCompanyList(
-        userId: number,
-        id: number,
-        params?: FindAllUserCompanyDto,
-    ): Promise<UserCompany[]> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.ACCESS,
-        );
-        return await this.repository.find({
-            where: { userId: id },
-            withDeleted: !!params?.deleted,
-            ...(!!params?.relations ? { relations: { company: true, role: true } } : {}),
-        });
     }
 
     async getUserCompanyRoleType(userId: number, companyId: number): Promise<RoleType> {

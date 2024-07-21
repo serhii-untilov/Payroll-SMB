@@ -2,7 +2,7 @@ import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
 import { companiesFindOne } from '@/services/company.service';
 import { payPeriodsFindCurrent } from '@/services/payPeriod.service';
-import { usersCompanies } from '@/services/user.service';
+import { userCompaniesFindAll } from '@/services/user-companies.service';
 import { defaultTheme } from '@/themes/defaultTheme';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
@@ -12,8 +12,8 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { Company, UserCompany } from '@repo/openapi';
-import { ResourceType, monthBegin } from '@repo/shared';
+import { Company, ResourceTypeEnum, UserCompany } from '@repo/openapi';
+import { monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
@@ -73,7 +73,9 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initCompanyList = async () => {
-            const response = user?.id ? await usersCompanies(user.id, { relations: true }) : [];
+            const response = user?.id
+                ? await userCompaniesFindAll({ userId: user.id, relations: true })
+                : [];
             setUserCompanyList(response);
         };
         initCompanyList();
@@ -149,13 +151,13 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
                     invalidateQueries(queryClient, [
-                        ResourceType.COMPANY,
-                        ResourceType.DEPARTMENT,
-                        ResourceType.PAY_PERIOD,
-                        ResourceType.POSITION,
-                        ResourceType.PERSON,
-                        ResourceType.TASK,
-                        ResourceType.PAYMENT,
+                        ResourceTypeEnum.COMPANY,
+                        ResourceTypeEnum.DEPARTMENT,
+                        ResourceTypeEnum.PAY_PERIOD,
+                        ResourceTypeEnum.POSITION,
+                        ResourceTypeEnum.PERSON,
+                        ResourceTypeEnum.TASK,
+                        ResourceTypeEnum.PAYMENT,
                     ]);
                 }
                 setServerEvent(event.data);

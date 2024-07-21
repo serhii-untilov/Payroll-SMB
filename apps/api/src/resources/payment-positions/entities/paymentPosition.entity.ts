@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RecordFlags } from '@/types';
+import { RecordFlags } from './../../../types';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Logger } from '../../abstract/logger.abstract';
 import { Payment } from '../../payments/entities/payment.entity';

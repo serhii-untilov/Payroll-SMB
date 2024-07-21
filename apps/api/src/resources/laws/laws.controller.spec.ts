@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { createMockLaw, repositoryMockFactory } from '@repo/testing';
+import { createMockLaw, repositoryMockFactory } from 'test';
 import { Law } from './entities/law.entity';
 import { LawsController } from './laws.controller';
 import { LawsService } from './laws.service';

@@ -1,9 +1,9 @@
+import { PayPeriodCalcMethod } from './../../resources/pay-periods/entities/pay-period-calc-method.entity';
+import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
+import { Company } from './../../resources/companies/entities/company.entity';
 import {
     CompaniesService,
-    Company,
     PayFundsService,
-    PayPeriod,
-    PayPeriodCalcMethod,
     PayPeriodsCalcMethodService,
     PayPeriodsService,
     PayrollsService,

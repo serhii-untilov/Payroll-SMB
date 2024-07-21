@@ -1,13 +1,8 @@
-import {
-    ConflictException,
-    Inject,
-    Injectable,
-    NotFoundException,
-    forwardRef,
-} from '@nestjs/common';
+import { ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@/types';
 import { add, sub } from 'date-fns';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
@@ -17,13 +12,13 @@ import { PositionUpdatedEvent } from '../positions/events/position-updated.event
 import { PositionsService } from '../positions/positions.service';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindAllPositionHistoryDto } from './dto/find-all-position-history.dto';
+import { FindOnePositionHistoryDto } from './dto/find-one-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistory } from './entities/position-history.entity';
-import { FindOnePositionHistoryDto } from './dto/find-one-position-history.dto';
 
 @Injectable()
 export class PositionHistoryService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.POSITION;
+    public readonly resourceType = ResourceType.Position;
 
     constructor(
         @InjectRepository(PositionHistory)
@@ -120,11 +115,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         payload: UpdatePositionHistoryDto,
     ): Promise<PositionHistory> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         const updated = await this.repository.save({
             ...payload,
             id,
@@ -134,7 +125,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         await this.normalizeAfterCreateOrUpdate(userId, updated);
         const position = await this.positionsService.findOne(record.positionId);
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
-        return record;
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: number, id: number): Promise<PositionHistory> {

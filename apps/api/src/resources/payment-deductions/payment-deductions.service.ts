@@ -10,7 +10,7 @@ import { PaymentDeduction } from './entities/payment-deduction.entity';
 
 @Injectable()
 export class PaymentDeductionsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.PAYMENT;
+    public readonly resourceType = ResourceType.Payment;
 
     constructor(
         @InjectRepository(PaymentDeduction)

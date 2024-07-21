@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CalcMethod } from '@/types';
 import {
     AfterLoad,
     Column,
@@ -9,6 +8,7 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
+import { CalcMethod } from './../../../types';
 import { PayPeriod } from './pay-period.entity';
 
 @Entity()

@@ -1,4 +1,4 @@
-import { Task } from '@/resources';
+import { Task } from './../../../../resources/tasks/entities/task.entity';
 import { TaskSequenceNumber } from './../abstract/task-sequence-number';
 
 export class DynamicSequenceNumber extends TaskSequenceNumber {

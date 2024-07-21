@@ -1,5 +1,5 @@
-import { WorkNorm, WorkNormPeriod } from '@/resources';
-import { WorkNormType } from '@/types';
+import { WorkNorm, WorkNormPeriod } from './../resources/work-norms/entities';
+import { WorkNormType } from '../types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { getSystemUserId } from '../utils/lib/getSystemUserId';
 import { langPipe } from '../utils/lib/langPipe';

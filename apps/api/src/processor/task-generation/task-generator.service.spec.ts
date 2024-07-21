@@ -6,7 +6,7 @@ import {
     PersonsService,
     PositionsService,
     TasksService,
-    UsersCompanyService,
+    UserCompaniesService,
 } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -25,7 +25,7 @@ describe('TaskGenerationService', () => {
                 { provide: DepartmentsService, useValue: createMock<DepartmentsService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PersonsService, useValue: createMock<PersonsService>() },
-                { provide: UsersCompanyService, useValue: createMock<UsersCompanyService>() },
+                { provide: UserCompaniesService, useValue: createMock<UserCompaniesService>() },
                 { provide: PaymentsService, useValue: createMock<PaymentsService>() },
             ],
         }).compile();

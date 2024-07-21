@@ -1,6 +1,7 @@
-import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';
@@ -10,7 +11,7 @@ import { MinWage } from './entities/min-wage.entity';
 
 @Injectable()
 export class MinWageService extends AvailableForUser {
-    readonly resourceType = ResourceType.MIN_WAGE;
+    readonly resourceType = ResourceType.MinWage;
 
     constructor(
         @InjectRepository(MinWage)
@@ -40,11 +41,7 @@ export class MinWageService extends AvailableForUser {
 
     async update(userId: number, id: number, payload: UpdateMinWageDto): Promise<MinWage> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,

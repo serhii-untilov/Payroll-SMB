@@ -20,6 +20,7 @@ import {
     PositionsModule,
     RolesModule,
     TasksModule,
+    UserCompaniesModule,
     UsersModule,
     WorkNormsModule,
 } from '@/resources';
@@ -87,6 +88,7 @@ import { AppService } from './app.service';
         PositionsModule,
         RolesModule,
         TasksModule,
+        UserCompaniesModule,
         UsersModule,
         WorkNormsModule,
     ],

@@ -1,5 +1,5 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
-import { Job } from '../entities/job.entity';
+import { Job } from './../entities/job.entity';
 
 export class UpdateJobDto extends PartialType(
     OmitType(Job, [

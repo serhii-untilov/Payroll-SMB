@@ -6,12 +6,14 @@ import {
     PayFundTypesModule,
     PayFundsModule,
     PayPeriodsModule,
+    PaymentPositionsModule,
     PaymentTypesModule,
     PaymentsModule,
     PayrollsModule,
     PersonsModule,
     PositionsModule,
     TasksModule,
+    UserCompaniesModule,
     UsersModule,
     WorkNormsModule,
 } from '@/resources';
@@ -46,6 +48,8 @@ import { TaskGenerationService } from './task-generation/task-generator.service'
         forwardRef(() => PersonsModule),
         forwardRef(() => UsersModule),
         forwardRef(() => PaymentsModule),
+        forwardRef(() => PaymentPositionsModule),
+        forwardRef(() => UserCompaniesModule),
     ],
     controllers: [SseController],
     providers: [

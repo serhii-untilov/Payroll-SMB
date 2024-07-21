@@ -1,18 +1,15 @@
 import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    forwardRef,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import {
-    IPaymentGroupsTotal,
-    IPaymentPartsTotal,
+    CalcMethod,
+    PaymentGroupsTotal,
+    PaymentPartsTotal,
     ResourceType,
+    WrapperType,
     defaultPaymentGroupsTotal,
     defaultPaymentPartsTotal,
 } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -21,11 +18,10 @@ import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { FindPayrollDto } from './dto/find-payroll.dto';
 import { UpdatePayrollDto } from './dto/update-payroll.dto';
 import { Payroll } from './entities/payroll.entity';
-import { WrapperType } from '@/types';
 
 @Injectable()
 export class PayrollsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.PAYROLL;
+    public readonly resourceType = ResourceType.Payroll;
 
     constructor(
         @InjectRepository(Payroll)
@@ -105,11 +101,7 @@ export class PayrollsService extends AvailableForUserCompany {
 
     async update(userId: number, id: number, payload: UpdatePayrollDto): Promise<Payroll> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,
@@ -135,7 +127,7 @@ export class PayrollsService extends AvailableForUserCompany {
     async payrollPositionPaymentParts(
         positionId: number,
         payPeriod: Date,
-    ): Promise<IPaymentPartsTotal> {
+    ): Promise<PaymentPartsTotal> {
         const records = await this.repository
             .createQueryBuilder('payroll')
             .select('paymentType.paymentPart', 'paymentPart')
@@ -157,7 +149,7 @@ export class PayrollsService extends AvailableForUserCompany {
     async payrollPositionPaymentGroups(
         positionId: number,
         payPeriod: Date,
-    ): Promise<IPaymentGroupsTotal> {
+    ): Promise<PaymentGroupsTotal> {
         const records = await this.repository
             .createQueryBuilder('payroll')
             .select('paymentType.paymentGroup', 'paymentGroup')
@@ -179,7 +171,7 @@ export class PayrollsService extends AvailableForUserCompany {
     async payrollCompanyPaymentParts(
         companyId: number,
         payPeriod: Date,
-    ): Promise<IPaymentPartsTotal> {
+    ): Promise<PaymentPartsTotal> {
         const records = await this.repository
             .createQueryBuilder('payroll')
             .select('paymentType.paymentPart', 'paymentPart')
@@ -203,7 +195,7 @@ export class PayrollsService extends AvailableForUserCompany {
     async payrollCompanyPaymentGroups(
         companyId: number,
         payPeriod: Date,
-    ): Promise<IPaymentGroupsTotal> {
+    ): Promise<PaymentGroupsTotal> {
         const records = await this.repository
             .createQueryBuilder('payroll')
             .select('paymentType.paymentGroup', 'paymentGroup')
@@ -227,7 +219,7 @@ export class PayrollsService extends AvailableForUserCompany {
     async payrollCompanyCalcMethods(
         companyId: number,
         payPeriod: Date,
-    ): Promise<{ calcMethod: string; factSum: number }[]> {
+    ): Promise<{ calcMethod: CalcMethod; factSum: number }[]> {
         return await this.repository
             .createQueryBuilder('payroll')
             .select('paymentType.calcMethod', 'calcMethod')

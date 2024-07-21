@@ -1,4 +1,4 @@
-import { PayPeriod } from '@/resources';
+import { PayPeriod } from './../../../resources/pay-periods/entities/pay-period.entity';
 import { PayPeriodState } from '@/types';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { addMonths } from 'date-fns';

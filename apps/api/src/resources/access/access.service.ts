@@ -1,16 +1,12 @@
-import { AccessType, ResourceType, RoleType, WrapperType } from '@/types';
+import { AccessType, ResourceType, RoleType } from '@/types';
 import {
     BadRequestException,
     ForbiddenException,
-    Inject,
     Injectable,
     NotFoundException,
-    forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UsersCompanyService } from '../users/users-company.service';
-import { UsersService } from '../users/users.service';
 import {
     AvailableAccessDto,
     AvailableAccessUserCompanyDto,
@@ -22,15 +18,11 @@ import { Access } from './entities/access.entity';
 
 @Injectable()
 export class AccessService {
-    public readonly resourceType = ResourceType.ACCESS;
+    public readonly resourceType = ResourceType.Access;
 
     constructor(
         @InjectRepository(Access)
         private repository: Repository<Access>,
-        @Inject(forwardRef(() => UsersService))
-        private readonly usersService: WrapperType<UsersService>,
-        @Inject(forwardRef(() => UsersCompanyService))
-        private readonly usersCompanyService: WrapperType<UsersCompanyService>,
     ) {}
 
     async create(userId: number, data: CreateAccessDto): Promise<Access> {
@@ -38,7 +30,7 @@ export class AccessService {
         if (exists) {
             throw new BadRequestException(`Access record already exists.`);
         }
-        await this.availableForUserOrFail(userId, this.resourceType, AccessType.CREATE);
+        await this.availableForUserOrFail(userId, this.resourceType, AccessType.Create);
         return await this.repository.save({
             ...data,
             createdUserId: userId,
@@ -62,7 +54,7 @@ export class AccessService {
         if (!record) {
             throw new NotFoundException(`Access record could not be found.`);
         }
-        await this.availableForUserOrFail(userId, this.resourceType, AccessType.UPDATE);
+        await this.availableForUserOrFail(userId, this.resourceType, AccessType.Update);
         await this.repository.save({ ...data, id, updatedUserId: userId, updatedDate: new Date() });
         return await this.repository.save({ id, ...data });
     }
@@ -72,7 +64,7 @@ export class AccessService {
         if (!record) {
             throw new NotFoundException(`Access record could not be found.`);
         }
-        await this.availableForUserOrFail(userId, this.resourceType, AccessType.DELETE);
+        await this.availableForUserOrFail(userId, this.resourceType, AccessType.Delete);
         return await this.repository.save({
             ...record,
             id,
@@ -103,8 +95,24 @@ export class AccessService {
         }
     }
 
+    async getUserRoleType(userId: number): Promise<RoleType> {
+        try {
+            const result: { type: RoleType }[] = await this.repository.query(
+                `select r.type"
+                from user
+                inner join "role" r on r.id = user."roleId"
+                where user."id" = $1`,
+                [userId],
+            );
+            return result[0].type;
+        } catch (e) {
+            throw new NotFoundException(`User role not found. ${e}`);
+        }
+    }
+
     async availableForUser(params: AvailableAccessUserDto): Promise<boolean> {
-        const roleType = await this.usersService.getUserRoleTypeOrFail(params.userId);
+        // const roleType = await this.usersService.getUserRoleTypeOrFail(params.userId);
+        const roleType = await this.getUserRoleType(params.userId);
         return this.available({
             roleType,
             resourceType: params.resourceType,
@@ -122,15 +130,26 @@ export class AccessService {
         }
     }
 
+    async getUserCompanyRoleType(userId: number, companyId: number): Promise<RoleType | null> {
+        try {
+            const result: { type: RoleType }[] = await this.repository.query(
+                `select r.type"
+                from user_company uc
+                inner join "role" r on r.id = uc."roleId"
+                where uc."userId" = $1 and uc."companyId" = $2`,
+                [userId, companyId],
+            );
+            return result[0].type;
+        } catch (_e) {
+            return null;
+        }
+    }
+
     async availableForUserCompany(params: AvailableAccessUserCompanyDto): Promise<boolean> {
-        const roleType = await this.usersCompanyService.getUserCompanyRoleTypeOrFail(
-            params.userId,
-            params.companyId,
-        );
-        await this.usersCompanyService.getUserCompanyRoleTypeOrFail(
-            params.userId,
-            params.companyId,
-        );
+        const roleType = await this.getUserCompanyRoleType(params.userId, params.companyId);
+        if (!roleType) {
+            return false;
+        }
         return await this.available({
             roleType,
             resourceType: params.resourceType,

@@ -31,28 +31,28 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 export interface Access {
     /**
      * 
+     * @type {string}
+     * @memberof Access
+     */
+    'roleType': AccessRoleTypeEnum;
+    /**
+     * 
+     * @type {ResourceTypeEnum}
+     * @memberof Access
+     */
+    'resourceType': ResourceTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof Access
+     */
+    'accessType': AccessAccessTypeEnum;
+    /**
+     * 
      * @type {number}
      * @memberof Access
      */
     'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Access
-     */
-    'roleType': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Access
-     */
-    'resourceType': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Access
-     */
-    'accessType': string;
     /**
      * 
      * @type {Date}
@@ -96,12 +96,39 @@ export interface Access {
      */
     'version': number;
 }
+
+export const AccessRoleTypeEnum = {
+    System: 'system',
+    Admin: 'admin',
+    Employer: 'employer',
+    Observer: 'observer',
+    Employee: 'employee',
+    Guest: 'guest'
+} as const;
+
+export type AccessRoleTypeEnum = typeof AccessRoleTypeEnum[keyof typeof AccessRoleTypeEnum];
+export const AccessAccessTypeEnum = {
+    Create: 'create',
+    Update: 'update',
+    Delete: 'delete',
+    Access: 'access',
+    Elevated: 'elevated'
+} as const;
+
+export type AccessAccessTypeEnum = typeof AccessAccessTypeEnum[keyof typeof AccessAccessTypeEnum];
+
 /**
  * 
  * @export
  * @interface Accounting
  */
 export interface Accounting {
+    /**
+     * 
+     * @type {string}
+     * @memberof Accounting
+     */
+    'type': AccountingTypeEnum;
     /**
      * 
      * @type {number}
@@ -116,12 +143,6 @@ export interface Accounting {
     'name': string;
     /**
      * 
-     * @type {string}
-     * @memberof Accounting
-     */
-    'type': string;
-    /**
-     * 
      * @type {Date}
      * @memberof Accounting
      */
@@ -163,6 +184,17 @@ export interface Accounting {
      */
     'version': number;
 }
+
+export const AccountingTypeEnum = {
+    Generic: 'generic',
+    Kindergarten: 'kindergarten',
+    Services: 'services',
+    Trade: 'trade',
+    Custom: 'custom'
+} as const;
+
+export type AccountingTypeEnum = typeof AccountingTypeEnum[keyof typeof AccountingTypeEnum];
+
 /**
  * 
  * @export
@@ -199,26 +231,59 @@ export interface AvailableAccessDto {
      * @type {string}
      * @memberof AvailableAccessDto
      */
-    'roleType': string;
+    'roleType': AvailableAccessDtoRoleTypeEnum;
+    /**
+     * 
+     * @type {ResourceTypeEnum}
+     * @memberof AvailableAccessDto
+     */
+    'resourceType': ResourceTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof AvailableAccessDto
      */
-    'resourceType': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AvailableAccessDto
-     */
-    'accessType': string;
+    'accessType': AvailableAccessDtoAccessTypeEnum;
 }
+
+export const AvailableAccessDtoRoleTypeEnum = {
+    System: 'system',
+    Admin: 'admin',
+    Employer: 'employer',
+    Observer: 'observer',
+    Employee: 'employee',
+    Guest: 'guest'
+} as const;
+
+export type AvailableAccessDtoRoleTypeEnum = typeof AvailableAccessDtoRoleTypeEnum[keyof typeof AvailableAccessDtoRoleTypeEnum];
+export const AvailableAccessDtoAccessTypeEnum = {
+    Create: 'create',
+    Update: 'update',
+    Delete: 'delete',
+    Access: 'access',
+    Elevated: 'elevated'
+} as const;
+
+export type AvailableAccessDtoAccessTypeEnum = typeof AvailableAccessDtoAccessTypeEnum[keyof typeof AvailableAccessDtoAccessTypeEnum];
+
 /**
  * 
  * @export
  * @interface AvailableAccessUserCompanyDto
  */
 export interface AvailableAccessUserCompanyDto {
+    /**
+     * 
+     * @type {ResourceTypeEnum}
+     * @memberof AvailableAccessUserCompanyDto
+     */
+    'resourceType': ResourceTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AvailableAccessUserCompanyDto
+     */
+    'accessType': AvailableAccessUserCompanyDtoAccessTypeEnum;
     /**
      * 
      * @type {number}
@@ -231,19 +296,18 @@ export interface AvailableAccessUserCompanyDto {
      * @memberof AvailableAccessUserCompanyDto
      */
     'companyId': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof AvailableAccessUserCompanyDto
-     */
-    'resourceType': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AvailableAccessUserCompanyDto
-     */
-    'accessType': string;
 }
+
+export const AvailableAccessUserCompanyDtoAccessTypeEnum = {
+    Create: 'create',
+    Update: 'update',
+    Delete: 'delete',
+    Access: 'access',
+    Elevated: 'elevated'
+} as const;
+
+export type AvailableAccessUserCompanyDtoAccessTypeEnum = typeof AvailableAccessUserCompanyDtoAccessTypeEnum[keyof typeof AvailableAccessUserCompanyDtoAccessTypeEnum];
+
 /**
  * 
  * @export
@@ -252,23 +316,34 @@ export interface AvailableAccessUserCompanyDto {
 export interface AvailableAccessUserDto {
     /**
      * 
+     * @type {ResourceTypeEnum}
+     * @memberof AvailableAccessUserDto
+     */
+    'resourceType': ResourceTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AvailableAccessUserDto
+     */
+    'accessType': AvailableAccessUserDtoAccessTypeEnum;
+    /**
+     * 
      * @type {number}
      * @memberof AvailableAccessUserDto
      */
     'userId': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof AvailableAccessUserDto
-     */
-    'resourceType': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AvailableAccessUserDto
-     */
-    'accessType': string;
 }
+
+export const AvailableAccessUserDtoAccessTypeEnum = {
+    Create: 'create',
+    Update: 'update',
+    Delete: 'delete',
+    Access: 'access',
+    Elevated: 'elevated'
+} as const;
+
+export type AvailableAccessUserDtoAccessTypeEnum = typeof AvailableAccessUserDtoAccessTypeEnum[keyof typeof AvailableAccessUserDtoAccessTypeEnum];
+
 /**
  * 
  * @export
@@ -438,20 +513,41 @@ export interface CreateAccessDto {
      * @type {string}
      * @memberof CreateAccessDto
      */
-    'roleType': string;
+    'roleType': CreateAccessDtoRoleTypeEnum;
+    /**
+     * 
+     * @type {ResourceTypeEnum}
+     * @memberof CreateAccessDto
+     */
+    'resourceType': ResourceTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof CreateAccessDto
      */
-    'resourceType': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateAccessDto
-     */
-    'accessType': string;
+    'accessType': CreateAccessDtoAccessTypeEnum;
 }
+
+export const CreateAccessDtoRoleTypeEnum = {
+    System: 'system',
+    Admin: 'admin',
+    Employer: 'employer',
+    Observer: 'observer',
+    Employee: 'employee',
+    Guest: 'guest'
+} as const;
+
+export type CreateAccessDtoRoleTypeEnum = typeof CreateAccessDtoRoleTypeEnum[keyof typeof CreateAccessDtoRoleTypeEnum];
+export const CreateAccessDtoAccessTypeEnum = {
+    Create: 'create',
+    Update: 'update',
+    Delete: 'delete',
+    Access: 'access',
+    Elevated: 'elevated'
+} as const;
+
+export type CreateAccessDtoAccessTypeEnum = typeof CreateAccessDtoAccessTypeEnum[keyof typeof CreateAccessDtoAccessTypeEnum];
+
 /**
  * 
  * @export
@@ -463,19 +559,19 @@ export interface CreateCompanyDto {
      * @type {string}
      * @memberof CreateCompanyDto
      */
-    'name'?: string;
+    'name': string;
     /**
      * 
      * @type {number}
      * @memberof CreateCompanyDto
      */
-    'lawId'?: number;
+    'lawId': number;
     /**
      * 
      * @type {number}
      * @memberof CreateCompanyDto
      */
-    'accountingId'?: number;
+    'accountingId': number;
     /**
      * 
      * @type {string}
@@ -596,6 +692,12 @@ export interface CreateMinWageDto {
 export interface CreatePayFundDto {
     /**
      * 
+     * @type {string}
+     * @memberof CreatePayFundDto
+     */
+    'payFundCategory': CreatePayFundDtoPayFundCategoryEnum;
+    /**
+     * 
      * @type {number}
      * @memberof CreatePayFundDto
      */
@@ -618,12 +720,6 @@ export interface CreatePayFundDto {
      * @memberof CreatePayFundDto
      */
     'payFundTypeId': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePayFundDto
-     */
-    'payFundCategory': string;
     /**
      * 
      * @type {number}
@@ -649,6 +745,16 @@ export interface CreatePayFundDto {
      */
     'paySum': number;
 }
+
+export const CreatePayFundDtoPayFundCategoryEnum = {
+    Employees: 'employees',
+    Invalidity: 'invalidity',
+    Maternity: 'maternity',
+    Government: 'government'
+} as const;
+
+export type CreatePayFundDtoPayFundCategoryEnum = typeof CreatePayFundDtoPayFundCategoryEnum[keyof typeof CreatePayFundDtoPayFundCategoryEnum];
+
 /**
  * 
  * @export
@@ -660,19 +766,19 @@ export interface CreatePayFundTypeDto {
      * @type {string}
      * @memberof CreatePayFundTypeDto
      */
+    'group': CreatePayFundTypeDtoGroupEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePayFundTypeDto
+     */
+    'calcMethod': CreatePayFundTypeDtoCalcMethodEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePayFundTypeDto
+     */
     'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePayFundTypeDto
-     */
-    'group': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePayFundTypeDto
-     */
-    'calcMethod': string;
     /**
      * 
      * @type {number}
@@ -686,6 +792,26 @@ export interface CreatePayFundTypeDto {
      */
     'description': string;
 }
+
+export const CreatePayFundTypeDtoGroupEnum = {
+    Ecb: 'ECB',
+    Custom: 'custom'
+} as const;
+
+export type CreatePayFundTypeDtoGroupEnum = typeof CreatePayFundTypeDtoGroupEnum[keyof typeof CreatePayFundTypeDtoGroupEnum];
+export const CreatePayFundTypeDtoCalcMethodEnum = {
+    EcbVacation: 'ECB-vacation',
+    EcbSalary: 'ECB-salary',
+    EcbCommission: 'ECB-commission',
+    EcbSickByCompany: 'ECB-sick-by-company',
+    EcbSickBySif: 'ECB-sick-by-SIF',
+    EcbMaternity: 'ECB-maternity',
+    EcbMinWage: 'ECB-min-wage',
+    Custom: 'custom'
+} as const;
+
+export type CreatePayFundTypeDtoCalcMethodEnum = typeof CreatePayFundTypeDtoCalcMethodEnum[keyof typeof CreatePayFundTypeDtoCalcMethodEnum];
+
 /**
  * 
  * @export
@@ -848,6 +974,12 @@ export interface CreatePaymentDto {
      * @type {number}
      * @memberof CreatePaymentDto
      */
+    'recordFlags'?: CreatePaymentDtoRecordFlagsEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreatePaymentDto
+     */
     'companyId'?: number;
     /**
      * 
@@ -917,12 +1049,6 @@ export interface CreatePaymentDto {
     'funds'?: number;
     /**
      * 
-     * @type {number}
-     * @memberof CreatePaymentDto
-     */
-    'recordFlags'?: number;
-    /**
-     * 
      * @type {string}
      * @memberof CreatePaymentDto
      */
@@ -937,6 +1063,14 @@ export const CreatePaymentDtoStatusEnum = {
 } as const;
 
 export type CreatePaymentDtoStatusEnum = typeof CreatePaymentDtoStatusEnum[keyof typeof CreatePaymentDtoStatusEnum];
+export const CreatePaymentDtoRecordFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type CreatePaymentDtoRecordFlagsEnum = typeof CreatePaymentDtoRecordFlagsEnum[keyof typeof CreatePaymentDtoRecordFlagsEnum];
 
 /**
  * 
@@ -944,6 +1078,12 @@ export type CreatePaymentDtoStatusEnum = typeof CreatePaymentDtoStatusEnum[keyof
  * @interface CreatePaymentPositionDto
  */
 export interface CreatePaymentPositionDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CreatePaymentPositionDto
+     */
+    'recordFlags'?: CreatePaymentPositionDtoRecordFlagsEnum;
     /**
      * 
      * @type {number}
@@ -980,13 +1120,17 @@ export interface CreatePaymentPositionDto {
      * @memberof CreatePaymentPositionDto
      */
     'funds'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreatePaymentPositionDto
-     */
-    'recordFlags'?: number;
 }
+
+export const CreatePaymentPositionDtoRecordFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type CreatePaymentPositionDtoRecordFlagsEnum = typeof CreatePaymentPositionDtoRecordFlagsEnum[keyof typeof CreatePaymentPositionDtoRecordFlagsEnum];
+
 /**
  * 
  * @export
@@ -1035,6 +1179,24 @@ export interface CreatePayrollDto {
      * @type {number}
      * @memberof CreatePayrollDto
      */
+    'recordFlags': CreatePayrollDtoRecordFlagsEnum;
+    /**
+     * 
+     * @type {ResourceTypeEnum}
+     * @memberof CreatePayrollDto
+     */
+    'sourceType'?: ResourceTypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreatePayrollDto
+     */
+    'fixedFlags'?: CreatePayrollDtoFixedFlagsEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreatePayrollDto
+     */
     'positionId': number;
     /**
      * 
@@ -1068,10 +1230,16 @@ export interface CreatePayrollDto {
     'dateTo': Date;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof CreatePayrollDto
      */
-    'sourceType'?: string | null;
+    'factSum': number;
+    /**
+     * 
+     * @type {Position}
+     * @memberof CreatePayrollDto
+     */
+    'position'?: Position;
     /**
      * 
      * @type {number}
@@ -1131,12 +1299,6 @@ export interface CreatePayrollDto {
      * @type {number}
      * @memberof CreatePayrollDto
      */
-    'factSum': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreatePayrollDto
-     */
     'mask1'?: number;
     /**
      * 
@@ -1144,18 +1306,6 @@ export interface CreatePayrollDto {
      * @memberof CreatePayrollDto
      */
     'mask2'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreatePayrollDto
-     */
-    'recordFlags': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreatePayrollDto
-     */
-    'fixedFlags'?: number;
     /**
      * 
      * @type {object}
@@ -1175,6 +1325,27 @@ export interface CreatePayrollDto {
      */
     'parentId'?: number | null;
 }
+
+export const CreatePayrollDtoRecordFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type CreatePayrollDtoRecordFlagsEnum = typeof CreatePayrollDtoRecordFlagsEnum[keyof typeof CreatePayrollDtoRecordFlagsEnum];
+export const CreatePayrollDtoFixedFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8,
+    NUMBER_16: 16,
+    NUMBER_32: 32,
+    NUMBER_64: 64
+} as const;
+
+export type CreatePayrollDtoFixedFlagsEnum = typeof CreatePayrollDtoFixedFlagsEnum[keyof typeof CreatePayrollDtoFixedFlagsEnum];
+
 /**
  * 
  * @export
@@ -1363,14 +1534,26 @@ export interface CreateRoleDto {
      * @type {string}
      * @memberof CreateRoleDto
      */
-    'name': string;
+    'type': CreateRoleDtoTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof CreateRoleDto
      */
-    'type': string;
+    'name': string;
 }
+
+export const CreateRoleDtoTypeEnum = {
+    System: 'system',
+    Admin: 'admin',
+    Employer: 'employer',
+    Observer: 'observer',
+    Employee: 'employee',
+    Guest: 'guest'
+} as const;
+
+export type CreateRoleDtoTypeEnum = typeof CreateRoleDtoTypeEnum[keyof typeof CreateRoleDtoTypeEnum];
+
 /**
  * 
  * @export
@@ -1379,16 +1562,22 @@ export interface CreateRoleDto {
 export interface CreateTaskDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof CreateTaskDto
      */
-    'companyId': number;
+    'type': CreateTaskDtoTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof CreateTaskDto
      */
-    'type': string;
+    'status': CreateTaskDtoStatusEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTaskDto
+     */
+    'companyId': number;
     /**
      * 
      * @type {Date}
@@ -1409,17 +1598,39 @@ export interface CreateTaskDto {
     'sequenceNumber': number;
     /**
      * 
-     * @type {string}
-     * @memberof CreateTaskDto
-     */
-    'status': string;
-    /**
-     * 
      * @type {number}
      * @memberof CreateTaskDto
      */
     'entityId': number | null;
 }
+
+export const CreateTaskDtoTypeEnum = {
+    CreateUser: 'create-user',
+    CreateCompany: 'create-company',
+    FillDepartmentList: 'fill-department-list',
+    FillPositionList: 'fill-position-list',
+    PostWorkSheet: 'post-work-sheet',
+    PostAccrualDocument: 'post-accrual-document',
+    SendApplicationFss: 'send-application-fss',
+    PostPaymentFss: 'post-payment-fss',
+    PostAdvancePayment: 'post-advance-payment',
+    PostRegularPayment: 'post-regular-payment',
+    ClosePayPeriod: 'close-pay-period',
+    SendIncomeTaxReport: 'send-income-tax-report',
+    HappyBirthday: 'happy-birthday'
+} as const;
+
+export type CreateTaskDtoTypeEnum = typeof CreateTaskDtoTypeEnum[keyof typeof CreateTaskDtoTypeEnum];
+export const CreateTaskDtoStatusEnum = {
+    NotAvailable: 'not-available',
+    Todo: 'todo',
+    InProgress: 'in-progress',
+    Done: 'done',
+    DoneByUser: 'done-by-user'
+} as const;
+
+export type CreateTaskDtoStatusEnum = typeof CreateTaskDtoStatusEnum[keyof typeof CreateTaskDtoStatusEnum];
+
 /**
  * 
  * @export
@@ -1468,13 +1679,13 @@ export interface CreateWorkNormDto {
      * @type {string}
      * @memberof CreateWorkNormDto
      */
-    'name': string;
+    'type': CreateWorkNormDtoTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof CreateWorkNormDto
      */
-    'type': string;
+    'name': string;
     /**
      * 
      * @type {Date}
@@ -1488,6 +1699,15 @@ export interface CreateWorkNormDto {
      */
     'dateTo'?: Date;
 }
+
+export const CreateWorkNormDtoTypeEnum = {
+    Weekly: 'weekly',
+    Periodic: 'periodic',
+    Shifted: 'shifted'
+} as const;
+
+export type CreateWorkNormDtoTypeEnum = typeof CreateWorkNormDtoTypeEnum[keyof typeof CreateWorkNormDtoTypeEnum];
+
 /**
  * 
  * @export
@@ -1688,7 +1908,7 @@ export interface FindAllPaymentDto {
      * @type {string}
      * @memberof FindAllPaymentDto
      */
-    'status'?: string;
+    'status'?: FindAllPaymentDtoStatusEnum;
     /**
      * 
      * @type {boolean}
@@ -1696,6 +1916,16 @@ export interface FindAllPaymentDto {
      */
     'relations'?: boolean;
 }
+
+export const FindAllPaymentDtoStatusEnum = {
+    Draft: 'draft',
+    Submitted: 'submitted',
+    Accepted: 'accepted',
+    Payed: 'payed'
+} as const;
+
+export type FindAllPaymentDtoStatusEnum = typeof FindAllPaymentDtoStatusEnum[keyof typeof FindAllPaymentDtoStatusEnum];
+
 /**
  * 
  * @export
@@ -1950,6 +2180,12 @@ export interface FindAllTaskDto {
 export interface FindAllUserCompanyDto {
     /**
      * 
+     * @type {number}
+     * @memberof FindAllUserCompanyDto
+     */
+    'userId': number;
+    /**
+     * 
      * @type {boolean}
      * @memberof FindAllUserCompanyDto
      */
@@ -1959,7 +2195,7 @@ export interface FindAllUserCompanyDto {
      * @type {boolean}
      * @memberof FindAllUserCompanyDto
      */
-    'deleted'?: boolean;
+    'withDeleted'?: boolean;
 }
 /**
  * 
@@ -2094,6 +2330,25 @@ export interface FindOneTaskDto {
      * @memberof FindOneTaskDto
      */
     'relations'?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface FindOneUserCompanyDto
+ */
+export interface FindOneUserCompanyDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOneUserCompanyDto
+     */
+    'relations'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOneUserCompanyDto
+     */
+    'withDeleted'?: boolean;
 }
 /**
  * 
@@ -2289,6 +2544,12 @@ export interface Job {
 export interface Law {
     /**
      * 
+     * @type {string}
+     * @memberof Law
+     */
+    'type': LawTypeEnum;
+    /**
+     * 
      * @type {number}
      * @memberof Law
      */
@@ -2299,13 +2560,15 @@ export interface Law {
      * @memberof Law
      */
     'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Law
-     */
-    'type': string;
 }
+
+export const LawTypeEnum = {
+    Ukraine: 'ukraine',
+    Custom: 'custom'
+} as const;
+
+export type LawTypeEnum = typeof LawTypeEnum[keyof typeof LawTypeEnum];
+
 /**
  * 
  * @export
@@ -2387,6 +2650,12 @@ export interface MinWage {
 export interface PayFund {
     /**
      * 
+     * @type {string}
+     * @memberof PayFund
+     */
+    'payFundCategory': PayFundPayFundCategoryEnum;
+    /**
+     * 
      * @type {number}
      * @memberof PayFund
      */
@@ -2429,12 +2698,6 @@ export interface PayFund {
     'payFundTypeId': number;
     /**
      * 
-     * @type {string}
-     * @memberof PayFund
-     */
-    'payFundCategory': string;
-    /**
-     * 
      * @type {number}
      * @memberof PayFund
      */
@@ -2458,12 +2721,34 @@ export interface PayFund {
      */
     'paySum': number;
 }
+
+export const PayFundPayFundCategoryEnum = {
+    Employees: 'employees',
+    Invalidity: 'invalidity',
+    Maternity: 'maternity',
+    Government: 'government'
+} as const;
+
+export type PayFundPayFundCategoryEnum = typeof PayFundPayFundCategoryEnum[keyof typeof PayFundPayFundCategoryEnum];
+
 /**
  * 
  * @export
  * @interface PayFundType
  */
 export interface PayFundType {
+    /**
+     * 
+     * @type {string}
+     * @memberof PayFundType
+     */
+    'group': PayFundTypeGroupEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayFundType
+     */
+    'calcMethod': PayFundTypeCalcMethodEnum;
     /**
      * 
      * @type {number}
@@ -2476,18 +2761,6 @@ export interface PayFundType {
      * @memberof PayFundType
      */
     'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PayFundType
-     */
-    'group': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PayFundType
-     */
-    'calcMethod': string;
     /**
      * 
      * @type {number}
@@ -2543,6 +2816,26 @@ export interface PayFundType {
      */
     'version': number;
 }
+
+export const PayFundTypeGroupEnum = {
+    Ecb: 'ECB',
+    Custom: 'custom'
+} as const;
+
+export type PayFundTypeGroupEnum = typeof PayFundTypeGroupEnum[keyof typeof PayFundTypeGroupEnum];
+export const PayFundTypeCalcMethodEnum = {
+    EcbVacation: 'ECB-vacation',
+    EcbSalary: 'ECB-salary',
+    EcbCommission: 'ECB-commission',
+    EcbSickByCompany: 'ECB-sick-by-company',
+    EcbSickBySif: 'ECB-sick-by-SIF',
+    EcbMaternity: 'ECB-maternity',
+    EcbMinWage: 'ECB-min-wage',
+    Custom: 'custom'
+} as const;
+
+export type PayFundTypeCalcMethodEnum = typeof PayFundTypeCalcMethodEnum[keyof typeof PayFundTypeCalcMethodEnum];
+
 /**
  * 
  * @export
@@ -2756,6 +3049,12 @@ export interface PayPeriod {
 export interface PayPeriodCalcMethod {
     /**
      * 
+     * @type {string}
+     * @memberof PayPeriodCalcMethod
+     */
+    'calcMethod': PayPeriodCalcMethodCalcMethodEnum;
+    /**
+     * 
      * @type {number}
      * @memberof PayPeriodCalcMethod
      */
@@ -2774,17 +3073,42 @@ export interface PayPeriodCalcMethod {
     'payPeriodId': number;
     /**
      * 
-     * @type {string}
-     * @memberof PayPeriodCalcMethod
-     */
-    'calcMethod': string;
-    /**
-     * 
      * @type {number}
      * @memberof PayPeriodCalcMethod
      */
     'factSum': number;
 }
+
+export const PayPeriodCalcMethodCalcMethodEnum = {
+    Salary: 'salary',
+    Wage: 'wage',
+    Commission: 'commission',
+    Allowance: 'allowance',
+    PayEveningHours: 'pay_evening_hours',
+    PayNightHours: 'pay_night_hours',
+    PayOvertime: 'pay_overtime',
+    PayWeekendHours: 'pay_weekend_hours',
+    PayHolidayHours: 'pay_holiday_hours',
+    Bonus: 'bonus',
+    PaidVacation: 'paid-vacation',
+    UnpaidLeave: 'unpaid-leave',
+    UnpaidLeaveCompany: 'unpaid-leave-company',
+    PaidSickByCompany: 'paid-sick-by-company',
+    PaidSickBySif: 'paid-sick-by-sif',
+    UnconfirmedSick: 'unconfirmed-sick',
+    IncomeIndexation: 'income-indexation',
+    OneTimeAccrual: 'one-time-accrual',
+    IncomeTax: 'income-tax',
+    MilitaryTax: 'military-tax',
+    AdvancePayment: 'advance-payment',
+    RegularPayment: 'regular-payment',
+    FastPayment: 'fast-payment',
+    SifPayment: 'sif-payment',
+    OneTimeDeduction: 'one-time-deduction'
+} as const;
+
+export type PayPeriodCalcMethodCalcMethodEnum = typeof PayPeriodCalcMethodCalcMethodEnum[keyof typeof PayPeriodCalcMethodCalcMethodEnum];
+
 /**
  * 
  * @export
@@ -2797,6 +3121,12 @@ export interface Payment {
      * @memberof Payment
      */
     'status': PaymentStatusEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payment
+     */
+    'recordFlags': PaymentRecordFlagsEnum;
     /**
      * 
      * @type {number}
@@ -2889,12 +3219,6 @@ export interface Payment {
     'funds': number;
     /**
      * 
-     * @type {number}
-     * @memberof Payment
-     */
-    'recordFlags': number;
-    /**
-     * 
      * @type {string}
      * @memberof Payment
      */
@@ -2957,6 +3281,14 @@ export const PaymentStatusEnum = {
 } as const;
 
 export type PaymentStatusEnum = typeof PaymentStatusEnum[keyof typeof PaymentStatusEnum];
+export const PaymentRecordFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type PaymentRecordFlagsEnum = typeof PaymentRecordFlagsEnum[keyof typeof PaymentRecordFlagsEnum];
 
 /**
  * 
@@ -2964,6 +3296,12 @@ export type PaymentStatusEnum = typeof PaymentStatusEnum[keyof typeof PaymentSta
  * @interface PaymentPosition
  */
 export interface PaymentPosition {
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentPosition
+     */
+    'recordFlags': PaymentPositionRecordFlagsEnum;
     /**
      * 
      * @type {number}
@@ -3020,12 +3358,6 @@ export interface PaymentPosition {
     'funds': number;
     /**
      * 
-     * @type {number}
-     * @memberof PaymentPosition
-     */
-    'recordFlags': number;
-    /**
-     * 
      * @type {Date}
      * @memberof PaymentPosition
      */
@@ -3067,6 +3399,16 @@ export interface PaymentPosition {
      */
     'version': number;
 }
+
+export const PaymentPositionRecordFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type PaymentPositionRecordFlagsEnum = typeof PaymentPositionRecordFlagsEnum[keyof typeof PaymentPositionRecordFlagsEnum];
+
 /**
  * 
  * @export
@@ -3160,6 +3502,24 @@ export interface PaymentType {
 export interface Payroll {
     /**
      * 
+     * @type {ResourceTypeEnum}
+     * @memberof Payroll
+     */
+    'sourceType': ResourceTypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payroll
+     */
+    'recordFlags': PayrollRecordFlagsEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payroll
+     */
+    'fixedFlags': PayrollFixedFlagsEnum;
+    /**
+     * 
      * @type {number}
      * @memberof Payroll
      */
@@ -3212,12 +3572,6 @@ export interface Payroll {
      * @memberof Payroll
      */
     'dateTo': Date;
-    /**
-     * 
-     * @type {string}
-     * @memberof Payroll
-     */
-    'sourceType': string | null;
     /**
      * 
      * @type {number}
@@ -3292,18 +3646,6 @@ export interface Payroll {
     'mask2': number;
     /**
      * 
-     * @type {number}
-     * @memberof Payroll
-     */
-    'recordFlags': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Payroll
-     */
-    'fixedFlags': number;
-    /**
-     * 
      * @type {object}
      * @memberof Payroll
      */
@@ -3363,6 +3705,27 @@ export interface Payroll {
      */
     'version': number;
 }
+
+export const PayrollRecordFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type PayrollRecordFlagsEnum = typeof PayrollRecordFlagsEnum[keyof typeof PayrollRecordFlagsEnum];
+export const PayrollFixedFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8,
+    NUMBER_16: 16,
+    NUMBER_32: 32,
+    NUMBER_64: 64
+} as const;
+
+export type PayrollFixedFlagsEnum = typeof PayrollFixedFlagsEnum[keyof typeof PayrollFixedFlagsEnum];
+
 /**
  * 
  * @export
@@ -4273,9 +4636,64 @@ export interface PublicUserDataDto {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+
+export const ResourceTypeEnum = {
+    Access: 'Access',
+    AppTitle: 'App Title',
+    Role: 'Role',
+    RoleAccess: 'Role Access',
+    UserAccess: 'User Access',
+    User: 'User',
+    Profile: 'Profile',
+    Dashboard: 'Dashboard',
+    Accounting: 'Accounting',
+    Law: 'Law',
+    Company: 'Company',
+    Job: 'Job',
+    Department: 'Department',
+    Manager: 'Manager',
+    Account: 'Account',
+    PaymentType: 'Payment Type',
+    FundType: 'Fund Type',
+    WorkNorm: 'Work Norm',
+    PayPeriod: 'Pay Period',
+    Position: 'Position',
+    PositionHistory: 'Position History',
+    Person: 'Person',
+    Vacancy: 'Vacancy',
+    Candidate: 'Candidate',
+    Dismissed: 'Dismissed',
+    TimeOff: 'Time Off',
+    Documents: 'Documents',
+    Notes: 'Notes',
+    TimeSheet: 'Time Sheet',
+    Payroll: 'Payroll',
+    Payment: 'Payment',
+    Report: 'Report',
+    PayFund: 'Pay Fund',
+    MinimalWage: 'Minimal Wage',
+    MaximalBaseUfc: 'Maximal Base UFC',
+    Task: 'Task',
+    Demo: 'Demo'
+} as const;
+
+export type ResourceTypeEnum = typeof ResourceTypeEnum[keyof typeof ResourceTypeEnum];
+
+
+/**
+ * 
+ * @export
  * @interface Role
  */
 export interface Role {
+    /**
+     * 
+     * @type {string}
+     * @memberof Role
+     */
+    'type': RoleTypeEnum;
     /**
      * 
      * @type {number}
@@ -4288,19 +4706,37 @@ export interface Role {
      * @memberof Role
      */
     'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Role
-     */
-    'type': string;
 }
+
+export const RoleTypeEnum = {
+    System: 'system',
+    Admin: 'admin',
+    Employer: 'employer',
+    Observer: 'observer',
+    Employee: 'employee',
+    Guest: 'guest'
+} as const;
+
+export type RoleTypeEnum = typeof RoleTypeEnum[keyof typeof RoleTypeEnum];
+
 /**
  * 
  * @export
  * @interface Task
  */
 export interface Task {
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
+    'type': TaskTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
+    'status': TaskStatusEnum;
     /**
      * 
      * @type {number}
@@ -4321,12 +4757,6 @@ export interface Task {
     'companyId': number;
     /**
      * 
-     * @type {string}
-     * @memberof Task
-     */
-    'type': string;
-    /**
-     * 
      * @type {Date}
      * @memberof Task
      */
@@ -4343,12 +4773,6 @@ export interface Task {
      * @memberof Task
      */
     'sequenceNumber': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Task
-     */
-    'status': string;
     /**
      * 
      * @type {number}
@@ -4398,6 +4822,34 @@ export interface Task {
      */
     'version': number;
 }
+
+export const TaskTypeEnum = {
+    CreateUser: 'create-user',
+    CreateCompany: 'create-company',
+    FillDepartmentList: 'fill-department-list',
+    FillPositionList: 'fill-position-list',
+    PostWorkSheet: 'post-work-sheet',
+    PostAccrualDocument: 'post-accrual-document',
+    SendApplicationFss: 'send-application-fss',
+    PostPaymentFss: 'post-payment-fss',
+    PostAdvancePayment: 'post-advance-payment',
+    PostRegularPayment: 'post-regular-payment',
+    ClosePayPeriod: 'close-pay-period',
+    SendIncomeTaxReport: 'send-income-tax-report',
+    HappyBirthday: 'happy-birthday'
+} as const;
+
+export type TaskTypeEnum = typeof TaskTypeEnum[keyof typeof TaskTypeEnum];
+export const TaskStatusEnum = {
+    NotAvailable: 'not-available',
+    Todo: 'todo',
+    InProgress: 'in-progress',
+    Done: 'done',
+    DoneByUser: 'done-by-user'
+} as const;
+
+export type TaskStatusEnum = typeof TaskStatusEnum[keyof typeof TaskStatusEnum];
+
 /**
  * 
  * @export
@@ -4425,65 +4877,44 @@ export interface TokensDto {
 export interface UpdateAccessDto {
     /**
      * 
-     * @type {Date}
+     * @type {string}
      * @memberof UpdateAccessDto
      */
-    'createdDate'?: Date;
+    'roleType'?: UpdateAccessDtoRoleTypeEnum;
     /**
      * 
-     * @type {number}
+     * @type {ResourceTypeEnum}
      * @memberof UpdateAccessDto
      */
-    'createdUserId'?: number | null;
-    /**
-     * 
-     * @type {Date}
-     * @memberof UpdateAccessDto
-     */
-    'updatedDate'?: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateAccessDto
-     */
-    'updatedUserId'?: number | null;
-    /**
-     * 
-     * @type {Date}
-     * @memberof UpdateAccessDto
-     */
-    'deletedDate'?: Date | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateAccessDto
-     */
-    'deletedUserId'?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateAccessDto
-     */
-    'version'?: number;
+    'resourceType'?: ResourceTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof UpdateAccessDto
      */
-    'roleType'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateAccessDto
-     */
-    'resourceType'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateAccessDto
-     */
-    'accessType'?: string;
+    'accessType'?: UpdateAccessDtoAccessTypeEnum;
 }
+
+export const UpdateAccessDtoRoleTypeEnum = {
+    System: 'system',
+    Admin: 'admin',
+    Employer: 'employer',
+    Observer: 'observer',
+    Employee: 'employee',
+    Guest: 'guest'
+} as const;
+
+export type UpdateAccessDtoRoleTypeEnum = typeof UpdateAccessDtoRoleTypeEnum[keyof typeof UpdateAccessDtoRoleTypeEnum];
+export const UpdateAccessDtoAccessTypeEnum = {
+    Create: 'create',
+    Update: 'update',
+    Delete: 'delete',
+    Access: 'access',
+    Elevated: 'elevated'
+} as const;
+
+export type UpdateAccessDtoAccessTypeEnum = typeof UpdateAccessDtoAccessTypeEnum[keyof typeof UpdateAccessDtoAccessTypeEnum];
+
 /**
  * 
  * @export
@@ -4652,6 +5083,12 @@ export interface UpdateMinWageDto {
 export interface UpdatePayFundDto {
     /**
      * 
+     * @type {string}
+     * @memberof UpdatePayFundDto
+     */
+    'payFundCategory'?: UpdatePayFundDtoPayFundCategoryEnum;
+    /**
+     * 
      * @type {number}
      * @memberof UpdatePayFundDto
      */
@@ -4674,12 +5111,6 @@ export interface UpdatePayFundDto {
      * @memberof UpdatePayFundDto
      */
     'payFundTypeId'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePayFundDto
-     */
-    'payFundCategory'?: string;
     /**
      * 
      * @type {number}
@@ -4705,12 +5136,34 @@ export interface UpdatePayFundDto {
      */
     'paySum'?: number;
 }
+
+export const UpdatePayFundDtoPayFundCategoryEnum = {
+    Employees: 'employees',
+    Invalidity: 'invalidity',
+    Maternity: 'maternity',
+    Government: 'government'
+} as const;
+
+export type UpdatePayFundDtoPayFundCategoryEnum = typeof UpdatePayFundDtoPayFundCategoryEnum[keyof typeof UpdatePayFundDtoPayFundCategoryEnum];
+
 /**
  * 
  * @export
  * @interface UpdatePayFundTypeDto
  */
 export interface UpdatePayFundTypeDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePayFundTypeDto
+     */
+    'group'?: UpdatePayFundTypeDtoGroupEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePayFundTypeDto
+     */
+    'calcMethod'?: UpdatePayFundTypeDtoCalcMethodEnum;
     /**
      * 
      * @type {number}
@@ -4725,18 +5178,6 @@ export interface UpdatePayFundTypeDto {
     'name'?: string;
     /**
      * 
-     * @type {string}
-     * @memberof UpdatePayFundTypeDto
-     */
-    'group'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePayFundTypeDto
-     */
-    'calcMethod'?: string;
-    /**
-     * 
      * @type {number}
      * @memberof UpdatePayFundTypeDto
      */
@@ -4748,6 +5189,26 @@ export interface UpdatePayFundTypeDto {
      */
     'description'?: string;
 }
+
+export const UpdatePayFundTypeDtoGroupEnum = {
+    Ecb: 'ECB',
+    Custom: 'custom'
+} as const;
+
+export type UpdatePayFundTypeDtoGroupEnum = typeof UpdatePayFundTypeDtoGroupEnum[keyof typeof UpdatePayFundTypeDtoGroupEnum];
+export const UpdatePayFundTypeDtoCalcMethodEnum = {
+    EcbVacation: 'ECB-vacation',
+    EcbSalary: 'ECB-salary',
+    EcbCommission: 'ECB-commission',
+    EcbSickByCompany: 'ECB-sick-by-company',
+    EcbSickBySif: 'ECB-sick-by-SIF',
+    EcbMaternity: 'ECB-maternity',
+    EcbMinWage: 'ECB-min-wage',
+    Custom: 'custom'
+} as const;
+
+export type UpdatePayFundTypeDtoCalcMethodEnum = typeof UpdatePayFundTypeDtoCalcMethodEnum[keyof typeof UpdatePayFundTypeDtoCalcMethodEnum];
+
 /**
  * 
  * @export
@@ -4928,6 +5389,12 @@ export interface UpdatePaymentDto {
      * @type {number}
      * @memberof UpdatePaymentDto
      */
+    'recordFlags'?: UpdatePaymentDtoRecordFlagsEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePaymentDto
+     */
     'version': number;
     /**
      * 
@@ -5003,12 +5470,6 @@ export interface UpdatePaymentDto {
     'funds'?: number;
     /**
      * 
-     * @type {number}
-     * @memberof UpdatePaymentDto
-     */
-    'recordFlags'?: number;
-    /**
-     * 
      * @type {string}
      * @memberof UpdatePaymentDto
      */
@@ -5023,6 +5484,14 @@ export const UpdatePaymentDtoStatusEnum = {
 } as const;
 
 export type UpdatePaymentDtoStatusEnum = typeof UpdatePaymentDtoStatusEnum[keyof typeof UpdatePaymentDtoStatusEnum];
+export const UpdatePaymentDtoRecordFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type UpdatePaymentDtoRecordFlagsEnum = typeof UpdatePaymentDtoRecordFlagsEnum[keyof typeof UpdatePaymentDtoRecordFlagsEnum];
 
 /**
  * 
@@ -5030,6 +5499,12 @@ export type UpdatePaymentDtoStatusEnum = typeof UpdatePaymentDtoStatusEnum[keyof
  * @interface UpdatePaymentPositionDto
  */
 export interface UpdatePaymentPositionDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePaymentPositionDto
+     */
+    'recordFlags'?: UpdatePaymentPositionDtoRecordFlagsEnum;
     /**
      * 
      * @type {number}
@@ -5072,13 +5547,17 @@ export interface UpdatePaymentPositionDto {
      * @memberof UpdatePaymentPositionDto
      */
     'funds'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdatePaymentPositionDto
-     */
-    'recordFlags'?: number;
 }
+
+export const UpdatePaymentPositionDtoRecordFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type UpdatePaymentPositionDtoRecordFlagsEnum = typeof UpdatePaymentPositionDtoRecordFlagsEnum[keyof typeof UpdatePaymentPositionDtoRecordFlagsEnum];
+
 /**
  * 
  * @export
@@ -5130,16 +5609,28 @@ export interface UpdatePaymentTypeDto {
 export interface UpdatePayrollDto {
     /**
      * 
+     * @type {ResourceTypeEnum}
+     * @memberof UpdatePayrollDto
+     */
+    'sourceType'?: ResourceTypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePayrollDto
+     */
+    'recordFlags'?: UpdatePayrollDtoRecordFlagsEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatePayrollDto
+     */
+    'fixedFlags'?: UpdatePayrollDtoFixedFlagsEnum;
+    /**
+     * 
      * @type {number}
      * @memberof UpdatePayrollDto
      */
     'version'?: number;
-    /**
-     * 
-     * @type {Position}
-     * @memberof UpdatePayrollDto
-     */
-    'position'?: Position;
     /**
      * 
      * @type {number}
@@ -5160,12 +5651,6 @@ export interface UpdatePayrollDto {
     'accPeriod'?: Date;
     /**
      * 
-     * @type {PaymentType}
-     * @memberof UpdatePayrollDto
-     */
-    'paymentType'?: PaymentType;
-    /**
-     * 
      * @type {number}
      * @memberof UpdatePayrollDto
      */
@@ -5182,12 +5667,6 @@ export interface UpdatePayrollDto {
      * @memberof UpdatePayrollDto
      */
     'dateTo'?: Date;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePayrollDto
-     */
-    'sourceType'?: string | null;
     /**
      * 
      * @type {number}
@@ -5262,18 +5741,6 @@ export interface UpdatePayrollDto {
     'mask2'?: number;
     /**
      * 
-     * @type {number}
-     * @memberof UpdatePayrollDto
-     */
-    'recordFlags'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdatePayrollDto
-     */
-    'fixedFlags'?: number;
-    /**
-     * 
      * @type {object}
      * @memberof UpdatePayrollDto
      */
@@ -5291,6 +5758,27 @@ export interface UpdatePayrollDto {
      */
     'parentId'?: number | null;
 }
+
+export const UpdatePayrollDtoRecordFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8
+} as const;
+
+export type UpdatePayrollDtoRecordFlagsEnum = typeof UpdatePayrollDtoRecordFlagsEnum[keyof typeof UpdatePayrollDtoRecordFlagsEnum];
+export const UpdatePayrollDtoFixedFlagsEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_4: 4,
+    NUMBER_8: 8,
+    NUMBER_16: 16,
+    NUMBER_32: 32,
+    NUMBER_64: 64
+} as const;
+
+export type UpdatePayrollDtoFixedFlagsEnum = typeof UpdatePayrollDtoFixedFlagsEnum[keyof typeof UpdatePayrollDtoFixedFlagsEnum];
+
 /**
  * 
  * @export
@@ -5497,14 +5985,26 @@ export interface UpdateRoleDto {
      * @type {string}
      * @memberof UpdateRoleDto
      */
-    'name'?: string;
+    'type'?: UpdateRoleDtoTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof UpdateRoleDto
      */
-    'type'?: string;
+    'name'?: string;
 }
+
+export const UpdateRoleDtoTypeEnum = {
+    System: 'system',
+    Admin: 'admin',
+    Employer: 'employer',
+    Observer: 'observer',
+    Employee: 'employee',
+    Guest: 'guest'
+} as const;
+
+export type UpdateRoleDtoTypeEnum = typeof UpdateRoleDtoTypeEnum[keyof typeof UpdateRoleDtoTypeEnum];
+
 /**
  * 
  * @export
@@ -5513,28 +6013,28 @@ export interface UpdateRoleDto {
 export interface UpdateTaskDto {
     /**
      * 
+     * @type {string}
+     * @memberof UpdateTaskDto
+     */
+    'type'?: UpdateTaskDtoTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTaskDto
+     */
+    'status'?: UpdateTaskDtoStatusEnum;
+    /**
+     * 
      * @type {number}
      * @memberof UpdateTaskDto
      */
     'version'?: number;
     /**
      * 
-     * @type {Company}
-     * @memberof UpdateTaskDto
-     */
-    'company'?: Company;
-    /**
-     * 
      * @type {number}
      * @memberof UpdateTaskDto
      */
     'companyId'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateTaskDto
-     */
-    'type'?: string;
     /**
      * 
      * @type {Date}
@@ -5555,17 +6055,39 @@ export interface UpdateTaskDto {
     'sequenceNumber'?: number;
     /**
      * 
-     * @type {string}
-     * @memberof UpdateTaskDto
-     */
-    'status'?: string;
-    /**
-     * 
      * @type {number}
      * @memberof UpdateTaskDto
      */
     'entityId'?: number | null;
 }
+
+export const UpdateTaskDtoTypeEnum = {
+    CreateUser: 'create-user',
+    CreateCompany: 'create-company',
+    FillDepartmentList: 'fill-department-list',
+    FillPositionList: 'fill-position-list',
+    PostWorkSheet: 'post-work-sheet',
+    PostAccrualDocument: 'post-accrual-document',
+    SendApplicationFss: 'send-application-fss',
+    PostPaymentFss: 'post-payment-fss',
+    PostAdvancePayment: 'post-advance-payment',
+    PostRegularPayment: 'post-regular-payment',
+    ClosePayPeriod: 'close-pay-period',
+    SendIncomeTaxReport: 'send-income-tax-report',
+    HappyBirthday: 'happy-birthday'
+} as const;
+
+export type UpdateTaskDtoTypeEnum = typeof UpdateTaskDtoTypeEnum[keyof typeof UpdateTaskDtoTypeEnum];
+export const UpdateTaskDtoStatusEnum = {
+    NotAvailable: 'not-available',
+    Todo: 'todo',
+    InProgress: 'in-progress',
+    Done: 'done',
+    DoneByUser: 'done-by-user'
+} as const;
+
+export type UpdateTaskDtoStatusEnum = typeof UpdateTaskDtoStatusEnum[keyof typeof UpdateTaskDtoStatusEnum];
+
 /**
  * 
  * @export
@@ -5677,6 +6199,12 @@ export interface UpdateUserDto {
 export interface UpdateWorkNormDto {
     /**
      * 
+     * @type {string}
+     * @memberof UpdateWorkNormDto
+     */
+    'type'?: UpdateWorkNormDtoTypeEnum;
+    /**
+     * 
      * @type {number}
      * @memberof UpdateWorkNormDto
      */
@@ -5687,12 +6215,6 @@ export interface UpdateWorkNormDto {
      * @memberof UpdateWorkNormDto
      */
     'name'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateWorkNormDto
-     */
-    'type'?: string;
     /**
      * 
      * @type {Date}
@@ -5706,6 +6228,15 @@ export interface UpdateWorkNormDto {
      */
     'dateTo'?: Date;
 }
+
+export const UpdateWorkNormDtoTypeEnum = {
+    Weekly: 'weekly',
+    Periodic: 'periodic',
+    Shifted: 'shifted'
+} as const;
+
+export type UpdateWorkNormDtoTypeEnum = typeof UpdateWorkNormDtoTypeEnum[keyof typeof UpdateWorkNormDtoTypeEnum];
+
 /**
  * 
  * @export
@@ -5927,6 +6458,12 @@ export interface WithdrawPaymentDto {
 export interface WorkNorm {
     /**
      * 
+     * @type {string}
+     * @memberof WorkNorm
+     */
+    'type': WorkNormTypeEnum;
+    /**
+     * 
      * @type {number}
      * @memberof WorkNorm
      */
@@ -5937,12 +6474,6 @@ export interface WorkNorm {
      * @memberof WorkNorm
      */
     'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorkNorm
-     */
-    'type': string;
     /**
      * 
      * @type {Date}
@@ -6004,6 +6535,15 @@ export interface WorkNorm {
      */
     'version': number;
 }
+
+export const WorkNormTypeEnum = {
+    Weekly: 'weekly',
+    Periodic: 'periodic',
+    Shifted: 'shifted'
+} as const;
+
+export type WorkNormTypeEnum = typeof WorkNormTypeEnum[keyof typeof WorkNormTypeEnum];
+
 /**
  * 
  * @export
@@ -10363,18 +10903,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {number} id 
-         * @param {FindAllUserCompanyDto} findAllUserCompanyDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersCompanies: async (id: number, findAllUserCompanyDto: FindAllUserCompanyDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('usersCompanies', 'id', id)
-            // verify required parameter 'findAllUserCompanyDto' is not null or undefined
-            assertParamExists('usersCompanies', 'findAllUserCompanyDto', findAllUserCompanyDto)
-            const localVarPath = `/api/users/{id}/companies`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        userCompaniesCreate: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/user-companies`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -10386,9 +10919,37 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {FindAllUserCompanyDto} findAllUserCompanyDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userCompaniesFindAll: async (findAllUserCompanyDto: FindAllUserCompanyDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findAllUserCompanyDto' is not null or undefined
+            assertParamExists('userCompaniesFindAll', 'findAllUserCompanyDto', findAllUserCompanyDto)
+            const localVarPath = `/api/user-companies/find`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
 
     
@@ -10406,15 +10967,54 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {number} id 
+         * @param {FindOneUserCompanyDto} findOneUserCompanyDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userCompaniesFindOne: async (id: number, findOneUserCompanyDto: FindOneUserCompanyDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('userCompaniesFindOne', 'id', id)
+            // verify required parameter 'findOneUserCompanyDto' is not null or undefined
+            assertParamExists('userCompaniesFindOne', 'findOneUserCompanyDto', findOneUserCompanyDto)
+            const localVarPath = `/api/user-companies/find/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(findOneUserCompanyDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Soft delete a User Company record
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersCompaniesRemove: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        userCompaniesRemove: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('usersCompaniesRemove', 'id', id)
-            const localVarPath = `/api/users/companies/{id}`
+            assertParamExists('userCompaniesRemove', 'id', id)
+            const localVarPath = `/api/user-companies/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -10426,10 +11026,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -10449,10 +11045,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersCompaniesRestore: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        userCompaniesRestore: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('usersCompaniesRestore', 'id', id)
-            const localVarPath = `/api/users/companies/{id}/restore`
+            assertParamExists('userCompaniesRestore', 'id', id)
+            const localVarPath = `/api/user-companies/{id}/restore`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -10464,10 +11060,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -12336,15 +12928,38 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userCompaniesCreate(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserCompany>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userCompaniesCreate(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.userCompaniesCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {FindAllUserCompanyDto} findAllUserCompanyDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersCompanies(id: number, findAllUserCompanyDto: FindAllUserCompanyDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserCompany>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersCompanies(id, findAllUserCompanyDto, options);
+        async userCompaniesFindAll(findAllUserCompanyDto: FindAllUserCompanyDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserCompany>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userCompaniesFindAll(findAllUserCompanyDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersCompanies']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.userCompaniesFindAll']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {FindOneUserCompanyDto} findOneUserCompanyDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userCompaniesFindOne(id: number, findOneUserCompanyDto: FindOneUserCompanyDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userCompaniesFindOne(id, findOneUserCompanyDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.userCompaniesFindOne']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -12354,10 +12969,10 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersCompaniesRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserCompany>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersCompaniesRemove(id, options);
+        async userCompaniesRemove(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserCompany>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userCompaniesRemove(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersCompaniesRemove']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.userCompaniesRemove']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -12367,10 +12982,10 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersCompaniesRestore(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserCompany>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersCompaniesRestore(id, options);
+        async userCompaniesRestore(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserCompany>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userCompaniesRestore(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.usersCompaniesRestore']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.userCompaniesRestore']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -13592,13 +14207,30 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userCompaniesCreate(options?: any): AxiosPromise<Array<UserCompany>> {
+            return localVarFp.userCompaniesCreate(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {FindAllUserCompanyDto} findAllUserCompanyDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersCompanies(id: number, findAllUserCompanyDto: FindAllUserCompanyDto, options?: any): AxiosPromise<Array<UserCompany>> {
-            return localVarFp.usersCompanies(id, findAllUserCompanyDto, options).then((request) => request(axios, basePath));
+        userCompaniesFindAll(findAllUserCompanyDto: FindAllUserCompanyDto, options?: any): AxiosPromise<Array<UserCompany>> {
+            return localVarFp.userCompaniesFindAll(findAllUserCompanyDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {FindOneUserCompanyDto} findOneUserCompanyDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userCompaniesFindOne(id: number, findOneUserCompanyDto: FindOneUserCompanyDto, options?: any): AxiosPromise<void> {
+            return localVarFp.userCompaniesFindOne(id, findOneUserCompanyDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13607,8 +14239,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersCompaniesRemove(id: number, options?: any): AxiosPromise<UserCompany> {
-            return localVarFp.usersCompaniesRemove(id, options).then((request) => request(axios, basePath));
+        userCompaniesRemove(id: number, options?: any): AxiosPromise<UserCompany> {
+            return localVarFp.userCompaniesRemove(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13617,8 +14249,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersCompaniesRestore(id: number, options?: any): AxiosPromise<UserCompany> {
-            return localVarFp.usersCompaniesRestore(id, options).then((request) => request(axios, basePath));
+        userCompaniesRestore(id: number, options?: any): AxiosPromise<UserCompany> {
+            return localVarFp.userCompaniesRestore(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15026,14 +15658,35 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public userCompaniesCreate(options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).userCompaniesCreate(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {FindAllUserCompanyDto} findAllUserCompanyDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public usersCompanies(id: number, findAllUserCompanyDto: FindAllUserCompanyDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersCompanies(id, findAllUserCompanyDto, options).then((request) => request(this.axios, this.basePath));
+    public userCompaniesFindAll(findAllUserCompanyDto: FindAllUserCompanyDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).userCompaniesFindAll(findAllUserCompanyDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {FindOneUserCompanyDto} findOneUserCompanyDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public userCompaniesFindOne(id: number, findOneUserCompanyDto: FindOneUserCompanyDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).userCompaniesFindOne(id, findOneUserCompanyDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15044,8 +15697,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public usersCompaniesRemove(id: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersCompaniesRemove(id, options).then((request) => request(this.axios, this.basePath));
+    public userCompaniesRemove(id: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).userCompaniesRemove(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15056,8 +15709,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public usersCompaniesRestore(id: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).usersCompaniesRestore(id, options).then((request) => request(this.axios, this.basePath));
+    public userCompaniesRestore(id: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).userCompaniesRestore(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -14,11 +14,11 @@ import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { RolesService } from '../roles/roles.service';
 import { CreateUserDto, PublicUserDataDto, UpdateUserDto } from './dto';
-import { User } from './entities';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-    public readonly resourceType = ResourceType.USER;
+    public readonly resourceType = ResourceType.User;
 
     constructor(
         @InjectRepository(User)
@@ -55,7 +55,7 @@ export class UsersService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.CREATE,
+            AccessType.Create,
         );
         const currentRoleType = await this.getUserRoleTypeOrFail(userId);
         const newRoleType = await this.rolesService.getRoleType(payload.roleId);
@@ -73,7 +73,7 @@ export class UsersService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
         return await this.repository.find(params);
     }
@@ -95,7 +95,7 @@ export class UsersService {
             await this.accessService.availableForUserOrFail(
                 userId,
                 this.resourceType,
-                AccessType.UPDATE,
+                AccessType.Update,
             );
         }
         if (payload?.roleId) {
@@ -121,7 +121,7 @@ export class UsersService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.DELETE,
+            AccessType.Delete,
         );
         const user = await this.repository.findOneOrFail({ where: { id } });
         const userRoleType = await this.getUserRoleTypeOrFail(userId);

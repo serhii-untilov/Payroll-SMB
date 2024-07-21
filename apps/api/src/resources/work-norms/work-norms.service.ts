@@ -8,10 +8,11 @@ import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { FindWorkNormDto } from './dto/find-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNorm } from './entities/work-norm.entity';
+import { checkVersionOrFail } from '@/utils';
 
 @Injectable()
 export class WorkNormsService extends AvailableForUser {
-    public readonly resourceType = ResourceType.WORK_NORM;
+    public readonly resourceType = ResourceType.WorkNorm;
 
     constructor(
         @InjectRepository(WorkNorm)
@@ -51,13 +52,9 @@ export class WorkNormsService extends AvailableForUser {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.UPDATE,
+            AccessType.Update,
         );
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         const updated = await this.repository.save({
             ...payload,
             id,

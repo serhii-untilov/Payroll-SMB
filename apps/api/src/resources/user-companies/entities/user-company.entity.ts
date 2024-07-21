@@ -1,8 +1,8 @@
 import { Company } from '../../companies/entities/company.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
-import { Logger } from './../../abstract/logger.abstract';
-import { User } from './user.entity';
+import { Logger } from '../../abstract/logger.abstract';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class UserCompany extends Logger {

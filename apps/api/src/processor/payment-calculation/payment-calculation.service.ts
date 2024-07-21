@@ -1,19 +1,19 @@
+import { Position } from './../../resources/positions/entities/position.entity';
+import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
+import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
+import { PaymentPosition } from './../../resources/payment-positions/entities/paymentPosition.entity';
+import { Payment } from './../../resources/payments/entities/payment.entity';
+import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
+import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
+import { Company } from './../../resources/companies/entities/company.entity';
 import {
     CompaniesService,
-    Company,
-    PayFund,
     PayFundsService,
-    PayPeriod,
     PayPeriodsService,
-    Payment,
-    PaymentPosition,
     PaymentPositionsService,
-    PaymentType,
     PaymentTypesService,
     PaymentsService,
-    Payroll,
     PayrollsService,
-    Position,
     PositionsService,
 } from '@/resources';
 import { CalcMethod, PaymentGroup, PaymentStatus } from '@/types';

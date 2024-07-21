@@ -1,7 +1,7 @@
+import { Company } from './../../companies/entities/company.entity';
 import { Logger } from './../../abstract/logger.abstract';
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Company } from '@/resources';
-import { TaskStatus, TaskType } from '@/types';
+import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { TaskStatus, TaskType } from './../../../types';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
@@ -10,7 +10,7 @@ export class Task extends Logger {
     id: number;
 
     @ManyToOne(() => Company, { createForeignKeyConstraints: false })
-    company?: Company;
+    company?: Relation<Company>;
 
     @Column({ type: 'integer' })
     companyId: number;

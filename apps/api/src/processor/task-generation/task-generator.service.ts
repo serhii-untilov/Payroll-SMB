@@ -1,15 +1,15 @@
+import { Task } from './../../resources/tasks/entities/task.entity';
+import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
+import { Company } from './../../resources/companies/entities/company.entity';
 import {
     CompaniesService,
-    Company,
     DepartmentsService,
-    PayPeriod,
     PayPeriodsService,
     PaymentsService,
     PersonsService,
     PositionsService,
-    Task,
     TasksService,
-    UsersCompanyService,
+    UserCompaniesService,
 } from '@/resources';
 import { TaskStatus, TaskType } from '@/types';
 import { Inject, Injectable, Logger, NotFoundException, Scope, forwardRef } from '@nestjs/common';
@@ -55,8 +55,8 @@ export class TaskGenerationService {
         public positionsService: PositionsService,
         @Inject(forwardRef(() => PersonsService))
         public personsService: PersonsService,
-        @Inject(forwardRef(() => UsersCompanyService))
-        public usersCompanyService: UsersCompanyService,
+        @Inject(forwardRef(() => UserCompaniesService))
+        public userCompaniesService: UserCompaniesService,
         @Inject(forwardRef(() => PaymentsService))
         public paymentsService: PaymentsService,
     ) {

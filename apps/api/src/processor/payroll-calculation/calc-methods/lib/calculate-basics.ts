@@ -1,5 +1,7 @@
+import { PositionHistory } from './../../../../resources/position-history/entities/position-history.entity';
+import { Payroll } from './../../../../resources/payrolls/entities/payroll.entity';
+import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
 import { getWorkingTimeFact, getWorkingTimePlan } from '@/processor/helpers';
-import { PayPeriod, Payroll, PositionHistory } from '@/resources';
 import { CalcMethod, PaymentGroup, RecordFlags, WorkingTime } from '@/types';
 import { NotFoundException } from '@nestjs/common';
 import { getMaxDate, getMinDate } from '@repo/shared';

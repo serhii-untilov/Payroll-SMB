@@ -1,5 +1,6 @@
-import { Company, PaymentType } from '@/resources';
-import { PaymentStatus, RecordFlags } from '@/types';
+import { PaymentType } from './../../payment-types/entities/payment-type.entity';
+import { Company } from './../../companies/entities/company.entity';
+import { PaymentStatus, RecordFlags } from './../../../types';
 import { ApiProperty } from '@nestjs/swagger';
 import {
     AfterLoad,

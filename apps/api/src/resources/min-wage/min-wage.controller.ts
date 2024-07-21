@@ -1,5 +1,5 @@
+import { MinWage } from './entities/min-wage.entity';
 import { AccessTokenGuard } from '@/guards';
-import { MinWage } from '@/resources';
 import { getUserId } from '@/utils';
 import {
     Body,
@@ -22,7 +22,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@/types';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';

@@ -1,31 +1,26 @@
-import { UsersCompanyService } from './users-company.service';
 import { createMock } from '@golevelup/ts-jest';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { randEmail } from '@ngneat/falso';
-import { MockType, createMockUser, repositoryMockFactory } from '@repo/testing';
 import * as _ from 'lodash';
+import { MockType, createMockUser, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserCompany } from './entities/user-company.entity';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
     let usersService: UsersService;
     let repoUsersMock: MockType<Repository<User>>;
-    let repoUserCompanyMock: MockType<Repository<UserCompany>>;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 UsersService,
-                UsersCompanyService,
                 { provide: getRepositoryToken(User), useFactory: repositoryMockFactory },
-                { provide: getRepositoryToken(UserCompany), useFactory: repositoryMockFactory },
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: RolesService, useValue: createMock<RolesService>() },
             ],
@@ -33,13 +28,11 @@ describe('UsersService', () => {
 
         usersService = module.get<UsersService>(UsersService);
         repoUsersMock = module.get(getRepositoryToken(User));
-        repoUserCompanyMock = module.get(getRepositoryToken(UserCompany));
     });
 
     it('should be defined', () => {
         expect(usersService).toBeDefined();
         expect(repoUsersMock).toBeTruthy();
-        expect(repoUserCompanyMock).toBeTruthy();
     });
 
     it.skip('should be able to create a user', async () => {

@@ -22,7 +22,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@/types';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
 import { FindAllPaymentPositionDto } from './dto/find-all-payment-position.dto';
