@@ -1,4 +1,5 @@
 import { PayPeriodState, ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
 import {
     ConflictException,
     Inject,
@@ -21,8 +22,8 @@ import {
     FindOnePayPeriodDto,
     UpdatePayPeriodDto,
 } from './dto';
+import { ClosePayPeriodDto, OpenPayPeriodDto } from './dto';
 import { PayPeriod, defaultFieldList } from './entities';
-import { checkVersionOrFail } from '@/utils';
 
 @Injectable()
 export class PayPeriodsService extends AvailableForUserCompany {
@@ -165,9 +166,13 @@ export class PayPeriodsService extends AvailableForUserCompany {
         return Number(count);
     }
 
-    async close(userId: number, currentPayPeriodId: number, version: number): Promise<PayPeriod> {
+    async close(
+        userId: number,
+        currentPayPeriodId: number,
+        payload: ClosePayPeriodDto,
+    ): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
-        checkVersionOrFail(current, { version });
+        checkVersionOrFail(current, payload);
         const company = await this.companiesService.findOne(userId, current.companyId);
         if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
             throw new ConflictException(
@@ -201,9 +206,13 @@ export class PayPeriodsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: next.id } });
     }
 
-    async open(userId: number, currentPayPeriodId: number, version: number): Promise<PayPeriod> {
+    async open(
+        userId: number,
+        currentPayPeriodId: number,
+        payload: OpenPayPeriodDto,
+    ): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
-        checkVersionOrFail(current, { version });
+        checkVersionOrFail(current, payload);
         if (current.state !== PayPeriodState.Opened) {
             throw new ConflictException('The given period is not opened.');
         }

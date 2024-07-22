@@ -1,3 +1,4 @@
+import { ClosePayPeriodDto, OpenPayPeriodDto } from './dto';
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
 import {
@@ -136,11 +137,11 @@ export class PayPeriodsController {
     async close(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() payload: { version: number },
+        @Body() payload: ClosePayPeriodDto,
     ) {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.close(userId, id, payload.version);
+        return await this.service.close(userId, id, payload);
     }
 
     @Post('open/:id')
@@ -154,10 +155,10 @@ export class PayPeriodsController {
     async open(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() payload: { version: number },
+        @Body() payload: OpenPayPeriodDto,
     ) {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.open(userId, id, payload.version);
+        return await this.service.open(userId, id, payload);
     }
 }

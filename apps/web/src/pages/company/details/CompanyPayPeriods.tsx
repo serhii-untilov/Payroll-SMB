@@ -93,7 +93,9 @@ export function CompanyPayPeriods(params: Props) {
                 await invalidateQueries();
                 return;
             }
-            const next = await payPeriodsClose(currentPayPeriod.id);
+            const next = await payPeriodsClose(currentPayPeriod.id, {
+                version: currentPayPeriod.version,
+            });
             setPayPeriod(next.dateFrom);
             await invalidateQueries();
         }
@@ -105,7 +107,9 @@ export function CompanyPayPeriods(params: Props) {
                 await invalidateQueries();
                 return;
             }
-            const prior = await payPeriodsOpen(currentPayPeriod.id);
+            const prior = await payPeriodsOpen(currentPayPeriod.id, {
+                version: currentPayPeriod.version,
+            });
             setPayPeriod(prior.dateFrom);
             await invalidateQueries();
         }

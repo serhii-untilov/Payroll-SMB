@@ -59,6 +59,7 @@ export class PaymentsService extends AvailableForUserCompany {
         });
         const created = await this.repository.save({
             ...other,
+            companyId,
             payPeriod: payPeriod ?? company.payPeriod,
             accPeriod: accPeriod ?? payPeriod ?? company.payPeriod,
             docNumber:

@@ -372,6 +372,19 @@ export interface CalcMethodBalanceDto {
 /**
  * 
  * @export
+ * @interface ClosePayPeriodDto
+ */
+export interface ClosePayPeriodDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ClosePayPeriodDto
+     */
+    'version': number;
+}
+/**
+ * 
+ * @export
  * @interface Company
  */
 export interface Company {
@@ -945,13 +958,13 @@ export interface CreatePaymentDto {
      * @type {number}
      * @memberof CreatePaymentDto
      */
-    'companyId'?: number;
+    'companyId': number;
     /**
      * 
      * @type {number}
      * @memberof CreatePaymentDto
      */
-    'paymentTypeId'?: number;
+    'paymentTypeId': number;
     /**
      * 
      * @type {Date}
@@ -2516,6 +2529,19 @@ export interface MinWage {
      * 
      * @type {number}
      * @memberof MinWage
+     */
+    'version': number;
+}
+/**
+ * 
+ * @export
+ * @interface OpenPayPeriodDto
+ */
+export interface OpenPayPeriodDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof OpenPayPeriodDto
      */
     'version': number;
 }
@@ -5150,19 +5176,7 @@ export interface UpdatePayPeriodDto {
      * @type {number}
      * @memberof UpdatePayPeriodDto
      */
-    'version'?: number;
-    /**
-     * 
-     * @type {Company}
-     * @memberof UpdatePayPeriodDto
-     */
-    'company'?: Company;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdatePayPeriodDto
-     */
-    'companyId'?: number;
+    'version': number;
     /**
      * 
      * @type {Date}
@@ -8397,12 +8411,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Close Pay Period
          * @param {number} id 
+         * @param {ClosePayPeriodDto} closePayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsClose: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        payPeriodsClose: async (id: number, closePayPeriodDto: ClosePayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('payPeriodsClose', 'id', id)
+            // verify required parameter 'closePayPeriodDto' is not null or undefined
+            assertParamExists('payPeriodsClose', 'closePayPeriodDto', closePayPeriodDto)
             const localVarPath = `/api/pay-periods/close/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8422,9 +8439,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(closePayPeriodDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8596,12 +8616,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Open Pay Period
          * @param {number} id 
+         * @param {OpenPayPeriodDto} openPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsOpen: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        payPeriodsOpen: async (id: number, openPayPeriodDto: OpenPayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('payPeriodsOpen', 'id', id)
+            // verify required parameter 'openPayPeriodDto' is not null or undefined
+            assertParamExists('payPeriodsOpen', 'openPayPeriodDto', openPayPeriodDto)
             const localVarPath = `/api/pay-periods/open/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8621,9 +8644,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(openPayPeriodDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12027,11 +12053,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary Close Pay Period
          * @param {number} id 
+         * @param {ClosePayPeriodDto} closePayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async payPeriodsClose(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsClose(id, options);
+        async payPeriodsClose(id: number, closePayPeriodDto: ClosePayPeriodDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsClose(id, closePayPeriodDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.payPeriodsClose']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -12090,11 +12117,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary Open Pay Period
          * @param {number} id 
+         * @param {OpenPayPeriodDto} openPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async payPeriodsOpen(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsOpen(id, options);
+        async payPeriodsOpen(id: number, openPayPeriodDto: OpenPayPeriodDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodsOpen(id, openPayPeriodDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.payPeriodsOpen']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -13483,11 +13511,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary Close Pay Period
          * @param {number} id 
+         * @param {ClosePayPeriodDto} closePayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsClose(id: number, options?: any): AxiosPromise<PayPeriod> {
-            return localVarFp.payPeriodsClose(id, options).then((request) => request(axios, basePath));
+        payPeriodsClose(id: number, closePayPeriodDto: ClosePayPeriodDto, options?: any): AxiosPromise<PayPeriod> {
+            return localVarFp.payPeriodsClose(id, closePayPeriodDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13531,11 +13560,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary Open Pay Period
          * @param {number} id 
+         * @param {OpenPayPeriodDto} openPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodsOpen(id: number, options?: any): AxiosPromise<PayPeriod> {
-            return localVarFp.payPeriodsOpen(id, options).then((request) => request(axios, basePath));
+        payPeriodsOpen(id: number, openPayPeriodDto: OpenPayPeriodDto, options?: any): AxiosPromise<PayPeriod> {
+            return localVarFp.payPeriodsOpen(id, openPayPeriodDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14816,12 +14846,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary Close Pay Period
      * @param {number} id 
+     * @param {ClosePayPeriodDto} closePayPeriodDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public payPeriodsClose(id: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).payPeriodsClose(id, options).then((request) => request(this.axios, this.basePath));
+    public payPeriodsClose(id: number, closePayPeriodDto: ClosePayPeriodDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).payPeriodsClose(id, closePayPeriodDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14874,12 +14905,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary Open Pay Period
      * @param {number} id 
+     * @param {OpenPayPeriodDto} openPayPeriodDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public payPeriodsOpen(id: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).payPeriodsOpen(id, options).then((request) => request(this.axios, this.basePath));
+    public payPeriodsOpen(id: number, openPayPeriodDto: OpenPayPeriodDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).payPeriodsOpen(id, openPayPeriodDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

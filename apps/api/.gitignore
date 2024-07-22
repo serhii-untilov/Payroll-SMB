@@ -43,3 +43,5 @@ lerna-debug.log*
 *.sqlite
 
 **/swagger.json
+
+metadata.ts

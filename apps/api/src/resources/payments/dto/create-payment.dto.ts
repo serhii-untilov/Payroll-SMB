@@ -7,8 +7,11 @@ export class CreatePaymentDto extends IntersectionType(
         OmitType(Payment, [
             'id',
             'company',
+            'companyId',
             'paymentType',
+            'paymentTypeId',
             'paymentPositions',
+            'transform',
             'createdDate',
             'createdUserId',
             'updatedDate',

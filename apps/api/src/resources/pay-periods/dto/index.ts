@@ -5,3 +5,5 @@ export * from './find-current-pay-period.dto';
 export * from './find-one-pay-period.dto';
 export * from './update-pay-period.dto';
 export * from './update-pay-period-calc-method.dto';
+export * from './close-pay-period.dto';
+export * from './open-pay-period.dto';

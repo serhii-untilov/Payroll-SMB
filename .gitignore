@@ -16,3 +16,4 @@ stats.html
 /postgres-data
 
 **/add.json
+apps/api/src/metadata.ts

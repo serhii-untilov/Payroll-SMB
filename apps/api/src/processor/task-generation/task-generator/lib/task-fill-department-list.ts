@@ -12,7 +12,7 @@ export class TaskFillDepartmentList extends TaskGenerator {
         const task = this.makeTask();
         const count = await this.ctx.departmentsService.count(this.ctx.company.id);
         task.status = count ? TaskStatus.Done : TaskStatus.Todo;
-        if (count) {
+        if (!count) {
             const countClosed = await this.ctx.payPeriodsService.countClosed(this.ctx.company.id);
             if (countClosed) {
                 return [];

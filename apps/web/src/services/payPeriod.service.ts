@@ -1,5 +1,10 @@
 import { api } from '@/api';
-import { FindAllPayPeriodDto, FindCurrentPayPeriodDto } from '@repo/openapi';
+import {
+    ClosePayPeriodDto,
+    FindAllPayPeriodDto,
+    FindCurrentPayPeriodDto,
+    OpenPayPeriodDto,
+} from '@repo/openapi';
 
 export async function payPeriodsFindAll(params: FindAllPayPeriodDto) {
     const response = (await api.payPeriodsFindAll(params)).data;
@@ -10,10 +15,10 @@ export async function payPeriodsFindCurrent(params: FindCurrentPayPeriodDto) {
     return (await api.payPeriodsFindCurrent(params)).data;
 }
 
-export async function payPeriodsClose(id: number) {
-    return (await api.payPeriodsClose(id)).data;
+export async function payPeriodsClose(id: number, params: ClosePayPeriodDto) {
+    return (await api.payPeriodsClose(id, params)).data;
 }
 
-export async function payPeriodsOpen(id: number) {
-    return (await api.payPeriodsOpen(id)).data;
+export async function payPeriodsOpen(id: number, params: OpenPayPeriodDto) {
+    return (await api.payPeriodsOpen(id, params)).data;
 }
