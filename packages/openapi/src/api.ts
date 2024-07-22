@@ -1080,6 +1080,24 @@ export interface CreatePaymentPositionDto {
 export interface CreatePaymentTypeDto {
     /**
      * 
+     * @type {PaymentPart}
+     * @memberof CreatePaymentTypeDto
+     */
+    'paymentPart': PaymentPart;
+    /**
+     * 
+     * @type {PaymentGroup}
+     * @memberof CreatePaymentTypeDto
+     */
+    'paymentGroup': PaymentGroup;
+    /**
+     * 
+     * @type {CalcMethod}
+     * @memberof CreatePaymentTypeDto
+     */
+    'calcMethod': CalcMethod;
+    /**
+     * 
      * @type {string}
      * @memberof CreatePaymentTypeDto
      */
@@ -1089,26 +1107,10 @@ export interface CreatePaymentTypeDto {
      * @type {string}
      * @memberof CreatePaymentTypeDto
      */
-    'paymentPart': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePaymentTypeDto
-     */
-    'paymentGroup': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePaymentTypeDto
-     */
-    'calcMethod': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePaymentTypeDto
-     */
-    'description': string;
+    'description'?: string;
 }
+
+
 /**
  * 
  * @export
@@ -2432,6 +2434,21 @@ export type LawType = typeof LawType[keyof typeof LawType];
 /**
  * 
  * @export
+ * @interface MessageEvent
+ */
+export interface MessageEvent {
+    /**
+     * 
+     * @type {ServerEvent}
+     * @memberof MessageEvent
+     */
+    'data': ServerEvent;
+}
+
+
+/**
+ * 
+ * @export
  * @interface MinWage
  */
 export interface MinWage {
@@ -3132,6 +3149,42 @@ export interface Payment {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+
+export const PaymentGroup = {
+    Basic: 'basic',
+    Adjustments: 'adjustments',
+    Bonuses: 'bonuses',
+    Vacations: 'vacations',
+    Sicks: 'sicks',
+    Refunds: 'refunds',
+    OtherAccruals: 'other_accruals',
+    Taxes: 'taxes',
+    Payments: 'payments',
+    OtherDeductions: 'other_deductions'
+} as const;
+
+export type PaymentGroup = typeof PaymentGroup[keyof typeof PaymentGroup];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const PaymentPart = {
+    Accruals: 'accruals',
+    Deductions: 'deductions'
+} as const;
+
+export type PaymentPart = typeof PaymentPart[keyof typeof PaymentPart];
+
+
+/**
+ * 
+ * @export
  * @interface PaymentPosition
  */
 export interface PaymentPosition {
@@ -3279,6 +3332,24 @@ export type PaymentStatus = typeof PaymentStatus[keyof typeof PaymentStatus];
 export interface PaymentType {
     /**
      * 
+     * @type {PaymentPart}
+     * @memberof PaymentType
+     */
+    'paymentPart': PaymentPart;
+    /**
+     * 
+     * @type {PaymentGroup}
+     * @memberof PaymentType
+     */
+    'paymentGroup': PaymentGroup;
+    /**
+     * 
+     * @type {CalcMethod}
+     * @memberof PaymentType
+     */
+    'calcMethod': CalcMethod;
+    /**
+     * 
      * @type {number}
      * @memberof PaymentType
      */
@@ -3289,24 +3360,6 @@ export interface PaymentType {
      * @memberof PaymentType
      */
     'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PaymentType
-     */
-    'paymentPart': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PaymentType
-     */
-    'paymentGroup': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PaymentType
-     */
-    'calcMethod': string;
     /**
      * 
      * @type {string}
@@ -3356,6 +3409,8 @@ export interface PaymentType {
      */
     'version': number;
 }
+
+
 /**
  * 
  * @export
@@ -4594,6 +4649,25 @@ export type RoleType = typeof RoleType[keyof typeof RoleType];
  * @enum {string}
  */
 
+export const ServerEvent = {
+    CommunicationError: 'communication-error',
+    PayrollStarted: 'payroll-started',
+    PayrollFinished: 'payroll-finished',
+    PayrollFailed: 'payroll-failed',
+    TasklistStarted: 'tasklist-started',
+    TasklistFinished: 'tasklist-finished',
+    TasklistFailed: 'tasklist-failed'
+} as const;
+
+export type ServerEvent = typeof ServerEvent[keyof typeof ServerEvent];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
 export const Sex = {
     Male: 'male',
     Female: 'female'
@@ -5398,6 +5472,24 @@ export interface UpdatePaymentPositionDto {
 export interface UpdatePaymentTypeDto {
     /**
      * 
+     * @type {PaymentPart}
+     * @memberof UpdatePaymentTypeDto
+     */
+    'paymentPart'?: PaymentPart;
+    /**
+     * 
+     * @type {PaymentGroup}
+     * @memberof UpdatePaymentTypeDto
+     */
+    'paymentGroup'?: PaymentGroup;
+    /**
+     * 
+     * @type {CalcMethod}
+     * @memberof UpdatePaymentTypeDto
+     */
+    'calcMethod'?: CalcMethod;
+    /**
+     * 
      * @type {number}
      * @memberof UpdatePaymentTypeDto
      */
@@ -5413,26 +5505,10 @@ export interface UpdatePaymentTypeDto {
      * @type {string}
      * @memberof UpdatePaymentTypeDto
      */
-    'paymentPart'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePaymentTypeDto
-     */
-    'paymentGroup'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePaymentTypeDto
-     */
-    'calcMethod'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdatePaymentTypeDto
-     */
     'description'?: string;
 }
+
+
 /**
  * 
  * @export
@@ -12635,7 +12711,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async sseGetCompanyStream(companyId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async sseGetCompanyStream(companyId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MessageEvent>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.sseGetCompanyStream(companyId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.sseGetCompanyStream']?.[localVarOperationServerIndex]?.url;
@@ -13932,7 +14008,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sseGetCompanyStream(companyId: number, options?: any): AxiosPromise<object> {
+        sseGetCompanyStream(companyId: number, options?: any): AxiosPromise<MessageEvent> {
             return localVarFp.sseGetCompanyStream(companyId, options).then((request) => request(axios, basePath));
         },
         /**

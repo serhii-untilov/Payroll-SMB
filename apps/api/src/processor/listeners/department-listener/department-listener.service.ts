@@ -5,7 +5,7 @@ import {
     DepartmentDeletedEvent,
     DepartmentUpdatedEvent,
 } from '@/resources';
-import { ServerEvent } from '@repo/shared';
+import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 

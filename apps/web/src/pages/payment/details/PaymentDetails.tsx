@@ -19,7 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, OutlinedInput } from '@mui/material';
 import { CreatePaymentDto, Payment, UpdatePaymentDto } from '@repo/openapi';
 import { PaymentStatus, ResourceType } from '@repo/openapi';
-import { PaymentGroup } from '@repo/shared';
+import { PaymentGroup } from '@repo/openapi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';

@@ -69,6 +69,7 @@ export class PayPeriodsController {
 
     @Post('current')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: PayPeriod })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })

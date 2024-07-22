@@ -1,6 +1,7 @@
 import { accPeriodFactSum } from '@/processor/helpers';
 import { CalcMethod, RecordFlags } from '@/types';
-import { getMaxDate, getMinDate, PaymentPart } from '@repo/shared';
+import { PaymentPart } from '@/types';
+import { getMaxDate, getMinDate } from '@repo/shared';
 import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
 import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
 import { Payroll } from './../../../../resources/payrolls/entities/payroll.entity';

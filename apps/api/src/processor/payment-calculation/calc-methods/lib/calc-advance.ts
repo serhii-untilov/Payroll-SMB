@@ -5,7 +5,7 @@ import {
     payFundPayPeriodFactSum,
     payPeriodFactSum,
 } from '@/processor/helpers';
-import { PaymentGroup } from '@repo/shared';
+import { PaymentGroup } from '@/types';
 import { dateUTC } from '@repo/shared';
 import { PaymentCalculationService } from '../../payment-calculation.service';
 import { CalcPayment } from '../abstract/calc-payment';

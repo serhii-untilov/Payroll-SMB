@@ -5,7 +5,7 @@ import { PayrollCalculationService } from '@/processor/payroll-calculation/payro
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
 import { CompanyCreatedEvent, CompanyDeletedEvent, CompanyUpdatedEvent } from '@/resources';
-import { ServerEvent } from '@repo/shared';
+import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 

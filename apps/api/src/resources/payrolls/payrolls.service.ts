@@ -4,7 +4,7 @@ import {
     PaymentPartsTotal,
     defaultPaymentGroupsTotal,
     defaultPaymentPartsTotal,
-} from '@repo/shared';
+} from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

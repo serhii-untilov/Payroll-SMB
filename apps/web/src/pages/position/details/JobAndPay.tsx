@@ -26,18 +26,12 @@ import { Button, Grid } from '@mui/material';
 import {
     CreatePositionDto,
     CreatePositionHistoryDto,
+    PaymentGroup,
     Position,
     PositionHistory,
     ResourceType,
 } from '@repo/openapi';
-import {
-    formatDate,
-    MAX_SEQUENCE_NUMBER,
-    maxDate,
-    minDate,
-    monthBegin,
-    PaymentGroup,
-} from '@repo/shared';
+import { formatDate, MAX_SEQUENCE_NUMBER, maxDate, minDate, monthBegin } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useCallback, useEffect, useMemo, useState } from 'react';

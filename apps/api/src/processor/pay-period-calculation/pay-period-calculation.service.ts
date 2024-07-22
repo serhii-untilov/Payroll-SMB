@@ -11,7 +11,7 @@ import {
     UsersService,
 } from '@/resources';
 import { PaymentSchedule } from '@/types';
-import { PaymentPart } from '@repo/shared';
+import { PaymentPart } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dropTime } from '@repo/shared';
 import { addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';

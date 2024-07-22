@@ -23,3 +23,8 @@ export * from './lib/TaskType';
 export * from './lib/WorkingTime';
 export * from './lib/WorkNormType';
 export * from './lib/WrapperType';
+export * from './lib/PaymentGroup';
+export * from './lib/PaymentGroupsTotal';
+export * from './lib/PaymentPart';
+export * from './lib/PaymentPartsTotal';
+export * from '../processor/server-sent-events/lib/ServerEvent';

@@ -4,7 +4,8 @@ import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-peri
 import { getWorkingTimeFact, getWorkingTimePlan } from '@/processor/helpers';
 import { CalcMethod, RecordFlags, WorkingTime } from '@/types';
 import { NotFoundException } from '@nestjs/common';
-import { getMaxDate, getMinDate, PaymentGroup } from '@repo/shared';
+import { PaymentGroup } from '@/types';
+import { getMaxDate, getMinDate } from '@repo/shared';
 import { PayrollCalculationService } from './../../payroll-calculation.service';
 
 export function calculateBasics(ctx: PayrollCalculationService) {
