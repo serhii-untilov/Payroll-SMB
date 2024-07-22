@@ -4,9 +4,7 @@ import { Accounting } from '@repo/openapi';
 import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
-type Result = { data: Accounting[]; isLoading: boolean };
-
-export function useAccountingList(): Result {
+export function useAccountingList() {
     const { data, isError, isLoading, error } = useQuery<Accounting[], Error>({
         queryKey: [ResourceType.Accounting],
         queryFn: async () => await accountingFindAll(),

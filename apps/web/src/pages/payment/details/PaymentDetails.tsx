@@ -7,9 +7,9 @@ import { SelectAccPeriod } from '@/components/select/SelectAccPeriod';
 import { SelectPaymentType } from '@/components/select/SelectPaymentType';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
+import { usePayment } from '@/hooks/usePayment';
 import {
     paymentsCreate,
-    paymentsFindOne,
     paymentsProcess,
     paymentsUpdate,
     paymentsWithdraw,
@@ -17,13 +17,18 @@ import {
 import { getDirtyValues, invalidateQueries, snackbarError } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, OutlinedInput } from '@mui/material';
-import { CreatePaymentDto, Payment, UpdatePaymentDto } from '@repo/openapi';
-import { PaymentStatus, ResourceType } from '@repo/openapi';
-import { PaymentGroup } from '@repo/openapi';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+    CreatePaymentDto,
+    Payment,
+    PaymentGroup,
+    PaymentStatus,
+    ResourceType,
+    UpdatePaymentDto,
+} from '@repo/openapi';
+import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -39,21 +44,10 @@ export function PaymentDetails(props: Props) {
     const { locale } = useLocale();
     const queryClient = useQueryClient();
     const { t } = useTranslation();
+    const { data, isLoading } = usePayment(paymentId, { relations: true });
+    const payment = useMemo(() => transformPayment(data), [data]);
 
     useEffect(() => {}, [locale]);
-
-    const { data: payment } = useQuery<Payment, Error>({
-        queryKey: [ResourceType.Payment, { paymentId, relations: true }],
-        queryFn: async () => {
-            const payment = await paymentsFindOne(paymentId, { relations: true });
-            return {
-                ...payment,
-                mandatoryPayments: (payment?.deductions || 0) + (payment?.funds || 0),
-                total: (payment?.paySum || 0) + (payment?.deductions || 0) + (payment?.funds || 0),
-            };
-        },
-        enabled: !!paymentId,
-    });
 
     const formSchema = yup.object().shape({
         docNumber: yup.string(),
@@ -113,7 +107,10 @@ export function PaymentDetails(props: Props) {
                       payPeriod: payPeriod,
                   });
             reset(response);
-            await invalidateQueries(queryClient, [ResourceType.Payment]);
+            await invalidateQueries(queryClient, [
+                ResourceType.Payment,
+                ResourceType.PaymentPosition,
+            ]);
             setPaymentId(response.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
@@ -122,23 +119,31 @@ export function PaymentDetails(props: Props) {
     };
 
     const onCancel = async () => {
-        reset(payment);
-        await invalidateQueries(queryClient, [ResourceType.Payment]);
+        reset((payment as FormType) || {});
+        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
     };
 
     const onProcess = async () => {
         if (payment) {
             await paymentsProcess(payment?.id, { version: payment.version });
-            await invalidateQueries(queryClient, [ResourceType.Payment]);
+            await invalidateQueries(queryClient, [
+                ResourceType.Payment,
+                ResourceType.PaymentPosition,
+            ]);
         }
     };
 
     const onWithdraw = async () => {
         if (payment) {
             await paymentsWithdraw(payment.id, { version: payment.version });
-            await invalidateQueries(queryClient, [ResourceType.Payment]);
+            await invalidateQueries(queryClient, [
+                ResourceType.Payment,
+                ResourceType.PaymentPosition,
+            ]);
         }
     };
+
+    if (isLoading) return <></>;
 
     return (
         company &&
@@ -278,4 +283,13 @@ export function PaymentDetails(props: Props) {
             </>
         )
     );
+}
+
+function transformPayment(data: Payment | null) {
+    if (!data) return null;
+    return {
+        ...data,
+        mandatoryPayments: (data?.deductions || 0) + (data?.funds || 0),
+        total: (data?.paySum || 0) + (data?.deductions || 0) + (data?.funds || 0),
+    };
 }

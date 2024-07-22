@@ -154,7 +154,7 @@ export function PaymentList(props: Props) {
                 await paymentsRemove(+id);
             }
         }
-        await invalidateQueries(queryClient, [ResourceType.Payment]);
+        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
     };
 
     const onPrint = () => {

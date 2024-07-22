@@ -1,22 +1,18 @@
 import { companiesFindOne } from '@/services/company.service';
 import { snackbarError } from '@/utils/snackbar';
-import { Company } from '@repo/openapi';
-import { ResourceType } from '@repo/openapi';
+import { Company, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 
-type Result = { data: Company | undefined; isLoading: boolean };
-
-export function useCompany(companyId: number | undefined): Result {
-    const [id] = useState(Number(companyId));
+export function useCompany(companyId: number | undefined) {
     const { data, isError, isLoading, error } = useQuery<Company | null, Error>({
-        queryKey: [ResourceType.Company, { id }],
+        queryKey: [ResourceType.Company, { companyId }],
         queryFn: async () => {
-            return id ? await companiesFindOne(id) : null;
+            return companyId ? await companiesFindOne(companyId) : null;
         },
+        enabled: !!companyId,
     });
     if (isError) {
         snackbarError(`${error.name}\n${error.message}`);
     }
-    return { data: data ?? undefined, isLoading };
+    return { data, isLoading };
 }

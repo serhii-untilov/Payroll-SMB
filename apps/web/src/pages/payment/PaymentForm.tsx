@@ -5,14 +5,11 @@ import { TabPanel } from '@/components/layout/TabPanel';
 import { Tabs } from '@/components/layout/Tabs';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { paymentsFindOne } from '@/services/payment.service';
+import { usePayment } from '@/hooks/usePayment';
 import { sumFormatter } from '@/utils';
 import { Box, Chip } from '@mui/material';
-import { Payment } from '@repo/openapi';
+import { Payment, PaymentStatus } from '@repo/openapi';
 import { dateUTC } from '@repo/shared';
-import { PaymentStatus, ResourceType } from '@repo/openapi';
-import { useQuery } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -27,54 +24,20 @@ export default function PaymentForm() {
     const { locale } = useLocale();
     const [searchParams] = useSearchParams();
     const tabName = searchParams.get('tab');
-    const [tab, setTab] = useState(
-        Number(tabName ? getTabIndex(tabName) : localStorage.getItem('payment-tab-index')),
-    );
+    const tabIndex = Number(getTabIndex(tabName) ?? localStorage.getItem('payment-tab-index'));
+    const [tab, setTab] = useState(tabIndex);
+    const { data: payment } = usePayment(paymentId, { relations: true });
     const { t } = useTranslation();
+    const totalSum = useMemo(() => getTotalSum(payment), [payment]);
+    const docTitle = useMemo(() => getDocTitle(payment, t), [payment, t]);
+    const docColor = useMemo(() => getDocColor(payment), [payment]);
 
     useEffect(() => {}, [locale]);
-
-    const {
-        data: payment,
-        isError,
-        error,
-    } = useQuery<Partial<Payment>, Error>({
-        queryKey: [ResourceType.Payment, { paymentId, relations: true }],
-        queryFn: async () => {
-            return await paymentsFindOne(paymentId, { relations: true });
-        },
-        enabled: !!paymentId,
-    });
 
     const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('payment-tab-index', newValue.toString());
     };
-
-    useEffect(() => {}, [locale]);
-
-    const totalSum = useMemo(() => {
-        return (payment?.paySum || 0) + (payment?.deductions || 0) + (payment?.funds || 0);
-    }, [payment]);
-
-    const docTitle = useMemo(() => {
-        return `${payment?.id ? payment?.paymentType?.name : t('New Payment')} `;
-    }, [payment, t]);
-
-    const docColor = useMemo(() => {
-        const status = payment?.status || PaymentStatus.Draft;
-        const docDate = dateUTC(payment?.docDate || new Date());
-        const now = dateUTC(new Date());
-        return status === PaymentStatus.Draft && docDate.getTime() <= now.getTime()
-            ? 'warning'
-            : 'primary';
-    }, [payment]);
-
-    if (isError) {
-        enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
-    }
 
     return (
         company &&
@@ -123,10 +86,27 @@ export default function PaymentForm() {
     );
 }
 
-function getTabIndex(tabName: string | null): number {
+function getTabIndex(tabName: string | null): number | null {
     if (!tabName) {
-        return 0;
+        return null;
     }
     const map = { document: 0, employees: 1, mandatoryPayments: 2 };
     return map[tabName];
+}
+
+function getTotalSum(payment: Payment | null) {
+    return (payment?.paySum || 0) + (payment?.deductions || 0) + (payment?.funds || 0);
+}
+
+function getDocTitle(payment: Payment | null, t: any) {
+    return payment?.id ? payment?.paymentType?.name : t('New Payment');
+}
+
+function getDocColor(payment: Payment | null) {
+    const status = payment?.status || PaymentStatus.Draft;
+    const docDate = dateUTC(payment?.docDate || new Date());
+    const now = dateUTC(new Date());
+    return status === PaymentStatus.Draft && docDate.getTime() <= now.getTime()
+        ? 'warning'
+        : 'primary';
 }

@@ -12,12 +12,10 @@ import { SelectPerson } from '@/components/select/SelectPerson';
 import { SelectWorkNorm } from '@/components/select/SelectWorkNorm';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { positionsCreate, positionsFindOne } from '@/services/position.service';
-import {
-    positionHistoryCreate,
-    positionHistoryFindLast,
-    positionHistoryUpdate,
-} from '@/services/positionHistory.service';
+import { usePosition } from '@/hooks/usePosition';
+import { usePositionHistoryLast } from '@/hooks/usePositionHistoryLast';
+import { positionsCreate } from '@/services/position.service';
+import { positionHistoryCreate, positionHistoryUpdate } from '@/services/positionHistory.service';
 import { getDirtyValues, invalidateQueries } from '@/utils';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -32,7 +30,7 @@ import {
     ResourceType,
 } from '@repo/openapi';
 import { formatDate, MAX_SEQUENCE_NUMBER, maxDate, minDate, monthBegin } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
@@ -51,41 +49,16 @@ export function JobAndPay(props: Props) {
     const { t } = useTranslation();
     const { company } = useAppContext();
     const queryClient = useQueryClient();
+    const { data: position, isLoading: isPositionLoading } = usePosition(positionId, {
+        relations: true,
+    });
+    const { data: positionHistory, isLoading: isPositionHistoryLoading } = usePositionHistoryLast({
+        positionId,
+        onPayPeriodDate: company?.payPeriod || monthBegin(new Date()),
+        relations: true,
+    });
 
     useEffect(() => {}, [company]);
-
-    const {
-        data: position,
-        isError: isPositionError,
-        error: positionError,
-        isLoading: isPositionLoading,
-    } = useQuery<Position, Error>({
-        queryKey: [ResourceType.Position, { positionId, relations: true }],
-        queryFn: async () => await positionsFindOne(positionId, { relations: true }),
-        enabled: !!positionId,
-    });
-
-    const findPositionHistoryParams = useMemo(() => {
-        return {
-            positionId,
-            onPayPeriodDate: company?.payPeriod || monthBegin(new Date()),
-            last: true,
-            relations: true,
-        };
-    }, [positionId, company]);
-
-    const {
-        data: positionHistory,
-        isError: isPositionHistoryError,
-        error: positionHistoryError,
-        isLoading: isPositionHistoryLoading,
-    } = useQuery<PositionHistory, Error>({
-        queryKey: [ResourceType.PositionHistory, findPositionHistoryParams],
-        queryFn: async () => {
-            return await positionHistoryFindLast(findPositionHistoryParams);
-        },
-        enabled: !!positionId && !!company?.payPeriod,
-    });
 
     const formSchema = object().shape({
         // Position
@@ -111,8 +84,8 @@ export function JobAndPay(props: Props) {
 
     const position_formData = useCallback(
         (
-            position: Position | undefined,
-            positionHistory: PositionHistory | undefined,
+            position: Position | undefined | null,
+            positionHistory: PositionHistory | undefined | null,
         ): FormType => {
             return {
                 // Position fields
@@ -161,19 +134,7 @@ export function JobAndPay(props: Props) {
         snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    if (isPositionLoading || isPositionHistoryLoading) {
-        return <></>;
-    }
-
-    if (isPositionError) {
-        snackbarError(`${positionError.name}\n${positionError.message}`);
-        return <></>;
-    }
-
-    if (isPositionHistoryError) {
-        snackbarError(`${positionHistoryError.name}\n${positionHistoryError.message}`);
-        return <></>;
-    }
+    if (isPositionLoading || isPositionHistoryLoading) return <></>;
 
     const formData_Position = (data: FormType): CreatePositionDto => {
         const { cardNumber, sequenceNumber, description, personId, dateFrom, dateTo } = data;

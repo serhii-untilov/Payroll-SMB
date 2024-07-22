@@ -1,8 +1,8 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
+import { usePaymentPositionList } from '@/hooks/usePaymentPositionList';
 import { paymentsRemove } from '@/services/payment.service';
-import { paymentPositionsFindAll } from '@/services/paymentPosition.service';
-import { invalidateQueries, snackbarError, sumFormatter } from '@/utils';
+import { invalidateQueries, sumFormatter } from '@/utils';
 import {
     GridCellParams,
     GridColDef,
@@ -11,10 +11,9 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { PaymentPosition } from '@repo/openapi';
 import { PaymentStatus, ResourceType } from '@repo/openapi';
 import { dateUTC } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -31,18 +30,7 @@ export function EmployeePayments(props: Props) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
-
-    const { data, isError, error } = useQuery<PaymentPosition[], Error>({
-        queryKey: [ResourceType.Payment, { paymentId, relations: true }],
-        queryFn: async () => {
-            return await paymentPositionsFindAll({ paymentId, relations: true });
-        },
-        enabled: !!paymentId,
-    });
-
-    if (isError) {
-        snackbarError(`${error.name}\n${error.message}`);
-    }
+    const { data } = usePaymentPositionList({ paymentId, relations: true });
 
     const onAddPayment = () => {
         console.log('onAddPayment');
@@ -56,7 +44,7 @@ export function EmployeePayments(props: Props) {
         for (const id of rowSelectionModel) {
             await paymentsRemove(+id);
         }
-        await invalidateQueries(queryClient, [ResourceType.Payment]);
+        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
     };
 
     const onPrint = () => {
