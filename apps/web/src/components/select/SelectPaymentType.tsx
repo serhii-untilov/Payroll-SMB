@@ -5,7 +5,7 @@ import { FindAllPaymentTypeDto, PaymentType } from '@repo/openapi';
 import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
-interface Props {
+type Props = {
     companyId: number | undefined;
     control: any;
     label?: string;
@@ -15,7 +15,7 @@ interface Props {
     autoFocus?: boolean;
     disabled?: boolean;
     sx?: any;
-}
+};
 
 export function SelectPaymentType({
     companyId,

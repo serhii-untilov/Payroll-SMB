@@ -3,7 +3,7 @@ import { OutlinedInput, OutlinedInputProps } from '@mui/material';
 import { MAX_SEQUENCE_NUMBER } from '@repo/shared';
 import { Controller } from 'react-hook-form';
 
-export type Props = OutlinedInputProps & {
+type Props = OutlinedInputProps & {
     name: string;
     control: any;
     label: string;

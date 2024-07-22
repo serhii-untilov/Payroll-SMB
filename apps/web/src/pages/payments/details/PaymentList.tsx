@@ -1,7 +1,8 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
-import { paymentsFindAll, paymentsRemove } from '@/services/payment.service';
-import { invalidateQueries, snackbarError, sumFormatter } from '@/utils';
+import { usePaymentList } from '@/hooks/usePaymentList';
+import { paymentsRemove } from '@/services/payment.service';
+import { invalidateQueries, sumFormatter } from '@/utils';
 import {
     GridCellParams,
     GridColDef,
@@ -10,10 +11,9 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { FindAllPaymentDto, Payment } from '@repo/openapi';
-import { CalcMethod, PaymentStatus, ResourceType } from '@repo/openapi';
+import { CalcMethod, FindAllPaymentDto, Payment, PaymentStatus, ResourceType } from '@repo/openapi';
 import { date2view, dateUTC } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -26,11 +26,72 @@ export function PaymentList(props: Props) {
     const { companyId, payPeriod, status } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
+    const columns = useMemo(() => getColumns(t), [t]);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
+    const params = { relations: true, companyId, payPeriod, ...(status ? { status } : {}) };
+    const { data: rawData } = usePaymentList(params);
+    const data = useMemo(() => filteredPaymentList(rawData, props), [rawData, props]);
 
-    const columns: GridColDef[] = [
+    const onAddPayment = () => console.log('onAddPayment');
+    const onEditPayment = (id: number) => navigate(`/payments/${id}`);
+    const onPrint = () => gridRef.current.exportDataAsPrint();
+    const onExport = () => gridRef.current.exportDataAsCsv();
+
+    const onDeletePayment = async () => {
+        for (const id of rowSelectionModel) {
+            const payment = data?.find((o) => o.id === Number(id));
+            if (payment?.status === PaymentStatus.Draft) {
+                await paymentsRemove(+id);
+            }
+        }
+        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
+    };
+
+    return (
+        <>
+            <Toolbar
+                onAdd={onAddPayment}
+                onPrint={data?.length ? onPrint : 'disabled'}
+                onExport={data?.length ? onExport : 'disabled'}
+                onDelete={rowSelectionModel.length ? onDeletePayment : 'disabled'}
+                onShowDeleted={'disabled'}
+                onRestoreDeleted={'disabled'}
+                onShowHistory={'disabled'}
+            />
+            <DataGrid
+                checkboxSelection={true}
+                getRowStatus={getRowStatus}
+                columnVisibilityModel={{
+                    // Hide columns, the other columns will remain visible
+                    docNumber: false,
+                    dateFrom: false,
+                    dateTo: false,
+                }}
+                apiRef={gridRef}
+                rows={data || []}
+                columns={columns}
+                onRowSelectionModelChange={(newRowSelectionModel) => {
+                    setRowSelectionModel(newRowSelectionModel);
+                }}
+                rowSelectionModel={rowSelectionModel}
+                onCellKeyDown={(
+                    params: GridCellParams,
+                    event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
+                ) => {
+                    if (event.code === 'Enter') {
+                        onEditPayment(params.row.id);
+                    }
+                }}
+                onRowDoubleClick={(params: GridRowParams) => onEditPayment(params.row.id)}
+            />
+        </>
+    );
+}
+
+function getColumns(t: any): GridColDef[] {
+    return [
         {
             field: 'docNumber',
             headerName: t('Number'),
@@ -113,111 +174,28 @@ export function PaymentList(props: Props) {
             },
         },
     ];
+}
 
-    const queryKey = useMemo(() => {
-        return {
-            relations: true,
-            companyId,
-            payPeriod,
-            ...(status ? { status } : {}),
-        };
-    }, [companyId, payPeriod, status]);
-
-    const { data, isError, error } = useQuery<Payment[], Error>({
-        queryKey: [ResourceType.Payment, queryKey],
-        queryFn: async () => {
-            const response = companyId && payPeriod ? (await paymentsFindAll(queryKey)) ?? [] : [];
-            return response.filter(
-                (o) =>
-                    (props.companyPayments &&
-                        o.paymentType?.calcMethod !== CalcMethod.SifPayment) ||
-                    (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SifPayment),
-            );
-        },
-        enabled: !!queryKey,
-    });
-
-    if (isError) snackbarError(`${error.name}\n${error.message}`);
-
-    const onAddPayment = () => {
-        console.log('onEditPayment');
-    };
-
-    const onEditPayment = (id: number) => {
-        navigate(`/payments/${id}`);
-    };
-
-    const onDeletePayment = async () => {
-        for (const id of rowSelectionModel) {
-            const payment = data?.find((o) => o.id === Number(id));
-            if (payment?.status === PaymentStatus.Draft) {
-                await paymentsRemove(+id);
-            }
-        }
-        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
-    };
-
-    const onPrint = () => {
-        gridRef.current.exportDataAsPrint();
-    };
-
-    const onExport = () => {
-        gridRef.current.exportDataAsCsv();
-    };
-
-    const getRowStatus = (params: any): string => {
-        return params.row?.deletedDate
-            ? 'Deleted'
-            : params.row?.status === PaymentStatus.Paid
-              ? 'Normal'
-              : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
+function getRowStatus(params: any): string {
+    return params.row?.deletedDate
+        ? 'Deleted'
+        : params.row?.status === PaymentStatus.Paid
+          ? 'Normal'
+          : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
+            ? 'Overdue'
+            : params.row?.status === PaymentStatus.Submitted
+              ? 'Todo'
+              : params.row?.status === PaymentStatus.Accepted
                 ? 'Overdue'
-                : params.row?.status === PaymentStatus.Submitted
+                : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
                   ? 'Todo'
-                  : params.row?.status === PaymentStatus.Accepted
-                    ? 'Overdue'
-                    : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
-                      ? 'Todo'
-                      : 'Normal';
-    };
+                  : 'Normal';
+}
 
-    return (
-        <>
-            <Toolbar
-                onAdd={onAddPayment}
-                onPrint={data?.length ? onPrint : 'disabled'}
-                onExport={data?.length ? onExport : 'disabled'}
-                onDelete={rowSelectionModel.length ? onDeletePayment : 'disabled'}
-                onShowDeleted={'disabled'}
-                onRestoreDeleted={'disabled'}
-                onShowHistory={'disabled'}
-            />
-            <DataGrid
-                checkboxSelection={true}
-                getRowStatus={getRowStatus}
-                columnVisibilityModel={{
-                    // Hide columns, the other columns will remain visible
-                    docNumber: false,
-                    dateFrom: false,
-                    dateTo: false,
-                }}
-                apiRef={gridRef}
-                rows={data || []}
-                columns={columns}
-                onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
-                }}
-                rowSelectionModel={rowSelectionModel}
-                onCellKeyDown={(
-                    params: GridCellParams,
-                    event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                ) => {
-                    if (event.code === 'Enter') {
-                        onEditPayment(params.row.id);
-                    }
-                }}
-                onRowDoubleClick={(params: GridRowParams) => onEditPayment(params.row.id)}
-            />
-        </>
+function filteredPaymentList(rawData: Payment[], props: Props) {
+    return rawData.filter(
+        (o) =>
+            (props.companyPayments && o.paymentType?.calcMethod !== CalcMethod.SifPayment) ||
+            (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SifPayment),
     );
 }

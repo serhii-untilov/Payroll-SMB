@@ -1,6 +1,4 @@
-import { DataGrid } from '@/components/grid/DataGrid';
-import { Toolbar } from '@/components/layout/Toolbar';
-import { Loading } from '@/components/utility/Loading';
+import { DataGrid, Loading, Toolbar } from '@/components';
 import { useDepartmentList } from '@/hooks/useDepartmentList';
 import DepartmentForm from '@/pages/department/DepartmentForm';
 import { departmentsRemove } from '@/services/department.service';
@@ -33,10 +31,6 @@ export function CompanyDepartments(params: Props) {
     const gridRef = useGridApiRef();
     const columns = useColumns();
 
-    if (isLoading) {
-        return <Loading />;
-    }
-
     const onAddDepartment = () => {
         setDepartmentId(null);
         setOpenForm(true);
@@ -58,17 +52,11 @@ export function CompanyDepartments(params: Props) {
         await invalidateQueries(queryClient, [ResourceType.Department]);
     };
 
-    const onTreeView = () => {
-        console.log('onTreeView');
-    };
+    const onTreeView = () => console.log('onTreeView');
+    const onPrint = () => gridRef.current.exportDataAsPrint();
+    const onExport = () => gridRef.current.exportDataAsCsv();
 
-    const onPrint = () => {
-        gridRef.current.exportDataAsPrint();
-    };
-
-    const onExport = () => {
-        gridRef.current.exportDataAsCsv();
-    };
+    if (isLoading) return <Loading />;
 
     return (
         <>

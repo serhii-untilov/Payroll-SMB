@@ -3,4 +3,4 @@ import { useContext } from 'react';
 
 const useLocale = () => useContext(LocaleContext);
 
-export default useLocale;
+export { useLocale };

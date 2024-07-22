@@ -1,40 +1,23 @@
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
+import { useAppContext, useLocale } from '@/hooks';
 import { usePayPeriodList } from '@/hooks/usePayPeriodList';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { MenuItem, Select, SelectProps } from '@mui/material';
+import { PayPeriod } from '@repo/openapi';
 import { formatDate, monthBegin, toDate } from '@repo/shared';
 import { format, isEqual } from 'date-fns';
 import { useMemo } from 'react';
 
-export type PayPeriodOption = SelectProps<string> & {
+type Props = SelectProps<string> & {
     companyId: number | undefined;
 };
 
-export function SelectPayPeriod(props: PayPeriodOption) {
+export function SelectPayPeriod(props: Props) {
     const { companyId, ...other } = props;
     const { company, payPeriod, setPayPeriod } = useAppContext();
-    const { locale } = useLocale();
     const { data, isLoading } = usePayPeriodList({ companyId });
+    const options = useOptions(data, company?.payPeriod ?? monthBegin(new Date()));
 
-    const options = useMemo(() => {
-        return data?.map((period: any) => {
-            return (
-                <MenuItem key={formatDate(period.dateFrom)} value={formatDate(period.dateFrom)}>
-                    {getPayPeriodName(
-                        toDate(period.dateFrom),
-                        toDate(period.dateTo),
-                        isEqual(period.dateFrom, company?.payPeriod),
-                        locale.dateLocale,
-                    )}
-                </MenuItem>
-            );
-        });
-    }, [data, company, locale.dateLocale]);
-
-    if (isLoading) {
-        return null;
-    }
+    if (isLoading) return null;
 
     return (
         <Select
@@ -50,4 +33,22 @@ export function SelectPayPeriod(props: PayPeriodOption) {
             {options}
         </Select>
     );
+}
+
+function useOptions(data: PayPeriod[], currentPayPeriod: Date) {
+    const { locale } = useLocale();
+    return useMemo(() => {
+        return data?.map((period: any) => {
+            return (
+                <MenuItem key={formatDate(period.dateFrom)} value={formatDate(period.dateFrom)}>
+                    {getPayPeriodName(
+                        toDate(period.dateFrom),
+                        toDate(period.dateTo),
+                        isEqual(period.dateFrom, currentPayPeriod),
+                        locale.dateLocale,
+                    )}
+                </MenuItem>
+            );
+        });
+    }, [data, currentPayPeriod, locale.dateLocale]);
 }

@@ -1,12 +1,12 @@
 import { Box, BoxProps } from '@mui/material';
 
-export interface TabPanelProps extends BoxProps {
+interface Props extends BoxProps {
     children?: React.ReactNode;
     index: number;
     value: number;
 }
 
-export function TabPanel(props: TabPanelProps) {
+export function TabPanel(props: Props) {
     const { children, value, index, ...other } = props;
 
     return (

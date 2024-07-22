@@ -1,18 +1,15 @@
-import PageLayout from '@/components/layout/PageLayout';
-import { PageTitle } from '@/components/layout/PageTitle';
-import { Tab } from '@/components/layout/Tab';
-import { TabPanel } from '@/components/layout/TabPanel';
-import { Tabs } from '@/components/layout/Tabs';
-import { useCompany } from '@/hooks/useCompany';
-import useLocale from '@/hooks/useLocale';
+import { PageLayout, PageTitle, Tab, TabPanel, Tabs } from '@/components';
+import { useCompany, useLocale } from '@/hooks';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { CompanyAccounts } from './details/CompanyAccounts';
-import { CompanyDepartments } from './details/CompanyDepartments';
-import { CompanyDetails } from './details/CompanyDetails';
-import { CompanyManagers } from './details/CompanyManagers';
-import { CompanyPayPeriods } from './details/CompanyPayPeriods';
+import {
+    CompanyAccounts,
+    CompanyDepartments,
+    CompanyDetails,
+    CompanyManagers,
+    CompanyPayPeriods,
+} from './details';
 
 export default function Company() {
     const params = useParams();
@@ -33,19 +30,14 @@ export default function Company() {
         return data?.id ? data?.name ?? '' : t('New Company');
     }, [data, t]);
 
-    if (isLoading) {
-        // return <Loading />;
-        return null;
-    }
-
     const handleChange = (_event: SyntheticEvent, newValue: number) => {
         setTab(newValue);
         localStorage.setItem('company-tab-index', newValue.toString());
     };
 
-    const submitCallback = (companyId: number) => {
-        setCompanyId(companyId);
-    };
+    const submitCallback = (companyId: number) => setCompanyId(companyId);
+
+    if (isLoading) return null;
 
     return (
         <PageLayout>

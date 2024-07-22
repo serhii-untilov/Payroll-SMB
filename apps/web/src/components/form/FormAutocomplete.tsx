@@ -2,18 +2,18 @@ import { InputLabel } from '@/components/layout/InputLabel';
 import { Autocomplete, Box, OutlinedInputProps, TextField } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
-export type FormAutocompleteOption = {
+type Option = {
     label: string;
     value: any;
 };
 
-export type Props = OutlinedInputProps & {
+type Props = OutlinedInputProps & {
     name: string;
     valueType: 'number' | 'string';
     control: any;
     label: string;
     rules?: any;
-    options: FormAutocompleteOption[];
+    options: Option[];
     autofocus?: boolean;
     disabled?: boolean;
     // sx?: any;

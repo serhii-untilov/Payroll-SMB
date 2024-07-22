@@ -3,7 +3,7 @@ import { OutlinedInput, OutlinedInputProps } from '@mui/material';
 import { date2view, view2date } from '@repo/shared';
 import { Controller } from 'react-hook-form';
 
-export type FormDateFieldProps = OutlinedInputProps & {
+type Props = OutlinedInputProps & {
     name: string;
     control: any;
     label: string;
@@ -12,7 +12,7 @@ export type FormDateFieldProps = OutlinedInputProps & {
     disabled?: boolean;
 };
 
-export const FormDateField = (props: FormDateFieldProps) => {
+export const FormDateField = (props: Props) => {
     const { label } = props;
     return (
         <>

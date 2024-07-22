@@ -1,10 +1,10 @@
 import { Typography, TypographyProps } from '@mui/material';
 
-type FormTitleProps = TypographyProps & {
+type Props = TypographyProps & {
     title: string;
 };
 
-export function FormTitle(props: FormTitleProps) {
+export function FormTitle(props: Props) {
     const { title } = props;
 
     return (

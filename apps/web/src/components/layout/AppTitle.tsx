@@ -1,5 +1,4 @@
-import { useAppTitle } from '@/hooks/useAppTitle';
-import useLocale from '@/hooks/useLocale';
+import { useAppTitle, useLocale } from '@/hooks';
 import { Typography, TypographyProps } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

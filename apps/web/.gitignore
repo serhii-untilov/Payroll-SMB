@@ -28,3 +28,6 @@ dist-ssr
 # Tests
 /coverage
 /.nyc_output
+
+*.tsbuildinfo
+vite.config.ts.timestamp*

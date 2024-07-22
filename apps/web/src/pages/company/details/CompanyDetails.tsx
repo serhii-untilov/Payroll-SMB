@@ -1,34 +1,31 @@
 import { api } from '@/api';
-import { FormInputDropdown } from '@/components/form/FormInputDropdown';
-import { FormTextField } from '@/components/form/FormTextField';
-import { InputLabel } from '@/components/layout/InputLabel';
-import { Toolbar } from '@/components/layout/Toolbar';
-import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
-import { useAccountingList } from '@/hooks/useAccountingList';
-import useAppContext from '@/hooks/useAppContext';
-import { useCompany } from '@/hooks/useCompany';
-import { useLawList } from '@/hooks/useLawList';
-import useLocale from '@/hooks/useLocale';
+import {
+    FormInputDropdown,
+    FormTextField,
+    InputLabel,
+    SelectPayPeriod,
+    Toolbar,
+} from '@/components';
+import {
+    useAccountingList,
+    useAppContext,
+    useCompany,
+    useDefaultAccountingId,
+    useDefaultLawId,
+    useLawList,
+    useLocale,
+} from '@/hooks';
 import { companiesCreate } from '@/services/company.service';
-import { getDirtyValues } from '@/utils';
-import { invalidateQueries } from '@/utils/invalidateQueries';
-import { snackbarFormErrors } from '@/utils/snackbar';
+import { getDirtyValues, invalidateQueries, snackbarFormErrors } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import {
-    AccountingType,
-    CreateCompanyDto,
-    LawType,
-    PaymentSchedule,
-    ResourceType,
-    UpdateCompanyDto,
-} from '@repo/openapi';
+import { CreateCompanyDto, PaymentSchedule, ResourceType, UpdateCompanyDto } from '@repo/openapi';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { format } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { date, InferType, number, object, string } from 'yup';
@@ -47,18 +44,10 @@ export function CompanyDetails(props: Props) {
     const { data: company, isLoading } = useCompany(companyId);
     const { data: lawList, isLoading: isLoadingLawList } = useLawList();
     const { data: accountingList, isLoading: isLoadingAccountingList } = useAccountingList();
+    const defaultLawId = useDefaultLawId(lawList);
+    const defaultAccountingId = useDefaultAccountingId(accountingList);
 
     useEffect(() => {});
-
-    const defaultLawId = useMemo(
-        () => lawList?.find((o) => o.type === LawType.Ukraine)?.id ?? 0,
-        [lawList],
-    );
-
-    const defaultAccountingId = useMemo(
-        () => accountingList?.find((o) => o.type === AccountingType.Generic)?.id ?? 0,
-        [accountingList],
-    );
 
     const formSchema = object().shape({
         name: string().required('Name is required'),
@@ -99,10 +88,6 @@ export function CompanyDetails(props: Props) {
         snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    if (isLoading || isLoadingLawList || isLoadingAccountingList) {
-        return null;
-    }
-
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
@@ -133,6 +118,8 @@ export function CompanyDetails(props: Props) {
         reset(formSchema.cast(company));
         await invalidateQueries(queryClient, [ResourceType.Company]);
     };
+
+    if (isLoading || isLoadingLawList || isLoadingAccountingList) return null;
 
     return (
         <>

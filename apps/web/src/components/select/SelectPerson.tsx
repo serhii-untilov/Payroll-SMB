@@ -21,20 +21,20 @@ import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-export interface Props {
+interface Props {
     name: string;
     control: any;
     label: string;
     autoFocus?: boolean;
 }
 
-interface OptionType {
+type Option = {
     inputValue: string;
     label: string;
     value: number;
-}
+};
 
-const filter = createFilterOptions<OptionType>();
+const filter = createFilterOptions<Option>();
 
 const personDefaultValues = {
     lastName: '',

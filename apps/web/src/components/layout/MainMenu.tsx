@@ -1,5 +1,4 @@
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
+import { useAppContext, useLocale } from '@/hooks';
 import BusinessCenterOutlined from '@mui/icons-material/BusinessCenterOutlined';
 import CalculateOutlined from '@mui/icons-material/CalculateOutlined';
 import CreditScore from '@mui/icons-material/CreditScore';
@@ -31,7 +30,6 @@ export function MainMenu() {
             {company && (
                 <ListItemLink to="/people" primary={t('People')} icon={<PeopleOutlined />} />
             )}
-            {/* <ListItemLink to="/time-off" primary={t('Time Off')} icon={<LandscapeOutlined />} /> */}
             {company && (
                 <ListItemLink to="/time-sheet" primary={t('Time Sheet')} icon={<Schedule />} />
             )}
@@ -45,12 +43,7 @@ export function MainMenu() {
             {company && (
                 <ListItemLink to="/payments" primary={t('Payments')} icon={<CreditScore />} />
             )}
-            {/* <ListItemLink to="/pay-contractors" primary="Pay Contractors" icon={<Description />} /> */}
-            {/* <ListItemLink to="/benefits" primary="Benefits" icon={<Description />} /> */}
-            {/* <ListItemLink to="/compliant" primary="Stay Compliant" icon={<Description />} /> */}
-            {/* <ListItemLink to="/surveys" primary="Surveys" icon={<Description />} /> */}
             {company && <ListItemLink to="/reports" primary={t('Reports')} icon={<Equalizer />} />}
-            {/* <ListItemLink to="/reports" primary="Settings" icon={<Settings />} /> */}
         </List>
     );
 }

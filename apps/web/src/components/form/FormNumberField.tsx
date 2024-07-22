@@ -2,7 +2,7 @@ import { InputLabel } from '@/components/layout/InputLabel';
 import { OutlinedInput, OutlinedInputProps } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
-export type Props = OutlinedInputProps & {
+type Props = OutlinedInputProps & {
     name: string;
     control: any;
     label: string;

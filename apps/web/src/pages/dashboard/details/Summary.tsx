@@ -1,7 +1,7 @@
 import { Link } from '@/components/layout/Link';
-import useAppContext from '@/hooks/useAppContext';
+import { useAppContext } from '@/hooks/useAppContext';
 import { useCurrentPayPeriod } from '@/hooks/useCurrentPayPeriod';
-import useLocale from '@/hooks/useLocale';
+import { useLocale } from '@/hooks/useLocale';
 import { capitalizeFirstChar, getPayPeriodName, sumFormatter } from '@/utils';
 import { Grid, Typography } from '@mui/material';
 import { sub } from 'date-fns';

@@ -1,9 +1,6 @@
 import { dto } from '@/api';
 import { Locale } from '@/context/LocaleContext';
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
-import { usePerson } from '@/hooks/usePerson';
-import { usePositionByPerson } from '@/hooks/usePositionByPerson';
+import { useAppContext, useLocale, usePerson, usePositionByPerson } from '@/hooks';
 import { tasksUpdate } from '@/services/task.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {

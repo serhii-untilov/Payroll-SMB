@@ -1,13 +1,13 @@
 import { FormAutocomplete } from '@/components/form/FormAutocomplete';
 import { useDepartmentList } from '@/hooks/useDepartmentList';
 
-interface Props {
+type Props = {
     companyId: number | undefined;
     control: any;
     label?: string;
     id?: string;
     name?: string;
-}
+};
 
 export function SelectDepartment({ companyId, control, label, id, name }: Props) {
     const { data: departmentList } = useDepartmentList({ companyId, relations: false });

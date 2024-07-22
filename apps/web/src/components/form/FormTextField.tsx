@@ -2,7 +2,7 @@ import { InputLabel } from '@/components/layout/InputLabel';
 import { OutlinedInput, OutlinedInputProps } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
-export type FormTextFieldProps = OutlinedInputProps & {
+type Props = OutlinedInputProps & {
     name: string;
     control: any;
     label: string;
@@ -11,7 +11,7 @@ export type FormTextFieldProps = OutlinedInputProps & {
     disabled?: boolean;
 };
 
-export const FormTextField = (props: FormTextFieldProps) => {
+export const FormTextField = (props: Props) => {
     const { label } = props;
     return (
         <>

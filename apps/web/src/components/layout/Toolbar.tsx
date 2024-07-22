@@ -22,7 +22,7 @@ import { Tooltip } from './Tooltip';
 
 type Func<T> = (value: T) => void;
 
-export interface Props extends StackProps {
+interface Props extends StackProps {
     // Left side
     onAdd?: Func<any> | 'disabled' | undefined;
     onSave?: Func<any> | 'disabled' | undefined;

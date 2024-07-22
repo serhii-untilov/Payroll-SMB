@@ -1,15 +1,14 @@
 import { InputLabel } from '@/components/layout/InputLabel';
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
-import { usePayPeriodList } from '@/hooks/usePayPeriodList';
+import { useAppContext, useLocale, usePayPeriodList } from '@/hooks';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { MenuItem, Select, SelectProps } from '@mui/material';
+import { PayPeriod } from '@repo/openapi';
 import { monthBegin } from '@repo/shared';
 import { format, isEqual } from 'date-fns';
 import { useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 
-export type PayPeriodOption = SelectProps<string> & {
+type Props = SelectProps<string> & {
     companyId: number | undefined;
     control: any;
     label?: string;
@@ -18,29 +17,11 @@ export type PayPeriodOption = SelectProps<string> & {
     disabled?: boolean;
 };
 
-export function SelectAccPeriod(props: PayPeriodOption) {
+export function SelectAccPeriod(props: Props) {
     const { companyId, control, label, id, name, disabled, ...other } = props;
     const { company } = useAppContext();
-    const { locale } = useLocale();
     const { data } = usePayPeriodList({ companyId });
-
-    const options = useMemo(() => {
-        return data?.map((period: any) => {
-            return (
-                <MenuItem
-                    key={format(period.dateFrom, 'yyyy-MM-dd')}
-                    value={format(period.dateFrom, 'yyyy-MM-dd')}
-                >
-                    {getPayPeriodName(
-                        period.dateFrom,
-                        period.dateTo,
-                        isEqual(period.dateFrom, company?.payPeriod),
-                        locale.dateLocale,
-                    )}
-                </MenuItem>
-            );
-        });
-    }, [data, company, locale.dateLocale]);
+    const options = useOptions(data, company?.payPeriod ?? monthBegin(new Date()));
 
     return (
         <>
@@ -71,5 +52,28 @@ export function SelectAccPeriod(props: PayPeriodOption) {
                 }}
             />
         </>
+    );
+}
+
+function useOptions(data: PayPeriod[], currentPayPeriod: Date) {
+    const { locale } = useLocale();
+    return useMemo(
+        () =>
+            data?.map((period: any) => {
+                return (
+                    <MenuItem
+                        key={format(period.dateFrom, 'yyyy-MM-dd')}
+                        value={format(period.dateFrom, 'yyyy-MM-dd')}
+                    >
+                        {getPayPeriodName(
+                            period.dateFrom,
+                            period.dateTo,
+                            isEqual(period.dateFrom, currentPayPeriod),
+                            locale.dateLocale,
+                        )}
+                    </MenuItem>
+                );
+            }),
+        [locale, data, currentPayPeriod],
     );
 }

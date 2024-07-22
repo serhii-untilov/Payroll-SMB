@@ -11,39 +11,42 @@ type Props = {
 };
 
 export function Upcoming(props: Props) {
+    const { taskList } = props;
     const { t } = useTranslation();
-    const typeList = useMemo(
-        () => [
-            TaskType.CreateUser.toString(),
-            TaskType.CreateCompany.toString(),
-            TaskType.FillDepartmentList.toString(),
-            TaskType.FillPositionList.toString(),
-            TaskType.PostWorkSheet.toString(),
-            TaskType.PostAccrualDocument.toString(),
-            TaskType.SendApplicationFss.toString(),
-            TaskType.PostPaymentFss.toString(),
-            TaskType.PostAdvancePayment.toString(),
-            TaskType.PostRegularPayment.toString(),
-            TaskType.ClosePayPeriod.toString(),
-            TaskType.SendIncomeTaxReport.toString(),
-        ],
-        [],
-    );
-    const taskList = useMemo(
-        () =>
-            props.taskList
-                ?.filter((o) => dropTime(o.dateFrom) > dropTime(new Date()))
-                .filter((o) => typeList.includes(o.type)),
-        [props, typeList],
-    );
-    return taskList.length ? (
+    const typeList = useMemo(() => getTypeList(), []);
+    const filteredTaskList = useMemo(() => filter(taskList, typeList), [taskList, typeList]);
+
+    return filteredTaskList.length ? (
         <Box>
             <Typography component="h4" variant="h4" textAlign={'center'}>
                 {t('Upcoming')}
             </Typography>
-            {taskList.map((task) => (
+            {filteredTaskList.map((task) => (
                 <Task key={task.id} task={task} view="upcoming" />
             ))}
         </Box>
     ) : null;
+}
+
+function getTypeList() {
+    return [
+        TaskType.CreateUser,
+        TaskType.CreateCompany,
+        TaskType.FillDepartmentList,
+        TaskType.FillPositionList,
+        TaskType.PostWorkSheet,
+        TaskType.PostAccrualDocument,
+        TaskType.SendApplicationFss,
+        TaskType.PostPaymentFss,
+        TaskType.PostAdvancePayment,
+        TaskType.PostRegularPayment,
+        TaskType.ClosePayPeriod,
+        TaskType.SendIncomeTaxReport,
+    ];
+}
+
+function filter(taskList: dto.Task[], typeList: TaskType[]) {
+    return taskList
+        .filter((o) => dropTime(o.dateFrom) > dropTime(new Date()))
+        .filter((o) => typeList.includes(o.type));
 }

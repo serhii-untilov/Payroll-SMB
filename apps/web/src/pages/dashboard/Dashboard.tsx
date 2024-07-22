@@ -1,33 +1,23 @@
-import { Link } from '@/components/layout/Link';
-import PageLayout from '@/components/layout/PageLayout';
-import { Loading } from '@/components/utility/Loading';
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
-import { useTaskList } from '@/hooks/useTaskList';
+import { Link, Loading, PageLayout } from '@/components';
+import { useAppContext, useLocale, useTaskList } from '@/hooks';
 import { Box, Grid, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Greeting } from './details/Greeting';
-import { Reminder } from './details/Reminder';
-import { Summary } from './details/Summary';
-import { Todo } from './details/Todo';
-import { Upcoming } from './details/Upcoming';
+import { Greeting, Reminder, Summary, Todo, Upcoming } from './details';
 
 export default function Dashboard() {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company, themeMode } = useAppContext();
-    const { data: taskList, isLoading } = useTaskList({
-        companyId: company?.id,
-        onPayPeriodDate: company?.payPeriod,
-    });
+    const companyId = company?.id;
+    const onPayPeriodDate = company?.payPeriod;
+    const { data: taskList, isLoading } = useTaskList({ companyId, onPayPeriodDate });
 
     useEffect(() => {}, [locale, themeMode]);
 
-    if (isLoading) {
-        return <Loading />;
-    }
+    if (isLoading) return <Loading />;
+
     return (
         <>
             <PageLayout>

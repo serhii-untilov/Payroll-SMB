@@ -1,5 +1,5 @@
-import { InputLabel } from '@/components/layout/InputLabel';
-import useLocale from '@/hooks/useLocale';
+import { InputLabel } from '@/components';
+import { useLocale } from '@/hooks';
 import { FormControl, MenuItem } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { supportedLanguages } from '../../context/LocaleContext';

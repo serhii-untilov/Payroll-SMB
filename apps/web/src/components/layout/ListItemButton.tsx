@@ -1,16 +1,16 @@
-import useAppContext from '@/hooks/useAppContext';
+import { useAppContext } from '@/hooks/useAppContext';
 import { ListItem } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Tooltip } from './Tooltip';
 
-interface ListItemButtonProps {
+interface Props {
     icon?: React.ReactElement;
     primary: string | React.ReactElement;
     onClick?: React.MouseEventHandler;
 }
 
-export function ListItemButton(props: ListItemButtonProps) {
+export function ListItemButton(props: Props) {
     const { icon, primary, onClick } = props;
     const { compactView } = useAppContext();
 

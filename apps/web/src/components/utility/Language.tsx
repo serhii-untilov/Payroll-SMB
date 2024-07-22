@@ -1,5 +1,5 @@
-import { InputLabel } from '@/components/layout/InputLabel';
-import useLocale from '@/hooks/useLocale';
+import { InputLabel } from '@/components';
+import { useLocale } from '@/hooks';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { SelectProps } from '@mui/material/Select';
 import { useTranslation } from 'react-i18next';
