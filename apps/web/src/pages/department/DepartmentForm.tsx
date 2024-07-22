@@ -3,12 +3,9 @@ import { FormTextField } from '@/components/form/FormTextField';
 import { Button } from '@/components/layout/Button';
 import { SelectDepartment } from '@/components/select/SelectDepartment';
 import useAppContext from '@/hooks/useAppContext';
+import { useDepartment } from '@/hooks/useDepartment';
 import useLocale from '@/hooks/useLocale';
-import {
-    departmentsCreate,
-    departmentsFindOne,
-    departmentsUpdate,
-} from '@/services/department.service';
+import { departmentsCreate, departmentsUpdate } from '@/services/department.service';
 import { getDirtyValues, invalidateQueries } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
@@ -16,10 +13,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { CreateDepartmentDto, Department } from '@repo/openapi';
-import { ResourceType } from '@repo/openapi';
+import { CreateDepartmentDto, Department, ResourceType } from '@repo/openapi';
 import { maxDate, minDate } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { Dispatch, Fragment, useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
@@ -36,25 +32,13 @@ export interface Params {
 
 export default function DepartmentForm(params: Params) {
     const { submitCallback } = params;
-    const departmentId = Number(params.departmentId);
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company } = useAppContext();
     const queryClient = useQueryClient();
+    const { department } = useDepartment(Number(params.departmentId));
 
     useEffect(() => {}, [company]);
-
-    const {
-        data: department,
-        isError,
-        error,
-    } = useQuery<Department | null, Error>({
-        queryKey: [ResourceType.Department, { departmentId }],
-        queryFn: async () => {
-            return departmentId ? (await departmentsFindOne(departmentId)) ?? null : null;
-        },
-        enabled: !!departmentId,
-    });
 
     const formSchema: ObjectSchema<CreateDepartmentDto> = object({
         name: string().required('Name is required').default(''),
@@ -73,7 +57,7 @@ export default function DepartmentForm(params: Params) {
         formState: { errors: formErrors },
     } = useForm({
         defaultValues: department || {},
-        values: formSchema.cast(department || {}),
+        values: department || {},
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -85,10 +69,6 @@ export default function DepartmentForm(params: Params) {
     useEffect(() => {
         snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
-
-    if (isError) {
-        snackbarError(`${error.name}\n${error.message}`);
-    }
 
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) {

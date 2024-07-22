@@ -1,8 +1,8 @@
-import { ResourceType, RoleType } from '../types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Access } from './../resources/access/entities/access.entity';
+import { ResourceType, RoleType } from '../types';
+import { generateAccess_Full } from '../utils/lib/access';
 import { getSystemUserId } from '../utils/lib/getSystemUserId';
-import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/lib/access';
+import { Access } from './../resources/access/entities/access.entity';
 
 // Default access rules by Role Type.
 // This table is read only for all role types. Changes for this table available only by migrations.
@@ -10,23 +10,11 @@ import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/lib/acces
 
 const entity = Access;
 const recordList = [
-    // SYSTEM
-    // This role is used to update, migrate, and seed DB only and doesn't have
-    // access to any resource through the API.
-
-    // ADMIN
-    ...generateAccess_Full(RoleType.Admin, ResourceType.Payment),
-    // EMPLOYER
-    ...generateAccess_Full(RoleType.Employer, ResourceType.Payment),
-    // OBSERVER
-    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.Payment),
-    // EMPLOYEE
-    ...generateAccess_ReadOnly(RoleType.Employee, ResourceType.Payment),
-    // GUEST
-    ...generateAccess_ReadOnly(RoleType.Guest, ResourceType.Payment),
+    ...generateAccess_Full(RoleType.Admin, ResourceType.PaymentPosition),
+    ...generateAccess_Full(RoleType.Employer, ResourceType.PaymentPosition),
 ];
 
-export class Seed1819288749808 implements MigrationInterface {
+export class Seed1821650962526 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         const userId = await getSystemUserId(dataSource);
