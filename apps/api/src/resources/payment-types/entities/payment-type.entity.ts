@@ -1,9 +1,10 @@
-import { IPaymentType } from '@repo/shared';
-import { Logger } from '../../abstract/logger.abstract';
+import { CalcMethod, PaymentGroup, PaymentPart } from './../../../types';
+import { Logger } from './../../abstract/logger.abstract';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
-export class PaymentType extends Logger implements IPaymentType {
+export class PaymentType extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -11,14 +12,17 @@ export class PaymentType extends Logger implements IPaymentType {
     name: string;
 
     @Column({ type: 'varchar', length: 30 })
-    paymentPart: string;
+    @ApiProperty({ enum: PaymentPart, enumName: 'PaymentPart' })
+    paymentPart: PaymentPart;
 
     @Column({ type: 'varchar', length: 30 })
-    paymentGroup: string;
+    @ApiProperty({ enum: PaymentGroup, enumName: 'PaymentGroup' })
+    paymentGroup: PaymentGroup;
 
     @Column({ type: 'varchar', length: 30 })
-    calcMethod: string;
+    @ApiProperty({ enum: CalcMethod, enumName: 'CalcMethod' })
+    calcMethod: CalcMethod;
 
-    @Column({ type: 'varchar', length: 300 })
+    @Column({ type: 'varchar', length: 300, default: '' })
     description: string;
 }

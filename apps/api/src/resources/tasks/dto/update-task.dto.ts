@@ -1,18 +1,16 @@
-import { PartialType } from '@nestjs/swagger';
-import { Task } from '../entities/task.entity';
-import { OmitType } from '@nestjs/swagger';
-import { IUpdateTask } from '@repo/shared';
+import { OmitType, PartialType } from '@nestjs/swagger';
+import { Task } from './../entities/task.entity';
 
-export class UpdateTaskDto
-    extends PartialType(
-        OmitType(Task, [
-            'id',
-            'createdDate',
-            'createdUserId',
-            'updatedDate',
-            'updatedUserId',
-            'deletedDate',
-            'deletedUserId',
-        ]),
-    )
-    implements IUpdateTask {}
+export class UpdateTaskDto extends PartialType(
+    OmitType(Task, [
+        'id',
+        'company',
+        'transform',
+        'createdDate',
+        'createdUserId',
+        'updatedDate',
+        'updatedUserId',
+        'deletedDate',
+        'deletedUserId',
+    ]),
+) {}

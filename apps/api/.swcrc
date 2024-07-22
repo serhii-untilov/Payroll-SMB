@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json.schemastore.org/swcrc",
+    "sourceMaps": true,
+    "jsc": {
+        "parser": {
+            "syntax": "typescript",
+            "decorators": true,
+            "dynamicImport": false
+        },
+        "transform": {
+            "legacyDecorator": true,
+            "decoratorMetadata": true
+        },
+        "baseUrl": "./"
+    },
+    "exclude": [
+        "jest.config.ts",
+        "node_modules",
+        "test",
+        "dist",
+        ".*\\.spec\\.[j|t]s.?$",
+        "migrations"
+    ],
+    "minify": false
+}

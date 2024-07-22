@@ -3,12 +3,9 @@ import PageLayout from '@/components/layout/PageLayout';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getTaskList } from '@/services/task.service';
+import { useTaskList } from '@/hooks/useTaskList';
 import { Box, Grid, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { ITask } from '@repo/shared';
-import { useQuery } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Greeting } from './details/Greeting';
@@ -21,27 +18,12 @@ export default function Dashboard() {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company, themeMode } = useAppContext();
+    const { data: taskList, isLoading } = useTaskList({
+        companyId: company?.id,
+        onPayPeriodDate: company?.payPeriod,
+    });
 
     useEffect(() => {}, [locale, themeMode]);
-
-    const {
-        data: taskList,
-        isError,
-        isLoading,
-        error,
-    } = useQuery<ITask[], Error>({
-        queryKey: ['task', 'list', { companyId: company?.id }],
-        queryFn: async () => {
-            return await getTaskList(
-                company?.id ? { companyId: company?.id, onPayPeriodDate: company?.payPeriod } : {},
-            );
-        },
-    });
-    if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
-    }
 
     if (isLoading) {
         return <Loading />;
@@ -79,7 +61,7 @@ export default function Dashboard() {
                             sx={{
                                 borderRadius: '5px',
                                 my: { xs: 1, sm: 2 },
-                                mx: { xs: 1, sm: 2, md: 8, lg: 18 },
+                                mx: { xs: 1, sm: 2, md: 8, lg: 10, xl: 18 },
                                 py: { xs: 1, sm: 2 },
                                 px: { xs: 1, sm: 4 },
                                 color: (theme) => theme.palette.common.black,

@@ -4,7 +4,12 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "builder": "swc",
+    "builder": {
+      "type": "swc",
+      "options": {
+        "swcrcPath": "./.swcrc"
+      }
+    },
     "typeCheck": true,
     "plugins": [
       {
@@ -12,14 +17,17 @@
         "options": {
           "dtoFileNameSuffix": [
             ".dto.ts",
-            ".entity.ts"
+            ".entity.ts",
+            ".abstract.ts"
           ],
           "controllerFileNameSuffix": [
             ".controller.ts"
           ],
           "dtoKeyOfComment": "description",
           "controllerKeyOfComment": "description",
-          "introspectComments": false
+          "introspectComments": false,
+          "classValidatorShim": true,
+          "host": "localhost"
         }
       }
     ]

@@ -1,6 +1,4 @@
-import { ITokens } from '@repo/shared';
-
-export class TokensDto implements ITokens {
+export class TokensDto {
     accessToken: string;
     refreshToken: string | null;
 }

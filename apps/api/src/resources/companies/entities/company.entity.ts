@@ -1,4 +1,11 @@
-import { ICompany, PaymentSchedule, monthBegin, monthEnd } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
+import { Accounting } from './../../accounting/entities/accounting.entity';
+import { Department } from './../../departments/entities/department.entity';
+import { Law } from './../../laws/entities/law.entity';
+import { Position } from './../../positions/entities/position.entity';
+import { UserCompany } from './../../user-companies/entities/user-company.entity';
+import { PaymentSchedule } from './../../../types/lib/PaymentSchedule';
+import { monthBegin, monthEnd } from '@repo/shared';
 import {
     AfterLoad,
     BeforeInsert,
@@ -10,15 +17,10 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { UserCompany } from '../../../resources/users/entities/user-company.entity';
-import { Logger } from '../../abstract/logger.abstract';
-import { Accounting } from '../../accounting/entities/accounting.entity';
-import { Department } from '../../departments/entities/department.entity';
-import { Law } from '../../laws/entities/law.entity';
-import { Position } from '../../positions/entities/position.entity';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class Company extends Logger implements ICompany {
+export class Company extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -44,8 +46,9 @@ export class Company extends Logger implements ICompany {
     @Column({ type: 'integer', nullable: true })
     accountingId: number;
 
-    @Column({ type: 'varchar', length: 10, default: PaymentSchedule.LAST_DAY })
-    paymentSchedule: string;
+    @Column({ type: 'varchar', length: 10, default: PaymentSchedule.LastDay })
+    @ApiProperty({ enum: PaymentSchedule, enumName: 'PaymentSchedule' })
+    paymentSchedule: PaymentSchedule;
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;
@@ -86,7 +89,7 @@ export class Company extends Logger implements ICompany {
     }
 }
 
-function normalize(record: ICompany) {
+function normalize(record: Company) {
     record.payPeriod = monthBegin(record.payPeriod || new Date());
     record.checkDate = monthEnd(record.payPeriod || new Date());
 }

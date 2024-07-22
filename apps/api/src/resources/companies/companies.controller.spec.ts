@@ -1,15 +1,15 @@
-import { PayrollCalculationService } from './../../processor/payrollCalculation/payrollCalculation.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
 import { createMock } from '@golevelup/ts-jest';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { repositoryMockFactory } from '@repo/testing';
+import { repositoryMockFactory } from 'test';
 import { AccessService } from '../access/access.service';
-import { UsersCompanyService } from '../users/users-company.service';
+import { UserCompaniesService } from '../user-companies/user-companies.service';
 import { UsersService } from '../users/users.service';
 import { CompaniesController } from './companies.controller';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('CompaniesController', () => {
     let controller: CompaniesController;
@@ -22,7 +22,7 @@ describe('CompaniesController', () => {
                 CompaniesService,
                 { provide: getRepositoryToken(Company), useFactory: repositoryMockFactory },
                 { provide: UsersService, useValue: createMock<UsersService>() },
-                { provide: UsersCompanyService, useValue: createMock<UsersCompanyService>() },
+                { provide: UserCompaniesService, useValue: createMock<UserCompaniesService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
                 {

@@ -1,7 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/swagger';
-import { IUpdateAccess } from '@repo/shared';
-import { Access } from '../entities/access.entity';
+import { CreateAccessDto } from './create-access.dto';
+import { PartialType } from '@nestjs/swagger';
 
-export class UpdateAccessDto
-    extends PartialType(OmitType(Access, ['id']))
-    implements IUpdateAccess {}
+export class UpdateAccessDto extends PartialType(CreateAccessDto) {}

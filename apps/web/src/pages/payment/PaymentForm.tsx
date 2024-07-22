@@ -5,10 +5,12 @@ import { TabPanel } from '@/components/layout/TabPanel';
 import { Tabs } from '@/components/layout/Tabs';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getPayment } from '@/services/payment.service';
-import { sumFormatter } from '@/services/utils';
+import { paymentsFindOne } from '@/services/payment.service';
+import { sumFormatter } from '@/utils';
 import { Box, Chip } from '@mui/material';
-import { IPayment, PaymentStatus, dateUTC } from '@repo/shared';
+import { Payment } from '@repo/openapi';
+import { dateUTC } from '@repo/shared';
+import { PaymentStatus, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
@@ -36,10 +38,10 @@ export default function PaymentForm() {
         data: payment,
         isError,
         error,
-    } = useQuery<Partial<IPayment>, Error>({
-        queryKey: ['payment', { paymentId }],
+    } = useQuery<Partial<Payment>, Error>({
+        queryKey: [ResourceType.Payment, { paymentId, relations: true }],
         queryFn: async () => {
-            return await getPayment({ id: paymentId, relations: true });
+            return await paymentsFindOne(paymentId, { relations: true });
         },
         enabled: !!paymentId,
     });
@@ -60,10 +62,10 @@ export default function PaymentForm() {
     }, [payment, t]);
 
     const docColor = useMemo(() => {
-        const status = payment?.status || PaymentStatus.DRAFT;
+        const status = payment?.status || PaymentStatus.Draft;
         const docDate = dateUTC(payment?.docDate || new Date());
         const now = dateUTC(new Date());
-        return status === PaymentStatus.DRAFT && docDate.getTime() <= now.getTime()
+        return status === PaymentStatus.Draft && docDate.getTime() <= now.getTime()
             ? 'warning'
             : 'primary';
     }, [payment]);

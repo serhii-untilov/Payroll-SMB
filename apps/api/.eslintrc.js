@@ -39,5 +39,14 @@ module.exports = {
                 ignoreRestSiblings: true,
             },
         ],
+        'max-len': [
+            'error',
+            {
+                code: 100,
+                ignoreTemplateLiterals: true,
+                ignoreStrings: true,
+                ignoreUrls: true,
+            },
+        ],
     },
 };

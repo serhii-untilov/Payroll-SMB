@@ -1,10 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ICreateRole } from '@repo/shared';
+import { PickType } from '@nestjs/swagger';
+import { Role } from './../entities/role.entity';
 
-export class CreateRoleDto implements ICreateRole {
-    @ApiProperty()
-    name: string;
-
-    @ApiProperty()
-    type: string;
-}
+export class CreateRoleDto extends PickType(Role, ['name', 'type']) {}

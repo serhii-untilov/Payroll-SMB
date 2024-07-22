@@ -1,8 +1,8 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
-import { deletePayment } from '@/services/payment.service';
-import { getPaymentPositions } from '@/services/paymentPosition.service';
-import { sumFormatter } from '@/services/utils';
+import { paymentsRemove } from '@/services/payment.service';
+import { paymentPositionsFindAll } from '@/services/paymentPosition.service';
+import { invalidateQueries, snackbarError, sumFormatter } from '@/utils';
 import {
     GridCellParams,
     GridColDef,
@@ -11,9 +11,10 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IPaymentPosition, PaymentStatus, dateUTC } from '@repo/shared';
+import { PaymentPosition } from '@repo/openapi';
+import { PaymentStatus, ResourceType } from '@repo/openapi';
+import { dateUTC } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -107,22 +108,19 @@ export function EmployeePayments(props: Props) {
         },
     ];
 
-    const { data, isError, error } = useQuery<IPaymentPosition[], Error>({
-        queryKey: ['payment', 'position-list', { paymentId }],
+    const { data, isError, error } = useQuery<PaymentPosition[], Error>({
+        queryKey: [ResourceType.Payment, { paymentId, relations: true }],
         queryFn: async () => {
-            return await getPaymentPositions({ paymentId, relations: true });
+            return await paymentPositionsFindAll({ paymentId, relations: true });
         },
         enabled: !!paymentId,
     });
 
     if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
+        snackbarError(`${error.name}\n${error.message}`);
     }
 
     const onAddPayment = () => {
-        // navigate('/people/payment/?tab=details&return=true');
         console.log('onAddPayment');
     };
 
@@ -132,9 +130,9 @@ export function EmployeePayments(props: Props) {
 
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
-            await deletePayment(+id);
+            await paymentsRemove(+id);
         }
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.Payment]);
     };
 
     const onPrint = () => {
@@ -148,13 +146,13 @@ export function EmployeePayments(props: Props) {
     const getRowStatus = (params: any): string => {
         return params.row?.deletedDate
             ? 'Deleted'
-            : params.row?.status === PaymentStatus.PAYED
+            : params.row?.status === PaymentStatus.Paid
               ? 'Normal'
               : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
                 ? 'Overdue'
-                : params.row?.status === PaymentStatus.SUBMITTED
+                : params.row?.status === PaymentStatus.Submitted
                   ? 'Todo'
-                  : params.row?.status === PaymentStatus.ACCEPTED
+                  : params.row?.status === PaymentStatus.Accepted
                     ? 'Overdue'
                     : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
                       ? 'Todo'

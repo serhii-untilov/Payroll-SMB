@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@/types';
 import { Repository } from 'typeorm';
 import { Law } from './entities/law.entity';
 
 @Injectable()
 export class LawsService {
-    public readonly resourceType = ResourceType.LAW;
+    public readonly resourceType = ResourceType.Law;
     constructor(
         @InjectRepository(Law)
         private repository: Repository<Law>,

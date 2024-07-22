@@ -1,30 +1,29 @@
+import { api } from '@/api';
 import { FormInputDropdown } from '@/components/form/FormInputDropdown';
 import { FormTextField } from '@/components/form/FormTextField';
 import { InputLabel } from '@/components/layout/InputLabel';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
-import { Loading } from '@/components/utility/Loading';
 import { useAccountingList } from '@/hooks/useAccountingList';
 import useAppContext from '@/hooks/useAppContext';
 import { useCompany } from '@/hooks/useCompany';
 import { useLawList } from '@/hooks/useLawList';
 import useLocale from '@/hooks/useLocale';
-import { createCompany, updateCompany } from '@/services/company.service';
-import { getDirtyValues } from '@/services/utils';
+import { companiesCreate } from '@/services/company.service';
+import { getDirtyValues } from '@/utils';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import {
     AccountingType,
+    CreateCompanyDto,
     LawType,
-    maxDate,
-    minDate,
-    monthBegin,
-    monthEnd,
     PaymentSchedule,
     ResourceType,
-} from '@repo/shared';
+    UpdateCompanyDto,
+} from '@repo/openapi';
+import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { format } from 'date-fns';
@@ -46,18 +45,18 @@ export function CompanyDetails(props: Props) {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const { data: company, isLoading } = useCompany(companyId);
-    const { data: lawList } = useLawList();
-    const { data: accountingList } = useAccountingList();
+    const { data: lawList, isLoading: isLoadingLawList } = useLawList();
+    const { data: accountingList, isLoading: isLoadingAccountingList } = useAccountingList();
 
     useEffect(() => {});
 
     const defaultLawId = useMemo(
-        () => lawList?.find((o) => o.type === LawType.UKRAINE)?.id ?? 0,
+        () => lawList?.find((o) => o.type === LawType.Ukraine)?.id ?? 0,
         [lawList],
     );
 
     const defaultAccountingId = useMemo(
-        () => accountingList?.find((o) => o.type === AccountingType.GENERIC)?.id ?? 0,
+        () => accountingList?.find((o) => o.type === AccountingType.Generic)?.id ?? 0,
         [accountingList],
     );
 
@@ -71,12 +70,11 @@ export function CompanyDetails(props: Props) {
             .default(defaultAccountingId),
         paymentSchedule: string()
             .required('Payment Schedule required')
-            .default(PaymentSchedule.LAST_DAY),
+            .default(PaymentSchedule.LastDay),
         dateFrom: date().default(minDate()).required(),
         dateTo: date().default(maxDate()).required(),
         payPeriod: date().required('Pay Period required').default(monthBegin(new Date())),
         checkDate: date().required('Check Date required').default(monthEnd(new Date())),
-        version: number().optional(),
     });
 
     type FormType = InferType<typeof formSchema>;
@@ -87,8 +85,8 @@ export function CompanyDetails(props: Props) {
         reset,
         formState: { errors: formErrors },
     } = useForm({
-        defaultValues: formSchema.cast(company) ?? {},
-        values: formSchema.cast(company) ?? {},
+        defaultValues: formSchema.cast(company),
+        values: formSchema.cast(company),
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
@@ -101,8 +99,8 @@ export function CompanyDetails(props: Props) {
         snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    if (isLoading) {
-        return <Loading />;
+    if (isLoading || isLoadingLawList || isLoadingAccountingList) {
+        return null;
     }
 
     const onSubmit: SubmitHandler<FormType> = async (data) => {
@@ -110,11 +108,16 @@ export function CompanyDetails(props: Props) {
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
             const response = company?.id
-                ? await updateCompany(company.id, dirtyValues)
-                : await createCompany(data);
+                ? (
+                      await api.companiesUpdate(company.id, {
+                          ...(dirtyValues as UpdateCompanyDto),
+                          version: company.version,
+                      })
+                  ).data
+                : await companiesCreate(data as CreateCompanyDto);
             setCompanyId(response.id);
             reset(formSchema.cast(response));
-            await invalidateQueries(queryClient, [ResourceType.COMPANY, ResourceType.PAY_PERIOD]);
+            await invalidateQueries(queryClient, [ResourceType.Company, ResourceType.PayPeriod]);
             if (!currentCompany || currentCompany.id === response.id) {
                 setCurrentCompany(response);
             }
@@ -128,7 +131,7 @@ export function CompanyDetails(props: Props) {
     const onCancel = async () => {
         setCompanyId(Number(company?.id));
         reset(formSchema.cast(company));
-        await queryClient.invalidateQueries({ queryKey: ['company'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.Company]);
     };
 
     return (

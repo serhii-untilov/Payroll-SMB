@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { JobsService } from './jobs.service';
-import { MockType, repositoryMockFactory } from '@repo/testing';
-import { Repository } from 'typeorm';
-import { Job } from './entities/job.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { AccessService } from '../access/access.service';
 import { createMock } from '@golevelup/ts-jest';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { MockType, repositoryMockFactory } from 'test';
+import { Repository } from 'typeorm';
+import { AccessService } from '../access/access.service';
+import { Job } from './entities/job.entity';
+import { JobsService } from './jobs.service';
 
 describe('JobsService', () => {
     let service: JobsService;

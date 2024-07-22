@@ -1,8 +1,10 @@
+import { dto } from '@/api';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getPerson } from '@/services/person.service';
-import { getPositionByPersonId } from '@/services/position.service';
-import { updateTask } from '@/services/task.service';
+import { usePerson } from '@/hooks/usePerson';
+import { usePositionByPerson } from '@/hooks/usePositionByPerson';
+import { tasksUpdate } from '@/services/task.service';
+import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     CropSquare,
     DoneRounded,
@@ -12,8 +14,9 @@ import {
 } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { green, grey, orange, red } from '@mui/material/colors';
-import { IPosition, ITask, TaskStatus, TaskType } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Task as ITask } from '@repo/openapi';
+import { ResourceType, TaskStatus, TaskType } from '@repo/openapi';
+import { useQueryClient } from '@tanstack/react-query';
 import { add, differenceInYears } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +25,7 @@ import { useNavigate } from 'react-router-dom';
 export type TaskView = 'todo' | 'reminder' | 'upcoming';
 
 type Props = {
-    task: ITask;
+    task: dto.Task;
     view: TaskView;
 };
 
@@ -31,55 +34,43 @@ export function Task(props: Props) {
     const { view } = props;
     const queryClient = useQueryClient();
     const { t } = useTranslation();
-    const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
-    const statusIcon = useMemo(() => getStatusIcon(task, view), [task, view]);
     const navigate = useNavigate();
     const { company } = useAppContext();
     const { locale } = useLocale();
+    const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
+    const statusIcon = useMemo(() => getStatusIcon(task, view), [task, view]);
     const backgroundColor = useMemo(() => getBackgroundColor(task, view), [task, view]);
-
-    const { data: person } = useQuery({
-        queryKey: ['person', 'task', task],
-        queryFn: async () => {
-            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId
-                ? await getPerson(task.entityId)
-                : null;
-        },
-        enabled: !!task?.id,
-    });
-
-    const { data: position } = useQuery({
-        queryKey: ['position', 'task', { taskId: task.id, companyId: company?.id }],
-        queryFn: async () => {
-            return task.type === TaskType.HAPPY_BIRTHDAY && task.entityId && company?.id
-                ? await getPositionByPersonId({
-                      personId: task.entityId,
-                      companyId: company.id,
-                      relations: false,
-                      onDate: task.dateFrom,
-                  })
-                : null;
-        },
-        enabled: !!person?.id,
+    const { data: person } = usePerson(task?.entityId);
+    const { position } = usePositionByPerson({
+        companyId: company?.id,
+        personId: person?.id,
+        onPayPeriodDate: company?.payPeriod,
+        relations: false,
     });
 
     const taskDate = useMemo(() => {
         const day = task.dateFrom.getDate();
-        const month = task.dateFrom.toLocaleString(locale.dateLocale.code, { month: 'short' });
+        const month = task.dateFrom.toLocaleString(locale.dateLocale.code, {
+            month: 'short',
+        });
         return `${day} ${month}`;
     }, [task, locale]);
 
     const description = useMemo(() => {
         switch (task.type) {
-            case TaskType.HAPPY_BIRTHDAY:
-                return `${person?.fullName}, ${person?.birthday ? differenceInYears(add(task.dateTo, { days: 1 }), person?.birthday) : ''}`;
+            case TaskType.HappyBirthday: {
+                const age = person?.birthday
+                    ? differenceInYears(add(task.dateTo, { days: 1 }), person?.birthday)
+                    : 0;
+                return `${person?.fullName}, ${age || ''}`;
+            }
             default:
                 return t(task.type);
         }
     }, [person, task, t]);
 
     const onClickTask = () => {
-        if (task.status === TaskStatus.NOT_AVAILABLE) {
+        if (task.status === TaskStatus.NotAvailable) {
             return;
         }
         const path = getPath(task, company?.id, position);
@@ -89,13 +80,13 @@ export function Task(props: Props) {
     };
 
     const onClickStatus = async () => {
-        if (task.status === TaskStatus.NOT_AVAILABLE) {
+        if (task.status === TaskStatus.NotAvailable) {
             return;
         }
         if (canMarkAsDone(task, view)) {
-            if (task.status === TaskStatus.TODO || task.status === TaskStatus.IN_PROGRESS) {
+            if (task.status === TaskStatus.Todo || task.status === TaskStatus.InProgress) {
                 await markDone();
-            } else if (task.status === TaskStatus.DONE_BY_USER) {
+            } else if (task.status === TaskStatus.DoneByUser) {
                 await markTodo();
             }
         } else {
@@ -104,18 +95,21 @@ export function Task(props: Props) {
     };
 
     const markDone = async () => {
-        setTask(
-            await updateTask(task.id, {
-                status: TaskStatus.DONE_BY_USER,
-                version: task.version,
-            }),
-        );
-        await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
+        const updatedTask = await tasksUpdate(task.id, {
+            status: TaskStatus.DoneByUser,
+            version: task.version,
+        });
+        setTask(updatedTask);
+        await invalidateQueries(queryClient, [ResourceType.Task]);
     };
 
     const markTodo = async () => {
-        setTask(await updateTask(task.id, { status: TaskStatus.TODO, version: task.version }));
-        await queryClient.invalidateQueries({ queryKey: ['task'], refetchType: 'all' });
+        const updatedTask = await tasksUpdate(task.id, {
+            status: TaskStatus.Todo,
+            version: task.version,
+        });
+        setTask(updatedTask);
+        await invalidateQueries(queryClient, [ResourceType.Task]);
     };
 
     return (
@@ -182,31 +176,31 @@ export function Task(props: Props) {
 
 function getTitleByTaskType(type: string) {
     switch (type) {
-        case TaskType.CREATE_USER:
+        case TaskType.CreateUser:
             return 'User';
-        case TaskType.CREATE_COMPANY:
+        case TaskType.CreateCompany:
             return 'Company';
-        case TaskType.FILL_DEPARTMENT_LIST:
+        case TaskType.FillDepartmentList:
             return 'Departments';
-        case TaskType.FILL_POSITION_LIST:
+        case TaskType.FillPositionList:
             return 'People';
-        case TaskType.POST_WORK_SHEET:
+        case TaskType.PostWorkSheet:
             return 'Time Sheet';
-        case TaskType.POST_ACCRUAL_DOCUMENT:
+        case TaskType.PostAccrualDocument:
             return 'Payroll';
-        case TaskType.SEND_APPLICATION_FSS:
+        case TaskType.SendApplicationFss:
             return 'Payments';
-        case TaskType.POST_PAYMENT_FSS:
+        case TaskType.PostPaymentFss:
             return 'Payments';
-        case TaskType.POST_ADVANCE_PAYMENT:
+        case TaskType.PostAdvancePayment:
             return 'Payments';
-        case TaskType.POST_REGULAR_PAYMENT:
+        case TaskType.PostRegularPayment:
             return 'Payments';
-        case TaskType.CLOSE_PAY_PERIOD:
+        case TaskType.ClosePayPeriod:
             return 'Company';
-        case TaskType.SEND_INCOME_TAX_REPORT:
+        case TaskType.SendIncomeTaxReport:
             return 'Reports';
-        case TaskType.HAPPY_BIRTHDAY:
+        case TaskType.HappyBirthday:
             return type;
         default:
             return type;
@@ -218,15 +212,15 @@ function getStatusIcon(task: ITask, view: TaskView) {
         return null;
     }
     switch (task.status) {
-        case TaskStatus.NOT_AVAILABLE:
+        case TaskStatus.NotAvailable:
             return <NotInterested />;
-        case TaskStatus.TODO:
+        case TaskStatus.Todo:
             return <CropSquare />;
-        case TaskStatus.IN_PROGRESS:
+        case TaskStatus.InProgress:
             return <LoopRounded />;
-        case TaskStatus.DONE:
+        case TaskStatus.Done:
             return <DoneRounded />;
-        case TaskStatus.DONE_BY_USER:
+        case TaskStatus.DoneByUser:
             return <FileDownloadDoneRounded />;
         default:
             null;
@@ -237,48 +231,48 @@ function getBackgroundColor(task: ITask, view: TaskView) {
     if (view === 'upcoming') {
         return grey[200];
     }
-    if (task.status === TaskStatus.NOT_AVAILABLE) return grey[50];
-    if (task.status === TaskStatus.DONE) return green[50];
-    if (task.status === TaskStatus.DONE_BY_USER) return green[50];
+    if (task.status === TaskStatus.NotAvailable) return grey[50];
+    if (task.status === TaskStatus.Done) return green[50];
+    if (task.status === TaskStatus.DoneByUser) return green[50];
     if (task.dateTo.getTime() < new Date().getTime()) return red[50];
-    if (task.status === TaskStatus.TODO) return orange[50];
-    if (task.status === TaskStatus.IN_PROGRESS) return orange[50];
+    if (task.status === TaskStatus.Todo) return orange[50];
+    if (task.status === TaskStatus.InProgress) return orange[50];
     return red[50];
 }
 
 function getPath(
-    task: ITask,
+    task: dto.Task,
     companyId: number | null | undefined,
-    position: IPosition | null | undefined,
+    position: dto.Position | null | undefined,
 ): string {
     switch (task.type) {
-        case TaskType.CREATE_COMPANY:
+        case TaskType.CreateCompany:
             return `/company/${companyId ? companyId : ''}?tab=details&return=true`;
-        case TaskType.FILL_DEPARTMENT_LIST:
+        case TaskType.FillDepartmentList:
             return companyId ? `/company/${companyId || ''}?tab=departments&return=true` : '#';
-        case TaskType.FILL_POSITION_LIST:
+        case TaskType.FillPositionList:
             return '/people?tab=positions&return=true';
-        case TaskType.POST_WORK_SHEET:
+        case TaskType.PostWorkSheet:
             return '/time-sheet?return=true';
-        case TaskType.POST_ACCRUAL_DOCUMENT:
+        case TaskType.PostAccrualDocument:
             return '/payroll?return=true';
-        case TaskType.SEND_APPLICATION_FSS:
+        case TaskType.SendApplicationFss:
             return '/payments?tab=sciPayments&return=true';
-        case TaskType.POST_PAYMENT_FSS:
+        case TaskType.PostPaymentFss:
             return '/payments?tab=sciPayments&return=true';
-        case TaskType.POST_ADVANCE_PAYMENT:
-            return task.status === TaskStatus.TODO
+        case TaskType.PostAdvancePayment:
+            return task.status === TaskStatus.Todo
                 ? '/payments?tab=pay&return=true'
-                : '/payments?tab=payed&return=true';
-        case TaskType.POST_REGULAR_PAYMENT:
-            return task.status === TaskStatus.TODO
+                : '/payments?tab=paid&return=true';
+        case TaskType.PostRegularPayment:
+            return task.status === TaskStatus.Todo
                 ? '/payments?tab=pay&return=true'
-                : '/payments?tab=payed&return=true';
-        case TaskType.CLOSE_PAY_PERIOD:
+                : '/payments?tab=paid&return=true';
+        case TaskType.ClosePayPeriod:
             return companyId ? `/company/${companyId || ''}?tab=periods&return=true` : '#';
-        case TaskType.SEND_INCOME_TAX_REPORT:
+        case TaskType.SendIncomeTaxReport:
             return '/reports?return=true';
-        case TaskType.HAPPY_BIRTHDAY:
+        case TaskType.HappyBirthday:
             return position?.id ? `/people/position/${position?.id}?return=true` : '#';
         default:
             return '#';
@@ -287,12 +281,12 @@ function getPath(
 
 function canMarkAsDone(task: ITask, view: TaskView) {
     if (view === 'upcoming') return false;
-    if (task.status === TaskStatus.NOT_AVAILABLE) return false;
+    if (task.status === TaskStatus.NotAvailable) return false;
     switch (task.type) {
-        case TaskType.FILL_DEPARTMENT_LIST:
-        case TaskType.POST_WORK_SHEET:
-        case TaskType.POST_ACCRUAL_DOCUMENT:
-        case TaskType.HAPPY_BIRTHDAY:
+        case TaskType.FillDepartmentList:
+        case TaskType.PostWorkSheet:
+        case TaskType.PostAccrualDocument:
+        case TaskType.HappyBirthday:
             return true;
     }
     return false;

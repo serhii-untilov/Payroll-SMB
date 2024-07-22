@@ -1,17 +1,8 @@
-import { OmitType, PartialType } from '@nestjs/swagger';
-import { IUpdatePositionHistory } from '@repo/shared';
-import { PositionHistory } from '../entities/position-history.entity';
+import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
+import { PositionHistory } from './../entities/position-history.entity';
+import { CreatePositionHistoryDto } from './create-position-history.dto';
 
-export class UpdatePositionHistoryDto
-    extends PartialType(
-        OmitType(PositionHistory, [
-            'id',
-            'createdDate',
-            'createdUserId',
-            'updatedDate',
-            'updatedUserId',
-            'deletedDate',
-            'deletedUserId',
-        ]),
-    )
-    implements IUpdatePositionHistory {}
+export class UpdatePositionHistoryDto extends IntersectionType(
+    PickType(PositionHistory, ['version']),
+    PartialType(CreatePositionHistoryDto),
+) {}

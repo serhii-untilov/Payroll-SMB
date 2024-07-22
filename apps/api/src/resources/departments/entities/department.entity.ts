@@ -1,19 +1,17 @@
-import { IDepartment } from '@repo/shared';
-import { Logger } from '../../abstract/logger.abstract';
 import {
     AfterLoad,
     Column,
     Entity,
-    JoinColumn,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Company } from '../../companies/entities/company.entity';
+import { Company } from './../../companies/entities/company.entity';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class Department extends Logger implements IDepartment {
+export class Department extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -21,7 +19,6 @@ export class Department extends Logger implements IDepartment {
     name: string;
 
     @ManyToOne(() => Company, (company) => company.departments)
-    @JoinColumn()
     company?: Relation<Company>;
 
     @Column({ type: 'integer' })
@@ -34,7 +31,6 @@ export class Department extends Logger implements IDepartment {
     dateTo: Date;
 
     @ManyToOne(() => Department, (department) => department.childDepartments, { nullable: true })
-    @JoinColumn()
     parentDepartment?: Relation<Department> | null;
 
     @Column({ type: 'integer', nullable: true })

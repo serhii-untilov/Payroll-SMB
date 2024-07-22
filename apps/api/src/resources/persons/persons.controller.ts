@@ -1,10 +1,10 @@
+import { AccessTokenGuard } from '@/guards';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,
     Delete,
     Get,
-    HttpCode,
-    HttpStatus,
     Param,
     ParseIntPipe,
     Patch,
@@ -12,23 +12,36 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
-import { IPerson, deepStringToShortDate } from '@repo/shared';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreatePersonDto } from './dto/create-person.dto';
-import { FindPersonDto } from './dto/find-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { Person } from './entities/person.entity';
 import { PersonsService } from './persons.service';
-import { getUserId } from './../../utils/getUserId';
 
 @Controller('persons')
+@ApiBearerAuth()
 export class PersonsController {
     constructor(private readonly service: PersonsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async create(@Req() req: Request, @Body() payload: CreatePersonDto): Promise<IPerson> {
+    @ApiOperation({ summary: 'Create a Person record' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: Person,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    async create(@Req() req: Request, @Body() payload: CreatePersonDto): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
         return await this.service.create(userId, deepStringToShortDate(payload));
@@ -36,8 +49,12 @@ export class PersonsController {
 
     @Get()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async findAll(@Req() req: Request): Promise<IPerson[]> {
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(Person) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    async findAll(@Req() req: Request): Promise<Person[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId);
         return await this.service.findAll();
@@ -45,8 +62,10 @@ export class PersonsController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
+    @ApiOkResponse({ description: 'The found record', type: Person })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);
         return await this.service.findOne(id);
@@ -54,12 +73,15 @@ export class PersonsController {
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a Person record' })
+    @ApiOkResponse({ description: 'The updated record', type: Person })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Body() payload: UpdatePersonDto,
-    ): Promise<IPerson> {
+    ): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId);
         return await this.service.update(userId, id, deepStringToShortDate(payload));
@@ -67,19 +89,13 @@ export class PersonsController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<IPerson> {
+    @ApiOperation({ summary: 'Soft delete a Person record' })
+    @ApiOkResponse({ description: 'The record has been successfully deleted', type: Person })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId);
         return await this.service.remove(userId, id);
-    }
-
-    @Post('find')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async find(@Req() req: Request, @Body() params: FindPersonDto): Promise<IPerson | null> {
-        const userId = getUserId(req);
-        await this.service.availableFindOneOrFail(userId);
-        return await this.service.findOneBy(params);
     }
 }

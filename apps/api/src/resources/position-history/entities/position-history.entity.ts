@@ -1,3 +1,8 @@
+import { PaymentType } from './../../payment-types/entities/payment-type.entity';
+import { WorkNorm } from './../../work-norms/entities/work-norm.entity';
+import { Job } from './../../jobs/entities/job.entity';
+import { Department } from './../../departments/entities/department.entity';
+import { Position } from './../../positions/entities/position.entity';
 import {
     AfterLoad,
     Column,
@@ -7,16 +12,10 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Position } from '../../positions/entities/position.entity';
-import { Department } from '../../departments/entities/department.entity';
-import { Job } from '../../jobs/entities/job.entity';
-import { WorkNorm } from '../../work-norms/entities/work-norm.entity';
-import { PaymentType } from '../../payment-types/entities/payment-type.entity';
-import { Logger } from '../../abstract/logger.abstract';
-import { IPositionHistory } from '@repo/shared';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class PositionHistory extends Logger implements IPositionHistory {
+export class PositionHistory extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

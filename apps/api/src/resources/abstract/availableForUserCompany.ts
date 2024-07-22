@@ -1,4 +1,4 @@
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType } from './../../types';
 import { AccessService } from '../access/access.service';
 
 export abstract class AvailableForUserCompany {
@@ -18,7 +18,7 @@ export abstract class AvailableForUserCompany {
             userId,
             companyId,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
     }
 
@@ -27,7 +27,7 @@ export abstract class AvailableForUserCompany {
             userId,
             companyId,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
     }
 
@@ -36,7 +36,7 @@ export abstract class AvailableForUserCompany {
             userId,
             companyId,
             this.resourceType,
-            AccessType.CREATE,
+            AccessType.Create,
         );
     }
 
@@ -46,7 +46,7 @@ export abstract class AvailableForUserCompany {
             userId,
             companyId,
             this.resourceType,
-            AccessType.UPDATE,
+            AccessType.Update,
         );
     }
 
@@ -56,7 +56,7 @@ export abstract class AvailableForUserCompany {
             userId,
             companyId,
             this.resourceType,
-            AccessType.DELETE,
+            AccessType.Delete,
         );
     }
 }

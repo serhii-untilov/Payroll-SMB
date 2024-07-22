@@ -1,6 +1,7 @@
 import { Button } from '@/components/layout/Button';
 import { InputLabel } from '@/components/layout/InputLabel';
-import { createPerson, getPersonList } from '@/services/person.service';
+import { personsCreate, personsFindAll } from '@/services/person.service';
+import { invalidateQueries, snackbarError } from '@/utils';
 import {
     Autocomplete,
     Dialog,
@@ -13,9 +14,10 @@ import {
     TextField,
     createFilterOptions,
 } from '@mui/material';
+import { Person, Sex } from '@repo/openapi';
+import { ResourceType } from '@repo/openapi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -27,9 +29,9 @@ export interface Props {
 }
 
 interface OptionType {
-    inputValue?: string;
+    inputValue: string;
     label: string;
-    value: number | null;
+    value: number;
 }
 
 const filter = createFilterOptions<OptionType>();
@@ -54,30 +56,21 @@ export const SelectPerson = (props: Props) => {
         toggleOpen(false);
     };
 
-    const {
-        data: options,
-        isError,
-        error,
-    } = useQuery<OptionType[], Error>({
-        queryKey: ['person', 'SelectPerson'],
-        queryFn: async () => {
-            const personList = await getPersonList();
-            return personList
-                .map((o) => {
-                    return {
-                        inputValue: '',
-                        label: o.fullName || '',
-                        value: o.id,
-                    };
-                })
-                .sort((a, b) => a.label.toUpperCase().localeCompare(b.label.toUpperCase()));
-        },
+    const { data, isError, error } = useQuery<Person[], Error>({
+        queryKey: [ResourceType.Person],
+        queryFn: async () => await personsFindAll(),
     });
 
+    const options = useMemo(() => {
+        return data
+            ?.map((o) => {
+                return { inputValue: '', label: o.fullName || '', value: o.id };
+            })
+            .sort((a, b) => a.label.toUpperCase().localeCompare(b.label.toUpperCase()));
+    }, [data]);
+
     if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
+        snackbarError(`${error.name}\n${error.message}`);
     }
 
     return (
@@ -157,7 +150,7 @@ export const SelectPerson = (props: Props) => {
                                         filtered.push({
                                             inputValue,
                                             label: `${t('Add')} "${inputValue}"`,
-                                            value: null,
+                                            value: 0,
                                         });
                                     }
 
@@ -183,7 +176,7 @@ export const SelectPerson = (props: Props) => {
                                 <form
                                     onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
                                         event.preventDefault();
-                                        const person = await createPerson({
+                                        const person = await personsCreate({
                                             firstName: dialogValue.firstName,
                                             lastName: dialogValue.lastName,
                                             middleName: dialogValue.middleName,
@@ -191,13 +184,10 @@ export const SelectPerson = (props: Props) => {
                                             birthday: dialogValue.birthday
                                                 ? new Date(dialogValue.birthday)
                                                 : null,
-                                            sex: dialogValue.sex,
+                                            sex: dialogValue.sex as Sex,
                                         });
                                         onChange(person.id);
-                                        await queryClient.invalidateQueries({
-                                            queryKey: ['person'],
-                                            refetchType: 'all',
-                                        });
+                                        await invalidateQueries(queryClient, [ResourceType.Person]);
                                         handleClose();
                                     }}
                                 >

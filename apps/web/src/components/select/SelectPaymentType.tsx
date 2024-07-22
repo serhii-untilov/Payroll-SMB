@@ -1,8 +1,9 @@
 import { FormAutocomplete } from '@/components/form/FormAutocomplete';
-import { getPaymentTypeList } from '@/services/paymentType.service';
-import { IPaymentType, IPaymentTypeFilter } from '@repo/shared';
+import { paymentTypesFindAll } from '@/services/paymentType.service';
+import { snackbarError } from '@/utils';
+import { FindAllPaymentTypeDto, PaymentType } from '@repo/openapi';
+import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
 
 interface Props {
     companyId: number | undefined;
@@ -10,7 +11,7 @@ interface Props {
     label?: string;
     id?: string;
     name?: string;
-    filter?: IPaymentTypeFilter;
+    filter?: FindAllPaymentTypeDto;
     autoFocus?: boolean;
     disabled?: boolean;
     sx?: any;
@@ -27,22 +28,16 @@ export function SelectPaymentType({
     disabled,
     // sx,
 }: Props) {
-    const {
-        data: paymentTypeList,
-        isError: isPaymentTypeListError,
-        error: paymentTypeListError,
-    } = useQuery<IPaymentType[], Error>({
-        queryKey: ['paymentType', 'list', { companyId, ...filter }],
+    const { data, isError, error } = useQuery<PaymentType[], Error>({
+        queryKey: [ResourceType.PaymentType, { companyId, ...(filter ?? {}) }],
         queryFn: async () => {
-            return companyId ? await getPaymentTypeList(filter) : [];
+            return companyId ? (await paymentTypesFindAll(filter ?? {})) ?? [] : [];
         },
         enabled: !!companyId,
     });
 
-    if (isPaymentTypeListError) {
-        return enqueueSnackbar(`${paymentTypeListError.name}\n${paymentTypeListError.message}`, {
-            variant: 'error',
-        });
+    if (isError) {
+        snackbarError(`${error.name}\n${error.message}`);
     }
 
     return (
@@ -56,7 +51,7 @@ export function SelectPaymentType({
             id={id || name || ''}
             autoComplete="paymentType"
             options={
-                paymentTypeList?.map((o) => {
+                data?.map((o) => {
                     return { label: o.name, value: o.id };
                 }) ?? []
             }

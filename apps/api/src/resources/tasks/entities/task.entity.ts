@@ -1,21 +1,23 @@
-import { ITask } from '@repo/shared';
-import { Logger } from './../../../resources/abstract/logger.abstract';
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Company } from './../../../resources/companies/entities/company.entity';
+import { Company } from './../../companies/entities/company.entity';
+import { Logger } from './../../abstract/logger.abstract';
+import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { TaskStatus, TaskType } from './../../../types';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
-export class Task extends Logger implements ITask {
+export class Task extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
     @ManyToOne(() => Company, { createForeignKeyConstraints: false })
-    company?: Company;
+    company?: Relation<Company>;
 
     @Column({ type: 'integer' })
     companyId: number;
 
     @Column({ type: 'varchar', length: 30 })
-    type: string; // See enum TaskType
+    @ApiProperty({ enum: TaskType, enumName: 'TaskType' })
+    type: TaskType;
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;
@@ -27,7 +29,8 @@ export class Task extends Logger implements ITask {
     sequenceNumber: number;
 
     @Column({ type: 'varchar', length: 15 })
-    status: string; // See enum TaskStatus
+    @ApiProperty({ enum: TaskStatus, enumName: 'TaskStatus' })
+    status: TaskStatus;
 
     @Column({ type: 'integer', nullable: true })
     entityId: number | null;

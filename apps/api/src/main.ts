@@ -3,6 +3,7 @@ import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import 'reflect-metadata';
 import metadata from './metadata';
 
 async function bootstrap() {
@@ -37,14 +38,11 @@ async function bootstrap() {
     const port = configService.get<number>('app.port') || 3000;
     await app.listen(port);
 
-    logger.log(`Application is running on: http://${host}:${port}`);
-    logger.log(`API is running on: http://${host}:${port}/${globalPrefix}`);
-    logger.log(`Swagger is running on: http://${host}:${port}/${globalPrefix}/${apiVersion}`);
-    logger.log(
-        `Swagger JSON file on: http://${host}:${port}/${globalPrefix}/${apiVersion}/${apiFileName}.json`,
-    );
-    logger.log(
-        `Swagger YAML file on: http://${host}:${port}/${globalPrefix}/${apiVersion}/${apiFileName}.yaml`,
-    );
+    logger.log(`Application: http://${host}:${port}`);
+    logger.log(`API: http://${host}:${port}/${globalPrefix}`);
+    logger.log(`Open API by Swagger:`);
+    logger.log(`http://${host}:${port}/${globalPrefix}/${apiVersion}`);
+    logger.log(`http://${host}:${port}/${globalPrefix}/${apiVersion}/${apiFileName}.json`);
+    logger.log(`http://${host}:${port}/${globalPrefix}/${apiVersion}/${apiFileName}.yaml`);
 }
 bootstrap();

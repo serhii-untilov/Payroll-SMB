@@ -1,16 +1,18 @@
-import { IRole, RoleType } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
+import { RoleType } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Role implements IRole {
+export class Role {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @Column({ type: 'varchar', length: 15, default: RoleType.GUEST })
-    type: string;
+    @Column({ type: 'varchar', length: 15, default: RoleType.Guest })
+    @ApiProperty({ enum: RoleType, enumName: 'RoleType' })
+    type: RoleType;
 
     // @ManyToMany(() => User, (user) => user.roles)
     // users?: User[];

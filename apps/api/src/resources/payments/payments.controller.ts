@@ -1,36 +1,52 @@
+import { Payment } from './entities/payment.entity';
+import { AccessTokenGuard } from '@/guards';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,
     Delete,
-    Get,
     HttpCode,
     HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
+import {
+    ApiBadRequestResponse,
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from './../../guards/accessToken.guard';
 import { CreatePaymentDto } from './dto/create-payment.dto';
+import { FindAllPaymentDto } from './dto/find-all-payment.dto';
+import { FindOnePaymentDto } from './dto/find-one-payment.dto';
+import { ProcessPaymentDto } from './dto/process-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
-import { Payment } from './entities/payment.entity';
+import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
 import { PaymentsService } from './payments.service';
-import { FindPaymentDto } from './dto/find-payment.dto';
-import { getUserId } from './../../utils/getUserId';
 
 @Controller('payments')
+@ApiBearerAuth()
 export class PaymentsController {
     constructor(private readonly service: PaymentsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create payment' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: Payment,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePaymentDto): Promise<Payment> {
         const userId = getUserId(req);
         const companyId = await this.service.getCompanyId(payload.companyId);
@@ -38,23 +54,42 @@ export class PaymentsController {
         return await this.service.create(userId, deepStringToShortDate(payload));
     }
 
-    @Get(':id')
+    @Post('find')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(Payment) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    async findAll(@Req() req: Request, @Body() params: FindAllPaymentDto): Promise<Payment[]> {
+        const userId = getUserId(req);
+        await this.service.availableFindAllOrFail(userId, params.companyId);
+        return await this.service.findAll(deepStringToShortDate(params));
+    }
+
+    @Post('find/:id')
+    @UseGuards(AccessTokenGuard)
+    @ApiOkResponse({ description: 'The found record', type: Payment })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', ParseBoolPipe) relations: boolean,
+        @Body() params: FindOnePaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
-        const found = await this.service.findOne(id, relations);
+        const found = await this.service.findOne(id, params);
         await this.service.availableFindOneOrFail(userId, found.companyId);
         return found;
     }
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update payment' })
+    @ApiOkResponse({ description: 'The updated record', type: Payment })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -67,45 +102,53 @@ export class PaymentsController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Soft delete a payment record' })
+    @ApiOkResponse({ description: 'The record has been successfully deleted', type: Payment })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Payment> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 
-    @Post('find')
-    @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
-    async findAll(@Req() req: Request, @Body() params: FindPaymentDto): Promise<Payment[]> {
-        const userId = getUserId(req);
-        await this.service.availableFindAllOrFail(userId, params.companyId);
-        return await this.service.findAll(deepStringToShortDate(params));
-    }
-
     @Post('process/:id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Process payment' })
+    @ApiOkResponse({
+        description: 'The Payment has been successfully processed',
+        type: Payment,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiBadRequestResponse({ description: 'Bad request' })
     async process(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() params: { version: number },
+        @Body() params: ProcessPaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return this.service.process(userId, id, params.version);
+        return this.service.process(userId, id, params);
     }
 
     @Post('withdraw/:id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Withdraw payment' })
+    @ApiOkResponse({
+        description: 'The Payment has been successfully withdraw',
+        type: Payment,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiBadRequestResponse({ description: 'Bad request' })
     async withdraw(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Body() params: { version: number },
+        @Body() params: WithdrawPaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return this.service.withdraw(userId, id, params.version);
+        return this.service.withdraw(userId, id, params);
     }
 }

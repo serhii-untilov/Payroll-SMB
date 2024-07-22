@@ -3,7 +3,7 @@ import { WorkNormsController } from './work-norms.controller';
 import { WorkNormsService } from './work-norms.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { WorkNorm } from './entities/work-norm.entity';
-import { repositoryMockFactory } from '@repo/testing';
+import { repositoryMockFactory } from 'test';
 import { AccessService } from '../access/access.service';
 import { createMock } from '@golevelup/ts-jest';
 

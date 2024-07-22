@@ -1,8 +1,8 @@
 import { Link } from '@/components/layout/Link';
 import { Loading } from '@/components/utility/Loading';
 import useAuth from '@/hooks/useAuth';
-import { getCurrentUser } from '@/services/auth.service';
-import { capitalizeFirstChar, getPartOfDay } from '@/services/utils';
+import { usersFindCurrent } from '@/services/auth.service';
+import { capitalizeFirstChar, getPartOfDay } from '@/utils';
 import { Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
@@ -22,7 +22,7 @@ export function Greeting() {
     } = useQuery({
         queryKey: ['user', { id: currentUser?.id }],
         queryFn: async () => {
-            return await getCurrentUser();
+            return await usersFindCurrent();
         },
     });
 

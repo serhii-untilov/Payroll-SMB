@@ -1,9 +1,10 @@
-import { IPayFundType } from '@repo/shared';
-import { Logger } from '../../abstract/logger.abstract';
+import { ApiProperty } from '@nestjs/swagger';
+import { PayFundCalcMethod, PayFundGroup } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class PayFundType extends Logger implements IPayFundType {
+export class PayFundType extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -11,10 +12,12 @@ export class PayFundType extends Logger implements IPayFundType {
     name: string;
 
     @Column({ type: 'varchar', length: 30 })
-    group: string; // See enum PayFundGroup
+    @ApiProperty({ enum: PayFundGroup, enumName: 'PayFundGroup' })
+    group: PayFundGroup;
 
     @Column({ type: 'varchar', length: 30 })
-    calcMethod: string; // See enum PayFundCalcMethod
+    @ApiProperty({ enum: PayFundCalcMethod, enumName: 'PayFundCalcMethod' })
+    calcMethod: PayFundCalcMethod;
 
     @Column({ type: 'integer' })
     sequence: number;

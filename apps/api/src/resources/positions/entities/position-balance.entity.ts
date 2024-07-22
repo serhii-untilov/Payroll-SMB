@@ -1,4 +1,3 @@
-import { IPositionBalance } from '@repo/shared';
 import {
     AfterLoad,
     Column,
@@ -11,7 +10,7 @@ import {
 import { Position } from './position.entity';
 
 @Entity()
-export class PositionBalance implements IPositionBalance {
+export class PositionBalance {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

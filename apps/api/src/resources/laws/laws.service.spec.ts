@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { MockType, createMockLaw, repositoryMockFactory } from '@repo/testing';
+import { MockType, createMockLaw, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
 import { Law } from './entities/law.entity';
 import { LawsService } from './laws.service';

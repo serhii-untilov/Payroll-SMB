@@ -1,38 +1,27 @@
-import { ICompany, ICreateCompany, IUpdateCompany } from '@repo/shared';
-import { axiosInstance } from '@/api';
-import authHeader from './auth-header';
+import { api } from '@/api';
+import { CreateCompanyDto, UpdateCompanyDto } from '@repo/openapi';
 
-export async function createCompany(company: ICreateCompany): Promise<ICompany> {
-    const response = await axiosInstance.post(`/api/companies/`, company, {
-        headers: authHeader(),
-    });
-    return response.data;
+export async function companiesCreate(payload: CreateCompanyDto) {
+    return (await api.companiesCreate(payload)).data;
 }
 
-export async function getCompanyList(): Promise<ICompany[]> {
-    const response = await axiosInstance.get(`/api/companies/`, { headers: authHeader() });
-    return response.data.sort((a: ICompany, b: ICompany) =>
-        a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
-    );
+export async function companiesFindAll() {
+    const response = (await api.companiesFindAll()).data;
+    return response.sort((a, b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase()));
 }
 
-export async function getCompany(id: number): Promise<ICompany> {
-    const response = await axiosInstance.get(`/api/companies/${id}`, { headers: authHeader() });
-    return response.data;
+export async function companiesFindOne(id: number) {
+    return (await api.companiesFindOne(id)).data;
 }
 
-export async function updateCompany(id: number, company: IUpdateCompany): Promise<ICompany> {
-    const response = await axiosInstance.patch(`/api/companies/${id}`, company, {
-        headers: authHeader(),
-    });
-    return response.data;
+export async function updateCompany(id: number, payload: UpdateCompanyDto) {
+    return (await api.companiesUpdate(id, payload)).data;
 }
 
-export async function deleteCompany(id: number): Promise<ICompany> {
-    const response = await axiosInstance.delete(`/api/companies/${id}`, { headers: authHeader() });
-    return response.data;
+export async function companiesRemove(id: number) {
+    return (await api.companiesRemove(id)).data;
 }
 
-export async function calculatePayroll(id: number) {
-    await axiosInstance.get(`/api/companies/${id}/calculate-payroll`, { headers: authHeader() });
+export async function companiesSalaryCalculate(id: number) {
+    await api.companiesSalaryCalculate(id);
 }

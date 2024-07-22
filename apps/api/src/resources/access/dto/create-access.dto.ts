@@ -1,7 +1,4 @@
-import { ICreateAccess } from '@repo/shared';
+import { PickType } from '@nestjs/swagger';
+import { Access } from './../entities/access.entity';
 
-export class CreateAccessDto implements ICreateAccess {
-    roleType: string; // See enum RoleType
-    resourceType: string; // See enum ResourceType
-    accessType: string; // See enum AccessType
-}
+export class CreateAccessDto extends PickType(Access, ['roleType', 'resourceType', 'accessType']) {}

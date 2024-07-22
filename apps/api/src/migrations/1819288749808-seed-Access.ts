@@ -1,8 +1,8 @@
-import { ResourceType, RoleType } from '@repo/shared';
+import { ResourceType, RoleType } from '../types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Access } from '../resources/access/entities/access.entity';
-import { getSystemUserId } from '../utils/getSystemUserId';
-import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/access';
+import { Access } from './../resources/access/entities/access.entity';
+import { getSystemUserId } from '../utils/lib/getSystemUserId';
+import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/lib/access';
 
 // Default access rules by Role Type.
 // This table is read only for all role types. Changes for this table available only by migrations.
@@ -11,18 +11,19 @@ import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/access';
 const entity = Access;
 const recordList = [
     // SYSTEM
-    // This role is used to update, migrate, and seed DB only and doesn't have access to any resource through the API.
+    // This role is used to update, migrate, and seed DB only and doesn't have
+    // access to any resource through the API.
 
     // ADMIN
-    ...generateAccess_Full(RoleType.ADMIN, ResourceType.PAYMENT),
+    ...generateAccess_Full(RoleType.Admin, ResourceType.Payment),
     // EMPLOYER
-    ...generateAccess_Full(RoleType.EMPLOYER, ResourceType.PAYMENT),
+    ...generateAccess_Full(RoleType.Employer, ResourceType.Payment),
     // OBSERVER
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.PAYMENT),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.Payment),
     // EMPLOYEE
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.PAYMENT),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.Payment),
     // GUEST
-    ...generateAccess_ReadOnly(RoleType.OBSERVER, ResourceType.PAYMENT),
+    ...generateAccess_ReadOnly(RoleType.Observer, ResourceType.Payment),
 ];
 
 export class Seed1819288749808 implements MigrationInterface {

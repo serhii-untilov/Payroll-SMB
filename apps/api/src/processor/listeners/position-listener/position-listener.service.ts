@@ -1,22 +1,22 @@
-import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@repo/shared';
-import { PositionCreatedEvent } from '../../../resources/positions/events/position-created.event';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
+import { PayFundCalculationService } from '@/processor/pay-fund-calculation/pay-fund-calculation.service';
+import { PaymentCalculationService } from '@/processor/payment-calculation/payment-calculation.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
 import {
+    PositionCreatedEvent,
+    PositionDeletedEvent,
     PositionEvent,
     PositionEventType,
-} from './../../../resources/positions/events/abstract/PositionEvent';
-import { PositionDeletedEvent } from './../../../resources/positions/events/position-deleted.event';
-import { PositionUpdatedEvent } from './../../../resources/positions/events/position-updated.event';
-import { PaymentCalculationService } from './../../paymentCalculation/payment-calculation.service';
-import { PayrollCalculationService } from './../../payrollCalculation/payrollCalculation.service';
-import { SseService } from './../../serverSentEvents/sse.service';
+    PositionUpdatedEvent,
+} from '@/resources';
+import { ServerEvent } from '@/types';
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PositionListenerService {
-    private _logger: Logger = new Logger(PayrollCalculationService.name);
+    private _logger: Logger = new Logger(PositionListenerService.name);
 
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
@@ -51,7 +51,7 @@ export class PositionListenerService {
 
     private async runBatch(event: PositionEvent) {
         try {
-            this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_STARTED });
+            this.sseService.event(event.companyId, { data: ServerEvent.PayrollStarted });
             if (event.type !== PositionEventType.DELETED) {
                 await this.payrollCalculationService.calculatePosition(
                     event.userId,
@@ -71,9 +71,10 @@ export class PositionListenerService {
                 event.companyId,
             );
             await this.taskListService.generate(event.userId, event.companyId);
-            this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_FINISHED });
-        } catch (_e) {
-            this.sseService.event(event.companyId, { data: ServerEvent.PAYROLL_FAILED });
+            this.sseService.event(event.companyId, { data: ServerEvent.PayrollFinished });
+        } catch (e) {
+            this._logger.fatal(`companyId ${event.companyId} ${ServerEvent.PayrollFailed} ${e}`);
+            this.sseService.event(event.companyId, { data: ServerEvent.PayrollFailed });
         }
     }
 }

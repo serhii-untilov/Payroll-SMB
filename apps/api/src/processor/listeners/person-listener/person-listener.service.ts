@@ -1,19 +1,21 @@
+import { PayFundCalculationService } from '@/processor/pay-fund-calculation/pay-fund-calculation.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
+import {
+    PersonCreatedEvent,
+    PersonDeletedEvent,
+    PersonEvent,
+    PersonUpdatedEvent,
+    PositionsService,
+} from '@/resources';
+import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@repo/shared';
-import { PersonCreatedEvent } from '../../../resources/persons/events/person-created.event';
-import { PersonDeletedEvent } from '../../../resources/persons/events/person-deleted.event';
-import { PersonUpdatedEvent } from '../../../resources/persons/events/person-updated.event';
-import { PayFundCalculationService } from '../../payFundCalculation/payFundCalculation.service';
-import { PayrollCalculationService } from '../../payrollCalculation/payrollCalculation.service';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { PersonEvent } from './../../../resources/persons/events/abstract/PersonEvent';
-import { PositionsService } from './../../../resources/positions/positions.service';
-import { SseService } from './../../serverSentEvents/sse.service';
 
 @Injectable()
 export class PersonListenerService {
-    private _logger: Logger = new Logger(PayrollCalculationService.name);
+    private _logger: Logger = new Logger(PersonListenerService.name);
 
     constructor(
         @Inject(forwardRef(() => PositionsService))
@@ -55,7 +57,7 @@ export class PersonListenerService {
             .filter((value, index, array) => array.indexOf(value) === index);
         for (const companyId of companyIds) {
             try {
-                this.sseService.event(companyId, { data: ServerEvent.PAYROLL_STARTED });
+                this.sseService.event(companyId, { data: ServerEvent.PayrollStarted });
                 for (const position of positions.filter((o) => o.companyId === companyId)) {
                     await this.payrollCalculationService.calculatePosition(
                         event.userId,
@@ -71,9 +73,10 @@ export class PersonListenerService {
                     companyId,
                 );
                 await this.taskListService.generate(event.userId, companyId);
-                this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FINISHED });
-            } catch (_e) {
-                this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FAILED });
+                this.sseService.event(companyId, { data: ServerEvent.PayrollFinished });
+            } catch (e) {
+                this._logger.fatal(`companyId ${companyId} ${ServerEvent.PayrollFailed} ${e}`);
+                this.sseService.event(companyId, { data: ServerEvent.PayrollFailed });
             }
         }
     }

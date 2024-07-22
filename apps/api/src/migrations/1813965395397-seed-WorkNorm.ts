@@ -1,9 +1,8 @@
-import { WorkNorm } from './../resources/work-norms/entities/work-norm.entity';
-import { getSystemUserId } from '../utils/getSystemUserId';
+import { WorkNorm, WorkNormPeriod } from './../resources/work-norms/entities';
+import { WorkNormType } from '../types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { langPipe } from '../utils/langPipe';
-import { WorkNormType } from '@repo/shared';
-import { WorkNormPeriod } from '../resources/work-norms/entities/work-norm-period.entity';
+import { getSystemUserId } from '../utils/lib/getSystemUserId';
+import { langPipe } from '../utils/lib/langPipe';
 
 const lang = process.env.LANGUAGE || 'uk';
 const entity = WorkNorm;
@@ -13,7 +12,7 @@ const recordList = [
             en: '5 days, 40 hours per week',
             uk: '5 днів, 40 годин на тиждень',
         },
-        type: WorkNormType.WEEKLY,
+        type: WorkNormType.Weekly,
         dateFrom: '2024-04-22',
         dateTo: '9999-12-31',
 
@@ -33,7 +32,7 @@ const recordList = [
             en: '6 days, 40 hours per week',
             uk: '6 днів, 40 годин на тиждень',
         },
-        type: WorkNormType.WEEKLY,
+        type: WorkNormType.Weekly,
         dateFrom: '2024-04-22',
         dateTo: '9999-12-31',
         workNormPeriod: [
@@ -52,7 +51,7 @@ const recordList = [
             en: '5 days, 35 hours per week',
             uk: '5 днів, 35 годин на тиждень',
         },
-        type: WorkNormType.WEEKLY,
+        type: WorkNormType.Weekly,
         dateFrom: '2024-04-22',
         dateTo: '9999-12-31',
         workNormPeriod: [
@@ -71,7 +70,7 @@ const recordList = [
             en: 'Shifted (one day - work, three days - rest)',
             uk: 'Змінна (один день - робота, три - відпочинок)',
         },
-        type: WorkNormType.SHIFTED,
+        type: WorkNormType.Shifted,
         dateFrom: '2024-04-22',
         dateTo: '9999-12-31',
         workNormPeriod: [

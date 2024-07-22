@@ -1,11 +1,11 @@
+import { PayFundCalculationService } from '@/processor/pay-fund-calculation/pay-fund-calculation.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
+import { PositionsService } from '@/resources';
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PersonListenerService } from './person-listener.service';
-import { PayrollCalculationService } from '../../payrollCalculation/payrollCalculation.service';
-import { createMock } from '@golevelup/ts-jest';
-import { PayFundCalculationService } from '../../payFundCalculation/payFundCalculation.service';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { PositionsService } from './../../../resources/positions/positions.service';
-import { SseService } from './../../serverSentEvents/sse.service';
 
 describe('PersonListenerService', () => {
     let service: PersonListenerService;

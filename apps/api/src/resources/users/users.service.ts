@@ -1,3 +1,4 @@
+import { AccessType, ResourceType, RoleType, WrapperType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -8,19 +9,16 @@ import {
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, IPublicUserData, IUser, ResourceType, RoleType } from '@repo/shared';
 import * as _ from 'lodash';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { RolesService } from '../roles/roles.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, PublicUserDataDto, UpdateUserDto } from './dto';
 import { User } from './entities/user.entity';
-import { WrapperType } from 'src/types/WrapperType';
 
 @Injectable()
 export class UsersService {
-    public readonly resourceType = ResourceType.USER;
+    public readonly resourceType = ResourceType.User;
 
     constructor(
         @InjectRepository(User)
@@ -37,7 +35,7 @@ export class UsersService {
             throw new ConflictException('User already exists.');
         }
         if (!payload.roleId) {
-            payload.roleId = await this.rolesService.findRoleByType(RoleType.EMPLOYER);
+            payload.roleId = await this.rolesService.findRoleByType(RoleType.Employer);
         }
         if (!payload.roleId) {
             throw new BadRequestException(`Role should be defined.`);
@@ -57,9 +55,9 @@ export class UsersService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.CREATE,
+            AccessType.Create,
         );
-        const currentRoleType = await this.getUserRoleTypeOrFail(userId);
+        const currentRoleType = await this.getUserRoleType(userId);
         const newRoleType = await this.rolesService.getRoleType(payload.roleId);
         if (!this.accessService.canOperateRoleType(currentRoleType, newRoleType)) {
             throw new ForbiddenException(`User doesn't have access to the requested operation.`);
@@ -75,13 +73,13 @@ export class UsersService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
         return await this.repository.find(params);
     }
 
-    async findOne(params: FindOneOptions<User>): Promise<User> {
-        return await this.repository.findOneOrFail(params);
+    async findOne(params: FindOneOptions<User>): Promise<User | null> {
+        return await this.repository.findOne(params);
     }
 
     async findOneOrFail(params: FindOneOptions<User>): Promise<User> {
@@ -97,11 +95,11 @@ export class UsersService {
             await this.accessService.availableForUserOrFail(
                 userId,
                 this.resourceType,
-                AccessType.UPDATE,
+                AccessType.Update,
             );
         }
         if (payload?.roleId) {
-            const userRoleType = await this.getUserRoleTypeOrFail(userId);
+            const userRoleType = await this.getUserRoleType(userId);
             const updateRoleType = await this.rolesService.getRoleType(payload.roleId);
             if (userId !== id || userRoleType != updateRoleType) {
                 if (!this.accessService.canOperateRoleType(userRoleType, updateRoleType)) {
@@ -123,10 +121,10 @@ export class UsersService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.DELETE,
+            AccessType.Delete,
         );
         const user = await this.repository.findOneOrFail({ where: { id } });
-        const userRoleType = await this.getUserRoleTypeOrFail(userId);
+        const userRoleType = await this.getUserRoleType(userId);
         const deleteRoleType = await this.rolesService.getRoleType(user.roleId);
         if (userId !== id && !this.accessService.canOperateRoleType(userRoleType, deleteRoleType)) {
             throw new ForbiddenException(`User doesn't have access to the requested operation.`);
@@ -138,12 +136,12 @@ export class UsersService {
         });
     }
 
-    public static toPublic(user: IUser): IPublicUserData {
+    public toPublic(user: User): PublicUserDataDto {
         const publicUser = _.omit(user, ['password', 'refreshToken']);
         return publicUser;
     }
 
-    async getUserRoleType(id: number): Promise<string> {
+    async getUserRoleType(id: number): Promise<RoleType> {
         const user = await this.repository.findOneOrFail({
             where: { id },
             relations: { role: true },
@@ -154,19 +152,11 @@ export class UsersService {
         return user.role.type;
     }
 
-    async getUserRoleTypeOrFail(id: number): Promise<string> {
-        const roleType = await this.getUserRoleType(id);
-        if (!roleType) {
-            throw new ForbiddenException(`User doesn't have access to the requested resource.`);
-        }
-        return roleType;
-    }
-
     async getSystemUserId(): Promise<number> {
         const user = await this.repository.findOneOrFail({
             select: { id: true },
             relations: { role: true },
-            where: { role: { type: RoleType.SYSTEM } },
+            where: { role: { type: RoleType.System } },
         });
         return user.id;
     }

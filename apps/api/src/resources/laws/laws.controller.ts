@@ -1,15 +1,13 @@
+import { AccessTokenGuard } from '@/guards';
+import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import {
-    Controller,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Param,
-    ParseIntPipe,
-    UseGuards,
-} from '@nestjs/common';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { LawsService } from './laws.service';
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    getSchemaPath,
+} from '@nestjs/swagger';
 import { Law } from './entities/law.entity';
+import { LawsService } from './laws.service';
 
 @Controller('laws')
 export class LawsController {
@@ -17,14 +15,20 @@ export class LawsController {
 
     @Get()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(Law) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(): Promise<Law[]> {
         return await this.lawsService.findAll();
     }
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: Law })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(@Param('id', ParseIntPipe) id: number): Promise<Law> {
         return await this.lawsService.findOne(id);
     }

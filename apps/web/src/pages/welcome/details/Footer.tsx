@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Link } from '@/components/layout/Link';
 import { Box, IconButton, SvgIcon, Typography } from '@mui/material';
 

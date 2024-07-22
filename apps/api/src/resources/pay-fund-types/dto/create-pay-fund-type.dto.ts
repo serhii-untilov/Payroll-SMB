@@ -1,9 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ICreatePayFundType } from '@repo/shared';
-export class CreatePayFundTypeDto implements ICreatePayFundType {
-    @ApiProperty() name: string;
-    @ApiProperty() group: string; // See enum PayFundGroup
-    @ApiProperty() calcMethod: string;
-    @ApiProperty() sequence: number;
-    @ApiProperty() description: string;
-}
+import { PayFundType } from './../entities/pay-fund-type.entity';
+import { OmitType } from '@nestjs/swagger';
+
+export class CreatePayFundTypeDto extends OmitType(PayFundType, [
+    'id',
+    'createdDate',
+    'createdUserId',
+    'updatedDate',
+    'updatedUserId',
+    'deletedDate',
+    'deletedUserId',
+    'version',
+]) {}

@@ -1,8 +1,8 @@
-import { ResourceType, RoleType } from '@repo/shared';
+import { ResourceType, RoleType } from '../types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Access } from '../resources/access/entities/access.entity';
-import { generateAccess_ReadOnly } from '../utils/access';
-import { getSystemUserId } from '../utils/getSystemUserId';
+import { Access } from './../resources/access/entities/access.entity';
+import { generateAccess_ReadOnly } from '../utils/lib/access';
+import { getSystemUserId } from '../utils/lib/getSystemUserId';
 
 // Default access rules by Role Type.
 // This table is read only for all role types. Changes for this table available only by migrations.
@@ -11,7 +11,7 @@ import { getSystemUserId } from '../utils/getSystemUserId';
 const entity = Access;
 const recordList = [
     // EMPLOYER
-    ...generateAccess_ReadOnly(RoleType.EMPLOYER, ResourceType.DEMO),
+    ...generateAccess_ReadOnly(RoleType.Employer, ResourceType.Demo),
 ];
 
 export class Seed1817862424920 implements MigrationInterface {

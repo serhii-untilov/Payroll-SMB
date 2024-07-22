@@ -1,18 +1,21 @@
-import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { ResourceType, TaskStatus, TaskType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType, TaskStatus, TaskType, monthBegin, monthEnd } from '@repo/shared';
+import { monthBegin, monthEnd } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
-import { PayPeriodsService } from '../pay-periods/payPeriods.service';
+import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { FindTaskDto } from './dto/find-task.dto';
+import { FindAllTaskDto } from './dto/find-all-task.dto';
+import { FindOneTaskDto } from './dto/find-one-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TasksService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.TASK;
+    public readonly resourceType = ResourceType.Task;
 
     constructor(
         @InjectRepository(Task)
@@ -38,13 +41,13 @@ export class TasksService extends AvailableForUserCompany {
         return created;
     }
 
-    async findAll(payload: FindTaskDto): Promise<Task[]> {
+    async findAll(payload: FindAllTaskDto): Promise<Task[]> {
         const { companyId, onDate, onPayPeriodDate, relations } = payload;
         if (!companyId) {
             return this._generateFakeTaskList();
         }
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOne({
+            ? await this.payPeriodsService.findOneBy({
                   where: {
                       companyId,
                       dateFrom: onPayPeriodDate,
@@ -75,22 +78,18 @@ export class TasksService extends AvailableForUserCompany {
         );
     }
 
-    async findOne(id: number, relations?: boolean): Promise<Task> {
+    async findOne(id: number, params?: FindOneTaskDto) {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: {
-                company: !!relations,
+                company: !!params?.relations,
             },
         });
     }
 
-    async update(userId: number, id: number, payload: UpdateTaskDto): Promise<Task> {
+    async update(userId: number, id: number, payload: UpdateTaskDto) {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,
@@ -123,11 +122,11 @@ export class TasksService extends AvailableForUserCompany {
     private async _generateFakeTaskList(): Promise<Task[]> {
         const dateFrom = monthBegin(new Date());
         const dateTo = monthEnd(dateFrom);
-        const availableTypeList = [TaskType.CREATE_COMPANY];
-        const notAvailableTypeList = [TaskType.FILL_DEPARTMENT_LIST, TaskType.FILL_POSITION_LIST];
+        const availableTypeList = [TaskType.CreateCompany];
+        const notAvailableTypeList = [TaskType.FillDepartmentList, TaskType.FillPositionList];
         const fakeTaskList = [
             ...availableTypeList.map((o) =>
-                Object.assign({ id: 0, type: o, dateFrom, dateTo, status: TaskStatus.TODO }),
+                Object.assign({ id: 0, type: o, dateFrom, dateTo, status: TaskStatus.Todo }),
             ),
             ...notAvailableTypeList.map((o) =>
                 Object.assign({
@@ -135,7 +134,7 @@ export class TasksService extends AvailableForUserCompany {
                     type: o,
                     dateFrom,
                     dateTo,
-                    status: TaskStatus.NOT_AVAILABLE,
+                    status: TaskStatus.NotAvailable,
                 }),
             ),
         ];
@@ -148,19 +147,7 @@ export class TasksService extends AvailableForUserCompany {
 }
 
 function sortedTaskList(list: Task[]): Task[] {
-    return [...list].sort((a, b) =>
-        a.sequenceNumber < b.sequenceNumber
-            ? -1
-            : a.sequenceNumber > b.sequenceNumber
-              ? 1
-              : a.dateTo.getTime() < b.dateTo.getTime()
-                ? -1
-                : a.dateTo.getTime() > b.dateTo.getTime()
-                  ? 1
-                  : a.id < b.id
-                    ? -1
-                    : a.id > b.id
-                      ? 1
-                      : 0,
+    return [...list].sort(
+        (a, b) => a.sequenceNumber - b.sequenceNumber || a.dateTo.getTime() - b.dateTo.getTime(),
     );
 }

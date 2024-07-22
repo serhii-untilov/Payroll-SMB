@@ -1,19 +1,17 @@
+import { PayPeriodCalculationService } from '@/processor/pay-period-calculation/pay-period-calculation.service';
+import { PayFundCalculationService } from '@/processor/pay-fund-calculation/pay-fund-calculation.service';
+import { PaymentCalculationService } from '@/processor/payment-calculation/payment-calculation.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
+import { CompanyCreatedEvent, CompanyDeletedEvent, CompanyUpdatedEvent } from '@/resources';
+import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ServerEvent } from '@repo/shared';
-import { CompanyCreatedEvent } from '../../../resources/companies/events/company-created.event';
-import { PaymentCalculationService } from '../../paymentCalculation/payment-calculation.service';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
-import { CompanyDeletedEvent } from './../../../resources/companies/events/company-deleted.event';
-import { CompanyUpdatedEvent } from './../../../resources/companies/events/company-updated.event';
-import { PayPeriodCalculationService } from './../../payPeriodCalculation/payPeriodCalculation.service';
-import { PayrollCalculationService } from './../../payrollCalculation/payrollCalculation.service';
-import { SseService } from './../../serverSentEvents/sse.service';
 
 @Injectable()
 export class CompanyListenerService {
-    private _logger: Logger = new Logger(PayrollCalculationService.name);
+    private _logger: Logger = new Logger(CompanyListenerService.name);
 
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
@@ -55,19 +53,19 @@ export class CompanyListenerService {
 
     private async runBatch(userId: number, companyId: number) {
         try {
-            this._logger.log(`companyId ${companyId} ${ServerEvent.PAYROLL_STARTED}`);
-            this.sseService.event(companyId, { data: ServerEvent.PAYROLL_STARTED });
+            this._logger.log(`companyId ${companyId} ${ServerEvent.PayrollStarted}`);
+            this.sseService.event(companyId, { data: ServerEvent.PayrollStarted });
             await this.payPeriodCalculationService.fillPeriods(userId, companyId);
             await this.payrollCalculationService.calculateCompany(userId, companyId);
             await this.payFundCalculationService.calculateCompany(userId, companyId);
             await this.paymentCalculationService.calculateCompany(userId, companyId);
             await this.payrollCalculationService.calculateCompanyTotals(userId, companyId);
             await this.taskListService.generate(userId, companyId);
-            this._logger.log(`companyId ${companyId} ${ServerEvent.PAYROLL_FINISHED}`);
-            this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FINISHED });
-        } catch (_e) {
-            this._logger.fatal(`companyId ${companyId} ${ServerEvent.PAYROLL_FAILED}`);
-            this.sseService.event(companyId, { data: ServerEvent.PAYROLL_FAILED });
+            this._logger.log(`companyId ${companyId} ${ServerEvent.PayrollFinished}`);
+            this.sseService.event(companyId, { data: ServerEvent.PayrollFinished });
+        } catch (e) {
+            this._logger.fatal(`companyId ${companyId} ${ServerEvent.PayrollFailed} ${e}`);
+            this.sseService.event(companyId, { data: ServerEvent.PayrollFailed });
         }
     }
 }

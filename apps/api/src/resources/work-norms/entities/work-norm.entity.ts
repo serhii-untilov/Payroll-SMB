@@ -1,18 +1,20 @@
-import { IWorkNorm, WorkNormType } from '@repo/shared';
-import { Logger } from '../../abstract/logger.abstract';
-import { Column, PrimaryGeneratedColumn, OneToMany, Entity, AfterLoad } from 'typeorm';
+import { WorkNormType } from './../../../types';
+import { Column, PrimaryGeneratedColumn, OneToMany, Entity, AfterLoad, Relation } from 'typeorm';
 import { WorkNormPeriod } from './work-norm-period.entity';
+import { Logger } from './../../abstract/logger.abstract';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
-export class WorkNorm extends Logger implements IWorkNorm {
+export class WorkNorm extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @Column({ type: 'varchar', length: 30, default: WorkNormType.WEEKLY })
-    type: string;
+    @Column({ type: 'varchar', length: 30, default: WorkNormType.Weekly })
+    @ApiProperty({ enum: WorkNormType, enumName: 'WorkNormType' })
+    type: WorkNormType;
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;
@@ -23,7 +25,7 @@ export class WorkNorm extends Logger implements IWorkNorm {
     @OneToMany(() => WorkNormPeriod, (workNormPeriod) => workNormPeriod.workNorm, {
         cascade: true,
     })
-    periods?: WorkNormPeriod[];
+    periods?: Relation<WorkNormPeriod>[];
 
     @AfterLoad()
     transform() {

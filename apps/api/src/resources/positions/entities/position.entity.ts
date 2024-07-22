@@ -1,4 +1,6 @@
-import { IPosition } from '@repo/shared';
+import { Company } from './../../companies/entities/company.entity';
+import { Person } from './../../persons/entities/person.entity';
+import { PositionHistory } from './../../position-history/entities/position-history.entity';
 import {
     AfterLoad,
     Column,
@@ -9,14 +11,11 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Logger } from '../../abstract/logger.abstract';
-import { Company } from '../../companies/entities/company.entity';
-import { Person } from '../../persons/entities/person.entity';
-import { PositionHistory } from '../../position-history/entities/position-history.entity';
+import { Logger } from './../../abstract/logger.abstract';
 import { PositionBalance } from './position-balance.entity';
 
 @Entity()
-export class Position extends Logger implements IPosition {
+export class Position extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

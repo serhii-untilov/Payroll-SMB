@@ -1,20 +1,24 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ICreatePayment } from '@repo/shared';
+import { IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { Payment } from './../entities/payment.entity';
 
-export class CreatePaymentDto implements ICreatePayment {
-    @ApiProperty() companyId: number;
-    @ApiProperty() payPeriod: Date;
-    @ApiProperty() accPeriod: Date;
-    @ApiProperty() docNumber?: string;
-    @ApiProperty() docDate?: Date;
-    @ApiProperty() paymentTypeId: number;
-    @ApiProperty() dateFrom?: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
-    @ApiProperty() dateTo?: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
-    @ApiProperty() baseSum?: number;
-    @ApiProperty() deductions?: number;
-    @ApiProperty() paySum?: number;
-    @ApiProperty() funds?: number;
-    @ApiProperty() status?: string; // See enum PaymentStatus
-    @ApiProperty() recordFlags?: number; // See enum RecordFlags
-    @ApiProperty() description?: string;
-}
+export class CreatePaymentDto extends IntersectionType(
+    PickType(Payment, ['companyId', 'paymentTypeId']),
+    PartialType(
+        OmitType(Payment, [
+            'id',
+            'company',
+            'companyId',
+            'paymentType',
+            'paymentTypeId',
+            'paymentPositions',
+            'transform',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+            'version',
+        ]),
+    ),
+) {}

@@ -1,4 +1,4 @@
-import { HoursByDay, IPayroll } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
 import {
     AfterLoad,
     Column,
@@ -8,14 +8,15 @@ import {
     PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Logger } from '../../../resources/abstract/logger.abstract';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
+import { FixedFlags, HoursByDay, RecordFlags, ResourceType } from './../../../types';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
 @Index('IDX_PAYROLL_POSITION_PAY_PERIOD', ['positionId', 'payPeriod'])
 @Index('IDX_PAYROLL_SOURCE_TYPE_ID', ['sourceType', 'sourceId'])
-export class Payroll extends Logger implements IPayroll {
+export class Payroll extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -43,8 +44,9 @@ export class Payroll extends Logger implements IPayroll {
     @Column({ type: 'date' })
     dateTo: Date;
 
-    @Column({ type: 'varchar', length: 10, nullable: true })
-    sourceType: string | null; // See enum ResourceType
+    @Column({ type: 'varchar', length: 10, default: '' })
+    @ApiProperty({ enum: ResourceType, enumName: 'ResourceType' })
+    sourceType: ResourceType;
 
     @Column({ type: 'integer', nullable: true })
     sourceId: number | null;
@@ -83,10 +85,12 @@ export class Payroll extends Logger implements IPayroll {
     mask2: number;
 
     @Column({ type: 'bigint' })
-    recordFlags: number;
+    @ApiProperty({ enum: RecordFlags, default: 0, enumName: 'RecordFlags' })
+    recordFlags: RecordFlags;
 
     @Column({ type: 'bigint', default: 0 })
-    fixedFlags: number;
+    @ApiProperty({ enum: FixedFlags, enumName: 'FixedFlags' })
+    fixedFlags: FixedFlags;
 
     @Column({ type: 'jsonb', nullable: true })
     planHoursByDay: HoursByDay | null;

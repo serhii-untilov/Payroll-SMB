@@ -2,7 +2,8 @@ import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
 import useAppContext from '@/hooks/useAppContext';
-import { deletePosition, getPositions } from '@/services/position.service';
+import { positionsFindAll, positionsRemove } from '@/services/position.service';
+import { invalidateQueries } from '@/utils';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -12,14 +13,16 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { IFindPosition, IPosition, date2view, maxDate } from '@repo/shared';
+import { FindAllPositionDto, Position } from '@repo/openapi';
+import { ResourceType } from '@repo/openapi';
+import { date2view, maxDate } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-export function PositionList(props: IFindPosition) {
+export function PositionList(props: FindAllPositionDto) {
     const { companyId } = props;
     const { t } = useTranslation();
     const queryClient = useQueryClient();
@@ -156,16 +159,10 @@ export function PositionList(props: IFindPosition) {
         },
     ];
 
-    const { data, isError, isLoading, error } = useQuery<IPosition[], Error>({
-        queryKey: ['position', 'list', props],
+    const { data, isError, isLoading, error } = useQuery<Position[], Error>({
+        queryKey: [ResourceType.Position, props],
         queryFn: async () => {
-            return (await getPositions(props)).sort((a, b) =>
-                (Number(a.cardNumber) || 2147483647) < (Number(b.cardNumber) || 2147483647)
-                    ? -1
-                    : (Number(a.cardNumber) || 2147483647) > (Number(b.cardNumber) || 2147483647)
-                      ? 1
-                      : 0,
-            );
+            return await positionsFindAll(props);
         },
         enabled: !!companyId && !!payPeriod,
     });
@@ -190,9 +187,9 @@ export function PositionList(props: IFindPosition) {
 
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
-            await deletePosition(+id);
+            await positionsRemove(+id);
         }
-        await queryClient.invalidateQueries({ queryKey: ['position'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.Position]);
     };
 
     const onPrint = () => {

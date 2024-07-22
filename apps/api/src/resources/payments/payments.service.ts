@@ -1,29 +1,31 @@
 import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    Logger,
-    forwardRef,
-} from '@nestjs/common';
+    AccessService,
+    AvailableForUserCompany,
+    CompaniesService,
+    PayPeriodsService,
+    PaymentPositionsService,
+} from '@/resources';
+import { PaymentStatus, RecordFlags, ResourceType, WrapperType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { BadRequestException, Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaymentStatus, ResourceType, dateUTC, RecordFlags } from '@repo/shared';
+import { dateUTC } from '@repo/shared';
 import { Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
-import { AccessService } from '../access/access.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { FindPaymentDto } from './dto/find-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
+import {
+    CreatePaymentDto,
+    FindAllPaymentDto,
+    FindOnePaymentDto,
+    ProcessPaymentDto,
+    UpdatePaymentDto,
+    WithdrawPaymentDto,
+} from './dto';
 import { Payment } from './entities/payment.entity';
-import { PaymentUpdatedEvent } from './events/payment-updated.event';
-import { PaymentPositionsService } from './payment-positions/payment-positions.service';
-import { PayPeriodsService } from '../pay-periods/payPeriods.service';
-import { WrapperType } from 'src/types/WrapperType';
+import { PaymentUpdatedEvent } from './events';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.PAYMENT;
+    public readonly resourceType = ResourceType.Payment;
     private logger: Logger = new Logger(PaymentsService.name);
 
     constructor(
@@ -35,6 +37,8 @@ export class PaymentsService extends AvailableForUserCompany {
         public paymentPositionsService: WrapperType<PaymentPositionsService>,
         @Inject(forwardRef(() => PayPeriodsService))
         public payPeriodsService: WrapperType<PayPeriodsService>,
+        @Inject(forwardRef(() => CompaniesService))
+        public companiesService: WrapperType<CompaniesService>,
         private eventEmitter: EventEmitter2,
     ) {
         super(accessService);
@@ -45,29 +49,34 @@ export class PaymentsService extends AvailableForUserCompany {
     }
 
     async create(userId: number, payload: CreatePaymentDto): Promise<Payment> {
-        const accPeriod = await this.payPeriodsService.findOne({
+        const { companyId, payPeriod, accPeriod, ...other } = payload;
+        const company = await this.companiesService.findOne(userId, payload.companyId);
+        const accPeriodRecord = await this.payPeriodsService.findOneBy({
             where: {
-                companyId: payload.companyId,
-                dateFrom: payload.accPeriod || payload.payPeriod,
+                companyId,
+                dateFrom: accPeriod ?? payPeriod ?? company.payPeriod,
             },
         });
         const created = await this.repository.save({
-            ...payload,
+            ...other,
+            companyId,
+            payPeriod: payPeriod ?? company.payPeriod,
+            accPeriod: accPeriod ?? payPeriod ?? company.payPeriod,
             docNumber:
                 payload.docNumber ||
-                (await this.getNextDocNumber(payload.companyId, payload.payPeriod)),
+                (await this.getNextDocNumber(payload.companyId, payPeriod ?? company.payPeriod)),
             docDate: payload.docDate || dateUTC(new Date()),
-            dateFrom: payload.dateFrom || accPeriod.dateFrom,
-            dateTo: payload.dateTo || accPeriod.dateTo,
-            status: payload.status || PaymentStatus.DRAFT,
-            recordFlags: payload.recordFlags || RecordFlags.AUTO,
+            dateFrom: payload.dateFrom || accPeriodRecord.dateFrom,
+            dateTo: payload.dateTo || accPeriodRecord.dateTo,
+            status: payload.status || PaymentStatus.Draft,
+            recordFlags: payload.recordFlags || RecordFlags.Auto,
             createdUserId: userId,
             updatedUserId: userId,
         });
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(params: FindPaymentDto): Promise<Payment[]> {
+    async findAll(params: FindAllPaymentDto): Promise<Payment[]> {
         const { companyId, positionId, payPeriod, accPeriod, status, relations } = params;
         if (!companyId) {
             throw new BadRequestException('Should be defined companyId');
@@ -88,34 +97,29 @@ export class PaymentsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(id: number, relations: boolean = false): Promise<Payment> {
+    async findOne(id: number, params?: FindOnePaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({
             where: { id },
-            relations: { company: relations, paymentType: relations },
+            relations: { company: !!params?.relations, paymentType: !!params?.relations },
         });
         return record;
     }
 
-    async findOneBy(params: FindPaymentDto): Promise<Payment | null> {
+    async findOneBy(params: FindAllPaymentDto): Promise<Payment | null> {
         const found = await this.findAll(params);
         return found.length ? found[0] : null;
     }
 
     async update(userId: number, id: number, payload: UpdatePaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,
             updatedUserId: userId,
             updatedDate: new Date(),
         });
-        const updated = await this.repository.findOneOrFail({ where: { id } });
-        return updated;
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: number, id: number): Promise<Payment> {
@@ -166,38 +170,32 @@ export class PaymentsService extends AvailableForUserCompany {
         }
     }
 
-    async process(userId: number, id: number, version: number): Promise<Payment> {
-        const payment = await this.repository.findOneOrFail({
+    async process(userId: number, id: number, payload: ProcessPaymentDto): Promise<Payment> {
+        const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },
         });
-        if (payment.status === PaymentStatus.PAYED) {
-            return payment;
-        }
-        this.logger.log(
-            `process, id: ${id}, version: ${version}, payment.version: ${payment.version}`,
-        );
-        await this.paymentPositionsService.process(userId, payment);
-        await this.update(userId, payment.id, { status: PaymentStatus.PAYED, version });
+        if (record.status === PaymentStatus.Paid) return record;
+        // TODO startTransaction(); {
+        await this.paymentPositionsService.process(userId, record);
+        await this.update(userId, id, { status: PaymentStatus.Paid, version: payload.version });
+        // TODO }
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
         return updated;
     }
 
-    async withdraw(userId: number, id: number, version: number): Promise<Payment> {
-        const payment = await this.repository.findOneOrFail({
+    async withdraw(userId: number, id: number, payload: WithdrawPaymentDto): Promise<Payment> {
+        const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },
         });
-        if (payment.status === PaymentStatus.DRAFT) {
-            return payment;
-        }
-        this.logger.log(
-            `withdraw, id: ${id}, version: ${version}, payment.version: ${payment.version}`,
-        );
+        if (record.status === PaymentStatus.Draft) return record;
+        // TODO startTransaction(); {
         await this.paymentPositionsService.withdraw(id);
-        await this.update(userId, payment.id, { status: PaymentStatus.DRAFT, version });
+        await this.update(userId, id, { status: PaymentStatus.Draft, version: payload.version });
         const updated = await this.repository.findOneOrFail({ where: { id } });
+        // TODO }
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
         return updated;
     }

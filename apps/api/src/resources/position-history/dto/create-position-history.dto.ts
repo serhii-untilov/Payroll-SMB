@@ -1,14 +1,24 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ICreatePositionHistory } from '@repo/shared';
+import { IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { PositionHistory } from './../entities/position-history.entity';
 
-export class CreatePositionHistoryDto implements ICreatePositionHistory {
-    @ApiProperty() positionId: number;
-    @ApiProperty() dateFrom: Date;
-    @ApiProperty() dateTo: Date;
-    @ApiProperty() departmentId?: number | null;
-    @ApiProperty() jobId: number | null;
-    @ApiProperty() workNormId: number;
-    @ApiProperty() paymentTypeId: number;
-    @ApiProperty() wage: number;
-    @ApiProperty() rate: number;
-}
+export class CreatePositionHistoryDto extends IntersectionType(
+    PickType(PositionHistory, ['positionId']),
+    PartialType(
+        OmitType(PositionHistory, [
+            'id',
+            'position',
+            'department',
+            'job',
+            'workNorm',
+            'paymentType',
+            'paymentType',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+            'version',
+        ]),
+    ),
+) {}

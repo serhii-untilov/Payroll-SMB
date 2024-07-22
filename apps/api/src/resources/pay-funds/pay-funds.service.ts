@@ -1,12 +1,12 @@
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-    IPayFundCategoriesTotal,
-    IPayFundGroupsTotal,
+    PayFundCategoriesTotal,
+    PayFundGroupsTotal,
     ResourceType,
     defaultPayFundCategoriesTotal,
     defaultPayFundGroupsTotal,
-} from '@repo/shared';
+} from '@/types';
 import { Between, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -19,7 +19,7 @@ import { PayFund } from './entities/pay-fund.entity';
 
 @Injectable()
 export class PayFundsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.PAY_FUND;
+    public readonly resourceType = ResourceType.PayFund;
 
     constructor(
         @InjectRepository(PayFund)
@@ -120,7 +120,7 @@ export class PayFundsService extends AvailableForUserCompany {
     async payFundPositionPayFundCategories(
         positionId: number,
         payPeriod: Date,
-    ): Promise<IPayFundCategoriesTotal> {
+    ): Promise<PayFundCategoriesTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('pay-fund-type.payFundCategory', 'payFundCategory')
@@ -142,7 +142,7 @@ export class PayFundsService extends AvailableForUserCompany {
     async payFundPositionPayFundGroups(
         positionId: number,
         payPeriod: Date,
-    ): Promise<IPayFundGroupsTotal> {
+    ): Promise<PayFundGroupsTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('payFundType.payFundGroup', 'payFundGroup')
@@ -164,7 +164,7 @@ export class PayFundsService extends AvailableForUserCompany {
     async payFundCompanyPayFundCategories(
         companyId: number,
         payPeriod: Date,
-    ): Promise<IPayFundCategoriesTotal> {
+    ): Promise<PayFundCategoriesTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('payFundType.payFundCategory', 'payFundCategory')
@@ -188,7 +188,7 @@ export class PayFundsService extends AvailableForUserCompany {
     async payFundCompanyPayFundGroups(
         companyId: number,
         payPeriod: Date,
-    ): Promise<IPayFundGroupsTotal> {
+    ): Promise<PayFundGroupsTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('payFundType.payFundGroup', 'payFundGroup')

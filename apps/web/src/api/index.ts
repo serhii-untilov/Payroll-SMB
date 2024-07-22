@@ -1,5 +1,10 @@
 import authHeader from '@/services/auth-header';
-import { getUserRefreshToken, removeUserTokens, saveUserTokens } from '@/services/token.service';
+import {
+    getUserAccessToken,
+    getUserRefreshToken,
+    removeUserTokens,
+    saveUserTokens,
+} from '@/services/token.service';
 import { DefaultApi as PayrollApi } from '@repo/openapi';
 import { deepStringToDate } from '@repo/shared';
 import axios from 'axios';
@@ -23,6 +28,7 @@ export const axiosInstance = axios.create({
     },
 });
 
+export type * as dto from '@repo/openapi';
 export const api = new PayrollApi(undefined, baseURL, axiosInstance);
 
 axiosInstance.interceptors.response.use(
@@ -92,8 +98,15 @@ function getApiError(apiError: ApiError): ApiError {
 
 // Casting dates properly from an API response in typescript
 // https://stackoverflow.com/questions/65692061/casting-dates-properly-from-an-api-response-in-typescript
-
 axiosInstance.interceptors.response.use((originalResponse) => {
     deepStringToDate(originalResponse.data);
     return originalResponse;
+});
+
+axiosInstance.interceptors.request.use((originalRequest) => {
+    const headerToken = getUserAccessToken();
+    if (headerToken) {
+        originalRequest.headers['Authorization'] = `Bearer ${headerToken}`;
+    }
+    return originalRequest;
 });

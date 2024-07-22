@@ -1,16 +1,16 @@
-import { api } from '@/api';
+import { lawsFindAll } from '@/services/law.service';
 import { snackbarError } from '@/utils/snackbar';
 import { Law } from '@repo/openapi';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
 type Result = { data: Law[]; isLoading: boolean };
 
 export function useLawList(): Result {
     const { data, isError, isLoading, error } = useQuery<Law[], Error>({
-        queryKey: [ResourceType.LAW, 'list'],
+        queryKey: [ResourceType.Law],
         queryFn: async () => {
-            return (await api.lawsFindAll()).data || [];
+            return (await lawsFindAll()) ?? [];
         },
     });
     if (isError) {

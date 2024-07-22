@@ -1,19 +1,16 @@
+import { CreateUserDto } from './../resources/users/dto/create-user.dto';
+import { AccessTokenGuard, RefreshTokenGuard } from '@/guards';
+import { getRefreshToken, getUserId } from '@/utils';
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../guards/accessToken.guard';
-import { RefreshTokenGuard } from '../guards/refreshToken.guard';
-import { CreateUserDto } from '../resources/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';
-import { getUserId } from './../utils/getUserId';
-import { getRefreshToken } from './../utils/getRefreshToken';
 
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) {}
 
-    @HttpCode(HttpStatus.OK)
     @Post('register')
     async register(@Body() user: CreateUserDto): Promise<TokensDto> {
         return await this.authService.register(user);
@@ -25,7 +22,6 @@ export class AuthController {
         return await this.authService.login(user);
     }
 
-    @HttpCode(HttpStatus.OK)
     @UseGuards(AccessTokenGuard)
     @Get('logout')
     async logout(@Req() req: Request): Promise<null> {
@@ -33,7 +29,6 @@ export class AuthController {
         return this.authService.logout(userId);
     }
 
-    @HttpCode(HttpStatus.OK)
     @UseGuards(RefreshTokenGuard)
     @Get('refresh')
     refreshTokens(@Req() req: Request) {
@@ -43,7 +38,7 @@ export class AuthController {
     }
 
     @HttpCode(HttpStatus.OK)
-    @Post('preview')
+    @Post('demo')
     async demo(): Promise<AuthDto> {
         return await this.authService.demo();
     }

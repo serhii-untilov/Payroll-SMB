@@ -1,6 +1,6 @@
-import { axiosInstance } from '@/api';
+import { api } from '../api';
 
-export async function getAppTitle(): Promise<string> {
-    const response = await axiosInstance.get('/api/title/');
-    return response.data;
+export async function appGetTitle() {
+    const response = (await api.appGetTitle()).data;
+    return response ?? '';
 }

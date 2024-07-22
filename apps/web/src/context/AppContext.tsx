@@ -1,8 +1,8 @@
 import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
-import { getCompany } from '@/services/company.service';
-import { getCurrentPayPeriodDateFrom } from '@/services/payPeriod.service';
-import { getUserCompanyList } from '@/services/user.service';
+import { companiesFindOne } from '@/services/company.service';
+import { payPeriodsFindCurrent } from '@/services/payPeriod.service';
+import { userCompaniesFindAll } from '@/services/user-companies.service';
 import { defaultTheme } from '@/themes/defaultTheme';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
@@ -12,7 +12,8 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany, IUserCompany, ResourceType, monthBegin } from '@repo/shared';
+import { Company, ResourceType, UserCompany } from '@repo/openapi';
+import { monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
@@ -20,8 +21,8 @@ import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } 
 export type AppContextType = {
     compactView: boolean;
     setCompactView: Dispatch<boolean>;
-    company: ICompany | null | undefined;
-    setCompany: Dispatch<ICompany | null>;
+    company: Company | undefined;
+    setCompany: Dispatch<Company | undefined>;
     theme: ThemeOptions;
     themeMode: string;
     setThemeMode: Dispatch<string>;
@@ -53,8 +54,8 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     const { children } = props;
     const [compactView, setCompactView] = useState(false);
     const wideScreen = useMediaQuery('(min-width:900px)');
-    const [userCompanyList, setUserCompanyList] = useState<IUserCompany[]>([]);
-    const [company, setCompany] = useState<ICompany | null | undefined>(null);
+    const [userCompanyList, setUserCompanyList] = useState<UserCompany[]>([]);
+    const [company, setCompany] = useState<Company | undefined>();
     const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') ?? 'light');
     const { user } = useAuth();
     const { locale } = useLocale();
@@ -72,8 +73,10 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initCompanyList = async () => {
-            const userCompanyList = user?.id ? await getUserCompanyList(user?.id, true) : [];
-            setUserCompanyList(userCompanyList);
+            const response = user?.id
+                ? await userCompaniesFindAll({ userId: user.id, relations: true })
+                : [];
+            setUserCompanyList(response);
         };
         initCompanyList();
     }, [user]);
@@ -84,7 +87,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             if (userCompanyList.length) {
                 const userCompany =
                     userCompanyList.find((o) => o.companyId === companyId) ?? userCompanyList[0];
-                const currentCompany = await getCompany(userCompany.companyId);
+                const currentCompany = await companiesFindOne(userCompany.companyId);
                 setCompany(currentCompany);
                 localStorage.setItem('company', currentCompany.id.toString());
             }
@@ -104,8 +107,12 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initPayPeriod = async () => {
-            const current: Date =
-                (await getCurrentPayPeriodDateFrom(company?.id)) ?? monthBegin(new Date());
+            const currentPayPeriod = company?.id
+                ? await payPeriodsFindCurrent({ companyId: company?.id })
+                : null;
+            const current: Date = currentPayPeriod?.dateFrom
+                ? currentPayPeriod?.dateFrom
+                : monthBegin(new Date());
             const currentPeriodString = localStorage.getItem('currentPayPeriod');
             const lastCurrent: Date = monthBegin(
                 currentPeriodString ? new Date(currentPeriodString) : new Date(),
@@ -144,13 +151,13 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
                     invalidateQueries(queryClient, [
-                        ResourceType.COMPANY,
-                        ResourceType.DEPARTMENT,
-                        ResourceType.PAY_PERIOD,
-                        ResourceType.POSITION,
-                        ResourceType.PERSON,
-                        ResourceType.TASK,
-                        ResourceType.PAYMENT,
+                        ResourceType.Company,
+                        ResourceType.Department,
+                        ResourceType.PayPeriod,
+                        ResourceType.Position,
+                        ResourceType.Person,
+                        ResourceType.Task,
+                        ResourceType.Payment,
                     ]);
                 }
                 setServerEvent(event.data);

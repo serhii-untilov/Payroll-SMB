@@ -2,7 +2,7 @@ import { Button } from '@/components/layout/Button';
 import useAppContext from '@/hooks/useAppContext';
 import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
-import { preview } from '@/services/auth.service';
+import { demo } from '@/services/auth.service';
 import { Box, CssBaseline } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,9 @@ import { Features } from './details/Features';
 import { Footer } from './details/Footer';
 import { Header } from './details/Header';
 import { ScreenshotList } from './details/ScreenshotList';
+
+const LINEAR_GRADIENT =
+    'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)';
 
 function Welcome() {
     const { themeMode } = useAppContext();
@@ -22,7 +25,7 @@ function Welcome() {
     useEffect(() => {}, [themeMode, locale]);
 
     const onClickDemo = async () => {
-        const credentials = await preview();
+        const credentials = await demo();
         await login(credentials);
         navigate('/dashboard');
     };
@@ -50,9 +53,7 @@ function Welcome() {
                         overflow: 'auto',
                         p: [1],
                         background: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? 'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)'
-                                : '',
+                            theme.palette.mode === 'light' ? LINEAR_GRADIENT : '',
                     }}
                 >
                     <Header />

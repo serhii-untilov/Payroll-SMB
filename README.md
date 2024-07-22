@@ -270,8 +270,12 @@ npm i --workspace @repo/api --save-dev @golevelup/ts-jest
 npm i --workspace @repo/api --save-dev webpack-node-externals run-script-webpack-plugin webpack
 npm i --workspace @repo/api --save-dev webpack webpack-cli
 npm i --workspace @repo/api --save @nestjs/event-emitter
-npm i --workspace @repo/api --save-dev tsconfig-paths
 npm i --workspace @repo/api --save-dev @swc/cli @swc/core
+npm i --workspace @repo/api --save-dev tsconfig-paths
+npm i --workspace @repo/api --save typeorm
+npm i --workspace @repo/api --save reflect-metadata
+npm i --workspace @repo/api --save-dev @types/node
+npm i --workspace @repo/api --save-dev supertest
 
 # Init "web" application for front-end
 npm --workspace @repo/web i @tanstack/react-query
@@ -300,6 +304,7 @@ mkdir packages/shared
 npm i --workspace @repo/shared --save sqlite3 ts-loader typeorm
 npm i --workspace @repo/shared --save-dev ts-node typescript
 npm i --workspace @repo/shared --save date-fns
+npm i --workspace @repo/shared --save @repo/openapi
 
 # Init "utils" shared library for common functions
 mkdir packages/utils
@@ -308,7 +313,6 @@ npm i --workspace @repo/shared --save-dev ts-node typescript jest
 
 # Common packages
 npm i @openapitools/openapi-generator-cli -D
-
 
 ```
 
@@ -320,6 +324,8 @@ npx --workspace @repo/api nest generate resource users resources
 npx --workspace @repo/api nest generate resource laws resources
 npx --workspace @repo/api nest generate resource accounting resources
 npx --workspace @repo/api nest generate resource companies resources
+npx --workspace @repo/api nest generate resource userCompanies resources
+npx --workspace @repo/api nest generate resource users resources
 npx --workspace @repo/api nest generate resource locales resources
 npx --workspace @repo/api nest g module auth
 npx --workspace @repo/api nest g controller auth
@@ -443,3 +449,5 @@ openssl rand -base64 60
 - [**React** - Path To A Clean(er) React Architecture](https://profy.dev/article/react-architecture-api-client)
 - [**Shared DTO** - Domain Entities & DTOs](https://profy.dev/article/react-architecture-domain-entities-and-dtos)
 - [**Shared DTO** - A Guide to OpenAPI Code Generation for TypeScript](https://www.stefanwille.com/2021/05/2021-05-30-openapi-code-generator-for-typescript)
+- [**Jest** - Jest with TypeScript and aliased imports (custom paths)](https://dev.to/mliakos/jest-with-typescript-and-aliased-imports-custom-paths-40d4)
+- [**NestJS** - Best Way to Structure Your Directory/Code](https://medium.com/the-crowdlinker-chronicle/best-way-to-structure-your-directory-code-nestjs-a06c7a641401)

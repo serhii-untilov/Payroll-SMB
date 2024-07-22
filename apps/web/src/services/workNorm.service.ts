@@ -1,39 +1,23 @@
-import { IWorkNorm, ICreateWorkNorm, IUpdateWorkNorm } from '@repo/shared';
-import { axiosInstance } from '@/api';
-import authHeader from './auth-header';
+import { api } from '@/api';
+import { CreateWorkNormDto, FindWorkNormDto, UpdateWorkNormDto } from '@repo/openapi';
 
-export async function createWorkNorm(workNorm: ICreateWorkNorm): Promise<IWorkNorm> {
-    const response = await axiosInstance.post(`/api/work-norms/`, workNorm, {
-        headers: authHeader(),
-    });
-    return response.data;
+export async function workNormsCreate(payload: CreateWorkNormDto) {
+    return (await api.workNormsCreate(payload)).data;
 }
 
-export async function getWorkNormList(): Promise<IWorkNorm[]> {
-    const response = await axiosInstance.get(`/api/work-norms/`, { headers: authHeader() });
-    return response.data.sort((a: IWorkNorm, b: IWorkNorm) =>
-        a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
-    );
+export async function workNormsFindAll(params?: FindWorkNormDto) {
+    const response = (await api.workNormsFindAll(params ?? {})).data;
+    return response.sort((a, b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase()));
 }
 
-export async function getWorkNorm(id: number): Promise<IWorkNorm> {
-    const response = await axiosInstance.get(`/api/work-norms/${id}`, { headers: authHeader() });
-    return response.data;
+export async function workNormsFindOne(id: number, params?: FindWorkNormDto) {
+    return (await api.workNormsFindOne(id, params ?? {})).data;
 }
 
-export async function updateWorkNorm(id: number, workNorm: IUpdateWorkNorm): Promise<IWorkNorm> {
-    const response = await axiosInstance.patch(`/api/work-norms/${id}`, workNorm, {
-        headers: authHeader(),
-    });
-    return response.data;
+export async function workNormsUpdate(id: number, payload: UpdateWorkNormDto) {
+    return (await api.workNormsUpdate(id, payload)).data;
 }
 
-export async function deleteWorkNorm(id: number): Promise<IWorkNorm> {
-    const response = await axiosInstance.delete(`/api/work-norms/${id}`, { headers: authHeader() });
-    return response.data;
-}
-
-export async function getDefaultWorkNormId(): Promise<number | null> {
-    const workNormList = await getWorkNormList();
-    return workNormList.length === 1 ? workNormList[0].id : null;
+export async function workNormsRemove(id: number) {
+    return (await api.workNormsRemove(id)).data;
 }

@@ -1,10 +1,11 @@
+import { MinWage } from './entities/min-wage.entity';
+import { AccessTokenGuard } from '@/guards';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,
     Delete,
     Get,
-    HttpCode,
-    HttpStatus,
     Param,
     ParseIntPipe,
     Patch,
@@ -12,22 +13,34 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
+import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
-import { MinWage } from './entities/min-wage.entity';
 import { MinWageService } from './min-wage.service';
-import { deepStringToShortDate } from '@repo/shared';
-import { getUserId } from './../../utils/getUserId';
 
 @Controller('min-wage')
+@ApiBearerAuth()
 export class MinWageController {
     constructor(private readonly service: MinWageService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create a Min Wage record' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: MinWage,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreateMinWageDto): Promise<MinWage> {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
@@ -36,7 +49,11 @@ export class MinWageController {
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(MinWage) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request): Promise<MinWage[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId);
@@ -45,7 +62,9 @@ export class MinWageController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: MinWage })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<MinWage> {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);
@@ -54,7 +73,10 @@ export class MinWageController {
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a Min Wage record' })
+    @ApiOkResponse({ description: 'The updated record', type: MinWage })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -67,7 +89,10 @@ export class MinWageController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Soft delete a Min Wage record' })
+    @ApiOkResponse({ description: 'The record has been successfully deleted', type: MinWage })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<MinWage> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId);

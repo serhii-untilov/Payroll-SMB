@@ -1,81 +1,48 @@
+import { api } from '@/api';
 import {
-    ICreatePosition,
-    IFindPosition,
-    IFindPositionBalance,
-    IPosition,
-    IPositionBalanceExtended,
-    IUpdatePosition,
-} from '@repo/shared';
-import { axiosInstance } from '@/api';
-import authHeader from './auth-header';
+    CreatePositionDto,
+    FindAllPositionBalanceDto,
+    FindAllPositionDto,
+    FindOnePositionDto,
+    FindPositionByPersonDto,
+    UpdatePositionDto,
+} from '@repo/openapi';
+import { MAX_SEQUENCE_NUMBER } from '@repo/shared';
 
-export async function createPosition(position: ICreatePosition): Promise<IPosition> {
-    const response = await axiosInstance.post(`/api/positions/`, position, {
-        headers: authHeader(),
-    });
-    return response.data;
+export async function positionsCreate(payload: CreatePositionDto) {
+    return (await api.positionsCreate(payload)).data;
 }
 
-export async function getPositions(params: IFindPosition): Promise<IPosition[]> {
-    const response = await axiosInstance.post('/api/positions/find', params, {
-        headers: authHeader(),
-    });
-    return response.data;
-}
-
-export async function getPositionsBalance(
-    params: IFindPositionBalance,
-): Promise<IPositionBalanceExtended[]> {
-    const response = await axiosInstance.post('/api/positions/balance', params, {
-        headers: authHeader(),
-    });
-    return response.data;
-}
-
-export async function getPosition(params: {
-    id: number;
-    relations?: boolean;
-    onDate?: Date;
-    onPayPeriodDate?: Date | null | undefined;
-}): Promise<IPosition> {
-    const response = await axiosInstance.get(
-        `/api/positions/${params.id}?relations=${!!params.relations}` +
-            (params.onDate ? `&onDate=${params.onDate}` : '') +
-            (params.onPayPeriodDate ? `&onPayPeriodDate=${params.onPayPeriodDate}` : ''),
-        {
-            headers: authHeader(),
-        },
+export async function positionsFindAll(params: FindAllPositionDto) {
+    const response = (await api.positionsFindAll(params)).data;
+    return response.sort(
+        (a, b) =>
+            (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) -
+            (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
     );
-    return response.data;
 }
 
-export async function updatePosition(id: number, position: IUpdatePosition): Promise<IPosition> {
-    const response = await axiosInstance.patch(`/api/positions/${id}`, position, {
-        headers: authHeader(),
-    });
-    return response.data;
-}
-
-export async function deletePosition(id: number): Promise<IPosition> {
-    const response = await axiosInstance.delete(`/api/positions/${id}`, { headers: authHeader() });
-    return response.data;
-}
-
-export async function getPositionByPersonId(params: {
-    personId: number;
-    companyId: number;
-    relations?: boolean;
-    onDate?: Date;
-    onPayPeriodDate?: Date | null | undefined;
-}): Promise<IPosition> {
-    const response = await axiosInstance.post(
-        `/api/positions/person/${params.personId}?relations=${!!params.relations}` +
-            (params.onDate ? `&onDate=${params.onDate}` : '') +
-            (params.onPayPeriodDate ? `&onPayPeriodDate=${params.onPayPeriodDate}` : ''),
-        { companyId: params.companyId },
-        {
-            headers: authHeader(),
-        },
+export async function positionsFindBalance(params: FindAllPositionBalanceDto) {
+    const response = (await api.positionsFindBalance(params)).data;
+    return response.sort(
+        (a, b) =>
+            (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) -
+            (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
     );
-    return response.data;
+}
+
+export async function positionsFindOne(id: number, params?: FindOnePositionDto) {
+    return (await api.positionsFindOne(id, params ?? {})).data;
+}
+
+export async function positionsUpdate(id: number, payload: UpdatePositionDto) {
+    return (await api.positionsUpdate(id, payload)).data;
+}
+
+export async function positionsRemove(id: number) {
+    return (await api.positionsRemove(id)).data;
+}
+
+export async function positionsFindFirstByPersonId(params: FindPositionByPersonDto) {
+    return (await api.positionsFindFirstByPersonId(params)).data;
 }

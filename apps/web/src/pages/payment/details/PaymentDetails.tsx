@@ -8,16 +8,18 @@ import { SelectPaymentType } from '@/components/select/SelectPaymentType';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import {
-    createPayment,
-    getPayment,
-    processPayment,
-    updatePayment,
-    withdrawPayment,
+    paymentsCreate,
+    paymentsFindOne,
+    paymentsProcess,
+    paymentsUpdate,
+    paymentsWithdraw,
 } from '@/services/payment.service';
-import { getDirtyValues } from '@/services/utils';
+import { getDirtyValues, invalidateQueries, snackbarError } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid, OutlinedInput } from '@mui/material';
-import { IPayment, PaymentGroup, PaymentStatus } from '@repo/shared';
+import { CreatePaymentDto, Payment, UpdatePaymentDto } from '@repo/openapi';
+import { PaymentStatus, ResourceType } from '@repo/openapi';
+import { PaymentGroup } from '@repo/openapi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
@@ -40,10 +42,10 @@ export function PaymentDetails(props: Props) {
 
     useEffect(() => {}, [locale]);
 
-    const { data: payment } = useQuery<Partial<IPayment>, Error>({
-        queryKey: ['payment', { paymentId }],
+    const { data: payment } = useQuery<Payment, Error>({
+        queryKey: [ResourceType.Payment, { paymentId, relations: true }],
         queryFn: async () => {
-            const payment = await getPayment({ id: paymentId, relations: true });
+            const payment = await paymentsFindOne(paymentId, { relations: true });
             return {
                 ...payment,
                 mandatoryPayments: (payment?.deductions || 0) + (payment?.funds || 0),
@@ -100,38 +102,41 @@ export function PaymentDetails(props: Props) {
         if (!payPeriod) return;
         const dirtyValues = getDirtyValues(dirtyFields, data);
         try {
-            const updated = paymentId
-                ? await updatePayment(paymentId, { ...dirtyValues, version: payment?.version })
-                : await createPayment({
-                      ...data,
+            const response = payment
+                ? await paymentsUpdate(paymentId, {
+                      ...(dirtyValues as UpdatePaymentDto),
+                      version: payment.version,
+                  })
+                : await paymentsCreate({
+                      ...(data as CreatePaymentDto),
                       companyId: company.id,
                       payPeriod: payPeriod,
                   });
-            reset(updated);
-            await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
-            setPaymentId(updated.id);
+            reset(response);
+            await invalidateQueries(queryClient, [ResourceType.Payment]);
+            setPaymentId(response.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
-            enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
+            snackbarError(`${error.code}\n${error.message}`);
         }
     };
 
     const onCancel = async () => {
         reset(payment);
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.Payment]);
     };
 
     const onProcess = async () => {
-        if (payment?.id && payment?.version) {
-            await processPayment(payment?.id, payment?.version);
-            await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        if (payment) {
+            await paymentsProcess(payment?.id, { version: payment.version });
+            await invalidateQueries(queryClient, [ResourceType.Payment]);
         }
     };
 
     const onWithdraw = async () => {
-        if (payment?.id && payment?.version) {
-            await withdrawPayment(payment?.id, payment?.version);
-            await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        if (payment) {
+            await paymentsWithdraw(payment.id, { version: payment.version });
+            await invalidateQueries(queryClient, [ResourceType.Payment]);
         }
     };
 
@@ -142,8 +147,8 @@ export function PaymentDetails(props: Props) {
                 <Toolbar
                     onSave={isDirty ? handleSubmit(onSubmit) : 'disabled'}
                     onCancel={isDirty ? onCancel : 'disabled'}
-                    onProcess={payment?.status === PaymentStatus.DRAFT ? onProcess : 'disabled'}
-                    onWithdraw={payment?.status !== PaymentStatus.DRAFT ? onWithdraw : 'disabled'}
+                    onProcess={payment?.status === PaymentStatus.Draft ? onProcess : 'disabled'}
+                    onWithdraw={payment?.status !== PaymentStatus.Draft ? onWithdraw : 'disabled'}
                 />
                 <Grid
                     container
@@ -180,7 +185,7 @@ export function PaymentDetails(props: Props) {
                                     size="small"
                                     fullWidth
                                     name="status"
-                                    value={t(payment?.status || PaymentStatus.DRAFT)}
+                                    value={t(payment?.status || PaymentStatus.Draft)}
                                     type="text"
                                     sx={{ fontWeight: 'bold' }}
                                 />
@@ -194,7 +199,7 @@ export function PaymentDetails(props: Props) {
                                     companyId={company?.id}
                                     control={control}
                                     label={t('Type of Payment')}
-                                    filter={{ groups: [PaymentGroup.PAYMENTS] }}
+                                    filter={{ groups: [PaymentGroup.Payments] }}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={12} lg={6}>
@@ -230,8 +235,8 @@ export function PaymentDetails(props: Props) {
                                     control={control}
                                     name="paySum"
                                     label={t(
-                                        payment?.status === PaymentStatus.PAYED
-                                            ? PaymentStatus.PAYED
+                                        payment?.status === PaymentStatus.Paid
+                                            ? PaymentStatus.Paid
                                             : 'Net Pay',
                                     )}
                                     type="text"

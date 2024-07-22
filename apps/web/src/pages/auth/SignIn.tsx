@@ -3,7 +3,7 @@ import { AppTitle } from '@/components/layout/AppTitle';
 import { Copyright } from '@/components/layout/Copyright';
 import useAuth from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
-import { errorMessage } from '@/services/utils';
+import { errorMessage } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Visibility from '@mui/icons-material/Visibility';
@@ -20,7 +20,7 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Link from '@mui/material/Link';
 import { grey } from '@mui/material/colors';
-import { IAuth } from '@repo/shared';
+import { AuthDto } from '@repo/openapi';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -75,7 +75,7 @@ export default function SignIn() {
         event.preventDefault();
     };
 
-    const onSubmit: SubmitHandler<IAuth> = async (data) => {
+    const onSubmit: SubmitHandler<AuthDto> = async (data) => {
         try {
             await login({ ...data, rememberMe });
             navigate('/dashboard');

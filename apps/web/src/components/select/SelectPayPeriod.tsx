@@ -1,11 +1,10 @@
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getPayPeriodList, getPayPeriodName } from '@/services/payPeriod.service';
+import { usePayPeriodList } from '@/hooks/usePayPeriodList';
+import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { MenuItem, Select, SelectProps } from '@mui/material';
-import { IPayPeriod, monthBegin } from '@repo/shared';
-import { useQuery } from '@tanstack/react-query';
+import { formatDate, monthBegin, toDate } from '@repo/shared';
 import { format, isEqual } from 'date-fns';
-import { enqueueSnackbar } from 'notistack';
 import { useMemo } from 'react';
 
 export type PayPeriodOption = SelectProps<string> & {
@@ -16,22 +15,15 @@ export function SelectPayPeriod(props: PayPeriodOption) {
     const { companyId, ...other } = props;
     const { company, payPeriod, setPayPeriod } = useAppContext();
     const { locale } = useLocale();
-
-    const { data, isError, error } = useQuery<IPayPeriod[], Error>({
-        queryKey: ['payPeriod', 'list', { companyId, payPeriod: company?.payPeriod }],
-        queryFn: async () => await getPayPeriodList(companyId),
-    });
+    const { data, isLoading } = usePayPeriodList({ companyId });
 
     const options = useMemo(() => {
         return data?.map((period: any) => {
             return (
-                <MenuItem
-                    key={format(period.dateFrom, 'yyyy-MM-dd')}
-                    value={format(period.dateFrom, 'yyyy-MM-dd')}
-                >
+                <MenuItem key={formatDate(period.dateFrom)} value={formatDate(period.dateFrom)}>
                     {getPayPeriodName(
-                        period.dateFrom,
-                        period.dateTo,
+                        toDate(period.dateFrom),
+                        toDate(period.dateTo),
                         isEqual(period.dateFrom, company?.payPeriod),
                         locale.dateLocale,
                     )}
@@ -40,10 +32,8 @@ export function SelectPayPeriod(props: PayPeriodOption) {
         });
     }, [data, company, locale.dateLocale]);
 
-    if (isError) {
-        enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
+    if (isLoading) {
+        return null;
     }
 
     return (

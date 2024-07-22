@@ -1,36 +1,49 @@
+import { AccessTokenGuard } from '@/guards';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,
     Delete,
-    Get,
     HttpCode,
     HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
 import { deepStringToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { FindAllTaskDto } from './dto/find-all-task.dto';
+import { FindOneTaskDto } from './dto/find-one-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { TasksService } from './tasks.service';
-import { FindTaskDto } from './dto/find-task.dto';
 import { Task } from './entities/task.entity';
-import { getUserId } from './../../utils/getUserId';
+import { TasksService } from './tasks.service';
 
 @Controller('tasks')
+@ApiBearerAuth()
 export class TasksController {
     constructor(private readonly tasksService: TasksService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create task' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: Task,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreateTaskDto): Promise<Task> {
         const userId = getUserId(req);
         await this.tasksService.availableCreateOrFail(userId, payload.companyId);
@@ -40,30 +53,41 @@ export class TasksController {
     @Post('find')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
-    async findAll(@Req() req: Request, @Body() payload: FindTaskDto): Promise<Task[]> {
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(Task) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    async findAll(@Req() req: Request, @Body() payload: FindAllTaskDto): Promise<Task[]> {
         const userId = getUserId(req);
         payload.companyId &&
             (await this.tasksService.availableFindAllOrFail(userId, payload.companyId));
         return await this.tasksService.findAll(deepStringToShortDate(payload));
     }
 
-    @Get(':id')
+    @Post('find/:id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: Task })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
-    ): Promise<Task> {
+        @Body() params?: FindOneTaskDto,
+    ) {
         const userId = getUserId(req);
-        const found = await this.tasksService.findOne(id, !!relations);
+        const found = await this.tasksService.findOne(id, params);
         await this.tasksService.availableFindAllOrFail(userId, found.companyId);
         return found;
     }
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a task' })
+    @ApiOkResponse({ description: 'The updated record', type: Task })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -76,7 +100,10 @@ export class TasksController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Soft delete a task' })
+    @ApiOkResponse({ description: 'The record has been successfully deleted', type: Task })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Task> {
         const userId = getUserId(req);
         await this.tasksService.availableDeleteOrFail(userId, id);

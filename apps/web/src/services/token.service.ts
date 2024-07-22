@@ -1,12 +1,12 @@
-import { ITokens } from '@repo/shared';
+import { TokensDto } from '@repo/openapi';
 
-export const getUserTokens = (): ITokens | null => {
+export const getUserTokens = (): TokensDto | null => {
     const userStr = localStorage.getItem('user');
     if (userStr) return JSON.parse(userStr);
     return null;
 };
 
-export function saveUserTokens(tokens: ITokens) {
+export function saveUserTokens(tokens: TokensDto) {
     localStorage.setItem('user', JSON.stringify(tokens));
 }
 

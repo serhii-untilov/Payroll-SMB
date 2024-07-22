@@ -3,7 +3,6 @@ import { PageTitle } from '@/components/layout/PageTitle';
 import { Tab } from '@/components/layout/Tab';
 import { TabPanel } from '@/components/layout/TabPanel';
 import { Tabs } from '@/components/layout/Tabs';
-import { Loading } from '@/components/utility/Loading';
 import { useCompany } from '@/hooks/useCompany';
 import useLocale from '@/hooks/useLocale';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
@@ -35,7 +34,8 @@ export default function Company() {
     }, [data, t]);
 
     if (isLoading) {
-        return <Loading />;
+        // return <Loading />;
+        return null;
     }
 
     const handleChange = (_event: SyntheticEvent, newValue: number) => {

@@ -1,23 +1,21 @@
-import { api } from '@/api';
+import { payPeriodsFindAll } from '@/services/payPeriod.service';
 import { snackbarError } from '@/utils/snackbar';
-import { PayPeriod } from '@repo/openapi';
+import { FindAllPayPeriodDto, PayPeriod } from '@repo/openapi';
+import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
-type Params = { companyId: number | null | undefined; relations: boolean; fullFieldList: boolean };
 type Result = { data: PayPeriod[]; isLoading: boolean };
 
-export function usePayPeriodList(params: Params): Result {
+export function usePayPeriodList(params: Partial<FindAllPayPeriodDto>): Result {
     const companyId = Number(params.companyId);
-    const { relations, fullFieldList } = params;
     const { data, isError, isLoading, error } = useQuery<PayPeriod[], Error>({
-        queryKey: ['payPeriod', 'list', { companyId, relations: true, fullFieldList: true }],
+        queryKey: [ResourceType.PayPeriod, { ...params, companyId }],
         queryFn: async () => {
-            return (await api.payPeriodsFindAll(companyId, relations, fullFieldList)).data;
+            return params?.companyId ? await payPeriodsFindAll({ ...params, companyId }) : [];
         },
-        enabled: !!companyId,
     });
     if (isError) {
         snackbarError(`${error.name}\n${error.message}`);
     }
-    return { data: data || [], isLoading };
+    return { data: data ?? [], isLoading };
 }

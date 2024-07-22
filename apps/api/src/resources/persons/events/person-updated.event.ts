@@ -1,4 +1,4 @@
-import { PersonEvent, PersonEventType } from './abstract/PersonEvent';
+import { PersonEvent, PersonEventType } from './abstract/person-event';
 
 export class PersonUpdatedEvent extends PersonEvent {
     constructor(userId: number, id: number) {

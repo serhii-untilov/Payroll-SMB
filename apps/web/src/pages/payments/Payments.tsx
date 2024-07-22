@@ -8,7 +8,7 @@ import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { Box, Grid } from '@mui/material';
-import { PaymentStatus } from '@repo/shared';
+import { PaymentStatus } from '@repo/openapi';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
@@ -54,7 +54,7 @@ export default function Payments() {
                 >
                     <Tabs id="payments__tabs" value={tab} onChange={handleChange}>
                         <Tab label={t('To Pay')} />
-                        <Tab label={t('Payed')} />
+                        <Tab label={t('Paid')} />
                         <Tab label={t('Company Payments')} />
                         <Tab label={t(`SCI Payments`)} />
                         <Tab label={t(`All`)} />
@@ -65,7 +65,7 @@ export default function Payments() {
                             <PaymentList
                                 companyId={company?.id}
                                 payPeriod={payPeriod || new Date()}
-                                status={PaymentStatus.DRAFT}
+                                status={PaymentStatus.Draft}
                                 companyPayments={true}
                                 sifPayments={true}
                             />
@@ -76,7 +76,7 @@ export default function Payments() {
                             <PaymentList
                                 companyId={company?.id}
                                 payPeriod={payPeriod || new Date()}
-                                status={PaymentStatus.PAYED}
+                                status={PaymentStatus.Paid}
                                 companyPayments={true}
                                 sifPayments={true}
                             />
@@ -122,6 +122,6 @@ function getTabIndex(tabName: string | null): number {
     if (!tabName) {
         return 0;
     }
-    const map = { pay: 0, payed: 1, companyPayments: 2, sciPayments: 3, all: 4 };
+    const map = { pay: 0, paid: 1, companyPayments: 2, sciPayments: 3, all: 4 };
     return map[tabName];
 }

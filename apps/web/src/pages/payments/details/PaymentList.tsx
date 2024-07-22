@@ -1,7 +1,7 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
-import { deletePayment, getPayments } from '@/services/payment.service';
-import { sumFormatter } from '@/services/utils';
+import { paymentsFindAll, paymentsRemove } from '@/services/payment.service';
+import { invalidateQueries, snackbarError, sumFormatter } from '@/utils';
 import {
     GridCellParams,
     GridColDef,
@@ -10,21 +10,14 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import {
-    CalcMethod,
-    IFindPayment,
-    IPayment,
-    PaymentStatus,
-    date2view,
-    dateUTC,
-} from '@repo/shared';
+import { FindAllPaymentDto, Payment } from '@repo/openapi';
+import { CalcMethod, PaymentStatus, ResourceType } from '@repo/openapi';
+import { date2view, dateUTC } from '@repo/shared';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { enqueueSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-type Props = IFindPayment & {
+type Props = FindAllPaymentDto & {
     companyPayments: boolean;
     sifPayments: boolean;
 };
@@ -121,31 +114,30 @@ export function PaymentList(props: Props) {
         },
     ];
 
-    const { data, isError, error } = useQuery<IPayment[], Error>({
-        queryKey: ['payment', 'list', props],
+    const queryKey = useMemo(() => {
+        return {
+            relations: true,
+            companyId,
+            payPeriod,
+            ...(status ? { status } : {}),
+        };
+    }, [companyId, payPeriod, status]);
+
+    const { data, isError, error } = useQuery<Payment[], Error>({
+        queryKey: [ResourceType.Payment, queryKey],
         queryFn: async () => {
-            return (
-                await getPayments({
-                    relations: true,
-                    companyId,
-                    payPeriod,
-                    ...(status ? { status } : {}),
-                })
-            ).filter(
+            const response = companyId && payPeriod ? (await paymentsFindAll(queryKey)) ?? [] : [];
+            return response.filter(
                 (o) =>
                     (props.companyPayments &&
-                        o.paymentType?.calcMethod !== CalcMethod.SIF_PAYMENT) ||
-                    (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SIF_PAYMENT),
+                        o.paymentType?.calcMethod !== CalcMethod.SifPayment) ||
+                    (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SifPayment),
             );
         },
-        enabled: !!companyId && !!payPeriod,
+        enabled: !!queryKey,
     });
 
-    if (isError) {
-        return enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
-    }
+    if (isError) snackbarError(`${error.name}\n${error.message}`);
 
     const onAddPayment = () => {
         console.log('onEditPayment');
@@ -158,11 +150,11 @@ export function PaymentList(props: Props) {
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
             const payment = data?.find((o) => o.id === Number(id));
-            if (payment?.status === PaymentStatus.DRAFT) {
-                await deletePayment(+id);
+            if (payment?.status === PaymentStatus.Draft) {
+                await paymentsRemove(+id);
             }
         }
-        await queryClient.invalidateQueries({ queryKey: ['payment'], refetchType: 'all' });
+        await invalidateQueries(queryClient, [ResourceType.Payment]);
     };
 
     const onPrint = () => {
@@ -176,13 +168,13 @@ export function PaymentList(props: Props) {
     const getRowStatus = (params: any): string => {
         return params.row?.deletedDate
             ? 'Deleted'
-            : params.row?.status === PaymentStatus.PAYED
+            : params.row?.status === PaymentStatus.Paid
               ? 'Normal'
               : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
                 ? 'Overdue'
-                : params.row?.status === PaymentStatus.SUBMITTED
+                : params.row?.status === PaymentStatus.Submitted
                   ? 'Todo'
-                  : params.row?.status === PaymentStatus.ACCEPTED
+                  : params.row?.status === PaymentStatus.Accepted
                     ? 'Overdue'
                     : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
                       ? 'Todo'

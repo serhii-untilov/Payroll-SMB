@@ -1,6 +1,7 @@
-import { AccountingType } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
+import { AccountingType } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Logger } from '../../../resources/abstract/logger.abstract';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
 export class Accounting extends Logger {
@@ -13,7 +14,8 @@ export class Accounting extends Logger {
     @Column({
         type: 'varchar',
         length: 15,
-        default: AccountingType.GENERIC,
+        default: AccountingType.Generic,
     })
-    type: string;
+    @ApiProperty({ enum: AccountingType, enumName: 'AccountingType' })
+    type: AccountingType;
 }

@@ -1,18 +1,22 @@
-import { IAccess } from '@repo/shared';
-import { Logger } from '../../../resources/abstract/logger.abstract';
+import { ApiProperty } from '@nestjs/swagger';
+import { AccessType, ResourceType, RoleType } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class Access extends Logger implements IAccess {
+export class Access extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
     @Column({ type: 'varchar', length: 20 })
-    roleType: string; // See enum RoleType
+    @ApiProperty({ enum: RoleType, enumName: 'RoleType' })
+    roleType: RoleType;
 
     @Column({ type: 'varchar', length: 20 })
-    resourceType: string; // See enum ResourceType
+    @ApiProperty({ enum: ResourceType, enumName: 'ResourceType' })
+    resourceType: ResourceType;
 
     @Column({ type: 'varchar', length: 20 })
-    accessType: string; // See enum AccessType
+    @ApiProperty({ enum: AccessType, enumName: 'AccessType' })
+    accessType: AccessType;
 }

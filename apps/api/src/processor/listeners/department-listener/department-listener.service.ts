@@ -1,16 +1,17 @@
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
+import {
+    DepartmentCreatedEvent,
+    DepartmentDeletedEvent,
+    DepartmentUpdatedEvent,
+} from '@/resources';
+import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { DepartmentCreatedEvent } from '../../../resources/departments/events/department-created.event';
-import { DepartmentDeletedEvent } from '../../../resources/departments/events/department-deleted.event';
-import { DepartmentUpdatedEvent } from '../../../resources/departments/events/department-updated.event';
-import { PayrollCalculationService } from '../../payrollCalculation/payrollCalculation.service';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { SseService } from './../../serverSentEvents/sse.service';
-import { ServerEvent } from '@repo/shared';
 
 @Injectable()
 export class DepartmentListenerService {
-    private _logger: Logger = new Logger(PayrollCalculationService.name);
+    private _logger: Logger = new Logger(DepartmentListenerService.name);
 
     constructor(
         @Inject(forwardRef(() => TaskGenerationService))
@@ -39,11 +40,12 @@ export class DepartmentListenerService {
 
     private async runBatch(userId: number, companyId: number) {
         try {
-            this.sseService.event(companyId, { data: ServerEvent.TASKLIST_STARTED });
+            this.sseService.event(companyId, { data: ServerEvent.TasklistStarted });
             await this.taskListService.generate(userId, companyId);
-            this.sseService.event(companyId, { data: ServerEvent.TASKLIST_FINISHED });
-        } catch (_e) {
-            this.sseService.event(companyId, { data: ServerEvent.TASKLIST_FAILED });
+            this.sseService.event(companyId, { data: ServerEvent.TasklistFinished });
+        } catch (e) {
+            this._logger.fatal(`companyId ${companyId} ${ServerEvent.TasklistFailed} ${e}`);
+            this.sseService.event(companyId, { data: ServerEvent.TasklistFailed });
         }
     }
 }

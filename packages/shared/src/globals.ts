@@ -1,0 +1,1 @@
+export const MAX_SEQUENCE_NUMBER = 2147483647;

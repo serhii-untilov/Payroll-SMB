@@ -1,3 +1,6 @@
+import { PayFund } from './entities/pay-fund.entity';
+import { AccessTokenGuard } from '@/guards';
+import { getUserId } from '@/utils';
 import {
     BadRequestException,
     Body,
@@ -15,23 +18,36 @@ import {
     Req,
     UseGuards,
 } from '@nestjs/common';
+import {
+    ApiBadRequestResponse,
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiOperation,
+    getSchemaPath,
+} from '@nestjs/swagger';
+import { deepStringToShortDate } from '@repo/shared';
+import { Request } from 'express';
 import { CreatePayFundDto } from './dto/create-pay-fund.dto';
+import { FindPayFundDto } from './dto/find-pay-fund.dto';
 import { UpdatePayFundDto } from './dto/update-pay-fund.dto';
 import { PayFundsService } from './pay-funds.service';
-import { AccessTokenGuard } from '../../guards/accessToken.guard';
-import { Request } from 'express';
-import { deepStringToShortDate } from '@repo/shared';
-import { PayFund } from './entities/pay-fund.entity';
-import { FindPayFundDto } from './dto/find-pay-fund.dto';
-import { getUserId } from './../../utils/getUserId';
 
 @Controller('fund')
+@ApiBearerAuth()
 export class PayFundsController {
     constructor(private readonly service: PayFundsService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Create a Pay Fund record' })
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created',
+        type: PayFund,
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePayFundDto): Promise<PayFund> {
         const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(payload.positionId);
@@ -41,7 +57,11 @@ export class PayFundsController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(PayFund) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -54,7 +74,9 @@ export class PayFundsController {
 
     @Patch(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'The found record', type: PayFund })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
@@ -67,16 +89,25 @@ export class PayFundsController {
 
     @Delete(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Update a Pay Fund record' })
+    @ApiOkResponse({ description: 'The updated record', type: PayFund })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<PayFund> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 
-    @Post('find-all')
+    @Post('find')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({
+        description: 'The found records',
+        schema: { type: 'array', items: { $ref: getSchemaPath(PayFund) } },
+    })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiBadRequestResponse({ description: 'Bad request' })
     async findAll(@Req() req: Request, @Body() params: FindPayFundDto): Promise<PayFund[]> {
         const userId = getUserId(req);
         if (params.companyId) {

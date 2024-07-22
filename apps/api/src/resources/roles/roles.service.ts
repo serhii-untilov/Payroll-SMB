@@ -1,16 +1,16 @@
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
+import { AccessType, ResourceType, RoleType } from '@/types';
 import { FindManyOptions, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
-import { WrapperType } from 'src/types/WrapperType';
+import { WrapperType } from '@/types';
 
 @Injectable()
 export class RolesService {
-    public readonly resourceType = ResourceType.ROLE;
+    public readonly resourceType = ResourceType.Role;
 
     constructor(
         @InjectRepository(Role)
@@ -23,7 +23,7 @@ export class RolesService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.CREATE,
+            AccessType.Create,
         );
         const existing = await this.repository.findOne({ where: { name: payload.name } });
         if (existing) {
@@ -40,7 +40,7 @@ export class RolesService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
         return await this.repository.find(params);
     }
@@ -49,7 +49,7 @@ export class RolesService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
         return await this.repository.findOneOrFail({ where: { id } });
     }
@@ -58,7 +58,7 @@ export class RolesService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.UPDATE,
+            AccessType.Update,
         );
         await this.repository.findOneOrFail({ where: { id } });
         return await this.repository.save({
@@ -73,7 +73,7 @@ export class RolesService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.DELETE,
+            AccessType.Delete,
         );
         await this.repository.findOneOrFail({ where: { id } });
         return await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
@@ -84,7 +84,7 @@ export class RolesService {
         return role.type;
     }
 
-    async findRoleByType(type: string): Promise<number> {
+    async findRoleByType(type: RoleType): Promise<number> {
         const role = await this.repository.findOneOrFail({ where: { type } });
         return role.id;
     }

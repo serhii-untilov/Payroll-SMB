@@ -1,48 +1,45 @@
 import { Link } from '@/components/layout/Link';
 import useAppContext from '@/hooks/useAppContext';
+import { useCurrentPayPeriod } from '@/hooks/useCurrentPayPeriod';
 import useLocale from '@/hooks/useLocale';
-import { getCurrentPayPeriod, getPayPeriodName } from '@/services/payPeriod.service';
-import { capitalizeFirstChar, sumFormatter } from '@/services/utils';
+import { capitalizeFirstChar, getPayPeriodName, sumFormatter } from '@/utils';
 import { Grid, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
 import { sub } from 'date-fns';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export function Summary() {
     const { company } = useAppContext();
     const { locale } = useLocale();
     const { t } = useTranslation();
-
-    const { data: payPeriod } = useQuery({
-        queryKey: [
-            'payPeriod',
-            'current',
-            { companyId: company?.id, payPeriod: company?.payPeriod },
-        ],
-        queryFn: async () => {
-            return company?.id ? await getCurrentPayPeriod(company.id, true, true) : null;
-        },
+    const { data: currentPayPeriod } = useCurrentPayPeriod({
+        companyId: company?.id,
+        relations: true,
+        fullFieldList: true,
     });
 
-    const formatUpdatedDate = (date: Date): string => {
-        let hours = '' + date.getHours();
-        let minutes = '' + date.getMinutes();
-        const month = '' + (date.getMonth() + 1);
-        const day = '' + date.getDate();
-        const year = date.getFullYear();
+    const payrollCalculatedDate = useMemo(() => {
+        const formatUpdatedDate = (date: Date): string => {
+            let hours = '' + date.getHours();
+            let minutes = '' + date.getMinutes();
+            const month = '' + (date.getMonth() + 1);
+            const day = '' + date.getDate();
+            const year = date.getFullYear();
 
-        if (hours.length < 2) hours = '0' + hours;
-        if (minutes.length < 2) minutes = '0' + minutes;
+            if (hours.length < 2) hours = '0' + hours;
+            if (minutes.length < 2) minutes = '0' + minutes;
 
-        const d = new Date(date);
-        if (d.setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)) {
-            return `${t('today at')} ${hours}:${minutes} `;
-        }
-        if (d.setHours(0, 0, 0, 0) === sub(new Date(), { days: 1 }).setHours(0, 0, 0, 0)) {
-            return `${t('yesterday at')} ${hours}:${minutes} `;
-        }
-        return `${day}-${month}-${year} ${t('at')} ${hours}:${minutes} `;
-    };
+            const d = new Date(date);
+            if (d.setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)) {
+                return `${t('today at')} ${hours}:${minutes} `;
+            }
+            if (d.setHours(0, 0, 0, 0) === sub(new Date(), { days: 1 }).setHours(0, 0, 0, 0)) {
+                return `${t('yesterday at')} ${hours}:${minutes} `;
+            }
+            return `${day}-${month}-${year} ${t('at')} ${hours}:${minutes} `;
+        };
+        return currentPayPeriod?.updatedDate ? formatUpdatedDate(currentPayPeriod.updatedDate) : '';
+    }, [currentPayPeriod, t]);
 
     return (
         <Grid container flexDirection="row">
@@ -63,7 +60,7 @@ export function Summary() {
                                 </Link>
                             </Grid>
                         )}
-                        {payPeriod?.dateTo && (
+                        {currentPayPeriod?.dateTo && (
                             <Grid item>
                                 <Link to={`/company/${company.id}?tab=periods&return=true`}>
                                     <Typography sx={{ display: 'inline' }}>
@@ -75,8 +72,8 @@ export function Summary() {
                                     >
                                         {capitalizeFirstChar(
                                             getPayPeriodName(
-                                                payPeriod.dateFrom,
-                                                payPeriod.dateTo,
+                                                currentPayPeriod.dateFrom,
+                                                currentPayPeriod.dateTo,
                                                 false,
                                                 locale.dateLocale,
                                                 'LLLL y',
@@ -128,26 +125,24 @@ export function Summary() {
                     sx={{ alignItems: { xs: 'start', lg: 'end' } }}
                 >
                     <Grid item>
-                        {payPeriod?.updatedDate && (
+                        {currentPayPeriod?.updatedDate && (
                             <Link to={'/payroll?tab=payroll&return=true'}>
                                 <Typography sx={{ textAlign: 'end', display: 'inline' }}>
                                     {t('Calculation was completed')}:{' '}
                                 </Typography>{' '}
                                 <Typography
                                     sx={{
-                                        // textAlign: 'end',
                                         display: 'inline',
                                         fontWeight: 'medium',
                                     }}
                                 >
-                                    {/* {formatDateTime(payPeriod.updatedDate, locale.dateLocale)} */}
-                                    {formatUpdatedDate(payPeriod.updatedDate)}
+                                    {payrollCalculatedDate}
                                 </Typography>
                             </Link>
                         )}
                     </Grid>
                     <Grid item>
-                        {payPeriod?.updatedDate && (
+                        {currentPayPeriod?.updatedDate && (
                             <Link to={'/payroll?tab=payroll&return=true'}>
                                 <Typography
                                     sx={{
@@ -166,7 +161,8 @@ export function Summary() {
                                     }}
                                 >
                                     {sumFormatter(
-                                        Number(payPeriod.accruals) + Number(payPeriod.funds),
+                                        Number(currentPayPeriod.accruals) +
+                                            Number(currentPayPeriod.funds),
                                         false,
                                     )}
                                 </Typography>

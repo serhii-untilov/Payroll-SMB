@@ -1,10 +1,21 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ICreateWorkNorm } from '@repo/shared';
+import { IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { WorkNorm } from './../entities/work-norm.entity';
 
-export class CreateWorkNormDto implements ICreateWorkNorm {
-    @ApiProperty() id: number;
-    @ApiProperty() name: string;
-    @ApiProperty() type: string;
-    @ApiProperty() dateFrom: Date;
-    @ApiProperty() dateTo: Date;
-}
+export class CreateWorkNormDto extends IntersectionType(
+    PickType(WorkNorm, ['name', 'type']),
+    PartialType(
+        OmitType(WorkNorm, [
+            'id',
+            'name',
+            'type',
+            'periods',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+            'version',
+        ]),
+    ),
+) {}

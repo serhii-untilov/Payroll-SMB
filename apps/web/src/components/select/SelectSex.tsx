@@ -1,5 +1,5 @@
 import { FormAutocomplete } from '@/components/form/FormAutocomplete';
-import { Sex } from '@repo/shared';
+import { Sex } from '@repo/openapi';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 

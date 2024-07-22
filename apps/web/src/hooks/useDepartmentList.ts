@@ -1,18 +1,22 @@
-import { api } from '@/api';
+import { departmentsFindAll } from '@/services/department.service';
 import { snackbarError } from '@/utils/snackbar';
-import { Department } from '@repo/openapi';
-import { ResourceType } from '@repo/shared';
+import { Department, FindAllDepartmentDto } from '@repo/openapi';
+import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
-type Params = { companyId: number | null | undefined; relations: true };
 type Result = { data: Department[]; isLoading: boolean };
 
-export function useDepartmentList(params: Params): Result {
+export function useDepartmentList(params: Partial<FindAllDepartmentDto>): Result {
     const { companyId, relations } = params;
     const { data, isError, isLoading, error } = useQuery<Department[], Error>({
-        queryKey: [ResourceType.DEPARTMENT, 'list', params],
+        queryKey: [ResourceType.Department, params],
         queryFn: async () => {
-            return companyId ? (await api.departmentsFindAll(companyId, relations)).data : [];
+            const response = companyId
+                ? (await departmentsFindAll({ companyId, relations })) ?? []
+                : [];
+            return response.sort((a, b) =>
+                a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
+            );
         },
     });
     if (isError) {

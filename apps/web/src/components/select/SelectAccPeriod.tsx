@@ -1,12 +1,11 @@
 import { InputLabel } from '@/components/layout/InputLabel';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { getPayPeriodList, getPayPeriodName } from '@/services/payPeriod.service';
+import { usePayPeriodList } from '@/hooks/usePayPeriodList';
+import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { MenuItem, Select, SelectProps } from '@mui/material';
-import { IPayPeriod, monthBegin } from '@repo/shared';
-import { useQuery } from '@tanstack/react-query';
+import { monthBegin } from '@repo/shared';
 import { format, isEqual } from 'date-fns';
-import { enqueueSnackbar } from 'notistack';
 import { useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 
@@ -23,11 +22,7 @@ export function SelectAccPeriod(props: PayPeriodOption) {
     const { companyId, control, label, id, name, disabled, ...other } = props;
     const { company } = useAppContext();
     const { locale } = useLocale();
-
-    const { data, isError, error } = useQuery<IPayPeriod[], Error>({
-        queryKey: ['payPeriod', 'list', { companyId, payPeriod: company?.payPeriod }],
-        queryFn: async () => await getPayPeriodList(companyId),
-    });
+    const { data } = usePayPeriodList({ companyId });
 
     const options = useMemo(() => {
         return data?.map((period: any) => {
@@ -46,12 +41,6 @@ export function SelectAccPeriod(props: PayPeriodOption) {
             );
         });
     }, [data, company, locale.dateLocale]);
-
-    if (isError) {
-        enqueueSnackbar(`${error.name}\n${error.message}`, {
-            variant: 'error',
-        });
-    }
 
     return (
         <>
