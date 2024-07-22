@@ -1,21 +1,19 @@
 import { api } from '@/api';
-import { FormDateField } from '@/components/form/FormDateField';
-import { FormNumberField } from '@/components/form/FormNumberField';
-import { FormSequenceField } from '@/components/form/FormSequenceField';
-import { FormTextField } from '@/components/form/FormTextField';
-import TabLayout from '@/components/layout/TabLayout';
-import { Toolbar } from '@/components/layout/Toolbar';
-import { SelectDepartment } from '@/components/select/SelectDepartment';
-import { SelectJob } from '@/components/select/SelectJob';
-import { SelectPaymentType } from '@/components/select/SelectPaymentType';
-import { SelectPerson } from '@/components/select/SelectPerson';
-import { SelectWorkNorm } from '@/components/select/SelectWorkNorm';
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
-import { usePosition } from '@/hooks/usePosition';
-import { usePositionHistoryLast } from '@/hooks/usePositionHistoryLast';
-import { positionsCreate } from '@/services/position.service';
-import { positionHistoryCreate, positionHistoryUpdate } from '@/services/positionHistory.service';
+import {
+    FormDateField,
+    FormNumberField,
+    FormSequenceField,
+    FormTextField,
+    SelectDepartment,
+    SelectJob,
+    SelectPaymentType,
+    SelectPerson,
+    SelectWorkNorm,
+    TabLayout,
+    Toolbar,
+} from '@/components';
+import { useAppContext, useLocale, usePosition, usePositionHistoryLast } from '@/hooks';
+import { positionHistoryCreate, positionHistoryUpdate, positionsCreate } from '@/services';
 import { getDirtyValues, invalidateQueries } from '@/utils';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';

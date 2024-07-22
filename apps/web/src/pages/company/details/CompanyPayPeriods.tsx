@@ -1,10 +1,5 @@
-import { DataGrid } from '@/components/grid/DataGrid';
-import { Toolbar } from '@/components/layout/Toolbar';
-import { Loading } from '@/components/utility/Loading';
-import useAppContext from '@/hooks/useAppContext';
-import { useCurrentPayPeriod } from '@/hooks/useCurrentPayPeriod';
-import useLocale from '@/hooks/useLocale';
-import { usePayPeriodList } from '@/hooks/usePayPeriodList';
+import { DataGrid, Loading, Toolbar } from '@/components';
+import { useAppContext, useCurrentPayPeriod, useLocale, usePayPeriodList } from '@/hooks';
 import { companiesSalaryCalculate } from '@/services/company.service';
 import { payPeriodsClose, payPeriodsOpen } from '@/services/payPeriod.service';
 import * as utils from '@/utils';

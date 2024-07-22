@@ -1,11 +1,5 @@
-import PageLayout from '@/components/layout/PageLayout';
-import { PageTitle } from '@/components/layout/PageTitle';
-import { Tab } from '@/components/layout/Tab';
-import { TabPanel } from '@/components/layout/TabPanel';
-import { Tabs } from '@/components/layout/Tabs';
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
-import { usePayment } from '@/hooks/usePayment';
+import { PageLayout, PageTitle, Tab, TabPanel, Tabs } from '@/components';
+import { useAppContext, useLocale, usePayment } from '@/hooks';
 import { sumFormatter } from '@/utils';
 import { Box, Chip } from '@mui/material';
 import { Payment, PaymentStatus } from '@repo/openapi';
@@ -13,9 +7,7 @@ import { dateUTC } from '@repo/shared';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { EmployeePayments } from './details/EmployeePayments';
-import { MandatoryPayments } from './details/MandatoryPayments';
-import { PaymentDetails } from './details/PaymentDetails';
+import { EmployeePayments, MandatoryPayments, PaymentDetails } from './details';
 
 export default function PaymentForm() {
     const { id } = useParams();

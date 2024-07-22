@@ -1,10 +1,5 @@
-import { FormDateField } from '@/components/form/FormDateField';
-import { FormTextField } from '@/components/form/FormTextField';
-import { Button } from '@/components/layout/Button';
-import { SelectDepartment } from '@/components/select/SelectDepartment';
-import useAppContext from '@/hooks/useAppContext';
-import { useDepartment } from '@/hooks/useDepartment';
-import useLocale from '@/hooks/useLocale';
+import { Button, FormDateField, FormTextField, SelectDepartment } from '@/components';
+import { useAppContext, useDepartment, useLocale } from '@/hooks';
 import { departmentsCreate, departmentsUpdate } from '@/services/department.service';
 import { getDirtyValues, invalidateQueries } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';

@@ -1,9 +1,5 @@
-import { AppTitle } from '@/components/layout/AppTitle';
-import { Button } from '@/components/layout/Button';
-import { Logo } from '@/components/layout/Logo';
-import useAppContext from '@/hooks/useAppContext';
-import useAuth from '@/hooks/useAuth';
-import useLocale from '@/hooks/useLocale';
+import { AppTitle, Button, Logo } from '@/components';
+import { useAppContext, useAuth, useLocale } from '@/hooks';
 import { demo } from '@/services/auth.service';
 import { Language, MenuRounded } from '@mui/icons-material';
 import { Box, Drawer, IconButton } from '@mui/material';
@@ -54,9 +50,6 @@ export function Header() {
                     px: { xs: 1, sm: 2 },
                     display: 'flex',
                     justifyContent: 'space-between',
-                    // fixed header
-                    // zIndex: 100,
-                    // position: 'fixed',
                 }}
             >
                 <Box

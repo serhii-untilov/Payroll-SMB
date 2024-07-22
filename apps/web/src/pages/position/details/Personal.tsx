@@ -1,10 +1,5 @@
-import { FormDateField } from '@/components/form/FormDateField';
-import { FormTextField } from '@/components/form/FormTextField';
-import TabLayout from '@/components/layout/TabLayout';
-import { Toolbar } from '@/components/layout/Toolbar';
-import { SelectSex } from '@/components/select/SelectSex';
-import { useAppContext } from '@/hooks/useAppContext';
-import { useLocale } from '@/hooks/useLocale';
+import { FormDateField, FormTextField, SelectSex, TabLayout, Toolbar } from '@/components';
+import { useAppContext, useLocale } from '@/hooks';
 import { personsFindOne, personsUpdate } from '@/services/person.service';
 import { getDirtyValues, invalidateQueries, snackbarError, snackbarFormErrors } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';

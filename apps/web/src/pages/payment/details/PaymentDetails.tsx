@@ -1,13 +1,13 @@
-import { FormDateField } from '@/components/form/FormDateField';
-import { FormNumberField } from '@/components/form/FormNumberField';
-import { FormTextField } from '@/components/form/FormTextField';
-import { InputLabel } from '@/components/layout/InputLabel';
-import { Toolbar } from '@/components/layout/Toolbar';
-import { SelectAccPeriod } from '@/components/select/SelectAccPeriod';
-import { SelectPaymentType } from '@/components/select/SelectPaymentType';
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
-import { usePayment } from '@/hooks/usePayment';
+import {
+    FormDateField,
+    FormNumberField,
+    FormTextField,
+    InputLabel,
+    SelectAccPeriod,
+    SelectPaymentType,
+    Toolbar,
+} from '@/components';
+import { useAppContext, useLocale, usePayment } from '@/hooks';
 import {
     paymentsCreate,
     paymentsProcess,

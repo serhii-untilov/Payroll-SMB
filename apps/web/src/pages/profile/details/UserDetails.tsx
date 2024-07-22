@@ -1,9 +1,5 @@
-import { FormInputDropdown } from '@/components/form/FormInputDropdown';
-import { FormTextField } from '@/components/form/FormTextField';
-import { Toolbar } from '@/components/layout/Toolbar';
-import { Loading } from '@/components/utility/Loading';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
-import useLocale from '@/hooks/useLocale';
+import { FormInputDropdown, FormTextField, Loading, Toolbar } from '@/components';
+import { useCurrentUser, useLocale } from '@/hooks';
 import { usersUpdate } from '@/services/user.service';
 import { getDirtyValues, invalidateQueries, snackbarFormErrors } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -53,10 +49,6 @@ export function UserDetails() {
         snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    if (isLoading) {
-        return <Loading />;
-    }
-
     const onSubmit: SubmitHandler<FormType> = async (data) => {
         if (!isDirty) return;
         if (!user) return;
@@ -75,6 +67,8 @@ export function UserDetails() {
     const onCancel = () => {
         reset(user);
     };
+
+    if (isLoading) return <Loading />;
 
     return (
         <>

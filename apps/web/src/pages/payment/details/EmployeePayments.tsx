@@ -1,11 +1,9 @@
-import { DataGrid } from '@/components/grid/DataGrid';
-import { Toolbar } from '@/components/layout/Toolbar';
-import { usePaymentPositionList } from '@/hooks/usePaymentPositionList';
-import { paymentsRemove } from '@/services/payment.service';
+import { DataGrid, Toolbar } from '@/components';
+import { usePaymentPositionList } from '@/hooks';
+import { paymentsRemove } from '@/services';
 import { invalidateQueries, sumFormatter } from '@/utils';
 import {
     GridCellParams,
-    GridColDef,
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
@@ -24,51 +22,23 @@ type Props = {
 
 export function EmployeePayments(props: Props) {
     const { paymentId } = props;
-    const { t } = useTranslation();
-    const columns = useMemo(() => getColumns(t), [t]);
+    const columns = useColumns();
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
     const { data } = usePaymentPositionList({ paymentId, relations: true });
 
-    const onAddPayment = () => {
-        console.log('onAddPayment');
-    };
-
-    const onEditPayment = (id: number) => {
-        navigate(`/people/position/${id}?return=true`);
-    };
+    const onAddPayment = () => console.log('onAddPayment');
+    const onEditPayment = (id: number) => navigate(`/people/position/${id}?return=true`);
+    const onPrint = () => gridRef.current.exportDataAsPrint();
+    const onExport = () => gridRef.current.exportDataAsCsv();
 
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
             await paymentsRemove(+id);
         }
         await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
-    };
-
-    const onPrint = () => {
-        gridRef.current.exportDataAsPrint();
-    };
-
-    const onExport = () => {
-        gridRef.current.exportDataAsCsv();
-    };
-
-    const getRowStatus = (params: any): string => {
-        return params.row?.deletedDate
-            ? 'Deleted'
-            : params.row?.status === PaymentStatus.Paid
-              ? 'Normal'
-              : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
-                ? 'Overdue'
-                : params.row?.status === PaymentStatus.Submitted
-                  ? 'Todo'
-                  : params.row?.status === PaymentStatus.Accepted
-                    ? 'Overdue'
-                    : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
-                      ? 'Todo'
-                      : 'Normal';
     };
 
     return (
@@ -84,7 +54,6 @@ export function EmployeePayments(props: Props) {
             />
             <DataGrid
                 checkboxSelection={true}
-                // rowHeight={80}
                 getRowStatus={getRowStatus}
                 columnVisibilityModel={{
                     // Hide columns, the other columns will remain visible
@@ -113,81 +82,101 @@ export function EmployeePayments(props: Props) {
     );
 }
 
-function getColumns(t: any): GridColDef[] {
-    return [
-        {
-            field: 'cardNumber',
-            headerName: t('Card Number'),
-            type: 'string',
-            width: 110,
-            sortable: true,
-            valueGetter: (params) => {
-                return params.row.position.cardNumber;
+function useColumns() {
+    const { t } = useTranslation();
+    return useMemo(() => {
+        return [
+            {
+                field: 'cardNumber',
+                headerName: t('Card Number'),
+                type: 'string',
+                width: 110,
+                sortable: true,
+                valueGetter: (params) => {
+                    return params.row.position.cardNumber;
+                },
             },
-        },
-        {
-            field: 'fullName',
-            headerName: t('Full Name'),
-            width: 260,
-            sortable: true,
-            valueGetter: (params) => {
-                return params.row.position.person.fullName;
+            {
+                field: 'fullName',
+                headerName: t('Full Name'),
+                width: 260,
+                sortable: true,
+                valueGetter: (params) => {
+                    return params.row.position.person.fullName;
+                },
             },
-        },
-        {
-            field: 'baseSum',
-            headerName: t('Gross Pay'),
-            type: 'number',
-            width: 150,
-            sortable: true,
-            valueGetter: (params) => {
-                return sumFormatter(params.value);
+            {
+                field: 'baseSum',
+                headerName: t('Gross Pay'),
+                type: 'number',
+                width: 150,
+                sortable: true,
+                valueGetter: (params) => {
+                    return sumFormatter(params.value);
+                },
             },
-        },
-        {
-            field: 'deductions',
-            headerName: t('Deductions'),
-            type: 'number',
-            width: 150,
-            sortable: true,
-            valueGetter: (params) => {
-                return sumFormatter(params.value);
+            {
+                field: 'deductions',
+                headerName: t('Deductions'),
+                type: 'number',
+                width: 150,
+                sortable: true,
+                valueGetter: (params) => {
+                    return sumFormatter(params.value);
+                },
             },
-        },
-        {
-            field: 'paySum',
-            headerName: t('Net Pay'),
-            type: 'number',
-            width: 150,
-            sortable: true,
-            valueGetter: (params) => {
-                return sumFormatter(params.value);
+            {
+                field: 'paySum',
+                headerName: t('Net Pay'),
+                type: 'number',
+                width: 150,
+                sortable: true,
+                valueGetter: (params) => {
+                    return sumFormatter(params.value);
+                },
             },
-        },
-        {
-            field: 'mandatoryPayments',
-            headerName: t('Mandatory Payments'),
-            type: 'number',
-            width: 190,
-            sortable: true,
-            valueGetter: (params) => {
-                const mandatoryPayments = (params.row?.deductions || 0) + (params.row?.funds || 0);
-                return sumFormatter(mandatoryPayments);
+            {
+                field: 'mandatoryPayments',
+                headerName: t('Mandatory Payments'),
+                type: 'number',
+                width: 190,
+                sortable: true,
+                valueGetter: (params) => {
+                    const mandatoryPayments =
+                        (params.row?.deductions || 0) + (params.row?.funds || 0);
+                    return sumFormatter(mandatoryPayments);
+                },
             },
-        },
-        {
-            field: 'total',
-            headerName: t('Total'),
-            type: 'number',
-            width: 150,
-            sortable: true,
-            valueGetter: (params) => {
-                const total =
-                    (params.row?.paySum || 0) +
-                    (params.row?.deductions || 0) +
-                    (params.row?.funds || 0);
-                return sumFormatter(total);
+            {
+                field: 'total',
+                headerName: t('Total'),
+                type: 'number',
+                width: 150,
+                sortable: true,
+                valueGetter: (params) => {
+                    const total =
+                        (params.row?.paySum || 0) +
+                        (params.row?.deductions || 0) +
+                        (params.row?.funds || 0);
+                    return sumFormatter(total);
+                },
             },
-        },
-    ];
+        ];
+    }, [t]);
+}
+
+function getRowStatus(params: any): string {
+    return params.row?.deletedDate
+        ? 'Deleted'
+        : params.row?.status === PaymentStatus.Paid
+          ? 'Normal'
+          : params.row?.dateTo && dateUTC(params.row?.dateTo) < dateUTC(new Date())
+            ? 'Overdue'
+            : params.row?.status === PaymentStatus.Submitted
+              ? 'Todo'
+              : params.row?.status === PaymentStatus.Accepted
+                ? 'Overdue'
+                : params.row?.dateFrom && dateUTC(params.row?.dateFrom) <= dateUTC(new Date())
+                  ? 'Todo'
+                  : 'Normal';
 }

@@ -1,17 +1,9 @@
-import PageLayout from '@/components/layout/PageLayout';
-import { PageTitle } from '@/components/layout/PageTitle';
-import { Tab } from '@/components/layout/Tab';
-import { TabPanel } from '@/components/layout/TabPanel';
-import { Tabs } from '@/components/layout/Tabs';
-import { AvatarBox } from '@/components/utility/AvatarBox';
-import { Loading } from '@/components/utility/Loading';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
-import useLocale from '@/hooks/useLocale';
+import { AvatarBox, Loading, PageLayout, PageTitle, Tab, TabPanel, Tabs } from '@/components';
+import { useCurrentUser, useLocale } from '@/hooks';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { UserCompanyList } from './details/UserCompanyList';
-import { UserDetails } from './details/UserDetails';
+import { UserCompanyList, UserDetails } from './details';
 
 export default function Profile() {
     const [searchParams] = useSearchParams();
@@ -30,9 +22,7 @@ export default function Profile() {
 
     useEffect(() => {}, [locale]);
 
-    if (isLoading) {
-        return <Loading />;
-    }
+    if (isLoading) return <Loading />;
 
     const handleChange = (_event: SyntheticEvent, newValue: number) => {
         setTab(newValue);
