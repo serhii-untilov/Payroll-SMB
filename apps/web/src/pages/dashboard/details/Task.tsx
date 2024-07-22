@@ -1,4 +1,5 @@
 import { dto } from '@/api';
+import { Locale } from '@/context/LocaleContext';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { usePerson } from '@/hooks/usePerson';
@@ -14,8 +15,7 @@ import {
 } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { green, grey, orange, red } from '@mui/material/colors';
-import { Task as ITask } from '@repo/openapi';
-import { ResourceType, TaskStatus, TaskType } from '@repo/openapi';
+import { Person, ResourceType, TaskStatus, TaskType } from '@repo/openapi';
 import { useQueryClient } from '@tanstack/react-query';
 import { add, differenceInYears } from 'date-fns';
 import { useMemo, useState } from 'react';
@@ -40,7 +40,9 @@ export function Task(props: Props) {
     const title = useMemo(() => getTitleByTaskType(task?.type), [task]);
     const statusIcon = useMemo(() => getStatusIcon(task, view), [task, view]);
     const backgroundColor = useMemo(() => getBackgroundColor(task, view), [task, view]);
-    const { data: person } = usePerson(task?.entityId);
+    const taskDate = useMemo(() => getTaskDate(task, locale), [task, locale]);
+    const { person } = usePerson(task?.entityId);
+    const description = useMemo(() => getDescription(task, person, t), [task, person, t]);
     const { position } = usePositionByPerson({
         companyId: company?.id,
         personId: person?.id,
@@ -48,53 +50,26 @@ export function Task(props: Props) {
         relations: false,
     });
 
-    const taskDate = useMemo(() => {
-        const day = task.dateFrom.getDate();
-        const month = task.dateFrom.toLocaleString(locale.dateLocale.code, {
-            month: 'short',
-        });
-        return `${day} ${month}`;
-    }, [task, locale]);
-
-    const description = useMemo(() => {
-        switch (task.type) {
-            case TaskType.HappyBirthday: {
-                const age = person?.birthday
-                    ? differenceInYears(add(task.dateTo, { days: 1 }), person?.birthday)
-                    : 0;
-                return `${person?.fullName}, ${age || ''}`;
-            }
-            default:
-                return t(task.type);
-        }
-    }, [person, task, t]);
-
-    const onClickTask = () => {
-        if (task.status === TaskStatus.NotAvailable) {
-            return;
-        }
+    const onTaskClick = () => {
+        if (task.status === TaskStatus.NotAvailable) return;
         const path = getPath(task, company?.id, position);
-        if (path) {
-            navigate(path);
-        }
+        if (path) navigate(path);
     };
 
-    const onClickStatus = async () => {
-        if (task.status === TaskStatus.NotAvailable) {
-            return;
-        }
+    const onStatusClick = async () => {
+        if (task.status === TaskStatus.NotAvailable) return;
         if (canMarkAsDone(task, view)) {
             if (task.status === TaskStatus.Todo || task.status === TaskStatus.InProgress) {
-                await markDone();
+                await markTaskDone();
             } else if (task.status === TaskStatus.DoneByUser) {
-                await markTodo();
+                await markTaskTodo();
             }
         } else {
-            onClickTask();
+            onTaskClick();
         }
     };
 
-    const markDone = async () => {
+    const markTaskDone = async () => {
         const updatedTask = await tasksUpdate(task.id, {
             status: TaskStatus.DoneByUser,
             version: task.version,
@@ -103,7 +78,7 @@ export function Task(props: Props) {
         await invalidateQueries(queryClient, [ResourceType.Task]);
     };
 
-    const markTodo = async () => {
+    const markTaskTodo = async () => {
         const updatedTask = await tasksUpdate(task.id, {
             status: TaskStatus.Todo,
             version: task.version,
@@ -132,7 +107,7 @@ export function Task(props: Props) {
                 item
                 xs={11}
                 component={'button'}
-                onClick={() => onClickTask()}
+                onClick={() => onTaskClick()}
                 sx={{ border: 0, bgcolor: 'inherit', textAlign: 'left', cursor: 'pointer' }}
             >
                 <Grid container>
@@ -167,7 +142,7 @@ export function Task(props: Props) {
             </Grid>
             <Grid item xs={1}>
                 {statusIcon && (
-                    <IconButton onClick={() => onClickStatus()}>{statusIcon}</IconButton>
+                    <IconButton onClick={() => onStatusClick()}>{statusIcon}</IconButton>
                 )}
             </Grid>
         </Box>
@@ -207,7 +182,7 @@ function getTitleByTaskType(type: string) {
     }
 }
 
-function getStatusIcon(task: ITask, view: TaskView) {
+function getStatusIcon(task: dto.Task, view: TaskView) {
     if (view === 'upcoming') {
         return null;
     }
@@ -227,7 +202,7 @@ function getStatusIcon(task: ITask, view: TaskView) {
     }
 }
 
-function getBackgroundColor(task: ITask, view: TaskView) {
+function getBackgroundColor(task: dto.Task, view: TaskView) {
     if (view === 'upcoming') {
         return grey[200];
     }
@@ -279,7 +254,7 @@ function getPath(
     }
 }
 
-function canMarkAsDone(task: ITask, view: TaskView) {
+function canMarkAsDone(task: dto.Task, view: TaskView) {
     if (view === 'upcoming') return false;
     if (task.status === TaskStatus.NotAvailable) return false;
     switch (task.type) {
@@ -290,4 +265,27 @@ function canMarkAsDone(task: ITask, view: TaskView) {
             return true;
     }
     return false;
+}
+
+function getDescription(task: dto.Task, person: Person | null, t: any) {
+    switch (task.type) {
+        case TaskType.HappyBirthday: {
+            const age = person?.birthday
+                ? differenceInYears(add(task.dateTo, { days: 1 }), person?.birthday)
+                : 0;
+            return `${person?.fullName}, ${age || ''}`;
+        }
+        default:
+            return t(task.type);
+    }
+}
+
+function getTaskDate(task: dto.Task, locale: Locale) {
+    {
+        const day = task.dateFrom.getDate();
+        const month = task.dateFrom.toLocaleString(locale.dateLocale.code, {
+            month: 'short',
+        });
+        return `${day} ${month}`;
+    }
 }
