@@ -1,8 +1,15 @@
 import { dto } from '@/api';
-import { AvatarBox, PageLayout, PageTitle, Tab, TabPanel, Tabs } from '@/components';
-import { useAppContext, useLocale } from '@/hooks';
+import { PageLayout } from '@/components/layout/PageLayout';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { Tab } from '@/components/layout/Tab';
+import { TabPanel } from '@/components/layout/TabPanel';
+import { Tabs } from '@/components/layout/Tabs';
+import { AvatarBox } from '@/components/utility/AvatarBox';
+import { useAppContext } from '@/hooks/useAppContext';
+import { useLocale } from '@/hooks/useLocale';
 import { positionsFindOne } from '@/services/position.service';
-import { invalidateQueries, snackbarError } from '@/utils';
+import { invalidateQueries } from '@/utils/invalidateQueries';
+import { snackbarError } from '@/utils/snackbar';
 import { ResourceType } from '@repo/openapi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';

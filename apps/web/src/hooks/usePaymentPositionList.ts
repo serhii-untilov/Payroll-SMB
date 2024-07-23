@@ -1,5 +1,5 @@
 import { paymentPositionsFindAll } from '@/services/paymentPosition.service';
-import { snackbarError } from '@/utils';
+import { snackbarError } from '@/utils/snackbar';
 import { FindAllPaymentPositionDto, PaymentPosition, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

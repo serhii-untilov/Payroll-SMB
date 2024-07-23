@@ -1,4 +1,4 @@
-import { usersFindCurrent, authLogin, authLogout, authRegister } from '@/services/auth.service';
+import { authLogin, authLogout, authRegister, usersFindCurrent } from '@/services/auth.service';
 import { getUserAccessToken } from '@/services/token.service';
 import { AuthDto, CreateUserDto, PublicUserDataDto } from '@repo/openapi';
 import PropTypes from 'prop-types';

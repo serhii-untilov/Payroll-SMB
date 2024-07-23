@@ -1,5 +1,5 @@
 import { departmentsFindOne } from '@/services/department.service';
-import { snackbarError } from '@/utils';
+import { snackbarError } from '@/utils/snackbar';
 import { Department, FindOneDepartmentDto, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

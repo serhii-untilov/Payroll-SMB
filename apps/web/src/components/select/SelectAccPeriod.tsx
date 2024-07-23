@@ -1,5 +1,6 @@
-import { InputLabel } from '@/components/layout/InputLabel';
-import { useAppContext, useLocale, usePayPeriodList } from '@/hooks';
+import { useAppContext } from '@/hooks/useAppContext';
+import { useLocale } from '@/hooks/useLocale';
+import { usePayPeriodList } from '@/hooks/usePayPeriodList';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { MenuItem, Select, SelectProps } from '@mui/material';
 import { PayPeriod } from '@repo/openapi';
@@ -7,6 +8,7 @@ import { monthBegin } from '@repo/shared';
 import { format, isEqual } from 'date-fns';
 import { useMemo } from 'react';
 import { Controller } from 'react-hook-form';
+import { InputLabel } from '../layout/InputLabel';
 
 type Props = SelectProps<string> & {
     companyId: number | undefined;

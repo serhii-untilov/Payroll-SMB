@@ -1,18 +1,17 @@
-import {
-    InputLabel,
-    PageLayout,
-    PageTitle,
-    SelectPayPeriod,
-    Tab,
-    TabPanel,
-    Tabs,
-} from '@/components';
-import { useAppContext, useLocale } from '@/hooks';
 import { Box, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { SalaryReport } from './details/SalaryReport';
+import { useAppContext } from '@/hooks/useAppContext';
+import { useLocale } from '@/hooks/useLocale';
+import { PageLayout } from '@/components/layout/PageLayout';
+import { PageTitle } from '@/components/layout/PageTitle';
+import { InputLabel } from '@/components/layout/InputLabel';
+import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
+import { Tabs } from '@/components/layout/Tabs';
+import { Tab } from '@/components/layout/Tab';
+import { TabPanel } from '@/components/layout/TabPanel';
 
 export default function Payroll() {
     const { company, payPeriod } = useAppContext();

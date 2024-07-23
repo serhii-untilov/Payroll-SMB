@@ -1,7 +1,14 @@
-import { FormDateField, FormTextField, SelectSex, TabLayout, Toolbar } from '@/components';
-import { useAppContext, useLocale } from '@/hooks';
+import { FormDateField } from '@/components/form/FormDateField';
+import { FormTextField } from '@/components/form/FormTextField';
+import { TabLayout } from '@/components/layout/TabLayout';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { SelectSex } from '@/components/select/SelectSex';
+import { useAppContext } from '@/hooks/useAppContext';
+import { useLocale } from '@/hooks/useLocale';
 import { personsFindOne, personsUpdate } from '@/services/person.service';
-import { getDirtyValues, invalidateQueries, snackbarError, snackbarFormErrors } from '@/utils';
+import { getDirtyValues } from '@/utils/getDirtyValues';
+import { invalidateQueries } from '@/utils/invalidateQueries';
+import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';

@@ -1,5 +1,5 @@
 import { positionsFindOne } from '@/services/position.service';
-import { snackbarError } from '@/utils';
+import { snackbarError } from '@/utils/snackbar';
 import { FindOnePositionDto, Position, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

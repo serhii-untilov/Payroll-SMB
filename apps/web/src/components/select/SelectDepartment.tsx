@@ -1,5 +1,5 @@
-import { FormAutocomplete } from '@/components/form/FormAutocomplete';
 import { useDepartmentList } from '@/hooks/useDepartmentList';
+import { FormAutocomplete } from '../form/FormAutocomplete';
 
 type Props = {
     companyId: number | undefined;

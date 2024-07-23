@@ -1,7 +1,9 @@
-import { DataGrid, Toolbar } from '@/components';
-import { usePaymentPositionList } from '@/hooks';
-import { paymentsRemove } from '@/services';
-import { invalidateQueries, sumFormatter } from '@/utils';
+import { DataGrid } from '@/components/grid/DataGrid';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { usePaymentPositionList } from '@/hooks/usePaymentPositionList';
+import { paymentsRemove } from '@/services/payment.service';
+import { invalidateQueries } from '@/utils/invalidateQueries';
+import { sumFormatter } from '@/utils/sumFormatter';
 import {
     GridCellParams,
     GridRowParams,

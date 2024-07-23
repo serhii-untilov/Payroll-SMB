@@ -1,5 +1,7 @@
-import { Button } from '@/components';
-import { useAppContext, useAuth, useLocale } from '@/hooks';
+import { Button } from '@/components/layout/Button';
+import { useAppContext } from '@/hooks/useAppContext';
+import { useAuth } from '@/hooks/useAuth';
+import { useLocale } from '@/hooks/useLocale';
 import { demo } from '@/services/auth.service';
 import { Box, CssBaseline } from '@mui/material';
 import { useEffect } from 'react';

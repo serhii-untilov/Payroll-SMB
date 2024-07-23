@@ -1,8 +1,15 @@
-import { DataGrid, Loading, Toolbar } from '@/components';
-import { useAppContext, useCurrentPayPeriod, useLocale, usePayPeriodList } from '@/hooks';
+import { DataGrid } from '@/components/grid/DataGrid';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { Loading } from '@/components/utility/Loading';
+import { useAppContext } from '@/hooks/useAppContext';
+import { useCurrentPayPeriod } from '@/hooks/useCurrentPayPeriod';
+import { useLocale } from '@/hooks/useLocale';
+import { usePayPeriodList } from '@/hooks/usePayPeriodList';
 import { companiesSalaryCalculate } from '@/services/company.service';
 import { payPeriodsClose, payPeriodsOpen } from '@/services/payPeriod.service';
-import * as utils from '@/utils';
+import { getPayPeriodName } from '@/utils/getPayPeriodName';
+import * as utils from '@/utils/invalidateQueries';
+import { sumFormatter } from '@/utils/sumFormatter';
 import {
     GridCellParams,
     GridRowParams,
@@ -49,10 +56,6 @@ export function CompanyPayPeriods(params: Props) {
             .filter((o) => o.dateFrom.getTime() <= (payPeriod || new Date()).getTime())
             .sort((a, b) => b.dateFrom.getTime() - a.dateFrom.getTime());
     }, [rawData, payPeriod]);
-
-    if (isLoading) {
-        return <Loading />;
-    }
 
     const onEdit = (_id: number) => {
         navigate('/payroll?tab=payroll&return=true');
@@ -110,6 +113,8 @@ export function CompanyPayPeriods(params: Props) {
         }
     };
 
+    if (isLoading) return <Loading />;
+
     return (
         <>
             <Toolbar
@@ -157,7 +162,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 240,
                 sortable: true,
                 valueGetter: (params) => {
-                    return utils.getPayPeriodName(
+                    return getPayPeriodName(
                         toDate(params.row.dateFrom),
                         toDate(params.row.dateTo),
                         isEqual(params.row.dateFrom, payPeriod),
@@ -182,7 +187,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 160,
                 sortable: true,
                 valueGetter: (params) => {
-                    return utils.sumFormatter(params.value);
+                    return sumFormatter(params.value);
                 },
             },
             {
@@ -192,7 +197,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 160,
                 sortable: true,
                 valueGetter: (params) => {
-                    return utils.sumFormatter(params.value);
+                    return sumFormatter(params.value);
                 },
             },
             {
@@ -202,7 +207,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 160,
                 sortable: true,
                 valueGetter: (params) => {
-                    return utils.sumFormatter(params.value);
+                    return sumFormatter(params.value);
                 },
             },
             {
@@ -216,7 +221,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                         Number(params.row.inBalance) +
                         Number(params.row.accruals) -
                         (Number(params.row.deductions) - Number(params.row.payments));
-                    return utils.sumFormatter(netPay);
+                    return sumFormatter(netPay);
                 },
             },
             {
@@ -226,7 +231,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 160,
                 sortable: true,
                 valueGetter: (params) => {
-                    return utils.sumFormatter(params.value);
+                    return sumFormatter(params.value);
                 },
             },
             {
@@ -236,7 +241,7 @@ function useColumns(dateLocale: string, payPeriod: Date) {
                 width: 190,
                 sortable: true,
                 valueGetter: (params) => {
-                    return utils.sumFormatter(params.value);
+                    return sumFormatter(params.value);
                 },
             },
         ];

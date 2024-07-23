@@ -2,14 +2,15 @@ import { dto } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
-import { useAppContext } from '@/hooks';
+import { useAppContext } from '@/hooks/useAppContext';
 import { companiesFindOne } from '@/services/company.service';
 import {
     userCompaniesFindAll,
     userCompaniesRemove,
     userCompaniesRestore,
 } from '@/services/user-companies.service';
-import { invalidateQueries, snackbarError } from '@/utils';
+import { invalidateQueries } from '@/utils/invalidateQueries';
+import { snackbarError } from '@/utils/snackbar';
 import {
     GridCallbackDetails,
     GridCellParams,

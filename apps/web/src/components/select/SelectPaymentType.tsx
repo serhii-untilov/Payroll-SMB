@@ -1,9 +1,8 @@
-import { FormAutocomplete } from '@/components/form/FormAutocomplete';
-import { paymentTypesFindAll } from '@/services/paymentType.service';
-import { snackbarError } from '@/utils';
-import { FindAllPaymentTypeDto, PaymentType } from '@repo/openapi';
-import { ResourceType } from '@repo/openapi';
+import { snackbarError } from '@/utils/snackbar';
+import { FindAllPaymentTypeDto, PaymentType, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
+import { FormAutocomplete } from '../form/FormAutocomplete';
+import { paymentTypesFindAll } from '@/services/paymentType.service';
 
 type Props = {
     companyId: number | undefined;

@@ -1,7 +1,6 @@
-import { Button } from '@/components/layout/Button';
-import { InputLabel } from '@/components/layout/InputLabel';
 import { personsCreate, personsFindAll } from '@/services/person.service';
-import { invalidateQueries, snackbarError } from '@/utils';
+import { invalidateQueries } from '@/utils/invalidateQueries';
+import { snackbarError } from '@/utils/snackbar';
 import {
     Autocomplete,
     Dialog,
@@ -14,12 +13,13 @@ import {
     TextField,
     createFilterOptions,
 } from '@mui/material';
-import { Person, Sex } from '@repo/openapi';
-import { ResourceType } from '@repo/openapi';
+import { Person, ResourceType, Sex } from '@repo/openapi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../layout/Button';
+import { InputLabel } from '../layout/InputLabel';
 
 interface Props {
     name: string;

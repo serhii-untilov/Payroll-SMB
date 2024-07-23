@@ -1,22 +1,20 @@
 import { api } from '@/api';
-import {
-    FormInputDropdown,
-    FormTextField,
-    InputLabel,
-    SelectPayPeriod,
-    Toolbar,
-} from '@/components';
-import {
-    useAccountingList,
-    useAppContext,
-    useCompany,
-    useDefaultAccountingId,
-    useDefaultLawId,
-    useLawList,
-    useLocale,
-} from '@/hooks';
+import { FormInputDropdown } from '@/components/form/FormInputDropdown';
+import { FormTextField } from '@/components/form/FormTextField';
+import { InputLabel } from '@/components/layout/InputLabel';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
+import { useAccountingList } from '@/hooks/useAccountingList';
+import { useAppContext } from '@/hooks/useAppContext';
+import { useCompany } from '@/hooks/useCompany';
+import { useDefaultAccountingId } from '@/hooks/useDefaultAccountingId';
+import { useDefaultLawId } from '@/hooks/useDefaultLawId';
+import { useLawList } from '@/hooks/useLawList';
+import { useLocale } from '@/hooks/useLocale';
 import { companiesCreate } from '@/services/company.service';
-import { getDirtyValues, invalidateQueries, snackbarFormErrors } from '@/utils';
+import { getDirtyValues } from '@/utils/getDirtyValues';
+import { invalidateQueries } from '@/utils/invalidateQueries';
+import { snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { CreateCompanyDto, PaymentSchedule, ResourceType, UpdateCompanyDto } from '@repo/openapi';

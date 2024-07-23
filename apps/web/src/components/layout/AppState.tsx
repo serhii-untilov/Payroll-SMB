@@ -1,4 +1,4 @@
-import { useAppContext } from '@/hooks';
+import { useAppContext } from '@/hooks/useAppContext';
 import { CheckCircle } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton } from '@mui/material';
 import { ServerEvent } from '@repo/openapi';

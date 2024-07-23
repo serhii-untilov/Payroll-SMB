@@ -1,9 +1,8 @@
-import { FormAutocomplete } from '@/components/form/FormAutocomplete';
 import { workNormsFindAll } from '@/services/workNorm.service';
-import { snackbarError } from '@/utils';
-import { WorkNorm } from '@repo/openapi';
-import { ResourceType } from '@repo/openapi';
+import { snackbarError } from '@/utils/snackbar';
+import { ResourceType, WorkNorm } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
+import { FormAutocomplete } from '../form/FormAutocomplete';
 
 interface Props {
     companyId: number | undefined;

@@ -1,10 +1,10 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import { Toolbar } from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
-import { useAppContext } from '@/hooks';
+import { useAppContext } from '@/hooks/useAppContext';
 import { positionsFindBalance } from '@/services/position.service';
-import { sumFormatter } from '@/utils';
 import { getUnitByCalcMethod } from '@/utils/getUnitByCalcMethod';
+import { sumFormatter } from '@/utils/sumFormatter';
 import { Box, Typography } from '@mui/material';
 import {
     GridCellParams,
@@ -14,8 +14,12 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { PositionBalanceExtendedDto } from '@repo/openapi';
-import { CalcMethod, FindAllPositionBalanceDto, ResourceType } from '@repo/openapi';
+import {
+    CalcMethod,
+    FindAllPositionBalanceDto,
+    PositionBalanceExtendedDto,
+    ResourceType,
+} from '@repo/openapi';
 import { getFullName, maxDate } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';

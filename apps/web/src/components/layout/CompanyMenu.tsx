@@ -1,4 +1,4 @@
-import { useLocale } from '@/hooks';
+import { useLocale } from '@/hooks/useLocale';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 import BusinessCenterOutlined from '@mui/icons-material/BusinessCenterOutlined';
 import { Box, Menu, MenuItem, Typography } from '@mui/material';

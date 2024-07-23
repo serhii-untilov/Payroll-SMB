@@ -1,4 +1,6 @@
-import { DataGrid, Loading, Toolbar } from '@/components';
+import { DataGrid } from '@/components/grid/DataGrid';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { Loading } from '@/components/utility/Loading';
 import { useDepartmentList } from '@/hooks/useDepartmentList';
 import DepartmentForm from '@/pages/department/DepartmentForm';
 import { departmentsRemove } from '@/services/department.service';

@@ -39,5 +39,11 @@ module.exports = {
             },
         ],
         'max-len': ['error', { code: 100, ignoreComments: true }],
+        'no-restricted-imports': [
+            'error',
+            {
+                patterns: ['@mui/*/*/*'],
+            },
+        ],
     },
 };

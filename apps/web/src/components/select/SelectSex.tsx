@@ -1,7 +1,7 @@
-import { FormAutocomplete } from '@/components/form/FormAutocomplete';
 import { Sex } from '@repo/openapi';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FormAutocomplete } from '../form/FormAutocomplete';
 
 interface Props {
     control: any;

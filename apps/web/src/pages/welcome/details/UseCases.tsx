@@ -1,4 +1,4 @@
-import { useLocale } from '@/hooks';
+import { useLocale } from '@/hooks/useLocale';
 import { Box, Typography } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';

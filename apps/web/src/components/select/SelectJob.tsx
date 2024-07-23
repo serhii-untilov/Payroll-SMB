@@ -1,5 +1,5 @@
-import { FormAutocomplete } from '@/components/form/FormAutocomplete';
 import { useJobList } from '@/hooks/useJobList';
+import { FormAutocomplete } from '../form/FormAutocomplete';
 
 type Props = {
     control: any;

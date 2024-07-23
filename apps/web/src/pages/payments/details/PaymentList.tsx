@@ -1,10 +1,11 @@
-import { DataGrid, Toolbar } from '@/components';
-import { usePaymentList } from '@/hooks';
-import { paymentsRemove } from '@/services';
-import { invalidateQueries, sumFormatter } from '@/utils';
+import { DataGrid } from '@/components/grid/DataGrid';
+import { Toolbar } from '@/components/layout/Toolbar';
+import { usePaymentList } from '@/hooks/usePaymentList';
+import { paymentsRemove } from '@/services/payment.service';
+import { invalidateQueries } from '@/utils/invalidateQueries';
+import { sumFormatter } from '@/utils/sumFormatter';
 import {
     GridCellParams,
-    GridColDef,
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
@@ -23,9 +24,8 @@ type Props = FindAllPaymentDto & {
 
 export function PaymentList(props: Props) {
     const { companyId, payPeriod, status } = props;
-    const { t } = useTranslation();
     const queryClient = useQueryClient();
-    const columns = useMemo(() => getColumns(t), [t]);
+    const columns = useColumns();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
@@ -33,7 +33,9 @@ export function PaymentList(props: Props) {
     const { data: rawData } = usePaymentList(params);
     const data = useMemo(() => filteredPaymentList(rawData, props), [rawData, props]);
 
+    // TODO
     const onAddPayment = () => console.log('onAddPayment');
+
     const onEditPayment = (id: number) => navigate(`/payments/${id}`);
     const onPrint = () => gridRef.current.exportDataAsPrint();
     const onExport = () => gridRef.current.exportDataAsCsv();
@@ -89,90 +91,95 @@ export function PaymentList(props: Props) {
     );
 }
 
-function getColumns(t: any): GridColDef[] {
-    return [
-        {
-            field: 'docNumber',
-            headerName: t('Number'),
-            type: 'string',
-            width: 110,
-            sortable: true,
-        },
-        {
-            field: 'docDate',
-            headerName: t('Date'),
-            type: 'string',
-            width: 125,
-            sortable: true,
-            valueGetter: (params) => {
-                return date2view(params.value);
+function useColumns() {
+    const { t } = useTranslation();
+    return useMemo(
+        () => [
+            {
+                field: 'docNumber',
+                headerName: t('Number'),
+                type: 'string',
+                width: 110,
+                sortable: true,
             },
-        },
-        {
-            field: 'name',
-            headerName: t('Name'),
-            width: 260,
-            sortable: true,
-            valueGetter: (params) => {
-                return params.row?.paymentType?.name;
+            {
+                field: 'docDate',
+                headerName: t('Date'),
+                type: 'string',
+                width: 125,
+                sortable: true,
+                valueGetter: (params) => {
+                    return date2view(params.value);
+                },
             },
-        },
-        {
-            field: 'baseSum',
-            headerName: t('Gross Pay'),
-            type: 'number',
-            width: 150,
-            sortable: true,
-            valueGetter: (params) => {
-                return sumFormatter(params.value);
+            {
+                field: 'name',
+                headerName: t('Name'),
+                width: 260,
+                sortable: true,
+                valueGetter: (params) => {
+                    return params.row?.paymentType?.name;
+                },
             },
-        },
-        {
-            field: 'deductions',
-            headerName: t('Deductions'),
-            type: 'number',
-            width: 150,
-            sortable: true,
-            valueGetter: (params) => {
-                return sumFormatter(params.value);
+            {
+                field: 'baseSum',
+                headerName: t('Gross Pay'),
+                type: 'number',
+                width: 150,
+                sortable: true,
+                valueGetter: (params) => {
+                    return sumFormatter(params.value);
+                },
             },
-        },
-        {
-            field: 'paySum',
-            headerName: t('Net Pay'),
-            type: 'number',
-            width: 150,
-            sortable: true,
-            valueGetter: (params) => {
-                return sumFormatter(params.value);
+            {
+                field: 'deductions',
+                headerName: t('Deductions'),
+                type: 'number',
+                width: 150,
+                sortable: true,
+                valueGetter: (params) => {
+                    return sumFormatter(params.value);
+                },
             },
-        },
-        {
-            field: 'mandatoryPayments',
-            headerName: t('Mandatory Payments'),
-            type: 'number',
-            width: 190,
-            sortable: true,
-            valueGetter: (params) => {
-                const mandatoryPayments = (params.row?.deductions || 0) + (params.row?.funds || 0);
-                return sumFormatter(mandatoryPayments);
+            {
+                field: 'paySum',
+                headerName: t('Net Pay'),
+                type: 'number',
+                width: 150,
+                sortable: true,
+                valueGetter: (params) => {
+                    return sumFormatter(params.value);
+                },
             },
-        },
-        {
-            field: 'total',
-            headerName: t('Total'),
-            type: 'number',
-            width: 150,
-            sortable: true,
-            valueGetter: (params) => {
-                const total =
-                    (params.row?.paySum || 0) +
-                    (params.row?.deductions || 0) +
-                    (params.row?.funds || 0);
-                return sumFormatter(total);
+            {
+                field: 'mandatoryPayments',
+                headerName: t('Mandatory Payments'),
+                type: 'number',
+                width: 190,
+                sortable: true,
+                valueGetter: (params) => {
+                    const mandatoryPayments =
+                        (params.row?.deductions || 0) + (params.row?.funds || 0);
+                    return sumFormatter(mandatoryPayments);
+                },
             },
-        },
-    ];
+            {
+                field: 'total',
+                headerName: t('Total'),
+                type: 'number',
+                width: 150,
+                sortable: true,
+                valueGetter: (params) => {
+                    const total =
+                        (params.row?.paySum || 0) +
+                        (params.row?.deductions || 0) +
+                        (params.row?.funds || 0);
+                    return sumFormatter(total);
+                },
+            },
+        ],
+        [t],
+    );
 }
 
 function getRowStatus(params: any): string {

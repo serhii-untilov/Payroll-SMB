@@ -1,7 +1,11 @@
-import { Button, FormDateField, FormTextField, SelectDepartment } from '@/components';
-import { useAppContext, useDepartment, useLocale } from '@/hooks';
+import { FormDateField } from '@/components/form/FormDateField';
+import { FormTextField } from '@/components/form/FormTextField';
+import { Button } from '@/components/layout/Button';
+import { SelectDepartment } from '@/components/select/SelectDepartment';
+import { useAppContext } from '@/hooks/useAppContext';
+import { useDepartment } from '@/hooks/useDepartment';
+import { useLocale } from '@/hooks/useLocale';
 import { departmentsCreate, departmentsUpdate } from '@/services/department.service';
-import { getDirtyValues, invalidateQueries } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
@@ -17,6 +21,8 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { date, InferType, number, object, ObjectSchema, string } from 'yup';
 import { snackbarError, snackbarFormErrors } from '../../utils/snackbar';
+import { getDirtyValues } from '@/utils/getDirtyValues';
+import { invalidateQueries } from '@/utils/invalidateQueries';
 
 export interface Params {
     open: boolean;

@@ -1,5 +1,5 @@
 import { paymentsFindOne } from '@/services/payment.service';
-import { snackbarError } from '@/utils';
+import { snackbarError } from '@/utils/snackbar';
 import { FindOnePaymentDto, Payment, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

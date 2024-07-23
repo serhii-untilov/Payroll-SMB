@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks';
+import { useAuth } from '@/hooks/useAuth';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';

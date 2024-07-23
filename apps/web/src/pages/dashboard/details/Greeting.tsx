@@ -1,6 +1,8 @@
-import { Link, Loading } from '@/components';
-import { useCurrentUser } from '@/hooks';
-import { capitalizeFirstChar, getPartOfDay } from '@/utils';
+import { Link } from '@/components/layout/Link';
+import { Loading } from '@/components/utility/Loading';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { capitalizeFirstChar } from '@/utils/capitalizeFirstChar';
+import { getPartOfDay } from '@/utils/getPartOfDay';
 import { Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
