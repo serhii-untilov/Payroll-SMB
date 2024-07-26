@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { Task } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import { Task as TaskComponent } from '../Task';
+import TaskComponent from '../TaskComponent';
 import TaskListTitle from '../TaskListTitle';
 
 type Props = {

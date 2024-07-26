@@ -29,7 +29,7 @@ type Props = {
     view: TaskView;
 };
 
-export function Task(props: Props) {
+export default function Task(props: Props) {
     const [task, setTask] = useState(props.task);
     const { view } = props;
     const queryClient = useQueryClient();
