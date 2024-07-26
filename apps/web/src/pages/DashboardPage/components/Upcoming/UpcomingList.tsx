@@ -1,20 +1,20 @@
 import { Box } from '@mui/material';
 import { Task } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import TaskComponent from '../TaskComponent';
 import TaskListTitle from '../TaskListTitle';
+import UpcomingTask from './UpcomingTask';
 
-type Props = {
+type UpcomingListProps = {
     taskList: Task[];
 };
 
-export default function UpcomingCard(props: Props) {
+export default function UpcomingList(props: UpcomingListProps) {
     const { t } = useTranslation();
     return (
         <Box>
             <TaskListTitle title={t('Upcoming')} />
             {props.taskList.map((task) => (
-                <TaskComponent key={task.id} task={task} view="upcoming" />
+                <UpcomingTask key={task.id} task={task} />
             ))}
         </Box>
     );

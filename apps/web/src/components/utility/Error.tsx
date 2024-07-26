@@ -1,12 +1,12 @@
+import { AppError } from '@/types';
 import { snackbarError } from '@/utils/snackbar';
-import { AxiosError } from 'axios';
 
-type Props = {
-    error: unknown;
+type ErrorProps = {
+    error: AppError;
 };
 
-export default function Error({ error }: Props) {
-    const e = error as AxiosError;
-    snackbarError(`${e.code}\n${e.message}`);
+export default function Error({ error }: ErrorProps) {
+    const { code, message } = error;
+    snackbarError(code || message ? `${code ?? ''}\n${message ?? ''}` : 'Unknown error.');
     return null;
 }

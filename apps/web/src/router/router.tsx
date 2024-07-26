@@ -13,7 +13,7 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
 
 export const SignIn = Loadable(lazy(() => import('@/pages/auth/SignIn')));
 const SignUp = Loadable(lazy(() => import('@/pages/auth/SignUp')));
-const Dashboard = Loadable(lazy(() => import('@/pages/dashboard/Dashboard')));
+const DashboardPage = Loadable(lazy(() => import('@/pages/DashboardPage')));
 const Welcome = Loadable(lazy(() => import('@/pages/welcome/Welcome')));
 const Company = Loadable(lazy(() => import('@/pages/company/Company')));
 const People = Loadable(lazy(() => import('@/pages/people/People')));
@@ -71,8 +71,8 @@ const router: RouteObject[] = [
             </AuthGuard>
         ),
         children: [
-            { index: true, element: <Dashboard /> },
-            { path: 'dashboard', element: <Dashboard /> },
+            { index: true, element: <DashboardPage /> },
+            { path: 'dashboard', element: <DashboardPage /> },
             {
                 path: 'company',
                 children: [

@@ -17,7 +17,6 @@ export default function GreetingUser({ user }: Props) {
                 {t(getPartOfDay(new Date().getHours()))},{' '}
                 <Link to={'/profile?tab=details&return=true'}>{getUserName(user)}</Link>
             </Typography>
-            ,
         </>
     );
 }

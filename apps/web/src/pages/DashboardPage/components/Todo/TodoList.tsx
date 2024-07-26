@@ -1,21 +1,21 @@
 import { Box } from '@mui/system';
 import { Task } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import TaskComponent from '../TaskComponent';
 import TaskListTitle from '../TaskListTitle';
+import TodoTask from './TodoTask';
 
-type Props = {
+type TodoListProps = {
     taskList: Task[];
 };
 
-export function ReminderCard(props: Props) {
+export function TodoList(props: TodoListProps) {
     const { t } = useTranslation();
 
     return (
         <Box>
-            <TaskListTitle title={t('Reminders')} />
+            <TaskListTitle title={t('Things to do')} />
             {props.taskList.map((task) => (
-                <TaskComponent key={task.id} task={task} view="reminder" />
+                <TodoTask key={task.id} task={task} />
             ))}
         </Box>
     );

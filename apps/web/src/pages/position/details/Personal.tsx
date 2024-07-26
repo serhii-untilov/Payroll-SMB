@@ -45,7 +45,7 @@ export function Personal({ personId }: Props) {
     const { t } = useTranslation();
     const { company } = useAppContext();
     const queryClient = useQueryClient();
-    const { person, isLoading } = usePerson(personId);
+    const { data: person, isLoading } = usePerson(personId);
 
     useEffect(() => {}, [company, locale]);
 

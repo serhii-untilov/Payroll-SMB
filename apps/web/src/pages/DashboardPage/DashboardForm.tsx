@@ -1,13 +1,13 @@
 import PageLayout from '@/components/layout/PageLayout';
+import { useAppContext } from '@/hooks/useAppContext';
 import { Grid } from '@mui/material';
-import { Company, Task } from '@repo/openapi';
+import { Task } from '@repo/openapi';
 import Greeting from './components/Greeting';
 import Reminder from './components/Reminder';
 import Summary from './components/Summary';
 import SupportCenter from './components/SupportCenter';
 import Todo from './components/Todo';
 import Upcoming from './components/Upcoming';
-import { useAppContext } from '@/hooks/useAppContext';
 
 interface DashboardFormProps {
     taskList: Task[];

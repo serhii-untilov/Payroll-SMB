@@ -1,6 +1,6 @@
 import { Task } from '@repo/openapi';
 import useReminder from '../../hooks/useReminder';
-import { ReminderCard } from './ReminderCard';
+import { ReminderList } from './ReminderList';
 
 type Props = {
     taskList: Task[];
@@ -9,5 +9,5 @@ type Props = {
 export default function Reminder(props: Props) {
     const taskList: Task[] = useReminder(props.taskList);
 
-    return <>{taskList.length && <ReminderCard taskList={taskList} />}</>;
+    return <>{!!taskList.length && <ReminderList taskList={taskList} />}</>;
 }

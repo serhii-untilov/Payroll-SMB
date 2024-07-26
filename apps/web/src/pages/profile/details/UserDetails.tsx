@@ -71,7 +71,7 @@ export function UserDetails() {
     };
 
     const onCancel = () => {
-        reset(user);
+        reset(formSchema.cast(user));
     };
 
     if (isLoading) return <Loading />;
