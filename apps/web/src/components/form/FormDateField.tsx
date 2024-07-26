@@ -30,7 +30,6 @@ export const FormDateField = (props: Props) => {
                             onChange(new Date(view2date(e.target.value, props.defaultValue)));
                         }}
                         value={date2view(value)}
-                        // inputMode="numeric"
                         fullWidth
                         {...props}
                         label=""

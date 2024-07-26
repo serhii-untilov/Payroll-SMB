@@ -3,7 +3,7 @@ import { FC, PropsWithChildren } from 'react';
 
 interface Props extends BoxProps, PropsWithChildren {}
 
-export const PageLayout: FC<Props> = ({ children, ...other }) => {
+const PageLayout: FC<Props> = ({ children, ...other }) => {
     return (
         <Box
             mb={{ xs: 0, lg: 1, xl: 1 }}
@@ -20,3 +20,5 @@ export const PageLayout: FC<Props> = ({ children, ...other }) => {
         </Box>
     );
 };
+
+export default PageLayout;

@@ -1,5 +1,5 @@
 export class FindAllTaskDto {
-    companyId: number;
+    companyId?: number;
     onDate?: Date;
     onPayPeriodDate?: Date;
     relations?: boolean;

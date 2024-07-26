@@ -1,6 +1,6 @@
 import { dto } from '@/api';
-import { PageLayout } from '@/components/layout/PageLayout';
-import { PageTitle } from '@/components/layout/PageTitle';
+import PageLayout from '@/components/layout/PageLayout';
+import PageTitle from '@/components/layout/PageTitle';
 import { Tab } from '@/components/layout/Tab';
 import { TabPanel } from '@/components/layout/TabPanel';
 import { Tabs } from '@/components/layout/Tabs';

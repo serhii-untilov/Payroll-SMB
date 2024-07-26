@@ -16,7 +16,6 @@ type Props = OutlinedInputProps & {
     options: Option[];
     autofocus?: boolean;
     disabled?: boolean;
-    // sx?: any;
 };
 
 export const FormAutocomplete = (props: Props) => {
@@ -39,7 +38,6 @@ export const FormAutocomplete = (props: Props) => {
                             // autoSelect !!!
                             // autoHighlight !!!
                             autoComplete
-                            // id={'value'}
                             options={props.options}
                             getOptionLabel={(option) => option?.label || ''}
                             getOptionKey={(option) => option?.value || ''}
@@ -62,8 +60,6 @@ export const FormAutocomplete = (props: Props) => {
                                             {...params}
                                             size="small"
                                             fullWidth
-                                            // sx={props.sx}
-                                            // sx={{ fontWeight: 'bold' }}
                                         />
                                     </Box>
                                 );

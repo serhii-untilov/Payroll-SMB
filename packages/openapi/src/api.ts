@@ -2000,7 +2000,7 @@ export interface FindAllTaskDto {
      * @type {number}
      * @memberof FindAllTaskDto
      */
-    'companyId': number;
+    'companyId'?: number;
     /**
      * 
      * @type {Date}

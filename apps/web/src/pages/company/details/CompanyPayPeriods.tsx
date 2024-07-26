@@ -33,7 +33,12 @@ export function CompanyPayPeriods(params: Props) {
     const { companyId } = params;
     const { locale } = useLocale();
     const { company, payPeriod, setPayPeriod } = useAppContext();
-    const { data: currentPayPeriod } = useCurrentPayPeriod({
+    const {
+        data: currentPayPeriod,
+        isLoading,
+        isError,
+        error,
+    } = useCurrentPayPeriod({
         companyId,
         relations: false,
         fullFieldList: true,
