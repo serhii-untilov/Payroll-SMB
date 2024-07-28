@@ -6,7 +6,7 @@ type CompanyNameProps = {
     company: Company;
 };
 
-const CompanyName = ({ company }: CompanyNameProps) => {
+export default function CompanyName({ company }: CompanyNameProps) {
     return (
         <Link to={`/company/${company.id}?tab-index=0&return=true`}>
             <Typography variant="h3" color="primary">
@@ -14,6 +14,4 @@ const CompanyName = ({ company }: CompanyNameProps) => {
             </Typography>
         </Link>
     );
-};
-
-export default CompanyName;
+}

@@ -1,6 +1,6 @@
 import { Link } from '@/components/layout/Link';
-import Error from '@/components/utility/Error';
-import { Loading } from '@/components/utility/Loading';
+import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { useCurrentUser } from '@/hooks/queries/useCurrentUser';
 import { getPartOfDay } from '@/utils/getPartOfDay';
 import { getUserName } from '@/utils/getUserName';
@@ -13,8 +13,8 @@ export default function GreetingUser() {
 
     return (
         <>
-            {isError && <Error error={error} />}
-            {isLoading && <Loading />}
+            {isError && <ErrorDisplay error={error} />}
+            {isLoading && <LoadingDisplay />}
             {user && (
                 <Typography component="h2" variant="h1" textAlign={'center'} sx={{ my: 2 }}>
                     {t(getPartOfDay(new Date().getHours()))},{' '}

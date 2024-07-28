@@ -1,5 +1,5 @@
-import Error from '@/components/utility/Error';
-import { Loading } from '@/components/utility/Loading';
+import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useAppContext from '@/hooks/useAppContext';
 import usePayPeriodOptions from '@/hooks/usePayPeriodOptions';
 import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
@@ -19,8 +19,8 @@ export default function SelectPayPeriod(props: SelectPayPeriodProps) {
 
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {data && (
                 <Select
                     size="small"

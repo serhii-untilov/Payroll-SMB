@@ -25,7 +25,7 @@ export default function CompanyForm(props: CompanyFormProps) {
     return (
         <PageLayout>
             <PageTitle goBack={goBack}>{pageTitle}</PageTitle>
-            <TabsContainer name={'company-tabs'} tabIndex={tabIndex} tabs={tabs} />
+            <TabsContainer id="company-tabs" tabIndex={tabIndex} tabs={tabs} />
         </PageLayout>
     );
 }

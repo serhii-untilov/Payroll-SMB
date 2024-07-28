@@ -4,7 +4,7 @@ import { blue } from '@mui/material/colors';
 import CompanySummary from './CompanySummary';
 import WelcomeNewUser from './WelcomeNewUser';
 
-const Summary = () => {
+export default function Summary() {
     const { company } = useAppContext();
 
     return (
@@ -27,6 +27,4 @@ const Summary = () => {
             </Grid>
         </Box>
     );
-};
-
-export default Summary;
+}

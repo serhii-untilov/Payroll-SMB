@@ -1,6 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { Loading } from '@/components/utility/Loading';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { usePositionHistoryList } from '@/hooks/queries/usePositionHistory';
 import {
     GridCallbackDetails,
@@ -24,7 +24,7 @@ export function PositionHistory(props: Props) {
     const gridRef = useGridApiRef();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
-    if (isLoading) return <Loading />;
+    if (isLoading) return <LoadingDisplay />;
 
     // TODO
     const onAdd = () => console.log('onAdd');

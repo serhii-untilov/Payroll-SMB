@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
 import { Task } from '@repo/openapi';
-import { todoTaskTypeList } from './useTodo';
 import { dateUTC } from '@repo/shared';
+import { useMemo } from 'react';
+import { todoTaskTypeList } from './useTodo';
 
-const useUpcoming = (taskList: Task[]) => {
+export default function useUpcoming(taskList: Task[]) {
     const onDate = dateUTC(new Date());
     return useMemo(
         () =>
@@ -12,6 +12,4 @@ const useUpcoming = (taskList: Task[]) => {
                 .filter((o) => todoTaskTypeList.includes(o.type)),
         [taskList, onDate],
     );
-};
-
-export default useUpcoming;
+}

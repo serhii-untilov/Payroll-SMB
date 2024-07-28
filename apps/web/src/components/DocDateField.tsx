@@ -6,7 +6,7 @@ interface DocDateProps {
     control: any;
 }
 
-export default function DocDate(props: DocDateProps) {
+export default function DocDateField(props: DocDateProps) {
     const { t } = useTranslation();
     return (
         <FormDateField

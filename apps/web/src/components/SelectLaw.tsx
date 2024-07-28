@@ -1,8 +1,8 @@
 import { FormInputDropdown } from '@/components/form/FormInputDropdown';
 import { useLaws } from '@/hooks/queries/useLaws';
 import { useTranslation } from 'react-i18next';
-import Error from './utility/Error';
-import { Loading } from './utility/Loading';
+import ErrorDisplay from './utility/ErrorDisplay';
+import { LoadingDisplay } from './utility/LoadingDisplay';
 
 type Props = {
     control: any;
@@ -13,8 +13,8 @@ export default function SelectLaw(props: Props) {
     const { t } = useTranslation();
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {data && (
                 <FormInputDropdown
                     control={props.control}

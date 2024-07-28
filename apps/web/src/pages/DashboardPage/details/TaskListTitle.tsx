@@ -4,12 +4,10 @@ type TaskListTitleProps = {
     title: string;
 };
 
-const TaskListTitle = ({ title }: TaskListTitleProps) => {
+export default function TaskListTitle({ title }: TaskListTitleProps) {
     return (
         <Typography component="h4" variant="h4" textAlign={'center'}>
             {title}
         </Typography>
     );
-};
-
-export default TaskListTitle;
+}

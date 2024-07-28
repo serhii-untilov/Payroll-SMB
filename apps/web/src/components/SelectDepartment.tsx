@@ -1,7 +1,7 @@
 import { useDepartments } from '@/hooks/queries/useDepartments';
 import { FormAutocomplete } from './form/FormAutocomplete';
-import { Loading } from './utility/Loading';
-import Error from './utility/Error';
+import { LoadingDisplay } from './utility/LoadingDisplay';
+import ErrorDisplay from './utility/ErrorDisplay';
 
 type Props = {
     companyId: number | undefined;
@@ -16,8 +16,8 @@ export function SelectDepartment({ companyId, control, label, id, name }: Props)
 
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {data && (
                 <FormAutocomplete
                     valueType={'number'}

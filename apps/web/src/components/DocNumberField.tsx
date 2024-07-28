@@ -6,7 +6,7 @@ interface DocNumberProps {
     control: any;
 }
 
-export default function DocNumber(props: DocNumberProps) {
+export default function DocNumberField(props: DocNumberProps) {
     const { t } = useTranslation();
     return (
         <FormTextField

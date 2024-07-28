@@ -1,18 +1,15 @@
-import { Task } from '@repo/openapi';
-import TaskCard from '../TaskCard';
-import { useMemo } from 'react';
-import { getTaskDate } from '../TaskCard/hooks/useTask';
 import useLocale from '@/hooks/useLocale';
+import { Task } from '@repo/openapi';
+import { useMemo } from 'react';
+import TaskCard from '../TaskCard';
+import { getTaskDate } from '../TaskCard/hooks/useTask';
 
 type UpcomingTaskProps = {
     task: Task;
 };
 
-const UpcomingTask = ({ task }: UpcomingTaskProps) => {
+export default function UpcomingTask({ task }: UpcomingTaskProps) {
     const { locale } = useLocale();
     const taskDate = useMemo(() => getTaskDate(task, locale), [task, locale]);
-
     return <TaskCard task={task} date={taskDate} />;
-};
-
-export default UpcomingTask;
+}

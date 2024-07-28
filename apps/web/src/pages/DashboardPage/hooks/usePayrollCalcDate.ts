@@ -2,7 +2,7 @@ import { sub } from 'date-fns';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const usePayrollCalcDate = (date: Date): string => {
+export default function usePayrollCalcDate(date: Date): string {
     const { t } = useTranslation();
 
     return useMemo(() => {
@@ -24,6 +24,4 @@ const usePayrollCalcDate = (date: Date): string => {
         }
         return `${day}-${month}-${year} ${t('at')} ${hours}:${minutes} `;
     }, [date, t]);
-};
-
-export default usePayrollCalcDate;
+}

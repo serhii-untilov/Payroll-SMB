@@ -1,6 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { Loading } from '@/components/utility/Loading';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useAppContext from '@/hooks/useAppContext';
 import usePositionBalances from '@/hooks/queries/usePositions';
 import { getUnitByCalcMethod } from '@/utils/getUnitByCalcMethod';
@@ -382,7 +382,7 @@ export function SalaryReport(props: FindAllPositionBalanceDto) {
     } = usePositionBalances(props);
 
     if (isPositionListLoading) {
-        return <Loading />;
+        return <LoadingDisplay />;
     }
 
     if (isPositionListError) {

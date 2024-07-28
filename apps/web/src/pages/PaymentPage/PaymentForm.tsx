@@ -47,7 +47,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                         flexGrow: 1,
                     }}
                 >
-                    <TabsContainer name={'payment-tabs'} tabIndex={tabIndex} tabs={tabs} />
+                    <TabsContainer id="payment-tabs" tabIndex={tabIndex} tabs={tabs} />
                 </Box>
             </PageLayout>
         )

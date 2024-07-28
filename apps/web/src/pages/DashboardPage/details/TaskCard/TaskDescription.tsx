@@ -5,10 +5,8 @@ type TaskDescriptionProps = {
     description: string;
 };
 
-const TaskDescription = ({ description }: TaskDescriptionProps) => {
+export default function TaskDescription({ description }: TaskDescriptionProps) {
     const { t } = useTranslation();
 
     return <Typography sx={{ color: 'text.primary' }}>{t(description)}</Typography>;
-};
-
-export default TaskDescription;
+}

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CreatePayment from './CreatePayment';
 import EditPayment from './EditPayment';
-import Error from '@/components/utility/Error';
+import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import useAppContext from '@/hooks/useAppContext';
 
 export default function PaymentPage() {
@@ -15,8 +15,8 @@ export default function PaymentPage() {
 
     return (
         <>
-            {!company && <Error error={{ message: 'Company not defined.' }} />}
-            {!payPeriod && <Error error={{ message: 'PayPeriod not defined.' }} />}
+            {!company && <ErrorDisplay error={{ message: 'Company not defined.' }} />}
+            {!payPeriod && <ErrorDisplay error={{ message: 'PayPeriod not defined.' }} />}
             {paymentId && company && payPeriod && (
                 <EditPayment {...{ company, payPeriod, paymentId, tabIndex, goBack }} />
             )}

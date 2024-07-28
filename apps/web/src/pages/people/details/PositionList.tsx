@@ -1,6 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { Loading } from '@/components/utility/Loading';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useAppContext from '@/hooks/useAppContext';
 import { usePositions } from '@/hooks/queries/usePositions';
 import { positionsRemove } from '@/services/position.service';
@@ -41,7 +41,7 @@ export function PositionList(props: FindAllPositionDto) {
         await invalidateQueries(queryClient, [ResourceType.Position]);
     };
 
-    if (isLoading) return <Loading />;
+    if (isLoading) return <LoadingDisplay />;
 
     return (
         <>

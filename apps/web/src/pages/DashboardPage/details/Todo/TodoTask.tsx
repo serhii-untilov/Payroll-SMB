@@ -5,8 +5,6 @@ type TodoTaskProps = {
     task: Task;
 };
 
-const TodoTask = ({ task }: TodoTaskProps) => {
+export default function TodoTask({ task }: TodoTaskProps) {
     return <TaskCard task={task} />;
-};
-
-export default TodoTask;
+}

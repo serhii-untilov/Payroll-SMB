@@ -1,7 +1,8 @@
 import { dto } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { Loading } from '@/components/utility/Loading';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
+import useUserCompanies from '@/hooks/queries/useUserCompanies';
 import useAppContext from '@/hooks/useAppContext';
 import { companiesFindOne } from '@/services/company.service';
 import {
@@ -101,22 +102,10 @@ export function UserCompanyList(params: Props) {
         isError,
         isLoading,
         error: error,
-    } = useQuery<dto.UserCompany[], Error>({
-        queryKey: [ResourceType.Company, { userId, relations: true, showDeleted }],
-        queryFn: async () => {
-            return userId
-                ? (await userCompaniesFindAll({
-                      userId,
-                      relations: true,
-                      withDeleted: showDeleted,
-                  })) ?? []
-                : [];
-        },
-        enabled: !!userId,
-    });
+    } = useUserCompanies({ userId, relations: true, withDeleted: showDeleted });
 
     if (isLoading) {
-        return <Loading />;
+        return <LoadingDisplay />;
     }
 
     if (isError) {

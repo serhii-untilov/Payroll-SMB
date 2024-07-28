@@ -1,6 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { Loading } from '@/components/utility/Loading';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useAppContext from '@/hooks/useAppContext';
 import { useCurrentPayPeriod } from '@/hooks/queries/useCurrentPayPeriod';
 import useLocale from '@/hooks/useLocale';
@@ -17,7 +17,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { ResourceType } from '@repo/openapi';
+import { Company, ResourceType } from '@repo/openapi';
 import { dateUTC, monthBegin, toDate } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { isEqual } from 'date-fns';
@@ -26,13 +26,13 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
-    companyId: number | undefined;
+    company: Company;
 };
 
-export function CompanyPayPeriods(params: Props) {
-    const { companyId } = params;
+export function CompanyPayPeriods({ company }: Props) {
+    const companyId = company.id;
     const { locale } = useLocale();
-    const { company, payPeriod, setPayPeriod } = useAppContext();
+    const { payPeriod, setPayPeriod } = useAppContext();
     const { data: currentPayPeriod, isLoading } = useCurrentPayPeriod({
         companyId,
         relations: false,
@@ -79,14 +79,12 @@ export function CompanyPayPeriods(params: Props) {
     };
 
     const onCalculate = async () => {
-        if (companyId) {
-            await companiesSalaryCalculate(companyId);
-            await invalidateQueries();
-        }
+        await companiesSalaryCalculate(companyId);
+        await invalidateQueries();
     };
 
     const onClose = async () => {
-        if (companyId && currentPayPeriod) {
+        if (currentPayPeriod) {
             if (currentPayPeriod.dateFrom.getTime() !== payPeriod?.getTime()) {
                 await invalidateQueries();
                 return;
@@ -100,7 +98,7 @@ export function CompanyPayPeriods(params: Props) {
     };
 
     const onOpen = async () => {
-        if (companyId && currentPayPeriod) {
+        if (currentPayPeriod) {
             if (currentPayPeriod.dateFrom.getTime() !== payPeriod?.getTime()) {
                 await invalidateQueries();
                 return;
@@ -113,7 +111,7 @@ export function CompanyPayPeriods(params: Props) {
         }
     };
 
-    if (isLoading) return <Loading />;
+    if (isLoading) return <LoadingDisplay />;
 
     return (
         <>

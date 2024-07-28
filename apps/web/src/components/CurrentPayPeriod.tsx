@@ -9,7 +9,7 @@ type CurrentPayPeriodProps = {
     payPeriod: PayPeriod;
 };
 
-const CurrentPayPeriod = ({ companyId, payPeriod }: CurrentPayPeriodProps) => {
+export default function CurrentPayPeriod({ companyId, payPeriod }: CurrentPayPeriodProps) {
     const { t } = useTranslation();
     const periodName = usePayPeriodName(payPeriod);
 
@@ -21,6 +21,4 @@ const CurrentPayPeriod = ({ companyId, payPeriod }: CurrentPayPeriodProps) => {
             </Typography>
         </Link>
     );
-};
-
-export default CurrentPayPeriod;
+}

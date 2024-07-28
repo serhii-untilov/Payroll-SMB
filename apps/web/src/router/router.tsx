@@ -1,12 +1,12 @@
 import { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
-import { Loading } from '../components/utility/Loading';
+import { LoadingDisplay } from '../components/utility/LoadingDisplay';
 import AuthGuard from '../guards/AuthGuard';
 import GuestGuard from '../guards/GuestGuard';
 
 export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<LoadingDisplay />}>
         <Component {...props} />
     </Suspense>
 );
@@ -23,7 +23,7 @@ const Payroll = Loadable(lazy(() => import('@/pages/payroll/Payroll')));
 const Payments = Loadable(lazy(() => import('@/pages/payments/Payments')));
 const PaymentForm = Loadable(lazy(() => import('@/pages/PaymentPage/PaymentForm')));
 const Reports = Loadable(lazy(() => import('@/pages/reports/Reports')));
-const Profile = Loadable(lazy(() => import('@/pages/profile/Profile')));
+const UserProfilePage = Loadable(lazy(() => import('@/pages/UserProfilePage')));
 const Position = Loadable(lazy(() => import('@/pages/PositionPage')));
 const AccountantFeatures = Loadable(
     lazy(() => import('@/pages/welcome/details/featuresByRole/AccountantFeatures')),
@@ -103,7 +103,7 @@ const router: RouteObject[] = [
             {
                 path: 'profile',
                 children: [
-                    { index: true, element: <Profile /> },
+                    { index: true, element: <UserProfilePage /> },
                     { path: 'company', element: <CompanyPage /> },
                 ],
             },

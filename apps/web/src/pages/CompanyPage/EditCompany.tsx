@@ -1,5 +1,5 @@
-import Error from '@/components/utility/Error';
-import { Loading } from '@/components/utility/Loading';
+import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { useCompany } from '@/hooks/queries/useCompany';
 import CompanyForm from './CompanyForm';
 
@@ -15,8 +15,8 @@ export default function EditCompany(props: EditCompanyProps) {
 
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {company && <CompanyForm company={company} tabIndex={tabIndex} goBack={goBack} />}
         </>
     );

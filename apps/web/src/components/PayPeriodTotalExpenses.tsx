@@ -1,16 +1,15 @@
-import { Typography } from '@mui/material';
-import { Link } from './layout/Link';
-import { useTranslation } from 'react-i18next';
 import { sumFormatter } from '@/utils/sumFormatter';
+import { Typography } from '@mui/material';
 import { PayPeriod } from '@repo/openapi';
+import { useTranslation } from 'react-i18next';
+import { Link } from './layout/Link';
 
 type PayPeriodTotalExpensesProps = {
     payPeriod: PayPeriod;
 };
 
-const PayPeriodTotalExpenses = ({ payPeriod }: PayPeriodTotalExpensesProps) => {
+export default function PayPeriodTotalExpenses({ payPeriod }: PayPeriodTotalExpensesProps) {
     const { t } = useTranslation();
-
     return (
         <Link to={'/payroll?tab-index=0&return=true'}>
             <Typography sx={{ display: 'inline' }}>{t('Total expenses')}: </Typography>
@@ -22,6 +21,4 @@ const PayPeriodTotalExpenses = ({ payPeriod }: PayPeriodTotalExpensesProps) => {
             </Typography>
         </Link>
     );
-};
-
-export default PayPeriodTotalExpenses;
+}

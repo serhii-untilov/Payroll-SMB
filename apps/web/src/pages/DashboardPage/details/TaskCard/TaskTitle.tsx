@@ -5,10 +5,8 @@ type TaskTitleProps = {
     title: string;
 };
 
-const TaskTitle = ({ title }: TaskTitleProps) => {
+export default function TaskTitle({ title }: TaskTitleProps) {
     const { t } = useTranslation();
 
     return <Typography sx={{ fontWeight: 'medium', color: 'text.primary' }}>{t(title)}</Typography>;
-};
-
-export default TaskTitle;
+}

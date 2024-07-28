@@ -10,11 +10,9 @@ type HappyBirthdayTaskProps = {
     person: Person;
 };
 
-const HappyBirthdayCard = ({ task, person }: HappyBirthdayTaskProps) => {
+export default function HappyBirthdayCard({ task, person }: HappyBirthdayTaskProps) {
     const { locale } = useLocale();
     const description = useDescription(task, person);
     const taskDate = useMemo(() => getTaskDate(task, locale), [task, locale]);
     return <TaskCard task={task} date={taskDate} description={description} />;
-};
-
-export default HappyBirthdayCard;
+}

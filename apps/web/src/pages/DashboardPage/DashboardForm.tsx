@@ -13,7 +13,7 @@ interface DashboardFormProps {
     taskList: Task[];
 }
 
-const DashboardForm = ({ taskList }: DashboardFormProps) => {
+export default function DashboardForm({ taskList }: DashboardFormProps) {
     const { company } = useAppContext();
     return (
         <>
@@ -54,6 +54,4 @@ const DashboardForm = ({ taskList }: DashboardFormProps) => {
             </PageLayout>
         </>
     );
-};
-
-export default DashboardForm;
+}

@@ -24,22 +24,22 @@ export default function useCompanyTabs(props: Props) {
             {
                 label: t('Pay Periods'),
                 disabled: !company,
-                tab: <CompanyPayPeriods company={company} />,
+                tab: company && <CompanyPayPeriods company={company} />,
             },
             {
                 label: t('Departments'),
                 disabled: !company,
-                tab: <CompanyDepartments company={company} />,
+                tab: company && <CompanyDepartments company={company} />,
             },
             {
                 label: t('Company Managers'),
                 disabled: !company,
-                tab: <CompanyManagers company={company} />,
+                tab: company && <CompanyManagers company={company} />,
             },
             {
                 label: t('Accounts'),
                 disabled: !company,
-                tab: <CompanyAccounts company={company} />,
+                tab: company && <CompanyAccounts company={company} />,
             },
         ],
         [],

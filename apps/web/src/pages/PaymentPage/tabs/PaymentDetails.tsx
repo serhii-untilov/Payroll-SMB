@@ -1,5 +1,5 @@
 import DocDate from '@/components/DocDate';
-import DocNumber from '@/components/DocNumber';
+import DocNumberField from '@/components/DocNumberField';
 import DocPaymentStatus from '@/components/DocPaymentStatus';
 import { FormNumberField } from '@/components/form/FormNumberField';
 import Toolbar from '@/components/layout/Toolbar';
@@ -54,7 +54,7 @@ export function PaymentDetails(props: Props) {
                 <Grid item md={12} lg={10} xl={8}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={12} lg={3}>
-                            <DocNumber disabled={!!payment?.id} control={control} />
+                            <DocNumberField disabled={!!payment?.id} control={control} />
                         </Grid>
                         <Grid item xs={12} sm={12} lg={3}>
                             <DocDate disabled={!!payment?.id} control={control} />

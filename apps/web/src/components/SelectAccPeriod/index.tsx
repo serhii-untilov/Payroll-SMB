@@ -1,8 +1,8 @@
-import Error from '@/components/utility/Error';
+import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
 import { SelectProps } from '@mui/material';
 import SelectAccPeriodForm from './form/SelectAccPeriodForm';
-import { Loading } from '@/components/utility/Loading';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 
 type Props = SelectProps<string> & {
     companyId: number;
@@ -19,8 +19,8 @@ export default function SelectAccPeriod(props: Props) {
 
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {data && <SelectAccPeriodForm {...props} data={data} />}
         </>
     );

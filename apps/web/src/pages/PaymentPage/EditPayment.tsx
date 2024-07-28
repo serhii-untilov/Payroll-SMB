@@ -1,5 +1,5 @@
-import Error from '@/components/utility/Error';
-import { Loading } from '@/components/utility/Loading';
+import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { usePayment } from '@/hooks/queries/usePayments';
 import PaymentForm from './PaymentForm';
 import { Company } from '@repo/openapi';
@@ -18,8 +18,8 @@ export default function EditPayment(props: EditPaymentProps) {
 
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {payment && <PaymentForm {...{ company, payPeriod, payment, tabIndex, goBack }} />}
         </>
     );

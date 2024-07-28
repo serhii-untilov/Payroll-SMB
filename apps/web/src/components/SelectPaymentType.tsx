@@ -1,8 +1,8 @@
 import { usePaymentTypes } from '@/hooks/queries/usePaymentTypes';
 import { FindAllPaymentTypeDto } from '@repo/openapi';
 import { FormAutocomplete } from './form/FormAutocomplete';
-import Error from './utility/Error';
-import { Loading } from './utility/Loading';
+import ErrorDisplay from './utility/ErrorDisplay';
+import { LoadingDisplay } from './utility/LoadingDisplay';
 import { useTranslation } from 'react-i18next';
 
 type SelectPaymentTypeProps = {
@@ -23,8 +23,8 @@ export function SelectPaymentType(props: SelectPaymentTypeProps) {
 
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {data && (
                 <FormAutocomplete
                     disabled={disabled}

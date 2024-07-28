@@ -2,14 +2,14 @@ import { invalidateQueries } from '@/utils/invalidateQueries';
 import { Box, Grid, IconButton } from '@mui/material';
 import { ResourceType, Task, TaskStatus } from '@repo/openapi';
 import { useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import TaskDate from './TaskDate';
 import TaskDescription from './TaskDescription';
 import TaskTitle from './TaskTitle';
-import { useTask } from './hooks/useTask';
 import useStatusIcon from './hooks/useStatusIcon';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useTask } from './hooks/useTask';
 
 interface Props {
     task: Task;
@@ -17,7 +17,7 @@ interface Props {
     description?: string;
 }
 
-const TaskCard = (props: Props) => {
+export default function TaskCard(props: Props) {
     const { date, description } = props;
     const [task, setTask] = useState<Task>(props.task);
     const { title, path, bgColor, toggleStatus } = useTask(task);
@@ -79,6 +79,4 @@ const TaskCard = (props: Props) => {
             </Grid>
         </Box>
     );
-};
-
-export default TaskCard;
+}

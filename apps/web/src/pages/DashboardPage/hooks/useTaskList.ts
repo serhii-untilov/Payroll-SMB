@@ -4,11 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 
 type Params = FindAllTaskDto;
 
-const useTaskList = (params: Params) => {
+export default function useTaskList(params: Params) {
     return useQuery<Task[], Error>({
         queryKey: [ResourceType.Task, params],
         queryFn: async () => await tasksFindAll(params),
     });
-};
-
-export default useTaskList;
+}

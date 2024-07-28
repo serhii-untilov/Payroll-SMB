@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
 import { Task, TaskType } from '@repo/openapi';
 import { dateUTC } from '@repo/shared';
+import { useMemo } from 'react';
 
 export const typeList: TaskType[] = [TaskType.HappyBirthday];
 
-const useReminder = (taskList: Task[]) => {
+export default function useReminder(taskList: Task[]) {
     const onDate = dateUTC(new Date());
     return useMemo(
         () =>
@@ -13,6 +13,4 @@ const useReminder = (taskList: Task[]) => {
                 .filter((o) => typeList.includes(o.type)),
         [taskList, onDate],
     );
-};
-
-export default useReminder;
+}

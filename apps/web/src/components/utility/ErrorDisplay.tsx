@@ -5,7 +5,7 @@ type ErrorProps = {
     error: AppError;
 };
 
-export default function Error({ error }: ErrorProps) {
+export default function ErrorDisplay({ error }: ErrorProps) {
     const { code, message } = error;
     snackbarError(code || message ? `${code ?? ''}\n${message ?? ''}` : 'Unknown error.');
     return null;

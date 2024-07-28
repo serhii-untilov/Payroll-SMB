@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
 import { Task, TaskType } from '@repo/openapi';
 import { dateUTC } from '@repo/shared';
+import { useMemo } from 'react';
 
 export const todoTaskTypeList: TaskType[] = [
     TaskType.CreateUser,
@@ -17,7 +17,7 @@ export const todoTaskTypeList: TaskType[] = [
     TaskType.SendIncomeTaxReport,
 ];
 
-const useTodo = (taskList: Task[]) => {
+export default function useTodo(taskList: Task[]) {
     const onDate = dateUTC(new Date());
     return useMemo(
         () =>
@@ -26,6 +26,4 @@ const useTodo = (taskList: Task[]) => {
                 .filter((o) => todoTaskTypeList.includes(o.type)),
         [taskList, onDate],
     );
-};
-
-export default useTodo;
+}

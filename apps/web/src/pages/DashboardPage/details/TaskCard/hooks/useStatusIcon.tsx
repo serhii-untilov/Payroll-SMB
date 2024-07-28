@@ -8,11 +8,9 @@ import {
 import { Task, TaskStatus } from '@repo/openapi';
 import { useMemo } from 'react';
 
-const useStatusIcon = (task: Task) => {
+export default function useStatusIcon(task: Task) {
     return useMemo(() => getStatusIcon(task), [task]);
-};
-
-export default useStatusIcon;
+}
 
 function getStatusIcon(task: Task) {
     if (task.dateFrom.getTime() > new Date().getTime()) {

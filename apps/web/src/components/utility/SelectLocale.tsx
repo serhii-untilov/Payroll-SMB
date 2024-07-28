@@ -15,7 +15,7 @@ const options = [
     },
 ];
 
-export const Locale = () => {
+export const SelectLocale = () => {
     const { locale, setLanguage } = useLocale();
 
     const handleChange = (event: SelectChangeEvent) => {

@@ -1,6 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { Loading } from '@/components/utility/Loading';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { useDepartments } from '@/hooks/queries/useDepartments';
 import DepartmentForm from '@/pages/department/DepartmentForm';
 import { departmentsRemove } from '@/services/department.service';
@@ -13,21 +13,20 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { ResourceType } from '@repo/openapi';
+import { Company, ResourceType } from '@repo/openapi';
 import { date2view } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-    companyId: number | undefined;
+    company: Company;
 };
 
-export function CompanyDepartments(params: Props) {
-    const { companyId } = params;
+export function CompanyDepartments({ company }: Props) {
     const [openForm, setOpenForm] = useState(false);
     const [departmentId, setDepartmentId] = useState<number | null>(null);
-    const { data, isLoading } = useDepartments({ companyId, relations: true });
+    const { data, isLoading } = useDepartments({ companyId: company.id, relations: true });
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
@@ -58,7 +57,7 @@ export function CompanyDepartments(params: Props) {
     const onPrint = () => gridRef.current.exportDataAsPrint();
     const onExport = () => gridRef.current.exportDataAsCsv();
 
-    if (isLoading) return <Loading />;
+    if (isLoading) return <LoadingDisplay />;
 
     return (
         <>

@@ -1,5 +1,5 @@
-import Error from '@/components/utility/Error';
-import { Loading } from '@/components/utility/Loading';
+import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { usePerson } from '@/hooks/queries/usePersons';
 import { Task } from '@repo/openapi';
 import HappyBirthdayCard from './HappyBirthdayCard';
@@ -9,15 +9,13 @@ type HappyBirthdayTaskProps = {
     personId: number;
 };
 
-const HappyBirthdayTask = ({ task, personId }: HappyBirthdayTaskProps) => {
+export default function HappyBirthdayTask({ task, personId }: HappyBirthdayTaskProps) {
     const { data: person, isLoading, isError, error } = usePerson(personId);
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {person && <HappyBirthdayCard task={task} person={person} />}
         </>
     );
-};
-
-export default HappyBirthdayTask;
+}

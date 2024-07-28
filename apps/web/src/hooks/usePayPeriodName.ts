@@ -1,10 +1,10 @@
-import { PayPeriod } from '@repo/openapi';
-import useLocale from './useLocale';
-import { useMemo } from 'react';
 import { capitalizeFirstChar } from '@/utils/capitalizeFirstChar';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
+import { PayPeriod } from '@repo/openapi';
+import { useMemo } from 'react';
+import useLocale from './useLocale';
 
-const usePayPeriodName = (payPeriod: PayPeriod): string => {
+export default function usePayPeriodName(payPeriod: PayPeriod): string {
     const { locale } = useLocale();
     return useMemo<string>(() => {
         return capitalizeFirstChar(
@@ -17,6 +17,4 @@ const usePayPeriodName = (payPeriod: PayPeriod): string => {
             ),
         );
     }, [locale, payPeriod]);
-};
-
-export default usePayPeriodName;
+}

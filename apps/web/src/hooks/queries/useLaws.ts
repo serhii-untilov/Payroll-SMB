@@ -5,8 +5,6 @@ import { useQuery } from '@tanstack/react-query';
 export function useLaws() {
     return useQuery<Law[], Error>({
         queryKey: [ResourceType.Law],
-        queryFn: async () => {
-            return (await lawsFindAll()) ?? [];
-        },
+        queryFn: async () => await lawsFindAll(),
     });
 }

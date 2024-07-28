@@ -10,7 +10,7 @@ export interface TabComponent {
 }
 
 export interface TabsContainerProps {
-    name: string;
+    id: string;
     tabs: TabComponent[];
     tabIndex?: string | null;
 }
@@ -18,14 +18,14 @@ export interface TabsContainerProps {
 const PREFIX = 'tab-index-';
 
 export function TabsContainer(props: TabsContainerProps) {
-    const { name, tabs } = props;
+    const { id, tabs } = props;
     const [tabIndex, setTab] = useState<number>(
-        Number(props.tabIndex ?? localStorage.getItem(PREFIX + name)),
+        Number(props.tabIndex ?? localStorage.getItem(PREFIX + id)),
     );
 
     const handleChangeTab = (_event: SyntheticEvent, tabIndex: number) => {
         setTab(tabIndex);
-        localStorage.setItem(PREFIX + name, tabIndex.toString());
+        localStorage.setItem(PREFIX + id, tabIndex.toString());
     };
 
     const getLabel = (label: string | (() => string)) =>

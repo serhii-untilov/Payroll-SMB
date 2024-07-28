@@ -1,7 +1,7 @@
 import useWorkNorm from '@/hooks/queries/useWorkNorm';
 import { FormAutocomplete } from './form/FormAutocomplete';
-import Error from './utility/Error';
-import { Loading } from './utility/Loading';
+import ErrorDisplay from './utility/ErrorDisplay';
+import { LoadingDisplay } from './utility/LoadingDisplay';
 
 interface Props {
     companyId: number | undefined;
@@ -16,8 +16,8 @@ export function SelectWorkNorm({ control, label, id, name }: Props) {
 
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {data && (
                 <FormAutocomplete
                     valueType={'number'}

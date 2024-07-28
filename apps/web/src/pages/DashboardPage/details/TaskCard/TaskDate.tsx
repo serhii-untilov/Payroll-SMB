@@ -4,7 +4,7 @@ type TaskDateProps = {
     date: string;
 };
 
-const TaskDate = ({ date }: TaskDateProps) => {
+export default function TaskDate({ date }: TaskDateProps) {
     return (
         <Grid
             alignItems={'middle'}
@@ -26,6 +26,4 @@ const TaskDate = ({ date }: TaskDateProps) => {
             </Typography>
         </Grid>
     );
-};
-
-export default TaskDate;
+}

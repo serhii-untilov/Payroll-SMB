@@ -9,7 +9,7 @@ type SummaryProps = {
     company: Company;
 };
 
-const CompanySummary = ({ company }: SummaryProps) => {
+export default function CompanySummary({ company }: SummaryProps) {
     return (
         <Grid container flexDirection="row">
             <Grid item xs={12} lg={6} container flexDirection="column">
@@ -50,6 +50,4 @@ const CompanySummary = ({ company }: SummaryProps) => {
             </Grid>
         </Grid>
     );
-};
-
-export default CompanySummary;
+}

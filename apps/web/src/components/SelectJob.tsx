@@ -1,7 +1,7 @@
 import { useJobs } from '@/hooks/queries/useJobs';
 import { FormAutocomplete } from './form/FormAutocomplete';
-import { Loading } from './utility/Loading';
-import Error from './utility/Error';
+import { LoadingDisplay } from './utility/LoadingDisplay';
+import ErrorDisplay from './utility/ErrorDisplay';
 
 type Props = {
     control: any;
@@ -15,8 +15,8 @@ export function SelectJob({ control, label, id, name }: Props) {
 
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && <Error error={error} />}
+            {isLoading && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
             {data && (
                 <FormAutocomplete
                     valueType={'number'}

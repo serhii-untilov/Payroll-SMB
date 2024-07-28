@@ -1,5 +1,5 @@
-import Error from '@/components/utility/Error';
-import { Loading } from '@/components/utility/Loading';
+import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useAppContext from '@/hooks/useAppContext';
 import { usePosition } from '@/hooks/queries/usePositions';
 import { usePositionHistoryLast } from '@/hooks/queries/usePositionHistory';
@@ -36,9 +36,9 @@ export default function EditPosition(props: EditPositionProps) {
 
     return (
         <>
-            {(isLoading || isPositionHistoryLoading) && <Loading />}
-            {isError && <Error error={error} />}
-            {isPositionHistoryError && <Error error={positionHistoryError} />}
+            {(isLoading || isPositionHistoryLoading) && <LoadingDisplay />}
+            {isError && <ErrorDisplay error={error} />}
+            {isPositionHistoryError && <ErrorDisplay error={positionHistoryError} />}
             {position && positionHistory && (
                 <PositionForm
                     position={position}
