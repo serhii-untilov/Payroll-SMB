@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { SalaryReport } from './details/SalaryReport';
-import { useAppContext } from '@/hooks/useAppContext';
-import { useLocale } from '@/hooks/useLocale';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
 import PageLayout from '@/components/layout/PageLayout';
 import PageTitle from '@/components/layout/PageTitle';
 import { InputLabel } from '@/components/layout/InputLabel';
-import { SelectPayPeriod } from '@/components/select/SelectPayPeriod';
+import SelectPayPeriod from '@/components/SelectPayPeriod';
 import { Tabs } from '@/components/layout/Tabs';
 import { Tab } from '@/components/layout/Tab';
 import { TabPanel } from '@/components/layout/TabPanel';
@@ -17,19 +17,11 @@ export default function Payroll() {
     const { company, payPeriod } = useAppContext();
     const { locale } = useLocale();
     const [searchParams] = useSearchParams();
-    const tabName = searchParams.get('tab');
+    const tabIndex = searchParams.get('tab-index');
     const goBack = searchParams.get('return') === 'true';
-    const [tab, setTab] = useState(
-        Number(tabName ? getTabIndex(tabName) : localStorage.getItem('people-tab-index')),
-    );
     const { t } = useTranslation();
 
     useEffect(() => {}, [locale]);
-
-    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-        setTab(newValue);
-        localStorage.setItem('people-tab-index', newValue.toString());
-    };
 
     return (
         company &&
@@ -111,12 +103,4 @@ export default function Payroll() {
             </PageLayout>
         )
     );
-}
-
-function getTabIndex(tabName: string | null): number {
-    if (!tabName) {
-        return 0;
-    }
-    const map = { payroll: 0, employer: 1, summary: 2, entries: 3 };
-    return map[tabName];
 }

@@ -1,10 +1,10 @@
 import { FormDateField } from '@/components/form/FormDateField';
 import { FormTextField } from '@/components/form/FormTextField';
 import { Button } from '@/components/layout/Button';
-import { SelectDepartment } from '@/components/select/SelectDepartment';
-import { useAppContext } from '@/hooks/useAppContext';
-import { useDepartment } from '@/hooks/useDepartment';
-import { useLocale } from '@/hooks/useLocale';
+import { SelectDepartment } from '@/components/SelectDepartment';
+import useAppContext from '@/hooks/useAppContext';
+import { useDepartment } from '@/hooks/queries/useDepartments';
+import useLocale from '@/hooks/useLocale';
 import { departmentsCreate, departmentsUpdate } from '@/services/department.service';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
@@ -37,7 +37,7 @@ export default function DepartmentForm(params: Params) {
     const { t } = useTranslation();
     const { company } = useAppContext();
     const queryClient = useQueryClient();
-    const { department } = useDepartment(Number(params.departmentId));
+    const { data: department } = useDepartment(Number(params.departmentId));
 
     useEffect(() => {}, [company]);
 

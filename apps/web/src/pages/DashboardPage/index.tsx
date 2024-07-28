@@ -1,10 +1,10 @@
+import Error from '@/components/utility/Error';
 import { Loading } from '@/components/utility/Loading';
-import { useAppContext } from '@/hooks/useAppContext';
-import { useLocale } from '@/hooks/useLocale';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
 import { useEffect } from 'react';
 import DashboardForm from './DashboardForm';
 import useTaskList from './hooks/useTaskList';
-import Error from '@/components/utility/Error';
 
 export default function DashboardPage() {
     const { company, themeMode } = useAppContext();

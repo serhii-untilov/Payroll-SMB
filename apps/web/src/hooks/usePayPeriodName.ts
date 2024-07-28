@@ -1,5 +1,5 @@
 import { PayPeriod } from '@repo/openapi';
-import { useLocale } from './useLocale';
+import useLocale from './useLocale';
 import { useMemo } from 'react';
 import { capitalizeFirstChar } from '@/utils/capitalizeFirstChar';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';

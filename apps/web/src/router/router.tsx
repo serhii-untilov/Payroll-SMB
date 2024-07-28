@@ -11,20 +11,20 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
     </Suspense>
 );
 
-export const SignIn = Loadable(lazy(() => import('@/pages/auth/SignIn')));
-const SignUp = Loadable(lazy(() => import('@/pages/auth/SignUp')));
+export const SignIn = Loadable(lazy(() => import('@/pages/AuthPage/SignIn')));
+const SignUp = Loadable(lazy(() => import('@/pages/AuthPage/SignUp')));
 const DashboardPage = Loadable(lazy(() => import('@/pages/DashboardPage')));
 const Welcome = Loadable(lazy(() => import('@/pages/welcome/Welcome')));
-const Company = Loadable(lazy(() => import('@/pages/company/Company')));
+const CompanyPage = Loadable(lazy(() => import('@/pages/CompanyPage')));
 const People = Loadable(lazy(() => import('@/pages/people/People')));
 const TimeOff = Loadable(lazy(() => import('@/pages/timesheet/TimeOff')));
 const TimeSheet = Loadable(lazy(() => import('@/pages/timesheet/TimeSheet')));
 const Payroll = Loadable(lazy(() => import('@/pages/payroll/Payroll')));
 const Payments = Loadable(lazy(() => import('@/pages/payments/Payments')));
-const PaymentForm = Loadable(lazy(() => import('@/pages/payment/PaymentForm')));
+const PaymentForm = Loadable(lazy(() => import('@/pages/PaymentPage/PaymentForm')));
 const Reports = Loadable(lazy(() => import('@/pages/reports/Reports')));
 const Profile = Loadable(lazy(() => import('@/pages/profile/Profile')));
-const Position = Loadable(lazy(() => import('@/pages/position/Position')));
+const Position = Loadable(lazy(() => import('@/pages/PositionPage')));
 const AccountantFeatures = Loadable(
     lazy(() => import('@/pages/welcome/details/featuresByRole/AccountantFeatures')),
 );
@@ -76,8 +76,8 @@ const router: RouteObject[] = [
             {
                 path: 'company',
                 children: [
-                    { index: true, element: <Company /> },
-                    { path: ':companyId', element: <Company /> },
+                    { index: true, element: <CompanyPage /> },
+                    { path: ':companyId', element: <CompanyPage /> },
                 ],
             },
             {
@@ -104,7 +104,7 @@ const router: RouteObject[] = [
                 path: 'profile',
                 children: [
                     { index: true, element: <Profile /> },
-                    { path: 'company', element: <Company /> },
+                    { path: 'company', element: <CompanyPage /> },
                 ],
             },
         ],

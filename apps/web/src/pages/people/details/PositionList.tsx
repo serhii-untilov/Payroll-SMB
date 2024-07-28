@@ -1,8 +1,8 @@
 import { DataGrid } from '@/components/grid/DataGrid';
-import { Toolbar } from '@/components/layout/Toolbar';
+import Toolbar from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
-import { useAppContext } from '@/hooks/useAppContext';
-import { usePositionList } from '@/hooks/usePositionList';
+import useAppContext from '@/hooks/useAppContext';
+import { usePositions } from '@/hooks/queries/usePositions';
 import { positionsRemove } from '@/services/position.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
@@ -27,9 +27,9 @@ export function PositionList(props: FindAllPositionDto) {
     const navigate = useNavigate();
     const { payPeriod } = useAppContext();
     const columns = useColumns(payPeriod);
-    const { data, isLoading } = usePositionList(props);
+    const { data, isLoading } = usePositions(props);
 
-    const onAddPosition = () => navigate('/people/position/?tab=details&return=true');
+    const onAddPosition = () => navigate('/people/position/?tab-index=0&return=true');
     const onEditPosition = (positionId: number) =>
         navigate(`/people/position/${positionId}?return=true`);
     const onPrint = () => gridRef.current.exportDataAsPrint();

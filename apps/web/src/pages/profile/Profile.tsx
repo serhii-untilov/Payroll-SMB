@@ -5,8 +5,8 @@ import { TabPanel } from '@/components/layout/TabPanel';
 import { Tabs } from '@/components/layout/Tabs';
 import { AvatarBox } from '@/components/utility/AvatarBox';
 import { Loading } from '@/components/utility/Loading';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
-import { useLocale } from '@/hooks/useLocale';
+import { useCurrentUser } from '@/hooks/queries/useCurrentUser';
+import useLocale from '@/hooks/useLocale';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
@@ -14,11 +14,8 @@ import { UserCompanyList, UserDetails } from './details';
 
 export default function Profile() {
     const [searchParams] = useSearchParams();
-    const tabName = searchParams.get('tab');
+    const tabIndex = searchParams.get('tab-index');
     const goBack = searchParams.get('return') === 'true';
-    const [tab, setTab] = useState(
-        tabName ? getTabIndex(tabName) : Number(localStorage.getItem('profile-tab-index')),
-    );
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { data: user, isLoading } = useCurrentUser();
@@ -30,11 +27,6 @@ export default function Profile() {
     useEffect(() => {}, [locale]);
 
     if (isLoading) return <Loading />;
-
-    const handleChange = (_event: SyntheticEvent, newValue: number) => {
-        setTab(newValue);
-        localStorage.setItem('profile-tab-index', newValue.toString());
-    };
 
     return (
         <PageLayout>
@@ -52,12 +44,4 @@ export default function Profile() {
             </TabPanel>
         </PageLayout>
     );
-}
-
-function getTabIndex(tabName: string | null): number {
-    if (!tabName) {
-        return 0;
-    }
-    const map = { details: 0, companies: 1 };
-    return map[tabName];
 }

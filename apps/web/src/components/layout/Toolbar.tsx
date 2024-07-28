@@ -78,7 +78,7 @@ function ToolbarItem({ item, title, color, children, button }: ToolbarItemProps)
     );
 }
 
-export function Toolbar(props: Props) {
+export default function Toolbar(props: Props) {
     const { t } = useTranslation();
 
     return (

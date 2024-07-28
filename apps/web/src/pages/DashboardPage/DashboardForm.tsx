@@ -1,13 +1,13 @@
+import GreetingUser from '@/components/GreetingUser';
 import PageLayout from '@/components/layout/PageLayout';
-import { useAppContext } from '@/hooks/useAppContext';
+import SupportCenter from '@/components/SupportCenter';
+import useAppContext from '@/hooks/useAppContext';
 import { Grid } from '@mui/material';
 import { Task } from '@repo/openapi';
-import Greeting from './components/Greeting';
-import Reminder from './components/Reminder';
-import Summary from './components/Summary';
-import SupportCenter from './components/SupportCenter';
-import Todo from './components/Todo';
-import Upcoming from './components/Upcoming';
+import Reminder from './details/Reminder';
+import Summary from './details/Summary';
+import Todo from './details/Todo';
+import Upcoming from './details/Upcoming';
 
 interface DashboardFormProps {
     taskList: Task[];
@@ -20,7 +20,7 @@ const DashboardForm = ({ taskList }: DashboardFormProps) => {
             <PageLayout>
                 <Grid container flexDirection="column" alignItems="space-between" spacing={2}>
                     <Grid item>
-                        <Greeting />
+                        <GreetingUser />
                         <SupportCenter />
                         {company && <Summary />}
                     </Grid>

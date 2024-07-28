@@ -1,8 +1,8 @@
 import { dto } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
-import { Toolbar } from '@/components/layout/Toolbar';
+import Toolbar from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
-import { useAppContext } from '@/hooks/useAppContext';
+import useAppContext from '@/hooks/useAppContext';
 import { companiesFindOne } from '@/services/company.service';
 import {
     userCompaniesFindAll,
@@ -124,12 +124,12 @@ export function UserCompanyList(params: Props) {
     }
 
     const onAddCompany = () => {
-        navigate(`/profile/company/?tab=details&return=true`);
+        navigate(`/profile/company/?tab-index=0&return=true`);
     };
 
     const onSelectCompany = async (companyId: number) => {
         setCurrentCompany(await companiesFindOne(companyId));
-        navigate(`/company/${companyId}?tab=details&return=true`);
+        navigate(`/company/${companyId}?tab-index=0&return=true`);
     };
 
     const onDeleteCompany = async () => {

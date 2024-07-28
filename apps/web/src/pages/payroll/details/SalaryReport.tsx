@@ -1,8 +1,8 @@
 import { DataGrid } from '@/components/grid/DataGrid';
-import { Toolbar } from '@/components/layout/Toolbar';
+import Toolbar from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
-import { useAppContext } from '@/hooks/useAppContext';
-import { positionsFindBalance } from '@/services/position.service';
+import useAppContext from '@/hooks/useAppContext';
+import usePositionBalances from '@/hooks/queries/usePositions';
 import { getUnitByCalcMethod } from '@/utils/getUnitByCalcMethod';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { Box, Typography } from '@mui/material';
@@ -14,14 +14,8 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import {
-    CalcMethod,
-    FindAllPositionBalanceDto,
-    PositionBalanceExtendedDto,
-    ResourceType,
-} from '@repo/openapi';
+import { CalcMethod, FindAllPositionBalanceDto } from '@repo/openapi';
 import { getFullName, maxDate } from '@repo/shared';
-import { useQuery } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -385,13 +379,7 @@ export function SalaryReport(props: FindAllPositionBalanceDto) {
         isError: isPositionListError,
         isLoading: isPositionListLoading,
         error: positionListError,
-    } = useQuery<PositionBalanceExtendedDto[], Error>({
-        queryKey: [ResourceType.Position, 'balanceExtended', props],
-        queryFn: async () => {
-            return await positionsFindBalance(props);
-        },
-        enabled: !!companyId && !!payPeriod,
-    });
+    } = usePositionBalances(props);
 
     if (isPositionListLoading) {
         return <Loading />;

@@ -1,4 +1,4 @@
-import { useLocale } from '@/hooks/useLocale';
+import useLocale from '@/hooks/useLocale';
 import { FormControl, MenuItem } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { supportedLanguages } from '../../context/LocaleContext';

@@ -1,4 +1,4 @@
-import { useAppContext } from '@/hooks/useAppContext';
+import useAppContext from '@/hooks/useAppContext';
 import { BusinessCenterOutlined, PeopleOutlined, Settings } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';

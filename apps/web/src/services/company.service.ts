@@ -14,7 +14,7 @@ export async function companiesFindOne(id: number) {
     return (await api.companiesFindOne(id)).data;
 }
 
-export async function updateCompany(id: number, payload: UpdateCompanyDto) {
+export async function companiesUpdate(id: number, payload: UpdateCompanyDto) {
     return (await api.companiesUpdate(id, payload)).data;
 }
 

@@ -1,6 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
-import { Toolbar } from '@/components/layout/Toolbar';
-import { usePaymentList } from '@/hooks/usePaymentList';
+import Toolbar from '@/components/layout/Toolbar';
+import { usePayments } from '@/hooks/queries/usePayments';
 import { paymentsRemove } from '@/services/payment.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { sumFormatter } from '@/utils/sumFormatter';
@@ -30,7 +30,7 @@ export function PaymentList(props: Props) {
     const gridRef = useGridApiRef();
     const navigate = useNavigate();
     const params = { relations: true, companyId, payPeriod, ...(status ? { status } : {}) };
-    const { data: rawData } = usePaymentList(params);
+    const { data: rawData } = usePayments(params);
     const data = useMemo(() => filteredPaymentList(rawData, props), [rawData, props]);
 
     // TODO
@@ -198,8 +198,8 @@ function getRowStatus(params: any): string {
                   : 'Normal';
 }
 
-function filteredPaymentList(rawData: Payment[], props: Props) {
-    return rawData.filter(
+function filteredPaymentList(rawData: Payment[] | undefined, props: Props) {
+    return rawData?.filter(
         (o) =>
             (props.companyPayments && o.paymentType?.calcMethod !== CalcMethod.SifPayment) ||
             (props.sifPayments && o.paymentType?.calcMethod === CalcMethod.SifPayment),

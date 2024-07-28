@@ -1,9 +1,9 @@
 import { FormInputDropdown } from '@/components/form/FormInputDropdown';
 import { FormTextField } from '@/components/form/FormTextField';
-import { Toolbar } from '@/components/layout/Toolbar';
+import Toolbar from '@/components/layout/Toolbar';
 import { Loading } from '@/components/utility/Loading';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
-import { useLocale } from '@/hooks/useLocale';
+import { useCurrentUser } from '@/hooks/queries/useCurrentUser';
+import useLocale from '@/hooks/useLocale';
 import { usersUpdate } from '@/services/user.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { invalidateQueries } from '@/utils/invalidateQueries';

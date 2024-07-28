@@ -1,6 +1,8 @@
-import { Law, LawType } from '@repo/openapi';
+import { useLaws } from '@/hooks/queries/useLaws';
+import { LawType } from '@repo/openapi';
 import { useMemo } from 'react';
 
-export function useDefaultLawId(lawList: Law[]) {
-    return useMemo(() => lawList?.find((o) => o.type === LawType.Ukraine)?.id ?? 0, [lawList]);
+export default function useDefaultLawId() {
+    const { data } = useLaws();
+    return useMemo(() => data?.find((o) => o.type === LawType.Ukraine)?.id ?? 0, [data]);
 }
