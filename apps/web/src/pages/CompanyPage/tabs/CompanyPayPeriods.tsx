@@ -1,15 +1,13 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import useAppContext from '@/hooks/useAppContext';
 import { useCurrentPayPeriod } from '@/hooks/queries/useCurrentPayPeriod';
-import useLocale from '@/hooks/useLocale';
 import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
+import useAppContext from '@/hooks/useAppContext';
+import useLocale from '@/hooks/useLocale';
 import { companiesSalaryCalculate } from '@/services/api/company.service';
 import { payPeriodsClose, payPeriodsOpen } from '@/services/api/payPeriod.service';
-import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import * as utils from '@/utils/invalidateQueries';
-import { sumFormatter } from '@/utils/sumFormatter';
 import {
     GridCellParams,
     GridRowParams,
@@ -18,12 +16,11 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { Company, ResourceType } from '@repo/openapi';
-import { dateUTC, monthBegin, toDate } from '@repo/shared';
+import { dateUTC, monthBegin } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
-import { isEqual } from 'date-fns';
 import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import useColumns from '../hooks/useCompanyPeriodsColumns';
 
 type Props = {
     company: Company;
@@ -147,102 +144,4 @@ export function CompanyPayPeriods({ company }: Props) {
             />
         </>
     );
-}
-
-function useColumns(dateLocale: string, payPeriod: Date) {
-    const { t } = useTranslation();
-    const columns = useMemo(() => {
-        return [
-            {
-                field: 'name',
-                headerName: t('Pay Period'),
-                type: 'string',
-                width: 240,
-                sortable: true,
-                valueGetter: (params) => {
-                    return getPayPeriodName(
-                        toDate(params.row.dateFrom),
-                        toDate(params.row.dateTo),
-                        isEqual(params.row.dateFrom, payPeriod),
-                        dateLocale,
-                    );
-                },
-            },
-            {
-                field: 'inBalance',
-                headerName: t('In Balance'),
-                type: 'number',
-                width: 160,
-                sortable: true,
-                valueGetter: (params) => {
-                    return Number(params.value) === 0 ? '' : params.value;
-                },
-            },
-            {
-                field: 'accruals',
-                headerName: t('Accruals'),
-                type: 'number',
-                width: 160,
-                sortable: true,
-                valueGetter: (params) => {
-                    return sumFormatter(params.value);
-                },
-            },
-            {
-                field: 'deductions',
-                headerName: t('Deductions'),
-                type: 'number',
-                width: 160,
-                sortable: true,
-                valueGetter: (params) => {
-                    return sumFormatter(params.value);
-                },
-            },
-            {
-                field: 'taxes',
-                headerName: t('Taxes'),
-                type: 'number',
-                width: 160,
-                sortable: true,
-                valueGetter: (params) => {
-                    return sumFormatter(params.value);
-                },
-            },
-            {
-                field: 'netPay',
-                headerName: t('Net Pay'),
-                type: 'number',
-                width: 160,
-                sortable: true,
-                valueGetter: (params) => {
-                    const netPay =
-                        Number(params.row.inBalance) +
-                        Number(params.row.accruals) -
-                        (Number(params.row.deductions) - Number(params.row.payments));
-                    return sumFormatter(netPay);
-                },
-            },
-            {
-                field: 'payments',
-                headerName: t('Payments Sum'),
-                type: 'number',
-                width: 160,
-                sortable: true,
-                valueGetter: (params) => {
-                    return sumFormatter(params.value);
-                },
-            },
-            {
-                field: 'outBalance',
-                headerName: t('Out Balance'),
-                type: 'number',
-                width: 190,
-                sortable: true,
-                valueGetter: (params) => {
-                    return sumFormatter(params.value);
-                },
-            },
-        ];
-    }, [t, dateLocale, payPeriod]);
-    return columns;
 }

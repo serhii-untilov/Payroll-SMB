@@ -1,69 +1,19 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { GridCellParams, GridColDef, GridRowSelectionModel, MuiEvent } from '@mui/x-data-grid';
+import { GridCellParams, GridRowSelectionModel, MuiEvent } from '@mui/x-data-grid';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import useForm from '../hooks/useCompanyAccounts';
+import useColumns from '../hooks/useCompanyAccountsColumns';
+import { Company } from '@repo/openapi';
 
 type Props = {
-    companyId: number | undefined;
+    company: Company;
 };
 
 export function CompanyAccounts(_params: Props) {
-    const { t } = useTranslation();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-
-    const columns: GridColDef[] = [
-        {
-            field: 'accountNumber',
-            headerName: t('Account Number'),
-            type: 'string',
-            width: 280,
-            sortable: true,
-        },
-        {
-            field: 'bank',
-            headerName: t('Bank'),
-            type: 'string',
-            width: 240,
-            sortable: true,
-            valueGetter: (params) => {
-                return params.row.bank.name;
-            },
-        },
-        {
-            field: 'currency',
-            headerName: t('Currency'),
-            type: 'string',
-            width: 160,
-            sortable: true,
-            valueGetter: (params) => {
-                return params.row.currency.code;
-            },
-        },
-        {
-            field: 'description',
-            headerName: t('Description'),
-            type: 'string',
-            width: 160,
-            sortable: true,
-        },
-    ];
-
-    const onAddAccount = () => {
-        console.log('onAdd');
-    };
-
-    const onEditAccount = (_accountId: number) => {
-        console.log('onEdit');
-    };
-
-    const onPrint = () => {
-        console.log('onPrint');
-    };
-
-    const onExport = () => {
-        console.log('onExport');
-    };
+    const columns = useColumns();
+    const { onAddAccount, onEditAccount, onPrint, onExport } = useForm();
 
     return (
         <>
@@ -96,12 +46,6 @@ export function CompanyAccounts(_params: Props) {
                     // onEditAccount(params.row.id)
                 }}
             />
-            {/* <AccountForm
-                open={openForm}
-                setOpen={setOpenForm}
-                accountId={accountId}
-                submitCallback={submitCallback}
-            /> */}
         </>
     );
 }

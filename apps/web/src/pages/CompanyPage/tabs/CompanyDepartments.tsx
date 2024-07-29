@@ -7,23 +7,21 @@ import { departmentsRemove } from '@/services/api/department.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     GridCellParams,
-    GridColDef,
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { Company, ResourceType } from '@repo/openapi';
-import { date2view } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import useColumns from '../hooks/useCompanyDepartmentsColumns';
 
-type Props = {
+type CompanyDepartmentsProps = {
     company: Company;
 };
 
-export function CompanyDepartments({ company }: Props) {
+export function CompanyDepartments({ company }: CompanyDepartmentsProps) {
     const [openForm, setOpenForm] = useState(false);
     const [departmentId, setDepartmentId] = useState<number | null>(null);
     const { data, isLoading } = useDepartments({ companyId: company.id, relations: true });
@@ -98,50 +96,4 @@ export function CompanyDepartments({ company }: Props) {
             />
         </>
     );
-}
-
-function useColumns() {
-    const { t } = useTranslation();
-    const columns: GridColDef[] = useMemo(() => {
-        return [
-            {
-                field: 'name',
-                headerName: t('Department'),
-                type: 'string',
-                width: 400,
-                sortable: true,
-            },
-            {
-                field: 'dateFrom',
-                headerName: t('Date From'),
-                type: 'string',
-                width: 200,
-                sortable: true,
-                valueGetter: (params) => {
-                    return date2view(params.value);
-                },
-            },
-            {
-                field: 'dateTo',
-                headerName: t('Date To'),
-                type: 'string',
-                width: 200,
-                sortable: true,
-                valueGetter: (params) => {
-                    return date2view(params.value);
-                },
-            },
-            {
-                field: 'parentDepartment',
-                headerName: t('Parent Department'),
-                type: 'string',
-                width: 250,
-                sortable: true,
-                valueGetter: (params) => {
-                    return params.row.parentDepartment?.name ?? '';
-                },
-            },
-        ];
-    }, [t]);
-    return columns;
 }

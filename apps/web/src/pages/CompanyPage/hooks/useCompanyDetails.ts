@@ -26,7 +26,7 @@ interface Props {
     setCompanyId?: (companyId: number) => void;
 }
 
-export default function useForm(props: Props) {
+export default function useCompanyDetails(props: Props) {
     const { company, defaultLawId, defaultAccountingId, setCompanyId } = props;
     const queryClient = useQueryClient();
     const { t } = useTranslation();

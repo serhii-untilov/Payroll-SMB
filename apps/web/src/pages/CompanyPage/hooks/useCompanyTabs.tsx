@@ -42,6 +42,6 @@ export default function useCompanyTabs(props: Props) {
                 tab: company && <CompanyAccounts company={company} />,
             },
         ],
-        [],
+        [t, props, company],
     );
 }

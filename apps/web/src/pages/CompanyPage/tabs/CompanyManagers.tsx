@@ -1,94 +1,19 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { GridCellParams, GridColDef, GridRowSelectionModel, MuiEvent } from '@mui/x-data-grid';
+import { GridCellParams, GridRowSelectionModel, MuiEvent } from '@mui/x-data-grid';
+import { Company } from '@repo/openapi';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import useForm from '../hooks/useCompanyManagers';
+import useColumns from '../hooks/useCompanyManagersColumns';
 
 type Props = {
-    companyId: number | undefined;
+    company: Company;
 };
 
 export function CompanyManagers(_params: Props) {
-    const { t } = useTranslation();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-    const columns: GridColDef[] = [
-        {
-            field: 'fullName',
-            headerName: t('Full Name'),
-            type: 'string',
-            width: 290,
-            sortable: true,
-            valueGetter: (params) => {
-                return `${params.row.firstName} ${params.row.lastName}`;
-            },
-        },
-        {
-            field: 'job',
-            headerName: t('Job'),
-            type: 'string',
-            width: 240,
-            sortable: true,
-            valueGetter: (_params) => {
-                return '';
-            },
-        },
-        {
-            field: 'department',
-            headerName: t('Department'),
-            type: 'string',
-            width: 240,
-            sortable: true,
-            valueGetter: (_params) => {
-                return '';
-            },
-        },
-        {
-            field: 'taxId',
-            headerName: t('Tax ID'),
-            type: 'string',
-            width: 220,
-            sortable: true,
-            valueGetter: (_params) => {
-                return '';
-            },
-        },
-        {
-            field: 'phone',
-            headerName: t('Phone'),
-            type: 'string',
-            width: 160,
-            sortable: true,
-            valueGetter: (_params) => {
-                return '';
-            },
-        },
-        {
-            field: 'email',
-            headerName: t('Email Address'),
-            type: 'string',
-            width: 220,
-            sortable: true,
-            valueGetter: (_params) => {
-                return '';
-            },
-        },
-    ];
-
-    const onAddManager = () => {
-        console.log('onAdd');
-    };
-
-    const onEditManager = (_managerId: number) => {
-        console.log('onEdit');
-    };
-
-    const onPrint = () => {
-        console.log('onPrint');
-    };
-
-    const onExport = () => {
-        console.log('onExport');
-    };
+    const columns = useColumns();
+    const { onAddManager, onEditManager, onPrint, onExport } = useForm();
 
     return (
         <>
@@ -101,6 +26,7 @@ export function CompanyManagers(_params: Props) {
                 onShowDeleted={'disabled'}
                 onRestoreDeleted={'disabled'}
             />
+
             <DataGrid
                 rows={[]}
                 columns={columns}
