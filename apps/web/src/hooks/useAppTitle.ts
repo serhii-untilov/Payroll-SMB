@@ -1,4 +1,4 @@
-import { appGetTitle } from '@/services/app.service';
+import { appGetTitle } from '@/services/api/app.service';
 import { snackbarError } from '@/utils/snackbar';
 import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
