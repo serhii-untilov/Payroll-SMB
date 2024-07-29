@@ -16,7 +16,7 @@ export default function useUserProfileTabs(user: User) {
             {
                 label: t('Companies'),
                 disabled: !user?.id,
-                tab: <UserCompanyList userId={user?.id} />,
+                tab: <UserCompanyList user={user} />,
             },
         ],
         [t, user],
