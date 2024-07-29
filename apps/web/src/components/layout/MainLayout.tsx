@@ -1,6 +1,6 @@
-import useAppContext from '@/hooks/useAppContext';
-import { useAuth } from '@/hooks/useAuth';
-import useLocale from '@/hooks/useLocale';
+import useAppContext from '@/hooks/context/useAppContext';
+import { useAuth } from '@/hooks/context/useAuth';
+import useLocale from '@/hooks/context/useLocale';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';

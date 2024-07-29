@@ -1,4 +1,4 @@
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { usersUpdate } from '@/services/api/user.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { invalidateQueries } from '@/utils/invalidateQueries';

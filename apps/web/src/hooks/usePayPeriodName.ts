@@ -2,7 +2,7 @@ import { capitalizeFirstChar } from '@/utils/capitalizeFirstChar';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { PayPeriod } from '@repo/openapi';
 import { useMemo } from 'react';
-import useLocale from './useLocale';
+import useLocale from './context/useLocale';
 
 export default function usePayPeriodName(payPeriod: PayPeriod): string {
     const { locale } = useLocale();

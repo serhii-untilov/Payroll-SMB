@@ -1,7 +1,7 @@
 import PageLayout from '@/components/layout/PageLayout';
 import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { Company } from '@repo/openapi';
 import { useEffect } from 'react';
 import useTabs from './hooks/useCompanyTabs';

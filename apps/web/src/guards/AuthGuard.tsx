@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/context/useAuth';
 import SignIn from '@/pages/AuthPage/SignIn';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';

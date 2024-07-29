@@ -10,8 +10,8 @@ import { SelectJob } from '@/components/SelectJob';
 import { SelectPaymentType } from '@/components/SelectPaymentType';
 import SelectPerson from '@/components/SelectPerson';
 import { SelectWorkNorm } from '@/components/SelectWorkNorm';
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
+import useAppContext from '@/hooks/context/useAppContext';
+import useLocale from '@/hooks/context/useLocale';
 import { positionsCreate } from '@/services/api/position.service';
 import {
     positionHistoryCreate,

@@ -1,6 +1,6 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import useAppContext from '@/hooks/useAppContext';
+import useAppContext from '@/hooks/context/useAppContext';
 import { usePosition } from '@/hooks/queries/usePositions';
 import { usePositionHistoryLast } from '@/hooks/queries/usePositionHistory';
 import PositionForm from './PositionForm';

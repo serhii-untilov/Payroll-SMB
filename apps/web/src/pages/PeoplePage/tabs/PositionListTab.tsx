@@ -1,6 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import useAppContext from '@/hooks/useAppContext';
+import useAppContext from '@/hooks/context/useAppContext';
 import {
     GridCallbackDetails,
     GridCellParams,

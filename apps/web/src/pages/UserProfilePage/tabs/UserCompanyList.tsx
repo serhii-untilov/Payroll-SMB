@@ -1,15 +1,10 @@
-import { dto } from '@/api';
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
+import useAppContext from '@/hooks/context/useAppContext';
 import useUserCompanies from '@/hooks/queries/useUserCompanies';
-import useAppContext from '@/hooks/useAppContext';
 import { companiesFindOne } from '@/services/api/company.service';
-import {
-    userCompaniesFindAll,
-    userCompaniesRemove,
-    userCompaniesRestore,
-} from '@/services/api/user-companies.service';
+import { userCompaniesRemove, userCompaniesRestore } from '@/services/api/user-companies.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError } from '@/utils/snackbar';
 import {
@@ -23,14 +18,15 @@ import {
 } from '@mui/x-data-grid';
 import { ResourceType } from '@repo/openapi';
 import { date2view } from '@repo/shared';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import useColumns from '../hooks/useUserCompanyListColumns';
 
 type Props = {
-    userId: number | undefined;
+    userId: number;
 };
 
 export function UserCompanyList(params: Props) {
@@ -43,59 +39,7 @@ export function UserCompanyList(params: Props) {
     const [showDeleted, setShowDeleted] = useState<boolean>(false);
     const gridRef = useGridApiRef();
 
-    const columns: GridColDef[] = [
-        {
-            field: 'companyName',
-            headerName: t('Company'),
-            type: 'string',
-            width: 400,
-            sortable: true,
-            valueGetter: (params) => {
-                return params.row.company?.name;
-            },
-        },
-        {
-            field: 'roleName',
-            headerName: t('User Role'),
-            type: 'string',
-            width: 400,
-            sortable: true,
-            valueGetter: (params) => {
-                return params.row.role.name;
-            },
-        },
-        {
-            field: 'payPeriod',
-            headerName: t('Pay Period'),
-            type: 'string',
-            width: 200,
-            sortable: true,
-            valueGetter: (params) => {
-                return date2view(params.row.company?.payPeriod);
-            },
-        },
-        {
-            field: 'dateFrom',
-            headerName: t('Date From'),
-            type: 'string',
-            width: 200,
-            sortable: true,
-            valueGetter: (params) => {
-                return date2view(params.row.company?.dateFrom);
-            },
-        },
-
-        {
-            field: 'dateTo',
-            headerName: t('Date To'),
-            type: 'string',
-            width: 200,
-            sortable: true,
-            valueGetter: (params) => {
-                return date2view(params.row.company?.dateTo);
-            },
-        },
-    ];
+    const columns = useColumns();
 
     const {
         data,

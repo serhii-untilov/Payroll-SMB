@@ -1,7 +1,7 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
+import useAppContext from '@/hooks/context/useAppContext';
+import useLocale from '@/hooks/context/useLocale';
 import { useEffect } from 'react';
 import DashboardForm from './DashboardForm';
 import useTaskList from './hooks/useTaskList';

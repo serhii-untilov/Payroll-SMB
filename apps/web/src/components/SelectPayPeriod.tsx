@@ -1,6 +1,6 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import useAppContext from '@/hooks/useAppContext';
+import useAppContext from '@/hooks/context/useAppContext';
 import usePayPeriodOptions from '@/hooks/usePayPeriodOptions';
 import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
 import { Select, SelectProps } from '@mui/material';

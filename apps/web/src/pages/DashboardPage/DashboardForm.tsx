@@ -1,7 +1,7 @@
 import GreetingUser from '@/components/GreetingUser';
 import PageLayout from '@/components/layout/PageLayout';
 import SupportCenter from '@/components/SupportCenter';
-import useAppContext from '@/hooks/useAppContext';
+import useAppContext from '@/hooks/context/useAppContext';
 import { Grid } from '@mui/material';
 import { Task } from '@repo/openapi';
 import Reminder from './details/Reminder';

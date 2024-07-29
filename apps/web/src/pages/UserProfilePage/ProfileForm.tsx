@@ -2,7 +2,7 @@ import PageLayout from '@/components/layout/PageLayout';
 import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
 import { AvatarBox } from '@/components/utility/AvatarBox';
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import useUserName from '@/hooks/useUserName';
 import { User } from '@repo/openapi';
 import { useEffect } from 'react';

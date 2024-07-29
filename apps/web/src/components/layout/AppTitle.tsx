@@ -1,5 +1,5 @@
 import { useAppTitle } from '@/hooks/useAppTitle';
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { Typography, TypographyProps } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

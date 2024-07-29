@@ -3,7 +3,7 @@ import FirstNameField from '@/components/FirstNameField';
 import LastNameField from '@/components/LastNameField';
 import Toolbar from '@/components/layout/Toolbar';
 import SelectLanguage from '@/components/SelectLanguage';
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { Grid } from '@mui/material';
 import { User } from '@repo/openapi';
 import { useEffect } from 'react';

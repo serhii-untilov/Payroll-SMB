@@ -1,6 +1,6 @@
 import { Divider } from '@/components/layout/Divider';
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
+import useAppContext from '@/hooks/context/useAppContext';
+import useLocale from '@/hooks/context/useLocale';
 import {
     ArrowRightRounded,
     DarkModeOutlined,

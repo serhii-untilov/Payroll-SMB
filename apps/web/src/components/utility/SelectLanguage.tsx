@@ -1,4 +1,4 @@
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { SelectProps } from '@mui/material/Select';
 import { useTranslation } from 'react-i18next';

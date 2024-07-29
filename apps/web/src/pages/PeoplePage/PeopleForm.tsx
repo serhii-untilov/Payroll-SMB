@@ -3,7 +3,7 @@ import PageLayout from '@/components/layout/PageLayout';
 import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
 import SelectPayPeriod from '@/components/SelectPayPeriod';
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { Box, Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
 import { useEffect } from 'react';

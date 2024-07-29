@@ -1,4 +1,4 @@
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { MenuItem } from '@mui/material';
 import { PayPeriod } from '@repo/openapi';

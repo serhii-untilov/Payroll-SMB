@@ -1,8 +1,8 @@
 import Toolbar from '@/components/layout/Toolbar';
-import useAppContext from '@/hooks/useAppContext';
+import useAppContext from '@/hooks/context/useAppContext';
 import useDefaultAccountingId from '@/hooks/useDefaultAccountingId';
 import useDefaultLawId from '@/hooks/useDefaultLawId';
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
 import { useEffect } from 'react';

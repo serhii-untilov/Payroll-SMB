@@ -4,7 +4,7 @@ import { LoadingDisplay } from './utility/LoadingDisplay';
 import ErrorDisplay from './utility/ErrorDisplay';
 
 type Props = {
-    companyId: number | undefined;
+    companyId: number;
     control: any;
     label?: string;
     id?: string;

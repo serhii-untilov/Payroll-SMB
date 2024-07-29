@@ -1,5 +1,5 @@
 import { Company } from '@repo/openapi';
-import PaymentForm from './PaymentForm';
+import PaymentDoc from './PaymentDoc';
 
 interface CreatePaymentProps {
     company: Company;
@@ -8,5 +8,5 @@ interface CreatePaymentProps {
 }
 
 export default function CreatePayment(props: CreatePaymentProps) {
-    return <PaymentForm {...props} goBack={true} />;
+    return <PaymentDoc {...props} goBack={true} />;
 }

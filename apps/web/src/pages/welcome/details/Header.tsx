@@ -1,9 +1,9 @@
 import { AppTitle } from '@/components/layout/AppTitle';
 import { Button } from '@/components/layout/Button';
 import { Logo } from '@/components/layout/Logo';
-import useAppContext from '@/hooks/useAppContext';
-import { useAuth } from '@/hooks/useAuth';
-import useLocale from '@/hooks/useLocale';
+import useAppContext from '@/hooks/context/useAppContext';
+import { useAuth } from '@/hooks/context/useAuth';
+import useLocale from '@/hooks/context/useLocale';
 import { demo } from '@/services/auth/auth.service';
 import { Language, MenuRounded } from '@mui/icons-material';
 import { Box, Drawer, IconButton } from '@mui/material';

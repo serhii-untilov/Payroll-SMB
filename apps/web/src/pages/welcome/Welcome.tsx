@@ -1,5 +1,5 @@
-import useAppContext from '@/hooks/useAppContext';
-import useLocale from '@/hooks/useLocale';
+import useAppContext from '@/hooks/context/useAppContext';
+import useLocale from '@/hooks/context/useLocale';
 import { Box, CssBaseline } from '@mui/material';
 import { useEffect } from 'react';
 import DemoButton from './details/DemoButton';

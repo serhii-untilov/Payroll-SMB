@@ -1,5 +1,5 @@
-import { useAuth } from '@/hooks/useAuth';
-import useLocale from '@/hooks/useLocale';
+import { useAuth } from '@/hooks/context/useAuth';
+import useLocale from '@/hooks/context/useLocale';
 import { companiesFindOne } from '@/services/api/company.service';
 import { payPeriodsFindCurrent } from '@/services/api/payPeriod.service';
 import { userCompaniesFindAll } from '@/services/api/user-companies.service';

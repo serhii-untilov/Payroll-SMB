@@ -1,8 +1,8 @@
 import { FormTextField } from '@/components/form/FormTextField';
 import { AppTitle } from '@/components/layout/AppTitle';
 import { Copyright } from '@/components/layout/Copyright';
-import { useAuth } from '@/hooks/useAuth';
-import useLocale from '@/hooks/useLocale';
+import { useAuth } from '@/hooks/context/useAuth';
+import useLocale from '@/hooks/context/useLocale';
 import { errorMessage } from '@/utils/errorMessage';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';

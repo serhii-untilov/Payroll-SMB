@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { FormInputDropdown } from './form/FormInputDropdown';
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 
 interface SelectLanguageProps {
     control: any;

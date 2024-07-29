@@ -1,4 +1,4 @@
-import useAppContext from '@/hooks/useAppContext';
+import useAppContext from '@/hooks/context/useAppContext';
 import { Box, Grid } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import CompanySummary from './CompanySummary';

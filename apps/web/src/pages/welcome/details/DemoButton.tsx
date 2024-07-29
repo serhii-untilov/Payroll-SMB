@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/context/useAuth';
 import { demo } from '@/services/auth/auth.service';
 import { Button } from '@mui/material';
 import { t } from 'i18next';

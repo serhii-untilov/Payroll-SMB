@@ -1,4 +1,4 @@
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { Person, Task } from '@repo/openapi';
 import { useMemo } from 'react';
 import TaskCard from '../../TaskCard';
