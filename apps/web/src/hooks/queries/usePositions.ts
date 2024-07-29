@@ -31,7 +31,7 @@ export function usePositions(params: FindAllPositionDto) {
     });
 }
 
-export default function usePositionBalances(params: FindAllPositionBalanceDto) {
+export function usePositionBalances(params: FindAllPositionBalanceDto) {
     return useQuery<PositionBalanceExtendedDto[], Error>({
         queryKey: [ResourceType.Position, 'balanceExtended', params],
         queryFn: async () => {

@@ -1,53 +1,53 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
+import useAppContext from '@/hooks/useAppContext';
 import {
+    GridCallbackDetails,
     GridCellParams,
     GridRowParams,
     GridRowSelectionModel,
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { Company, Payment } from '@repo/openapi';
+import { Position } from '@repo/openapi';
 import { useState } from 'react';
-import useForm from '../hooks/useMandatoryPayments';
-import useColumns from '../hooks/useMandatoryPaymentsColumns';
+import useColumns from '../hooks/usePositionListColumns';
+import useForm from '../hooks/usePositionList';
 
-type Props = {
-    company: Company;
-    payPeriod: Date;
-    payment: Payment;
-};
-export function MandatoryPayments(_props: Props) {
+interface PositionListTabProps {
+    positions: Position[];
+}
+
+export default function PositionListTab({ positions }: PositionListTabProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
-    const { onAddPayment, onDeletePayment, onEditPayment, onPrint, onExport } = useForm(gridRef);
-    const columns = useColumns();
-
-    // TODO
-    const data = [];
+    const { payPeriod } = useAppContext();
+    const columns = useColumns(payPeriod);
+    const { getRowStatus, onAddPosition, onEditPosition, onDeletePosition, onPrint, onExport } =
+        useForm(gridRef, rowSelectionModel);
 
     return (
         <>
             <Toolbar
-                onAdd={onAddPayment}
-                onPrint={data?.length ? onPrint : 'disabled'}
-                onExport={data?.length ? onExport : 'disabled'}
-                onDelete={rowSelectionModel.length ? onDeletePayment : 'disabled'}
-                onShowDeleted={'disabled'}
+                onAdd={onAddPosition}
+                onPrint={positions?.length ? onPrint : 'disabled'}
+                onExport={positions?.length ? onExport : 'disabled'}
+                onDelete={rowSelectionModel.length ? onDeletePosition : 'disabled'}
                 onRestoreDeleted={'disabled'}
                 onShowHistory={'disabled'}
             />
             <DataGrid
-                checkboxSelection={true}
+                getRowStatus={getRowStatus}
                 columnVisibilityModel={{
                     // Hide columns, the other columns will remain visible
-                    docNumber: false,
+                    department: false,
                     dateFrom: false,
                     dateTo: false,
                 }}
                 apiRef={gridRef}
-                rows={data || []}
+                rows={positions || []}
                 columns={columns}
+                checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);
                 }}
@@ -55,12 +55,17 @@ export function MandatoryPayments(_props: Props) {
                 onCellKeyDown={(
                     params: GridCellParams,
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
+                    _details: GridCallbackDetails,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditPayment(params.row.id);
+                        onEditPosition(params.row.id);
                     }
                 }}
-                onRowDoubleClick={(params: GridRowParams) => onEditPayment(params.row.id)}
+                onRowDoubleClick={(
+                    params: GridRowParams,
+                    _event: MuiEvent,
+                    _details: GridCallbackDetails,
+                ) => onEditPosition(params.row.id)}
             />
         </>
     );

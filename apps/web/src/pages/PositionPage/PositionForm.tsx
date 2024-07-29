@@ -9,14 +9,14 @@ import useLocale from '@/hooks/useLocale';
 import { Position, PositionHistory } from '@repo/openapi';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { JobAndPay } from '../tabs/JobAndPay';
-import { Personal } from '../tabs/Personal';
-import { usePageTitle } from '../hooks/usePageTitle';
+import { JobAndPay } from './tabs/JobAndPay';
+import { Personal } from './tabs/Personal';
+import { usePageTitle } from './hooks/usePageTitle';
 
 interface PositionFormProps {
     position?: Position;
     positionHistory?: PositionHistory;
-    tabIndex: string | null;
+    tabIndex?: string | null;
     goBack?: boolean;
     setPositionId?: (number) => void;
 }

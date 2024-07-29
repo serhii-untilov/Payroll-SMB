@@ -7,31 +7,28 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { Company, Payment } from '@repo/openapi';
+import { Payment } from '@repo/openapi';
 import { useState } from 'react';
-import useForm from '../hooks/useMandatoryPayments';
-import useColumns from '../hooks/useMandatoryPaymentsColumns';
+import useForm from '../hooks/usePaymentList';
+import useColumns from '../hooks/usePaymentListColumns';
 
-type Props = {
-    company: Company;
-    payPeriod: Date;
-    payment: Payment;
-};
-export function MandatoryPayments(_props: Props) {
+interface PaymentListTabProps {
+    payments: Payment[];
+}
+
+export function PaymentListTab({ payments }: PaymentListTabProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
-    const { onAddPayment, onDeletePayment, onEditPayment, onPrint, onExport } = useForm(gridRef);
     const columns = useColumns();
-
-    // TODO
-    const data = [];
+    const { onAddPayment, onEditPayment, onPrint, onExport, onDeletePayment, getRowStatus } =
+        useForm(payments, gridRef, rowSelectionModel);
 
     return (
         <>
             <Toolbar
                 onAdd={onAddPayment}
-                onPrint={data?.length ? onPrint : 'disabled'}
-                onExport={data?.length ? onExport : 'disabled'}
+                onPrint={payments?.length ? onPrint : 'disabled'}
+                onExport={payments?.length ? onExport : 'disabled'}
                 onDelete={rowSelectionModel.length ? onDeletePayment : 'disabled'}
                 onShowDeleted={'disabled'}
                 onRestoreDeleted={'disabled'}
@@ -39,6 +36,7 @@ export function MandatoryPayments(_props: Props) {
             />
             <DataGrid
                 checkboxSelection={true}
+                getRowStatus={getRowStatus}
                 columnVisibilityModel={{
                     // Hide columns, the other columns will remain visible
                     docNumber: false,
@@ -46,7 +44,7 @@ export function MandatoryPayments(_props: Props) {
                     dateTo: false,
                 }}
                 apiRef={gridRef}
-                rows={data || []}
+                rows={payments || []}
                 columns={columns}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);

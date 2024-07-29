@@ -1,17 +1,36 @@
 import { paymentsRemove } from '@/services/payment.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
-import { PaymentStatus, ResourceType } from '@repo/openapi';
+import { Payment, PaymentStatus, ResourceType } from '@repo/openapi';
 import { dateUTC } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-export default function useEmployeePayments(
+export default function usePaymentList(
+    payments: Payment[],
     gridRef: any,
     rowSelectionModel: GridRowSelectionModel,
 ) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+
+    // TODO
+
+    const onAddPayment = () => console.log('onAddPayment');
+
+    const onEditPayment = (id: number) => navigate(`/payments/${id}`);
+    const onPrint = () => gridRef.current.exportDataAsPrint();
+    const onExport = () => gridRef.current.exportDataAsCsv();
+
+    const onDeletePayment = async () => {
+        for (const id of rowSelectionModel) {
+            const payment = payments.find((o) => o.id === Number(id));
+            if (payment?.status === PaymentStatus.Draft) {
+                await paymentsRemove(+id);
+            }
+        }
+        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
+    };
 
     const getRowStatus = (params: any): string => {
         return params.row?.deletedDate
@@ -29,24 +48,5 @@ export default function useEmployeePayments(
                       : 'Normal';
     };
 
-    const onAddPayment = () => console.log('onAddPayment');
-    const onEditPayment = (id: number) => navigate(`/people/position/${id}?return=true`);
-    const onPrint = () => gridRef.current.exportDataAsPrint();
-    const onExport = () => gridRef.current.exportDataAsCsv();
-
-    const onDeletePayment = async () => {
-        for (const id of rowSelectionModel) {
-            await paymentsRemove(+id);
-        }
-        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
-    };
-
-    return {
-        getRowStatus,
-        onAddPayment,
-        onEditPayment,
-        onPrint,
-        onExport,
-        onDeletePayment,
-    };
+    return { onAddPayment, onEditPayment, onPrint, onExport, onDeletePayment, getRowStatus };
 }

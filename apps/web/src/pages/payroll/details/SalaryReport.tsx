@@ -2,7 +2,7 @@ import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useAppContext from '@/hooks/useAppContext';
-import usePositionBalances from '@/hooks/queries/usePositions';
+import { usePositionBalances } from '@/hooks/queries/usePositions';
 import { getUnitByCalcMethod } from '@/utils/getUnitByCalcMethod';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { Box, Typography } from '@mui/material';

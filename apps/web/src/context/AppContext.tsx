@@ -27,8 +27,8 @@ export type AppContextType = {
     themeMode: string;
     setThemeMode: Dispatch<string>;
     switchThemeMode: () => void;
-    payPeriod: Date | undefined;
-    setPayPeriod: Dispatch<Date | undefined>;
+    payPeriod: Date;
+    setPayPeriod: Dispatch<Date>;
     serverEvent: string;
 };
 
@@ -63,7 +63,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         () => responsiveFontSizes(createTheme(defaultTheme(themeMode), locale.locale)),
         [themeMode, locale],
     );
-    const [payPeriod, setPayPeriod] = useState<Date>();
+    const [payPeriod, setPayPeriod] = useState<Date>(monthBegin(new Date()));
     const [serverEvent, setServerEvent] = useState('');
     const queryClient = useQueryClient();
 
@@ -110,9 +110,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             const currentPayPeriod = company?.id
                 ? await payPeriodsFindCurrent({ companyId: company?.id })
                 : null;
-            const current: Date = currentPayPeriod?.dateFrom
-                ? currentPayPeriod?.dateFrom
-                : monthBegin(new Date());
+            const current: Date = currentPayPeriod?.dateFrom ?? monthBegin(new Date());
             const currentPeriodString = localStorage.getItem('currentPayPeriod');
             const lastCurrent: Date = monthBegin(
                 currentPeriodString ? new Date(currentPeriodString) : new Date(),

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import CreatePosition from './form/CreatePosition';
-import EditPosition from './form/EditPosition';
+import CreatePosition from './CreatePosition';
+import EditPosition from './EditPosition';
 
 export default function PositionPage() {
     const params = useParams();

@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 import { Company, Payment } from '@repo/openapi';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import usePaymentTabs from './hooks/usePaymentTabs';
+import useTabs from './hooks/usePaymentTabs';
 
 interface PaymentFormProps {
     company: Company;
@@ -27,7 +27,7 @@ export default function PaymentForm(props: PaymentFormProps) {
     const totalSum = useDocTotalSum(payment);
     const docTitle = useDocTitle(payment);
     const docColor = useDocColor(payment);
-    const tabs = usePaymentTabs({ company, payPeriod, payment, setPaymentId });
+    const tabs = useTabs({ company, payPeriod, payment, setPaymentId });
 
     useEffect(() => {}, [locale]);
 

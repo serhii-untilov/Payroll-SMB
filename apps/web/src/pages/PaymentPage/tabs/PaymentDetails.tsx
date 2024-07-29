@@ -1,4 +1,4 @@
-import DocDate from '@/components/DocDate';
+import DocDateField from '@/components/DocDateField';
 import DocNumberField from '@/components/DocNumberField';
 import DocPaymentStatus from '@/components/DocPaymentStatus';
 import { FormNumberField } from '@/components/form/FormNumberField';
@@ -10,7 +10,7 @@ import { Grid } from '@mui/material';
 import { Company, Payment, PaymentGroup, PaymentStatus } from '@repo/openapi';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import usePaymentDetails from '../hooks/usePaymentDetails';
+import useForm from '../hooks/usePaymentDetails';
 import useTransformPayment from '../hooks/useTransformPayment';
 
 type Props = {
@@ -25,13 +25,12 @@ export function PaymentDetails(props: Props) {
     const payment = useTransformPayment(props.payment);
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { control, isDirty, handleSubmit, onSubmit, onCancel, onProcess, onWithdraw } =
-        usePaymentDetails({
-            payment,
-            company,
-            payPeriod,
-            setPaymentId,
-        });
+    const { control, isDirty, handleSubmit, onSubmit, onCancel, onProcess, onWithdraw } = useForm({
+        payment,
+        company,
+        payPeriod,
+        setPaymentId,
+    });
 
     useEffect(() => {}, [locale]);
 
@@ -57,7 +56,7 @@ export function PaymentDetails(props: Props) {
                             <DocNumberField disabled={!!payment?.id} control={control} />
                         </Grid>
                         <Grid item xs={12} sm={12} lg={3}>
-                            <DocDate disabled={!!payment?.id} control={control} />
+                            <DocDateField disabled={!!payment?.id} control={control} />
                         </Grid>
                         <Grid item xs={12} sm={12} lg={6}>
                             <DocPaymentStatus

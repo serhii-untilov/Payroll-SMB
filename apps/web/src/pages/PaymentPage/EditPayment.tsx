@@ -14,7 +14,7 @@ interface EditPaymentProps {
 
 export default function EditPayment(props: EditPaymentProps) {
     const { company, payPeriod, paymentId, tabIndex, goBack } = props;
-    const { data: payment, isLoading, isError, error } = usePayment(paymentId);
+    const { data: payment, isLoading, isError, error } = usePayment(paymentId, { relations: true });
 
     return (
         <>

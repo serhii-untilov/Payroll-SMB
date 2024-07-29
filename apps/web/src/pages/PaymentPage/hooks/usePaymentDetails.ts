@@ -118,5 +118,6 @@ export default function usePaymentDetails(props: Props) {
             ]);
         }
     };
+
     return { control, isDirty, handleSubmit, onSubmit, onCancel, onProcess, onWithdraw };
 }

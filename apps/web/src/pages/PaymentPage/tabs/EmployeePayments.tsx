@@ -11,6 +11,7 @@ import {
 import { Company, Payment } from '@repo/openapi';
 import { useState } from 'react';
 import useEmployeePayments from '../hooks/useEmployeePayments';
+import useColumns from '../hooks/useEmployeePaymentsColumns';
 
 type Props = {
     company: Company;
@@ -23,15 +24,9 @@ export function EmployeePayments(props: Props) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const { data } = usePaymentPositions({ paymentId: payment.id, relations: true });
-    const {
-        columns,
-        getRowStatus,
-        onAddPayment,
-        onEditPayment,
-        onPrint,
-        onExport,
-        onDeletePayment,
-    } = useEmployeePayments(gridRef, rowSelectionModel);
+    const { getRowStatus, onAddPayment, onEditPayment, onPrint, onExport, onDeletePayment } =
+        useEmployeePayments(gridRef, rowSelectionModel);
+    const columns = useColumns();
 
     return (
         <>
