@@ -3,7 +3,7 @@ import Toolbar from '@/components/layout/Toolbar';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { useDepartments } from '@/hooks/queries/useDepartments';
 import DepartmentForm from '@/pages/department/DepartmentForm';
-import { departmentsRemove } from '@/services/department.service';
+import { departmentsRemove } from '@/services/api/department.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     GridCellParams,

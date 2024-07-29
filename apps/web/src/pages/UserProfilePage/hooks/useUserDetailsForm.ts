@@ -1,5 +1,5 @@
 import useLocale from '@/hooks/useLocale';
-import { usersUpdate } from '@/services/user.service';
+import { usersUpdate } from '@/services/api/user.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarFormErrors } from '@/utils/snackbar';

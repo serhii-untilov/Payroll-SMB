@@ -1,4 +1,4 @@
-import { jobsFindAll } from '@/services/job.service';
+import { jobsFindAll } from '@/services/api/job.service';
 import { Job, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

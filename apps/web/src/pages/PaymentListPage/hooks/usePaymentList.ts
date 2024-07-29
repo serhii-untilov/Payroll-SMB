@@ -1,4 +1,4 @@
-import { paymentsRemove } from '@/services/payment.service';
+import { paymentsRemove } from '@/services/api/payment.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
 import { Payment, PaymentStatus, ResourceType } from '@repo/openapi';

@@ -1,4 +1,4 @@
-import { lawsFindAll } from '@/services/law.service';
+import { lawsFindAll } from '@/services/api/law.service';
 import { Law, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

@@ -4,7 +4,7 @@ import { Logo } from '@/components/layout/Logo';
 import useAppContext from '@/hooks/useAppContext';
 import { useAuth } from '@/hooks/useAuth';
 import useLocale from '@/hooks/useLocale';
-import { demo } from '@/services/auth.service';
+import { demo } from '@/services/auth/auth.service';
 import { Language, MenuRounded } from '@mui/icons-material';
 import { Box, Drawer, IconButton } from '@mui/material';
 import { useState } from 'react';

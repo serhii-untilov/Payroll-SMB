@@ -3,7 +3,7 @@ import {
     positionsFindBalance,
     positionsFindFirstByPersonId,
     positionsFindOne,
-} from '@/services/position.service';
+} from '@/services/api/position.service';
 import {
     FindAllPositionBalanceDto,
     FindAllPositionDto,

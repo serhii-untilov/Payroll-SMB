@@ -1,4 +1,4 @@
-import { paymentPositionsFindAll } from '@/services/paymentPosition.service';
+import { paymentPositionsFindAll } from '@/services/api/paymentPosition.service';
 import { FindAllPaymentPositionDto, PaymentPosition, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

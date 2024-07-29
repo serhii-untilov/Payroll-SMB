@@ -1,5 +1,5 @@
 import useAppContext from '@/hooks/useAppContext';
-import { companiesCreate, companiesUpdate } from '@/services/company.service';
+import { companiesCreate, companiesUpdate } from '@/services/api/company.service';
 import { AppError } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { invalidateQueries } from '@/utils/invalidateQueries';

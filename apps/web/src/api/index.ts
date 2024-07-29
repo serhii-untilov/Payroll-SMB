@@ -1,10 +1,10 @@
-import { authHeader } from '@/services/auth-header';
+import { authHeader } from '@/services/auth/auth-header';
 import {
     getUserAccessToken,
     getUserRefreshToken,
     removeUserTokens,
     saveUserTokens,
-} from '@/services/token.service';
+} from '@/services/auth/token.service';
 import { DefaultApi as PayrollApi } from '@repo/openapi';
 import { deepStringToDate } from '@repo/shared';
 import axios from 'axios';

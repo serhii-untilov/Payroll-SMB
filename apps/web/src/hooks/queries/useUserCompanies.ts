@@ -1,4 +1,4 @@
-import { userCompaniesFindAll } from '@/services/user-companies.service';
+import { userCompaniesFindAll } from '@/services/api/user-companies.service';
 import { UserCompany, ResourceType, FindAllUserCompanyDto } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

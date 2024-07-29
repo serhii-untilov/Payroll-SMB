@@ -1,5 +1,5 @@
 import { Locale } from '@/context/LocaleContext';
-import { tasksUpdate } from '@/services/task.service';
+import { tasksUpdate } from '@/services/api/task.service';
 import { green, grey, orange, red } from '@mui/material/colors';
 import { Task, TaskStatus, TaskType } from '@repo/openapi';
 import { useMemo } from 'react';

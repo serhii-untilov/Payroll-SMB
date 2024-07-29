@@ -6,11 +6,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App.tsx';
+import App from './app/App.tsx';
 import { AppErrorBoundary } from './components/layout/AppErrorBoundary.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { LocaleProvider } from './context/LocaleContext.tsx';
-import './i18n.ts';
+import './services/i18n/i18n.ts';
 import './index.css';
 
 const queryClient = new QueryClient({

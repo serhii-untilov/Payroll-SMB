@@ -12,8 +12,11 @@ import SelectPerson from '@/components/SelectPerson';
 import { SelectWorkNorm } from '@/components/SelectWorkNorm';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
-import { positionsCreate } from '@/services/position.service';
-import { positionHistoryCreate, positionHistoryUpdate } from '@/services/positionHistory.service';
+import { positionsCreate } from '@/services/api/position.service';
+import {
+    positionHistoryCreate,
+    positionHistoryUpdate,
+} from '@/services/api/positionHistory.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';

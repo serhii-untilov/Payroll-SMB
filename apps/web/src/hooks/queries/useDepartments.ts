@@ -1,4 +1,4 @@
-import { departmentsFindAll, departmentsFindOne } from '@/services/department.service';
+import { departmentsFindAll, departmentsFindOne } from '@/services/api/department.service';
 import {
     Department,
     FindAllDepartmentDto,

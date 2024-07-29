@@ -1,4 +1,4 @@
-import { personsFindAll, personsFindOne } from '@/services/person.service';
+import { personsFindAll, personsFindOne } from '@/services/api/person.service';
 import { Person, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

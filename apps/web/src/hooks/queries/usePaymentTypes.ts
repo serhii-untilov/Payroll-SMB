@@ -1,4 +1,4 @@
-import { paymentTypesFindAll } from '@/services/paymentType.service';
+import { paymentTypesFindAll } from '@/services/api/paymentType.service';
 import { FindAllPaymentTypeDto, PaymentType, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

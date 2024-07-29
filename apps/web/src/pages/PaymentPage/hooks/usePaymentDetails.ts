@@ -3,7 +3,7 @@ import {
     paymentsProcess,
     paymentsUpdate,
     paymentsWithdraw,
-} from '@/services/payment.service';
+} from '@/services/api/payment.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError } from '@/utils/snackbar';

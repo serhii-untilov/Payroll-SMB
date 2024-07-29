@@ -4,12 +4,12 @@ import Toolbar from '@/components/layout/Toolbar';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useUserCompanies from '@/hooks/queries/useUserCompanies';
 import useAppContext from '@/hooks/useAppContext';
-import { companiesFindOne } from '@/services/company.service';
+import { companiesFindOne } from '@/services/api/company.service';
 import {
     userCompaniesFindAll,
     userCompaniesRemove,
     userCompaniesRestore,
-} from '@/services/user-companies.service';
+} from '@/services/api/user-companies.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError } from '@/utils/snackbar';
 import {

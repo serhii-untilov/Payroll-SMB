@@ -1,5 +1,10 @@
-import { authLogin, authLogout, authRegister, usersFindCurrent } from '@/services/auth.service';
-import { getUserAccessToken } from '@/services/token.service';
+import {
+    authLogin,
+    authLogout,
+    authRegister,
+    usersFindCurrent,
+} from '@/services/auth/auth.service';
+import { getUserAccessToken } from '@/services/auth/token.service';
 import { AuthDto, CreateUserDto, PublicUserDataDto } from '@repo/openapi';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';

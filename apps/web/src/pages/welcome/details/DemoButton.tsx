@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks/useAuth';
-import { demo } from '@/services/auth.service';
+import { demo } from '@/services/auth/auth.service';
 import { Button } from '@mui/material';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';

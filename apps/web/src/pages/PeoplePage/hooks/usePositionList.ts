@@ -1,4 +1,4 @@
-import { positionsRemove } from '@/services/position.service';
+import { positionsRemove } from '@/services/api/position.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
 import { ResourceType } from '@repo/openapi';

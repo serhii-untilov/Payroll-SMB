@@ -1,6 +1,6 @@
 import { Button } from '@/components/layout/Button';
 import TextField from '@/components/layout/TextField';
-import { personsCreate } from '@/services/person.service';
+import { personsCreate } from '@/services/api/person.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     Dialog,

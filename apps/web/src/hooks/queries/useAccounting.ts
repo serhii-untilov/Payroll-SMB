@@ -1,4 +1,4 @@
-import { accountingFindAll } from '@/services/accounting.service';
+import { accountingFindAll } from '@/services/api/accounting.service';
 import { Accounting, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

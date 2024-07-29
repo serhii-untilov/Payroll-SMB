@@ -1,4 +1,4 @@
-import { payPeriodsFindAll } from '@/services/payPeriod.service';
+import { payPeriodsFindAll } from '@/services/api/payPeriod.service';
 import { FindAllPayPeriodDto, PayPeriod, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

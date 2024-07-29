@@ -1,4 +1,4 @@
-import { usersFindCurrent } from '@/services/auth.service';
+import { usersFindCurrent } from '@/services/auth/auth.service';
 import { ResourceType, User } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

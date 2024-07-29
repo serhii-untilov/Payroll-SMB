@@ -4,7 +4,8 @@ import useLocale from '@/hooks/useLocale';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export default function TimeOff() {
+// TODO
+export default function TimeOffForm() {
     const { locale } = useLocale();
     const { t } = useTranslation();
 

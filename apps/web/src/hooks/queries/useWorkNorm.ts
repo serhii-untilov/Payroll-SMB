@@ -1,4 +1,4 @@
-import { workNormsFindAll } from '@/services/workNorm.service';
+import { workNormsFindAll } from '@/services/api/workNorm.service';
 import { ResourceType, WorkNorm } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

@@ -6,7 +6,7 @@ import { SelectSex } from '@/components/SelectSex';
 import useAppContext from '@/hooks/useAppContext';
 import useLocale from '@/hooks/useLocale';
 import { usePerson } from '@/hooks/queries/usePersons';
-import { personsFindOne, personsUpdate } from '@/services/person.service';
+import { personsFindOne, personsUpdate } from '@/services/api/person.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';

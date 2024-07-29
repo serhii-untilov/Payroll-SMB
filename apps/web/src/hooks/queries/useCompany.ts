@@ -1,4 +1,4 @@
-import { companiesFindOne } from '@/services/company.service';
+import { companiesFindOne } from '@/services/api/company.service';
 import { Company, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

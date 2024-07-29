@@ -17,12 +17,12 @@ const DashboardPage = Loadable(lazy(() => import('@/pages/DashboardPage')));
 const Welcome = Loadable(lazy(() => import('@/pages/welcome/Welcome')));
 const CompanyPage = Loadable(lazy(() => import('@/pages/CompanyPage')));
 const PeoplePage = Loadable(lazy(() => import('@/pages/PeoplePage')));
-const TimeOff = Loadable(lazy(() => import('@/pages/timesheet/TimeOff')));
-const TimeSheet = Loadable(lazy(() => import('@/pages/timesheet/TimeSheet')));
+const TimeOffPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeOffForm')));
+const TimeSheetPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeSheetForm')));
 const Payroll = Loadable(lazy(() => import('@/pages/payroll/Payroll')));
 const PaymentListPage = Loadable(lazy(() => import('@/pages/PaymentListPage')));
 const PaymentPage = Loadable(lazy(() => import('@/pages/PaymentPage')));
-const Reports = Loadable(lazy(() => import('@/pages/reports/Reports')));
+const ReportsPage = Loadable(lazy(() => import('@/pages/ReportsPage/ReportsForm')));
 const UserProfilePage = Loadable(lazy(() => import('@/pages/UserProfilePage')));
 const PositionPage = Loadable(lazy(() => import('@/pages/PositionPage')));
 const AccountantFeatures = Loadable(
@@ -88,8 +88,8 @@ const router: RouteObject[] = [
                     { path: 'position/:positionId', element: <PositionPage /> },
                 ],
             },
-            { path: 'time-off', element: <TimeOff /> },
-            { path: 'time-sheet', element: <TimeSheet /> },
+            { path: 'time-off', element: <TimeOffPage /> },
+            { path: 'time-sheet', element: <TimeSheetPage /> },
             { path: 'payroll', element: <Payroll /> },
             {
                 path: 'payments',
@@ -99,7 +99,7 @@ const router: RouteObject[] = [
                     { path: ':paymentId', element: <PaymentPage /> },
                 ],
             },
-            { path: 'reports', element: <Reports /> },
+            { path: 'reports', element: <ReportsPage /> },
             {
                 path: 'profile',
                 children: [
