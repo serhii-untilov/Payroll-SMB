@@ -1,7 +1,7 @@
 import { Button } from '@/components/layout/Button';
 import TextField from '@/components/layout/TextField';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { personsCreate } from '@/services/api/person.service';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     Dialog,
     DialogActions,
@@ -11,7 +11,6 @@ import {
     Grid,
 } from '@mui/material';
 import { CreatePersonDto, ResourceType } from '@repo/openapi';
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 interface CreatePersonFormProps {
@@ -25,7 +24,7 @@ interface CreatePersonFormProps {
 export default function CreatePerson(props: CreatePersonFormProps) {
     const { open, handleClose, onChange, dialogValue, setDialogValue } = props;
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
+    const invalidateQueries = useInvalidateQueries();
 
     return (
         <Dialog open={open} onClose={() => handleClose()} disableRestoreFocus>
@@ -34,7 +33,7 @@ export default function CreatePerson(props: CreatePersonFormProps) {
                     event.preventDefault();
                     const person = await personsCreate(dialogValue);
                     onChange(person.id);
-                    await invalidateQueries(queryClient, [ResourceType.Person]);
+                    await invalidateQueries([ResourceType.Person]);
                     handleClose();
                 }}
             >

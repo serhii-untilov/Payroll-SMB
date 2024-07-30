@@ -1,9 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useDepartments } from '@/hooks/queries/useDepartments';
-import { departmentsRemove } from '@/services/api/department.service';
-import { invalidateQueries } from '@/utils/invalidateQueries';
+import useGrid from '@/hooks/useGrid';
 import {
     GridCellParams,
     GridRowParams,
@@ -11,48 +8,30 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { Company, ResourceType } from '@repo/openapi';
-import { useQueryClient } from '@tanstack/react-query';
+import { Company, Department } from '@repo/openapi';
 import { useState } from 'react';
-import useColumns from '../../hooks/useCompanyDepartmentsColumns';
 import DepartmentDialog from './DepartmentDialog';
+import useDepartmentList from './DepartmentList.hooks';
 
-type CompanyDepartmentsProps = {
+export type DepartmentListProps = {
     company: Company;
+    departments: Department[];
 };
 
-export function CompanyDepartments({ company }: CompanyDepartmentsProps) {
+export default function DepartmentList(props: DepartmentListProps) {
+    const { departments } = props;
     const [openForm, setOpenForm] = useState(false);
     const [departmentId, setDepartmentId] = useState<number | null>(null);
-    // TODO: Split into// TODO: Split into two components: data retrieval and form.
-    const { data, isLoading } = useDepartments({ companyId: company.id, relations: true });
-    const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
-    const columns = useColumns();
-
-    const onAddDepartment = () => {
-        setDepartmentId(null);
-        setOpenForm(true);
-    };
-
-    const onEditDepartment = (departmentId: number) => {
-        setDepartmentId(departmentId);
-        setOpenForm(true);
-    };
-
-    const onDeleteDepartment = async () => {
-        for (const id of rowSelectionModel) {
-            await departmentsRemove(+id);
-        }
-        await invalidateQueries(queryClient, [ResourceType.Department]);
-    };
-
-    const onTreeView = () => console.log('onTreeView');
-    const onPrint = () => gridRef.current.exportDataAsPrint();
-    const onExport = () => gridRef.current.exportDataAsCsv();
-
-    if (isLoading) return <LoadingDisplay />;
+    const { columns, onAddDepartment, onEditDepartment, onDeleteDepartment, onTreeView } =
+        useDepartmentList({
+            setOpenForm,
+            setDepartmentId,
+            rowSelectionModel,
+            gridRef,
+        });
+    const { onPrint, onExport } = useGrid(gridRef);
 
     return (
         <>
@@ -60,15 +39,15 @@ export function CompanyDepartments({ company }: CompanyDepartmentsProps) {
                 onAdd={onAddDepartment}
                 onDelete={rowSelectionModel.length ? onDeleteDepartment : 'disabled'}
                 onTreeView={onTreeView}
-                onPrint={data?.length ? onPrint : 'disabled'}
-                onExport={data?.length ? onExport : 'disabled'}
+                onPrint={departments?.length ? onPrint : 'disabled'}
+                onExport={departments?.length ? onExport : 'disabled'}
                 onShowHistory={'disabled'}
                 onShowDeleted={'disabled'}
                 onRestoreDeleted={'disabled'}
             />
             <DataGrid
                 apiRef={gridRef}
-                rows={data ?? []}
+                rows={departments}
                 columns={columns}
                 checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {

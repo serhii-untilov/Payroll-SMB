@@ -1,10 +1,9 @@
 import useAppContext from '@/hooks/context/useAppContext';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { companiesFindOne } from '@/services/api/company.service';
 import { userCompaniesRemove, userCompaniesRestore } from '@/services/api/user-companies.service';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
 import { ResourceType, UserCompany } from '@repo/openapi';
-import { useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +23,7 @@ export default function useUserCompanyList(params: Params) {
     const { t } = useTranslation();
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const navigate = useNavigate();
-    const queryClient = useQueryClient();
+    const invalidateQueries = useInvalidateQueries();
 
     const onAddCompany = () => {
         navigate(`/profile/company/?tab-index=0&return=true`);
@@ -46,7 +45,7 @@ export default function useUserCompanyList(params: Params) {
             }
         }
         setRowSelectionModel([]);
-        await invalidateQueries(queryClient, [ResourceType.Company]);
+        await invalidateQueries([ResourceType.Company]);
         if (attemptToDeleteCurrentCompany) {
             enqueueSnackbar(t(`Deleting the current company is not allowed.`), {
                 variant: 'error',
@@ -80,12 +79,12 @@ export default function useUserCompanyList(params: Params) {
             await userCompaniesRestore(id);
         }
         setRowSelectionModel([]);
-        await invalidateQueries(queryClient, [ResourceType.Company]);
+        await invalidateQueries([ResourceType.Company]);
     };
 
     const onShowDeleted = async () => {
         setShowDeleted(!showDeleted);
-        await invalidateQueries(queryClient, [ResourceType.Company]);
+        await invalidateQueries([ResourceType.Company]);
     };
 
     const getRowStatus = (params: any): string => {

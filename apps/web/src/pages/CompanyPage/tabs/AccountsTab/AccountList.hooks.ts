@@ -1,10 +1,21 @@
 import { GridColDef } from '@mui/x-data-grid';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export default function useCompanyAccountsColumns() {
+export default function useAccountList() {
     const { t } = useTranslation();
-    return useMemo<GridColDef[]>(
+
+    // TODO
+
+    const onAddAccount = useCallback(() => {
+        console.log('onAdd');
+    }, []);
+
+    const onEditAccount = useCallback((_accountId: number) => {
+        console.log('onEdit');
+    }, []);
+
+    const columns = useMemo<GridColDef[]>(
         () => [
             {
                 field: 'accountNumber',
@@ -43,4 +54,6 @@ export default function useCompanyAccountsColumns() {
         ],
         [t],
     );
+
+    return { columns, onAddAccount, onEditAccount };
 }

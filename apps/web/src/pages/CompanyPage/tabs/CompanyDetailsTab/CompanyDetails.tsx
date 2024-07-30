@@ -6,12 +6,12 @@ import useLocale from '@/hooks/context/useLocale';
 import { Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
 import { useEffect } from 'react';
-import CompanyNameField from '../../../components/CompanyNameField';
-import SelectAccounting from '../../../components/SelectAccounting';
-import SelectLaw from '../../../components/SelectLaw';
-import SelectPayPeriodField from '../../../components/SelectPayPeriodField';
-import TaxIdField from '../../../components/TaxIdField';
-import useForm from '../hooks/useCompanyDetails';
+import CompanyNameField from '../../../../components/CompanyNameField';
+import SelectAccounting from '../../../../components/SelectAccounting';
+import SelectLaw from '../../../../components/SelectLaw';
+import SelectPayPeriodField from '../../../../components/SelectPayPeriodField';
+import TaxIdField from '../../../../components/TaxIdField';
+import useForm from './CompanyDetails.hooks';
 
 type CompanyDetailsProps = {
     company?: Company | undefined;

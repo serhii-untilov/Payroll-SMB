@@ -4,8 +4,7 @@ import { TabsContainer } from '@/components/layout/TabsContainer';
 import useLocale from '@/hooks/context/useLocale';
 import { Company } from '@repo/openapi';
 import { useEffect } from 'react';
-import useTabs from './hooks/useCompanyTabs';
-import usePageTitle from './hooks/usePageTitle';
+import useCompanyForm from './CompanyForm.hooks';
 
 interface CompanyFormProps {
     company?: Company;
@@ -15,10 +14,9 @@ interface CompanyFormProps {
 }
 
 export default function CompanyForm(props: CompanyFormProps) {
-    const { company, tabIndex, goBack } = props;
-    const pageTitle = usePageTitle(company);
+    const { tabIndex, goBack } = props;
     const { locale } = useLocale();
-    const tabs = useTabs(props);
+    const { pageTitle, tabs } = useCompanyForm(props);
 
     useEffect(() => {}, [locale]);
 

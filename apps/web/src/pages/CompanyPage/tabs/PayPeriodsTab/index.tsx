@@ -3,13 +3,13 @@ import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { useCurrentPayPeriod } from '@/hooks/queries/useCurrentPayPeriod';
 import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
 import { Company } from '@repo/openapi';
-import { CompanyPeriodList } from './CompanyPeriodList';
+import { PayPeriodList } from './PayPeriodList';
 
-type Props = {
+type PayPeriodsTabProps = {
     company: Company;
 };
 
-export function CompanyPayPeriods({ company }: Props) {
+export default function PayPeriodsTab({ company }: PayPeriodsTabProps) {
     const payPeriods = usePayPeriods({
         companyId: company.id,
         relations: true,
@@ -27,7 +27,7 @@ export function CompanyPayPeriods({ company }: Props) {
             {payPeriods.isError && <ErrorDisplay error={payPeriods.error} />}
             {currentPayPeriod.isError && <ErrorDisplay error={currentPayPeriod.error} />}
             {payPeriods.data && (
-                <CompanyPeriodList
+                <PayPeriodList
                     company={company}
                     payPeriods={payPeriods.data}
                     currentPayPeriod={currentPayPeriod.data}

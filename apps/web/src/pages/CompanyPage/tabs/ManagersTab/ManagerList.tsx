@@ -1,29 +1,28 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import { GridCellParams, GridRowSelectionModel, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
-import { useState } from 'react';
-import useForm from '../hooks/useCompanyAccounts';
-import useColumns from '../hooks/useCompanyAccountsColumns';
 import { Company } from '@repo/openapi';
+import { useState } from 'react';
+import useManagerList from './ManagerList.hooks';
 import useGrid from '@/hooks/useGrid';
 
-type Props = {
+type ManagerListProps = {
     company: Company;
+    managers: any[]; // TODO
 };
 
-export function CompanyAccounts(_params: Props) {
+export default function ManagerList(props: ManagerListProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-    const columns = useColumns();
-    const { onAddAccount, onEditAccount } = useForm();
+    const { columns, onAddManager, onEditManager } = useManagerList();
     const gridRef = useGridApiRef();
     const { onPrint, onExport } = useGrid(gridRef);
 
-    // TODO: Split into two components: data retrieval and form.
+    // TODO
 
     return (
         <>
             <Toolbar
-                onAdd={onAddAccount}
+                onAdd={onAddManager}
                 onDelete={'disabled'}
                 onPrint={onPrint}
                 onExport={onExport}
@@ -31,9 +30,10 @@ export function CompanyAccounts(_params: Props) {
                 onShowDeleted={'disabled'}
                 onRestoreDeleted={'disabled'}
             />
+
             <DataGrid
                 apiRef={gridRef}
-                rows={[]}
+                rows={props.managers}
                 columns={columns}
                 checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
@@ -45,13 +45,19 @@ export function CompanyAccounts(_params: Props) {
                     event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
                 ) => {
                     if (event.code === 'Enter') {
-                        onEditAccount(params.row.id);
+                        onEditManager(params.row.id);
                     }
                 }}
                 onRowDoubleClick={() => {
-                    // onEditAccount(params.row.id)
+                    // onEditManager(params.row.id)
                 }}
             />
+            {/* <ManagerForm
+                open={openForm}
+                setOpen={setOpenForm}
+                managerId={managerId}
+                submitCallback={submitCallback}
+            /> */}
         </>
     );
 }

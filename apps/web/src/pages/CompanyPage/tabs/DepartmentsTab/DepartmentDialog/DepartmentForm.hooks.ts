@@ -1,11 +1,10 @@
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { departmentsCreate, departmentsUpdate } from '@/services/api/department.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CreateDepartmentDto, ResourceType } from '@repo/openapi';
 import { maxDate, minDate } from '@repo/shared';
-import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
@@ -14,8 +13,8 @@ import { date, InferType, number, object, ObjectSchema, string } from 'yup';
 import { DepartmentFormProps } from './DepartmentForm';
 
 export default function useDepartmentForm(props: DepartmentFormProps) {
-    const queryClient = useQueryClient();
     const { t } = useTranslation();
+    const invalidateQueries = useInvalidateQueries();
 
     const formSchema: ObjectSchema<CreateDepartmentDto> = useMemo(
         () =>
@@ -49,8 +48,8 @@ export default function useDepartmentForm(props: DepartmentFormProps) {
         snackbarFormErrors(t, formErrors);
     }, [formErrors, t]);
 
-    const onSubmit: SubmitHandler<FormType> = useCallback(
-        () => async (data) => {
+    const onSubmit = useCallback<SubmitHandler<FormType>>(
+        async (data) => {
             if (!isDirty) {
                 props.setOpen(false);
                 return;
@@ -66,23 +65,20 @@ export default function useDepartmentForm(props: DepartmentFormProps) {
                 if (props.setDepartmentId) props.setDepartmentId(response.id);
                 props.setOpen(false);
                 reset();
-                await invalidateQueries(queryClient, [ResourceType.Department]);
+                await invalidateQueries([ResourceType.Department]);
             } catch (e: unknown) {
                 const error = e as AxiosError;
                 snackbarError(`${error.code}\n${error.message}`);
             }
         },
-        [dirtyFields, isDirty, props, queryClient, reset],
+        [dirtyFields, isDirty, props, invalidateQueries, reset],
     );
 
-    const onCancel = useCallback(
-        () => async () => {
-            reset();
-            props.setOpen(false);
-            await invalidateQueries(queryClient, [ResourceType.Department]);
-        },
-        [props, queryClient, reset],
-    );
+    const onCancel = useCallback(async () => {
+        reset();
+        props.setOpen(false);
+        await invalidateQueries([ResourceType.Department]);
+    }, [props, invalidateQueries, reset]);
 
     return { control, handleSubmit, onSubmit, onCancel };
 }

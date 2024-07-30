@@ -1,7 +1,6 @@
-import { invalidateQueries } from '@/utils/invalidateQueries';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { Box, Grid, IconButton } from '@mui/material';
 import { ResourceType, Task, TaskStatus } from '@repo/openapi';
-import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -11,20 +10,20 @@ import TaskTitle from './TaskTitle';
 import useStatusIcon from './hooks/useStatusIcon';
 import { useTask } from './hooks/useTask';
 
-interface Props {
+interface TaskCardProps {
     task: Task;
     date?: string;
     description?: string;
 }
 
-export default function TaskCard(props: Props) {
+export default function TaskCard(props: TaskCardProps) {
     const { date, description } = props;
     const [task, setTask] = useState<Task>(props.task);
     const { title, path, bgColor, toggleStatus } = useTask(task);
-    const queryClient = useQueryClient();
     const navigate = useNavigate();
     const statusIcon = useStatusIcon(task);
     const { t } = useTranslation();
+    const invalidateQueries = useInvalidateQueries();
 
     const onTaskClick = () => {
         if (task.status === TaskStatus.NotAvailable) return;
@@ -35,7 +34,7 @@ export default function TaskCard(props: Props) {
         const updatedTask = await toggleStatus();
         if (updatedTask) {
             setTask(updatedTask);
-            await invalidateQueries(queryClient, [ResourceType.Task]);
+            await invalidateQueries([ResourceType.Task]);
         } else {
             onTaskClick();
         }

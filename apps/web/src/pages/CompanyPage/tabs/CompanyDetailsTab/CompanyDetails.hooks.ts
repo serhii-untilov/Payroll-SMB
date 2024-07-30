@@ -1,8 +1,8 @@
 import useAppContext from '@/hooks/context/useAppContext';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { companiesCreate, companiesUpdate } from '@/services/api/company.service';
 import { AppError } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -13,7 +13,6 @@ import {
     UpdateCompanyDto,
 } from '@repo/openapi';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { SubmitHandler, useFormState, useForm as useReactHookForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -28,9 +27,9 @@ interface Props {
 
 export default function useCompanyDetails(props: Props) {
     const { company, defaultLawId, defaultAccountingId, setCompanyId } = props;
-    const queryClient = useQueryClient();
     const { t } = useTranslation();
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
+    const invalidateQueries = useInvalidateQueries();
 
     const formSchema = object().shape({
         name: string().required('Name is required'),
@@ -81,7 +80,7 @@ export default function useCompanyDetails(props: Props) {
                 : await companiesCreate(data as CreateCompanyDto);
             if (setCompanyId) setCompanyId(response.id);
             reset(formSchema.cast(response));
-            await invalidateQueries(queryClient, [ResourceType.Company, ResourceType.PayPeriod]);
+            await invalidateQueries([ResourceType.Company, ResourceType.PayPeriod]);
             if (!currentCompany || currentCompany.id === response.id) {
                 setCurrentCompany(response);
             }
@@ -95,7 +94,7 @@ export default function useCompanyDetails(props: Props) {
     const onCancel = async () => {
         if (setCompanyId) setCompanyId(Number(company?.id));
         reset(formSchema.cast(company));
-        await invalidateQueries(queryClient, [ResourceType.Company]);
+        await invalidateQueries([ResourceType.Company]);
     };
 
     return { control, isDirty, handleSubmit, onSubmit, onCancel };

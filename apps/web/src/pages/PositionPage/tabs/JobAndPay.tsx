@@ -12,13 +12,13 @@ import SelectPerson from '@/components/SelectPerson';
 import { SelectWorkNorm } from '@/components/SelectWorkNorm';
 import useAppContext from '@/hooks/context/useAppContext';
 import useLocale from '@/hooks/context/useLocale';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { positionsCreate } from '@/services/api/position.service';
 import {
     positionHistoryCreate,
     positionHistoryUpdate,
 } from '@/services/api/positionHistory.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
@@ -32,7 +32,6 @@ import {
     ResourceType,
 } from '@repo/openapi';
 import { formatDate, MAX_SEQUENCE_NUMBER, maxDate, minDate } from '@repo/shared';
-import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
@@ -50,7 +49,7 @@ export function JobAndPay(props: JobAndPayProps) {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company } = useAppContext();
-    const queryClient = useQueryClient();
+    const invalidateQueries = useInvalidateQueries();
 
     const formSchema = object().shape({
         // Position
@@ -181,10 +180,7 @@ export function JobAndPay(props: JobAndPayProps) {
                 if (setPositionId) setPositionId(pos.id);
                 reset(formSchema.cast(position_formData(pos, history)));
             }
-            await invalidateQueries(queryClient, [
-                ResourceType.Position,
-                ResourceType.PositionHistory,
-            ]);
+            await invalidateQueries([ResourceType.Position, ResourceType.PositionHistory]);
             if (setPositionId) setPositionId(pos?.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
@@ -194,7 +190,7 @@ export function JobAndPay(props: JobAndPayProps) {
 
     const onCancel = async () => {
         reset(formData);
-        await invalidateQueries(queryClient, [ResourceType.Position, ResourceType.PositionHistory]);
+        await invalidateQueries([ResourceType.Position, ResourceType.PositionHistory]);
     };
 
     return (

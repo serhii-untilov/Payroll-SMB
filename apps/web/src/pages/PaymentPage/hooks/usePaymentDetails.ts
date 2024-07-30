@@ -1,3 +1,4 @@
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import {
     paymentsCreate,
     paymentsProcess,
@@ -5,11 +6,9 @@ import {
     paymentsWithdraw,
 } from '@/services/api/payment.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Company, CreatePaymentDto, Payment, ResourceType, UpdatePaymentDto } from '@repo/openapi';
-import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect } from 'react';
@@ -27,7 +26,7 @@ type Props = {
 export default function usePaymentDetails(props: Props) {
     const { payment, company, payPeriod, setPaymentId } = props;
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
+    const invalidateQueries = useInvalidateQueries();
 
     const formSchema = yup.object().shape({
         docNumber: yup.string(),
@@ -83,10 +82,7 @@ export default function usePaymentDetails(props: Props) {
                       payPeriod: payPeriod,
                   });
             reset(response);
-            await invalidateQueries(queryClient, [
-                ResourceType.Payment,
-                ResourceType.PaymentPosition,
-            ]);
+            await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
             if (setPaymentId) setPaymentId(response.id);
         } catch (e: unknown) {
             const error = e as AxiosError;
@@ -96,26 +92,20 @@ export default function usePaymentDetails(props: Props) {
 
     const onCancel = async () => {
         reset((payment as FormType) || {});
-        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
+        await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
     };
 
     const onProcess = async () => {
         if (payment) {
             await paymentsProcess(payment?.id, { version: payment.version });
-            await invalidateQueries(queryClient, [
-                ResourceType.Payment,
-                ResourceType.PaymentPosition,
-            ]);
+            await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
         }
     };
 
     const onWithdraw = async () => {
         if (payment) {
             await paymentsWithdraw(payment.id, { version: payment.version });
-            await invalidateQueries(queryClient, [
-                ResourceType.Payment,
-                ResourceType.PaymentPosition,
-            ]);
+            await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
         }
     };
 

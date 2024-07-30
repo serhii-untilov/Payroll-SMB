@@ -12,7 +12,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Company, Department } from '@repo/openapi';
 import { Dispatch, Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import useDepartmentForm from './DepartmentForm.hook';
+import useDepartmentForm from './DepartmentForm.hooks';
 
 export interface DepartmentFormProps {
     company: Company;

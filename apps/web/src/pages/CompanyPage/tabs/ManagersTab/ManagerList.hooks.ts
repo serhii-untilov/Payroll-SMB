@@ -1,11 +1,21 @@
 import { GridColDef } from '@mui/x-data-grid';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export default function useCompanyManagersColumns() {
+export default function useManagerList() {
     const { t } = useTranslation();
 
-    return useMemo<GridColDef[]>(
+    // TODO
+
+    const onAddManager = useCallback(() => {
+        console.log('onAdd');
+    }, []);
+
+    const onEditManager = useCallback((_managerId: number) => {
+        console.log('onEdit');
+    }, []);
+
+    const columns = useMemo<GridColDef[]>(
         () => [
             {
                 field: 'fullName',
@@ -70,4 +80,6 @@ export default function useCompanyManagersColumns() {
         ],
         [t],
     );
+
+    return { columns, onAddManager, onEditManager };
 }

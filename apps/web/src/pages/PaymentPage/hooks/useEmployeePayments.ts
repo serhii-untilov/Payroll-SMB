@@ -1,14 +1,13 @@
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { paymentsRemove } from '@/services/api/payment.service';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
 import { PaymentStatus, ResourceType } from '@repo/openapi';
 import { dateUTC } from '@repo/shared';
-import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 export default function useEmployeePayments(rowSelectionModel: GridRowSelectionModel) {
-    const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const invalidateQueries = useInvalidateQueries();
 
     const getRowStatus = (params: any): string => {
         return params.row?.deletedDate
@@ -33,7 +32,7 @@ export default function useEmployeePayments(rowSelectionModel: GridRowSelectionM
         for (const id of rowSelectionModel) {
             await paymentsRemove(+id);
         }
-        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
+        await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
     };
 
     return {

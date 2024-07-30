@@ -1,10 +1,10 @@
 import { useAuth } from '@/hooks/context/useAuth';
 import useLocale from '@/hooks/context/useLocale';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { companiesFindOne } from '@/services/api/company.service';
 import { payPeriodsFindCurrent } from '@/services/api/payPeriod.service';
 import { userCompaniesFindAll } from '@/services/api/user-companies.service';
 import { defaultTheme } from '@/themes/defaultTheme';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     ThemeOptions,
     ThemeProvider,
@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import { Company, ResourceType, UserCompany } from '@repo/openapi';
 import { monthBegin } from '@repo/shared';
-import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 
@@ -65,7 +64,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     );
     const [payPeriod, setPayPeriod] = useState<Date>(monthBegin(new Date()));
     const [serverEvent, setServerEvent] = useState('');
-    const queryClient = useQueryClient();
+    const invalidateQueries = useInvalidateQueries();
 
     useEffect(() => {
         setCompactView(!wideScreen);
@@ -148,7 +147,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             // };
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
-                    invalidateQueries(queryClient, [
+                    invalidateQueries([
                         ResourceType.Company,
                         ResourceType.Department,
                         ResourceType.PayPeriod,
@@ -161,7 +160,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
                 setServerEvent(event.data);
             };
         }
-    }, [eventSource, company, queryClient]);
+    }, [eventSource, company, invalidateQueries]);
 
     const switchThemeMode = () => {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light');

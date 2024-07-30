@@ -6,15 +6,14 @@ import { SelectSex } from '@/components/SelectSex';
 import useAppContext from '@/hooks/context/useAppContext';
 import useLocale from '@/hooks/context/useLocale';
 import { usePerson } from '@/hooks/queries/usePersons';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { personsFindOne, personsUpdate } from '@/services/api/person.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
 import { ResourceType, UpdatePersonDto } from '@repo/openapi';
-import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
@@ -44,7 +43,7 @@ export function Personal({ personId }: Props) {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const { company } = useAppContext();
-    const queryClient = useQueryClient();
+    const invalidateQueries = useInvalidateQueries();
     const { data: person, isLoading } = usePerson(personId);
 
     useEffect(() => {}, [company, locale]);
@@ -75,7 +74,7 @@ export function Personal({ personId }: Props) {
             });
             const updated = await personsFindOne(personId);
             reset(updated as FormType);
-            await invalidateQueries(queryClient, [ResourceType.Person]);
+            await invalidateQueries([ResourceType.Person]);
         } catch (e: unknown) {
             const error = e as AxiosError;
             snackbarError(`${error.code}\n${error.message}`);
@@ -84,7 +83,7 @@ export function Personal({ personId }: Props) {
 
     const onCancel = async () => {
         reset(formSchema.cast(person));
-        await invalidateQueries(queryClient, [ResourceType.Person]);
+        await invalidateQueries([ResourceType.Person]);
     };
 
     if (isLoading) return null;

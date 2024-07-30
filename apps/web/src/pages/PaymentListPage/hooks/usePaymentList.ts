@@ -1,9 +1,8 @@
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { paymentsRemove } from '@/services/api/payment.service';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
 import { Payment, PaymentStatus, ResourceType } from '@repo/openapi';
 import { dateUTC } from '@repo/shared';
-import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 type Params = {
@@ -13,7 +12,7 @@ type Params = {
 
 export default function usePaymentList(params: Params) {
     const { payments, rowSelectionModel } = params;
-    const queryClient = useQueryClient();
+    const invalidateQueries = useInvalidateQueries();
     const navigate = useNavigate();
 
     // TODO
@@ -28,7 +27,7 @@ export default function usePaymentList(params: Params) {
                 await paymentsRemove(+id);
             }
         }
-        await invalidateQueries(queryClient, [ResourceType.Payment, ResourceType.PaymentPosition]);
+        await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
     };
 
     const getRowStatus = (params: any): string => {
