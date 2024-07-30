@@ -1,1 +1,4 @@
-export type TheGlobalType = { id: number; name: string };
+export type AppError = {
+    code?: string;
+    message?: string;
+};

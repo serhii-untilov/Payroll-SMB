@@ -1,24 +1,19 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
-export type RadioOption = {
+type RadioOption = {
     label: string;
     value: number | string;
 };
 
-export interface FormInputRadioProps {
+interface Props {
     name: string;
     control: any;
     label: string;
     options: RadioOption[];
 }
 
-export const FormInputRadioGroup: React.FC<FormInputRadioProps> = ({
-    name,
-    control,
-    label,
-    options,
-}) => {
+export const FormInputRadioGroup: React.FC<Props> = ({ name, control, label, options }) => {
     const generateRadioOptions = () => {
         return options.map((singleOption) => (
             <FormControlLabel

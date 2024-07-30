@@ -1,7 +1,7 @@
-import { Tooltip } from '@/components/layout/Tooltip';
 import { CameraAltRounded } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Tooltip } from '../layout/Tooltip';
 
 export function AvatarBox() {
     const { t } = useTranslation();

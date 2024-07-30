@@ -1,4 +1,4 @@
-import useAuth from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/context/useAuth';
 import { enUS } from '@mui/material/locale';
 import { ukUA } from '@mui/x-data-grid/locales';
 import { enUS as dateEn } from 'date-fns/locale/en-US';

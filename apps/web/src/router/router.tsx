@@ -1,30 +1,31 @@
 import { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
-import { Loading } from '../components/utility/Loading';
+import { LoadingDisplay } from '../components/utility/LoadingDisplay';
 import AuthGuard from '../guards/AuthGuard';
 import GuestGuard from '../guards/GuestGuard';
 
 export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<LoadingDisplay />}>
         <Component {...props} />
     </Suspense>
 );
 
-export const SignIn = Loadable(lazy(() => import('@/pages/auth/SignIn')));
-const SignUp = Loadable(lazy(() => import('@/pages/auth/SignUp')));
-const Dashboard = Loadable(lazy(() => import('@/pages/dashboard/Dashboard')));
+export const SignIn = Loadable(lazy(() => import('@/pages/AuthPage/SignIn')));
+const SignUp = Loadable(lazy(() => import('@/pages/AuthPage/SignUp')));
+const DashboardPage = Loadable(lazy(() => import('@/pages/DashboardPage')));
 const Welcome = Loadable(lazy(() => import('@/pages/welcome/Welcome')));
-const Company = Loadable(lazy(() => import('@/pages/company/Company')));
-const People = Loadable(lazy(() => import('@/pages/people/People')));
-const TimeOff = Loadable(lazy(() => import('@/pages/timesheet/TimeOff')));
-const TimeSheet = Loadable(lazy(() => import('@/pages/timesheet/TimeSheet')));
-const Payroll = Loadable(lazy(() => import('@/pages/payroll/Payroll')));
-const Payments = Loadable(lazy(() => import('@/pages/payments/Payments')));
-const PaymentForm = Loadable(lazy(() => import('@/pages/payment/PaymentForm')));
-const Reports = Loadable(lazy(() => import('@/pages/reports/Reports')));
-const Profile = Loadable(lazy(() => import('@/pages/profile/Profile')));
-const Position = Loadable(lazy(() => import('@/pages/position/Position')));
+const CompanyPage = Loadable(lazy(() => import('@/pages/CompanyPage')));
+const PeoplePage = Loadable(lazy(() => import('@/pages/PeoplePage')));
+const TimeOffPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeOffForm')));
+const TimeSheetPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeSheetForm')));
+const PayrollPage = Loadable(lazy(() => import('@/pages/PayrollPage')));
+const PaymentListPage = Loadable(lazy(() => import('@/pages/PaymentListPage')));
+const PaymentPage = Loadable(lazy(() => import('@/pages/PaymentPage')));
+const ReportsPage = Loadable(lazy(() => import('@/pages/ReportsPage/ReportsForm')));
+const UserProfilePage = Loadable(lazy(() => import('@/pages/UserProfilePage')));
+const PositionPage = Loadable(lazy(() => import('@/pages/PositionPage')));
+const PositionHistoryPage = Loadable(lazy(() => import('@/pages/PositionHistoryPage')));
 const AccountantFeatures = Loadable(
     lazy(() => import('@/pages/welcome/details/featuresByRole/AccountantFeatures')),
 );
@@ -71,40 +72,41 @@ const router: RouteObject[] = [
             </AuthGuard>
         ),
         children: [
-            { index: true, element: <Dashboard /> },
-            { path: 'dashboard', element: <Dashboard /> },
+            { index: true, element: <DashboardPage /> },
+            { path: 'dashboard', element: <DashboardPage /> },
             {
                 path: 'company',
                 children: [
-                    { index: true, element: <Company /> },
-                    { path: ':companyId', element: <Company /> },
+                    { index: true, element: <CompanyPage /> },
+                    { path: ':companyId', element: <CompanyPage /> },
                 ],
             },
             {
                 path: 'people',
                 children: [
-                    { index: true, element: <People /> },
-                    { path: 'position', element: <Position /> },
-                    { path: 'position/:positionId', element: <Position /> },
+                    { index: true, element: <PeoplePage /> },
+                    { path: 'position', element: <PositionPage /> },
+                    { path: 'position/:positionId', element: <PositionPage /> },
+                    { path: 'position/:positionId/history', element: <PositionHistoryPage /> },
                 ],
             },
-            { path: 'time-off', element: <TimeOff /> },
-            { path: 'time-sheet', element: <TimeSheet /> },
-            { path: 'payroll', element: <Payroll /> },
+            { path: 'time-off', element: <TimeOffPage /> },
+            { path: 'time-sheet', element: <TimeSheetPage /> },
+            { path: 'payroll', element: <PayrollPage /> },
             {
                 path: 'payments',
                 children: [
-                    { index: true, element: <Payments /> },
-                    { path: 'add', element: <PaymentForm /> },
-                    { path: ':id', element: <PaymentForm /> },
+                    { index: true, element: <PaymentListPage /> },
+                    { path: 'add', element: <PaymentPage /> },
+                    { path: ':paymentId', element: <PaymentPage /> },
                 ],
             },
-            { path: 'reports', element: <Reports /> },
+            { path: 'reports', element: <ReportsPage /> },
             {
                 path: 'profile',
                 children: [
-                    { index: true, element: <Profile /> },
-                    { path: 'company', element: <Company /> },
+                    { index: true, element: <UserProfilePage /> },
+                    { path: 'company', element: <CompanyPage /> },
                 ],
             },
         ],

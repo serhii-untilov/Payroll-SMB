@@ -140,10 +140,10 @@ export class PositionsService extends AvailableForUserCompany {
                       }
                     : {}),
             },
+            withDeleted: deletedOnly || includeDeleted,
             where: {
                 companyId,
-                ...(deletedOnly ? { withDeleted: true, deletedDate: Not(IsNull()) } : {}),
-                ...(includeDeleted ? { withDeleted: true } : {}),
+                ...(deletedOnly ? { deletedDate: Not(IsNull()) } : {}),
                 ...(employeesOnly ? { personId: Not(IsNull()) } : {}),
                 ...(vacanciesOnly ? { personId: IsNull() } : {}),
                 ...(onDate

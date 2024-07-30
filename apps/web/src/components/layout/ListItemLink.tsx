@@ -1,4 +1,4 @@
-import useAppContext from '@/hooks/useAppContext';
+import useAppContext from '@/hooks/context/useAppContext';
 import { ListItem, ListItemProps } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -6,7 +6,7 @@ import * as React from 'react';
 import { NavLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 import { Tooltip } from './Tooltip';
 
-interface ListItemLinkProps extends ListItemProps {
+interface Props extends ListItemProps {
     icon?: React.ReactElement;
     primary: string;
     to: string;
@@ -18,7 +18,7 @@ const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) =
     return <NavLink ref={ref} {...props} role={undefined} />;
 });
 
-export function ListItemLink(props: ListItemLinkProps) {
+export function ListItemLink(props: Props) {
     const { icon, primary, to, target, onClick } = props;
     const { compactView } = useAppContext();
 

@@ -1,4 +1,4 @@
-import useLocale from '@/hooks/useLocale';
+import useLocale from '@/hooks/context/useLocale';
 import { KeyboardArrowLeftRounded, KeyboardArrowRightRounded } from '@mui/icons-material';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';

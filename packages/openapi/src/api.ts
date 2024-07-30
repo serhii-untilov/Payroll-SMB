@@ -1749,7 +1749,7 @@ export interface FindAllPayPeriodDto {
      * @type {number}
      * @memberof FindAllPayPeriodDto
      */
-    'companyId': number;
+    'companyId'?: number;
     /**
      * 
      * @type {Date}
@@ -2000,7 +2000,7 @@ export interface FindAllTaskDto {
      * @type {number}
      * @memberof FindAllTaskDto
      */
-    'companyId': number;
+    'companyId'?: number;
     /**
      * 
      * @type {Date}

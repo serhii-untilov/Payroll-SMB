@@ -1,5 +1,5 @@
-import useAuth from '@/hooks/useAuth';
-import SignIn from '@/pages/auth/SignIn';
+import { useAuth } from '@/hooks/context/useAuth';
+import SignIn from '@/pages/AuthPage/SignIn';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';
 import { useState } from 'react';

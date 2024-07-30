@@ -9,7 +9,7 @@ type Props = PropsWithChildren & {
     title?: string;
 };
 
-export function PageTitle(props: Props) {
+export default function PageTitle(props: Props) {
     const { goBack, title, children, ...other } = props;
     const navigate = useNavigate();
 

@@ -1,6 +1,6 @@
-import useAppContext from '@/hooks/useAppContext';
-import useAuth from '@/hooks/useAuth';
-import useLocale from '@/hooks/useLocale';
+import useAppContext from '@/hooks/context/useAppContext';
+import { useAuth } from '@/hooks/context/useAuth';
+import useLocale from '@/hooks/context/useLocale';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
@@ -30,9 +30,7 @@ export default function MainLayout() {
 
     useEffect(() => {}, [locale, t]);
 
-    const toggleDrawer = () => {
-        setCompactView(!compactView);
-    };
+    const toggleDrawer = () => setCompactView(!compactView);
 
     function onLogout() {
         logout();

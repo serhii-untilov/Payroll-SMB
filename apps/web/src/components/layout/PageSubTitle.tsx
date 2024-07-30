@@ -9,7 +9,6 @@ export function PageSubTitle({ children, ...other }: PropsWithChildren) {
                 color="primary.main"
                 variant="h4"
                 noWrap
-                // align="center"
                 mb={{ xs: 1, sm: 2 }}
                 {...other}
             >

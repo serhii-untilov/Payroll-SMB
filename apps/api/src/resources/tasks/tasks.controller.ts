@@ -60,8 +60,9 @@ export class TasksController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request, @Body() payload: FindAllTaskDto): Promise<Task[]> {
         const userId = getUserId(req);
-        payload.companyId &&
-            (await this.tasksService.availableFindAllOrFail(userId, payload.companyId));
+        if (payload.companyId) {
+            await this.tasksService.availableFindAllOrFail(userId, payload.companyId);
+        }
         return await this.tasksService.findAll(deepStringToShortDate(payload));
     }
 

@@ -35,9 +35,9 @@ export class Person extends Logger {
     @Column({ type: 'varchar', length: 15, default: '' })
     taxId: string;
 
-    @Column({ type: 'varchar', length: 10, default: '' })
-    @ApiProperty({ enum: Sex, enumName: 'Sex' })
-    sex: Sex;
+    @Column({ type: 'varchar', length: 10, default: '', nullable: true })
+    @ApiProperty({ enum: Sex, enumName: 'Sex', nullable: true })
+    sex: Sex | null;
 
     @Column({ type: 'varchar', length: 20, default: '' })
     phone: string;

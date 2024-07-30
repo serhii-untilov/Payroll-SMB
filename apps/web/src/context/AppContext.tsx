@@ -1,10 +1,10 @@
-import useAuth from '@/hooks/useAuth';
-import useLocale from '@/hooks/useLocale';
-import { companiesFindOne } from '@/services/company.service';
-import { payPeriodsFindCurrent } from '@/services/payPeriod.service';
-import { userCompaniesFindAll } from '@/services/user-companies.service';
+import { useAuth } from '@/hooks/context/useAuth';
+import useLocale from '@/hooks/context/useLocale';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
+import { companiesFindOne } from '@/services/api/company.service';
+import { payPeriodsFindCurrent } from '@/services/api/payPeriod.service';
+import { userCompaniesFindAll } from '@/services/api/user-companies.service';
 import { defaultTheme } from '@/themes/defaultTheme';
-import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
     ThemeOptions,
     ThemeProvider,
@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import { Company, ResourceType, UserCompany } from '@repo/openapi';
 import { monthBegin } from '@repo/shared';
-import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
 
@@ -27,8 +26,8 @@ export type AppContextType = {
     themeMode: string;
     setThemeMode: Dispatch<string>;
     switchThemeMode: () => void;
-    payPeriod: Date | undefined;
-    setPayPeriod: Dispatch<Date | undefined>;
+    payPeriod: Date;
+    setPayPeriod: Dispatch<Date>;
     serverEvent: string;
 };
 
@@ -63,9 +62,9 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
         () => responsiveFontSizes(createTheme(defaultTheme(themeMode), locale.locale)),
         [themeMode, locale],
     );
-    const [payPeriod, setPayPeriod] = useState<Date>();
+    const [payPeriod, setPayPeriod] = useState<Date>(monthBegin(new Date()));
     const [serverEvent, setServerEvent] = useState('');
-    const queryClient = useQueryClient();
+    const invalidateQueries = useInvalidateQueries();
 
     useEffect(() => {
         setCompactView(!wideScreen);
@@ -110,9 +109,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             const currentPayPeriod = company?.id
                 ? await payPeriodsFindCurrent({ companyId: company?.id })
                 : null;
-            const current: Date = currentPayPeriod?.dateFrom
-                ? currentPayPeriod?.dateFrom
-                : monthBegin(new Date());
+            const current: Date = currentPayPeriod?.dateFrom ?? monthBegin(new Date());
             const currentPeriodString = localStorage.getItem('currentPayPeriod');
             const lastCurrent: Date = monthBegin(
                 currentPeriodString ? new Date(currentPeriodString) : new Date(),
@@ -150,7 +147,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
             // };
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
-                    invalidateQueries(queryClient, [
+                    invalidateQueries([
                         ResourceType.Company,
                         ResourceType.Department,
                         ResourceType.PayPeriod,
@@ -163,7 +160,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
                 setServerEvent(event.data);
             };
         }
-    }, [eventSource, company, queryClient]);
+    }, [eventSource, company, invalidateQueries]);
 
     const switchThemeMode = () => {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light');
