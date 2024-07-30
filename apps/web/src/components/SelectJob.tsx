@@ -1,6 +1,5 @@
 import { useJobs } from '@/hooks/queries/useJobs';
 import { FormAutocomplete } from './form/FormAutocomplete';
-import { LoadingDisplay } from './utility/LoadingDisplay';
 import ErrorDisplay from './utility/ErrorDisplay';
 import { useTranslation } from 'react-i18next';
 
@@ -12,12 +11,11 @@ type Props = {
 };
 
 export function SelectJob({ control, label, id, name }: Props) {
-    const { data, isLoading, isError, error } = useJobs();
+    const { data, isError, error } = useJobs();
     const { t } = useTranslation();
 
     return (
         <>
-            {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
             {data && (
                 <FormAutocomplete

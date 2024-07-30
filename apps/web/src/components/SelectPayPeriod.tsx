@@ -1,5 +1,4 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
 import usePayPeriodOptions from '@/hooks/usePayPeriodOptions';
 import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
@@ -13,13 +12,12 @@ type SelectPayPeriodProps = SelectProps<string> & {
 
 export default function SelectPayPeriod(props: SelectPayPeriodProps) {
     const { companyId, ...other } = props;
-    const { data, isLoading, isError, error } = usePayPeriods({ companyId });
+    const { data, isError, error } = usePayPeriods({ companyId });
     const { company, payPeriod, setPayPeriod } = useAppContext();
     const options = usePayPeriodOptions(data, company?.payPeriod ?? monthBegin(new Date()));
 
     return (
         <>
-            {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
             {data && (
                 <Select

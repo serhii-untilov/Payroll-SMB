@@ -207,7 +207,7 @@ export default function useJobForm(props: JobFormProps) {
 
     const onClickHistory = useCallback(() => {
         if (props.position?.id) {
-            navigate(`position/:${props.position?.id}/history`);
+            navigate(`position/${props.position?.id}/history`);
         }
     }, [navigate, props]);
 

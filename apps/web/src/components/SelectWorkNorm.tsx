@@ -1,7 +1,6 @@
 import useWorkNorm from '@/hooks/queries/useWorkNorm';
 import { FormAutocomplete } from './form/FormAutocomplete';
 import ErrorDisplay from './utility/ErrorDisplay';
-import { LoadingDisplay } from './utility/LoadingDisplay';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -13,12 +12,11 @@ interface Props {
 }
 
 export function SelectWorkNorm({ control, label, id, name }: Props) {
-    const { data, isError, error, isLoading } = useWorkNorm();
+    const { data, isError, error } = useWorkNorm();
     const { t } = useTranslation();
 
     return (
         <>
-            {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
             {data && (
                 <FormAutocomplete

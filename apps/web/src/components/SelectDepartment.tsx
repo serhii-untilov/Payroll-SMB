@@ -1,6 +1,5 @@
 import { useDepartments } from '@/hooks/queries/useDepartments';
 import { FormAutocomplete } from './form/FormAutocomplete';
-import { LoadingDisplay } from './utility/LoadingDisplay';
 import ErrorDisplay from './utility/ErrorDisplay';
 import { useTranslation } from 'react-i18next';
 
@@ -14,11 +13,10 @@ type Props = {
 
 export function SelectDepartment({ companyId, control, label, id, name }: Props) {
     const { t } = useTranslation();
-    const { data, isLoading, isError, error } = useDepartments({ companyId, relations: false });
+    const { data, isError, error } = useDepartments({ companyId, relations: false });
 
     return (
         <>
-            {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
             {data && (
                 <FormAutocomplete
