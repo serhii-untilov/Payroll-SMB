@@ -1,4 +1,4 @@
-import { useAppTitle } from '@/hooks/useAppTitle';
+import { useAppTitle } from '@/hooks/queries/useAppTitle';
 import useLocale from '@/hooks/context/useLocale';
 import { Typography, TypographyProps } from '@mui/material';
 import { useEffect } from 'react';
