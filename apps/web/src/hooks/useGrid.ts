@@ -1,10 +1,12 @@
-export default function useGrid(gridRef: any) {
-    const onPrint = () => {
-        gridRef.current.exportDataAsPrint();
-    };
+import { useCallback } from 'react';
 
-    const onExport = () => {
+export default function useGrid(gridRef: any) {
+    const onPrint = useCallback(() => {
+        gridRef.current.exportDataAsPrint();
+    }, [gridRef]);
+
+    const onExport = useCallback(() => {
         gridRef.current.exportDataAsCsv();
-    };
+    }, [gridRef]);
     return { onPrint, onExport };
 }
