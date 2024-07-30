@@ -2,7 +2,6 @@ import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { useDepartments } from '@/hooks/queries/useDepartments';
-import DepartmentForm from '@/pages/department/DepartmentForm';
 import { departmentsRemove } from '@/services/api/department.service';
 import { invalidateQueries } from '@/utils/invalidateQueries';
 import {
@@ -15,7 +14,8 @@ import {
 import { Company, ResourceType } from '@repo/openapi';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import useColumns from '../hooks/useCompanyDepartmentsColumns';
+import useColumns from '../../hooks/useCompanyDepartmentsColumns';
+import DepartmentDialog from './DepartmentDialog';
 
 type CompanyDepartmentsProps = {
     company: Company;
@@ -24,6 +24,7 @@ type CompanyDepartmentsProps = {
 export function CompanyDepartments({ company }: CompanyDepartmentsProps) {
     const [openForm, setOpenForm] = useState(false);
     const [departmentId, setDepartmentId] = useState<number | null>(null);
+    // TODO: Split into// TODO: Split into two components: data retrieval and form.
     const { data, isLoading } = useDepartments({ companyId: company.id, relations: true });
     const queryClient = useQueryClient();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -38,10 +39,6 @@ export function CompanyDepartments({ company }: CompanyDepartmentsProps) {
     const onEditDepartment = (departmentId: number) => {
         setDepartmentId(departmentId);
         setOpenForm(true);
-    };
-
-    const submitCallback = async () => {
-        await invalidateQueries(queryClient, [ResourceType.Department]);
     };
 
     const onDeleteDepartment = async () => {
@@ -88,11 +85,11 @@ export function CompanyDepartments({ company }: CompanyDepartmentsProps) {
                 }}
                 onRowDoubleClick={(params: GridRowParams) => onEditDepartment(params.row.id)}
             />
-            <DepartmentForm
+            <DepartmentDialog
                 open={openForm}
                 setOpen={setOpenForm}
                 departmentId={departmentId}
-                submitCallback={submitCallback}
+                setDepartmentId={setDepartmentId}
             />
         </>
     );

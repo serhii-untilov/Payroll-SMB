@@ -13,6 +13,7 @@ import { Position } from '@repo/openapi';
 import { useState } from 'react';
 import useColumns from '../hooks/usePositionListColumns';
 import useForm from '../hooks/usePositionList';
+import useGrid from '@/hooks/useGrid';
 
 interface PositionListTabProps {
     positions: Position[];
@@ -23,8 +24,9 @@ export default function PositionListTab({ positions }: PositionListTabProps) {
     const gridRef = useGridApiRef();
     const { payPeriod } = useAppContext();
     const columns = useColumns(payPeriod);
-    const { getRowStatus, onAddPosition, onEditPosition, onDeletePosition, onPrint, onExport } =
-        useForm(gridRef, rowSelectionModel);
+    const { getRowStatus, onAddPosition, onEditPosition, onDeletePosition } =
+        useForm(rowSelectionModel);
+    const { onPrint, onExport } = useGrid(gridRef);
 
     return (
         <>

@@ -9,12 +9,5 @@ export default function useCompanyAccounts() {
         console.log('onEdit');
     };
 
-    const onPrint = () => {
-        console.log('onPrint');
-    };
-
-    const onExport = () => {
-        console.log('onExport');
-    };
-    return { onAddAccount, onEditAccount, onPrint, onExport };
+    return { onAddAccount, onEditAccount };
 }

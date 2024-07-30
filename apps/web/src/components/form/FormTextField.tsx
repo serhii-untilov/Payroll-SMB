@@ -2,16 +2,16 @@ import { OutlinedInput, OutlinedInputProps } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { InputLabel } from '../layout/InputLabel';
 
-type Props = OutlinedInputProps & {
+export type FormTextFieldProps = OutlinedInputProps & {
     name: string;
     control: any;
-    label: string;
+    label?: string;
     rules?: any;
     autoFocus?: boolean;
     disabled?: boolean;
 };
 
-export const FormTextField = (props: Props) => {
+export function FormTextField(props: FormTextFieldProps) {
     const { label } = props;
     return (
         <>
@@ -42,4 +42,4 @@ export const FormTextField = (props: Props) => {
             />
         </>
     );
-};
+}

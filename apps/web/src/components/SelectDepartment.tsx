@@ -2,6 +2,7 @@ import { useDepartments } from '@/hooks/queries/useDepartments';
 import { FormAutocomplete } from './form/FormAutocomplete';
 import { LoadingDisplay } from './utility/LoadingDisplay';
 import ErrorDisplay from './utility/ErrorDisplay';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     companyId: number;
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export function SelectDepartment({ companyId, control, label, id, name }: Props) {
+    const { t } = useTranslation();
     const { data, isLoading, isError, error } = useDepartments({ companyId, relations: false });
 
     return (
@@ -22,9 +24,9 @@ export function SelectDepartment({ companyId, control, label, id, name }: Props)
                 <FormAutocomplete
                     valueType={'number'}
                     control={control}
-                    label={label || ''}
-                    name={name || id || ''}
-                    id={id || name || ''}
+                    label={label ?? t('Department')}
+                    name={name ?? 'departmentId'}
+                    id={id ?? 'departmentId'}
                     autoComplete="department"
                     options={
                         data?.map((o) => {

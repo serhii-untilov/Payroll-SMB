@@ -10,8 +10,9 @@ import {
 } from '@mui/x-data-grid';
 import { Company, Payment } from '@repo/openapi';
 import { useState } from 'react';
-import useEmployeePayments from '../hooks/useEmployeePayments';
+import useForm from '../hooks/useEmployeePayments';
 import useColumns from '../hooks/useEmployeePaymentsColumns';
+import useGrid from '@/hooks/useGrid';
 
 type Props = {
     company: Company;
@@ -23,9 +24,11 @@ export function EmployeePayments(props: Props) {
     const { payment } = props;
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
+    // TODO: Split into two components: data retrieval and form.
     const { data } = usePaymentPositions({ paymentId: payment.id, relations: true });
-    const { getRowStatus, onAddPayment, onEditPayment, onPrint, onExport, onDeletePayment } =
-        useEmployeePayments(gridRef, rowSelectionModel);
+    const { getRowStatus, onAddPayment, onEditPayment, onDeletePayment } =
+        useForm(rowSelectionModel);
+    const { onPrint, onExport } = useGrid(gridRef);
     const columns = useColumns();
 
     return (

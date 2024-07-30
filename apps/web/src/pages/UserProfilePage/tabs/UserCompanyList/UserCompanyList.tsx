@@ -1,5 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
+import useGrid from '@/hooks/useGrid';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -25,6 +26,7 @@ export function UserCompanyList(props: UserCompanyListProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const columns = useColumns();
+    const { onPrint, onExport } = useGrid(gridRef);
     const {
         onAddCompany,
         onSelectCompany,
@@ -32,8 +34,6 @@ export function UserCompanyList(props: UserCompanyListProps) {
         deletedSelection,
         notDeletedSelection,
         onRestoreDeleted,
-        onPrint,
-        onExport,
         onShowDeleted,
         getRowStatus,
     } = useForm({

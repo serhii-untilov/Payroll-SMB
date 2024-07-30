@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import CompanyDetails from '../tabs/CompanyDetails';
-import { CompanyPayPeriods } from '../tabs/CompanyPayPeriods';
-import { CompanyDepartments } from '../tabs/CompanyDepartments';
+import { CompanyPeriodList } from '../tabs/CompanyPayPeriods/CompanyPeriodList';
+import { CompanyDepartments } from '../tabs/CompanyDepartments/CompanyDepartments';
 import { CompanyManagers } from '../tabs/CompanyManagers';
 import { CompanyAccounts } from '../tabs/CompanyAccounts';
 import { Company } from '@repo/openapi';
@@ -24,7 +24,7 @@ export default function useCompanyTabs(props: Props) {
             {
                 label: t('Pay Periods'),
                 disabled: !company,
-                tab: company && <CompanyPayPeriods company={company} />,
+                tab: company && <CompanyPeriodList company={company} />,
             },
             {
                 label: t('Departments'),

@@ -6,10 +6,7 @@ import { dateUTC } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-export default function useEmployeePayments(
-    gridRef: any,
-    rowSelectionModel: GridRowSelectionModel,
-) {
+export default function useEmployeePayments(rowSelectionModel: GridRowSelectionModel) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -31,8 +28,6 @@ export default function useEmployeePayments(
 
     const onAddPayment = () => console.log('onAddPayment');
     const onEditPayment = (id: number) => navigate(`/people/position/${id}?return=true`);
-    const onPrint = () => gridRef.current.exportDataAsPrint();
-    const onExport = () => gridRef.current.exportDataAsCsv();
 
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
@@ -45,8 +40,6 @@ export default function useEmployeePayments(
         getRowStatus,
         onAddPayment,
         onEditPayment,
-        onPrint,
-        onExport,
         onDeletePayment,
     };
 }

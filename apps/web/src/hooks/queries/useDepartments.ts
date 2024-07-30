@@ -11,6 +11,7 @@ export function useDepartment(id: number, options?: FindOneDepartmentDto) {
     return useQuery<Department, Error>({
         queryKey: [ResourceType.Department, { id }],
         queryFn: async () => departmentsFindOne(id, options),
+        enabled: !!id,
     });
 }
 

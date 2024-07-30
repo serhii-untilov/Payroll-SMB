@@ -1,5 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
+import useGrid from '@/hooks/useGrid';
 import {
     GridCellParams,
     GridRowParams,
@@ -20,8 +21,11 @@ export function PaymentListTab({ payments }: PaymentListTabProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const columns = useColumns();
-    const { onAddPayment, onEditPayment, onPrint, onExport, onDeletePayment, getRowStatus } =
-        useForm(payments, gridRef, rowSelectionModel);
+    const { onAddPayment, onEditPayment, onDeletePayment, getRowStatus } = useForm({
+        payments,
+        rowSelectionModel,
+    });
+    const { onPrint, onExport } = useGrid(gridRef);
 
     return (
         <>

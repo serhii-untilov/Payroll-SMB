@@ -19,14 +19,8 @@ interface Params {
 }
 
 export default function useUserCompanyList(params: Params) {
-    const {
-        userCompanies,
-        rowSelectionModel,
-        setRowSelectionModel,
-        gridRef,
-        showDeleted,
-        setShowDeleted,
-    } = params;
+    const { userCompanies, rowSelectionModel, setRowSelectionModel, showDeleted, setShowDeleted } =
+        params;
     const { t } = useTranslation();
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const navigate = useNavigate();
@@ -89,14 +83,6 @@ export default function useUserCompanyList(params: Params) {
         await invalidateQueries(queryClient, [ResourceType.Company]);
     };
 
-    const onPrint = () => {
-        gridRef.current.exportDataAsPrint();
-    };
-
-    const onExport = () => {
-        gridRef.current.exportDataAsCsv();
-    };
-
     const onShowDeleted = async () => {
         setShowDeleted(!showDeleted);
         await invalidateQueries(queryClient, [ResourceType.Company]);
@@ -116,8 +102,6 @@ export default function useUserCompanyList(params: Params) {
         deletedSelection,
         notDeletedSelection,
         onRestoreDeleted,
-        onPrint,
-        onExport,
         onShowDeleted,
         getRowStatus,
     };

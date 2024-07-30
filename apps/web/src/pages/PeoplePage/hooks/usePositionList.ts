@@ -6,7 +6,7 @@ import { maxDate } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-export default function usePositionList(gridRef: any, rowSelectionModel: GridRowSelectionModel) {
+export default function usePositionList(rowSelectionModel: GridRowSelectionModel) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -14,10 +14,6 @@ export default function usePositionList(gridRef: any, rowSelectionModel: GridRow
 
     const onEditPosition = (positionId: number) =>
         navigate(`/people/position/${positionId}?return=true`);
-
-    const onPrint = () => gridRef.current.exportDataAsPrint();
-
-    const onExport = () => gridRef.current.exportDataAsCsv();
 
     const onDeletePosition = async () => {
         for (const id of rowSelectionModel) {
@@ -36,5 +32,5 @@ export default function usePositionList(gridRef: any, rowSelectionModel: GridRow
                 : 'Normal';
     };
 
-    return { getRowStatus, onAddPosition, onEditPosition, onDeletePosition, onPrint, onExport };
+    return { getRowStatus, onAddPosition, onEditPosition, onDeletePosition };
 }

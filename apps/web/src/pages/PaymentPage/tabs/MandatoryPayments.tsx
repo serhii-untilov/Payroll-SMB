@@ -11,6 +11,7 @@ import { Company, Payment } from '@repo/openapi';
 import { useState } from 'react';
 import useForm from '../hooks/useMandatoryPayments';
 import useColumns from '../hooks/useMandatoryPaymentsColumns';
+import useGrid from '@/hooks/useGrid';
 
 type Props = {
     company: Company;
@@ -20,10 +21,11 @@ type Props = {
 export function MandatoryPayments(_props: Props) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
-    const { onAddPayment, onDeletePayment, onEditPayment, onPrint, onExport } = useForm(gridRef);
+    const { onAddPayment, onDeletePayment, onEditPayment } = useForm();
+    const { onPrint, onExport } = useGrid(gridRef);
     const columns = useColumns();
 
-    // TODO
+    // TODO: Split into two components: data retrieval and form.
     const data = [];
 
     return (

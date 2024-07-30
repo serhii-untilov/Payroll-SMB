@@ -6,21 +6,20 @@ import { dateUTC } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-export default function usePaymentList(
-    payments: Payment[],
-    gridRef: any,
-    rowSelectionModel: GridRowSelectionModel,
-) {
+type Params = {
+    payments: Payment[];
+    rowSelectionModel: GridRowSelectionModel;
+};
+
+export default function usePaymentList(params: Params) {
+    const { payments, rowSelectionModel } = params;
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
     // TODO
-
     const onAddPayment = () => console.log('onAddPayment');
 
     const onEditPayment = (id: number) => navigate(`/payments/${id}`);
-    const onPrint = () => gridRef.current.exportDataAsPrint();
-    const onExport = () => gridRef.current.exportDataAsCsv();
 
     const onDeletePayment = async () => {
         for (const id of rowSelectionModel) {
@@ -48,5 +47,5 @@ export default function usePaymentList(
                       : 'Normal';
     };
 
-    return { onAddPayment, onEditPayment, onPrint, onExport, onDeletePayment, getRowStatus };
+    return { onAddPayment, onEditPayment, onDeletePayment, getRowStatus };
 }

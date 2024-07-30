@@ -250,13 +250,7 @@ export function JobAndPay(props: JobAndPayProps) {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <SelectDepartment
-                                    companyId={company?.id}
-                                    control={control}
-                                    name="departmentId"
-                                    id="departmentId"
-                                    label={t('Department')}
-                                />
+                                <SelectDepartment companyId={company?.id} control={control} />
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
