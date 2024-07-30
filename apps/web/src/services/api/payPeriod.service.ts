@@ -3,12 +3,17 @@ import {
     ClosePayPeriodDto,
     FindAllPayPeriodDto,
     FindCurrentPayPeriodDto,
+    FindOnePayPeriodDto,
     OpenPayPeriodDto,
 } from '@repo/openapi';
 
 export async function payPeriodsFindAll(params: FindAllPayPeriodDto) {
     const response = (await api.payPeriodsFindAll(params)).data;
     return response.sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
+}
+
+export async function payPeriodsFindOne(id: number, options?: FindOnePayPeriodDto) {
+    return (await api.payPeriodsFindOne(id, options ?? {})).data;
 }
 
 export async function payPeriodsFindCurrent(params: FindCurrentPayPeriodDto) {

@@ -1,4 +1,5 @@
 import useAppContext from '@/hooks/context/useAppContext';
+import useLocale from '@/hooks/context/useLocale';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { companiesCreate, companiesUpdate } from '@/services/api/company.service';
 import { AppError } from '@/types';
@@ -30,6 +31,9 @@ export default function useCompanyDetails(props: Props) {
     const { t } = useTranslation();
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const invalidateQueries = useInvalidateQueries();
+    const { locale } = useLocale();
+
+    useEffect(() => {}, [locale]);
 
     const formSchema = object().shape({
         name: string().required('Name is required'),

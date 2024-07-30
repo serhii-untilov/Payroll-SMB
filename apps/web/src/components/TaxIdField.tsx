@@ -1,20 +1,21 @@
-import { FormTextField } from '@/components/form/FormTextField';
+import { FormTextField, FormTextFieldProps } from '@/components/form/FormTextField';
 import { useTranslation } from 'react-i18next';
 
-type Props = {
+type TaxIdProps = Partial<FormTextFieldProps> & {
     control: any;
 };
 
-export default function TaxIdField({ control }: Props) {
+export default function TaxIdField(props: TaxIdProps) {
     const { t } = useTranslation();
     return (
         <FormTextField
-            control={control}
-            required
-            label={t('Tax ID')}
-            name="taxId"
+            {...props}
+            control={props.control}
+            id={props.id ?? 'taxId'}
+            name={props.name ?? 'taxId'}
+            autoComplete={props.autoComplete ?? 'taxId'}
+            label={props.label ?? t('Tax ID')}
             type="text"
-            autoComplete="taxId"
         />
     );
 }

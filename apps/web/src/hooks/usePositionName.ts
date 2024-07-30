@@ -2,9 +2,8 @@ import { Position } from '@repo/openapi';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export function usePageTitle(position: Position | undefined) {
+export default function usePositionName(position: Position | undefined) {
     const { t } = useTranslation();
-
     return useMemo(() => {
         const positionName = position
             ? position?.personId

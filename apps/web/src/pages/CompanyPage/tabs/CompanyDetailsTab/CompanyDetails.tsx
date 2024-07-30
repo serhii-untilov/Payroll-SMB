@@ -1,16 +1,14 @@
+import CompanyNameField from '@/components/CompanyNameField';
 import Toolbar from '@/components/layout/Toolbar';
+import SelectAccounting from '@/components/SelectAccounting';
+import SelectLaw from '@/components/SelectLaw';
+import SelectPayPeriodField from '@/components/SelectPayPeriodField';
+import TaxIdField from '@/components/TaxIdField';
 import useAppContext from '@/hooks/context/useAppContext';
 import useDefaultAccountingId from '@/hooks/useDefaultAccountingId';
 import useDefaultLawId from '@/hooks/useDefaultLawId';
-import useLocale from '@/hooks/context/useLocale';
 import { Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
-import { useEffect } from 'react';
-import CompanyNameField from '../../../../components/CompanyNameField';
-import SelectAccounting from '../../../../components/SelectAccounting';
-import SelectLaw from '../../../../components/SelectLaw';
-import SelectPayPeriodField from '../../../../components/SelectPayPeriodField';
-import TaxIdField from '../../../../components/TaxIdField';
 import useForm from './CompanyDetails.hooks';
 
 type CompanyDetailsProps = {
@@ -20,7 +18,6 @@ type CompanyDetailsProps = {
 
 export default function CompanyDetails(props: CompanyDetailsProps) {
     const { company: currentCompany } = useAppContext();
-    const { locale } = useLocale();
     const defaultLawId = useDefaultLawId();
     const defaultAccountingId = useDefaultAccountingId();
     const { control, isDirty, handleSubmit, onSubmit, onCancel } = useForm({
@@ -29,8 +26,6 @@ export default function CompanyDetails(props: CompanyDetailsProps) {
         defaultAccountingId,
         setCompanyId: props.setCompanyId,
     });
-
-    useEffect(() => {}, [locale]);
 
     return (
         <>

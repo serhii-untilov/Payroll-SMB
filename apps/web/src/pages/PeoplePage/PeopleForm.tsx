@@ -8,9 +8,9 @@ import { Box, Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import useTabs from './hooks/usePeopleFormTabs';
+import usePeopleForm from './PeopleForm.hooks';
 
-type PeopleFormProps = {
+export type PeopleFormProps = {
     company: Company;
     payPeriod: Date;
     tabIndex: string | null;
@@ -18,10 +18,10 @@ type PeopleFormProps = {
 };
 
 export default function PeopleForm(props: PeopleFormProps) {
-    const { company, payPeriod, tabIndex, goBack } = props;
+    const { company, tabIndex, goBack } = props;
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const tabs = useTabs(company.id, payPeriod);
+    const { tabs } = usePeopleForm(props);
 
     useEffect(() => {}, [locale]);
 

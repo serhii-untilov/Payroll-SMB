@@ -1,19 +1,19 @@
 import { t } from 'i18next';
-import { FormTextField } from './form/FormTextField';
+import { FormTextField, FormTextFieldProps } from './form/FormTextField';
 
-interface FirstNameProps {
+type FirstNameProps = Partial<FormTextFieldProps> & {
     control: any;
-}
+};
 
-export default function FirstNameField({ control }: FirstNameProps) {
+export default function FirstNameField(props: FirstNameProps) {
     return (
         <FormTextField
-            autoFocus
-            control={control}
-            id="firstName"
-            name="firstName"
-            autoComplete="firstName"
-            label={t('First Name')}
+            {...props}
+            control={props.control}
+            id={props.id ?? 'firstName'}
+            name={props.name ?? 'firstName'}
+            autoComplete={props.autoComplete ?? 'firstName'}
+            label={props.label ?? t('First Name')}
             type="text"
         />
     );

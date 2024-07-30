@@ -2,6 +2,7 @@ import useWorkNorm from '@/hooks/queries/useWorkNorm';
 import { FormAutocomplete } from './form/FormAutocomplete';
 import ErrorDisplay from './utility/ErrorDisplay';
 import { LoadingDisplay } from './utility/LoadingDisplay';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     companyId: number | undefined;
@@ -13,6 +14,7 @@ interface Props {
 
 export function SelectWorkNorm({ control, label, id, name }: Props) {
     const { data, isError, error, isLoading } = useWorkNorm();
+    const { t } = useTranslation();
 
     return (
         <>
@@ -22,10 +24,10 @@ export function SelectWorkNorm({ control, label, id, name }: Props) {
                 <FormAutocomplete
                     valueType={'number'}
                     control={control}
-                    label={label || ''}
-                    name={name || id || ''}
-                    id={id || name || ''}
-                    autoComplete="workNorm"
+                    label={label ?? t('Work Norm')}
+                    name={name ?? 'workNormId'}
+                    id={id ?? 'workNormId'}
+                    autoComplete="workNormId"
                     options={
                         data?.map((o) => {
                             return { label: o.name, value: o.id };

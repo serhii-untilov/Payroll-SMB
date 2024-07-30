@@ -1,10 +1,54 @@
-import { date2view } from '@repo/shared';
-import { useMemo } from 'react';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
+import { positionsRemove } from '@/services/api/position.service';
+import { GridRowSelectionModel } from '@mui/x-data-grid';
+import { PayPeriod, PositionHistory, ResourceType } from '@repo/openapi';
+import { date2view, maxDate } from '@repo/shared';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { PositionListTabProps } from './PositionListTab';
+import { useCallback, useMemo } from 'react';
 
-export default function usePositionListColumns(payPeriod: Date) {
+type Props = PositionListTabProps & {
+    payPeriod: PayPeriod;
+    rowSelectionModel: GridRowSelectionModel;
+};
+
+export default function usePositionListTab(props: Props) {
+    const { payPeriod } = props;
+    const invalidateQueries = useInvalidateQueries();
+    const navigate = useNavigate();
     const { t } = useTranslation();
-    return useMemo(
+
+    const onAddPosition = () => navigate('/people/position/?tab-index=0&return=true');
+
+    const onEditPosition = (positionId: number) =>
+        navigate(`/people/position/${positionId}?return=true`);
+
+    const onDeletePosition = async () => {
+        for (const id of props.rowSelectionModel) {
+            await positionsRemove(+id);
+        }
+        await invalidateQueries([ResourceType.Position]);
+    };
+
+    const getRowStatus = (params: any) => {
+        return params.row?.deletedDate
+            ? 'Deleted'
+            : params.row?.dateTo < maxDate()
+              ? 'Dismissed'
+              : !params.row?.personId
+                ? 'Vacancy'
+                : 'Normal';
+    };
+
+    const findFn = useCallback(
+        (positionHistory: PositionHistory) =>
+            positionHistory.dateFrom.getTime() <= props.payPeriod.dateTo.getTime() &&
+            positionHistory.dateTo.getTime() >= props.payPeriod.dateFrom.getTime(),
+        [props],
+    );
+
+    const columns = useMemo(
         () => [
             {
                 field: 'cardNumber',
@@ -33,11 +77,7 @@ export default function usePositionListColumns(payPeriod: Date) {
                 width: 200,
                 sortable: true,
                 valueGetter: (params) => {
-                    return payPeriod
-                        ? params.row?.history?.find(
-                              (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                          )?.job?.name || ''
-                        : '';
+                    return params.row?.history?.findLast((o) => findFn(o))?.job?.name || '';
                 },
             },
             {
@@ -47,10 +87,8 @@ export default function usePositionListColumns(payPeriod: Date) {
                 width: 300,
                 sortable: true,
                 valueGetter: (params) => {
-                    return payPeriod
-                        ? params.row?.history?.find(
-                              (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                          )?.department?.name || ''
+                    return props.payPeriod
+                        ? params.row?.history?.findLast((o) => findFn(o))?.department?.name || ''
                         : '';
                 },
             },
@@ -61,10 +99,8 @@ export default function usePositionListColumns(payPeriod: Date) {
                 width: 250,
                 sortable: true,
                 valueGetter: (params) => {
-                    return payPeriod
-                        ? params.row?.history?.find(
-                              (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                          )?.workNorm?.name || ''
+                    return props.payPeriod
+                        ? params.row?.history?.findLast((o) => findFn(o))?.workNorm?.name || ''
                         : '';
                 },
             },
@@ -76,9 +112,7 @@ export default function usePositionListColumns(payPeriod: Date) {
                 sortable: true,
                 valueGetter: (params) => {
                     return payPeriod
-                        ? params.row?.history?.find(
-                              (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                          )?.paymentType?.name || ''
+                        ? params.row?.history?.findLast((o) => findFn(o))?.paymentType?.name || ''
                         : '';
                 },
             },
@@ -90,9 +124,7 @@ export default function usePositionListColumns(payPeriod: Date) {
                 sortable: true,
                 valueGetter: (params) => {
                     const wage = payPeriod
-                        ? params.row?.history?.find(
-                              (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                          )?.wage || ''
+                        ? params.row?.history?.findLast((o) => findFn(o))?.wage || ''
                         : '';
                     return Number(wage) === 0 ? '' : wage;
                 },
@@ -105,9 +137,7 @@ export default function usePositionListColumns(payPeriod: Date) {
                 sortable: true,
                 valueGetter: (params) => {
                     return payPeriod
-                        ? params.row?.history?.find(
-                              (o) => o.dateFrom <= payPeriod && o.dateTo >= payPeriod,
-                          )?.rate || ''
+                        ? params.row?.history?.findLast((o) => findFn(o))?.rate || ''
                         : '';
                 },
             },
@@ -132,6 +162,8 @@ export default function usePositionListColumns(payPeriod: Date) {
                 },
             },
         ],
-        [t, payPeriod],
+        [t, props, findFn, payPeriod],
     );
+
+    return { columns, getRowStatus, onAddPosition, onEditPosition, onDeletePosition };
 }

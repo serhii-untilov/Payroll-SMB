@@ -1,11 +1,12 @@
 import { Company } from '@repo/openapi';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import AccountsTab from './tabs/AccountsTab';
 import DepartmentsTab from './tabs/DepartmentsTab';
 import CompanyDetailsTab from './tabs/CompanyDetailsTab/CompanyDetails';
 import ManagersTab from './tabs/ManagersTab';
 import PayPeriodsTab from './tabs/PayPeriodsTab';
+import useLocale from '@/hooks/context/useLocale';
 
 interface CompanyFormParams {
     company?: Company;
@@ -15,6 +16,9 @@ interface CompanyFormParams {
 export default function useCompanyForm(params: CompanyFormParams) {
     const { company } = params;
     const { t } = useTranslation();
+    const { locale } = useLocale();
+
+    useEffect(() => {}, [locale]);
 
     const pageTitle = useMemo(() => {
         return params.company?.id ? params.company?.name ?? 'Noname' : t('New Company');

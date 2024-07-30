@@ -1,28 +1,21 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
+import { usePositionHistoryList } from '@/hooks/queries/usePositionHistory';
 import { usePosition } from '@/hooks/queries/usePositions';
-import { usePositionHistoryLast } from '@/hooks/queries/usePositionHistory';
-import PositionForm from './PositionForm';
-import { Company } from '@repo/openapi';
+import { useParams } from 'react-router-dom';
+import PositionHistoryList from './PositionHistoryList';
 
-interface EditPositionProps {
-    company: Company;
-    positionId: number;
-    tabIndex: string | null;
-    goBack: boolean;
-}
-
-export default function EditPosition(props: EditPositionProps) {
-    const { company, positionId, tabIndex, goBack } = props;
+export default function PositionHistoryPage() {
+    const params = useParams();
+    const positionId = Number(params.positionId);
     const { payPeriod } = useAppContext();
     const position = usePosition(positionId, {
         onPayPeriodDate: payPeriod,
         relations: true,
     });
-    const positionHistory = usePositionHistoryLast({
+    const positionHistory = usePositionHistoryList({
         positionId,
-        onPayPeriodDate: payPeriod,
         relations: true,
     });
 
@@ -32,15 +25,7 @@ export default function EditPosition(props: EditPositionProps) {
             {position.isError && <ErrorDisplay error={position.error} />}
             {positionHistory.isError && <ErrorDisplay error={positionHistory.error} />}
             {position.data && positionHistory.data && (
-                <PositionForm
-                    {...{
-                        company,
-                        position: position.data,
-                        positionHistory: positionHistory.data,
-                        tabIndex,
-                        goBack,
-                    }}
-                />
+                <PositionHistoryList position={position.data} history={positionHistory.data} />
             )}
         </>
     );

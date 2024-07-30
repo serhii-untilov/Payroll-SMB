@@ -1,6 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import useAppContext from '@/hooks/context/useAppContext';
+import useGrid from '@/hooks/useGrid';
 import {
     GridCallbackDetails,
     GridCellParams,
@@ -9,23 +9,21 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { Position } from '@repo/openapi';
+import { PayPeriod, Position } from '@repo/openapi';
 import { useState } from 'react';
-import useColumns from '../hooks/usePositionListColumns';
-import useForm from '../hooks/usePositionList';
-import useGrid from '@/hooks/useGrid';
+import usePositionListTab from './PositionListTab.hooks';
 
-interface PositionListTabProps {
+export type PositionListTabProps = {
     positions: Position[];
-}
+    payPeriod: PayPeriod;
+};
 
-export default function PositionListTab({ positions }: PositionListTabProps) {
+export default function PositionListTab(props: PositionListTabProps) {
+    const { positions, payPeriod } = props;
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
-    const { payPeriod } = useAppContext();
-    const columns = useColumns(payPeriod);
-    const { getRowStatus, onAddPosition, onEditPosition, onDeletePosition } =
-        useForm(rowSelectionModel);
+    const { columns, getRowStatus, onAddPosition, onEditPosition, onDeletePosition } =
+        usePositionListTab({ ...props, payPeriod, rowSelectionModel });
     const { onPrint, onExport } = useGrid(gridRef);
 
     return (

@@ -1,9 +1,14 @@
+import { Company } from '@repo/openapi';
+import { Dispatch } from 'react';
 import PositionForm from './PositionForm';
 
 interface CreatePositionProps {
-    setPositionId: (number) => void;
+    company: Company;
+    setPositionId: Dispatch<number>;
 }
 
 export default function CreatePosition(props: CreatePositionProps) {
-    return <PositionForm goBack={true} setPositionId={props.setPositionId} />;
+    return (
+        <PositionForm company={props.company} goBack={true} setPositionId={props.setPositionId} />
+    );
 }

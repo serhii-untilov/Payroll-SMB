@@ -1,19 +1,20 @@
 import { TabComponent } from '@/components/layout/TabsContainer';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PositionList } from '../tabs/PositionList';
+import { PositionList } from './tabs/PositionList';
+import { PeopleFormProps } from './PeopleForm';
 
-export default function usePeopleFormTabs(companyId: number, payPeriod: Date) {
+export default function usePeopleForm(props: PeopleFormProps) {
     const { t } = useTranslation();
-    return useMemo<TabComponent[]>(
+    const tabs = useMemo<TabComponent[]>(
         () => [
             {
                 label: t('Positions'),
                 tab: (
                     <PositionList
-                        companyId={companyId}
+                        companyId={props.company.id}
                         relations={true}
-                        onPayPeriodDate={payPeriod}
+                        onPayPeriodDate={props.payPeriod}
                     />
                 ),
             },
@@ -21,10 +22,10 @@ export default function usePeopleFormTabs(companyId: number, payPeriod: Date) {
                 label: t('Employees'),
                 tab: (
                     <PositionList
-                        companyId={companyId}
+                        companyId={props.company.id}
                         employeesOnly={true}
                         relations={true}
-                        onPayPeriodDate={payPeriod}
+                        onPayPeriodDate={props.payPeriod}
                     />
                 ),
             },
@@ -33,10 +34,10 @@ export default function usePeopleFormTabs(companyId: number, payPeriod: Date) {
                 label: t('Vacancies'),
                 tab: (
                     <PositionList
-                        companyId={companyId}
+                        companyId={props.company.id}
                         vacanciesOnly={true}
                         relations={true}
-                        onPayPeriodDate={payPeriod}
+                        onPayPeriodDate={props.payPeriod}
                     />
                 ),
             },
@@ -45,19 +46,27 @@ export default function usePeopleFormTabs(companyId: number, payPeriod: Date) {
                 label: t('Dismissed'),
                 tab: (
                     <PositionList
-                        companyId={companyId}
+                        companyId={props.company.id}
                         employeesOnly={true}
                         dismissedOnly={true}
                         relations={true}
-                        onPayPeriodDate={payPeriod}
+                        onPayPeriodDate={props.payPeriod}
                     />
                 ),
             },
             {
                 label: t('All'),
-                tab: <PositionList companyId={companyId} includeDeleted={true} relations={true} />,
+                tab: (
+                    <PositionList
+                        companyId={props.company.id}
+                        includeDeleted={true}
+                        relations={true}
+                    />
+                ),
             },
         ],
-        [companyId, payPeriod, t],
+        [props, t],
     );
+
+    return { tabs };
 }

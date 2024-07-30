@@ -11,10 +11,14 @@ import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { date, InferType, number, object, ObjectSchema, string } from 'yup';
 import { DepartmentFormProps } from './DepartmentForm';
+import useLocale from '@/hooks/context/useLocale';
 
 export default function useDepartmentForm(props: DepartmentFormProps) {
     const { t } = useTranslation();
     const invalidateQueries = useInvalidateQueries();
+    const { locale } = useLocale();
+
+    useEffect(() => {}, [props, locale]);
 
     const formSchema: ObjectSchema<CreateDepartmentDto> = useMemo(
         () =>

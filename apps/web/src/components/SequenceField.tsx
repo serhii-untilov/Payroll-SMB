@@ -1,12 +1,14 @@
 import { OutlinedInput, OutlinedInputProps } from '@mui/material';
 import { MAX_SEQUENCE_NUMBER } from '@repo/shared';
 import { Controller } from 'react-hook-form';
-import { InputLabel } from '../layout/InputLabel';
+import { InputLabel } from './layout/InputLabel';
+import { useTranslation } from 'react-i18next';
 
 type Props = OutlinedInputProps & {
-    name: string;
+    id?: string;
+    name?: string;
     control: any;
-    label: string;
+    label?: string;
     rules?: any;
     autoFocus?: boolean;
     step?: number;
@@ -14,13 +16,14 @@ type Props = OutlinedInputProps & {
     max?: number;
 };
 
-export const FormSequenceField = (props: Props) => {
-    const { label, step, min, max, name, control, rules, autoFocus, ...other } = props;
+export default function SequenceField(props: Props) {
+    const { id, label, step, min, max, name, control, rules, autoFocus, ...other } = props;
+    const { t } = useTranslation();
     return (
         <>
-            <InputLabel>{label}</InputLabel>
+            <InputLabel>{label ?? t('Sequence Number')}</InputLabel>
             <Controller
-                name={props.name}
+                name={props.name ?? 'sequenceNumber'}
                 control={props.control}
                 rules={props.rules}
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -40,6 +43,7 @@ export const FormSequenceField = (props: Props) => {
                         }}
                         value={!value || value >= MAX_SEQUENCE_NUMBER ? '' : value}
                         fullWidth
+                        id={id ?? 'sequenceNumber'}
                         {...other}
                         label=""
                     />
@@ -47,4 +51,4 @@ export const FormSequenceField = (props: Props) => {
             />
         </>
     );
-};
+}

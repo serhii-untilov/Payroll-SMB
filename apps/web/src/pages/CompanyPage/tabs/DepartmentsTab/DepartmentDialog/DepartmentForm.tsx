@@ -3,14 +3,13 @@ import DateTo from '@/components/DateTo';
 import DepartmentName from '@/components/DepartmentName';
 import { Button } from '@/components/layout/Button';
 import { SelectDepartment } from '@/components/SelectDepartment';
-import useLocale from '@/hooks/context/useLocale';
 import { Grid } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Company, Department } from '@repo/openapi';
-import { Dispatch, Fragment, useEffect } from 'react';
+import { Dispatch, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import useDepartmentForm from './DepartmentForm.hooks';
 
@@ -23,11 +22,8 @@ export interface DepartmentFormProps {
 }
 
 export default function DepartmentForm(props: DepartmentFormProps) {
-    const { locale } = useLocale();
     const { t } = useTranslation();
     const { control, handleSubmit, onSubmit, onCancel } = useDepartmentForm(props);
-
-    useEffect(() => {}, [props, locale]);
 
     return (
         <Fragment>
