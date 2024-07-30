@@ -19,7 +19,7 @@ const CompanyPage = Loadable(lazy(() => import('@/pages/CompanyPage')));
 const PeoplePage = Loadable(lazy(() => import('@/pages/PeoplePage')));
 const TimeOffPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeOffForm')));
 const TimeSheetPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeSheetForm')));
-const Payroll = Loadable(lazy(() => import('@/pages/payroll/Payroll')));
+const PayrollPage = Loadable(lazy(() => import('@/pages/PayrollPage')));
 const PaymentListPage = Loadable(lazy(() => import('@/pages/PaymentListPage')));
 const PaymentPage = Loadable(lazy(() => import('@/pages/PaymentPage')));
 const ReportsPage = Loadable(lazy(() => import('@/pages/ReportsPage/ReportsForm')));
@@ -92,7 +92,7 @@ const router: RouteObject[] = [
             },
             { path: 'time-off', element: <TimeOffPage /> },
             { path: 'time-sheet', element: <TimeSheetPage /> },
-            { path: 'payroll', element: <Payroll /> },
+            { path: 'payroll', element: <PayrollPage /> },
             {
                 path: 'payments',
                 children: [
