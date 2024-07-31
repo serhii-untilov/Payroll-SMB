@@ -3,12 +3,13 @@ import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useUserCompanies from '@/hooks/queries/useUserCompanies';
 import { User } from '@repo/openapi';
 import { useState } from 'react';
+import UserCompanyList from './UserCompanyList';
 
 type Props = {
     user: User;
 };
 
-export function UserCompanyList({ user }: Props) {
+export default function UserCompaniesTab({ user }: Props) {
     const [showDeleted, setShowDeleted] = useState<boolean>(false);
     const {
         data: userCompanies,

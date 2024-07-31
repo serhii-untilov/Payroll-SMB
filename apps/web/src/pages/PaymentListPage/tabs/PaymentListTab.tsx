@@ -9,20 +9,30 @@ import {
     useGridApiRef,
 } from '@mui/x-data-grid';
 import { Payment } from '@repo/openapi';
-import { useState } from 'react';
-import useForm from '../hooks/usePaymentList';
-import useColumns from '../hooks/usePaymentListColumns';
+import { Dispatch, useState } from 'react';
+import usePaymentListTab from './PaymentListTab.hooks';
 
-interface PaymentListTabProps {
+export interface PaymentListTabProps {
     payments: Payment[];
+    showDeleted: boolean;
+    setShowDeleted: Dispatch<boolean>;
 }
 
-export function PaymentListTab({ payments }: PaymentListTabProps) {
+export function PaymentListTab(props: PaymentListTabProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
-    const columns = useColumns();
-    const { onAddPayment, onEditPayment, onDeletePayment, getRowStatus } = useForm({
-        payments,
+    const {
+        columns,
+        onAddPayment,
+        onEditPayment,
+        onDeletePayment,
+        onShowDeleted,
+        canDelete,
+        canRestore,
+        onRestoreDeleted,
+        getRowStatus,
+    } = usePaymentListTab({
+        ...props,
         rowSelectionModel,
     });
     const { onPrint, onExport } = useGrid(gridRef);
@@ -31,11 +41,11 @@ export function PaymentListTab({ payments }: PaymentListTabProps) {
         <>
             <Toolbar
                 onAdd={onAddPayment}
-                onPrint={payments?.length ? onPrint : 'disabled'}
-                onExport={payments?.length ? onExport : 'disabled'}
-                onDelete={rowSelectionModel.length ? onDeletePayment : 'disabled'}
-                onShowDeleted={'disabled'}
-                onRestoreDeleted={'disabled'}
+                onPrint={props.payments?.length ? onPrint : 'disabled'}
+                onExport={props.payments?.length ? onExport : 'disabled'}
+                onDelete={canDelete ? onDeletePayment : 'disabled'}
+                onShowDeleted={onShowDeleted}
+                onRestoreDeleted={canRestore ? onRestoreDeleted : 'disabled'}
                 onShowHistory={'disabled'}
             />
             <DataGrid
@@ -48,7 +58,7 @@ export function PaymentListTab({ payments }: PaymentListTabProps) {
                     dateTo: false,
                 }}
                 apiRef={gridRef}
-                rows={payments || []}
+                rows={props.payments || []}
                 columns={columns}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
                     setRowSelectionModel(newRowSelectionModel);

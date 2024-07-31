@@ -32,12 +32,17 @@ export class PaymentPositionsService extends AvailableForUserCompany {
     }
 
     async getCompanyId(entityId: number): Promise<number> {
-        const paymentPosition = await this.repository.findOneOrFail({ where: { id: entityId } });
-        return (await this.paymentsService.findOne(paymentPosition.paymentId)).companyId;
+        const paymentPosition = await this.repository.findOneOrFail({
+            where: { id: entityId },
+            withDeleted: true,
+        });
+        return (
+            await this.paymentsService.findOne(paymentPosition.paymentId, { withDeleted: true })
+        ).companyId;
     }
 
     async getPaymentCompanyId(paymentId: number): Promise<number> {
-        return (await this.paymentsService.findOne(paymentId)).companyId;
+        return (await this.paymentsService.findOne(paymentId, { withDeleted: true })).companyId;
     }
 
     async create(userId: number, payload: CreatePaymentPositionDto): Promise<PaymentPosition> {
@@ -83,6 +88,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
 
     async findOne(id: number, params?: FindOnePaymentPositionDto): Promise<PaymentPosition> {
         const record = await this.repository.findOneOrFail({
+            withDeleted: !!params?.withDeleted,
             where: { id },
             relations: {
                 payment: !!params?.relations,

@@ -2,9 +2,11 @@ import useAppContext from '@/hooks/context/useAppContext';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { companiesFindOne } from '@/services/api/company.service';
 import { userCompaniesRemove, userCompaniesRestore } from '@/services/api/user-companies.service';
-import { GridRowSelectionModel } from '@mui/x-data-grid';
+import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { ResourceType, UserCompany } from '@repo/openapi';
+import { date2view } from '@repo/shared';
 import { enqueueSnackbar } from 'notistack';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -94,7 +96,65 @@ export default function useUserCompanyList(params: Params) {
               ? 'Current'
               : 'Normal';
     };
+
+    const columns = useMemo<GridColDef[]>(
+        () => [
+            {
+                field: 'companyName',
+                headerName: t('Company'),
+                type: 'string',
+                width: 400,
+                sortable: true,
+                valueGetter: (params) => {
+                    return params.row.company?.name;
+                },
+            },
+            {
+                field: 'roleName',
+                headerName: t('User Role'),
+                type: 'string',
+                width: 400,
+                sortable: true,
+                valueGetter: (params) => {
+                    return params.row.role.name;
+                },
+            },
+            {
+                field: 'payPeriod',
+                headerName: t('Pay Period'),
+                type: 'string',
+                width: 200,
+                sortable: true,
+                valueGetter: (params) => {
+                    return date2view(params.row.company?.payPeriod);
+                },
+            },
+            {
+                field: 'dateFrom',
+                headerName: t('Date From'),
+                type: 'string',
+                width: 200,
+                sortable: true,
+                valueGetter: (params) => {
+                    return date2view(params.row.company?.dateFrom);
+                },
+            },
+
+            {
+                field: 'dateTo',
+                headerName: t('Date To'),
+                type: 'string',
+                width: 200,
+                sortable: true,
+                valueGetter: (params) => {
+                    return date2view(params.row.company?.dateTo);
+                },
+            },
+        ],
+        [t],
+    );
     return {
+        columns,
         onAddCompany,
         onSelectCompany,
         onDeleteCompany,

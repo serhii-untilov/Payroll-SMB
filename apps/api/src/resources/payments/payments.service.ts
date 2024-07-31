@@ -21,7 +21,7 @@ import {
     WithdrawPaymentDto,
 } from './dto';
 import { Payment } from './entities/payment.entity';
-import { PaymentUpdatedEvent } from './events';
+import { PaymentCreatedEvent, PaymentDeletedEvent, PaymentUpdatedEvent } from './events';
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
@@ -45,7 +45,8 @@ export class PaymentsService extends AvailableForUserCompany {
     }
 
     async getCompanyId(entityId: number): Promise<number> {
-        return (await this.repository.findOneOrFail({ where: { id: entityId } })).companyId;
+        return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true }))
+            .companyId;
     }
 
     async create(userId: number, payload: CreatePaymentDto): Promise<Payment> {
@@ -57,7 +58,7 @@ export class PaymentsService extends AvailableForUserCompany {
                 dateFrom: accPeriod ?? payPeriod ?? company.payPeriod,
             },
         });
-        const created = await this.repository.save({
+        const record = await this.repository.save({
             ...other,
             companyId,
             payPeriod: payPeriod ?? company.payPeriod,
@@ -73,7 +74,9 @@ export class PaymentsService extends AvailableForUserCompany {
             createdUserId: userId,
             updatedUserId: userId,
         });
-        return await this.repository.findOneOrFail({ where: { id: created.id } });
+        const created = await this.repository.findOneOrFail({ where: { id: record.id } });
+        this.eventEmitter.emit('payment.created', new PaymentCreatedEvent(userId, created));
+        return created;
     }
 
     async findAll(params: FindAllPaymentDto): Promise<Payment[]> {
@@ -86,6 +89,7 @@ export class PaymentsService extends AvailableForUserCompany {
                 company: relations,
                 paymentType: relations,
             },
+            withDeleted: !!params.withDeleted,
             where: {
                 companyId,
                 // TODO: check result for the positionId parameter
@@ -99,6 +103,7 @@ export class PaymentsService extends AvailableForUserCompany {
 
     async findOne(id: number, params?: FindOnePaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({
+            withDeleted: !!params?.withDeleted,
             where: { id },
             relations: { company: !!params?.relations, paymentType: !!params?.relations },
         });
@@ -125,7 +130,21 @@ export class PaymentsService extends AvailableForUserCompany {
     async remove(userId: number, id: number): Promise<Payment> {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+        this.eventEmitter.emit('payment.deleted', new PaymentDeletedEvent(userId, deleted));
         return deleted;
+    }
+
+    async restore(userId: number, id: number): Promise<Payment> {
+        await this.repository.save({
+            id,
+            deletedDate: null,
+            deletedUserId: null,
+            updatedUserId: userId,
+            updatedDate: new Date(),
+        });
+        const updated = await this.repository.findOneOrFail({ where: { id } });
+        this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
+        return updated;
     }
 
     async delete(ids: number[]) {

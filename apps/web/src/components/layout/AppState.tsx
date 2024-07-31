@@ -1,8 +1,10 @@
 import useAppContext from '@/hooks/context/useAppContext';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { snackbarWarning } from '@/utils/snackbar';
 import { CheckCircle } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton } from '@mui/material';
 import { ServerEvent } from '@repo/openapi';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Tooltip } from './Tooltip';
@@ -11,10 +13,21 @@ export function AppState() {
     const { t } = useTranslation();
     const { serverEvent: event } = useAppContext();
     const navigate = useNavigate();
+    const isOnline = useOnlineStatus();
+
+    useEffect(() => {
+        if (!isOnline) {
+            snackbarWarning(t('Offline'));
+        }
+    }, [isOnline, t]);
 
     const color = useMemo(() => {
-        return event.includes('failed') || event.includes('error') ? 'error' : 'primary';
-    }, [event]);
+        return event.includes('failed') || event.includes('error')
+            ? 'error'
+            : isOnline
+              ? 'primary'
+              : 'warning';
+    }, [event, isOnline]);
 
     const onButtonClick = () => {
         navigate('/dashboard');

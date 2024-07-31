@@ -7,7 +7,7 @@ import useLocale from '@/hooks/context/useLocale';
 import { Grid } from '@mui/material';
 import { User } from '@repo/openapi';
 import { useEffect } from 'react';
-import useUserDetailsForm from '../hooks/useUserDetailsForm';
+import useUserDetailsForm from './UserDetailsForm.hooks';
 
 type UserDetailsFormProps = {
     user: User;

@@ -26,11 +26,17 @@ export class PaymentFundsService extends AvailableForUserCompany {
     }
 
     async getCompanyId(entityId: number): Promise<number> {
-        const paymentFund = await this.repository.findOneOrFail({ where: { id: entityId } });
+        const paymentFund = await this.repository.findOneOrFail({
+            where: { id: entityId },
+            withDeleted: true,
+        });
         const paymentPosition = await this.paymentPositionsService.findOne(
             paymentFund.paymentPositionId,
+            { withDeleted: true },
         );
-        return (await this.paymentsService.findOne(paymentPosition.paymentId)).companyId;
+        return (
+            await this.paymentsService.findOne(paymentPosition.paymentId, { withDeleted: true })
+        ).companyId;
     }
 
     async create(userId: number, payload: CreatePaymentFundDto): Promise<PaymentFund> {

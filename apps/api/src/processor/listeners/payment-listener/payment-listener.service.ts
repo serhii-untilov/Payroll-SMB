@@ -17,6 +17,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 @Injectable()
 export class PaymentListenerService {
     private _logger: Logger = new Logger(PaymentListenerService.name);
+    private semaphore = 0;
 
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
@@ -34,7 +35,7 @@ export class PaymentListenerService {
     @OnEvent('payment.created')
     async handlePaymentCreatedEvent(event: PaymentCreatedEvent) {
         this._logger.log(`handling ['payment.created'] ${JSON.stringify(event)}`);
-        // this.runBatch(event);
+        this.runBatch(event);
     }
 
     @OnEvent('payment.updated')
@@ -46,10 +47,12 @@ export class PaymentListenerService {
     @OnEvent('payment.deleted')
     async handlePaymentDeletedEvent(event: PaymentDeletedEvent) {
         this._logger.log(`handling ['payment.deleted'] ${JSON.stringify(event)}`);
-        // this.runBatch(event);
+        this.runBatch(event);
     }
 
     private async runBatch(event: PaymentEvent) {
+        if (this.semaphore) return;
+        this.semaphore++;
         try {
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollStarted });
             if (event.type !== PaymentEventType.DELETED) {
@@ -76,6 +79,8 @@ export class PaymentListenerService {
         } catch (e) {
             this._logger.fatal(`companyId ${event.companyId} ${ServerEvent.PayrollFailed} ${e}`);
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollFailed });
+        } finally {
+            this.semaphore--;
         }
     }
 }

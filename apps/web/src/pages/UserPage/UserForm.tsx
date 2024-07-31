@@ -6,19 +6,19 @@ import useLocale from '@/hooks/context/useLocale';
 import useUserName from '@/hooks/useUserName';
 import { User } from '@repo/openapi';
 import { useEffect } from 'react';
-import useTabs from './hooks/useUserProfileTabs';
+import useUserForm from './UserForm.hooks';
 
-type ProfileFormProps = {
+type UserFormProps = {
     user: User;
     tabIndex: string | null;
     goBack: boolean;
 };
 
-export default function ProfileForm(props: ProfileFormProps) {
+export default function UserForm(props: UserFormProps) {
     const { user, tabIndex, goBack } = props;
     const { locale } = useLocale();
     const title = useUserName(user);
-    const tabs = useTabs(user);
+    const { tabs } = useUserForm(user);
 
     useEffect(() => {}, [locale]);
 

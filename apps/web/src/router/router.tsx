@@ -23,7 +23,7 @@ const PayrollPage = Loadable(lazy(() => import('@/pages/PayrollPage')));
 const PaymentListPage = Loadable(lazy(() => import('@/pages/PaymentListPage')));
 const PaymentPage = Loadable(lazy(() => import('@/pages/PaymentPage')));
 const ReportsPage = Loadable(lazy(() => import('@/pages/ReportsPage/ReportsForm')));
-const UserProfilePage = Loadable(lazy(() => import('@/pages/UserProfilePage')));
+const UserPage = Loadable(lazy(() => import('@/pages/UserPage')));
 const PositionPage = Loadable(lazy(() => import('@/pages/PositionPage')));
 const PositionHistoryPage = Loadable(lazy(() => import('@/pages/PositionHistoryPage')));
 const AccountantFeatures = Loadable(
@@ -105,7 +105,7 @@ const router: RouteObject[] = [
             {
                 path: 'profile',
                 children: [
-                    { index: true, element: <UserProfilePage /> },
+                    { index: true, element: <UserPage /> },
                     { path: 'company', element: <CompanyPage /> },
                 ],
             },

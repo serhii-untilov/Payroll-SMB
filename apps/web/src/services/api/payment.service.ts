@@ -32,6 +32,10 @@ export async function paymentsRemove(id: number) {
     return (await api.paymentsRemove(id)).data;
 }
 
+export async function paymentsRestore(id: number) {
+    return (await api.paymentsRestore(id)).data;
+}
+
 export async function paymentsProcess(id: number, params: ProcessPaymentDto) {
     return (await api.paymentsProcess(id, params)).data;
 }

@@ -2,8 +2,9 @@ import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { usePayments } from '@/hooks/queries/usePayments';
 import { FindAllPaymentDto } from '@repo/openapi';
-import useFilteredPaymentList from '../hooks/useFilteredPaymentList';
+import usePaymentList from './PaymentList.hooks';
 import { PaymentListTab } from './PaymentListTab';
+import { useState } from 'react';
 
 export type PaymentListProps = FindAllPaymentDto & {
     companyPayments: boolean;
@@ -12,15 +13,21 @@ export type PaymentListProps = FindAllPaymentDto & {
 
 export default function PaymentList(props: PaymentListProps) {
     const { companyId, payPeriod, status } = props;
-    const params = { relations: true, companyId, payPeriod, ...(status ? { status } : {}) };
-    const { data: rawData, isLoading, isError, error } = usePayments(params);
-    const data = useFilteredPaymentList(rawData, props);
+    const [showDeleted, setShowDeleted] = useState(false);
+    const { data, isLoading, isError, error } = usePayments({
+        relations: true,
+        companyId,
+        payPeriod,
+        ...(status ? { status } : {}),
+        withDeleted: showDeleted,
+    });
+    const { payments } = usePaymentList(data, props);
 
     return (
         <>
             {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
-            {data && <PaymentListTab payments={data} />}
+            {payments && <PaymentListTab {...{ payments, showDeleted, setShowDeleted }} />}
         </>
     );
 }

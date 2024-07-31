@@ -174,6 +174,7 @@ export class PaymentCalculationService {
             );
             if (!payment && paymentPosition?.payment) {
                 payment = await this.createPayment(paymentPosition.payment);
+                this.payments.push(payment);
             }
             if (!payment) {
                 throw new Error('Payment not defined');

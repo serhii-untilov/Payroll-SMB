@@ -8,7 +8,7 @@ import { Box, Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import useTabs from './hooks/usePaymentListTabs';
+import usePaymentListForm from './PaymentListForm.hooks';
 
 type PositionListFormProps = {
     company: Company;
@@ -21,7 +21,7 @@ export default function PaymentListForm(props: PositionListFormProps) {
     const { company, payPeriod, tabIndex, goBack } = props;
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const tabs = useTabs(company.id, payPeriod);
+    const { tabs } = usePaymentListForm(company.id, payPeriod);
 
     useEffect(() => {}, [locale]);
 
