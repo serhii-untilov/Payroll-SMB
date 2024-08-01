@@ -1,14 +1,25 @@
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { tasksUpdate } from '@/services/api/task.service';
 import { green, grey, orange, red } from '@mui/material/colors';
-import { Task, TaskStatus, TaskType } from '@repo/openapi';
-import { useMemo } from 'react';
+import { ResourceType, Task, TaskStatus, TaskType } from '@repo/openapi';
+import { useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useStatusIcon from './useStatusIcon';
 
-export function useTask(task: Task) {
+type Props = {
+    task: Task;
+};
+
+export function useTask(props: Props) {
+    const [task, setTask] = useState<Task>(props.task);
     const title = useMemo(() => getTaskTitle(task), [task]);
     const bgColor = useMemo(() => getBgColor(task), [task]);
     const path = useMemo(() => getPath(task), [task]);
+    const navigate = useNavigate();
+    const statusIcon = useStatusIcon(task);
+    const invalidateQueries = useInvalidateQueries();
 
-    const canToggleStatus = (task: Task) => {
+    const canToggleStatus = useCallback((task: Task) => {
         if (task.status === TaskStatus.NotAvailable) return false;
         if (task.dateFrom.getTime() > new Date().getTime()) return false;
         switch (task.type) {
@@ -19,23 +30,23 @@ export function useTask(task: Task) {
                 return true;
         }
         return false;
-    };
+    }, []);
 
-    const markAsDone = async () => {
+    const markAsDone = useCallback(async () => {
         return await tasksUpdate(task.id, {
             status: TaskStatus.DoneByUser,
             version: task.version,
         });
-    };
+    }, [task]);
 
-    const markAsTodo = async () => {
+    const markAsTodo = useCallback(async () => {
         return await tasksUpdate(task.id, {
             status: TaskStatus.Todo,
             version: task.version,
         });
-    };
+    }, [task]);
 
-    const toggleStatus = async (): Promise<Task | null> => {
+    const toggleStatus = useCallback(async (): Promise<Task | null> => {
         if (!canToggleStatus(task)) return null;
         if (task.status === TaskStatus.Todo || task.status === TaskStatus.InProgress) {
             return await markAsDone();
@@ -43,12 +54,31 @@ export function useTask(task: Task) {
             return await markAsTodo();
         }
         return null;
-    };
+    }, [task, canToggleStatus, markAsDone, markAsTodo]);
+
+    const onTaskClick = useCallback(() => {
+        if (task.status === TaskStatus.NotAvailable) return;
+        if (path) navigate(path);
+    }, [task, navigate, path]);
+
+    const onStatusClick = useCallback(async () => {
+        const updatedTask = await toggleStatus();
+        if (updatedTask) {
+            setTask(updatedTask);
+            await invalidateQueries([ResourceType.Task]);
+        } else {
+            onTaskClick();
+        }
+    }, [onTaskClick, invalidateQueries, toggleStatus]);
 
     return {
+        task,
         title,
+        statusIcon,
         path,
         bgColor,
+        onTaskClick,
+        onStatusClick,
         canToggleStatus,
         toggleStatus,
         markAsDone,

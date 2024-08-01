@@ -4,19 +4,16 @@ import { useTranslation } from 'react-i18next';
 import TaskListTitle from '../TaskListTitle';
 import TodoTask from './TodoTask';
 
-type TodoListProps = {
-    taskList: Task[];
-};
-
-export function TodoList(props: TodoListProps) {
+const TodoList = ({ taskList }) => {
     const { t } = useTranslation();
-
     return (
         <Box>
             <TaskListTitle title={t('Things to do')} />
-            {props.taskList.map((task) => (
+            {taskList.map((task: Task) => (
                 <TodoTask key={task.id} task={task} />
             ))}
         </Box>
     );
-}
+};
+
+export default TodoList;

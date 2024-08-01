@@ -1,6 +1,6 @@
 import { Person, Task } from '@repo/openapi';
-import TaskCard from '../../TaskCard';
-import useTaskDate from '../../TaskCard/hooks/useTaskDate';
+import TaskCard from '../../task-card/TaskCard';
+import useTaskDate from '../../../hooks/useTaskDate';
 import useHappyBirthdayDescription from '../../../hooks/useHappyBirthdayDescription';
 
 type HappyBirthdayTaskProps = {

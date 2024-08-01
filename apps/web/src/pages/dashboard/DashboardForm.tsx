@@ -5,8 +5,8 @@ import { Grid } from '@mui/material';
 import { Company, PayPeriod, Task } from '@repo/openapi';
 import ReminderSection from './sections/reminder/ReminderSection';
 import SummarySection from './sections/summary/SummarySection';
-import Todo from './sections/Todo';
-import Upcoming from './sections/Upcoming';
+import TodoSection from './sections/todo/TodoSection';
+import UpcomingSection from './sections/upcoming/UpcomingSection';
 import { useAuth } from '@/hooks/context/useAuth';
 
 type DashboardFormProps = {
@@ -34,7 +34,7 @@ const DashboardForm = ({ company, payPeriod, taskList }: DashboardFormProps) => 
                             spacing={3}
                         >
                             <Grid item xs={12} md={6}>
-                                <Todo taskList={taskList} />
+                                <TodoSection taskList={taskList} />
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Grid container flexDirection="column">
@@ -42,7 +42,7 @@ const DashboardForm = ({ company, payPeriod, taskList }: DashboardFormProps) => 
                                         <ReminderSection taskList={taskList} />
                                     </Grid>
                                     <Grid item>
-                                        <Upcoming taskList={taskList} />
+                                        <UpcomingSection taskList={taskList} />
                                     </Grid>
                                 </Grid>
                             </Grid>

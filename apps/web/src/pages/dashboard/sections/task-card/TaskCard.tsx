@@ -1,14 +1,10 @@
-import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { Box, Grid, IconButton } from '@mui/material';
-import { ResourceType, Task, TaskStatus } from '@repo/openapi';
-import { useState } from 'react';
+import { Task } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useTask } from '../../hooks/useTask';
 import TaskDate from './TaskDate';
 import TaskDescription from './TaskDescription';
 import TaskTitle from './TaskTitle';
-import useStatusIcon from './hooks/useStatusIcon';
-import { useTask } from './hooks/useTask';
 
 interface TaskCardProps {
     task: Task;
@@ -18,27 +14,11 @@ interface TaskCardProps {
 
 export default function TaskCard(props: TaskCardProps) {
     const { date, description } = props;
-    const [task, setTask] = useState<Task>(props.task);
-    const { title, path, bgColor, toggleStatus } = useTask(task);
-    const navigate = useNavigate();
-    const statusIcon = useStatusIcon(task);
+    const { task, title, statusIcon, bgColor, onTaskClick, onStatusClick } = useTask({
+        task: props.task,
+    });
+
     const { t } = useTranslation();
-    const invalidateQueries = useInvalidateQueries();
-
-    const onTaskClick = () => {
-        if (task.status === TaskStatus.NotAvailable) return;
-        if (path) navigate(path);
-    };
-
-    const onStatusClick = async () => {
-        const updatedTask = await toggleStatus();
-        if (updatedTask) {
-            setTask(updatedTask);
-            await invalidateQueries([ResourceType.Task]);
-        } else {
-            onTaskClick();
-        }
-    };
 
     return (
         <Box
