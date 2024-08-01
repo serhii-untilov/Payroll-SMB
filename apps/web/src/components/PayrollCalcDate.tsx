@@ -1,6 +1,6 @@
 import { Link } from '@/components/layout/Link';
 import { Typography } from '@mui/material';
-import usePayrollCalcDate from '../pages/DashboardPage/hooks/usePayrollCalcDate';
+import usePayrollCalcDate from '../pages/dashboard/hooks/usePayrollCalcDate';
 import { useTranslation } from 'react-i18next';
 import { PayPeriod } from '@repo/openapi';
 

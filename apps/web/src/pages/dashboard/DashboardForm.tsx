@@ -3,17 +3,12 @@ import PageLayout from '@/components/layout/PageLayout';
 import SupportCenter from '@/components/SupportCenter';
 import useAppContext from '@/hooks/context/useAppContext';
 import { Grid } from '@mui/material';
-import { Task } from '@repo/openapi';
-import Reminder from './details/Reminder';
-import Summary from './details/Summary';
-import Todo from './details/Todo';
-import Upcoming from './details/Upcoming';
+import Reminder from './sections/Reminder';
+import Summary from './sections/Summary';
+import Todo from './sections/Todo';
+import Upcoming from './sections/Upcoming';
 
-interface DashboardFormProps {
-    taskList: Task[];
-}
-
-export default function DashboardForm({ taskList }: DashboardFormProps) {
+const DashboardForm = ({ taskList }) => {
     const { company } = useAppContext();
     return (
         <>
@@ -54,4 +49,6 @@ export default function DashboardForm({ taskList }: DashboardFormProps) {
             </PageLayout>
         </>
     );
-}
+};
+
+export default DashboardForm;

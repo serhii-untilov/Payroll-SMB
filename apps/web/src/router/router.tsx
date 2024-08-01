@@ -12,10 +12,10 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
 );
 
 export const SignIn = Loadable(lazy(() => import('@/pages/auth/SignInPage')));
-const SignUp = Loadable(lazy(() => import('@/pages/auth/SignUp')));
-const DashboardPage = Loadable(lazy(() => import('@/pages/DashboardPage')));
+const SignUpPage = Loadable(lazy(() => import('@/pages/auth/SignUpPage')));
+const DashboardPage = Loadable(lazy(() => import('@/pages/dashboard/DashboardPage')));
 const WelcomePage = Loadable(lazy(() => import('@/pages/welcome/WelcomePage')));
-const CompanyPage = Loadable(lazy(() => import('@/pages/CompanyPage')));
+const CompanyPage = Loadable(lazy(() => import('@/pages/company/CompanyPage')));
 const PeoplePage = Loadable(lazy(() => import('@/pages/PeoplePage')));
 const TimeOffPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeOffForm')));
 const TimeSheetPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeSheetForm')));
@@ -58,7 +58,7 @@ const router: RouteObject[] = [
         path: 'signup',
         element: (
             <GuestGuard>
-                <SignUp />
+                <SignUpPage />
             </GuestGuard>
         ),
     },
