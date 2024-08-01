@@ -22,19 +22,19 @@ export class DepartmentListenerService {
 
     @OnEvent('department.created')
     async handleDepartmentCreatedEvent(event: DepartmentCreatedEvent) {
-        this._logger.log(`handling ['department.created'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event.userId, event.companyId);
     }
 
     @OnEvent('department.updated')
     async handleDepartmentUpdatedEvent(event: DepartmentUpdatedEvent) {
-        this._logger.log(`handling ['department.updated'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event.userId, event.companyId);
     }
 
     @OnEvent('department.deleted')
     async handleDepartmentDeletedEvent(event: DepartmentDeletedEvent) {
-        this._logger.log(`handling ['department.deleted'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event.userId, event.companyId);
     }
 

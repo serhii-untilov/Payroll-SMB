@@ -10,18 +10,27 @@ export class TaskPostRegularPayment extends TaskGenerator {
     }
 
     async getTaskList(): Promise<Task[]> {
+        if (!this.count()) {
+            return [];
+        }
         const task = this.makeTask();
         task.dateFrom = getWorkDayBeforeOrEqual(this.ctx.payPeriod.dateTo);
         task.dateTo = task.dateFrom;
-        const count = (
-            await this.ctx.paymentsService.findAll({
-                companyId: this.ctx.company.id,
-                accPeriod: this.ctx.payPeriod.dateFrom,
-                status: PaymentStatus.Draft,
-                relations: true,
-            })
-        ).filter((o) => o.paymentType?.calcMethod === CalcMethod.RegularPayment).length;
-        task.status = count ? TaskStatus.Todo : TaskStatus.Done;
+        task.status = this.countDraft() ? TaskStatus.Todo : TaskStatus.Done;
         return [task];
+    }
+
+    countDraft() {
+        return this.ctx.payments.filter(
+            (o) =>
+                o.paymentType?.calcMethod === CalcMethod.RegularPayment &&
+                o.status === PaymentStatus.Draft,
+        ).length;
+    }
+
+    count() {
+        return this.ctx.payments.filter(
+            (o) => o.paymentType?.calcMethod === CalcMethod.RegularPayment,
+        ).length;
     }
 }

@@ -14,18 +14,27 @@ export class TaskPostAdvancePayment extends TaskGenerator {
         if (this.ctx.company.paymentSchedule == PaymentSchedule.Every15day) {
             return [];
         }
+        if (!this.count()) {
+            return [];
+        }
         const task = this.makeTask();
         task.dateFrom = getAdvancePaymentDate(this.ctx.payPeriod);
         task.dateTo = dateUTC(task.dateFrom);
-        const count = (
-            await this.ctx.paymentsService.findAll({
-                companyId: this.ctx.company.id,
-                accPeriod: this.ctx.payPeriod.dateFrom,
-                status: PaymentStatus.Draft,
-                relations: true,
-            })
-        ).filter((o) => o.paymentType?.calcMethod === CalcMethod.AdvancedPayment).length;
-        task.status = count ? TaskStatus.Todo : TaskStatus.Done;
+        task.status = this.countDraft() ? TaskStatus.Todo : TaskStatus.Done;
         return [task];
+    }
+
+    countDraft() {
+        return this.ctx.payments.filter(
+            (o) =>
+                o.paymentType?.calcMethod === CalcMethod.AdvancedPayment &&
+                o.status === PaymentStatus.Draft,
+        ).length;
+    }
+
+    count() {
+        return this.ctx.payments.filter(
+            (o) => o.paymentType?.calcMethod === CalcMethod.AdvancedPayment,
+        ).length;
     }
 }
