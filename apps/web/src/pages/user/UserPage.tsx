@@ -1,6 +1,6 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useCurrentUser } from '@/hooks/queries/useCurrentUser';
+import { useCurrentUser } from '@/hooks/queries/useUsers';
 import { useSearchParams } from 'react-router-dom';
 import UserForm from './UserForm';
 

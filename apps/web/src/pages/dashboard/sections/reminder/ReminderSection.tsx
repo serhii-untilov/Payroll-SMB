@@ -6,7 +6,7 @@ type Props = {
     taskList: Task[];
 };
 
-export default function Reminder(props: Props) {
+export default function ReminderSection(props: Props) {
     const taskList: Task[] = useReminder(props.taskList);
 
     return <>{!!taskList.length && <ReminderList taskList={taskList} />}</>;

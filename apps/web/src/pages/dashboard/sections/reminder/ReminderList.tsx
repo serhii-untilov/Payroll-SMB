@@ -2,7 +2,7 @@ import { Box } from '@mui/system';
 import { Task, TaskType } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 import TaskListTitle from '../TaskListTitle';
-import HappyBirthdayTask from './HappyBirthdayTask';
+import HappyBirthdayTask from './happy-birthday/HappyBirthdayTask';
 import ReminderTask from './ReminderTask';
 
 type ReminderListProps = {

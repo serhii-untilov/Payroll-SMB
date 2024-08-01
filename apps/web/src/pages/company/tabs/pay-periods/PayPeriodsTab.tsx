@@ -1,6 +1,6 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useCurrentPayPeriod } from '@/hooks/queries/useCurrentPayPeriod';
+import { useCurrentPayPeriod } from '@/hooks/queries/usePayPeriods';
 import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
 import { Company } from '@repo/openapi';
 import { PayPeriodList } from './PayPeriodList';

@@ -7,6 +7,7 @@ import useUserName from '@/hooks/useUserName';
 import { User } from '@repo/openapi';
 import { useEffect } from 'react';
 import useUserForm from './hooks/UserForm.hooks';
+import { useTranslation } from 'react-i18next';
 
 type UserFormProps = {
     user: User;
@@ -17,14 +18,15 @@ type UserFormProps = {
 export default function UserForm(props: UserFormProps) {
     const { user, tabIndex, goBack } = props;
     const { locale } = useLocale();
-    const title = useUserName(user);
+    const userName = useUserName(user);
     const { tabs } = useUserForm(user);
+    const { t } = useTranslation();
 
     useEffect(() => {}, [locale]);
 
     return (
         <PageLayout>
-            <PageTitle goBack={goBack}>{title}</PageTitle>
+            <PageTitle goBack={goBack}>{userName ?? t('New user')}</PageTitle>
             <AvatarBox />
             <TabsContainer id="user-profile-tabs" tabIndex={tabIndex} tabs={tabs} />
         </PageLayout>

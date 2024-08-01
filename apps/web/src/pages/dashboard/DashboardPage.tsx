@@ -5,12 +5,17 @@ import useLocale from '@/hooks/context/useLocale';
 import { useEffect } from 'react';
 import DashboardForm from './DashboardForm';
 import useTaskList from './hooks/useTaskList';
+import DashboardCompany from './DashboardCompany';
 
 export default function DashboardPage() {
     const { company, themeMode } = useAppContext();
     const companyId = company?.id;
-    const onPayPeriodDate = company?.payPeriod;
-    const { data, isLoading, isError, error } = useTaskList({ companyId, onPayPeriodDate });
+    const {
+        data: taskList,
+        isLoading,
+        isError,
+        error,
+    } = useTaskList({ companyId, onPayPeriodDate: company?.payPeriod });
     const { locale } = useLocale();
 
     useEffect(() => {}, [locale, themeMode]);
@@ -19,7 +24,8 @@ export default function DashboardPage() {
         <>
             {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
-            {data && <DashboardForm taskList={data} />}
+            {company && taskList && <DashboardCompany {...{ company, taskList }} />}
+            {!company && taskList && <DashboardForm {...{ taskList }} />}
         </>
     );
 }

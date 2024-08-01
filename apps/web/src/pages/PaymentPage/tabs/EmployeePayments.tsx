@@ -1,6 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import { usePaymentPositions } from '@/hooks/queries/usePaymentPositions';
+import { usePaymentPositions } from '@/hooks/queries/usePayments';
 import {
     GridCellParams,
     GridRowParams,

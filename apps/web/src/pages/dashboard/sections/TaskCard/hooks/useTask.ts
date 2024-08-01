@@ -1,4 +1,3 @@
-import { Locale } from '@/context/LocaleContext';
 import { tasksUpdate } from '@/services/api/task.service';
 import { green, grey, orange, red } from '@mui/material/colors';
 import { Task, TaskStatus, TaskType } from '@repo/openapi';
@@ -46,7 +45,15 @@ export function useTask(task: Task) {
         return null;
     };
 
-    return { title, path, bgColor, canToggleStatus, toggleStatus, markAsDone, markAsTodo };
+    return {
+        title,
+        path,
+        bgColor,
+        canToggleStatus,
+        toggleStatus,
+        markAsDone,
+        markAsTodo,
+    };
 }
 
 function getTaskTitle(task: Task) {
@@ -127,15 +134,5 @@ function getPath(task: Task): string {
             return positionId ? `/people/position/${positionId}?return=true` : '#';
         default:
             return '#';
-    }
-}
-
-export function getTaskDate(task: Task, locale: Locale) {
-    {
-        const day = task.dateFrom.getDate();
-        const month = task.dateFrom.toLocaleString(locale.dateLocale.code, {
-            month: 'short',
-        });
-        return `${day} ${month}`;
     }
 }

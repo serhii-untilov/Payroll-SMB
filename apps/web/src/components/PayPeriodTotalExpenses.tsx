@@ -1,14 +1,9 @@
 import { sumFormatter } from '@/utils/sumFormatter';
 import { Typography } from '@mui/material';
-import { PayPeriod } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 import { Link } from './layout/Link';
 
-type PayPeriodTotalExpensesProps = {
-    payPeriod: PayPeriod;
-};
-
-export default function PayPeriodTotalExpenses({ payPeriod }: PayPeriodTotalExpensesProps) {
+const PayPeriodTotalExpenses = ({ payPeriod }) => {
     const { t } = useTranslation();
     return (
         <Link to={'/payroll?tab-index=0&return=true'}>
@@ -21,4 +16,6 @@ export default function PayPeriodTotalExpenses({ payPeriod }: PayPeriodTotalExpe
             </Typography>
         </Link>
     );
-}
+};
+
+export default PayPeriodTotalExpenses;

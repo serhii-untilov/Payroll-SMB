@@ -1,6 +1,6 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import useUserCompanies from '@/hooks/queries/useUserCompanies';
+import useUserCompanies from '@/hooks/queries/useUsers';
 import { useState } from 'react';
 import UserCompanyList from './UserCompanyList';
 

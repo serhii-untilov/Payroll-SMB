@@ -1,15 +1,10 @@
 import CompanyName from '@/components/CompanyName';
+import CurrentPayPeriod from '@/components/CurrentPayPeriod';
+import PayPeriodTotalExpenses from '@/components/PayPeriodTotalExpenses';
+import PayrollCalcDate from '@/components/PayrollCalcDate';
 import { Grid } from '@mui/material';
-import { Company } from '@repo/openapi';
-import CalcDate from './CalcDate';
-import PayPeriod from './PayPeriod';
-import TotalExpenses from './TotalExpenses';
 
-type SummaryProps = {
-    company: Company;
-};
-
-export default function CompanySummary({ company }: SummaryProps) {
+const CompanySummary = ({ company, payPeriod }) => {
     return (
         <Grid container flexDirection="row">
             <Grid item xs={12} lg={6} container flexDirection="column">
@@ -23,7 +18,7 @@ export default function CompanySummary({ company }: SummaryProps) {
                         <CompanyName company={company} />
                     </Grid>
                     <Grid item>
-                        <PayPeriod companyId={company.id} />
+                        {payPeriod && <CurrentPayPeriod {...{ company, payPeriod }} />}
                     </Grid>
                 </Grid>
             </Grid>
@@ -44,10 +39,12 @@ export default function CompanySummary({ company }: SummaryProps) {
                     spacing={1}
                     sx={{ alignItems: { xs: 'start', lg: 'end' } }}
                 >
-                    <Grid item>{company && <CalcDate companyId={company.id} />}</Grid>
-                    <Grid item>{company && <TotalExpenses companyId={company.id} />}</Grid>
+                    <Grid item>{company && <PayrollCalcDate payPeriod={payPeriod} />}</Grid>
+                    <Grid item>{company && <PayPeriodTotalExpenses payPeriod={payPeriod} />}</Grid>
                 </Grid>
             </Grid>
         </Grid>
     );
-}
+};
+
+export default CompanySummary;

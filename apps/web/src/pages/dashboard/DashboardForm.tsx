@@ -1,23 +1,30 @@
 import GreetingUser from '@/components/GreetingUser';
 import PageLayout from '@/components/layout/PageLayout';
 import SupportCenter from '@/components/SupportCenter';
-import useAppContext from '@/hooks/context/useAppContext';
 import { Grid } from '@mui/material';
-import Reminder from './sections/Reminder';
-import Summary from './sections/Summary';
+import { Company, PayPeriod, Task } from '@repo/openapi';
+import ReminderSection from './sections/reminder/ReminderSection';
+import SummarySection from './sections/summary/SummarySection';
 import Todo from './sections/Todo';
 import Upcoming from './sections/Upcoming';
+import { useAuth } from '@/hooks/context/useAuth';
 
-const DashboardForm = ({ taskList }) => {
-    const { company } = useAppContext();
+type DashboardFormProps = {
+    company?: Company;
+    payPeriod?: PayPeriod;
+    taskList: Task[];
+};
+
+const DashboardForm = ({ company, payPeriod, taskList }: DashboardFormProps) => {
+    const { user } = useAuth();
     return (
         <>
             <PageLayout>
                 <Grid container flexDirection="column" alignItems="space-between" spacing={2}>
                     <Grid item>
-                        <GreetingUser />
+                        <GreetingUser user={user} />
                         <SupportCenter />
-                        {company && <Summary />}
+                        {company && <SummarySection {...{ company, payPeriod }} />}
                     </Grid>
                     <Grid item>
                         <Grid
@@ -32,7 +39,7 @@ const DashboardForm = ({ taskList }) => {
                             <Grid item xs={12} md={6}>
                                 <Grid container flexDirection="column">
                                     <Grid item>
-                                        <Reminder taskList={taskList} />
+                                        <ReminderSection taskList={taskList} />
                                     </Grid>
                                     <Grid item>
                                         <Upcoming taskList={taskList} />

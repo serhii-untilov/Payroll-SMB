@@ -1,12 +1,9 @@
-import useAppContext from '@/hooks/context/useAppContext';
 import { Box, Grid } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import CompanySummary from './CompanySummary';
 import WelcomeNewUser from './WelcomeNewUser';
 
-export default function Summary() {
-    const { company } = useAppContext();
-
+const SummarySection = ({ company, payPeriod }) => {
     return (
         <Box
             component="section"
@@ -22,9 +19,11 @@ export default function Summary() {
             }}
         >
             <Grid container flexDirection="row">
-                {company && <CompanySummary company={company} />}
+                {company && <CompanySummary {...{ company, payPeriod }} />}
                 {!company && <WelcomeNewUser />}
             </Grid>
         </Box>
     );
-}
+};
+
+export default SummarySection;

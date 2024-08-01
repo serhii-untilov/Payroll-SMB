@@ -1,5 +1,13 @@
 import { paymentsFindAll, paymentsFindOne } from '@/services/api/payment.service';
-import { FindAllPaymentDto, FindOnePaymentDto, Payment, ResourceType } from '@repo/openapi';
+import { paymentPositionsFindAll } from '@/services/api/paymentPosition.service';
+import {
+    FindAllPaymentDto,
+    FindAllPaymentPositionDto,
+    FindOnePaymentDto,
+    Payment,
+    PaymentPosition,
+    ResourceType,
+} from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
 export function usePayment(paymentId: number, params?: FindOnePaymentDto) {
@@ -14,5 +22,12 @@ export function usePayments(params: FindAllPaymentDto) {
         queryKey: [ResourceType.Payment, params],
         queryFn: async () => await paymentsFindAll(params),
         enabled: !!(params.companyId && params.payPeriod),
+    });
+}
+
+export function usePaymentPositions(params: FindAllPaymentPositionDto) {
+    return useQuery<PaymentPosition[], Error>({
+        queryKey: [ResourceType.PaymentPosition, params],
+        queryFn: async () => await paymentPositionsFindAll(params),
     });
 }
