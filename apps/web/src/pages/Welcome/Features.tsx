@@ -1,58 +1,12 @@
-import useAppContext from '@/hooks/context/useAppContext';
-import { BusinessCenterOutlined, PeopleOutlined, Settings } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FeatureBox } from './FeatureBox';
-import { UseCases } from './UseCases';
-import AccountantFeatures from './featuresByRole/AccountantFeatures';
-import AdministratorFeatures from './featuresByRole/AdministratorFeatures';
-import EmployeeFeatures from './featuresByRole/EmployeeFeatures';
+import { FeatureBox } from './details/FeatureBox';
+import { UseCases } from './details/UseCases';
+import { useFeatures } from './Features.hooks';
 
 export function Features() {
-    const { themeMode } = useAppContext();
     const { t } = useTranslation();
-    const [selectedIndex, setSelectedIndex] = useState(
-        Number(localStorage.getItem('feature-index')),
-    );
-
-    useEffect(() => {
-        localStorage.setItem('feature-index', selectedIndex.toString());
-    }, [selectedIndex]);
-
-    const mainFeatures = useMemo(
-        () => [t('mainFeatures1'), t('mainFeatures2'), t('mainFeatures3'), t('mainFeatures4')],
-        [t],
-    );
-
-    const featuresByRoles = useMemo(
-        () => [
-            {
-                name: t('Accountant'),
-                description: [t('accountantFeature1'), t('accountantFeature2')],
-                icon: (
-                    <BusinessCenterOutlined color={themeMode === 'light' ? 'primary' : 'primary'} />
-                ),
-                roleFeatures: <AccountantFeatures embedded={true} />,
-                details: '/accountant-features',
-            },
-            {
-                name: t('Employee'),
-                description: [t(`employeeFeature1`), t(`employeeFeature2`)],
-                icon: <PeopleOutlined color="primary" />,
-                roleFeatures: <EmployeeFeatures embedded={true} />,
-                details: '/employee-features',
-            },
-            {
-                name: t('Administrator'),
-                description: [t('administratorFeature1'), t('administratorFeature2')],
-                icon: <Settings color="primary" />,
-                roleFeatures: <AdministratorFeatures embedded={true} />,
-                details: '/administrator-features',
-            },
-        ],
-        [t, themeMode],
-    );
+    const { mainFeatures, featuresByRoles, selectedIndex, setSelectedIndex } = useFeatures();
 
     return (
         <Box

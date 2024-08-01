@@ -14,7 +14,7 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
 export const SignIn = Loadable(lazy(() => import('@/pages/AuthPage/SignIn')));
 const SignUp = Loadable(lazy(() => import('@/pages/AuthPage/SignUp')));
 const DashboardPage = Loadable(lazy(() => import('@/pages/DashboardPage')));
-const Welcome = Loadable(lazy(() => import('@/pages/welcome/Welcome')));
+const WelcomePage = Loadable(lazy(() => import('@/pages/Welcome/WelcomePage')));
 const CompanyPage = Loadable(lazy(() => import('@/pages/CompanyPage')));
 const PeoplePage = Loadable(lazy(() => import('@/pages/PeoplePage')));
 const TimeOffPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeOffForm')));
@@ -27,23 +27,23 @@ const UserPage = Loadable(lazy(() => import('@/pages/UserPage')));
 const PositionPage = Loadable(lazy(() => import('@/pages/PositionPage')));
 const PositionHistoryPage = Loadable(lazy(() => import('@/pages/PositionHistoryPage')));
 const AccountantFeatures = Loadable(
-    lazy(() => import('@/pages/welcome/details/featuresByRole/AccountantFeatures')),
+    lazy(() => import('@/pages/Welcome/details/featuresByRole/AccountantFeatures')),
 );
 const EmployeeFeatures = Loadable(
-    lazy(() => import('@/pages/welcome/details/featuresByRole/EmployeeFeatures')),
+    lazy(() => import('@/pages/Welcome/details/featuresByRole/EmployeeFeatures')),
 );
 const AdministratorFeatures = Loadable(
-    lazy(() => import('@/pages/welcome/details/featuresByRole/AdministratorFeatures')),
+    lazy(() => import('@/pages/Welcome/details/featuresByRole/AdministratorFeatures')),
 );
 
 const router: RouteObject[] = [
     {
         index: true,
-        element: <Welcome />,
+        element: <WelcomePage />,
     },
     {
         path: 'welcome',
-        element: <Welcome />,
+        element: <WelcomePage />,
     },
     { path: 'accountant-features', element: <AccountantFeatures /> },
     { path: 'employee-features', element: <EmployeeFeatures /> },

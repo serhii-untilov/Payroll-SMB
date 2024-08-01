@@ -1,6 +1,5 @@
 import { FormTextField } from '@/components/form/FormTextField';
 import { AppTitle } from '@/components/layout/AppTitle';
-import { Copyright } from '@/components/layout/Copyright';
 import { useAuth } from '@/hooks/context/useAuth';
 import useLocale from '@/hooks/context/useLocale';
 import { errorMessage } from '@/utils/errorMessage';
@@ -173,7 +172,6 @@ export default function SignIn() {
                     </Grid>
                 </Box>
             </Box>
-            <Copyright sx={{ mt: 8, mb: 4 }} />
         </Container>
     );
 }

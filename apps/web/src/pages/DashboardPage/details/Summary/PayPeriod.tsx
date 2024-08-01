@@ -2,11 +2,7 @@ import CurrentPayPeriod from '@/components/CurrentPayPeriod';
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { useCurrentPayPeriod } from '@/hooks/queries/useCurrentPayPeriod';
 
-type PayPeriodProps = {
-    companyId: number;
-};
-
-export default function PayPeriod({ companyId }: PayPeriodProps) {
+const PayPeriod = ({ companyId }) => {
     const findPayPeriodParams = { companyId, relations: true, fullFieldList: true };
     const { data, isError, error } = useCurrentPayPeriod(findPayPeriodParams);
     return (
@@ -15,4 +11,6 @@ export default function PayPeriod({ companyId }: PayPeriodProps) {
             {data && <CurrentPayPeriod companyId={companyId} payPeriod={data} />}
         </>
     );
-}
+};
+
+export default PayPeriod;

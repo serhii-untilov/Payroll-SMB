@@ -1,49 +1,11 @@
-import useLocale from '@/hooks/context/useLocale';
 import { KeyboardArrowLeftRounded, KeyboardArrowRightRounded } from '@mui/icons-material';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useScreenshotList } from './Screenshots.hooks';
 
 export function ScreenshotList() {
     const { t } = useTranslation();
-    const { locale } = useLocale();
-    const [index, setIndex] = useState(0);
-
-    useEffect(() => {}, [t]);
-
-    const imageList = useMemo(
-        () => [
-            {
-                img: locale.language === 'uk' ? '/screenshot-4-uk.png' : '/screenshot-4-en.png',
-                title: t('Dashboard'),
-            },
-            {
-                img: locale.language === 'uk' ? '/screenshot-1-uk.png' : '/screenshot-1-en.png',
-                title: t('Employees'),
-            },
-            {
-                img: locale.language === 'uk' ? '/screenshot-2-uk.png' : '/screenshot-2-en.png',
-                title: t('Payroll'),
-            },
-            {
-                img: locale.language === 'uk' ? '/screenshot-5-uk.png' : '/screenshot-5-en.png',
-                title: t('Personal Card'),
-            },
-        ],
-        [t, locale],
-    );
-
-    const onNextImage = () => {
-        if (index + 1 < imageList.length) {
-            setIndex(index + 1);
-        }
-    };
-
-    const onPriorImage = () => {
-        if (index > 0) {
-            setIndex(index - 1);
-        }
-    };
+    const { image, onNextImage, onPriorImage } = useScreenshotList();
 
     return (
         <Box id="screenshot-list">
@@ -58,7 +20,6 @@ export function ScreenshotList() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    // bgcolor: 'grey.50',
                     m: 1,
                     p: 2,
                     borderRadius: 3,
@@ -84,19 +45,14 @@ export function ScreenshotList() {
                         objectFit: 'contain',
                     }}
                     alt="Screenshot"
-                    src={imageList[index].img}
+                    src={image}
                 />
                 <ButtonGroup variant="text" sx={{ m: 1, p: 1 }}>
                     <Button
                         startIcon={<KeyboardArrowLeftRounded />}
-                        onClick={() => {
-                            onPriorImage();
-                        }}
+                        onClick={onPriorImage}
                     ></Button>
-                    <Button
-                        endIcon={<KeyboardArrowRightRounded />}
-                        onClick={() => onNextImage()}
-                    ></Button>
+                    <Button endIcon={<KeyboardArrowRightRounded />} onClick={onNextImage}></Button>
                 </ButtonGroup>
             </Box>
         </Box>

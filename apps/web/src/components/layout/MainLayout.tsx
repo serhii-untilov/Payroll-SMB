@@ -13,7 +13,6 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AppTitle } from './AppTitle';
-import { Copyright } from './Copyright';
 import { Link } from './Link';
 import { ListItemButton } from './ListItemButton';
 import { ListItemLink } from './ListItemLink';
@@ -74,13 +73,7 @@ export default function MainLayout() {
                         >
                             <Logo onClick={toggleDrawer} />
                             {!compactView && (
-                                <Box
-                                    sx={{
-                                        flexGrow: 1,
-                                        ml: [2],
-                                        mt: [2],
-                                    }}
-                                >
+                                <Box sx={{ flexGrow: 1, ml: [2], my: 'auto' }}>
                                     <Link to="/welcome">
                                         <AppTitle align="left" />
                                     </Link>
@@ -123,7 +116,6 @@ export default function MainLayout() {
                                 icon={<Logout />}
                             />
                         </List>
-                        {!compactView && <Copyright sx={{ mx: ['auto'], mb: [3] }} />}
                     </Box>
                 </Box>
             </Sidebar>
