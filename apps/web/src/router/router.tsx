@@ -12,40 +12,40 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
 );
 
 export const SignIn = Loadable(lazy(() => import('@/pages/auth/SignInPage')));
-const SignUpPage = Loadable(lazy(() => import('@/pages/auth/SignUpPage')));
-const DashboardPage = Loadable(lazy(() => import('@/pages/dashboard/DashboardPage')));
-const WelcomePage = Loadable(lazy(() => import('@/pages/welcome/WelcomePage')));
-const CompanyPage = Loadable(lazy(() => import('@/pages/company/CompanyPage')));
-const PeoplePage = Loadable(lazy(() => import('@/pages/PeoplePage')));
-const TimeOffPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeOffForm')));
-const TimeSheetPage = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeSheetForm')));
-const PayrollPage = Loadable(lazy(() => import('@/pages/PayrollPage')));
-const PaymentListPage = Loadable(lazy(() => import('@/pages/PaymentListPage')));
-const PaymentPage = Loadable(lazy(() => import('@/pages/PaymentPage')));
-const ReportsPage = Loadable(lazy(() => import('@/pages/ReportsPage/ReportsForm')));
-const UserPage = Loadable(lazy(() => import('@/pages/user/UserPage')));
-const PositionPage = Loadable(lazy(() => import('@/pages/PositionPage')));
-const PositionHistoryPage = Loadable(lazy(() => import('@/pages/PositionHistoryPage')));
-const AccountantFeatures = Loadable(
+const SignUp = Loadable(lazy(() => import('@/pages/auth/SignUpPage')));
+const Dashboard = Loadable(lazy(() => import('@/pages/dashboard/DashboardPage')));
+const Welcome = Loadable(lazy(() => import('@/pages/welcome/WelcomePage')));
+const Company = Loadable(lazy(() => import('@/pages/company/CompanyPage')));
+const People = Loadable(lazy(() => import('@/pages/PeoplePage')));
+const TimeOff = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeOffForm')));
+const TimeSheet = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeSheetForm')));
+const Payroll = Loadable(lazy(() => import('@/pages/PayrollPage')));
+const PaymentList = Loadable(lazy(() => import('@/pages/PaymentListPage')));
+const Payment = Loadable(lazy(() => import('@/pages/PaymentPage')));
+const Reports = Loadable(lazy(() => import('@/pages/ReportsPage/ReportsForm')));
+const User = Loadable(lazy(() => import('@/pages/user/UserPage')));
+const Position = Loadable(lazy(() => import('@/pages/PositionPage')));
+const PositionHistory = Loadable(lazy(() => import('@/pages/PositionHistoryPage')));
+const FeaturesAccountant = Loadable(
     lazy(() => import('@/pages/welcome/sections/FeaturesAccountant')),
 );
-const EmployeeFeatures = Loadable(lazy(() => import('@/pages/welcome/sections/FeaturesEmployee')));
-const AdministratorFeatures = Loadable(
+const FeaturesEmployee = Loadable(lazy(() => import('@/pages/welcome/sections/FeaturesEmployee')));
+const FeaturesAdministrator = Loadable(
     lazy(() => import('@/pages/welcome/sections/FeaturesAdministrator')),
 );
 
 const router: RouteObject[] = [
     {
         index: true,
-        element: <WelcomePage />,
+        element: <Welcome />,
     },
     {
         path: 'welcome',
-        element: <WelcomePage />,
+        element: <Welcome />,
     },
-    { path: 'accountant-features', element: <AccountantFeatures /> },
-    { path: 'employee-features', element: <EmployeeFeatures /> },
-    { path: 'administrator-features', element: <AdministratorFeatures /> },
+    { path: 'accountant-features', element: <FeaturesAccountant /> },
+    { path: 'employee-features', element: <FeaturesEmployee /> },
+    { path: 'administrator-features', element: <FeaturesAdministrator /> },
     {
         path: 'signin',
         element: (
@@ -58,7 +58,7 @@ const router: RouteObject[] = [
         path: 'signup',
         element: (
             <GuestGuard>
-                <SignUpPage />
+                <SignUp />
             </GuestGuard>
         ),
     },
@@ -70,41 +70,41 @@ const router: RouteObject[] = [
             </AuthGuard>
         ),
         children: [
-            { index: true, element: <DashboardPage /> },
-            { path: 'dashboard', element: <DashboardPage /> },
+            { index: true, element: <Dashboard /> },
+            { path: 'dashboard', element: <Dashboard /> },
             {
                 path: 'company',
                 children: [
-                    { index: true, element: <CompanyPage /> },
-                    { path: ':companyId', element: <CompanyPage /> },
+                    { index: true, element: <Company /> },
+                    { path: ':companyId', element: <Company /> },
                 ],
             },
             {
                 path: 'people',
                 children: [
-                    { index: true, element: <PeoplePage /> },
-                    { path: 'position', element: <PositionPage /> },
-                    { path: 'position/:positionId', element: <PositionPage /> },
-                    { path: 'position/:positionId/history', element: <PositionHistoryPage /> },
+                    { index: true, element: <People /> },
+                    { path: 'position', element: <Position /> },
+                    { path: 'position/:positionId', element: <Position /> },
+                    { path: 'position/:positionId/history', element: <PositionHistory /> },
                 ],
             },
-            { path: 'time-off', element: <TimeOffPage /> },
-            { path: 'time-sheet', element: <TimeSheetPage /> },
-            { path: 'payroll', element: <PayrollPage /> },
+            { path: 'time-off', element: <TimeOff /> },
+            { path: 'time-sheet', element: <TimeSheet /> },
+            { path: 'payroll', element: <Payroll /> },
             {
                 path: 'payments',
                 children: [
-                    { index: true, element: <PaymentListPage /> },
-                    { path: 'add', element: <PaymentPage /> },
-                    { path: ':paymentId', element: <PaymentPage /> },
+                    { index: true, element: <PaymentList /> },
+                    { path: 'add', element: <Payment /> },
+                    { path: ':paymentId', element: <Payment /> },
                 ],
             },
-            { path: 'reports', element: <ReportsPage /> },
+            { path: 'reports', element: <Reports /> },
             {
                 path: 'profile',
                 children: [
-                    { index: true, element: <UserPage /> },
-                    { path: 'company', element: <CompanyPage /> },
+                    { index: true, element: <User /> },
+                    { path: 'company', element: <Company /> },
                 ],
             },
         ],
