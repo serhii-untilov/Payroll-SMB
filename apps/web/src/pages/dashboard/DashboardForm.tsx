@@ -27,11 +27,7 @@ const DashboardForm = ({ taskList }) => {
                             spacing={3}
                         >
                             <Grid item xs={12} md={6}>
-                                <Grid container flexDirection="column">
-                                    <Grid item>
-                                        <Todo taskList={taskList} />
-                                    </Grid>
-                                </Grid>
+                                <Todo taskList={taskList} />
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Grid container flexDirection="column">
