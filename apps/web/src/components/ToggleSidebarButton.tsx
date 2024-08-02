@@ -11,7 +11,7 @@ export default function ToggleSidebarButton(props: Props) {
         <IconButton
             id="header__menu-button"
             onClick={() => props.setShowSidebar(true)}
-            sx={{ color: 'primary.main' }}
+            sx={{ color: 'primary.main', my: 1 }}
         >
             <MenuRounded />
         </IconButton>
