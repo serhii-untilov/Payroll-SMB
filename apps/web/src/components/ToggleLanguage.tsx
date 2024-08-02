@@ -10,6 +10,7 @@ export default function ToggleLanguage() {
             onClick={() => {
                 toggleLanguage();
             }}
+            sx={{ my: 1 }}
         >
             <Language />
         </IconButton>

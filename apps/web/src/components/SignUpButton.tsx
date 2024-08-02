@@ -15,6 +15,7 @@ export default function SignUpButton() {
                 width: 120,
                 height: 38,
                 px: 2,
+                my: 1,
                 textAlign: 'center',
             }}
         >
