@@ -16,7 +16,7 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { PaymentDetailsProps } from './PaymentDetails';
+import { PaymentDetailsProps } from './PaymentDetailsTab';
 
 export default function usePaymentDetails(props: PaymentDetailsProps) {
     const { payment, company, payPeriod, setPaymentId } = props;

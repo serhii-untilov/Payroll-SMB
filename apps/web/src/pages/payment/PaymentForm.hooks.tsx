@@ -5,8 +5,8 @@ import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PaymentFormProps } from './PaymentForm';
 import EmployeePaymentTab from './tabs/employee-payment/EmployeePaymentTab';
-import { MandatoryPayment } from './tabs/mandatory-payment/MandatoryPayment';
-import PaymentDetails from './tabs/payment-details/PaymentDetails';
+import { MandatoryPaymentList } from './tabs/mandatory-payment/MandatoryPaymentList';
+import PaymentDetailsTab from './tabs/payment-details/PaymentDetailsTab';
 
 const usePaymentForm = (props: PaymentFormProps) => {
     const { company, payPeriod, payment } = props;
@@ -38,7 +38,7 @@ const usePaymentForm = (props: PaymentFormProps) => {
         () => [
             {
                 label: t('Document'),
-                tab: <PaymentDetails {...props} />,
+                tab: <PaymentDetailsTab {...props} />,
             },
             {
                 label: t('Employees'),
@@ -48,7 +48,7 @@ const usePaymentForm = (props: PaymentFormProps) => {
             {
                 label: t('Mandatory Payments'),
                 disabled: !payment,
-                tab: payment && <MandatoryPayment {...{ company, payPeriod, payment }} />,
+                tab: payment && <MandatoryPaymentList {...{ company, payPeriod, payment }} />,
             },
         ],
         [t, props, company, payPeriod, payment],

@@ -8,7 +8,7 @@ import { SelectPaymentType } from '@/components/SelectPaymentType';
 import { Grid } from '@mui/material';
 import { Company, Payment, PaymentGroup, PaymentStatus } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import useTransformPayment from '../../hooks/useTransformPayment';
+import usePaymentTransform from '../../../../hooks/usePaymentTransform';
 import usePaymentDetails from './PaymentDetails.hooks';
 
 export interface PaymentDetailsProps {
@@ -18,8 +18,8 @@ export interface PaymentDetailsProps {
     setPaymentId?: (paymentId: number) => void;
 }
 
-const PaymentDetails = (props: PaymentDetailsProps) => {
-    const payment = useTransformPayment(props.payment);
+const PaymentDetailsTab = (props: PaymentDetailsProps) => {
+    const payment = usePaymentTransform(props.payment);
     const { t } = useTranslation();
     const { control, isDirty, handleSubmit, onSubmit, onCancel, onProcess, onWithdraw } =
         usePaymentDetails(props);
@@ -141,4 +141,4 @@ const PaymentDetails = (props: PaymentDetailsProps) => {
     );
 };
 
-export default PaymentDetails;
+export default PaymentDetailsTab;

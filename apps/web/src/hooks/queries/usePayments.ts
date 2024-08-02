@@ -31,3 +31,11 @@ export function usePaymentPositions(params: FindAllPaymentPositionDto) {
         queryFn: async () => await paymentPositionsFindAll(params),
     });
 }
+
+export function useMandatoryPayments({ _paymentId }) {
+    // TODO
+    return useQuery<any[], Error>({
+        queryKey: ['Todo Mandatory Payments'],
+        queryFn: () => [],
+    });
+}

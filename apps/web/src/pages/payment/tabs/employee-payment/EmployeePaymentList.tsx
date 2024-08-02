@@ -7,13 +7,11 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-// import { Company, Payment } from '@repo/openapi';
 import useGrid from '@/hooks/useGrid';
 import { useState } from 'react';
-import useEmployeePaymentList from '../../hooks/useEmployeePaymentList';
+import useEmployeePaymentList from './EmployeePaymentList.hooks';
 
 const EmployeePaymentsList = ({ paymentList }) => {
-    // const { payment } = props;
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const { columns, getRowStatus, onAddPayment, onEditPayment, onDeletePayment } =
