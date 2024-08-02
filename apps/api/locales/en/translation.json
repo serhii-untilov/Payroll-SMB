@@ -228,7 +228,7 @@
     "fill-department-list": "Create departments",
     "fill-position-list": "Create staff units, assign employees",
     "post-work-sheet": "Make changes to the Work Time Sheet and post the document",
-    "post-accrual-document": "Calculate additional accruals and post document",
+    "post-accrual-document": "Calculate additional accruals and post the document",
     "send-application-fss": "Send the Application to the Social Insurance Fund",
     "post-payment-fss": "Pay accruals by the Social Insurance Fund",
     "post-advance-payment": "Pay an advance",
@@ -269,7 +269,6 @@
     "SCI Payments": "SCI Payments",
     "All Payments": "All Payments",
     "To Pay": "To Pay",
-    "Paid": "Paid",
     "New Payment": "New Payment",
     "Accounting Period": "Accounting Period",
     "Payment Details": "Details",
@@ -286,5 +285,7 @@
     "Status": "Status",
     "Income Sum": "Income",
     "Base Sum": "Base Sum",
-    "Payment Sum": "Payment Sum"
+    "Payment Sum": "Payment Sum",
+    "Personal Card": "Personal Card",
+    "Save and Close": "Save and Close"
 }

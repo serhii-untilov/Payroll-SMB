@@ -3,8 +3,8 @@ import { Task } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 import useTaskCard from './TaskCard.hooks';
 import TaskDate from '@/components/TaskDate';
-import TaskDescription from '../../../../components/TaskDescription';
-import TaskTitle from '../../../../components/TaskTitle';
+import TaskDescription from '@/components/TaskDescription';
+import TaskTitle from '@/components/TaskTitle';
 
 interface TaskCardProps {
     task: Task;
