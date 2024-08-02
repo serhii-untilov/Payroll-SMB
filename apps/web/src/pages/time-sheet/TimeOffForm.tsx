@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // TODO
-export default function TimeOffForm() {
+const TimeOffForm = () => {
     const { locale } = useLocale();
     const { t } = useTranslation();
 
@@ -18,4 +18,6 @@ export default function TimeOffForm() {
             </PageLayout>
         </>
     );
-}
+};
+
+export default TimeOffForm;

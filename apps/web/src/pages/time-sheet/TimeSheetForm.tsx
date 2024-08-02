@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
 // TODO
-export default function TimeSheetForm() {
+const TimeSheetForm = () => {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const [searchParams] = useSearchParams();
@@ -21,4 +21,6 @@ export default function TimeSheetForm() {
             </PageLayout>
         </>
     );
-}
+};
+
+export default TimeSheetForm;

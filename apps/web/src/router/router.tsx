@@ -16,16 +16,18 @@ const SignUp = Loadable(lazy(() => import('@/pages/auth/sign-up/SignUpPage')));
 const Dashboard = Loadable(lazy(() => import('@/pages/dashboard/DashboardPage')));
 const Welcome = Loadable(lazy(() => import('@/pages/welcome/WelcomePage')));
 const Company = Loadable(lazy(() => import('@/pages/company/CompanyPage')));
-const People = Loadable(lazy(() => import('@/pages/PeoplePage')));
-const TimeOff = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeOffForm')));
+const People = Loadable(lazy(() => import('@/pages/people/PeoplePage')));
+const TimeOff = Loadable(lazy(() => import('@/pages/time-sheet/TimeOffForm')));
 const TimeSheet = Loadable(lazy(() => import('@/pages/time-sheet/TimeSheetForm')));
-const Payroll = Loadable(lazy(() => import('@/pages/PayrollPage')));
+const Payroll = Loadable(lazy(() => import('@/pages/payroll/PayrollPage')));
 const Payments = Loadable(lazy(() => import('@/pages/payments/PaymentsPage')));
 const Payment = Loadable(lazy(() => import('@/pages/payment/PaymentPage')));
 const Reports = Loadable(lazy(() => import('@/pages/reports/ReportsForm')));
 const User = Loadable(lazy(() => import('@/pages/user/UserPage')));
-const Position = Loadable(lazy(() => import('@/pages/PositionPage')));
-const PositionHistory = Loadable(lazy(() => import('@/pages/PositionHistoryPage')));
+const Position = Loadable(lazy(() => import('@/pages/position/PositionPage')));
+const PositionHistory = Loadable(
+    lazy(() => import('@/pages/position-history/PositionHistoryPage')),
+);
 const FeaturesAccountant = Loadable(
     lazy(() => import('@/pages/welcome/features/FeaturesAccountant')),
 );

@@ -1,11 +1,15 @@
 import { TabComponent } from '@/components/layout/TabsContainer';
 import { PaymentStatus } from '@repo/openapi';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import PaymentList from './tabs/PaymentList';
+import useLocale from '@/hooks/context/useLocale';
 
 export default function usePaymentsForm(companyId: number, payPeriod: Date) {
     const { t } = useTranslation();
+    const { locale } = useLocale();
+
+    useEffect(() => {}, [locale]);
 
     const tabs = useMemo<TabComponent[]>(
         () => [

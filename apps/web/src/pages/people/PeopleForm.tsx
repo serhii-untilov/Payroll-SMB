@@ -6,31 +6,31 @@ import SelectPayPeriod from '@/components/SelectPayPeriod';
 import { Box, Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import usePaymentsForm from './PaymentsForm.hooks';
+import usePeopleForm from './PeopleForm.hooks';
 
-export type PaymentsFormProps = {
+export type PeopleFormProps = {
     company: Company;
     payPeriod: Date;
     tabIndex: string | null;
     goBack: boolean;
 };
 
-export default function PaymentsForm(props: PaymentsFormProps) {
-    const { company, payPeriod, tabIndex, goBack } = props;
+const PeopleForm = (props: PeopleFormProps) => {
+    const { company, tabIndex, goBack } = props;
     const { t } = useTranslation();
-    const { tabs } = usePaymentsForm(company.id, payPeriod);
+    const { tabs } = usePeopleForm(props);
 
     return (
         <PageLayout>
-            <PageTitle goBack={goBack}>{t('Payments')}</PageTitle>
+            <PageTitle goBack={goBack}>{t('People')}</PageTitle>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
                     <InputLabel>{t('Pay Period')}</InputLabel>
-                    <SelectPayPeriod companyId={company.id} sx={{ fontWeight: 'bold' }} />
+                    <SelectPayPeriod companyId={company?.id} sx={{ fontWeight: 'bold' }} />
                 </Grid>
             </Grid>
             <Box
-                id="payments__tabs-box"
+                id="people__tabs-box"
                 sx={{
                     width: '100%',
                     display: 'flex',
@@ -38,8 +38,10 @@ export default function PaymentsForm(props: PaymentsFormProps) {
                     flexGrow: 1,
                 }}
             >
-                <TabsContainer id="payment-list-tabs" tabIndex={tabIndex} tabs={tabs} />
+                <TabsContainer id="people-form-tabs" tabIndex={tabIndex} tabs={tabs} />
             </Box>
         </PageLayout>
     );
-}
+};
+
+export default PeopleForm;
