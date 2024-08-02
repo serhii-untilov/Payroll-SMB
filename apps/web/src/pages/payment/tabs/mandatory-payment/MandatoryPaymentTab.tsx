@@ -9,7 +9,7 @@ type Props = {
     payPeriod: Date;
     payment: Payment;
 };
-export function MandatoryPaymentTab(props: Props) {
+const MandatoryPaymentTab = (props: Props) => {
     const { company, payPeriod, payment } = props;
     const {
         data: paymentList,
@@ -29,4 +29,6 @@ export function MandatoryPaymentTab(props: Props) {
             )}
         </>
     );
-}
+};
+
+export default MandatoryPaymentTab;
