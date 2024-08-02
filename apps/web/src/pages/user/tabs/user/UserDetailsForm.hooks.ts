@@ -4,7 +4,7 @@ import { usersUpdate } from '@/services/api/user.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ResourceType, User } from '@repo/openapi';
+import { ResourceType } from '@repo/openapi';
 import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { enqueueSnackbar } from 'notistack';
@@ -12,7 +12,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { InferType, object, string } from 'yup';
 
-export default function useUserDetailsForm(user: User) {
+const useUserDetailsForm = ({ user }) => {
     const { setLanguage } = useLocale();
     const invalidateQueries = useInvalidateQueries();
 
@@ -73,4 +73,6 @@ export default function useUserDetailsForm(user: User) {
     }, [formSchema, user, reset]);
 
     return { control, isDirty, handleSubmit, onSubmit, onCancel };
-}
+};
+
+export default useUserDetailsForm;

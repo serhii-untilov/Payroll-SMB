@@ -5,17 +5,12 @@ import Toolbar from '@/components/layout/Toolbar';
 import SelectLanguage from '@/components/SelectLanguage';
 import useLocale from '@/hooks/context/useLocale';
 import { Grid } from '@mui/material';
-import { User } from '@repo/openapi';
 import { useEffect } from 'react';
-import useUserDetailsForm from '../../hooks/UserDetailsForm.hooks';
+import useUserDetailsForm from './UserDetailsForm.hooks';
 
-type UserDetailsFormProps = {
-    user: User;
-};
-
-export default function UserDetailsForm({ user }: UserDetailsFormProps) {
+const UserDetailsForm = ({ user }) => {
     const { locale } = useLocale();
-    const { control, isDirty, handleSubmit, onSubmit, onCancel } = useUserDetailsForm(user);
+    const { control, isDirty, handleSubmit, onSubmit, onCancel } = useUserDetailsForm({ user });
 
     useEffect(() => {}, [locale]);
 
@@ -43,4 +38,6 @@ export default function UserDetailsForm({ user }: UserDetailsFormProps) {
             </Grid>
         </>
     );
-}
+};
+
+export default UserDetailsForm;

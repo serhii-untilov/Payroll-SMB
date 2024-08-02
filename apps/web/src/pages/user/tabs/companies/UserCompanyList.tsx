@@ -11,7 +11,7 @@ import {
 } from '@mui/x-data-grid';
 import { User, UserCompany } from '@repo/openapi';
 import { useState } from 'react';
-import useUserCompanyList from '../../hooks/UserCompanyList.hooks';
+import useUserCompanyList from './UserCompanyList.hooks';
 
 type UserCompanyListProps = {
     user: User;
@@ -20,7 +20,7 @@ type UserCompanyListProps = {
     setShowDeleted: (showDeleted: boolean) => void;
 };
 
-export default function UserCompanyList(props: UserCompanyListProps) {
+const UserCompanyList = (props: UserCompanyListProps) => {
     const { userCompanyList: userCompanies, showDeleted, setShowDeleted } = props;
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
@@ -84,4 +84,6 @@ export default function UserCompanyList(props: UserCompanyListProps) {
             />
         </>
     );
-}
+};
+
+export default UserCompanyList;

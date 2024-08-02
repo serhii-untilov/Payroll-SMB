@@ -1,10 +1,7 @@
-import { User } from '@repo/openapi';
 import UserDetailsForm from './UserDetailsForm';
 
-type UserDetailsTabProps = {
-    user: User;
+const UserDetailsTab = ({ user }) => {
+    return <UserDetailsForm {...{ user }} />;
 };
 
-export default function UserDetailsTab(props: UserDetailsTabProps) {
-    return <UserDetailsForm {...props} />;
-}
+export default UserDetailsTab;

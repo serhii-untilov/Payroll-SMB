@@ -2,10 +2,10 @@ import { TabComponent } from '@/components/layout/TabsContainer';
 import { useTranslation } from 'react-i18next';
 import { User } from '@repo/openapi';
 import { useMemo } from 'react';
-import UserCompanyTab from '../tabs/companies/UserCompanyTab';
-import UserDetailsTab from '../tabs/user/UserDetailsTab';
+import UserCompanyTab from './tabs/companies/UserCompanyTab';
+import UserDetailsTab from './tabs/user/UserDetailsTab';
 
-export default function useUserForm(user: User) {
+const useUserForm = (user: User) => {
     const { t } = useTranslation();
     const tabs = useMemo<TabComponent[]>(
         () => [
@@ -22,4 +22,6 @@ export default function useUserForm(user: User) {
         [t, user],
     );
     return { tabs };
-}
+};
+
+export default useUserForm;

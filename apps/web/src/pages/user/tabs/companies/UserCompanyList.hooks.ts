@@ -19,7 +19,7 @@ interface Params {
     setShowDeleted: (showDeleted: boolean) => void;
 }
 
-export default function useUserCompanyList(params: Params) {
+const useUserCompanyList = (params: Params) => {
     const { userCompanies, rowSelectionModel, setRowSelectionModel, showDeleted, setShowDeleted } =
         params;
     const { t } = useTranslation();
@@ -164,4 +164,6 @@ export default function useUserCompanyList(params: Params) {
         onShowDeleted,
         getRowStatus,
     };
-}
+};
+
+export default useUserCompanyList;

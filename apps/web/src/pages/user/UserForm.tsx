@@ -6,7 +6,7 @@ import useLocale from '@/hooks/context/useLocale';
 import { useUserName } from '@/hooks/useUserName';
 import { User } from '@repo/openapi';
 import { useEffect } from 'react';
-import useUserForm from './hooks/UserForm.hooks';
+import useUserForm from './UserForm.hooks';
 import { useTranslation } from 'react-i18next';
 
 type UserFormProps = {
@@ -15,7 +15,7 @@ type UserFormProps = {
     goBack: boolean;
 };
 
-export default function UserForm(props: UserFormProps) {
+const UserForm = (props: UserFormProps) => {
     const { user, tabIndex, goBack } = props;
     const { locale } = useLocale();
     const userName = useUserName(user);
@@ -31,4 +31,6 @@ export default function UserForm(props: UserFormProps) {
             <TabsContainer id="user-profile-tabs" tabIndex={tabIndex} tabs={tabs} />
         </PageLayout>
     );
-}
+};
+
+export default UserForm;

@@ -4,7 +4,7 @@ import { useCurrentUser } from '@/hooks/queries/useUsers';
 import { useSearchParams } from 'react-router-dom';
 import UserForm from './UserForm';
 
-export default function UserPage() {
+const UserPage = () => {
     const [searchParams] = useSearchParams();
     const tabIndex = searchParams.get('tab-index');
     const goBack = searchParams.get('return') === 'true';
@@ -17,4 +17,6 @@ export default function UserPage() {
             {user && <UserForm {...{ user, tabIndex, goBack }} />}
         </>
     );
-}
+};
+
+export default UserPage;
