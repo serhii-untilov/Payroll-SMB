@@ -58,6 +58,7 @@ export class PositionsService extends AvailableForUserCompany {
             await this.repository.findOneOrFail({
                 select: { companyId: true },
                 where: { id: entityId },
+                withDeleted: true,
             })
         ).companyId;
     }
@@ -178,6 +179,7 @@ export class PositionsService extends AvailableForUserCompany {
         const onPayPeriodDate = params?.onPayPeriodDate;
         const relations = params?.relations || false;
         const position = await this.repository.findOneOrFail({
+            withDeleted: !!params?.withDeleted,
             where: { id },
             relations: {
                 company: relations,
@@ -204,6 +206,7 @@ export class PositionsService extends AvailableForUserCompany {
               })
             : null;
         const options: FindOneOptions<Partial<Position>> = {
+            withDeleted: !!params?.withDeleted,
             relations: {
                 company: true,
                 person: !!relations,

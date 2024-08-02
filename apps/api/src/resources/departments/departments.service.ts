@@ -35,6 +35,7 @@ export class DepartmentsService extends AvailableForUserCompany {
             await this.repository.findOneOrFail({
                 select: { companyId: true },
                 where: { id: entityId },
+                withDeleted: true,
             })
         ).companyId;
     }

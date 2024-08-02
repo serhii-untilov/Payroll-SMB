@@ -1,19 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import { FormDateField } from './form/FormDateField';
 
-interface DateFromProps {
-    control: any;
-}
-
-export default function DateFrom(props: DateFromProps) {
+const DateFrom = ({ control }) => {
     const { t } = useTranslation();
     return (
         <FormDateField
-            control={props.control}
+            control={control}
             autoComplete="date-from"
             name="dateFrom"
             id="dateFrom"
             label={t('Date From')}
         />
     );
-}
+};
+
+export default DateFrom;

@@ -30,6 +30,7 @@ import {
     TaskSendIncomeTaxReport,
 } from './task-generator';
 import { FixedSequenceNumber, TaskSequenceNumber } from './task-sequence-number';
+import { Payment } from '@/resources/payments/entities/payment.entity';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskGenerationService {
@@ -41,6 +42,7 @@ export class TaskGenerationService {
     private _currentTaskList: Task[] = [];
     private _sequenceNumber: TaskSequenceNumber;
     private _id: number = 0;
+    private _payments: Payment[];
 
     constructor(
         @Inject(forwardRef(() => CompaniesService))
@@ -89,6 +91,10 @@ export class TaskGenerationService {
         return this._id;
     }
 
+    public get payments() {
+        return this._payments;
+    }
+
     public async generate(userId: number, companyId: number) {
         this.logger.log(`userId: ${userId}, generate for companyId: ${companyId}`);
         this._userId = userId;
@@ -104,6 +110,10 @@ export class TaskGenerationService {
         this._id = this.priorTaskList
             .filter((o) => o.status === TaskStatus.DoneByUser)
             .reduce((a, b) => (a > b.id ? a : b.id), 0);
+        this._payments = await this.paymentsService.findAll({
+            companyId,
+            accPeriod: this.payPeriod.dateFrom,
+        });
         await this._generate();
     }
 

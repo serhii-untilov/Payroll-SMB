@@ -32,19 +32,19 @@ export class PersonListenerService {
 
     @OnEvent('person.created')
     async handlePersonCreatedEvent(event: PersonCreatedEvent) {
-        this._logger.log(`handling ['person.created'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
     @OnEvent('person.updated')
     async handlePersonUpdatedEvent(event: PersonUpdatedEvent) {
-        this._logger.log(`handling ['person.updated'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
     @OnEvent('person.deleted')
     async handlePersonDeletedEvent(event: PersonDeletedEvent) {
-        this._logger.log(`handling ['person.deleted'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 

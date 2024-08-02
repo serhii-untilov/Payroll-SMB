@@ -70,6 +70,7 @@ export class PaymentsController {
 
     @Post('find/:id')
     @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: Payment })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
@@ -110,6 +111,20 @@ export class PaymentsController {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
+    }
+
+    @Post('restore/:id')
+    @UseGuards(AccessTokenGuard)
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Restore the deleted payment record' })
+    @ApiOkResponse({ description: 'The record has been successfully restored', type: Payment })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
+    @ApiBadRequestResponse({ description: 'Bad request' })
+    async restore(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Payment> {
+        const userId = getUserId(req);
+        await this.service.availableUpdateOrFail(userId, id);
+        return await this.service.restore(userId, id);
     }
 
     @Post('process/:id')

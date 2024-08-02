@@ -16,7 +16,8 @@ import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PaymentListenerService {
-    private _logger: Logger = new Logger(PaymentListenerService.name);
+    private logger: Logger = new Logger(PaymentListenerService.name);
+    private semaphore = 0;
 
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
@@ -33,23 +34,28 @@ export class PaymentListenerService {
 
     @OnEvent('payment.created')
     async handlePaymentCreatedEvent(event: PaymentCreatedEvent) {
-        this._logger.log(`handling ['payment.created'] ${JSON.stringify(event)}`);
-        // this.runBatch(event);
+        this.logger.log(`${JSON.stringify(event)}`);
+        this.runBatch(event);
     }
 
     @OnEvent('payment.updated')
     async handlePaymentUpdatedEvent(event: PaymentUpdatedEvent) {
-        this._logger.log(`handling ['payment.updated'] ${JSON.stringify(event)}`);
+        this.logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
     @OnEvent('payment.deleted')
     async handlePaymentDeletedEvent(event: PaymentDeletedEvent) {
-        this._logger.log(`handling ['payment.deleted'] ${JSON.stringify(event)}`);
-        // this.runBatch(event);
+        this.logger.log(`${JSON.stringify(event)}`);
+        this.runBatch(event);
     }
 
     private async runBatch(event: PaymentEvent) {
+        if (this.semaphore) {
+            this.logger.log(`Skip runBatch by semaphore.`);
+            return;
+        }
+        this.semaphore++;
         try {
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollStarted });
             if (event.type !== PaymentEventType.DELETED) {
@@ -61,7 +67,7 @@ export class PaymentListenerService {
                     event.userId,
                     event.companyId,
                 );
-                // Recursion
+                // To avoid recursion
                 // await this.paymentCalculationService.calculateCompany(
                 //     event.userId,
                 //     event.companyId,
@@ -74,8 +80,10 @@ export class PaymentListenerService {
             await this.taskListService.generate(event.userId, event.companyId);
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollFinished });
         } catch (e) {
-            this._logger.fatal(`companyId ${event.companyId} ${ServerEvent.PayrollFailed} ${e}`);
+            this.logger.fatal(`companyId ${event.companyId} ${ServerEvent.PayrollFailed} ${e}`);
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollFailed });
+        } finally {
+            this.semaphore--;
         }
     }
 }

@@ -1,24 +1,25 @@
 import { Link } from '@/components/layout/Link';
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { useCurrentUser } from '@/hooks/queries/useCurrentUser';
+import { useUserFirstName } from '@/hooks/useUserName';
 import { getPartOfDay } from '@/utils/getPartOfDay';
-import { getUserName } from '@/utils/getUserName';
 import { Typography } from '@mui/material';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export default function GreetingUser() {
-    const { data: user, isError, error } = useCurrentUser();
+const GreetingUser = ({ user }) => {
     const { t } = useTranslation();
+    const userName = useUserFirstName(user);
+    const hours = new Date().getHours();
+    const partOfDay = useMemo(() => t(getPartOfDay(hours)), [hours, t]);
 
     return (
         <>
-            {isError && <ErrorDisplay error={error} />}
             {user && (
                 <Typography component="h2" variant="h1" textAlign={'center'} sx={{ my: 2 }}>
-                    {t(getPartOfDay(new Date().getHours()))},{' '}
-                    <Link to={'/profile?tab-index=0&return=true'}>{getUserName(user)}</Link>
+                    {partOfDay}, <Link to={'/profile?tab-index=0&return=true'}>{userName}</Link>
                 </Typography>
             )}
         </>
     );
-}
+};
+
+export default GreetingUser;

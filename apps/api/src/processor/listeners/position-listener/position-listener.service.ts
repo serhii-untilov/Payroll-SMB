@@ -33,19 +33,19 @@ export class PositionListenerService {
 
     @OnEvent('position.created')
     async handlePositionCreatedEvent(event: PositionCreatedEvent) {
-        this._logger.log(`handling ['position.created'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
     @OnEvent('position.updated')
     async handlePositionUpdatedEvent(event: PositionUpdatedEvent) {
-        this._logger.log(`handling ['position.updated'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
     @OnEvent('position.deleted')
     async handlePositionDeletedEvent(event: PositionDeletedEvent) {
-        this._logger.log(`handling ['position.deleted'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 

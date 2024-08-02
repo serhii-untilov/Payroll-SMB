@@ -29,7 +29,8 @@ export class TasksService extends AvailableForUserCompany {
     }
 
     async getCompanyId(entityId: number): Promise<number> {
-        return (await this.repository.findOneOrFail({ where: { id: entityId } })).companyId;
+        return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true }))
+            .companyId;
     }
 
     async create(userId: number, payload: CreateTaskDto): Promise<Task> {

@@ -30,24 +30,24 @@ export class CompanyListenerService {
 
     @OnEvent('company.created')
     async handleCompanyCreatedEvent(event: CompanyCreatedEvent) {
-        this._logger.log(`handling ['company.created'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event.userId, event.companyId);
     }
 
     @OnEvent('company.updated')
     async handleCompanyUpdatedEvent(event: CompanyUpdatedEvent) {
-        this._logger.log(`handling ['company.updated'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event.userId, event.companyId);
     }
 
     @OnEvent('company.deleted')
     async handleCompanyDeletedEvent(event: CompanyDeletedEvent) {
-        this._logger.log(`handling ['company.deleted'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
     }
 
     @OnEvent('company.calculate')
     async handleCompanyCalculateEvent(event: CompanyCreatedEvent) {
-        this._logger.log(`handling ['company.calculate'] ${JSON.stringify(event)}`);
+        this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event.userId, event.companyId);
     }
 

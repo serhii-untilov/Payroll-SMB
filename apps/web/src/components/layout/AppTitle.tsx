@@ -19,7 +19,7 @@ export function AppTitle(props: TypographyProps) {
                     variant="h2"
                     noWrap
                     align="center"
-                    sx={{ mb: 2 }}
+                    sx={{ color: 'primary.main', my: 'auto' }}
                     {...props}
                 >
                     {t(title)}

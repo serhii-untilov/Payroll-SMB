@@ -26,7 +26,10 @@ export class PaymentDeductionsService extends AvailableForUserCompany {
     }
 
     async getCompanyId(entityId: number): Promise<number> {
-        const paymentDeduction = await this.repository.findOneOrFail({ where: { id: entityId } });
+        const paymentDeduction = await this.repository.findOneOrFail({
+            where: { id: entityId },
+            withDeleted: true,
+        });
         const paymentPosition = await this.paymentPositionsService.findOne(
             paymentDeduction.paymentPositionId,
         );

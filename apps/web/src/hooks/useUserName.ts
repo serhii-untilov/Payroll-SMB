@@ -1,11 +1,23 @@
+import { capitalizeFirstChar } from '@/utils/capitalizeFirstChar';
 import { User } from '@repo/openapi';
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
-export default function useUserName(user: User | undefined) {
-    const { t } = useTranslation();
+export function useUserName(user: User | undefined) {
     return useMemo(() => {
-        const userName = `${user?.firstName} ${user?.lastName}`.trim();
-        return user?.id ? userName || user?.email || t('Profile') : t('New user');
-    }, [user, t]);
+        if (user) {
+            const userName = `${user.firstName} ${user.lastName}`.trim();
+            return capitalizeFirstChar(userName || user.email);
+        }
+        return undefined;
+    }, [user]);
+}
+
+export function useUserFirstName(user: User | undefined) {
+    return useMemo(() => {
+        if (user) {
+            const userName = `${user.firstName || user.lastName}`.trim();
+            return capitalizeFirstChar(userName || user.email);
+        }
+        return undefined;
+    }, [user]);
 }

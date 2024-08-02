@@ -36,12 +36,13 @@ export class PayrollsService extends AvailableForUserCompany {
         const { positionId } = await this.repository.findOneOrFail({
             select: { positionId: true },
             where: { id: entityId },
+            withDeleted: true,
         });
-        return (await this.positionsService.findOne(positionId)).companyId;
+        return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
     async getPositionCompanyId(positionId: number): Promise<number> {
-        return (await this.positionsService.findOne(positionId)).companyId;
+        return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
     async create(userId: number, payload: CreatePayrollDto): Promise<Payroll> {

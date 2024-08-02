@@ -1,11 +1,7 @@
 import { FormTextField } from '@/components/form/FormTextField';
 import { useTranslation } from 'react-i18next';
 
-type Props = {
-    control: any;
-};
-
-export default function CompanyNameField({ control }: Props) {
+const CompanyNameField = ({ control }) => {
     const { t } = useTranslation();
     return (
         <FormTextField
@@ -19,4 +15,6 @@ export default function CompanyNameField({ control }: Props) {
             sx={{ fontWeight: 'bold' }}
         />
     );
-}
+};
+
+export default CompanyNameField;

@@ -8,4 +8,5 @@ export class FindAllPaymentDto {
     paymentTypeId?: number;
     status?: PaymentStatus;
     relations?: boolean;
+    withDeleted?: boolean;
 }
