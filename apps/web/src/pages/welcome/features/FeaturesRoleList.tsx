@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { FeaturesRoleCard } from './FeaturesRoleCard';
-import { useFeatures } from '../hooks/Features.hooks';
+import useFeatures from './Features.hooks';
 
 const FeaturesRoleList = () => {
     const { featuresByRoles, selectedIndex, setSelectedIndex } = useFeatures();

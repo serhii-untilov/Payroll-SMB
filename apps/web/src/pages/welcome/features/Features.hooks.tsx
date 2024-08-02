@@ -2,11 +2,11 @@ import useAppContext from '@/hooks/context/useAppContext';
 import { BusinessCenterOutlined, PeopleOutlined, Settings } from '@mui/icons-material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import FeaturesAccountant from '../sections/FeaturesAccountant';
-import FeaturesAdministrator from '../sections/FeaturesAdministrator';
-import FeaturesEmployee from '../sections/FeaturesEmployee';
+import FeaturesAccountant from './FeaturesAccountant';
+import FeaturesAdministrator from './FeaturesAdministrator';
+import FeaturesEmployee from './FeaturesEmployee';
 
-export function useFeatures() {
+export default function useFeatures() {
     const { themeMode } = useAppContext();
     const { t } = useTranslation();
     const [selectedIndex, setSelectedIndex] = useState(
@@ -66,21 +66,21 @@ export function useFeatures() {
                 icon: (
                     <BusinessCenterOutlined color={themeMode === 'light' ? 'primary' : 'primary'} />
                 ),
-                roleFeatures: <FeaturesAccountant embedded={true} />,
+                roleFeatures: <FeaturesAccountant isEmbedded={true} />,
                 details: '/accountant-features',
             },
             {
                 name: t('Employee'),
                 description: [t(`employeeFeature1`), t(`employeeFeature2`)],
                 icon: <PeopleOutlined color="primary" />,
-                roleFeatures: <FeaturesEmployee embedded={true} />,
+                roleFeatures: <FeaturesEmployee isEmbedded={true} />,
                 details: '/employee-features',
             },
             {
                 name: t('Administrator'),
                 description: [t('administratorFeature1'), t('administratorFeature2')],
                 icon: <Settings color="primary" />,
-                roleFeatures: <FeaturesAdministrator embedded={true} />,
+                roleFeatures: <FeaturesAdministrator isEmbedded={true} />,
                 details: '/administrator-features',
             },
         ],

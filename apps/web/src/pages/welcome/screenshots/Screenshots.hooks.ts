@@ -2,7 +2,7 @@ import useLocale from '@/hooks/context/useLocale';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export function useScreenshotList() {
+export default function useScreenshots() {
     const { t } = useTranslation();
     const { locale } = useLocale();
     const [index, setIndex] = useState(0);

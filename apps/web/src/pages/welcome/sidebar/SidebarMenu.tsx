@@ -9,14 +9,14 @@ import {
     ListItemIcon,
     ListItemText,
 } from '@mui/material';
-import useSidebarMenu from '../hooks/SidebarMenu.hooks';
+import useSidebarMenu from './SidebarMenu.hooks';
 
-type Props = {
+type SidebarMenuProps = {
     showSidebar: boolean;
     setShowSidebar: (show: boolean) => void;
 };
 
-export function SidebarMenu(props: Props) {
+const SidebarMenu = (props: SidebarMenuProps) => {
     const { menuItems } = useSidebarMenu();
     return (
         <Drawer
@@ -54,4 +54,6 @@ export function SidebarMenu(props: Props) {
             </Box>
         </Drawer>
     );
-}
+};
+
+export default SidebarMenu;

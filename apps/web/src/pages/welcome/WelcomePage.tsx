@@ -1,10 +1,10 @@
 import { Box, CssBaseline } from '@mui/material';
 import DemoButton from '../../components/DemoButton';
-import { Features } from './sections/Features';
-import { Footer } from './sections/Footer';
-import { ScreenshotList } from './sections/Screenshots';
-import Header from './sections/Header';
-import Layout from './sections/Layout';
+import FeaturesSection from './features/FeaturesSection';
+import Footer from './footer/Footer';
+import Screenshots from './screenshots/Screenshots';
+import Header from './header/Header';
+import Layout from './WelcomePage.layout';
 
 export default function WelcomePage() {
     return (
@@ -16,8 +16,8 @@ export default function WelcomePage() {
                     <Box sx={{ display: { xs: 'block', sm: 'none', md: 'none' } }}>
                         <DemoButton />
                     </Box>
-                    <Features />
-                    <ScreenshotList />
+                    <FeaturesSection />
+                    <Screenshots />
                     <Footer />
                 </Layout>
             </Box>

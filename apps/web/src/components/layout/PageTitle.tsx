@@ -7,6 +7,7 @@ import { AppState } from './AppState';
 type Props = PropsWithChildren & {
     goBack?: boolean;
     title?: string;
+    hideAppState?: boolean;
 };
 
 export default function PageTitle(props: Props) {
@@ -41,7 +42,7 @@ export default function PageTitle(props: Props) {
                 {title}
                 {children}
             </Typography>
-            <AppState />
+            {!props.hideAppState && <AppState />}
         </Box>
     );
 }

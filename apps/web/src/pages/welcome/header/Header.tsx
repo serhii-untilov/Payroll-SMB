@@ -7,11 +7,11 @@ import ToggleLanguage from '@/components/ToggleLanguage';
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import DemoButton from '../../../components/DemoButton';
-import { SidebarMenu } from './SidebarMenu';
-import useHeader from '../hooks/Header.hooks';
 import ToggleSidebarButton from '../../../components/ToggleSidebarButton';
+import SidebarMenu from '../sidebar/SidebarMenu';
+import useHeader from './Header.hooks';
 
-export default function Header() {
+const Header = () => {
     const [showSidebar, setShowSidebar] = useState(false);
     const { headerProps, backGroundProps } = useHeader();
 
@@ -57,4 +57,6 @@ export default function Header() {
             <SidebarMenu {...{ showSidebar, setShowSidebar }} />
         </>
     );
-}
+};
+
+export default Header;

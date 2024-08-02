@@ -1,10 +1,10 @@
 import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { UseCaseList } from './UseCaseList';
-import { useFeatures } from '../hooks/Features.hooks';
+import UseCaseList from '../use-cases/UseCaseList';
+import useFeatures from './Features.hooks';
 import FeaturesRoleList from './FeaturesRoleList';
 
-export function Features() {
+const FeaturesSection = () => {
     const { t } = useTranslation();
     const { mainFeatures } = useFeatures();
 
@@ -47,4 +47,6 @@ export function Features() {
             <UseCaseList />
         </Box>
     );
-}
+};
+
+export default FeaturesSection;

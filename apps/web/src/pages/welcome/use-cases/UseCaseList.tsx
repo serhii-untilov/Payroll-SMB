@@ -1,9 +1,9 @@
 import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import useUseCases from '../hooks/UseCases.hooks';
+import useUseCases from './UseCases.hooks';
 import UseCaseCard from './UseCaseCard';
 
-export function UseCaseList() {
+const UseCaseList = () => {
     const { t } = useTranslation();
     const { useCases } = useUseCases();
 
@@ -17,4 +17,6 @@ export function UseCaseList() {
             })}
         </Box>
     );
-}
+};
+
+export default UseCaseList;

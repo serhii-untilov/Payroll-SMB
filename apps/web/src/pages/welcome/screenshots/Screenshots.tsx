@@ -1,11 +1,11 @@
 import { KeyboardArrowLeftRounded, KeyboardArrowRightRounded } from '@mui/icons-material';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useScreenshotList } from '../hooks/Screenshots.hooks';
+import useScreenshots from './Screenshots.hooks';
 
-export function ScreenshotList() {
+const Screenshots = () => {
     const { t } = useTranslation();
-    const { image, onNextImage, onPriorImage } = useScreenshotList();
+    const { image, onNextImage, onPriorImage } = useScreenshots();
 
     return (
         <Box id="screenshot-list">
@@ -57,4 +57,6 @@ export function ScreenshotList() {
             </Box>
         </Box>
     );
-}
+};
+
+export default Screenshots;

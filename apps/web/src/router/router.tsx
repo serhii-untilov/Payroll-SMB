@@ -27,11 +27,11 @@ const User = Loadable(lazy(() => import('@/pages/user/UserPage')));
 const Position = Loadable(lazy(() => import('@/pages/PositionPage')));
 const PositionHistory = Loadable(lazy(() => import('@/pages/PositionHistoryPage')));
 const FeaturesAccountant = Loadable(
-    lazy(() => import('@/pages/welcome/sections/FeaturesAccountant')),
+    lazy(() => import('@/pages/welcome/features/FeaturesAccountant')),
 );
-const FeaturesEmployee = Loadable(lazy(() => import('@/pages/welcome/sections/FeaturesEmployee')));
+const FeaturesEmployee = Loadable(lazy(() => import('@/pages/welcome/features/FeaturesEmployee')));
 const FeaturesAdministrator = Loadable(
-    lazy(() => import('@/pages/welcome/sections/FeaturesAdministrator')),
+    lazy(() => import('@/pages/welcome/features/FeaturesAdministrator')),
 );
 
 const router: RouteObject[] = [

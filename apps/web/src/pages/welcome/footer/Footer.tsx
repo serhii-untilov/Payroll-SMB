@@ -4,7 +4,7 @@ import GitHubButton from '@/components/GitHubButton';
 import LinkedInButton from '@/components/LinkedInButton';
 import { Box } from '@mui/material';
 
-export function Footer() {
+const Footer = () => {
     return (
         <Box id="footer" sx={{ maxWidth: 'lg', width: '100%', mt: 0, mb: 1 }}>
             <Box
@@ -28,4 +28,6 @@ export function Footer() {
             </Box>
         </Box>
     );
-}
+};
+
+export default Footer;
