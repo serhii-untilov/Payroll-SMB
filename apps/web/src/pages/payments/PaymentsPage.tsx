@@ -2,9 +2,9 @@ import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import PaymentListForm from './PaymentListForm';
+import PaymentsForm from './PaymentsForm';
 
-export default function PaymentListPage() {
+const PaymentsPage = () => {
     const [searchParams] = useSearchParams();
     const tabIndex = searchParams.get('tab-index');
     const goBack = searchParams.get('return') === 'true';
@@ -14,7 +14,10 @@ export default function PaymentListPage() {
     return (
         <>
             {!company && <ErrorDisplay error={{ message: t('The company is not defined') }} />}
-            {company && <PaymentListForm {...{ company, payPeriod, tabIndex, goBack }} />}
+            {!payPeriod && <ErrorDisplay error={{ message: t('The pay period is not defined') }} />}
+            {company && payPeriod && <PaymentsForm {...{ company, payPeriod, tabIndex, goBack }} />}
         </>
     );
-}
+};
+
+export default PaymentsPage;

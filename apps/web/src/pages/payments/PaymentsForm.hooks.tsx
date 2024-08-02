@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import PaymentList from './tabs/PaymentList';
 
-export default function usePaymentListForm(companyId: number, payPeriod: Date) {
+export default function usePaymentsForm(companyId: number, payPeriod: Date) {
     const { t } = useTranslation();
 
     const tabs = useMemo<TabComponent[]>(

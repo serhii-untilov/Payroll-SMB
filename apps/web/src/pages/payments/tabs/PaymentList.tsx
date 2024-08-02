@@ -2,9 +2,9 @@ import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import { usePayments } from '@/hooks/queries/usePayments';
 import { FindAllPaymentDto } from '@repo/openapi';
+import { useState } from 'react';
 import usePaymentList from './PaymentList.hooks';
 import { PaymentListTab } from './PaymentListTab';
-import { useState } from 'react';
 
 export type PaymentListProps = FindAllPaymentDto & {
     companyPayments: boolean;

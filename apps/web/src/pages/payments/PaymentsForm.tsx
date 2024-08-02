@@ -8,20 +8,20 @@ import { Box, Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import usePaymentListForm from './PaymentListForm.hooks';
+import usePaymentsForm from './PaymentsForm.hooks';
 
-type PositionListFormProps = {
+export type PaymentsFormProps = {
     company: Company;
     payPeriod: Date;
     tabIndex: string | null;
     goBack: boolean;
 };
 
-export default function PaymentListForm(props: PositionListFormProps) {
+export default function PaymentsForm(props: PaymentsFormProps) {
     const { company, payPeriod, tabIndex, goBack } = props;
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { tabs } = usePaymentListForm(company.id, payPeriod);
+    const { tabs } = usePaymentsForm(company.id, payPeriod);
 
     useEffect(() => {}, [locale]);
 
