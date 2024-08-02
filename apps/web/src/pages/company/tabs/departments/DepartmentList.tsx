@@ -11,7 +11,7 @@ import {
 import { Company, Department } from '@repo/openapi';
 import { useState } from 'react';
 import DepartmentDialog from './department/DepartmentDialog';
-import useDepartmentList from '../../hooks/DepartmentList.hooks';
+import useDepartmentList from './DepartmentList.hooks';
 
 export type DepartmentListProps = {
     company: Company;

@@ -8,6 +8,9 @@ import SummarySection from './sections/summary/SummarySection';
 import TodoSection from './sections/todo/TodoSection';
 import UpcomingSection from './sections/upcoming/UpcomingSection';
 import { useAuth } from '@/hooks/context/useAuth';
+import useAppContext from '@/hooks/context/useAppContext';
+import useLocale from '@/hooks/context/useLocale';
+import { useEffect } from 'react';
 
 type DashboardFormProps = {
     company?: Company;
@@ -16,7 +19,11 @@ type DashboardFormProps = {
 };
 
 const DashboardForm = ({ company, payPeriod, taskList }: DashboardFormProps) => {
+    const { themeMode } = useAppContext();
     const { user } = useAuth();
+    const { locale } = useLocale();
+    useEffect(() => {}, [locale, themeMode]);
+
     return (
         <>
             <PageLayout>

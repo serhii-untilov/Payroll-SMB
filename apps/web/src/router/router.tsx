@@ -11,8 +11,8 @@ export const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
     </Suspense>
 );
 
-export const SignIn = Loadable(lazy(() => import('@/pages/auth/SignInPage')));
-const SignUp = Loadable(lazy(() => import('@/pages/auth/SignUpPage')));
+export const SignIn = Loadable(lazy(() => import('@/pages/auth/sign-in/SignInPage')));
+const SignUp = Loadable(lazy(() => import('@/pages/auth/sign-up/SignUpPage')));
 const Dashboard = Loadable(lazy(() => import('@/pages/dashboard/DashboardPage')));
 const Welcome = Loadable(lazy(() => import('@/pages/welcome/WelcomePage')));
 const Company = Loadable(lazy(() => import('@/pages/company/CompanyPage')));
@@ -20,8 +20,8 @@ const People = Loadable(lazy(() => import('@/pages/PeoplePage')));
 const TimeOff = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeOffForm')));
 const TimeSheet = Loadable(lazy(() => import('@/pages/TimeSheetPage/TimeSheetForm')));
 const Payroll = Loadable(lazy(() => import('@/pages/PayrollPage')));
-const PaymentList = Loadable(lazy(() => import('@/pages/PaymentListPage')));
-const Payment = Loadable(lazy(() => import('@/pages/PaymentPage')));
+const PaymentList = Loadable(lazy(() => import('@/pages/Payments')));
+const Payment = Loadable(lazy(() => import('@/pages/payment/PaymentPage')));
 const Reports = Loadable(lazy(() => import('@/pages/ReportsPage/ReportsForm')));
 const User = Loadable(lazy(() => import('@/pages/user/UserPage')));
 const Position = Loadable(lazy(() => import('@/pages/PositionPage')));

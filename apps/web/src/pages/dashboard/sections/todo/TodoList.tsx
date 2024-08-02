@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
 import { Task } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import TaskListTitle from '../TaskListTitle';
+import TaskListTitle from '@/components/TaskListTitle';
 import TodoTask from './TodoTask';
 
 const TodoList = ({ taskList }) => {

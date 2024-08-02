@@ -1,5 +1,5 @@
 import { Task } from '@repo/openapi';
-import useUpcoming from '../../hooks/useUpcoming';
+import useUpcoming from '@/hooks/useUpcoming';
 import UpcomingList from './UpcomingList';
 
 const UpcomingSection = (props: { taskList: Task[] }) => {

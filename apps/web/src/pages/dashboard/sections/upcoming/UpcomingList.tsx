@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { Task } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import TaskListTitle from '../TaskListTitle';
+import TaskListTitle from '@/components/TaskListTitle';
 import UpcomingTask from './UpcomingTask';
 
 const UpcomingList = ({ taskList }) => {

@@ -11,7 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Company, Department } from '@repo/openapi';
 import { Dispatch, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import useDepartmentForm from '../../../hooks/DepartmentForm.hooks';
+import useDepartmentForm from './DepartmentForm.hooks';
 
 export interface DepartmentFormProps {
     company: Company;

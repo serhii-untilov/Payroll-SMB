@@ -1,24 +1,18 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
-import useLocale from '@/hooks/context/useLocale';
-import { useEffect } from 'react';
-import DashboardForm from './DashboardForm';
 import { useTasks } from '../../hooks/queries/useTasks';
 import DashboardCompany from './DashboardCompany';
+import DashboardForm from './DashboardForm';
 
-export default function DashboardPage() {
-    const { company, themeMode } = useAppContext();
-    const companyId = company?.id;
+const DashboardPage = () => {
+    const { company } = useAppContext();
     const {
         data: taskList,
         isLoading,
         isError,
         error,
-    } = useTasks({ companyId, onPayPeriodDate: company?.payPeriod });
-    const { locale } = useLocale();
-
-    useEffect(() => {}, [locale, themeMode]);
+    } = useTasks({ companyId: company?.id, onPayPeriodDate: company?.payPeriod });
 
     return (
         <>
@@ -28,4 +22,6 @@ export default function DashboardPage() {
             {!company && taskList && <DashboardForm {...{ taskList }} />}
         </>
     );
-}
+};
+
+export default DashboardPage;

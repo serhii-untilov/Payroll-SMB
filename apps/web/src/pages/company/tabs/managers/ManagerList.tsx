@@ -3,7 +3,7 @@ import Toolbar from '@/components/layout/Toolbar';
 import { GridCellParams, GridRowSelectionModel, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import { Company } from '@repo/openapi';
 import { useState } from 'react';
-import useManagerList from '../../hooks/ManagerList.hooks';
+import useManagerList from './ManagerList.hooks';
 import useGrid from '@/hooks/useGrid';
 
 type ManagerListProps = {

@@ -1,12 +1,9 @@
-import { Task } from '@repo/openapi';
+import useTaskDate from '@/hooks/useTaskDate';
 import TaskCard from '../task-card/TaskCard';
-import useTaskDate from '../../hooks/useTaskDate';
 
-type ReminderTaskProps = {
-    task: Task;
-};
-
-export default function ReminderTask({ task }: ReminderTaskProps) {
+const ReminderTask = ({ task }) => {
     const taskDate = useTaskDate(task);
     return <TaskCard task={task} date={taskDate} />;
-}
+};
+
+export default ReminderTask;

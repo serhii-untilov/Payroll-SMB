@@ -10,7 +10,7 @@ import {
 } from '@mui/x-data-grid';
 import { Company, PayPeriod } from '@repo/openapi';
 import { useState } from 'react';
-import usePayPeriodList from '../../hooks/PayPeriodList.hooks';
+import usePayPeriodList from './PayPeriodList.hooks';
 
 export type PayPeriodListProps = {
     company: Company;

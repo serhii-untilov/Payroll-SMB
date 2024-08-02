@@ -2,7 +2,7 @@ import PageLayout from '@/components/layout/PageLayout';
 import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
 import { Company } from '@repo/openapi';
-import useCompanyForm from './hooks/CompanyForm.hooks';
+import useCompanyForm from './CompanyForm.hooks';
 
 interface CompanyFormProps {
     company?: Company;

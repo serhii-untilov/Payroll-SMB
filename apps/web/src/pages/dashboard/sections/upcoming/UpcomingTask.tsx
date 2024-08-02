@@ -1,4 +1,4 @@
-import useTaskDate from '../../hooks/useTaskDate';
+import useTaskDate from '@/hooks/useTaskDate';
 import TaskCard from '../task-card/TaskCard';
 
 const UpcomingTask = ({ task }) => {

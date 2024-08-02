@@ -1,15 +1,11 @@
-import { Person, Task } from '@repo/openapi';
+import useHappyBirthdayDescription from '@/hooks/useHappyBirthdayDescription';
+import useTaskDate from '@/hooks/useTaskDate';
 import TaskCard from '../../task-card/TaskCard';
-import useTaskDate from '../../../hooks/useTaskDate';
-import useHappyBirthdayDescription from '../../../hooks/useHappyBirthdayDescription';
 
-type HappyBirthdayTaskProps = {
-    task: Task;
-    person: Person;
-};
-
-export default function HappyBirthdayCard({ task, person }: HappyBirthdayTaskProps) {
+const HappyBirthdayCard = ({ task, person }) => {
     const description = useHappyBirthdayDescription(task, person);
     const taskDate = useTaskDate(task);
     return <TaskCard task={task} date={taskDate} description={description} />;
-}
+};
+
+export default HappyBirthdayCard;

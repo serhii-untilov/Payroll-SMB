@@ -1,5 +1,5 @@
 import { Link } from '@/components/layout/Link';
-import useUserName from '@/hooks/useUserName';
+import { useUserFirstName } from '@/hooks/useUserName';
 import { getPartOfDay } from '@/utils/getPartOfDay';
 import { Typography } from '@mui/material';
 import { useMemo } from 'react';
@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 const GreetingUser = ({ user }) => {
     const { t } = useTranslation();
-    const userName = useUserName(user);
+    const userName = useUserFirstName(user);
     const hours = new Date().getHours();
     const partOfDay = useMemo(() => t(getPartOfDay(hours)), [hours, t]);
 

@@ -1,10 +1,10 @@
 import { Box, Grid, IconButton } from '@mui/material';
 import { Task } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import { useTask } from '../../hooks/useTask';
-import TaskDate from './TaskDate';
-import TaskDescription from './TaskDescription';
-import TaskTitle from './TaskTitle';
+import useTaskCard from './TaskCard.hooks';
+import TaskDate from '@/components/TaskDate';
+import TaskDescription from '../../../../components/TaskDescription';
+import TaskTitle from '../../../../components/TaskTitle';
 
 interface TaskCardProps {
     task: Task;
@@ -14,7 +14,7 @@ interface TaskCardProps {
 
 export default function TaskCard(props: TaskCardProps) {
     const { date, description } = props;
-    const { task, title, statusIcon, bgColor, onTaskClick, onStatusClick } = useTask({
+    const { task, title, statusIcon, bgColor, onTaskClick, onStatusClick } = useTaskCard({
         task: props.task,
     });
 

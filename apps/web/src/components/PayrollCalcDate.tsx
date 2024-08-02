@@ -1,7 +1,7 @@
 import { Link } from '@/components/layout/Link';
 import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import usePayrollCalcDate from '../pages/dashboard/hooks/usePayrollCalcDate';
+import usePayrollCalcDate from '../hooks/usePayrollCalcDate';
 
 const PayrollCalcDate = ({ payPeriod }) => {
     const payrollCalcDate = usePayrollCalcDate(payPeriod.updatedDate);

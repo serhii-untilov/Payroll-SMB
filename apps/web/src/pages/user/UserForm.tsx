@@ -3,7 +3,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
 import { AvatarBox } from '@/components/utility/AvatarBox';
 import useLocale from '@/hooks/context/useLocale';
-import useUserName from '@/hooks/useUserName';
+import { useUserName } from '@/hooks/useUserName';
 import { User } from '@repo/openapi';
 import { useEffect } from 'react';
 import useUserForm from './hooks/UserForm.hooks';

@@ -9,7 +9,7 @@ import useDefaultAccountingId from '@/hooks/useDefaultAccountingId';
 import useDefaultLawId from '@/hooks/useDefaultLawId';
 import { Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
-import useForm from '../../hooks/CompanyDetails.hooks';
+import useForm from './CompanyDetails.hooks';
 
 type CompanyDetailsProps = {
     company?: Company | undefined;

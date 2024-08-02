@@ -2,7 +2,7 @@ import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import { GridCellParams, GridRowSelectionModel, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import { useState } from 'react';
-import useAccountList from '../../hooks/AccountList.hooks';
+import useAccountList from './AccountList.hooks';
 
 import { Company } from '@repo/openapi';
 import useGrid from '@/hooks/useGrid';
