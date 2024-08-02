@@ -7,9 +7,11 @@ import {
 } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
+const queryKey = ResourceType.Department;
+
 export function useDepartment(id: number, options?: FindOneDepartmentDto) {
     return useQuery<Department, Error>({
-        queryKey: [ResourceType.Department, { id }],
+        queryKey: [queryKey, { id }],
         queryFn: async () => departmentsFindOne(id, options),
         enabled: !!id,
     });
@@ -17,7 +19,7 @@ export function useDepartment(id: number, options?: FindOneDepartmentDto) {
 
 export function useDepartments(params: FindAllDepartmentDto) {
     return useQuery<Department[], Error>({
-        queryKey: [ResourceType.Department, params],
+        queryKey: [queryKey, params],
         queryFn: async () => {
             return (await departmentsFindAll(params)).sort((a, b) =>
                 a.name.toUpperCase().localeCompare(b.name.toUpperCase()),

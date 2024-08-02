@@ -5,27 +5,18 @@ import SelectLaw from '@/components/SelectLaw';
 import SelectPayPeriodField from '@/components/SelectPayPeriodField';
 import TaxIdField from '@/components/TaxIdField';
 import useAppContext from '@/hooks/context/useAppContext';
-import useDefaultAccountingId from '@/hooks/useDefaultAccountingId';
-import useDefaultLawId from '@/hooks/useDefaultLawId';
 import { Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
-import useForm from './CompanyDetails.hooks';
+import useCompanyDetails from './CompanyDetails.hooks';
 
-type CompanyDetailsProps = {
+export type CompanyDetailsProps = {
     company?: Company | undefined;
     setCompanyId?: (companyId: number) => void;
 };
 
 export default function CompanyDetails(props: CompanyDetailsProps) {
     const { company: currentCompany } = useAppContext();
-    const defaultLawId = useDefaultLawId();
-    const defaultAccountingId = useDefaultAccountingId();
-    const { control, isDirty, handleSubmit, onSubmit, onCancel } = useForm({
-        company: props.company,
-        defaultLawId,
-        defaultAccountingId,
-        setCompanyId: props.setCompanyId,
-    });
+    const { control, isDirty, handleSubmit, onSubmit, onCancel } = useCompanyDetails(props);
 
     return (
         <>

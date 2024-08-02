@@ -13,7 +13,7 @@ const UseCaseList = () => {
                 {t('Usage scenarios')}
             </Typography>
             {useCases.map((item, index) => {
-                return <UseCaseCard {...{ item, index }} />;
+                return <UseCaseCard key={index} {...{ item, index }} />;
             })}
         </Box>
     );

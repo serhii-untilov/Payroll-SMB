@@ -1,37 +1,29 @@
 import useAppContext from '@/hooks/context/useAppContext';
 import useLocale from '@/hooks/context/useLocale';
+import useDefaultAccountingId from '@/hooks/useDefaultAccountingId';
+import useDefaultLawId from '@/hooks/useDefaultLawId';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { companiesCreate, companiesUpdate } from '@/services/api/company.service';
 import { AppError } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-    Company,
-    CreateCompanyDto,
-    PaymentSchedule,
-    ResourceType,
-    UpdateCompanyDto,
-} from '@repo/openapi';
+import { CreateCompanyDto, PaymentSchedule, ResourceType, UpdateCompanyDto } from '@repo/openapi';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 import { useEffect } from 'react';
 import { SubmitHandler, useFormState, useForm as useReactHookForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { date, InferType, number, object, string } from 'yup';
+import { CompanyDetailsProps } from './CompanyDetails';
 
-interface Props {
-    company: Company | undefined;
-    defaultLawId: number;
-    defaultAccountingId: number;
-    setCompanyId?: (companyId: number) => void;
-}
-
-export default function useCompanyDetails(props: Props) {
-    const { company, defaultLawId, defaultAccountingId, setCompanyId } = props;
+export default function useCompanyDetails(props: CompanyDetailsProps) {
+    const { company, setCompanyId } = props;
     const { t } = useTranslation();
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const invalidateQueries = useInvalidateQueries();
     const { locale } = useLocale();
+    const defaultLawId = useDefaultLawId();
+    const defaultAccountingId = useDefaultAccountingId();
 
     useEffect(() => {}, [locale]);
 
@@ -60,8 +52,8 @@ export default function useCompanyDetails(props: Props) {
         reset,
         formState: { errors: formErrors },
     } = useReactHookForm({
-        defaultValues: formSchema.cast(company),
-        values: formSchema.cast(company),
+        defaultValues: company,
+        values: company,
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });

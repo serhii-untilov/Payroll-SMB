@@ -29,7 +29,7 @@ export default function PageTitle(props: Props) {
             }}
         >
             <Typography component="h2" color="primary.main" variant="h2" noWrap {...other}>
-                {goBack && (
+                {!!goBack && (
                     <IconButton
                         aria-label="Go Back"
                         color="primary"
