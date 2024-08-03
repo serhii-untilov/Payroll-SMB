@@ -1,6 +1,6 @@
 import useLocale from '@/hooks/context/useLocale';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { personsFindOne, personsUpdate } from '@/services/api/person.service';
+import { personsFindOne, personsUpdate } from '@/services/person.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';

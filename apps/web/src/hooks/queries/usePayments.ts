@@ -1,5 +1,5 @@
-import { paymentsFindAll, paymentsFindOne } from '@/services/api/payment.service';
-import { paymentPositionsFindAll } from '@/services/api/paymentPosition.service';
+import { paymentsFindAll, paymentsFindOne } from '@/services/payment.service';
+import { paymentPositionsFindAll } from '@/services/paymentPosition.service';
 import {
     FindAllPaymentDto,
     FindAllPaymentPositionDto,

@@ -1,6 +1,6 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useCompany } from '@/hooks/queries/useCompany';
+import { useGetCompany } from '@/hooks/queries/useCompany';
 import CompanyForm from './CompanyForm';
 
 interface EditCompanyProps {
@@ -11,7 +11,7 @@ interface EditCompanyProps {
 
 export default function EditCompany(props: EditCompanyProps) {
     const { companyId, tabIndex, goBack } = props;
-    const { data: company, isLoading, isError, error } = useCompany(companyId);
+    const { data: company, isLoading, isError, error } = useGetCompany(companyId);
 
     return (
         <>

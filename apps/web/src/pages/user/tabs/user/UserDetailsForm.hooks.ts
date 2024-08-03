@@ -1,6 +1,6 @@
 import useLocale from '@/hooks/context/useLocale';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { usersUpdate } from '@/services/api/user.service';
+import { usersUpdate } from '@/services/user.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';

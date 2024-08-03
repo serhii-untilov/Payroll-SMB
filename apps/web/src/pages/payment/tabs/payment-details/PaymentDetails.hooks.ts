@@ -5,7 +5,7 @@ import {
     paymentsProcess,
     paymentsUpdate,
     paymentsWithdraw,
-} from '@/services/api/payment.service';
+} from '@/services/payment.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';

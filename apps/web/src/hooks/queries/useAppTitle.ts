@@ -1,4 +1,4 @@
-import { appGetTitle } from '@/services/api/app.service';
+import { appGetTitle } from '@/services/app.service';
 import { ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
@@ -8,7 +8,7 @@ export function queryKey() {
 
 export function useAppTitle() {
     return useQuery<string, Error>({
-        queryKey: [queryKey()],
+        queryKey: queryKey(),
         queryFn: async () => {
             return await appGetTitle();
         },

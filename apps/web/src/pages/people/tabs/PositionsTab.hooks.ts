@@ -1,5 +1,5 @@
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { positionsRemove } from '@/services/api/position.service';
+import { positionsRemove } from '@/services/position.service';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
 import { PayPeriod, PositionHistory, ResourceType } from '@repo/openapi';
 import { date2view, maxDate } from '@repo/shared';

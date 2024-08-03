@@ -1,7 +1,7 @@
+import { api } from '@/api';
 import useAppContext from '@/hooks/context/useAppContext';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { companiesFindOne } from '@/services/api/company.service';
-import { userCompaniesRemove, userCompaniesRestore } from '@/services/api/user-companies.service';
+import { userCompaniesRemove, userCompaniesRestore } from '@/services/user-companies.service';
 import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { ResourceType, UserCompany } from '@repo/openapi';
 import { date2view } from '@repo/shared';
@@ -32,7 +32,7 @@ const useUserCompanyList = (params: Params) => {
     };
 
     const onSelectCompany = async (companyId: number) => {
-        setCurrentCompany(await companiesFindOne(companyId));
+        setCurrentCompany((await api.companiesFindOne(companyId)).data);
         navigate(`/company/${companyId}?tab-index=0&return=true`);
     };
 

@@ -1,11 +1,8 @@
 import { api } from '@/api';
 import useLocale from '@/hooks/context/useLocale';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { positionsCreate } from '@/services/api/position.service';
-import {
-    positionHistoryCreate,
-    positionHistoryUpdate,
-} from '@/services/api/positionHistory.service';
+import { positionsCreate } from '@/services/position.service';
+import { positionHistoryCreate, positionHistoryUpdate } from '@/services/positionHistory.service';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';

@@ -2,7 +2,7 @@ import {
     payPeriodsFindAll,
     payPeriodsFindCurrent,
     payPeriodsFindOne,
-} from '@/services/api/payPeriod.service';
+} from '@/services/payPeriod.service';
 import {
     FindAllPayPeriodDto,
     FindCurrentPayPeriodDto,

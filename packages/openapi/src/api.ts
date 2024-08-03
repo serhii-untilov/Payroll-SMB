@@ -2120,6 +2120,12 @@ export interface FindOnePaymentDto {
      * @memberof FindOnePaymentDto
      */
     'relations'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOnePaymentDto
+     */
+    'withDeleted'?: boolean;
 }
 /**
  * 
@@ -2133,6 +2139,12 @@ export interface FindOnePaymentPositionDto {
      * @memberof FindOnePaymentPositionDto
      */
     'relations'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOnePaymentPositionDto
+     */
+    'withDeleted'?: boolean;
 }
 /**
  * 
@@ -2158,6 +2170,12 @@ export interface FindOnePositionDto {
      * @memberof FindOnePositionDto
      */
     'relations'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FindOnePositionDto
+     */
+    'withDeleted'?: boolean;
 }
 /**
  * 

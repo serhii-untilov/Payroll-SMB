@@ -1,7 +1,7 @@
 import {
     positionHistoryFindAll,
     positionHistoryFindLast,
-} from '@/services/api/positionHistory.service';
+} from '@/services/positionHistory.service';
 import { FindAllPositionHistoryDto, PositionHistory, ResourceType } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

@@ -1,8 +1,7 @@
 import useAppContext from '@/hooks/context/useAppContext';
 import useLocale from '@/hooks/context/useLocale';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { companiesSalaryCalculate } from '@/services/api/company.service';
-import { payPeriodsClose, payPeriodsOpen } from '@/services/api/payPeriod.service';
+import { payPeriodsClose, payPeriodsOpen } from '@/services/payPeriod.service';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { GridColDef } from '@mui/x-data-grid';
@@ -13,6 +12,7 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { PayPeriodListProps } from './PayPeriodList';
+import { useCalculateCompany } from '@/hooks/queries/useCompany';
 
 export default function usePayPeriodList(params: PayPeriodListProps) {
     const navigate = useNavigate();
@@ -20,6 +20,7 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
     const { t } = useTranslation();
     const { locale } = useLocale();
     const invalidateQueries = useInvalidateQueries();
+    const calculateCompany = useCalculateCompany();
 
     const payPeriods = useMemo(
         () =>
@@ -50,9 +51,8 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
     }, [invalidateQueries]);
 
     const onCalculate = useCallback(async () => {
-        await companiesSalaryCalculate(params.company.id);
-        await invalidate();
-    }, [params, invalidate]);
+        await calculateCompany.mutateAsync(params.company.id);
+    }, [params, calculateCompany]);
 
     const onClose = useCallback(async () => {
         if (params.currentPayPeriod) {

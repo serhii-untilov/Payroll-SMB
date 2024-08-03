@@ -1,5 +1,5 @@
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { paymentsRemove, paymentsRestore } from '@/services/api/payment.service';
+import { paymentsRemove, paymentsRestore } from '@/services/payment.service';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
 import { PaymentStatus, ResourceType } from '@repo/openapi';

@@ -1,5 +1,5 @@
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { tasksUpdate } from '@/services/api/task.service';
+import { tasksUpdate } from '@/services/task.service';
 import { green, grey, orange, red } from '@mui/material/colors';
 import { ResourceType, Task, TaskStatus, TaskType } from '@repo/openapi';
 import { useCallback, useMemo, useState } from 'react';

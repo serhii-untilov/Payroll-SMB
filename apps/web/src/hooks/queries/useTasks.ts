@@ -1,4 +1,4 @@
-import { tasksFindAll } from '@/services/api/task.service';
+import { tasksFindAll } from '@/services/task.service';
 import { FindAllTaskDto, ResourceType, Task } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 

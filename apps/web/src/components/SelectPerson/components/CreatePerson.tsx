@@ -1,7 +1,7 @@
 import { Button } from '@/components/layout/Button';
 import TextField from '@/components/layout/TextField';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { personsCreate } from '@/services/api/person.service';
+import { personsCreate } from '@/services/person.service';
 import {
     Dialog,
     DialogActions,

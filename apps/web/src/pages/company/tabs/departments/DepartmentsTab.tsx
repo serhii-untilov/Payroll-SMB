@@ -1,6 +1,6 @@
 import ErrorDisplay from '@/components/utility/ErrorDisplay';
 import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useDepartments } from '@/hooks/queries/useDepartments';
+import { useGetDepartments } from '@/hooks/queries/useDepartments';
 import { Company } from '@repo/openapi';
 import DepartmentList from './DepartmentList';
 
@@ -9,7 +9,7 @@ type DepartmentsTabProps = {
 };
 
 export default function DepartmentsTab({ company }: DepartmentsTabProps) {
-    const { data, isLoading, isError, error } = useDepartments({
+    const { data, isLoading, isError, error } = useGetDepartments({
         companyId: company.id,
         relations: true,
     });
