@@ -1,10 +1,10 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { usePerson } from '@/hooks/queries/usePersons';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
+import { useGetPerson } from '@/hooks/queries/usePerson';
 import PersonForm from './PersonForm';
 
 const PersonTab = ({ personId }) => {
-    const { data, isLoading, isError, error } = usePerson(personId);
+    const { data, isLoading, isError, error } = useGetPerson(personId);
 
     return (
         <>

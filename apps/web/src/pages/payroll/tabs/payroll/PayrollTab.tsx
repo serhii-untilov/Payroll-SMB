@@ -1,6 +1,6 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { usePositionBalances } from '@/hooks/queries/usePositions';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
+import { useGetPositionBalanceList } from '@/hooks/queries/usePosition';
 import { Company, PayPeriod } from '@repo/openapi';
 import PayrollList from './PayrollList';
 
@@ -10,7 +10,7 @@ type PayrollTabProps = {
 };
 
 const PayrollTab = (props: PayrollTabProps) => {
-    const { data, isError, isLoading, error } = usePositionBalances({
+    const { data, isError, isLoading, error } = useGetPositionBalanceList({
         companyId: props.company.id,
         payPeriod: props.payPeriod.dateFrom,
     });

@@ -1,7 +1,7 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import ErrorDisplay from './ErrorDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
 import usePayPeriodOptions from '@/hooks/usePayPeriodOptions';
-import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
+import { useGetPayPeriodList } from '@/hooks/queries/usePayPeriod';
 import { Select, SelectProps } from '@mui/material';
 import { monthBegin } from '@repo/shared';
 import { format } from 'date-fns';
@@ -12,7 +12,7 @@ type SelectPayPeriodProps = SelectProps<string> & {
 
 export default function SelectPayPeriod(props: SelectPayPeriodProps) {
     const { companyId, ...other } = props;
-    const { data, isError, error } = usePayPeriods({ companyId });
+    const { data, isError, error } = useGetPayPeriodList({ companyId });
     const { company, payPeriod, setPayPeriod } = useAppContext();
     const options = usePayPeriodOptions(data, company?.payPeriod ?? monthBegin(new Date()));
 

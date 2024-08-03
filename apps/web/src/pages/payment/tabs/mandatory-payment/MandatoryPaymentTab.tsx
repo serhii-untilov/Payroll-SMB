@@ -1,8 +1,8 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useMandatoryPayments } from '@/hooks/queries/usePayments';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { Company, Payment } from '@repo/openapi';
 import { MandatoryPaymentList } from './MandatoryPaymentList';
+import { useGetPaymentMandatoryList } from '@/hooks/queries/usePaymentMandatory';
 
 type Props = {
     company: Company;
@@ -16,7 +16,7 @@ const MandatoryPaymentTab = (props: Props) => {
         isLoading,
         isError,
         error,
-    } = useMandatoryPayments({
+    } = useGetPaymentMandatoryList({
         _paymentId: payment.id,
     });
 

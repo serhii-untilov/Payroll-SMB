@@ -2,7 +2,7 @@ import { ArrowBackIosNewRounded } from '@mui/icons-material';
 import { Box, IconButton, Typography } from '@mui/material';
 import { PropsWithChildren } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppState } from './AppState';
+import { AppState } from '../AppState';
 
 type Props = PropsWithChildren & {
     goBack?: boolean;

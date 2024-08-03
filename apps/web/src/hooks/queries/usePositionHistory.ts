@@ -1,26 +1,107 @@
+import { api } from '@/api';
 import {
-    positionHistoryFindAll,
-    positionHistoryFindLast,
-} from '@/services/positionHistory.service';
-import { FindAllPositionHistoryDto, PositionHistory, ResourceType } from '@repo/openapi';
-import { useQuery } from '@tanstack/react-query';
+    CreatePositionHistoryDto,
+    FindAllPositionHistoryDto,
+    PositionHistory,
+    ResourceType,
+    UpdatePositionHistoryDto,
+} from '@repo/openapi';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import useInvalidateQueries from '../useInvalidateQueries';
 
-export function usePositionHistoryList(params: FindAllPositionHistoryDto) {
+const usePositionHistoryList = (params: FindAllPositionHistoryDto) => {
     return useQuery<PositionHistory[], Error>({
         queryKey: [ResourceType.PositionHistory, params],
         queryFn: async () => {
-            return await positionHistoryFindAll(params);
+            return (await api.positionHistoryFindAll(params)).data.sort(
+                (a, b) => a.dateFrom.getTime() - b.dateFrom.getTime(),
+            );
         },
         enabled: !!params.positionId,
     });
-}
+};
 
-export function usePositionHistoryLast(params: FindAllPositionHistoryDto) {
+const usePositionHistoryLast = (params: FindAllPositionHistoryDto) => {
     return useQuery<PositionHistory, Error>({
         queryKey: [ResourceType.PositionHistory, { ...params, last: true }],
         queryFn: async () => {
-            return await positionHistoryFindLast({ ...params, last: true });
+            return (await api.positionHistoryFindLast({ ...params, last: true })).data;
         },
         enabled: !!params.positionId,
     });
-}
+};
+
+const useCreatePositionHistory = () => {
+    const invalidateQueries = useInvalidateQueries();
+    return useMutation({
+        mutationFn: async (dto: CreatePositionHistoryDto): Promise<PositionHistory> =>
+            (await api.positionHistoryCreate(dto)).data,
+        onSuccess: () => {
+            invalidateQueries([
+                ResourceType.PositionHistory,
+                ResourceType.Position,
+                ResourceType.Payroll,
+                ResourceType.PayFund,
+                ResourceType.Payment,
+                ResourceType.PaymentPosition,
+                ResourceType.PayPeriod,
+                ResourceType.Company,
+                ResourceType.Task,
+            ]);
+        },
+    });
+};
+
+type UpdatePositionHistory = {
+    id: number;
+    dto: UpdatePositionHistoryDto;
+};
+
+const useUpdatePositionHistory = () => {
+    const invalidateQueries = useInvalidateQueries();
+    return useMutation({
+        mutationFn: async ({ id, dto }: UpdatePositionHistory): Promise<PositionHistory> =>
+            (await api.positionHistoryUpdate(id, dto)).data,
+        onSuccess: () => {
+            invalidateQueries([
+                ResourceType.PositionHistory,
+                ResourceType.Position,
+                ResourceType.Payroll,
+                ResourceType.PayFund,
+                ResourceType.Payment,
+                ResourceType.PaymentPosition,
+                ResourceType.PayPeriod,
+                ResourceType.Company,
+                ResourceType.Task,
+            ]);
+        },
+    });
+};
+
+const useRemovePositionHistory = () => {
+    const invalidateQueries = useInvalidateQueries();
+    return useMutation({
+        mutationFn: async (id: number) => (await api.positionHistoryRemove(id)).data,
+        onSuccess: () => {
+            invalidateQueries([
+                ResourceType.PositionHistory,
+                ResourceType.Position,
+                ResourceType.Payroll,
+                ResourceType.PayFund,
+                ResourceType.Payment,
+                ResourceType.PaymentPosition,
+                ResourceType.PayPeriod,
+                ResourceType.Company,
+                ResourceType.Task,
+            ]);
+        },
+    });
+};
+
+export {
+    useCreatePositionHistory,
+    usePositionHistoryLast,
+    usePositionHistoryList,
+    useRemovePositionHistory,
+    useUpdatePositionHistory,
+};

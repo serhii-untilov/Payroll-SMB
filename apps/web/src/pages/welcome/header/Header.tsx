@@ -1,4 +1,4 @@
-import { AppTitle } from '@/components/layout/AppTitle';
+import { AppTitle } from '@/components/AppTitle';
 import { Link } from '@/components/layout/Link';
 import { Logo } from '@/components/layout/Logo';
 import SignInButton from '@/components/SignInButton';

@@ -1,5 +1,5 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetCompany } from '@/hooks/queries/useCompany';
 import CompanyForm from './CompanyForm';
 

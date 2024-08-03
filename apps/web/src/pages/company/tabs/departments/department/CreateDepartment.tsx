@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import DepartmentForm from './DepartmentForm';
 import useAppContext from '@/hooks/context/useAppContext';
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import ErrorDisplay from '@/components/ErrorDisplay';
 
 export interface CreateDepartmentProps {
     open: boolean;

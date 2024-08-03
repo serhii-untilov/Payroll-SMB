@@ -1,7 +1,8 @@
 import useAppContext from '@/hooks/context/useAppContext';
 import useLocale from '@/hooks/context/useLocale';
+import { useCalculateCompany } from '@/hooks/queries/useCompany';
+import { useClosePayPeriod, useOpenPayPeriod } from '@/hooks/queries/usePayPeriod';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { payPeriodsClose, payPeriodsOpen } from '@/services/payPeriod.service';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { GridColDef } from '@mui/x-data-grid';
@@ -12,15 +13,14 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { PayPeriodListProps } from './PayPeriodList';
-import { useCalculateCompany } from '@/hooks/queries/useCompany';
 
 export default function usePayPeriodList(params: PayPeriodListProps) {
     const navigate = useNavigate();
     const { payPeriod, setPayPeriod } = useAppContext();
-    const { t } = useTranslation();
-    const { locale } = useLocale();
     const invalidateQueries = useInvalidateQueries();
     const calculateCompany = useCalculateCompany();
+    const closePayPeriod = useClosePayPeriod();
+    const openPayPeriod = useOpenPayPeriod();
 
     const payPeriods = useMemo(
         () =>
@@ -43,9 +43,12 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
 
     const invalidate = useCallback(async () => {
         await invalidateQueries([
-            ResourceType.Position,
-            ResourceType.Company,
             ResourceType.PayPeriod,
+            ResourceType.Payroll,
+            ResourceType.Position,
+            ResourceType.Payment,
+            ResourceType.PaymentPosition,
+            ResourceType.Company,
             ResourceType.Task,
         ]);
     }, [invalidateQueries]);
@@ -60,13 +63,16 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
                 await invalidate();
                 return;
             }
-            const next = await payPeriodsClose(params.currentPayPeriod.id, {
-                version: params.currentPayPeriod.version,
+            const next = await closePayPeriod.mutateAsync({
+                id: params.currentPayPeriod.id,
+                dto: {
+                    version: params.currentPayPeriod.version,
+                },
             });
             setPayPeriod(next.dateFrom);
             await invalidate();
         }
-    }, [params, invalidate, setPayPeriod, payPeriod]);
+    }, [closePayPeriod, invalidate, params.currentPayPeriod, payPeriod, setPayPeriod]);
 
     const onOpen = useCallback(async () => {
         if (params.currentPayPeriod) {
@@ -74,15 +80,27 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
                 await invalidate();
                 return;
             }
-            const prior = await payPeriodsOpen(params.currentPayPeriod.id, {
-                version: params.currentPayPeriod.version,
+            const prior = await openPayPeriod.mutateAsync({
+                id: params.currentPayPeriod.id,
+                dto: {
+                    version: params.currentPayPeriod.version,
+                },
             });
             setPayPeriod(prior.dateFrom);
             await invalidate();
         }
-    }, [params, setPayPeriod, invalidate, payPeriod]);
+    }, [invalidate, openPayPeriod, params.currentPayPeriod, payPeriod, setPayPeriod]);
 
-    const columns = useMemo<GridColDef[]>(() => {
+    const columns = useColumns(payPeriod);
+
+    return { payPeriods, columns, onEdit, onCalculate, onClose, onOpen };
+}
+
+function useColumns(payPeriod: Date) {
+    const { t } = useTranslation();
+    const { locale } = useLocale();
+
+    return useMemo<GridColDef[]>(() => {
         return [
             {
                 field: 'name',
@@ -175,6 +193,4 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
             },
         ];
     }, [t, locale, payPeriod]);
-
-    return { payPeriods, columns, onEdit, onCalculate, onClose, onOpen };
 }

@@ -1,16 +1,18 @@
-import { enqueueSnackbar } from 'notistack';
+import { AppMessage } from '@/types';
+import { enqueueSnackbar, VariantType } from 'notistack';
 import { FieldErrors } from 'react-hook-form';
 
-export function snackbarError(message: string) {
-    enqueueSnackbar(message, { variant: 'error' });
+export function snackbarInfo(info: AppMessage, variant?: VariantType) {
+    const message = info.code || info.message ? `${info.code}\n${info.message}` : 'Unknown message';
+    enqueueSnackbar(message, { variant: variant ?? 'info' });
 }
 
-export function snackbarWarning(message: string) {
-    enqueueSnackbar(message, { variant: 'warning' });
+export function snackbarError(error: AppMessage) {
+    snackbarInfo(error, 'error');
 }
 
-export function snackbarInfo(message: string) {
-    enqueueSnackbar(message, { variant: 'info' });
+export function snackbarWarning(message: AppMessage) {
+    snackbarInfo(message, 'warning');
 }
 
 export function snackbarFormErrors(t: any, formErrors: FieldErrors) {

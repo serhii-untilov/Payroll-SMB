@@ -3,34 +3,31 @@ import { Company, CreateCompanyDto, ResourceType, UpdateCompanyDto } from '@repo
 import { useMutation, useQuery } from '@tanstack/react-query';
 import useInvalidateQueries from '../useInvalidateQueries';
 
-export function useGetCompany(companyId: number) {
+const useGetCompany = (companyId: number) => {
     return useQuery<Company, Error>({
         queryKey: [ResourceType.Company, { companyId }],
         queryFn: async () => (await api.companiesFindOne(companyId)).data,
         enabled: !!companyId,
     });
-}
+};
 
-export function useCreateCompany() {
+const useCreateCompany = () => {
     const invalidateQueries = useInvalidateQueries();
     return useMutation({
         mutationFn: async (dto: CreateCompanyDto): Promise<Company> =>
             (await api.companiesCreate(dto)).data,
         onSuccess: () => {
-            // without return invalidateQueries() - 🚀 fire and forget - will not wait
             invalidateQueries([ResourceType.Company, ResourceType.PayPeriod]);
         },
     });
-}
+};
 
-// Mutations only take one argument for variables
-// https://tkdodo.eu/blog/mastering-mutations-in-react-query#mutations-only-take-one-argument-for-variables
 type UpdateCompany = {
     id: number;
     dto: UpdateCompanyDto;
 };
 
-export function useUpdateCompany() {
+const useUpdateCompany = () => {
     const invalidateQueries = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdateCompany): Promise<Company> =>
@@ -43,12 +40,12 @@ export function useUpdateCompany() {
             ]);
         },
     });
-}
+};
 
-export function useRemoveCompany() {
+const useRemoveCompany = () => {
     const invalidateQueries = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: number) => await api.companiesRemove(id),
+        mutationFn: async (id: number) => (await api.companiesRemove(id)).data,
         onSuccess: () => {
             invalidateQueries([
                 ResourceType.Company,
@@ -59,9 +56,9 @@ export function useRemoveCompany() {
             ]);
         },
     });
-}
+};
 
-export function useCalculateCompany() {
+const useCalculateCompany = () => {
     const invalidateQueries = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => await api.companiesSalaryCalculate(id),
@@ -74,4 +71,6 @@ export function useCalculateCompany() {
             ]);
         },
     });
-}
+};
+
+export { useGetCompany, useCreateCompany, useUpdateCompany, useRemoveCompany, useCalculateCompany };

@@ -1,6 +1,6 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useCurrentPayPeriod } from '@/hooks/queries/usePayPeriods';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
+import { useGetCurrentPayPeriod } from '@/hooks/queries/usePayPeriod';
 import DashboardForm from './DashboardForm';
 
 const DashboardCompany = ({ company, taskList }) => {
@@ -9,7 +9,7 @@ const DashboardCompany = ({ company, taskList }) => {
         isLoading,
         isError,
         error,
-    } = useCurrentPayPeriod({ companyId: company.id, fullFieldList: true });
+    } = useGetCurrentPayPeriod({ companyId: company.id, fullFieldList: true });
 
     return (
         <>

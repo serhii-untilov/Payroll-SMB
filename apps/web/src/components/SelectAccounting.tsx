@@ -1,14 +1,14 @@
 import { FormInputDropdown } from '@/components/form/FormInputDropdown';
-import { useAccountingList } from '@/hooks/queries/useAccounting';
+import { useGetAccountingList } from '@/hooks/queries/useAccounting';
 import { useTranslation } from 'react-i18next';
-import ErrorDisplay from './utility/ErrorDisplay';
+import ErrorDisplay from './ErrorDisplay';
 
 type Props = {
     control: any;
 };
 
 export default function SelectAccounting(props: Props) {
-    const { data, isError, error } = useAccountingList();
+    const { data, isError, error } = useGetAccountingList();
     const { t } = useTranslation();
     return (
         <>

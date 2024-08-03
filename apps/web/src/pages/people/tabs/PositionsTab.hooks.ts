@@ -1,12 +1,11 @@
-import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { positionsRemove } from '@/services/position.service';
+import { useRemovePosition } from '@/hooks/queries/usePosition';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
-import { PayPeriod, PositionHistory, ResourceType } from '@repo/openapi';
+import { PayPeriod, PositionHistory } from '@repo/openapi';
 import { date2view, maxDate } from '@repo/shared';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { PositionListTabProps } from './PositionsTab';
-import { useCallback, useMemo } from 'react';
 
 type Props = PositionListTabProps & {
     payPeriod: PayPeriod;
@@ -15,9 +14,8 @@ type Props = PositionListTabProps & {
 
 const usePositionsTab = (props: Props) => {
     const { payPeriod } = props;
-    const invalidateQueries = useInvalidateQueries();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const removePosition = useRemovePosition();
 
     const onAddPosition = () => navigate('/people/position/?tab-index=0&return=true');
 
@@ -26,9 +24,8 @@ const usePositionsTab = (props: Props) => {
 
     const onDeletePosition = async () => {
         for (const id of props.rowSelectionModel) {
-            await positionsRemove(+id);
+            await removePosition.mutateAsync(+id);
         }
-        await invalidateQueries([ResourceType.Position]);
     };
 
     const getRowStatus = (params: any) => {
@@ -41,14 +38,20 @@ const usePositionsTab = (props: Props) => {
                 : 'Normal';
     };
 
+    const columns = useColumns(payPeriod);
+
+    return { columns, getRowStatus, onAddPosition, onEditPosition, onDeletePosition };
+};
+
+function useColumns(payPeriod: PayPeriod) {
+    const { t } = useTranslation();
     const findFn = useCallback(
         (positionHistory: PositionHistory) =>
-            positionHistory.dateFrom.getTime() <= props.payPeriod.dateTo.getTime() &&
-            positionHistory.dateTo.getTime() >= props.payPeriod.dateFrom.getTime(),
-        [props],
+            positionHistory.dateFrom.getTime() <= payPeriod.dateTo.getTime() &&
+            positionHistory.dateTo.getTime() >= payPeriod.dateFrom.getTime(),
+        [payPeriod.dateFrom, payPeriod.dateTo],
     );
-
-    const columns = useMemo(
+    return useMemo(
         () => [
             {
                 field: 'cardNumber',
@@ -87,7 +90,7 @@ const usePositionsTab = (props: Props) => {
                 width: 300,
                 sortable: true,
                 valueGetter: (params) => {
-                    return props.payPeriod
+                    return payPeriod
                         ? params.row?.history?.findLast((o) => findFn(o))?.department?.name || ''
                         : '';
                 },
@@ -99,7 +102,7 @@ const usePositionsTab = (props: Props) => {
                 width: 250,
                 sortable: true,
                 valueGetter: (params) => {
-                    return props.payPeriod
+                    return payPeriod
                         ? params.row?.history?.findLast((o) => findFn(o))?.workNorm?.name || ''
                         : '';
                 },
@@ -162,10 +165,8 @@ const usePositionsTab = (props: Props) => {
                 },
             },
         ],
-        [t, props, findFn, payPeriod],
+        [findFn, payPeriod, t],
     );
-
-    return { columns, getRowStatus, onAddPosition, onEditPosition, onDeletePosition };
-};
+}
 
 export default usePositionsTab;

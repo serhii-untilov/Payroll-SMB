@@ -1,9 +1,9 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { usePerson } from '@/hooks/queries/usePersons';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { useGetPerson } from '@/hooks/queries/usePerson';
 import HappyBirthdayCard from './HappyBirthdayCard';
 
 const HappyBirthdayTask = ({ task, personId }) => {
-    const { data: person, isError, error } = usePerson(personId);
+    const { data: person, isError, error } = useGetPerson(personId);
     return (
         <>
             {isError && <ErrorDisplay error={error} />}

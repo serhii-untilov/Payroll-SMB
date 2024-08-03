@@ -1,7 +1,7 @@
 import PageLayout from '@/components/layout/PageLayout';
 import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
-import { AvatarBox } from '@/components/utility/AvatarBox';
+import { AvatarBox } from '@/components/AvatarBox';
 import { Company, Position, PositionHistory } from '@repo/openapi';
 import usePositionForm from './PositionForm.hooks';
 

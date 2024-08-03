@@ -1,7 +1,7 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { usePaymentPositions } from '@/hooks/queries/usePayments';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
 import EmployeePaymentsList from './EmployeePaymentList';
+import { useGetPaymentPositionList } from '@/hooks/queries/usePaymentPosition';
 
 const EmployeePaymentTab = ({ company, payPeriod, payment }) => {
     const {
@@ -9,7 +9,7 @@ const EmployeePaymentTab = ({ company, payPeriod, payment }) => {
         isLoading,
         isError,
         error,
-    } = usePaymentPositions({
+    } = useGetPaymentPositionList({
         paymentId: payment.id,
         relations: true,
     });

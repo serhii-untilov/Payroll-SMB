@@ -4,7 +4,7 @@ import { useCreateCompany, useUpdateCompany } from '@/hooks/queries/useCompany';
 import useDefaultAccountingId from '@/hooks/useDefaultAccountingId';
 import useDefaultLawId from '@/hooks/useDefaultLawId';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { AppError } from '@/types';
+import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -67,8 +67,7 @@ export default function useCompanyDetails(props: CompanyDetailsProps) {
                 }
                 if (setCompanyId) setCompanyId(response?.id);
             } catch (e: unknown) {
-                const error = e as AppError;
-                snackbarError(`${error.code}\n${error.message}`);
+                snackbarError(e as AppMessage);
             }
         },
         [currentCompany, formSchema, isDirty, reset, save, setCompanyId, setCurrentCompany],

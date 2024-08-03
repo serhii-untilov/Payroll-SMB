@@ -154,7 +154,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
                 paymentTypeId: payment.paymentTypeId,
                 dateFrom: payment.dateFrom,
                 dateTo: payment.dateTo,
-                sourceType: this.resourceType,
+                sourceType: ResourceType.Payment,
                 sourceId: payment.id,
                 planSum: paymentPosition.baseSum,
                 factSum: paymentPosition.paySum,
@@ -165,7 +165,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
 
     async withdraw(paymentId: number) {
         await this.payrollsService.deleteBy({
-            sourceType: this.resourceType,
+            sourceType: ResourceType.Payment,
             sourceId: paymentId,
         });
     }

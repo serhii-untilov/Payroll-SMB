@@ -1,14 +1,14 @@
 import { FormInputDropdown } from '@/components/form/FormInputDropdown';
-import { useLaws } from '@/hooks/queries/useLaws';
+import { useGetLawList } from '@/hooks/queries/useLaw';
 import { useTranslation } from 'react-i18next';
-import ErrorDisplay from './utility/ErrorDisplay';
+import ErrorDisplay from './ErrorDisplay';
 
 type Props = {
     control: any;
 };
 
 export default function SelectLaw(props: Props) {
-    const { data, isError, error } = useLaws();
+    const { data, isError, error } = useGetLawList();
     const { t } = useTranslation();
     return (
         <>

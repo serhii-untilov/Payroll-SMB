@@ -1,8 +1,7 @@
-import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { paymentsRemove, paymentsRestore } from '@/services/payment.service';
+import { useRemovePayment, useRestorePayment } from '@/hooks/queries/usePayment';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
-import { PaymentStatus, ResourceType } from '@repo/openapi';
+import { PaymentStatus } from '@repo/openapi';
 import { date2view, dateUTC } from '@repo/shared';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,24 +14,22 @@ type PaymentListTabParams = PaymentListTabProps & {
 
 export default function usePaymentListTab(params: PaymentListTabParams) {
     const { payments, rowSelectionModel } = params;
-    const invalidateQueries = useInvalidateQueries();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const removePayment = useRemovePayment();
+    const restorePayment = useRestorePayment();
 
     // TODO
     const onAddPayment = useCallback(() => console.log('onAddPayment'), []);
-
     const onEditPayment = useCallback((id: number) => navigate(`/payments/${id}`), [navigate]);
 
     const onDeletePayment = useCallback(async () => {
         for (const id of rowSelectionModel) {
             const payment = payments.find((o) => o.id === Number(id));
             if (payment?.status === PaymentStatus.Draft) {
-                await paymentsRemove(+id);
+                await removePayment.mutateAsync(+id);
             }
         }
-        await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
-    }, [payments, invalidateQueries, rowSelectionModel]);
+    }, [payments, removePayment, rowSelectionModel]);
 
     const onShowDeleted = useCallback(() => {
         params.setShowDeleted(!params.showDeleted);
@@ -68,11 +65,10 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
         for (const id of rowSelectionModel) {
             const payment = payments.find((o) => o.id === Number(id));
             if (payment?.status === PaymentStatus.Draft && payment.deletedDate) {
-                await paymentsRestore(+id);
+                await restorePayment.mutateAsync(+id);
             }
         }
-        await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
-    }, [payments, invalidateQueries, rowSelectionModel]);
+    }, [payments, restorePayment, rowSelectionModel]);
 
     const getRowStatus = useCallback((params: any): string => {
         return params.row?.deletedDate
@@ -90,7 +86,24 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
                       : 'Normal';
     }, []);
 
-    const columns = useMemo(
+    const columns = useColumns();
+
+    return {
+        columns,
+        onAddPayment,
+        onEditPayment,
+        onDeletePayment,
+        onShowDeleted,
+        canDelete,
+        canRestore,
+        onRestoreDeleted,
+        getRowStatus,
+    };
+}
+
+function useColumns() {
+    const { t } = useTranslation();
+    return useMemo(
         () => [
             {
                 field: 'docNumber',
@@ -177,16 +190,4 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
         ],
         [t],
     );
-
-    return {
-        columns,
-        onAddPayment,
-        onEditPayment,
-        onDeletePayment,
-        onShowDeleted,
-        canDelete,
-        canRestore,
-        onRestoreDeleted,
-        getRowStatus,
-    };
 }

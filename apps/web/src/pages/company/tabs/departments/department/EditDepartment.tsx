@@ -1,6 +1,6 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useGetDepartment } from '@/hooks/queries/useDepartments';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
+import { useGetDepartment } from '@/hooks/queries/useDepartment';
 import { Dispatch } from 'react';
 import DepartmentForm from './DepartmentForm';
 import useAppContext from '@/hooks/context/useAppContext';

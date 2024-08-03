@@ -1,15 +1,15 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
-import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
-import { usePositions } from '@/hooks/queries/usePositions';
+import { useGetPayPeriodList } from '@/hooks/queries/usePayPeriod';
+import { useGetPositionList } from '@/hooks/queries/usePosition';
 import { FindAllPositionDto } from '@repo/openapi';
 import PositionsTab from './PositionsTab';
 
 const PositionList = (props: FindAllPositionDto) => {
-    const positions = usePositions(props);
+    const positions = useGetPositionList(props);
     const { payPeriod: dateFrom } = useAppContext();
-    const periods = usePayPeriods({ companyId: props.companyId, dateFrom });
+    const periods = useGetPayPeriodList({ companyId: props.companyId, dateFrom });
 
     return (
         <>

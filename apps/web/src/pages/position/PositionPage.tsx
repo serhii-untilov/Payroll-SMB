@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CreatePosition from './CreatePosition';
 import EditPosition from './EditPosition';
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import ErrorDisplay from '@/components/ErrorDisplay';
 import { useTranslation } from 'react-i18next';
 import useAppContext from '@/hooks/context/useAppContext';
 

@@ -1,4 +1,4 @@
-import { useRemoveDepartment } from '@/hooks/queries/useDepartments';
+import { useRemoveDepartment } from '@/hooks/queries/useDepartment';
 import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { date2view } from '@repo/shared';
 import { Dispatch, useCallback, useMemo } from 'react';

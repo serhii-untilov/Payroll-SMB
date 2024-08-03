@@ -2,8 +2,6 @@ import { api } from '@/api';
 import { useAuth } from '@/hooks/context/useAuth';
 import useLocale from '@/hooks/context/useLocale';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { payPeriodsFindCurrent } from '@/services/payPeriod.service';
-import { userCompaniesFindAll } from '@/services/user-companies.service';
 import { defaultTheme } from '@/themes/defaultTheme';
 import {
     ThemeOptions,
@@ -73,7 +71,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     useEffect(() => {
         const initCompanyList = async () => {
             const response = user?.id
-                ? await userCompaniesFindAll({ userId: user.id, relations: true })
+                ? (await api.userCompaniesFindAll({ userId: user.id, relations: true })).data
                 : [];
             setUserCompanyList(response);
         };
@@ -107,7 +105,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     useEffect(() => {
         const initPayPeriod = async () => {
             const currentPayPeriod = company?.id
-                ? await payPeriodsFindCurrent({ companyId: company?.id })
+                ? (await api.payPeriodsFindCurrent({ companyId: company?.id })).data
                 : null;
             const current: Date = currentPayPeriod?.dateFrom ?? monthBegin(new Date());
             const currentPeriodString = localStorage.getItem('currentPayPeriod');

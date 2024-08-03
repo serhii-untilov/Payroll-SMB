@@ -1,10 +1,10 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
-import { usePosition } from '@/hooks/queries/usePositions';
+import { useGetPosition } from '@/hooks/queries/usePosition';
 import { usePositionHistoryLast } from '@/hooks/queries/usePositionHistory';
-import PositionForm from './PositionForm';
 import { Company } from '@repo/openapi';
+import PositionForm from './PositionForm';
 
 interface EditPositionProps {
     company: Company;
@@ -16,7 +16,7 @@ interface EditPositionProps {
 const EditPosition = (props: EditPositionProps) => {
     const { company, positionId, tabIndex, goBack } = props;
     const { payPeriod } = useAppContext();
-    const position = usePosition(positionId, {
+    const position = useGetPosition(positionId, {
         onPayPeriodDate: payPeriod,
         relations: true,
     });

@@ -1,7 +1,7 @@
 import useLocale from '@/hooks/context/useLocale';
-import { useCreateDepartment, useUpdateDepartment } from '@/hooks/queries/useDepartments';
+import { useCreateDepartment, useUpdateDepartment } from '@/hooks/queries/useDepartment';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { AppError } from '@/types';
+import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -65,8 +65,7 @@ export default function useDepartmentForm(props: DepartmentFormProps) {
                 props.setOpen(false);
                 reset();
             } catch (e: unknown) {
-                const error = e as AppError;
-                snackbarError(`${error.code}\n${error.message}`);
+                snackbarError(e as AppMessage);
             }
         },
         [isDirty, props, reset, save],

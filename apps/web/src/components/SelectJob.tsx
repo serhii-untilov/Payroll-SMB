@@ -1,7 +1,7 @@
-import { useJobs } from '@/hooks/queries/useJobs';
-import { FormAutocomplete } from './form/FormAutocomplete';
-import ErrorDisplay from './utility/ErrorDisplay';
+import { useGetJobList } from '@/hooks/queries/useJob';
 import { useTranslation } from 'react-i18next';
+import { FormAutocomplete } from './form/FormAutocomplete';
+import ErrorDisplay from './ErrorDisplay';
 
 type Props = {
     control: any;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export function SelectJob({ control, label, id, name }: Props) {
-    const { data, isError, error } = useJobs();
+    const { data, isError, error } = useGetJobList();
     const { t } = useTranslation();
 
     return (

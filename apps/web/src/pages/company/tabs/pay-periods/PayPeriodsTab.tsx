@@ -1,7 +1,6 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useCurrentPayPeriod } from '@/hooks/queries/usePayPeriods';
-import { usePayPeriods } from '@/hooks/queries/usePayPeriods';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
+import { useGetCurrentPayPeriod, useGetPayPeriodList } from '@/hooks/queries/usePayPeriod';
 import { Company } from '@repo/openapi';
 import { PayPeriodList } from './PayPeriodList';
 
@@ -10,12 +9,12 @@ type PayPeriodsTabProps = {
 };
 
 export default function PayPeriodsTab({ company }: PayPeriodsTabProps) {
-    const payPeriods = usePayPeriods({
+    const payPeriods = useGetPayPeriodList({
         companyId: company.id,
         relations: true,
         fullFieldList: true,
     });
-    const currentPayPeriod = useCurrentPayPeriod({
+    const currentPayPeriod = useGetCurrentPayPeriod({
         companyId: company.id,
         relations: false,
         fullFieldList: true,

@@ -12,7 +12,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { AppTitle } from './AppTitle';
+import { AppTitle } from '../AppTitle';
 import { Link } from './Link';
 import { ListItemButton } from './ListItemButton';
 import { ListItemLink } from './ListItemLink';
