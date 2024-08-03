@@ -6,7 +6,7 @@ import Toolbar from '@/components/layout/Toolbar';
 import { SelectDepartment } from '@/components/SelectDepartment';
 import { SelectJob } from '@/components/SelectJob';
 import { SelectPaymentType } from '@/components/SelectPaymentType';
-import SelectPerson from '@/components/SelectPerson';
+import SelectPerson from '@/components/SelectPerson/SelectPerson';
 import { SelectWorkNorm } from '@/components/SelectWorkNorm';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';

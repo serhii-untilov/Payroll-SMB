@@ -1,7 +1,7 @@
 import EmailField from '@/components/EmailField';
 import PasswordField from '@/components/PasswordField';
 import RememberMe from '@/components/RememberMe';
-import { AppTitle } from '@/components/layout/AppTitle';
+import { AppTitle } from '@/components/AppTitle';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';

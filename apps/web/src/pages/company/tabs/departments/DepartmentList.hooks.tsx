@@ -1,7 +1,5 @@
-import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { departmentsRemove } from '@/services/api/department.service';
+import { useRemoveDepartment } from '@/hooks/queries/useDepartment';
 import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import { ResourceType } from '@repo/openapi';
 import { date2view } from '@repo/shared';
 import { Dispatch, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,10 +12,37 @@ interface DepartmentListParams {
 }
 
 export default function useDepartmentList(params: DepartmentListParams) {
-    const { t } = useTranslation();
-    const invalidateQueries = useInvalidateQueries();
+    const removeDepartment = useRemoveDepartment();
+    const columns = useColumns();
 
-    const columns = useMemo<GridColDef[]>(
+    const onAddDepartment = useCallback(() => {
+        params.setDepartmentId(null);
+        params.setOpenForm(true);
+    }, [params]);
+
+    const onEditDepartment = useCallback(
+        (departmentId: number) => {
+            params.setDepartmentId(departmentId);
+            params.setOpenForm(true);
+        },
+        [params],
+    );
+
+    const onDeleteDepartment = useCallback(async () => {
+        for (const id of params.rowSelectionModel) {
+            await removeDepartment.mutateAsync(+id);
+        }
+    }, [params.rowSelectionModel, removeDepartment]);
+
+    // TODO
+    const onTreeView = useCallback(() => console.log('onTreeView'), []);
+
+    return { columns, onAddDepartment, onEditDepartment, onDeleteDepartment, onTreeView };
+}
+
+function useColumns() {
+    const { t } = useTranslation();
+    return useMemo<GridColDef[]>(
         () => [
             {
                 field: 'name',
@@ -59,29 +84,4 @@ export default function useDepartmentList(params: DepartmentListParams) {
         ],
         [t],
     );
-
-    const onAddDepartment = useCallback(() => {
-        params.setDepartmentId(null);
-        params.setOpenForm(true);
-    }, [params]);
-
-    const onEditDepartment = useCallback(
-        (departmentId: number) => {
-            params.setDepartmentId(departmentId);
-            params.setOpenForm(true);
-        },
-        [params],
-    );
-
-    const onDeleteDepartment = useCallback(async () => {
-        for (const id of params.rowSelectionModel) {
-            await departmentsRemove(+id);
-        }
-        await invalidateQueries([ResourceType.Department]);
-    }, [params, invalidateQueries]);
-
-    // TODO
-    const onTreeView = useCallback(() => console.log('onTreeView'), []);
-
-    return { columns, onAddDepartment, onEditDepartment, onDeleteDepartment, onTreeView };
 }

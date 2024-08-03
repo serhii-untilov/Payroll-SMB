@@ -1,6 +1,6 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { useCurrentUser } from '@/hooks/queries/useUsers';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
+import { useGetCurrentUser } from '@/hooks/queries/useUser';
 import { useSearchParams } from 'react-router-dom';
 import UserForm from './UserForm';
 
@@ -8,7 +8,7 @@ const UserPage = () => {
     const [searchParams] = useSearchParams();
     const tabIndex = searchParams.get('tab-index');
     const goBack = searchParams.get('return') === 'true';
-    const { data: user, isLoading, isError, error } = useCurrentUser();
+    const { data: user, isLoading, isError, error } = useGetCurrentUser();
 
     return (
         <>

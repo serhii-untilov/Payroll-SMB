@@ -1,6 +1,6 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { usePayments } from '@/hooks/queries/usePayments';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
+import { useGetPaymentList } from '@/hooks/queries/usePayment';
 import { FindAllPaymentDto } from '@repo/openapi';
 import { useState } from 'react';
 import usePaymentList from './PaymentList.hooks';
@@ -14,7 +14,7 @@ export type PaymentListProps = FindAllPaymentDto & {
 export default function PaymentList(props: PaymentListProps) {
     const { companyId, payPeriod, status } = props;
     const [showDeleted, setShowDeleted] = useState(false);
-    const { data, isLoading, isError, error } = usePayments({
+    const { data, isLoading, isError, error } = useGetPaymentList({
         relations: true,
         companyId,
         payPeriod,

@@ -1,39 +1,26 @@
+import useLocale from '@/hooks/context/useLocale';
+import { useCreateDepartment, useUpdateDepartment } from '@/hooks/queries/useDepartment';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { departmentsCreate, departmentsUpdate } from '@/services/api/department.service';
+import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CreateDepartmentDto, ResourceType } from '@repo/openapi';
 import { maxDate, minDate } from '@repo/shared';
-import { AxiosError } from 'axios';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { date, InferType, number, object, ObjectSchema, string } from 'yup';
 import { DepartmentFormProps } from './DepartmentForm';
-import useLocale from '@/hooks/context/useLocale';
 
 export default function useDepartmentForm(props: DepartmentFormProps) {
     const { t } = useTranslation();
-    const invalidateQueries = useInvalidateQueries();
     const { locale } = useLocale();
-
-    useEffect(() => {}, [props, locale]);
-
-    const formSchema: ObjectSchema<CreateDepartmentDto> = useMemo(
-        () =>
-            object({
-                name: string().required('Name is required').default(''),
-                companyId: number().required('Company is required').default(props.company?.id),
-                dateFrom: date().default(minDate()),
-                dateTo: date().default(maxDate()),
-                parentDepartmentId: number().nullable(),
-            }),
-        [props],
-    );
-
+    const createDepartment = useCreateDepartment();
+    const updateDepartment = useUpdateDepartment();
+    const invalidateQueries = useInvalidateQueries();
+    const formSchema = useFormSchema(props);
     type FormType = InferType<typeof formSchema>;
-
     const {
         control,
         handleSubmit,
@@ -45,12 +32,26 @@ export default function useDepartmentForm(props: DepartmentFormProps) {
         resolver: yupResolver<FormType>(formSchema),
         shouldFocusError: true,
     });
-
     const { dirtyFields, isDirty } = useFormState({ control });
 
-    useEffect(() => {
-        snackbarFormErrors(t, formErrors);
-    }, [formErrors, t]);
+    useEffect(() => {}, [props, locale]);
+    useEffect(() => snackbarFormErrors(t, formErrors), [formErrors, t]);
+
+    const save = useCallback(
+        async (data: FormType) => {
+            const dirtyValues = getDirtyValues(dirtyFields, data);
+            return props.department
+                ? await updateDepartment.mutateAsync({
+                      id: props.department.id,
+                      dto: {
+                          ...dirtyValues,
+                          version: props.department.version,
+                      },
+                  })
+                : await createDepartment.mutateAsync(data);
+        },
+        [createDepartment, updateDepartment, dirtyFields, props],
+    );
 
     const onSubmit = useCallback<SubmitHandler<FormType>>(
         async (data) => {
@@ -58,24 +59,16 @@ export default function useDepartmentForm(props: DepartmentFormProps) {
                 props.setOpen(false);
                 return;
             }
-            const dirtyValues = getDirtyValues(dirtyFields, data);
             try {
-                const response = props.department
-                    ? await departmentsUpdate(props.department.id, {
-                          ...dirtyValues,
-                          version: props.department.version,
-                      })
-                    : await departmentsCreate(data);
+                const response = await save(data);
                 if (props.setDepartmentId) props.setDepartmentId(response.id);
                 props.setOpen(false);
                 reset();
-                await invalidateQueries([ResourceType.Department]);
             } catch (e: unknown) {
-                const error = e as AxiosError;
-                snackbarError(`${error.code}\n${error.message}`);
+                snackbarError(e as AppMessage);
             }
         },
-        [dirtyFields, isDirty, props, invalidateQueries, reset],
+        [isDirty, props, reset, save],
     );
 
     const onCancel = useCallback(async () => {
@@ -85,4 +78,18 @@ export default function useDepartmentForm(props: DepartmentFormProps) {
     }, [props, invalidateQueries, reset]);
 
     return { control, handleSubmit, onSubmit, onCancel };
+}
+
+function useFormSchema(props: DepartmentFormProps) {
+    return useMemo<ObjectSchema<CreateDepartmentDto>>(
+        () =>
+            object({
+                name: string().required('Name is required').default(''),
+                companyId: number().required('Company is required').default(props.company?.id),
+                dateFrom: date().default(minDate()),
+                dateTo: date().default(maxDate()),
+                parentDepartmentId: number().nullable(),
+            }),
+        [props],
+    );
 }

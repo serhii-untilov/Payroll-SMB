@@ -56,7 +56,7 @@ export class UserCompaniesService extends AvailableForUser {
     }
 
     async findOneByCompanyName(userId: number, name: string) {
-        return await this.repository.findOneOrFail({
+        return await this.repository.findOne({
             relations: { company: true },
             where: { userId, company: { name } },
         });

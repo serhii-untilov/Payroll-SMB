@@ -44,7 +44,7 @@ export class Payroll extends Logger {
     @Column({ type: 'date' })
     dateTo: Date;
 
-    @Column({ type: 'varchar', length: 10, default: '' })
+    @Column({ type: 'varchar', length: 20, default: '' })
     @ApiProperty({ enum: ResourceType, enumName: 'ResourceType' })
     sourceType: ResourceType;
 

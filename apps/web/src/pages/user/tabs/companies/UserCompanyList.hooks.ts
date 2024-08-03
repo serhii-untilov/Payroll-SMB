@@ -1,11 +1,10 @@
+import { api } from '@/api';
 import useAppContext from '@/hooks/context/useAppContext';
-import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { companiesFindOne } from '@/services/api/company.service';
-import { userCompaniesRemove, userCompaniesRestore } from '@/services/api/user-companies.service';
+import { useRemoveUserCompany, useRestoreUserCompany } from '@/hooks/queries/useUserCompany';
+import { snackbarError } from '@/utils/snackbar';
 import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import { ResourceType, UserCompany } from '@repo/openapi';
+import { UserCompany } from '@repo/openapi';
 import { date2view } from '@repo/shared';
-import { enqueueSnackbar } from 'notistack';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -20,19 +19,20 @@ interface Params {
 }
 
 const useUserCompanyList = (params: Params) => {
-    const { userCompanies, rowSelectionModel, setRowSelectionModel, showDeleted, setShowDeleted } =
-        params;
+    const { userCompanies, rowSelectionModel, setRowSelectionModel, showDeleted } = params;
     const { t } = useTranslation();
     const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
     const navigate = useNavigate();
-    const invalidateQueries = useInvalidateQueries();
+    const removeUserCompany = useRemoveUserCompany();
+    const restoreUserCompany = useRestoreUserCompany();
+    const columns = useColumns();
 
     const onAddCompany = () => {
         navigate(`/profile/company/?tab-index=0&return=true`);
     };
 
     const onSelectCompany = async (companyId: number) => {
-        setCurrentCompany(await companiesFindOne(companyId));
+        setCurrentCompany((await api.companiesFindOne(companyId)).data);
         navigate(`/company/${companyId}?tab-index=0&return=true`);
     };
 
@@ -41,17 +41,14 @@ const useUserCompanyList = (params: Params) => {
         for (const id of notDeletedSelection()) {
             const companyId = userCompanies?.find((o) => o.id === id)?.companyId;
             if (companyId !== currentCompany?.id) {
-                await userCompaniesRemove(Number(id));
+                await removeUserCompany.mutateAsync(Number(id));
             } else {
                 attemptToDeleteCurrentCompany = true;
             }
         }
         setRowSelectionModel([]);
-        await invalidateQueries([ResourceType.Company]);
         if (attemptToDeleteCurrentCompany) {
-            enqueueSnackbar(t(`Deleting the current company is not allowed.`), {
-                variant: 'error',
-            });
+            snackbarError({ message: t('Deleting the current company is not allowed') });
         }
     };
 
@@ -78,15 +75,13 @@ const useUserCompanyList = (params: Params) => {
 
     const onRestoreDeleted = async () => {
         for (const id of deletedSelection()) {
-            await userCompaniesRestore(id);
+            await restoreUserCompany.mutateAsync(id);
         }
         setRowSelectionModel([]);
-        await invalidateQueries([ResourceType.Company]);
     };
 
     const onShowDeleted = async () => {
-        setShowDeleted(!showDeleted);
-        await invalidateQueries([ResourceType.Company]);
+        params.setShowDeleted(!showDeleted);
     };
 
     const getRowStatus = (params: any): string => {
@@ -97,7 +92,22 @@ const useUserCompanyList = (params: Params) => {
               : 'Normal';
     };
 
-    const columns = useMemo<GridColDef[]>(
+    return {
+        columns,
+        onAddCompany,
+        onSelectCompany,
+        onDeleteCompany,
+        deletedSelection,
+        notDeletedSelection,
+        onRestoreDeleted,
+        onShowDeleted,
+        getRowStatus,
+    };
+};
+
+function useColumns() {
+    const { t } = useTranslation();
+    return useMemo<GridColDef[]>(
         () => [
             {
                 field: 'companyName',
@@ -153,17 +163,6 @@ const useUserCompanyList = (params: Params) => {
         ],
         [t],
     );
-    return {
-        columns,
-        onAddCompany,
-        onSelectCompany,
-        onDeleteCompany,
-        deletedSelection,
-        notDeletedSelection,
-        onRestoreDeleted,
-        onShowDeleted,
-        getRowStatus,
-    };
-};
+}
 
 export default useUserCompanyList;

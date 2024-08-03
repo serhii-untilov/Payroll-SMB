@@ -451,3 +451,5 @@ openssl rand -base64 60
 - [**Shared DTO** - A Guide to OpenAPI Code Generation for TypeScript](https://www.stefanwille.com/2021/05/2021-05-30-openapi-code-generator-for-typescript)
 - [**Jest** - Jest with TypeScript and aliased imports (custom paths)](https://dev.to/mliakos/jest-with-typescript-and-aliased-imports-custom-paths-40d4)
 - [**NestJS** - Best Way to Structure Your Directory/Code](https://medium.com/the-crowdlinker-chronicle/best-way-to-structure-your-directory-code-nestjs-a06c7a641401)
+- [**React Query** - The Official React Query Course](https://query.gg/?s=dom)
+- [**React Query** - Mastering Mutations in React Query](https://tkdodo.eu/blog/mastering-mutations-in-react-query)

@@ -47,7 +47,11 @@ export default function DepartmentForm(props: DepartmentFormProps) {
                         </Grid>
 
                         <Grid item xs={12}>
-                            <SelectDepartment companyId={props.company.id} control={control} />
+                            <SelectDepartment
+                                label={t('Parent Department')}
+                                companyId={props.company.id}
+                                control={control}
+                            />
                         </Grid>
                     </Grid>
                 </DialogContent>

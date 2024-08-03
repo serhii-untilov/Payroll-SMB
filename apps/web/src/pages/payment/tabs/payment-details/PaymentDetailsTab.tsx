@@ -3,7 +3,7 @@ import DocNumberField from '@/components/DocNumberField';
 import DocPaymentStatus from '@/components/DocPaymentStatus';
 import { FormNumberField } from '@/components/form/FormNumberField';
 import Toolbar from '@/components/layout/Toolbar';
-import SelectAccPeriod from '@/components/SelectAccPeriod';
+import SelectAccPeriod from '@/components/SelectAccPeriod/SelectAccPeriod';
 import { SelectPaymentType } from '@/components/SelectPaymentType';
 import { Grid } from '@mui/material';
 import { Company, Payment, PaymentGroup, PaymentStatus } from '@repo/openapi';

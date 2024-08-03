@@ -1,4 +1,4 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import ErrorDisplay from '@/components/ErrorDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';

@@ -1,7 +1,7 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
-import { useTasks } from '../../hooks/queries/useTasks';
+import { useGetTaskList } from '../../hooks/queries/useTask';
 import DashboardCompany from './DashboardCompany';
 import DashboardForm from './DashboardForm';
 
@@ -12,7 +12,7 @@ const DashboardPage = () => {
         isLoading,
         isError,
         error,
-    } = useTasks({ companyId: company?.id, onPayPeriodDate: company?.payPeriod });
+    } = useGetTaskList({ companyId: company?.id, onPayPeriodDate: company?.payPeriod });
 
     return (
         <>

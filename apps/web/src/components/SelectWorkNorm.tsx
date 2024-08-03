@@ -1,6 +1,6 @@
-import useWorkNorm from '@/hooks/queries/useWorkNorm';
+import { useGetWorkNormList } from '@/hooks/queries/useWorkNorm';
 import { FormAutocomplete } from './form/FormAutocomplete';
-import ErrorDisplay from './utility/ErrorDisplay';
+import ErrorDisplay from './ErrorDisplay';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function SelectWorkNorm({ control, label, id, name }: Props) {
-    const { data, isError, error } = useWorkNorm();
+    const { data, isError, error } = useGetWorkNormList();
     const { t } = useTranslation();
 
     return (

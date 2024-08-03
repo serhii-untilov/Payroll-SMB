@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CreatePayment from './CreatePayment';
 import EditPayment from './EditPayment';
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
+import ErrorDisplay from '@/components/ErrorDisplay';
 import useAppContext from '@/hooks/context/useAppContext';
 
 export default function PaymentPage() {

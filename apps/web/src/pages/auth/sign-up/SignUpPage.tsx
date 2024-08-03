@@ -2,7 +2,7 @@ import EmailField from '@/components/EmailField';
 import FirstNameField from '@/components/FirstNameField';
 import LastNameField from '@/components/LastNameField';
 import PasswordField from '@/components/PasswordField';
-import { AppTitle } from '@/components/layout/AppTitle';
+import { AppTitle } from '@/components/AppTitle';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Link } from '@mui/material';
 import Avatar from '@mui/material/Avatar';

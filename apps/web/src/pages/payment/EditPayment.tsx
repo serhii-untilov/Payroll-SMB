@@ -1,6 +1,6 @@
-import ErrorDisplay from '@/components/utility/ErrorDisplay';
-import { LoadingDisplay } from '@/components/utility/LoadingDisplay';
-import { usePayment } from '@/hooks/queries/usePayments';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { LoadingDisplay } from '@/components/LoadingDisplay';
+import { useGetPayment } from '@/hooks/queries/usePayment';
 import PaymentForm from './PaymentForm';
 import { Company } from '@repo/openapi';
 
@@ -14,7 +14,12 @@ interface EditPaymentProps {
 
 export default function EditPayment(props: EditPaymentProps) {
     const { company, payPeriod, paymentId, tabIndex, goBack } = props;
-    const { data: payment, isLoading, isError, error } = usePayment(paymentId, { relations: true });
+    const {
+        data: payment,
+        isLoading,
+        isError,
+        error,
+    } = useGetPayment(paymentId, { relations: true });
 
     return (
         <>

@@ -1,8 +1,7 @@
-import useInvalidateQueries from '@/hooks/useInvalidateQueries';
-import { paymentsRemove } from '@/services/api/payment.service';
+import { useRemovePaymentPosition } from '@/hooks/queries/usePaymentPosition';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
-import { PaymentStatus, ResourceType } from '@repo/openapi';
+import { PaymentStatus } from '@repo/openapi';
 import { dateUTC } from '@repo/shared';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,8 +9,8 @@ import { useNavigate } from 'react-router-dom';
 
 export default function useEmployeePaymentList(rowSelectionModel: GridRowSelectionModel) {
     const navigate = useNavigate();
-    const invalidateQueries = useInvalidateQueries();
-    const { t } = useTranslation();
+
+    const removePaymentPosition = useRemovePaymentPosition();
 
     const getRowStatus = useCallback((params: any): string => {
         return params.row?.deletedDate
@@ -39,12 +38,24 @@ export default function useEmployeePaymentList(rowSelectionModel: GridRowSelecti
 
     const onDeletePayment = useCallback(async () => {
         for (const id of rowSelectionModel) {
-            await paymentsRemove(+id);
+            await removePaymentPosition.mutateAsync(+id);
         }
-        await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
-    }, [rowSelectionModel, invalidateQueries]);
+    }, [removePaymentPosition, rowSelectionModel]);
 
-    const columns = useMemo(
+    const columns = useColumns();
+
+    return {
+        columns,
+        getRowStatus,
+        onAddPayment,
+        onEditPayment,
+        onDeletePayment,
+    };
+}
+
+const useColumns = () => {
+    const { t } = useTranslation();
+    return useMemo(
         () => [
             {
                 field: 'cardNumber',
@@ -124,12 +135,4 @@ export default function useEmployeePaymentList(rowSelectionModel: GridRowSelecti
         ],
         [t],
     );
-
-    return {
-        columns,
-        getRowStatus,
-        onAddPayment,
-        onEditPayment,
-        onDeletePayment,
-    };
-}
+};

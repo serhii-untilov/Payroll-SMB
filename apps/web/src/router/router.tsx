@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
-import { LoadingDisplay } from '../components/utility/LoadingDisplay';
+import { LoadingDisplay } from '../components/LoadingDisplay';
 import AuthGuard from '../guards/AuthGuard';
 import GuestGuard from '../guards/GuestGuard';
 
