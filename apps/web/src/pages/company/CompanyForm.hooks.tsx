@@ -17,14 +17,19 @@ export default function useCompanyForm(params: CompanyFormParams) {
     const { company } = params;
     const { t } = useTranslation();
     const { locale } = useLocale();
-
+    const pageTitle = useMemo(
+        () => (company?.id ? company?.name ?? 'Noname' : t('New Company')),
+        [company?.id, company?.name, t],
+    );
+    const tabs = useTabs(params);
     useEffect(() => {}, [locale]);
+    return { pageTitle, tabs };
+}
 
-    const pageTitle = useMemo(() => {
-        return params.company?.id ? params.company?.name ?? 'Noname' : t('New Company');
-    }, [params, t]);
-
-    const tabs = useMemo(
+function useTabs(params: CompanyFormParams) {
+    const { company } = params;
+    const { t } = useTranslation();
+    return useMemo(
         () => [
             {
                 label: t('Accounting Details'),
@@ -53,5 +58,4 @@ export default function useCompanyForm(params: CompanyFormParams) {
         ],
         [t, params, company],
     );
-    return { pageTitle, tabs };
 }
