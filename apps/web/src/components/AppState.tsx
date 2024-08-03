@@ -4,12 +4,12 @@ import { snackbarWarning } from '@/utils/snackbar';
 import { CheckCircle } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton } from '@mui/material';
 import { ServerEvent } from '@repo/openapi';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Tooltip } from './layout/Tooltip';
 
-export function AppState() {
+const AppState = () => {
     const { t } = useTranslation();
     const { serverEvent: event } = useAppContext();
     const navigate = useNavigate();
@@ -29,28 +29,18 @@ export function AppState() {
               : 'warning';
     }, [event, isOnline]);
 
-    const onButtonClick = () => {
-        navigate('/dashboard');
-    };
+    const onButtonClick = useCallback(() => navigate('/dashboard'), [navigate]);
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Tooltip placement="bottom" title={t(event ?? ServerEvent.PayrollFinished)}>
                 {!event || event.includes('finished') ? (
-                    <IconButton
-                        size="small"
-                        color={color}
-                        onClick={() => {
-                            onButtonClick();
-                        }}
-                    >
+                    <IconButton size="small" color={color} onClick={onButtonClick}>
                         <CheckCircle />
                     </IconButton>
                 ) : (
                     <CircularProgress
-                        onClick={() => {
-                            onButtonClick();
-                        }}
+                        onClick={onButtonClick}
                         size={34}
                         thickness={3}
                         color={color}
@@ -59,4 +49,6 @@ export function AppState() {
             </Tooltip>
         </Box>
     );
-}
+};
+
+export { AppState };
