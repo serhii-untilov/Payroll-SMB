@@ -3,9 +3,8 @@
 **Payroll SMB** is a web application that:
 
 - helps employers and employees calculate salaries and taxes according to the chosen country's laws.
-- features a responsive UI design, multi-tenant architecture, auto-generated
-REST API, role-based access with JWT authorization, event-driven document processing, and SSE enabling the
-client to receive automatic updates from the server
+- features a responsive UI design, multi-tenant architecture, auto-generated REST API, role-based access with JWT authorization, event-driven calculation processing, automatic document preparation according to business process schedules, and SSE enabling the
+client to receive automatic updates from the server.
 
 ## Key features
 
