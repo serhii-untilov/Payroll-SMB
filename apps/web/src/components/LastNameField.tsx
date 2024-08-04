@@ -5,7 +5,7 @@ type LastNameProps = Partial<FormTextFieldProps> & {
     control: any;
 };
 
-export default function LastNameField(props: LastNameProps) {
+const LastNameField = (props: LastNameProps) => {
     return (
         <FormTextField
             {...props}
@@ -17,4 +17,6 @@ export default function LastNameField(props: LastNameProps) {
             type="text"
         />
     );
-}
+};
+
+export default LastNameField;

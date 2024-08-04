@@ -8,7 +8,7 @@ type Props = {
     sx?: any;
 };
 
-export default function RememberMe(props: Props) {
+const RememberMe = (props: Props) => {
     const { t } = useTranslation();
     return (
         <FormControlLabel
@@ -25,4 +25,6 @@ export default function RememberMe(props: Props) {
             label={t('Remember me')}
         />
     );
-}
+};
+
+export default RememberMe;
