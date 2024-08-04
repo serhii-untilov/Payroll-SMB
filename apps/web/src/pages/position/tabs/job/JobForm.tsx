@@ -1,21 +1,22 @@
-import { FormDateField } from '@/components/form/FormDateField';
-import { FormNumberField } from '@/components/form/FormNumberField';
-import SequenceField from '@/components/SequenceField';
+import CardNumberField from '@/components/CardNumberField';
+import DateFrom from '@/components/DateFrom';
+import DateTo from '@/components/DateTo';
 import { TabLayout } from '@/components/layout/TabLayout';
 import Toolbar from '@/components/layout/Toolbar';
+import RateField from '@/components/RateField';
 import { SelectDepartment } from '@/components/SelectDepartment';
 import { SelectJob } from '@/components/SelectJob';
 import { SelectPaymentType } from '@/components/SelectPaymentType';
 import SelectPerson from '@/components/SelectPerson/SelectPerson';
 import { SelectWorkNorm } from '@/components/SelectWorkNorm';
+import SequenceField from '@/components/SequenceField';
+import WageField from '@/components/WageField';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
 import { Company, PaymentGroup, Position, PositionHistory } from '@repo/openapi';
-import { formatDate, maxDate, minDate } from '@repo/shared';
 import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 import useJobForm from './JobForm.hooks';
-import CardNumberField from '@/components/CardNumberField';
 
 export interface JobFormProps {
     company: Company;
@@ -84,46 +85,18 @@ const JobForm = (props: JobFormProps) => {
                             </Grid>
 
                             <Grid item xs={12} sm={6} md={3}>
-                                <FormNumberField
-                                    control={control}
-                                    name="wage"
-                                    id="wage"
-                                    label={t('Wage')}
-                                    step={500}
-                                    min={0}
-                                    autoFocus={!!position?.personId}
-                                />
+                                <WageField control={control} autoFocus={!!position?.personId} />
                             </Grid>
                             <Grid item xs={12} sm={6} md={3}>
-                                <FormNumberField
-                                    control={control}
-                                    name="rate"
-                                    id="rate"
-                                    label={t('Rate')}
-                                    step={0.25}
-                                    min={0}
-                                    max={2}
-                                />
+                                <RateField control={control} />
                             </Grid>
 
                             <Grid item xs={12} sm={6} md={3}>
-                                <FormDateField
-                                    control={control}
-                                    name="dateFrom"
-                                    id="dateFrom"
-                                    label={t('Date From')}
-                                    defaultValue={formatDate(minDate())}
-                                />
+                                <DateFrom control={control} />
                             </Grid>
 
                             <Grid item xs={12} sm={6} md={3}>
-                                <FormDateField
-                                    control={control}
-                                    name="dateTo"
-                                    id="dateTo"
-                                    label={t('Date To')}
-                                    defaultValue={formatDate(maxDate())}
-                                />
+                                <DateTo control={control} />
                             </Grid>
                         </Grid>
                     </Grid>

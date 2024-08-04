@@ -1,17 +1,23 @@
 # Payroll SMB
 
-The Payroll SMB application provides a solution for employers and employees to calculate salaries and taxes based on the laws of the chosen country.
+**Payroll SMB** is a web application that:
+
+- helps employers and employees calculate salaries and taxes according to the chosen country's laws.
+- features a responsive UI design, multi-tenant architecture, auto-generated
+REST API, role-based access with JWT authorization, event-driven document processing, and SSE enabling the
+client to receive automatic updates from the server
 
 ## Key features
 
 - UI Responsive Design
 - Multi-tenant architecture
-- Mono-repository, shared types libs between back-end and front-end apps
+- Auto-generated REST API
 - REST API documented in Open API by Swagger
+- Mono-repository, shared types libs between back-end and front-end apps
 - Role-based access, JWT authorization
 - Event-driven calculate processing
 - Automatic documents prepared according to the business process schedule
-- Automatic update of data on the client after the completion of the batch calculation on the server
+- Automatic update of data on the client after the completion of the batch calculation on the server (SSE)
 
 ## Live Demo
 
