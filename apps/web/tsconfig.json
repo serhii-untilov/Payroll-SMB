@@ -24,7 +24,11 @@
 
         /* Yup: https://github.com/jquense/yup?tab=readme-ov-file#typescript-integration */
         "strictNullChecks": true,
-        "strictFunctionTypes": false
+        "strictFunctionTypes": false,
+        // "baseUrl": "./src",
+        "paths": {
+            "@/*": ["./src/*"]
+        }
     },
     "include": ["src", "../../packages/utils"],
     "references": [{ "path": "./tsconfig.node.json" }]

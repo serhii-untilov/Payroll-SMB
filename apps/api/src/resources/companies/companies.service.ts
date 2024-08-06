@@ -1,6 +1,7 @@
+import { AccessType, ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
 import {
     BadRequestException,
-    ConflictException,
     ForbiddenException,
     Inject,
     Injectable,
@@ -8,33 +9,32 @@ import {
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
-import { UsersCompanyService } from '../users/users-company.service';
+import { UserCompaniesService } from '../user-companies/user-companies.service';
 import { UsersService } from '../users/users.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CompanyCreatedEvent } from './events/company-created.event';
-import { CompanyUpdatedEvent } from './events/company-updated.event';
-import { CompanyDeletedEvent } from './events/company-deleted.event';
 import { CompanyCalculateEvent } from './events/company-calculate.event';
+import { CompanyCreatedEvent } from './events/company-created.event';
+import { CompanyDeletedEvent } from './events/company-deleted.event';
+import { CompanyUpdatedEvent } from './events/company-updated.event';
 
 @Injectable()
 export class CompaniesService {
     private _logger: Logger = new Logger(CompaniesService.name);
-    public readonly resourceType = ResourceType.COMPANY;
+    public readonly resourceType = ResourceType.Company;
 
     constructor(
         @InjectRepository(Company)
         private repository: Repository<Company>,
         @Inject(forwardRef(() => UsersService))
         private usersService: UsersService,
-        @Inject(forwardRef(() => UsersCompanyService))
-        private usersCompanyService: UsersCompanyService,
+        @Inject(forwardRef(() => UserCompaniesService))
+        private usersCompanyService: UserCompaniesService,
         @Inject(forwardRef(() => AccessService))
         private accessService: AccessService,
         private eventEmitter: EventEmitter2,
@@ -44,7 +44,7 @@ export class CompaniesService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
     }
 
@@ -53,7 +53,7 @@ export class CompaniesService {
             userId,
             id,
             this.resourceType,
-            AccessType.ACCESS,
+            AccessType.Access,
         );
     }
 
@@ -61,7 +61,7 @@ export class CompaniesService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.CREATE,
+            AccessType.Create,
         );
     }
 
@@ -70,7 +70,7 @@ export class CompaniesService {
             userId,
             id,
             this.resourceType,
-            AccessType.UPDATE,
+            AccessType.Update,
         );
     }
 
@@ -79,12 +79,12 @@ export class CompaniesService {
             userId,
             id,
             this.resourceType,
-            AccessType.DELETE,
+            AccessType.Delete,
         );
     }
 
     async create(userId: number, payload: CreateCompanyDto): Promise<Company> {
-        const existing = await this.usersCompanyService.findOneByName(userId, payload.name);
+        const existing = await this.usersCompanyService.findOneByCompanyName(userId, payload.name);
         if (existing) {
             throw new BadRequestException(`Company '${payload.name}' already exists.`);
         }
@@ -120,7 +120,7 @@ export class CompaniesService {
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean = false): Promise<Company | null> {
+    async findOne(userId: number, id: number, relations: boolean = false): Promise<Company> {
         const company = await this.repository.findOneOrFail({
             relations: {
                 law: !!relations,
@@ -132,7 +132,7 @@ export class CompaniesService {
                 users: { userId },
             },
         });
-        this._logger.log(`companies/${id}: payPeriod: ${company.payPeriod}`);
+        // this._logger.log(`companies/${id}: payPeriod: ${company.payPeriod}`);
         return company;
     }
 
@@ -147,11 +147,7 @@ export class CompaniesService {
     async update(userId: number, id: number, payload: UpdateCompanyDto): Promise<Company> {
         await this.usersCompanyService.getUserCompanyRoleTypeOrFail(userId, id);
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,
@@ -167,7 +163,10 @@ export class CompaniesService {
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (record.createdUserId === userId) {
             await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-            const deleted = await this.repository.findOne({ where: { id }, withDeleted: true });
+            const deleted = await this.repository.findOneOrFail({
+                where: { id },
+                withDeleted: true,
+            });
             this.eventEmitter.emit('company.deleted', new CompanyDeletedEvent(userId, deleted));
             return deleted;
         }

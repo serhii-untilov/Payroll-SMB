@@ -1,6 +1,4 @@
-import { IAuth } from '@repo/shared';
-
-export class AuthDto implements IAuth {
+export class AuthDto {
     email: string;
     password: string;
     rememberMe: boolean;

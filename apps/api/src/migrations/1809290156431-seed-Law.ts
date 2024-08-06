@@ -1,11 +1,11 @@
-import { langPipe } from '../utils/langPipe';
-import { Law } from '../resources/laws/entities/law.entity';
+import { langPipe } from '../utils/lib/langPipe';
+import { Law } from './../resources/laws/entities/law.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { LawType } from '@repo/shared';
+import { LawType } from '../types';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const entity = Law;
-const recordList = [{ id: 1, name: { en: 'Ukraine', uk: 'Україна' }, type: LawType.UKRAINE }];
+const recordList = [{ id: 1, name: { en: 'Ukraine', uk: 'Україна' }, type: LawType.Ukraine }];
 
 export class Seed1809290156431 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {

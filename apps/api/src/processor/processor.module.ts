@@ -1,28 +1,35 @@
+import {
+    AccessModule,
+    CompaniesModule,
+    DepartmentsModule,
+    MinWageModule,
+    PayFundTypesModule,
+    PayFundsModule,
+    PayPeriodsModule,
+    PaymentPositionsModule,
+    PaymentTypesModule,
+    PaymentsModule,
+    PayrollsModule,
+    PersonsModule,
+    PositionsModule,
+    TasksModule,
+    UserCompaniesModule,
+    UsersModule,
+    WorkNormsModule,
+} from '@/resources';
 import { Module, forwardRef } from '@nestjs/common';
-import { AccessModule } from '../resources/access/access.module';
-import { CompaniesModule } from '../resources/companies/companies.module';
-import { PayPeriodsModule } from '../resources/pay-periods/payPeriods.module';
-import { PaymentTypesModule } from '../resources/payment-types/payment-types.module';
-import { PayrollsModule } from '../resources/payrolls/payrolls.module';
-import { PositionsModule } from '../resources/positions/positions.module';
-import { WorkNormsModule } from '../resources/work-norms/work-norms.module';
-import { DepartmentsModule } from './../resources/departments/departments.module';
-import { MinWageModule } from './../resources/min-wage/min-wage.module';
-import { PayFundTypesModule } from './../resources/pay-fund-types/pay-fund-types.module';
-import { PayFundsModule } from './../resources/pay-funds/pay-funds.module';
-import { PersonsModule } from './../resources/persons/persons.module';
-import { TasksModule } from './../resources/tasks/tasks.module';
-import { UsersModule } from './../resources/users/users.module';
 import { CompanyListenerService } from './listeners/company-listener/company-listener.service';
+import { DepartmentListenerService } from './listeners/department-listener/department-listener.service';
+import { PaymentListenerService } from './listeners/payment-listener/payment-listener.service';
 import { PersonListenerService } from './listeners/person-listener/person-listener.service';
 import { PositionListenerService } from './listeners/position-listener/position-listener.service';
-import { PayFundCalculationService } from './payFundCalculation/payFundCalculation.service';
-import { PayPeriodCalculationService } from './payPeriodCalculation/payPeriodCalculation.service';
-import { PayrollCalculationService } from './payrollCalculation/payrollCalculation.service';
-import { SseService } from './serverSentEvents/sse.service';
-import { SseController } from './serverSentEvents/sse.controller';
-import { TaskGenerationService } from './taskGeneration/taskGeneration.service';
-import { DepartmentListenerService } from './listeners/department-listener/department-listener.service';
+import { PayFundCalculationService } from './pay-fund-calculation/pay-fund-calculation.service';
+import { PayPeriodCalculationService } from './pay-period-calculation/pay-period-calculation.service';
+import { PaymentCalculationService } from './payment-calculation/payment-calculation.service';
+import { PayrollCalculationService } from './payroll-calculation/payroll-calculation.service';
+import { SseController } from './server-sent-events/sse.controller';
+import { SseService } from './server-sent-events/sse.service';
+import { TaskGenerationService } from './task-generation/task-generator.service';
 
 @Module({
     imports: [
@@ -40,6 +47,9 @@ import { DepartmentListenerService } from './listeners/department-listener/depar
         forwardRef(() => DepartmentsModule),
         forwardRef(() => PersonsModule),
         forwardRef(() => UsersModule),
+        forwardRef(() => PaymentsModule),
+        forwardRef(() => PaymentPositionsModule),
+        forwardRef(() => UserCompaniesModule),
     ],
     controllers: [SseController],
     providers: [
@@ -47,11 +57,13 @@ import { DepartmentListenerService } from './listeners/department-listener/depar
         DepartmentListenerService,
         PositionListenerService,
         PersonListenerService,
+        PaymentListenerService,
         PayrollCalculationService,
         PayFundCalculationService,
         TaskGenerationService,
         PayPeriodCalculationService,
         SseService,
+        PaymentCalculationService,
     ],
 })
 export class ProcessorModule {}

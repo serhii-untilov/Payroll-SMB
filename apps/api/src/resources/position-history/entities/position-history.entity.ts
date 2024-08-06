@@ -1,20 +1,27 @@
-import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Position } from '../../positions/entities/position.entity';
-import { Department } from '../../departments/entities/department.entity';
-import { Job } from '../../jobs/entities/job.entity';
-import { WorkNorm } from '../../work-norms/entities/work-norm.entity';
-import { PaymentType } from '../../payment-types/entities/payment-type.entity';
-import { Logger } from '../../abstract/logger.abstract';
-import { IPositionHistory } from '@repo/shared';
+import { PaymentType } from './../../payment-types/entities/payment-type.entity';
+import { WorkNorm } from './../../work-norms/entities/work-norm.entity';
+import { Job } from './../../jobs/entities/job.entity';
+import { Department } from './../../departments/entities/department.entity';
+import { Position } from './../../positions/entities/position.entity';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Relation,
+} from 'typeorm';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class PositionHistory extends Logger implements IPositionHistory {
+export class PositionHistory extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
     @ManyToOne(() => Position, (position) => position.history)
     @JoinColumn()
-    position?: Position;
+    position?: Relation<Position>;
 
     @Column({ type: 'integer' })
     positionId: number;
@@ -27,37 +34,37 @@ export class PositionHistory extends Logger implements IPositionHistory {
 
     @ManyToOne(() => Department, { createForeignKeyConstraints: false })
     @JoinColumn()
-    department?: Department;
+    department?: Relation<Department>;
 
     @Column({ type: 'integer', nullable: true })
     departmentId: number | null;
 
     @ManyToOne(() => Job, { createForeignKeyConstraints: false })
     @JoinColumn()
-    job?: Job;
+    job?: Relation<Job>;
 
     @Column({ type: 'integer', nullable: true })
     jobId: number | null;
 
     @ManyToOne(() => WorkNorm, { createForeignKeyConstraints: false })
     @JoinColumn()
-    workNorm?: WorkNorm;
+    workNorm?: Relation<WorkNorm>;
 
     @Column({ type: 'integer', nullable: true })
     workNormId: number | null;
 
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
     @JoinColumn()
-    paymentType?: PaymentType;
+    paymentType?: Relation<PaymentType>;
 
     @Column({ type: 'integer', nullable: true })
     paymentTypeId: number | null;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    wage: number | null;
+    wage: number;
 
     @Column({ type: 'decimal', precision: 4, scale: 2, default: 1 })
-    rate: number | null;
+    rate: number;
 
     @AfterLoad()
     transform() {

@@ -1,19 +1,21 @@
-import { Autocomplete, OutlinedInputProps, TextField } from '@mui/material';
+import { Autocomplete, Box, OutlinedInputProps, TextField } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { InputLabel } from '../layout/InputLabel';
 
-export type FormAutocompleteOption = {
+type Option = {
     label: string;
     value: any;
 };
 
-export type Props = OutlinedInputProps & {
+type Props = OutlinedInputProps & {
     name: string;
     valueType: 'number' | 'string';
     control: any;
     label: string;
     rules?: any;
-    options: FormAutocompleteOption[];
+    options: Option[];
+    autofocus?: boolean;
+    disabled?: boolean;
 };
 
 export const FormAutocomplete = (props: Props) => {
@@ -24,9 +26,11 @@ export const FormAutocomplete = (props: Props) => {
                 name={props.name}
                 control={props.control}
                 rules={props.rules}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => {
+                render={({ field: { onChange, value }, fieldState: { error } }) => {
                     return (
                         <Autocomplete
+                            disabled={!!props?.disabled}
+                            autoFocus={props?.autoFocus}
                             selectOnFocus
                             clearOnEscape
                             handleHomeEndKeys
@@ -34,7 +38,6 @@ export const FormAutocomplete = (props: Props) => {
                             // autoSelect !!!
                             // autoHighlight !!!
                             autoComplete
-                            // id={'value'}
                             options={props.options}
                             getOptionLabel={(option) => option?.label || ''}
                             getOptionKey={(option) => option?.value || ''}
@@ -44,19 +47,21 @@ export const FormAutocomplete = (props: Props) => {
                                     option?.value && value?.value && option?.value === value?.value
                                 );
                             }}
-                            onChange={(event, item) => {
+                            onChange={(_event, item) => {
                                 onChange(item?.value || (props.valueType === 'number' ? null : ''));
                             }}
                             renderInput={(params) => {
                                 return (
-                                    <TextField
-                                        error={error != undefined}
-                                        variant="outlined"
-                                        label=""
-                                        {...params}
-                                        size="small"
-                                        fullWidth
-                                    />
+                                    <Box sx={{ fontWeight: 'bold' }}>
+                                        <TextField
+                                            error={error != undefined}
+                                            variant="outlined"
+                                            label=""
+                                            {...params}
+                                            size="small"
+                                            fullWidth
+                                        />
+                                    </Box>
                                 );
                             }}
                         />

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Inspect docker volumes binding
+docker inspect -f '{{ json .Mounts }}' payroll-app | python -m json.tool
+docker inspect -f '{{ json .Mounts }}' payroll-db | python -m json.tool

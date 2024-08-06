@@ -1,16 +1,16 @@
-import { langPipe } from '../utils/langPipe';
-import { Accounting } from '../resources/accounting/entities/accounting.entity';
+import { langPipe } from '../utils/lib/langPipe';
+import { Accounting } from './../resources/accounting/entities/accounting.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { AccountingType } from '@repo/shared';
+import { AccountingType } from '../types';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const entity = Accounting;
 const recordList = [
-    { id: 1, name: { en: 'Generic', uk: 'Загальний' }, type: AccountingType.GENERIC },
-    { id: 2, name: { en: 'Kindergarten', uk: 'Дитсадок' }, type: AccountingType.KINDERGARTEN },
-    { id: 3, name: { en: 'Services', uk: 'Послуги' }, type: AccountingType.SERVICES },
-    { id: 4, name: { en: 'Trade', uk: 'Торгівля' }, type: AccountingType.TRADE },
-    { id: 5, name: { en: 'Custom', uk: 'Довільний' }, type: AccountingType.CUSTOM },
+    { id: 1, name: { en: 'Generic', uk: 'Загальний' }, type: AccountingType.Generic },
+    { id: 2, name: { en: 'Kindergarten', uk: 'Дитсадок' }, type: AccountingType.Kindergarten },
+    { id: 3, name: { en: 'Services', uk: 'Послуги' }, type: AccountingType.Services },
+    { id: 4, name: { en: 'Trade', uk: 'Торгівля' }, type: AccountingType.Trade },
+    { id: 5, name: { en: 'Custom', uk: 'Довільний' }, type: AccountingType.Custom },
 ];
 
 export class Seed1809290168967 implements MigrationInterface {

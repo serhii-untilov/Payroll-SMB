@@ -41,3 +41,7 @@ lerna-debug.log*
 
 # Local database
 *.sqlite
+
+**/swagger.json
+
+metadata.ts

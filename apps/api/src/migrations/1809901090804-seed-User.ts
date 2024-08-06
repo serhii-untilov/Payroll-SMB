@@ -1,11 +1,11 @@
-import { RoleType } from '@repo/shared';
+import { RoleType } from '../types';
 import * as bcrypt from 'bcrypt';
-import { getRoleIdByType } from '../utils/getSystemRoleId';
+import { getRoleIdByType } from '../utils/lib/getSystemRoleId';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { User } from '../resources/users/entities/user.entity';
-import { langPipe } from '../utils/langPipe';
+import { User } from './../resources/users/entities/user.entity';
+import { langPipe } from '../utils/lib/langPipe';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const entity = User;
 const recordList = [
     {
@@ -13,35 +13,35 @@ const recordList = [
         lastName: '',
         email: 'system@payroll.smb',
         password: null, // To prevent this user from logging in.
-        roleType: RoleType.SYSTEM || 'system',
+        roleType: RoleType.System || 'system',
     },
     {
         firstName: { en: 'Admin', uk: 'Адміністратор' },
         lastName: '',
         email: 'admin@payroll.smb',
         password: 'admin',
-        roleType: RoleType.ADMIN || 'admin',
+        roleType: RoleType.Admin || 'admin',
     },
     {
         firstName: { en: 'User', uk: 'Користувач' },
         lastName: '',
         email: 'user@payroll.smb',
         password: 'user',
-        roleType: RoleType.EMPLOYER || 'employer',
+        roleType: RoleType.Employer || 'employer',
     },
     {
         firstName: { en: 'User', uk: 'Працівник' },
         lastName: '',
         email: 'employee@payroll.smb',
         password: 'employee',
-        roleType: RoleType.EMPLOYEE || 'employee',
+        roleType: RoleType.Employee || 'employee',
     },
     {
         firstName: { en: 'Guest', uk: 'Гість' },
         lastName: '',
         email: 'guest@payroll.smb',
         password: 'guest',
-        roleType: RoleType.GUEST || 'guest',
+        roleType: RoleType.Guest || 'guest',
     },
 ];
 
@@ -49,10 +49,9 @@ export class Seed1809901090804 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
         for (let n = 0; n < recordList.length; n++) {
-            const values = langPipe(lang, recordList[n]);
+            const { roleType: _, ...values } = langPipe(lang, recordList[n]);
             const hashedPassword = values.password ? bcrypt.hashSync(values.password, 10) : '';
             const roleId = await getRoleIdByType(dataSource, values.roleType);
-            delete values.roleType;
             values['roleId'] = roleId;
             await dataSource
                 .createQueryBuilder()

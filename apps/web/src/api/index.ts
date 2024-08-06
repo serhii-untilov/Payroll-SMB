@@ -1,8 +1,14 @@
+import { authHeader } from '@/services/auth/auth-header';
+import {
+    getUserAccessToken,
+    getUserRefreshToken,
+    removeUserTokens,
+    saveUserTokens,
+} from '@/services/auth/token.service';
+import { DefaultApi as PayrollApi } from '@repo/openapi';
+import { deepStringToDate } from '@repo/shared';
 import axios from 'axios';
 import { redirect } from 'react-router-dom';
-import { getUserRefreshToken, removeUserTokens, saveUserTokens } from '../services/token.service';
-import authHeader from '../services/auth-header';
-import { deepStringToDate } from '@repo/shared';
 
 export type ApiError = {
     error?: string;
@@ -10,17 +16,22 @@ export type ApiError = {
     statusCode?: string;
 };
 
-console.log('import.meta.env.VITE_APP_URL:', import.meta.env.VITE_APP_URL);
+const baseURL = import.meta.env.VITE_APP_URL;
 
-export const api = axios.create({
-    baseURL: import.meta.env.VITE_APP_URL,
+console.log('baseURL:', baseURL);
+
+export const axiosInstance = axios.create({
+    baseURL,
     // timeout: 1000,
     headers: {
         'Content-type': 'application/json',
     },
 });
 
-api.interceptors.response.use(
+export type * as dto from '@repo/openapi';
+export const api = new PayrollApi(undefined, baseURL, axiosInstance);
+
+axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
@@ -40,7 +51,7 @@ api.interceptors.response.use(
                 // Retry the original request with the new token
                 originalRequest.headers.Authorization = authHeader().Authorization;
                 return axios(originalRequest);
-            } catch (error) {
+            } catch (_error) {
                 // Handle refresh token error or redirect to login
                 removeUserTokens();
                 delete originalRequest.headers.Authorization;
@@ -87,8 +98,15 @@ function getApiError(apiError: ApiError): ApiError {
 
 // Casting dates properly from an API response in typescript
 // https://stackoverflow.com/questions/65692061/casting-dates-properly-from-an-api-response-in-typescript
-
-api.interceptors.response.use((originalResponse) => {
+axiosInstance.interceptors.response.use((originalResponse) => {
     deepStringToDate(originalResponse.data);
     return originalResponse;
+});
+
+axiosInstance.interceptors.request.use((originalRequest) => {
+    const headerToken = getUserAccessToken();
+    if (headerToken) {
+        originalRequest.headers['Authorization'] = `Bearer ${headerToken}`;
+    }
+    return originalRequest;
 });

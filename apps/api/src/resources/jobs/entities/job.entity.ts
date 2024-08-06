@@ -1,9 +1,8 @@
-import { IJob } from '@repo/shared';
-import { Logger } from '../../abstract/logger.abstract';
+import { Logger } from './../../abstract/logger.abstract';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Job extends Logger implements IJob {
+export class Job extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 

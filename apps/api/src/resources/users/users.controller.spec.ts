@@ -1,19 +1,17 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { randUser } from '@ngneat/falso';
-import { createMockUser, repositoryMockFactory } from '@repo/testing';
+import { Request } from 'express';
 import * as _ from 'lodash';
+import { createMockUser, repositoryMockFactory } from 'test';
+import { AccessService } from '../access/access.service';
+import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { UserCompany } from './entities/user-company.entity';
-import { AccessService } from '../access/access.service';
-import { createMock } from '@golevelup/ts-jest';
-import { Request } from 'express';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { RolesService } from '../roles/roles.service';
-import { UsersCompanyService } from './users-company.service';
 
 describe('UsersController', () => {
     let controller: UsersController;
@@ -26,9 +24,7 @@ describe('UsersController', () => {
             controllers: [UsersController],
             providers: [
                 UsersService,
-                UsersCompanyService,
                 { provide: getRepositoryToken(User), useFactory: repositoryMockFactory },
-                { provide: getRepositoryToken(UserCompany), useFactory: repositoryMockFactory },
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: RolesService, useValue: createMock<RolesService>() },
             ],
@@ -49,7 +45,7 @@ describe('UsersController', () => {
 
     it.skip('should create a user', async () => {
         const user = createMockUser();
-        const publicUser = UsersService.toPublic(user);
+        const publicUser = service.toPublic(user);
         jest.spyOn(service, 'create').mockReturnValue(Promise.resolve(user));
         const payload: CreateUserDto = _.omit(user, ['id']);
         const res = await controller.create({ body: payload } as any as Request, payload);
@@ -58,9 +54,9 @@ describe('UsersController', () => {
 
     it.skip('should get user details', async () => {
         const user = createMockUser();
-        const publicUser = UsersService.toPublic(user);
+        const publicUser = service.toPublic(user);
         jest.spyOn(service, 'findOne').mockReturnValue(Promise.resolve(user));
-        const res = await controller.findOne({ body: {} } as any as Request, user.id);
+        const res = await controller.findOne(user.id);
         expect(res).toStrictEqual(publicUser);
     });
 
@@ -73,7 +69,7 @@ describe('UsersController', () => {
             lastName: newUser.lastName,
             email: newUser.email,
         };
-        const publicUser = UsersService.toPublic(updatedUser);
+        const publicUser = service.toPublic(updatedUser);
         jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(updatedUser));
         const payload: UpdateUserDto = _.omit(user, ['id']);
         const res = await controller.update({ body: payload } as any as Request, user.id, {
@@ -86,7 +82,7 @@ describe('UsersController', () => {
 
     it.skip('should remove a user', async () => {
         const user = createMockUser();
-        const publicUser = UsersService.toPublic(user);
+        const publicUser = service.toPublic(user);
         jest.spyOn(service, 'remove').mockReturnValue(Promise.resolve(user));
         const res = await controller.remove({ body: {} } as any as Request, user.id);
         expect(res).toStrictEqual(publicUser);

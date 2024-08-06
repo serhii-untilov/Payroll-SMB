@@ -1,12 +1,13 @@
+import { PayFundCalculationService } from '@/processor/pay-fund-calculation/pay-fund-calculation.service';
+import { PaymentCalculationService } from '@/processor/payment-calculation/payment-calculation.service';
+import { PayPeriodCalculationService } from '@/processor/pay-period-calculation/pay-period-calculation.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
+import { PayPeriodsService } from '@/resources';
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyListenerService } from './company-listener.service';
-import { PayrollCalculationService } from '../../../processor/payrollCalculation/payrollCalculation.service';
-import { createMock } from '@golevelup/ts-jest';
-import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
-import { PayPeriodsService } from '../../../resources/pay-periods/payPeriods.service';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { PayPeriodCalculationService } from './../../payPeriodCalculation/payPeriodCalculation.service';
-import { SseService } from './../../serverSentEvents/sse.service';
 
 describe('CompanyListenerService', () => {
     let service: CompanyListenerService;
@@ -19,6 +20,11 @@ describe('CompanyListenerService', () => {
                     provide: PayrollCalculationService,
                     useValue: createMock<PayrollCalculationService>(),
                 },
+                {
+                    provide: PaymentCalculationService,
+                    useValue: createMock<PaymentCalculationService>(),
+                },
+
                 {
                     provide: PayFundCalculationService,
                     useValue: createMock<PayFundCalculationService>(),

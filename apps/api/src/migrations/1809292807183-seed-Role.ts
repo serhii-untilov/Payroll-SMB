@@ -1,16 +1,16 @@
-import { RoleType } from '@repo/shared';
-import { Role } from '../resources/roles/entities/role.entity';
-import { langPipe } from '../utils/langPipe';
+import { RoleType } from '../types';
+import { Role } from './../resources/roles/entities/role.entity';
+import { langPipe } from '../utils/lib/langPipe';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-const lang = process.env.LANGUAGE;
+const lang = process.env.LANGUAGE || 'uk';
 const entity = Role;
 const recordList = [
-    { name: { en: 'System', uk: 'Система' }, type: RoleType.SYSTEM },
-    { name: { en: 'Admin', uk: 'Адміністратор' }, type: RoleType.ADMIN },
-    { name: { en: 'Employer', uk: 'Роботодавець' }, type: RoleType.EMPLOYER },
-    { name: { en: 'Employee', uk: 'Працівник' }, type: RoleType.EMPLOYEE },
-    { name: { en: 'Guest', uk: 'Гість' }, type: RoleType.GUEST },
+    { name: { en: 'System', uk: 'Система' }, type: RoleType.System },
+    { name: { en: 'Admin', uk: 'Адміністратор' }, type: RoleType.Admin },
+    { name: { en: 'Employer', uk: 'Роботодавець' }, type: RoleType.Employer },
+    { name: { en: 'Employee', uk: 'Працівник' }, type: RoleType.Employee },
+    { name: { en: 'Guest', uk: 'Гість' }, type: RoleType.Guest },
 ];
 
 export class Seed1809292807183 implements MigrationInterface {

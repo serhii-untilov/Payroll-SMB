@@ -1,4 +1,3 @@
-import { ILogger } from '@repo/shared';
 import {
     Column,
     CreateDateColumn,
@@ -7,15 +6,15 @@ import {
     VersionColumn,
 } from 'typeorm';
 
-export abstract class Logger implements ILogger {
+export abstract class Logger {
     @CreateDateColumn()
-    createdDate?: Date;
+    createdDate: Date;
 
     @Column({ type: 'integer', nullable: true })
     createdUserId?: number | null;
 
     @UpdateDateColumn()
-    updatedDate?: Date;
+    updatedDate: Date;
 
     @Column({ type: 'integer', nullable: true })
     updatedUserId?: number | null;
@@ -26,6 +25,6 @@ export abstract class Logger implements ILogger {
     @Column({ type: 'integer', nullable: true })
     deletedUserId?: number | null;
 
-    @VersionColumn({ default: 1, nullable: true })
-    version?: number | null;
+    @VersionColumn({ default: 1 })
+    version: number;
 }

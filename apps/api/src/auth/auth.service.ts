@@ -1,3 +1,6 @@
+import { CreateUserDto } from './../resources/users/dto/create-user.dto';
+import { AccessService, UsersService } from '@/resources';
+import { AccessType, ResourceType, RoleType } from '@/types';
 import {
     BadRequestException,
     ConflictException,
@@ -10,12 +13,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from '../resources/users/dto/create-user.dto';
-import { UsersService } from '../resources/users/users.service';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';
-import { AccessService } from './../resources/access/access.service';
-import { AccessType, ResourceType, RoleType } from '@repo/shared';
 
 @Injectable()
 export class AuthService {
@@ -123,14 +122,14 @@ export class AuthService {
 
     async demo(): Promise<AuthDto> {
         await this.accessService.availableForRoleTypeOrFail(
-            RoleType.EMPLOYER,
-            ResourceType.DEMO,
-            AccessType.ACCESS,
+            RoleType.Employer,
+            ResourceType.Demo,
+            AccessType.Access,
         );
         if (process.env['DEMO_AVAILABLE'] === 'true') {
             return {
-                email: process.env['DEMO_LOGIN'],
-                password: process.env['DEMO_PASSWORD'],
+                email: process.env['DEMO_LOGIN'] || '',
+                password: process.env['DEMO_PASSWORD'] || '',
                 rememberMe: true,
             };
         }

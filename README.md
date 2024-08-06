@@ -1,17 +1,22 @@
 # Payroll SMB
 
-The Payroll SMB application provides a solution for employers and employees to calculate salaries and taxes based on the laws of the chosen country.
+**Payroll SMB** is a web application that:
+
+- helps employers and employees calculate salaries and taxes according to the chosen country's laws.
+- features a responsive UI design, multi-tenant architecture, auto-generated REST API, role-based access with JWT authorization, event-driven calculation processing, automatic document preparation according to business process schedules, and SSE enabling the
+client to receive automatic updates from the server.
 
 ## Key features
 
 - UI Responsive Design
 - Multi-tenant architecture
-- Mono-repository, shared types libs between back-end and front-end apps
+- Auto-generated REST API
 - REST API documented in Open API by Swagger
+- Mono-repository, shared types libs between back-end and front-end apps
 - Role-based access, JWT authorization
 - Event-driven calculate processing
 - Automatic documents prepared according to the business process schedule
-- Automatic update of data on the client after the completion of the batch calculation on the server
+- Automatic update of data on the client after the completion of the batch calculation on the server (SSE)
 
 ## Live Demo
 
@@ -19,7 +24,7 @@ Link to [Live Demo](https://payroll.untilov.com.ua)
 
 ## Quick Start
 
-For a quick start, run this command:
+For a quick start, run this command on a Linux server:
 
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
@@ -124,6 +129,20 @@ Display the resource usage statistics
 ./stats
 ```
 
+Creating a backup of a database
+
+``` bash
+./scripts/db_backup
+```
+
+This will create a ./postgres-backup/payroll.dump file.
+
+Restoring a database from a backup file
+
+``` bash
+./scripts/db_restore
+```
+
 ## Configuration
 
 On a **production** server:
@@ -220,8 +239,13 @@ In **development** mode:
 |Regular Payment            |Виплата зарплати          |regularPayment     |                                                                                |
 |Fast Payment               |Виплата у міжрозрахунок   |fastPayment        |Виплата у міжрозрахунковий період: оплата відпустки, розрахунок при звільненні  |
 |Overdue Tasks              |Прострочені задачі        |overdueTasks       |                                                                                |
+|Application-calculation    |Заява-розрахунок          |appCalcSif         |Application-calculation to the Social Insurance Fund - Заява-розрахунок до ФСС  |
+|SIF                        |ФСС                       |sif                |The Social Insurance Fund - Фонд Соціального Страхування                        |
+|Mandatory Payments         |Обов'язкові платежі       |mandatoryPayments  |Обов'язкові платежі при виплаті                                                 |
+|Gross Pay                  |Разом нараховано          |grossPay           |Total amount of money an employee earns before any deductions are taken out     |
+|Net Pay                    |До виплати                |netPay             |                                                                                |
 
-## Development
+## Project Development History
 
 ### Initial script
 
@@ -251,10 +275,14 @@ npm i --workspace @repo/api --save-dev @golevelup/ts-jest
 npm i --workspace @repo/api --save-dev webpack-node-externals run-script-webpack-plugin webpack
 npm i --workspace @repo/api --save-dev webpack webpack-cli
 npm i --workspace @repo/api --save @nestjs/event-emitter
+npm i --workspace @repo/api --save-dev @swc/cli @swc/core
 npm i --workspace @repo/api --save-dev tsconfig-paths
+npm i --workspace @repo/api --save typeorm
+npm i --workspace @repo/api --save reflect-metadata
+npm i --workspace @repo/api --save-dev @types/node
+npm i --workspace @repo/api --save-dev supertest
 
 # Init "web" application for front-end
-#npm i --workspace @repo/web --save react-query
 npm --workspace @repo/web i @tanstack/react-query
 npm i --workspace @repo/web --save axios
 npm i --workspace @repo/web --save react-router-dom
@@ -263,8 +291,6 @@ npm i --workspace @repo/web --save @mui/material @emotion/react @emotion/styled
 npm i --workspace @repo/web --save @fontsource/roboto
 npm i --workspace @repo/web --save @mui/icons-material
 npm i --workspace @repo/web --save @mui/x-data-grid
-# npm i --workspace @repo/web --save @mui/x-date-pickers
-# npm i --workspace @repo/web --save moment
 npm i --workspace @repo/web --save notistack
 npm i --workspace @repo/web --save-dev typescript jest ts-jest @types/jest
 npm i --workspace @repo/web --save avvvatars-react
@@ -277,18 +303,21 @@ npm i --workspace @repo/web --save-dev rollup-plugin-visualizer
 npm i --workspace @repo/web --save react-error-boundary
 npm i --workspace @repo/web --save date-fns
 npm i --workspace @repo/web --save react-number-format
-# npm i --workspace @repo/web --save module-alias
 
 # Init "shared" library for common types and interfaces
 mkdir packages/shared
 npm i --workspace @repo/shared --save sqlite3 ts-loader typeorm
 npm i --workspace @repo/shared --save-dev ts-node typescript
 npm i --workspace @repo/shared --save date-fns
+npm i --workspace @repo/shared --save @repo/openapi
 
 # Init "utils" shared library for common functions
 mkdir packages/utils
 npm i --workspace @repo/shared --save ts-loader
 npm i --workspace @repo/shared --save-dev ts-node typescript jest
+
+# Common packages
+npm i @openapitools/openapi-generator-cli -D
 
 ```
 
@@ -300,6 +329,8 @@ npx --workspace @repo/api nest generate resource users resources
 npx --workspace @repo/api nest generate resource laws resources
 npx --workspace @repo/api nest generate resource accounting resources
 npx --workspace @repo/api nest generate resource companies resources
+npx --workspace @repo/api nest generate resource userCompanies resources
+npx --workspace @repo/api nest generate resource users resources
 npx --workspace @repo/api nest generate resource locales resources
 npx --workspace @repo/api nest g module auth
 npx --workspace @repo/api nest g controller auth
@@ -330,6 +361,14 @@ npx --workspace @repo/api nest generate service taskList processor
 npx --workspace @repo/api nest generate service payPeriodCalculation processor
 npx --workspace @repo/api nest generate controller serverEvent processor
 npx --workspace @repo/api nest generate service serverEvent processor/serverEvent
+npx --workspace @repo/api nest generate resource payments resources
+npx --workspace @repo/api nest generate service paymentPositions resources/payments
+npx --workspace @repo/api nest generate service paymentDeductions resources/payments
+npx --workspace @repo/api nest generate service paymentFunds resources/payments
+npx --workspace @repo/api nest generate service paymentCalculation processor
+npx --workspace @repo/api nest generate controller paymentPositions resources/payments
+npx --workspace @repo/api nest generate controller paymentDeductions resources/payments
+npx --workspace @repo/api nest generate controller paymentFunds resources/payments
 
 ```
 
@@ -406,3 +445,16 @@ openssl rand -base64 60
 - [**VPS** - Initial Server Setup with Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-20-04)
 - [**VPS** - Disabling Password Authentication on Your Server](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04)
 - [**VPS** - How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
+- [**Redux** - Getting Started with React Redux](https://react-redux.js.org/introduction/getting-started)
+- [**Backup** - Docker Postgres Backup/Restore Guide (with examples)](https://simplebackups.com/blog/docker-postgres-backup-restore-guide-with-examples/#before-you-begin)
+- [**React Hook Form** - Combined Add/Edit (Create/Update) Form Example](https://jasonwatmore.com/post/2020/10/14/react-hook-form-combined-add-edit-create-update-form-example)
+- [**ESLint** - ESLint no-unused-vars: _ ignore prefix](https://johnnyreilly.com/typescript-eslint-no-unused-vars)
+- [**TypeScript** - How to Remove a Property from an Object in TypeScript](https://bobbyhadz.com/blog/typescript-object-remove-property)
+- [**Yup** - Schema builder for runtime value parsing and validation](https://yup-docs.vercel.app/docs/intro)
+- [**React** - Path To A Clean(er) React Architecture](https://profy.dev/article/react-architecture-api-client)
+- [**Shared DTO** - Domain Entities & DTOs](https://profy.dev/article/react-architecture-domain-entities-and-dtos)
+- [**Shared DTO** - A Guide to OpenAPI Code Generation for TypeScript](https://www.stefanwille.com/2021/05/2021-05-30-openapi-code-generator-for-typescript)
+- [**Jest** - Jest with TypeScript and aliased imports (custom paths)](https://dev.to/mliakos/jest-with-typescript-and-aliased-imports-custom-paths-40d4)
+- [**NestJS** - Best Way to Structure Your Directory/Code](https://medium.com/the-crowdlinker-chronicle/best-way-to-structure-your-directory-code-nestjs-a06c7a641401)
+- [**React Query** - The Official React Query Course](https://query.gg/?s=dom)
+- [**React Query** - Mastering Mutations in React Query](https://tkdodo.eu/blog/mastering-mutations-in-react-query)

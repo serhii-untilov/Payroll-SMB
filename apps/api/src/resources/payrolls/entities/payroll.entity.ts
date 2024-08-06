@@ -1,16 +1,27 @@
-import { HoursByDay, IPayroll } from '@repo/shared';
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Logger } from '../../../resources/abstract/logger.abstract';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    Index,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Relation,
+} from 'typeorm';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
+import { FixedFlags, HoursByDay, RecordFlags, ResourceType } from './../../../types';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class Payroll extends Logger implements IPayroll {
+@Index('IDX_PAYROLL_POSITION_PAY_PERIOD', ['positionId', 'payPeriod'])
+@Index('IDX_PAYROLL_SOURCE_TYPE_ID', ['sourceType', 'sourceId'])
+export class Payroll extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
     @ManyToOne(() => Position, { createForeignKeyConstraints: false })
-    position?: Position;
+    position?: Relation<Position>;
 
     @Column({ type: 'integer' })
     positionId: number;
@@ -22,7 +33,7 @@ export class Payroll extends Logger implements IPayroll {
     accPeriod: Date;
 
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
-    paymentType?: PaymentType;
+    paymentType?: Relation<PaymentType>;
 
     @Column({ type: 'integer' })
     paymentTypeId: number;
@@ -33,59 +44,62 @@ export class Payroll extends Logger implements IPayroll {
     @Column({ type: 'date' })
     dateTo: Date;
 
-    @Column({ type: 'varchar', length: 10, nullable: true })
-    sourceType?: string; // See enum ResourceType
+    @Column({ type: 'varchar', length: 20, default: '' })
+    @ApiProperty({ enum: ResourceType, enumName: 'ResourceType' })
+    sourceType: ResourceType;
 
     @Column({ type: 'integer', nullable: true })
-    sourceId?: number;
+    sourceId: number | null;
 
     @Column({ type: 'date', nullable: true })
-    dateBegin?: Date;
+    dateBegin: Date | null;
 
     @Column({ type: 'date', nullable: true })
-    dateEnd?: Date;
+    dateEnd: Date | null;
 
     @Column({ type: 'integer', default: 0 })
-    planDays?: number;
+    planDays: number;
 
     @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
-    planHours?: number;
+    planHours: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    planSum?: number;
+    planSum: number;
 
     @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
-    rate?: number;
+    rate: number;
 
     @Column({ type: 'integer', default: 0 })
-    factDays?: number;
+    factDays: number;
 
     @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
-    factHours?: number;
+    factHours: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    factSum?: number;
+    factSum: number;
 
     @Column({ type: 'integer', default: 0 })
-    mask1?: number;
+    mask1: number;
 
     @Column({ type: 'integer', default: 0 })
-    mask2?: number;
+    mask2: number;
+
+    @Column({ type: 'bigint' })
+    @ApiProperty({ enum: RecordFlags, default: 0, enumName: 'RecordFlags' })
+    recordFlags: RecordFlags;
 
     @Column({ type: 'bigint', default: 0 })
-    recordFlags?: number;
-
-    @Column({ type: 'bigint', default: 0 })
-    fixedFlags?: number;
+    @ApiProperty({ enum: FixedFlags, enumName: 'FixedFlags' })
+    fixedFlags: FixedFlags;
 
     @Column({ type: 'jsonb', nullable: true })
-    planHoursByDay: HoursByDay;
+    planHoursByDay: HoursByDay | null;
 
     @Column({ type: 'jsonb', nullable: true })
-    factHoursByDay: HoursByDay;
+    factHoursByDay: HoursByDay | null;
 
     @Column({ type: 'integer', nullable: true })
-    parentId?: number;
+    parentId: number | null;
 
     @AfterLoad()
     transform() {

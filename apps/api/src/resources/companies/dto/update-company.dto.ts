@@ -1,5 +1,8 @@
-import { PartialType } from '@nestjs/swagger';
-import { IUpdateCompany } from '@repo/shared';
+import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
+import { Company } from './../entities/company.entity';
 import { CreateCompanyDto } from './create-company.dto';
 
-export class UpdateCompanyDto extends PartialType(CreateCompanyDto) implements IUpdateCompany {}
+export class UpdateCompanyDto extends IntersectionType(
+    PickType(Company, ['version']),
+    PartialType(CreateCompanyDto),
+) {}

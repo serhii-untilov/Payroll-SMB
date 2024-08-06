@@ -1,12 +1,12 @@
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-    IPayFundCategoriesTotal,
-    IPayFundGroupsTotal,
+    PayFundCategoriesTotal,
+    PayFundGroupsTotal,
     ResourceType,
     defaultPayFundCategoriesTotal,
     defaultPayFundGroupsTotal,
-} from '@repo/shared';
+} from '@/types';
 import { Between, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -19,7 +19,7 @@ import { PayFund } from './entities/pay-fund.entity';
 
 @Injectable()
 export class PayFundsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.PAY_FUND;
+    public readonly resourceType = ResourceType.PayFund;
 
     constructor(
         @InjectRepository(PayFund)
@@ -38,12 +38,13 @@ export class PayFundsService extends AvailableForUserCompany {
         const { positionId } = await this.repository.findOneOrFail({
             select: { positionId: true },
             where: { id: entityId },
+            withDeleted: true,
         });
-        return (await this.positionsService.findOne(positionId)).companyId;
+        return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
     async getPositionCompanyId(positionId: number): Promise<number> {
-        return (await this.positionsService.findOne(positionId)).companyId;
+        return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
     async create(userId: number, payload: CreatePayFundDto): Promise<PayFund> {
@@ -55,20 +56,20 @@ export class PayFundsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(userId: number, params: FindPayFundDto): Promise<PayFund[]> {
-        const { positionId, companyId, relations, ...other } = params;
+    async findAll(params: FindPayFundDto): Promise<PayFund[]> {
+        const { positionId, companyId, payPeriod, relations } = params;
         if (!positionId && !companyId) {
             throw new BadRequestException('Should be defined companyId or positionId');
         }
         return await this.repository.find({
-            where: {
-                ...other,
-                ...(positionId ? { positionId } : {}),
-                ...(companyId ? { position: { companyId } } : {}),
-            },
             relations: {
                 position: relations,
                 payFundType: relations,
+            },
+            where: {
+                ...(positionId ? { positionId } : {}),
+                ...(payPeriod ? { payPeriod } : {}),
+                ...(companyId ? { position: { companyId } } : {}),
             },
         });
     }
@@ -91,7 +92,7 @@ export class PayFundsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean): Promise<PayFund> {
+    async findOne(id: number, relations: boolean): Promise<PayFund> {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: { position: relations, payFundType: relations },
@@ -110,17 +111,17 @@ export class PayFundsService extends AvailableForUserCompany {
 
     async remove(userId: number, id: number) {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-        return await this.repository.findOneOrFail({ where: { id } });
+        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
-    async delete(userId: number, id: number) {
-        await this.repository.delete(id);
+    async delete(ids: number[]) {
+        await this.repository.delete(ids);
     }
 
     async payFundPositionPayFundCategories(
         positionId: number,
         payPeriod: Date,
-    ): Promise<IPayFundCategoriesTotal> {
+    ): Promise<PayFundCategoriesTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('pay-fund-type.payFundCategory', 'payFundCategory')
@@ -142,7 +143,7 @@ export class PayFundsService extends AvailableForUserCompany {
     async payFundPositionPayFundGroups(
         positionId: number,
         payPeriod: Date,
-    ): Promise<IPayFundGroupsTotal> {
+    ): Promise<PayFundGroupsTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('payFundType.payFundGroup', 'payFundGroup')
@@ -164,7 +165,7 @@ export class PayFundsService extends AvailableForUserCompany {
     async payFundCompanyPayFundCategories(
         companyId: number,
         payPeriod: Date,
-    ): Promise<IPayFundCategoriesTotal> {
+    ): Promise<PayFundCategoriesTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('payFundType.payFundCategory', 'payFundCategory')
@@ -188,7 +189,7 @@ export class PayFundsService extends AvailableForUserCompany {
     async payFundCompanyPayFundGroups(
         companyId: number,
         payPeriod: Date,
-    ): Promise<IPayFundGroupsTotal> {
+    ): Promise<PayFundGroupsTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('payFundType.payFundGroup', 'payFundGroup')

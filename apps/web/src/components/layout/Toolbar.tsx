@@ -17,11 +17,12 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { Box, IconButton, Stack, StackProps } from '@mui/material';
 import { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button } from './Button';
 import { Tooltip } from './Tooltip';
 
 type Func<T> = (value: T) => void;
 
-export interface Props extends StackProps {
+interface Props extends StackProps {
     // Left side
     onAdd?: Func<any> | 'disabled' | undefined;
     onSave?: Func<any> | 'disabled' | undefined;
@@ -30,6 +31,8 @@ export interface Props extends StackProps {
     onCalculate?: Func<any> | 'disabled' | undefined;
     onClose?: Func<any> | 'disabled' | undefined;
     onOpen?: Func<any> | 'disabled' | undefined;
+    onProcess?: Func<any> | 'disabled' | undefined;
+    onWithdraw?: Func<any> | 'disabled' | undefined;
     onTreeView?: Func<any> | 'disabled' | undefined;
     onPrint?: Func<any> | 'disabled' | undefined;
     onExport?: Func<any> | 'disabled' | undefined;
@@ -44,10 +47,23 @@ interface ToolbarItemProps extends PropsWithChildren {
     item?: Func<any> | 'disabled' | undefined;
     title?: string;
     color?: any;
+    button?: boolean;
 }
 
-function ToolbarItem({ item, title, color, children }: ToolbarItemProps) {
-    return item ? (
+function ToolbarItem({ item, title, color, children, button }: ToolbarItemProps) {
+    if (!item) return null;
+    return button ? (
+        <Button
+            variant="text"
+            sx={{ textTransform: 'none' }}
+            endIcon={children}
+            color={item === 'disabled' ? 'inherit' : color || 'primary'}
+            disabled={item === 'disabled'}
+            onClick={typeof item === 'function' ? item : () => {}}
+        >
+            {title}
+        </Button>
+    ) : (
         <Tooltip placement="top-start" title={title}>
             <Box sx={{ color: 'action.disabledBackground' }}>
                 <IconButton
@@ -59,10 +75,10 @@ function ToolbarItem({ item, title, color, children }: ToolbarItemProps) {
                 </IconButton>
             </Box>
         </Tooltip>
-    ) : null;
+    );
 }
 
-export function Toolbar(props: Props) {
+export default function Toolbar(props: Props) {
     const { t } = useTranslation();
 
     return (
@@ -105,6 +121,20 @@ export function Toolbar(props: Props) {
                     </ToolbarItem>
 
                     <ToolbarItem item={props?.onOpen} title={t('Open')} color={'warning'}>
+                        <UndoRounded />
+                    </ToolbarItem>
+
+                    <ToolbarItem item={props?.onProcess} title={t('Process')} color={'success'}>
+                        <RedoRounded />
+                    </ToolbarItem>
+
+                    <ToolbarItem
+                        // button={props?.onWithdraw !== 'disabled'}
+                        item={props?.onWithdraw}
+                        title={t('Withdraw')}
+                        color={'warning'}
+                    >
+                        {/* <CancelScheduleSend /> */}
                         <UndoRounded />
                     </ToolbarItem>
 

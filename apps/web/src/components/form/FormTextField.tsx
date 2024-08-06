@@ -1,18 +1,17 @@
 import { OutlinedInput, OutlinedInputProps } from '@mui/material';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { grey } from '@mui/material/colors';
 import { Controller } from 'react-hook-form';
 import { InputLabel } from '../layout/InputLabel';
 
 export type FormTextFieldProps = OutlinedInputProps & {
     name: string;
     control: any;
-    label: string;
+    label?: string;
     rules?: any;
     autoFocus?: boolean;
+    disabled?: boolean;
 };
 
-export const FormTextField = (props: FormTextFieldProps) => {
+export function FormTextField(props: FormTextFieldProps) {
     const { label } = props;
     return (
         <>
@@ -21,8 +20,9 @@ export const FormTextField = (props: FormTextFieldProps) => {
                 name={props.name}
                 control={props.control}
                 rules={props.rules}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <OutlinedInput
+                        disabled={!!props.disabled}
                         autoFocus={props?.autoFocus}
                         size="small"
                         error={error != undefined}
@@ -42,4 +42,4 @@ export const FormTextField = (props: FormTextFieldProps) => {
             />
         </>
     );
-};
+}

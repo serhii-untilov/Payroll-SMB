@@ -1,3 +1,8 @@
+import { api } from '@/api';
+import { useAuth } from '@/hooks/context/useAuth';
+import useLocale from '@/hooks/context/useLocale';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
+import { defaultTheme } from '@/themes/defaultTheme';
 import {
     ThemeOptions,
     ThemeProvider,
@@ -5,28 +10,22 @@ import {
     responsiveFontSizes,
     useMediaQuery,
 } from '@mui/material';
-import { ICompany, IUserCompany, ServerEvent, monthBegin } from '@repo/shared';
-import { useQueryClient } from '@tanstack/react-query';
-import { format, startOfMonth } from 'date-fns';
+import { Company, ResourceType, UserCompany } from '@repo/openapi';
+import { monthBegin } from '@repo/shared';
+import { format } from 'date-fns';
 import { Dispatch, FC, ReactNode, createContext, useEffect, useMemo, useState } from 'react';
-import useAuth from '../hooks/useAuth';
-import useLocale from '../hooks/useLocale';
-import { getCompany } from '../services/company.service';
-import { getCurrentPayPeriodDateFrom } from '../services/payPeriod.service';
-import { getUserCompanyList } from '../services/user.service';
-import { defaultTheme } from '../themes/defaultTheme';
 
 export type AppContextType = {
     compactView: boolean;
     setCompactView: Dispatch<boolean>;
-    company: ICompany | null | undefined;
-    setCompany: Dispatch<ICompany | null>;
+    company: Company | undefined;
+    setCompany: Dispatch<Company | undefined>;
     theme: ThemeOptions;
     themeMode: string;
     setThemeMode: Dispatch<string>;
     switchThemeMode: () => void;
-    payPeriod: Date | undefined | null;
-    setPayPeriod: Dispatch<Date | undefined | null>;
+    payPeriod: Date;
+    setPayPeriod: Dispatch<Date>;
     serverEvent: string;
 };
 
@@ -52,18 +51,18 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
     const { children } = props;
     const [compactView, setCompactView] = useState(false);
     const wideScreen = useMediaQuery('(min-width:900px)');
-    const [userCompanyList, setUserCompanyList] = useState<IUserCompany[]>([]);
-    const [company, setCompany] = useState<ICompany | null | undefined>(null);
-    const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') || 'light');
+    const [userCompanyList, setUserCompanyList] = useState<UserCompany[]>([]);
+    const [company, setCompany] = useState<Company | undefined>();
+    const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') ?? 'light');
     const { user } = useAuth();
     const { locale } = useLocale();
     const theme = useMemo(
         () => responsiveFontSizes(createTheme(defaultTheme(themeMode), locale.locale)),
         [themeMode, locale],
     );
-    const [payPeriod, setPayPeriod] = useState<Date | undefined | null>(null);
+    const [payPeriod, setPayPeriod] = useState<Date>(monthBegin(new Date()));
     const [serverEvent, setServerEvent] = useState('');
-    const queryClient = useQueryClient();
+    const invalidateQueries = useInvalidateQueries();
 
     useEffect(() => {
         setCompactView(!wideScreen);
@@ -71,19 +70,21 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initCompanyList = async () => {
-            const userCompanyList = user?.id ? await getUserCompanyList(user?.id, true) : [];
-            setUserCompanyList(userCompanyList);
+            const response = user?.id
+                ? (await api.userCompaniesFindAll({ userId: user.id, relations: true })).data
+                : [];
+            setUserCompanyList(response);
         };
         initCompanyList();
     }, [user]);
 
     useEffect(() => {
         const initCompany = async () => {
-            const companyId = +(localStorage.getItem('company') || 0);
+            const companyId = +(localStorage.getItem('company') ?? 0);
             if (userCompanyList.length) {
                 const userCompany =
-                    userCompanyList.find((o) => o.companyId === companyId) || userCompanyList[0];
-                const currentCompany = await getCompany(userCompany.companyId);
+                    userCompanyList.find((o) => o.companyId === companyId) ?? userCompanyList[0];
+                const currentCompany = (await api.companiesFindOne(userCompany.companyId)).data;
                 setCompany(currentCompany);
                 localStorage.setItem('company', currentCompany.id.toString());
             }
@@ -103,8 +104,10 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         const initPayPeriod = async () => {
-            const current: Date =
-                (await getCurrentPayPeriodDateFrom(company?.id)) || monthBegin(new Date());
+            const currentPayPeriod = company?.id
+                ? (await api.payPeriodsFindCurrent({ companyId: company?.id })).data
+                : null;
+            const current: Date = currentPayPeriod?.dateFrom ?? monthBegin(new Date());
             const currentPeriodString = localStorage.getItem('currentPayPeriod');
             const lastCurrent: Date = monthBegin(
                 currentPeriodString ? new Date(currentPeriodString) : new Date(),
@@ -134,28 +137,28 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
 
     useEffect(() => {
         if (eventSource) {
-            eventSource.onerror = function (event) {
-                // setServerEvent(ServerEvent.COMMUNICATION_ERROR);
-                // console.log(
-                //     `SSE: ${JSON.stringify(event, ['message', 'arguments', 'type', 'name'])}`,
-                // );
-            };
+            // eventSource.onerror = function (event) {
+            //     setServerEvent(ServerEvent.COMMUNICATION_ERROR);
+            //     console.log(
+            //         `SSE: ${JSON.stringify(event, ['message', 'arguments', 'type', 'name'])}`,
+            //     );
+            // };
             eventSource.onmessage = async (event) => {
                 if (event.data.includes('finished')) {
-                    ['company', 'department', 'payPeriod', 'position', 'person', 'task'].forEach(
-                        async (key) => {
-                            await queryClient.invalidateQueries({
-                                queryKey: [key],
-                                refetchType: 'all',
-                            });
-                        },
-                    );
+                    invalidateQueries([
+                        ResourceType.Company,
+                        ResourceType.Department,
+                        ResourceType.PayPeriod,
+                        ResourceType.Position,
+                        ResourceType.Person,
+                        ResourceType.Task,
+                        ResourceType.Payment,
+                    ]);
                 }
                 setServerEvent(event.data);
-                // console.log(`New company ${company?.id} message:`, event.data);
             };
         }
-    }, [eventSource, company, queryClient]);
+    }, [eventSource, company, invalidateQueries]);
 
     const switchThemeMode = () => {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light');

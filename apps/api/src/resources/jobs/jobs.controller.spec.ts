@@ -1,11 +1,11 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { repositoryMockFactory } from '@repo/testing';
+import { repositoryMockFactory } from 'test';
+import { AccessService } from '../access/access.service';
 import { Job } from './entities/job.entity';
 import { JobsController } from './jobs.controller';
 import { JobsService } from './jobs.service';
-import { AccessService } from '../access/access.service';
-import { createMock } from '@golevelup/ts-jest';
 
 describe('JobsController', () => {
     let controller: JobsController;

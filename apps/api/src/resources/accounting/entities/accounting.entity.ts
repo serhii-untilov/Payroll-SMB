@@ -1,9 +1,10 @@
-import { AccountingType, IAccounting } from '@repo/shared';
-import { Logger } from '../../../resources/abstract/logger.abstract';
+import { ApiProperty } from '@nestjs/swagger';
+import { AccountingType } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class Accounting extends Logger implements IAccounting {
+export class Accounting extends Logger {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -13,7 +14,8 @@ export class Accounting extends Logger implements IAccounting {
     @Column({
         type: 'varchar',
         length: 15,
-        default: AccountingType.GENERIC,
+        default: AccountingType.Generic,
     })
-    type: string;
+    @ApiProperty({ enum: AccountingType, enumName: 'AccountingType' })
+    type: AccountingType;
 }

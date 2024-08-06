@@ -26,5 +26,24 @@ module.exports = {
                 patterns: ['@mui/*/*/*'],
             },
         ],
+        '@typescript-eslint/no-unused-vars': [
+            'error',
+            {
+                args: 'all',
+                argsIgnorePattern: '^_',
+                caughtErrors: 'all',
+                caughtErrorsIgnorePattern: '^_',
+                destructuredArrayIgnorePattern: '^_',
+                varsIgnorePattern: '^_',
+                ignoreRestSiblings: true,
+            },
+        ],
+        'max-len': ['error', { code: 100, ignoreComments: true }],
+        'no-restricted-imports': [
+            'error',
+            {
+                patterns: ['@mui/*/*/*'],
+            },
+        ],
     },
 };

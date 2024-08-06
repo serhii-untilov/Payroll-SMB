@@ -1,4 +1,4 @@
-import { Department } from '../entities/department.entity';
+import { Department } from './../entities/department.entity';
 
 export class DepartmentUpdatedEvent {
     userId: number;

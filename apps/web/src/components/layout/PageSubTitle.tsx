@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { PropsWithChildren } from 'react';
 
 export function PageSubTitle({ children, ...other }: PropsWithChildren) {
@@ -9,7 +9,6 @@ export function PageSubTitle({ children, ...other }: PropsWithChildren) {
                 color="primary.main"
                 variant="h4"
                 noWrap
-                // align="center"
                 mb={{ xs: 1, sm: 2 }}
                 {...other}
             >

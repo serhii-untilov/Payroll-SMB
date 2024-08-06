@@ -1,7 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { repositoryMockFactory } from '@repo/testing';
+import { repositoryMockFactory } from 'test';
 import { AccessService } from '../access/access.service';
 import { PaymentType } from './entities/payment-type.entity';
 import { PaymentTypesController } from './payment-types.controller';

@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@/types';
 import { Repository } from 'typeorm';
 import { Accounting } from './entities/accounting.entity';
 
 @Injectable()
 export class AccountingService {
-    public readonly resourceType = ResourceType.ACCOUNTING;
+    public readonly resourceType = ResourceType.Accounting;
 
     constructor(
         @InjectRepository(Accounting)

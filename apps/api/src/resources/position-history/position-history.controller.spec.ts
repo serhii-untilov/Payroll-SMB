@@ -1,9 +1,9 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { repositoryMockFactory } from '@repo/testing';
+import { repositoryMockFactory } from 'test';
 import { AccessService } from '../access/access.service';
-import { PayPeriodsService } from '../pay-periods/payPeriods.service';
+import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionsService } from '../positions/positions.service';
 import { PositionHistory } from './entities/position-history.entity';
 import { PositionHistoryController } from './position-history.controller';

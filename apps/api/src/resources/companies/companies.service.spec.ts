@@ -2,9 +2,9 @@ import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
-import { MockType, createMockCompany, repositoryMockFactory } from '@repo/testing';
+import { MockType, createMockCompany, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
-import { UsersCompanyService } from '../users/users-company.service';
+import { UserCompaniesService } from '../user-companies/user-companies.service';
 import { UsersService } from '../users/users.service';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
@@ -21,7 +21,7 @@ describe('CompaniesService', () => {
                 CompaniesService,
                 { provide: getRepositoryToken(Company), useFactory: repositoryMockFactory },
                 { provide: UsersService, useValue: createMock<UsersService>() },
-                { provide: UsersCompanyService, useValue: createMock<UsersCompanyService>() },
+                { provide: UserCompaniesService, useValue: createMock<UserCompaniesService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],

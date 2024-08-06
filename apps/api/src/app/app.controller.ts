@@ -1,38 +1,40 @@
-import { Controller, Get, Header, Logger, Param, Post, StreamableFile } from '@nestjs/common';
+import { Body, Controller, Get, Header, Logger, Param, Post, StreamableFile } from '@nestjs/common';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { AppService } from './app.service';
-// import en from './locales/en.json';
-// import uk from './locales/uk.json';
 
 @Controller()
 export class AppController {
     private _logger: Logger = new Logger(AppController.name);
 
-    constructor(private readonly appService: AppService) {}
+    constructor(private readonly service: AppService) {}
 
     @Get('/')
     getHello(): string {
-        return this.appService.getHello();
+        return this.service.getHello();
     }
 
     @Get('/title')
     getTitle(): string {
-        return this.appService.getTitle();
+        return this.service.getTitle();
     }
 
     @Get('/locales/:lang/:ns.json')
     @Header('Content-Type', 'application/json')
-    getLocales(@Param() params): StreamableFile {
-        const fileName = join(process.cwd(), 'locales', params.lang, `${params.ns}.json`);
-        // console.log(params, fileName);
+    getLocales(@Param('lang') lang: string, @Param('ns') ns: string): StreamableFile {
+        const fileName = join(process.cwd(), 'locales', lang, `${ns}.json`);
         const file = createReadStream(fileName);
         return new StreamableFile(file);
     }
 
     @Post('/locales/add/:lng/:ns')
     @Header('Content-Type', 'application/json')
-    addLocales(@Param() params) {
-        this._logger.log('/locales/add/', params);
+    async addLocales(
+        @Param('lng') lng: string,
+        @Param('ns') ns: string,
+        @Body() payload: { key: string },
+    ) {
+        const { key } = payload;
+        await this.service.addLocaleKey(lng, ns, key);
     }
 }

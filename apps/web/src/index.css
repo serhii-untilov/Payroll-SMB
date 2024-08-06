@@ -3,10 +3,6 @@
   font-weight: 400;
   font-style: normal;
 
-  /* color-scheme: light dark; */
-  /* color: rgba(255, 255, 255, 0.87); */
-  /* background-color: #242424; */
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,15 +11,6 @@
 
 body {
   margin: 0;
-  /* display: flex; */
-  /* place-items: center; */
-
-  /* align-items: center;
-  justify-content: center;
-  text-align: center;
-
-  min-width: 320px;
-  min-height: 100vh; */
 }
 
 a:link {

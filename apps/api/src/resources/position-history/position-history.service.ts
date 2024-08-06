@@ -1,28 +1,24 @@
-import {
-    ConflictException,
-    Inject,
-    Injectable,
-    NotFoundException,
-    forwardRef,
-} from '@nestjs/common';
+import { ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType, castAsPositionHistory } from '@repo/shared';
 import { add, sub } from 'date-fns';
-import { FindOptionsWhere, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
-import { PayPeriodsService } from '../pay-periods/payPeriods.service';
+import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
-import { FindPositionHistoryDto } from './dto/find-position-history.dto';
+import { FindAllPositionHistoryDto } from './dto/find-all-position-history.dto';
+import { FindOnePositionHistoryDto } from './dto/find-one-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistory } from './entities/position-history.entity';
 
 @Injectable()
 export class PositionHistoryService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.POSITION;
+    public readonly resourceType = ResourceType.Position;
 
     constructor(
         @InjectRepository(PositionHistory)
@@ -42,12 +38,13 @@ export class PositionHistoryService extends AvailableForUserCompany {
         const { positionId } = await this.repository.findOneOrFail({
             select: { positionId: true },
             where: { id: entityId },
+            withDeleted: true,
         });
-        return (await this.positionsService.findOne(positionId)).companyId;
+        return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
     async getPositionCompanyId(positionId: number): Promise<number> {
-        return (await this.positionsService.findOne(positionId)).companyId;
+        return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
     async create(userId: number, payload: CreatePositionHistoryDto): Promise<PositionHistory> {
@@ -63,34 +60,52 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return record;
     }
 
-    async findAll(
-        userId: number,
-        positionId: number,
-        relations: boolean = false,
-    ): Promise<PositionHistory[]> {
-        return await this.repository.find({
+    async findAll(params: FindAllPositionHistoryDto): Promise<PositionHistory[]> {
+        const position = params.onPayPeriodDate
+            ? await this.positionsService.findOne(params.positionId)
+            : null;
+        const payPeriod =
+            params.onPayPeriodDate && position
+                ? await this.payPeriodsService.findOneBy({
+                      where: { companyId: position.companyId, dateFrom: params.onPayPeriodDate },
+                  })
+                : null;
+        const response = await this.repository.find({
             where: {
-                positionId,
+                positionId: params.positionId,
+                ...(params.onDate ? { dateFrom: LessThanOrEqual(params.onDate) } : {}),
+                ...(params.onDate ? { dateTo: MoreThanOrEqual(params.onDate) } : {}),
+                ...(params.onPayPeriodDate && payPeriod
+                    ? { dateFrom: LessThanOrEqual(payPeriod.dateTo) }
+                    : {}),
+                ...(params.onPayPeriodDate && payPeriod
+                    ? { dateTo: MoreThanOrEqual(payPeriod.dateFrom) }
+                    : {}),
             },
             relations: {
-                position: relations,
-                department: relations,
-                job: relations,
-                workNorm: relations,
-                paymentType: relations,
+                position: !!params.relations,
+                department: !!params.relations,
+                job: !!params.relations,
+                workNorm: !!params.relations,
+                paymentType: !!params.relations,
             },
         });
+        if (!!params.last && response.length > 1) {
+            response.sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
+            return [response[response.length - 1]];
+        }
+        return response;
     }
 
-    async findOne(id: number, relations: boolean = false): Promise<PositionHistory> {
+    async findOne(id: number, params?: FindOnePositionHistoryDto): Promise<PositionHistory> {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: {
-                position: relations,
-                department: relations,
-                job: relations,
-                workNorm: relations,
-                paymentType: relations,
+                position: !!params?.relations,
+                department: !!params?.relations,
+                job: !!params?.relations,
+                workNorm: !!params?.relations,
+                paymentType: !!params?.relations,
             },
         });
     }
@@ -101,11 +116,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         payload: UpdatePositionHistoryDto,
     ): Promise<PositionHistory> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         const updated = await this.repository.save({
             ...payload,
             id,
@@ -115,7 +126,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         await this.normalizeAfterCreateOrUpdate(userId, updated);
         const position = await this.positionsService.findOne(record.positionId);
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
-        return record;
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: number, id: number): Promise<PositionHistory> {
@@ -131,35 +142,6 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return record;
     }
 
-    async find(userId: number, params: FindPositionHistoryDto): Promise<PositionHistory[]> {
-        const position = await this.positionsService.findOne(params.positionId);
-        const where: FindOptionsWhere<PositionHistory> = castAsPositionHistory(params);
-        if (params.onDate) {
-            where.dateFrom = LessThanOrEqual(params.onDate);
-            where.dateTo = MoreThanOrEqual(params.onDate);
-        }
-        if (params.onPayPeriodDate) {
-            const payPeriod = await this.payPeriodsService.findOne({
-                where: {
-                    companyId: position.companyId,
-                    dateFrom: params.onPayPeriodDate,
-                },
-            });
-            where.dateFrom = LessThanOrEqual(payPeriod.dateTo);
-            where.dateTo = MoreThanOrEqual(payPeriod.dateFrom);
-        }
-        return this.repository.find({
-            where,
-            relations: {
-                position: !!params.relations,
-                department: !!params.relations,
-                job: !!params.relations,
-                workNorm: !!params.relations,
-                paymentType: !!params.relations,
-            },
-        });
-    }
-
     private async normalizeAfterCreateOrUpdate(
         userId: number,
         record: PositionHistory,
@@ -170,7 +152,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         }
         const list = (
             await this.repository.find({ where: { positionId: record.positionId } })
-        ).sort((a, b) => (a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0));
+        ).sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
         // Delete out of position's period
         for (const id of list
             .filter((o) => o.id !== record.id)
@@ -214,7 +196,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         }
         const list = (
             await this.repository.find({ where: { positionId: record.positionId } })
-        ).sort((a, b) => (a.dateFrom < b.dateFrom ? -1 : a.dateFrom > b.dateFrom ? 1 : 0));
+        ).sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
         // Delete out of position's period
         for (const id of list
             .filter((o) => o.id !== record.id)

@@ -1,20 +1,25 @@
-import { IAuth, ICreateUser, IPublicUserData } from '@repo/shared';
+import {
+    authLogin,
+    authLogout,
+    authRegister,
+    usersFindCurrent,
+} from '@/services/auth/auth.service';
+import { getUserAccessToken } from '@/services/auth/token.service';
+import { AuthDto, CreateUserDto, PublicUserDataDto } from '@repo/openapi';
 import PropTypes from 'prop-types';
 import type { FC, ReactNode } from 'react';
 import { createContext, useEffect, useReducer } from 'react';
-import { getCurrentUser, loginUser, logoutUser, registerUser } from '../services/auth.service';
-import { getUserAccessToken } from '../services/token.service';
 
 interface State {
     isInitialized: boolean;
     isAuthenticated: boolean;
-    user: IPublicUserData | null;
+    user: PublicUserDataDto | null;
 }
 
 interface AuthContextValue extends State {
-    login: (params: IAuth) => Promise<void>;
+    login: (params: AuthDto) => Promise<void>;
     logout: () => Promise<void>;
-    register: (params: ICreateUser) => Promise<void>;
+    register: (params: CreateUserDto) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -25,14 +30,14 @@ type InitializeAction = {
     type: 'INITIALIZE';
     payload: {
         isAuthenticated: boolean;
-        user: IPublicUserData | null;
+        user: PublicUserDataDto | null;
     };
 };
 
 type LoginAction = {
     type: 'LOGIN';
     payload: {
-        user: IPublicUserData;
+        user: PublicUserDataDto;
     };
 };
 
@@ -43,7 +48,7 @@ type LogoutAction = {
 type RegisterAction = {
     type: 'REGISTER';
     payload: {
-        user: IPublicUserData;
+        user: PublicUserDataDto;
     };
 };
 
@@ -109,7 +114,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         const initialize = async (): Promise<void> => {
             try {
                 const accessToken = getUserAccessToken();
-                const user = accessToken ? await getCurrentUser() : null;
+                const user = accessToken ? await usersFindCurrent() : null;
                 if (user) {
                     dispatch({
                         type: 'INITIALIZE',
@@ -142,9 +147,9 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         initialize();
     }, []);
 
-    const login = async (params: IAuth): Promise<void> => {
-        await loginUser(params);
-        const user = await getCurrentUser();
+    const login = async (params: AuthDto): Promise<void> => {
+        await authLogin(params);
+        const user = await usersFindCurrent();
         if (user) {
             dispatch({
                 type: 'LOGIN',
@@ -156,13 +161,13 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     };
 
     const logout = async (): Promise<void> => {
-        await logoutUser();
+        await authLogout();
         dispatch({ type: 'LOGOUT' });
     };
 
-    const register = async (params: ICreateUser): Promise<void> => {
-        await registerUser(params);
-        const user = await getCurrentUser();
+    const register = async (params: CreateUserDto): Promise<void> => {
+        await authRegister(params);
+        const user = await usersFindCurrent();
         if (user) {
             dispatch({
                 type: 'REGISTER',

@@ -1,7 +1,8 @@
 import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@repo/shared';
+import { ResourceType } from '@/types';
+import { maxDate, minDate } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
@@ -11,16 +12,19 @@ import { Department } from './entities/department.entity';
 import { DepartmentCreatedEvent } from './events/department-created.event';
 import { DepartmentDeletedEvent } from './events/department-deleted.event';
 import { DepartmentUpdatedEvent } from './events/department-updated.event';
+import { FindAllDepartmentDto } from './dto/find-all-department.dto';
+import { FindOneDepartmentDto } from './dto/find-one-department.dto';
+import { checkVersionOrFail } from '@/utils';
 
 @Injectable()
 export class DepartmentsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.DEPARTMENT;
+    public readonly resourceType = ResourceType.Department;
 
     constructor(
-        @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
         @InjectRepository(Department)
         private repository: Repository<Department>,
+        @Inject(forwardRef(() => AccessService))
+        public accessService: AccessService,
         private eventEmitter: EventEmitter2,
     ) {
         super(accessService);
@@ -31,11 +35,13 @@ export class DepartmentsService extends AvailableForUserCompany {
             await this.repository.findOneOrFail({
                 select: { companyId: true },
                 where: { id: entityId },
+                withDeleted: true,
             })
         ).companyId;
     }
 
     async create(userId: number, payload: CreateDepartmentDto): Promise<Department> {
+        const { dateFrom, dateTo, ...other } = payload;
         const existing = await this.repository.findOneBy({
             companyId: payload.companyId,
             name: payload.name,
@@ -44,7 +50,9 @@ export class DepartmentsService extends AvailableForUserCompany {
             throw new ConflictException(`Department '${payload.name}' already exists.`);
         }
         const created = await this.repository.save({
-            ...payload,
+            ...other,
+            dateFrom: dateFrom ?? minDate(),
+            dateTo: dateTo ?? maxDate(),
             createdUserId: userId,
             updatedUserId: userId,
         });
@@ -52,27 +60,23 @@ export class DepartmentsService extends AvailableForUserCompany {
         return created;
     }
 
-    async findAll(
-        userId: number,
-        companyId: number,
-        relations: boolean = false,
-    ): Promise<Department[]> {
+    async findAll(params: FindAllDepartmentDto): Promise<Department[]> {
         return await this.repository.find({
             relations: {
-                company: relations,
-                parentDepartment: relations,
-                childDepartments: relations,
+                company: !!params?.relations,
+                parentDepartment: !!params?.relations,
+                childDepartments: !!params?.relations,
             },
-            where: { companyId },
+            where: { companyId: params.companyId },
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean = false): Promise<Department> {
+    async findOne(id: number, params?: FindOneDepartmentDto): Promise<Department> {
         return await this.repository.findOneOrFail({
             relations: {
-                company: relations,
-                parentDepartment: relations,
-                childDepartments: relations,
+                company: !!params?.relations,
+                parentDepartment: !!params?.relations,
+                childDepartments: !!params?.relations,
             },
             where: { id },
         });
@@ -80,11 +84,7 @@ export class DepartmentsService extends AvailableForUserCompany {
 
     async update(userId: number, id: number, payload: UpdateDepartmentDto): Promise<Department> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,

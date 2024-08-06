@@ -1,13 +1,12 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { repositoryMockFactory } from 'test';
+import { AccessService } from '../access/access.service';
+import { PositionsService } from '../positions/positions.service';
+import { Payroll } from './entities/payroll.entity';
 import { PayrollsController } from './payrolls.controller';
 import { PayrollsService } from './payrolls.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Payroll } from './entities/payroll.entity';
-import { repositoryMockFactory } from '@repo/testing';
-import { PositionsService } from '../positions/positions.service';
-import { CompaniesService } from '../companies/companies.service';
-import { AccessService } from '../access/access.service';
-import { createMock } from '@golevelup/ts-jest';
 
 describe('PayrollController', () => {
     let controller: PayrollsController;
@@ -22,7 +21,6 @@ describe('PayrollController', () => {
                     useFactory: repositoryMockFactory,
                 },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
-                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();

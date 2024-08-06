@@ -1,8 +1,9 @@
-import { ILaw, LawType } from '@repo/shared';
+import { ApiProperty } from '@nestjs/swagger';
+import { LawType } from './../../../types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Law implements ILaw {
+export class Law {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -12,7 +13,8 @@ export class Law implements ILaw {
     @Column({
         type: 'varchar',
         length: 15,
-        default: LawType.UKRAINE,
+        default: LawType.Ukraine,
     })
+    @ApiProperty({ enum: LawType, enumName: 'LawType' })
     type: string;
 }

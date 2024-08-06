@@ -1,12 +1,12 @@
-import { Box, BoxProps, Typography } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 
-export interface TabPanelProps extends BoxProps {
+interface Props extends BoxProps {
     children?: React.ReactNode;
     index: number;
     value: number;
 }
 
-export function TabPanel(props: TabPanelProps) {
+export function TabPanel(props: Props) {
     const { children, value, index, ...other } = props;
 
     return (
@@ -15,13 +15,7 @@ export function TabPanel(props: TabPanelProps) {
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
-            sx={{
-                // my: 1,
-                // display: 'flex',
-                // flexDirection: 'column',
-                // minHeight: 0,
-                flex: 1,
-            }}
+            sx={{ flex: 1 }}
             {...other}
         >
             {value === index && (

@@ -1,11 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ICreateTask } from '@repo/shared';
+import { OmitType } from '@nestjs/swagger';
+import { Task } from './../entities/task.entity';
 
-export class CreateTaskDto implements ICreateTask {
-    @ApiProperty() companyId: number;
-    @ApiProperty() type: string; // See enum TaskType
-    @ApiProperty() dateFrom: Date;
-    @ApiProperty() dateTo: Date;
-    @ApiProperty() sequenceNumber: number;
-    @ApiProperty() status: string; // See enum TaskStatus
-}
+export class CreateTaskDto extends OmitType(Task, [
+    'id',
+    'company',
+    'transform',
+    'createdDate',
+    'createdUserId',
+    'updatedDate',
+    'updatedUserId',
+    'deletedDate',
+    'deletedUserId',
+    'version',
+]) {}

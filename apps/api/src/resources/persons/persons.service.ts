@@ -1,27 +1,23 @@
-import {
-    BadRequestException,
-    ConflictException,
-    Inject,
-    Injectable,
-    forwardRef,
-} from '@nestjs/common';
+import { ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType, formatDate, monthBegin, monthEnd } from '@repo/shared';
+import { formatDate, monthBegin, monthEnd } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';
 import { CreatePersonDto } from './dto/create-person.dto';
-import { FindPersonDto } from './dto/find-person.dto';
+import { FindAllPersonDto } from './dto/find-all-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { Person } from './entities/person.entity';
 import { PersonCreatedEvent } from './events/person-created.event';
-import { PersonUpdatedEvent } from './events/person-updated.event';
 import { PersonDeletedEvent } from './events/person-deleted.event';
+import { PersonUpdatedEvent } from './events/person-updated.event';
 
 @Injectable()
 export class PersonsService extends AvailableForUser {
-    public readonly resourceType = ResourceType.PERSON;
+    public readonly resourceType = ResourceType.Person;
 
     constructor(
         @InjectRepository(Person)
@@ -33,17 +29,23 @@ export class PersonsService extends AvailableForUser {
         super(accessService);
     }
 
+    async exists(params: FindAllPersonDto): Promise<boolean> {
+        const { firstName, lastName, middleName, birthday, sex, taxId, email } = params;
+        const found = await this.repository
+            .createQueryBuilder('person')
+            .where('"firstName" = :firstName', { firstName })
+            .andWhere('"lastName" = :lastName', { lastName })
+            .andWhere(middleName ? '"middleName" = :middleName' : '1=1', { middleName })
+            .andWhere(birthday ? '"birthday" = :birthday' : '1=1', { birthday })
+            .andWhere(sex ? '"sex" = :sex' : '1=1', { sex })
+            .andWhere(taxId ? '"taxId" = :taxId' : '1=1', { taxId })
+            .andWhere(email ? '"email" = :email' : '1=1', { email })
+            .getRawMany();
+        return !!found.length;
+    }
+
     async create(userId: number, payload: CreatePersonDto): Promise<Person> {
-        const where: FindPersonDto[] = [
-            {
-                firstName: payload.firstName,
-                lastName: payload.lastName,
-                ...(payload.middleName ? { middleName: payload.middleName } : {}),
-                ...(payload.birthday ? { birthday: payload.birthday } : {}),
-                ...(payload.taxId ? { taxId: payload.taxId } : {}),
-            },
-        ];
-        const exists = await this.repository.findOne({ where });
+        const exists = await this.exists(payload);
         if (exists) {
             throw new BadRequestException(
                 `Person '${payload.firstName} ${payload.lastName}' already exists.`,
@@ -69,11 +71,7 @@ export class PersonsService extends AvailableForUser {
 
     async update(userId: number, id: number, payload: UpdatePersonDto): Promise<Person> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         await this.repository.save({
             ...payload,
             id,
@@ -92,11 +90,10 @@ export class PersonsService extends AvailableForUser {
         return deleted;
     }
 
-    async findOneBy(params: FindPersonDto): Promise<Person | null> {
-        return await this.repository.findOne({ where: params });
-    }
-
-    async findByBirthdayInMonth(companyId: number, date: Date): Promise<Person[]> {
+    async findByBirthdayInMonth(
+        companyId: number,
+        date: Date,
+    ): Promise<{ id: number; birthday: Date }[]> {
         const dateFrom = monthBegin(date);
         const dateTo = monthEnd(date);
         const personList = await this.repository.query(
@@ -119,7 +116,9 @@ export class PersonsService extends AvailableForUser {
             )`,
             [formatDate(dateFrom), formatDate(dateTo), companyId],
         );
-        personList.forEach((o) => (o.birthday = new Date(o.birthday)));
-        return personList;
+        // personList.forEach((o) => (o.birthday = new Date(o.birthday)));
+        return personList.map((o) => {
+            return { id: o.id, birthday: new Date(o.birthday) };
+        });
     }
 }

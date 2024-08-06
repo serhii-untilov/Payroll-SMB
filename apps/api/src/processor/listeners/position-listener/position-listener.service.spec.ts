@@ -1,10 +1,11 @@
+import { PayFundCalculationService } from '@/processor/pay-fund-calculation/pay-fund-calculation.service';
+import { PaymentCalculationService } from '@/processor/payment-calculation/payment-calculation.service';
+import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PositionListenerService } from './position-listener.service';
-import { PayrollCalculationService } from '../../../processor/payrollCalculation/payrollCalculation.service';
-import { createMock } from '@golevelup/ts-jest';
-import { PayFundCalculationService } from './../../../processor/payFundCalculation/payFundCalculation.service';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
-import { SseService } from './../../serverSentEvents/sse.service';
 
 describe('PositionListenerService', () => {
     let service: PositionListenerService;
@@ -16,6 +17,10 @@ describe('PositionListenerService', () => {
                 {
                     provide: PayrollCalculationService,
                     useValue: createMock<PayrollCalculationService>(),
+                },
+                {
+                    provide: PaymentCalculationService,
+                    useValue: createMock<PaymentCalculationService>(),
                 },
                 {
                     provide: PayFundCalculationService,

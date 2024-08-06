@@ -1,10 +1,8 @@
 import { OutlinedInput, OutlinedInputProps } from '@mui/material';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { grey } from '@mui/material/colors';
 import { Controller } from 'react-hook-form';
 import { InputLabel } from '../layout/InputLabel';
 
-export type Props = OutlinedInputProps & {
+type Props = OutlinedInputProps & {
     name: string;
     control: any;
     label: string;
@@ -13,10 +11,11 @@ export type Props = OutlinedInputProps & {
     step?: number;
     min?: number;
     max?: number;
+    disabled?: boolean;
 };
 
 export const FormNumberField = (props: Props) => {
-    const { label, step, min, max, name, control, rules, autoFocus, ...other } = props;
+    const { label, step, min, max, name, control, rules, autoFocus, disabled, ...other } = props;
     return (
         <>
             <InputLabel>{label}</InputLabel>
@@ -24,8 +23,9 @@ export const FormNumberField = (props: Props) => {
                 name={props.name}
                 control={props.control}
                 rules={props.rules}
-                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <OutlinedInput
+                        disabled={!!disabled}
                         autoFocus={props?.autoFocus}
                         size="small"
                         type="number"

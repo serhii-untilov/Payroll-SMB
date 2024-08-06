@@ -1,27 +1,21 @@
-import React, { useEffect, useState } from 'react';
 import { Checkbox, FormControl, FormControlLabel, FormLabel } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 
-/**
- * {
- *     label: 'Checkbox Option 1',
- *     value: '1',
- * },
- */
-export type CheckboxOption = {
+type Option = {
     label: string;
     value: number | string;
 };
 
-export interface FormInputCheckboxGroupProps {
+export interface Props {
     name: string;
     control: any;
     label: string;
-    options: CheckboxOption[];
+    options: Option[];
     setValue?: any;
 }
 
-export const FormInputCheckboxGroup: React.FC<FormInputCheckboxGroupProps> = ({
+export const FormInputCheckboxGroup: React.FC<Props> = ({
     name,
     control,
     label,
@@ -53,7 +47,7 @@ export const FormInputCheckboxGroup: React.FC<FormInputCheckboxGroupProps> = ({
                             control={
                                 <Controller
                                     name={name}
-                                    render={({ field }) => {
+                                    render={() => {
                                         return (
                                             <Checkbox
                                                 checked={selectedItems.includes(option.value)}

@@ -1,8 +1,8 @@
+import { SseService } from '@/processor/server-sent-events/sse.service';
+import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TaskGenerationService } from '../../taskGeneration/taskGeneration.service';
 import { DepartmentListenerService } from './department-listener.service';
-import { SseService } from './../../serverSentEvents/sse.service';
 
 describe('DepartmentListenerService', () => {
     let service: DepartmentListenerService;

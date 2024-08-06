@@ -1,14 +1,19 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ICreatePerson } from '@repo/shared';
+import { IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { Person } from './../entities/person.entity';
 
-export class CreatePersonDto implements ICreatePerson {
-    @ApiProperty() firstName: string;
-    @ApiProperty() lastName: string;
-    @ApiProperty() middleName?: string | undefined;
-    @ApiProperty() birthday?: Date | undefined;
-    @ApiProperty() taxId?: string | undefined;
-    @ApiProperty() sex?: string | undefined; // See enum Sex
-    @ApiProperty() phone?: string | undefined;
-    @ApiProperty() email?: string | undefined;
-    @ApiProperty() photo?: string | undefined;
-}
+export class CreatePersonDto extends IntersectionType(
+    PickType(Person, ['firstName', 'lastName']),
+    PartialType(
+        OmitType(Person, [
+            'id',
+            'positions',
+            'createdDate',
+            'createdUserId',
+            'updatedDate',
+            'updatedUserId',
+            'deletedDate',
+            'deletedUserId',
+            'version',
+        ]),
+    ),
+) {}

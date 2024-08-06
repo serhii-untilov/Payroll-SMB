@@ -12,7 +12,6 @@ export function TabsVertical({ value, onChange, children, sx, ...other }: TabsPr
     return (
         <Tabs
             orientation="vertical"
-            // variant="scrollable"
             value={value}
             onChange={onChange}
             sx={{
@@ -28,9 +27,7 @@ export function TabsVertical({ value, onChange, children, sx, ...other }: TabsPr
                 '.Mui-disabled': {
                     color: (theme) => theme.palette.grey[500],
                 },
-                '.Mui-selected': {
-                    // fontWeight: 'bold',
-                },
+                '.Mui-selected': {},
                 ...sx,
             }}
             {...other}

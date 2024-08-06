@@ -2,21 +2,22 @@ import { ArrowBackIosNewRounded } from '@mui/icons-material';
 import { Box, IconButton, Typography } from '@mui/material';
 import { PropsWithChildren } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppState } from './AppState';
+import { AppState } from '../AppState';
 
 type Props = PropsWithChildren & {
     goBack?: boolean;
+    title?: string;
+    hideAppState?: boolean;
 };
 
-export function PageTitle(props: Props) {
-    const { goBack, children, ...other } = props;
+export default function PageTitle(props: Props) {
+    const { goBack, title, children, ...other } = props;
     const navigate = useNavigate();
 
     const onGoBack = () => {
         navigate(-1);
     };
     return (
-        // <Box sx={{ height: 48, display: 'flex', alignItems: 'center' }}>
         <Box
             id="page-title"
             sx={{
@@ -28,7 +29,7 @@ export function PageTitle(props: Props) {
             }}
         >
             <Typography component="h2" color="primary.main" variant="h2" noWrap {...other}>
-                {goBack && (
+                {!!goBack && (
                     <IconButton
                         aria-label="Go Back"
                         color="primary"
@@ -38,9 +39,10 @@ export function PageTitle(props: Props) {
                         <ArrowBackIosNewRounded />
                     </IconButton>
                 )}
+                {title}
                 {children}
             </Typography>
-            <AppState id="app-state" />
+            {!props.hideAppState && <AppState />}
         </Box>
     );
 }

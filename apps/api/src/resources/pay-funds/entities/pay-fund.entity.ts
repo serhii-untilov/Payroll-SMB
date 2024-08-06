@@ -1,10 +1,11 @@
+import { PayFundType } from './../../pay-fund-types/entities/pay-fund-type.entity';
+import { Position } from './../../positions/entities/position.entity';
+import { PayFundCategory } from './../../../types';
+import { ApiProperty } from '@nestjs/swagger';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { PayFundType } from '../../pay-fund-types/entities/pay-fund-type.entity';
-import { Position } from '../../positions/entities/position.entity';
-import { IPayFund } from '@repo/shared';
 
 @Entity()
-export class PayFund implements IPayFund {
+export class PayFund {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -27,7 +28,8 @@ export class PayFund implements IPayFund {
     payFundTypeId: number;
 
     @Column({ type: 'varchar', length: 30 })
-    payFundCategory: string; // See enum PayFundCategory
+    @ApiProperty({ enum: PayFundCategory, enumName: 'PayFundCategory' })
+    payFundCategory: PayFundCategory;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     incomeSum: number;

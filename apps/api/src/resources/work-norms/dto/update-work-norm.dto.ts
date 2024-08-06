@@ -1,18 +1,8 @@
-import { OmitType, PartialType } from '@nestjs/mapped-types';
-import { IUpdateWorkNorm } from '@repo/shared';
-import { WorkNorm } from '../entities/work-norm.entity';
+import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
+import { WorkNorm } from './../entities/work-norm.entity';
+import { CreateWorkNormDto } from './create-work-norm.dto';
 
-export class UpdateWorkNormDto
-    extends PartialType(
-        OmitType(WorkNorm, [
-            'id',
-            'periods',
-            'createdDate',
-            'createdUserId',
-            'updatedDate',
-            'updatedUserId',
-            'deletedDate',
-            'deletedUserId',
-        ]),
-    )
-    implements IUpdateWorkNorm {}
+export class UpdateWorkNormDto extends IntersectionType(
+    PickType(WorkNorm, ['version']),
+    PartialType(CreateWorkNormDto),
+) {}

@@ -1,13 +1,13 @@
+import { AccessType, ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
 import {
     BadRequestException,
-    ConflictException,
     Inject,
     Injectable,
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccessType, ResourceType } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
 import { CreateJobDto } from './dto/create-job.dto';
@@ -16,7 +16,7 @@ import { Job } from './entities/job.entity';
 
 @Injectable()
 export class JobsService {
-    public readonly resourceType = ResourceType.JOB;
+    public readonly resourceType = ResourceType.Job;
 
     constructor(
         @InjectRepository(Job)
@@ -33,7 +33,7 @@ export class JobsService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.CREATE,
+            AccessType.Create,
         );
         return await this.repository.save({
             ...payload,
@@ -58,14 +58,10 @@ export class JobsService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.UPDATE,
+            AccessType.Update,
         );
         const record = await this.repository.findOneOrFail({ where: { id } });
-        if (payload.version !== record.version) {
-            throw new ConflictException(
-                'The record has been updated by another user. Try to edit it after reloading.',
-            );
-        }
+        checkVersionOrFail(record, payload);
         return await this.repository.save({
             ...payload,
             id,
@@ -78,7 +74,7 @@ export class JobsService {
         await this.accessService.availableForUserOrFail(
             userId,
             this.resourceType,
-            AccessType.DELETE,
+            AccessType.Delete,
         );
         await this.repository.findOneOrFail({ where: { id } });
         return await this.repository.save({

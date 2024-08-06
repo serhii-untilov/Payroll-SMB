@@ -107,18 +107,23 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
         },
     },
     '& .row-status--Deleted': {
-        backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        textDecoration: 'line-through',
+        color: theme.palette.grey['600'],
+        backgroundColor: theme.palette.background.default,
         '&:hover': {
-            backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+            backgroundColor:
+                theme.palette.mode === 'dark'
+                    ? theme.palette.grey['900']
+                    : theme.palette.grey['200'],
         },
         '&.Mui-selected': {
             backgroundColor: getSelectedBackgroundColor(
-                theme.palette.error.main,
+                theme.palette.background.default,
                 theme.palette.mode,
             ),
             '&:hover': {
                 backgroundColor: getSelectedHoverBackgroundColor(
-                    theme.palette.error.main,
+                    theme.palette.background.paper,
                     theme.palette.mode,
                 ),
             },
@@ -202,6 +207,45 @@ const StyledDataGrid = styled(MuiDataGrid)(({ theme }) => ({
             },
         },
     },
+    '& .row-status--Todo': {
+        backgroundColor: getBackgroundColor(theme.palette.warning.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(
+                theme.palette.warning.main,
+                theme.palette.mode,
+            ),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.warning.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.warning.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
+    '& .row-status--Overdue': {
+        backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        },
+        '&.Mui-selected': {
+            backgroundColor: getSelectedBackgroundColor(
+                theme.palette.error.main,
+                theme.palette.mode,
+            ),
+            '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(
+                    theme.palette.error.main,
+                    theme.palette.mode,
+                ),
+            },
+        },
+    },
 }));
 
 type Props = DataGridProps & {
@@ -213,9 +257,6 @@ export function DataGrid(props: Props) {
     return (
         <StyledDataGrid //MuiDataGrid
             rowSelection={true}
-            // slots={{ toolbar: GridToolbar }}
-            // slotProps={{ toolbar: { csvOptions } }}
-            // slotProps={{ toolbar: { printOptions: { disableToolbarButton: true } } }}
             autoPageSize={true}
             density={'standard'}
             editMode={'row'}
@@ -224,7 +265,6 @@ export function DataGrid(props: Props) {
             disableRowSelectionOnClick={true}
             rowHeight={40}
             columnHeaderHeight={40}
-            // pagination={true}
             initialState={{
                 pagination: {
                     paginationModel: { page: 0, pageSize: 10 },
@@ -232,7 +272,6 @@ export function DataGrid(props: Props) {
             }}
             pageSizeOptions={[5, 10, 50]}
             sx={{
-                // boxShadow: 2,
                 border: 1,
                 borderColor: 'divider',
                 minHeight: 240,
@@ -247,18 +286,10 @@ export function DataGrid(props: Props) {
                     height: 40,
                     minHeight: 40,
                 },
-                // '& .MuiDataGrid-row': {
-                //     // border: 0.5,
-                //     // borderColor: 'divider',
-                // },
                 '& .MuiDataGrid-cell': {
                     fontSize: '1rem',
                     borderColor: 'divider',
                 },
-
-                // '& .MuiDataGrid-row:hover': {
-                //     backgroundColor: 'background.paper',
-                // },
             }}
             {...other}
             getRowClassName={(params) => {

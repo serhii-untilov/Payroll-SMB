@@ -1,3 +1,6 @@
+import useAppContext from '@/hooks/context/useAppContext';
+import { useAuth } from '@/hooks/context/useAuth';
+import useLocale from '@/hooks/context/useLocale';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
@@ -9,11 +12,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
-import useAppContext from '../../hooks/useAppContext';
-import useAuth from '../../hooks/useAuth';
-import useLocale from '../../hooks/useLocale';
-import { AppTitle } from './AppTitle';
-import { Copyright } from './Copyright';
+import { AppTitle } from '../AppTitle';
 import { Link } from './Link';
 import { ListItemButton } from './ListItemButton';
 import { ListItemLink } from './ListItemLink';
@@ -23,25 +22,17 @@ import { Sidebar } from './Sidebar';
 
 export default function MainLayout() {
     const { logout } = useAuth();
-    const { locale, toggleLanguage } = useLocale();
+    const { locale } = useLocale();
     const { t } = useTranslation();
-    const { compactView, setCompactView, themeMode, theme, switchThemeMode } = useAppContext();
+    const { compactView, setCompactView, themeMode, switchThemeMode } = useAppContext();
     const navigate = useNavigate();
 
     useEffect(() => {}, [locale, t]);
 
-    const toggleDrawer = () => {
-        setCompactView(!compactView);
-    };
-
-    // const onToggleLanguage = () => {
-    //     toggleLanguage();
-    // };
+    const toggleDrawer = () => setCompactView(!compactView);
 
     function onLogout() {
         logout();
-        // redirect('/signin');
-        // redirect('/welcome');
         navigate('/');
     }
 
@@ -82,13 +73,7 @@ export default function MainLayout() {
                         >
                             <Logo onClick={toggleDrawer} />
                             {!compactView && (
-                                <Box
-                                    sx={{
-                                        flexGrow: 1,
-                                        ml: [2],
-                                        mt: [2],
-                                    }}
-                                >
+                                <Box sx={{ flexGrow: 1, ml: [2], my: 'auto' }}>
                                     <Link to="/welcome">
                                         <AppTitle align="left" />
                                     </Link>
@@ -105,14 +90,6 @@ export default function MainLayout() {
                                 primary={t('Profile')}
                                 icon={<PersonOutlined />}
                             />
-
-                            {/* <ListItemButton
-                                onClick={() => {
-                                    onToggleLanguage();
-                                }}
-                                primary={locale.language === 'en' ? 'Українська' : 'English'}
-                                icon={<Language />}
-                            /> */}
 
                             <ListItemButton
                                 onClick={switchThemeMode}
@@ -139,7 +116,6 @@ export default function MainLayout() {
                                 icon={<Logout />}
                             />
                         </List>
-                        {!compactView && <Copyright sx={{ mx: ['auto'], mb: [3] }} />}
                     </Box>
                 </Box>
             </Sidebar>
