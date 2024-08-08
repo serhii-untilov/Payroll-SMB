@@ -1,6 +1,9 @@
-import useAppContext from '@/hooks/context/useAppContext';
 import { useAuth } from '@/hooks/context/useAuth';
 import useLocale from '@/hooks/context/useLocale';
+import { selectCompactView, setCompactView } from '@/store/slices/compactViewSlice';
+import { selectThemeMode, switchThemeMode } from '@/store/slices/themeModeSlice';
+import { store } from '@/store/store';
+import { useAppDispatch } from '@/store/store.hooks';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
@@ -9,7 +12,7 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AppTitle } from '../AppTitle';
@@ -24,17 +27,24 @@ export default function MainLayout() {
     const { logout } = useAuth();
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const { compactView, setCompactView, themeMode, switchThemeMode } = useAppContext();
+    const compactView = selectCompactView(store.getState());
+    const themeMode = selectThemeMode(store.getState());
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {}, [locale, t]);
 
-    const toggleDrawer = () => setCompactView(!compactView);
+    const onSwitchThemeMode = useCallback(() => dispatch(switchThemeMode()), [dispatch]);
 
-    function onLogout() {
+    const onToggleCompactView = useCallback(
+        () => dispatch(setCompactView(!compactView)),
+        [compactView, dispatch],
+    );
+
+    const onLogout = useCallback(() => {
         logout();
         navigate('/');
-    }
+    }, [logout, navigate]);
 
     return (
         <Box
@@ -71,7 +81,7 @@ export default function MainLayout() {
                                 px: [0],
                             }}
                         >
-                            <Logo onClick={toggleDrawer} />
+                            <Logo onClick={onToggleCompactView} />
                             {!compactView && (
                                 <Box sx={{ flexGrow: 1, ml: [2], my: 'auto' }}>
                                     <Link to="/welcome">
@@ -92,7 +102,7 @@ export default function MainLayout() {
                             />
 
                             <ListItemButton
-                                onClick={switchThemeMode}
+                                onClick={onSwitchThemeMode}
                                 primary={themeMode === 'light' ? t('Light theme') : t('Dark theme')}
                                 icon={
                                     themeMode === 'light' ? (

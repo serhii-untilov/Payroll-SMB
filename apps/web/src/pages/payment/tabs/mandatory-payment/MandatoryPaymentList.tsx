@@ -7,14 +7,14 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { Company, Payment } from '@repo/openapi';
+import { Company, Payment, PayPeriod } from '@repo/openapi';
 import { useState } from 'react';
 import useMandatoryPaymentList from './MandatoryPaymentList.hooks';
 import useGrid from '@/hooks/useGrid';
 
 export type MandatoryPaymentListProps = {
     company: Company;
-    payPeriod: Date;
+    payPeriod: PayPeriod;
     payment: Payment;
     paymentList: any[];
 };

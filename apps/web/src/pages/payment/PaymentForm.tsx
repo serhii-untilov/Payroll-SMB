@@ -3,12 +3,12 @@ import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
 import TotalSumChip from '@/components/TotalSumChip';
 import { Box } from '@mui/material';
-import { Company, Payment } from '@repo/openapi';
+import { Company, Payment, PayPeriod } from '@repo/openapi';
 import usePaymentForm from './PaymentForm.hooks';
 
 export interface PaymentFormProps {
     company: Company;
-    payPeriod: Date;
+    payPeriod: PayPeriod;
     payment?: Payment;
     tabIndex?: string | null;
     goBack?: boolean;

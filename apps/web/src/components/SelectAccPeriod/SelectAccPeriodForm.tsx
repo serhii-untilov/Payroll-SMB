@@ -1,4 +1,5 @@
-import useAppContext from '@/hooks/context/useAppContext';
+import { selectCompany } from '@/store/slices/companySlice';
+import { store } from '@/store/store';
 import { Select, SelectProps } from '@mui/material';
 import { PayPeriod } from '@repo/openapi';
 import { monthBegin } from '@repo/shared';
@@ -18,7 +19,7 @@ type Props = SelectProps<string> & {
 
 export default function SelectAccPeriodForm(props: Props) {
     const { data, control, label, id, name, disabled, ...other } = props;
-    const { company } = useAppContext();
+    const company = selectCompany(store.getState());
     const options = useOptions(data, company?.payPeriod ?? monthBegin(new Date()));
 
     return (

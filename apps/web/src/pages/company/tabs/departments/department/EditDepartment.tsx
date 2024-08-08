@@ -1,9 +1,10 @@
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetDepartment } from '@/hooks/queries/useDepartment';
+import { selectCompany } from '@/store/slices/companySlice';
+import { store } from '@/store/store';
 import { Dispatch } from 'react';
 import DepartmentForm from './DepartmentForm';
-import useAppContext from '@/hooks/context/useAppContext';
 
 export interface EditDepartmentProps {
     open: boolean;
@@ -14,7 +15,7 @@ export interface EditDepartmentProps {
 export default function EditDepartment(props: EditDepartmentProps) {
     const { open, setOpen } = props;
     const { data, isLoading, isError, error } = useGetDepartment(props.departmentId);
-    const { company } = useAppContext();
+    const company = selectCompany(store.getState());
 
     return (
         <>

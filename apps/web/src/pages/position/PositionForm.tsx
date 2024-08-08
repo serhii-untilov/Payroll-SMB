@@ -2,11 +2,12 @@ import PageLayout from '@/components/layout/PageLayout';
 import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
 import { AvatarBox } from '@/components/AvatarBox';
-import { Company, Position, PositionHistory } from '@repo/openapi';
+import { Company, PayPeriod, Position, PositionHistory } from '@repo/openapi';
 import usePositionForm from './PositionForm.hooks';
 
 export interface PositionFormProps {
     company: Company;
+    payPeriod: PayPeriod;
     position?: Position;
     positionHistory?: PositionHistory;
     tabIndex?: string | null;

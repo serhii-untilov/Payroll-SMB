@@ -1,4 +1,5 @@
-import useAppContext from '@/hooks/context/useAppContext';
+import { selectCompactView } from '@/store/slices/compactViewSlice';
+import { store } from '@/store/store';
 import { ListItem } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -12,7 +13,7 @@ interface Props {
 
 export function ListItemButton(props: Props) {
     const { icon, primary, onClick } = props;
-    const { compactView } = useAppContext();
+    const compactView = selectCompactView(store.getState());
 
     return (
         <li>

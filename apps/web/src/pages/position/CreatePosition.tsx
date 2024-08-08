@@ -1,16 +1,7 @@
-import { Company } from '@repo/openapi';
-import { Dispatch } from 'react';
 import PositionForm from './PositionForm';
 
-interface CreatePositionProps {
-    company: Company;
-    setPositionId: Dispatch<number>;
-}
-
-const CreatePosition = (props: CreatePositionProps) => {
-    return (
-        <PositionForm company={props.company} goBack={true} setPositionId={props.setPositionId} />
-    );
+const CreatePosition = ({ company, payPeriod, setPositionId }) => {
+    return <PositionForm {...{ company, payPeriod, goBack: true, setPositionId }} />;
 };
 
 export default CreatePosition;

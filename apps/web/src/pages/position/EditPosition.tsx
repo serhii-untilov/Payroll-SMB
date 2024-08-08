@@ -1,28 +1,17 @@
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
-import useAppContext from '@/hooks/context/useAppContext';
 import { useGetPosition } from '@/hooks/queries/usePosition';
 import { usePositionHistoryLast } from '@/hooks/queries/usePositionHistory';
-import { Company } from '@repo/openapi';
 import PositionForm from './PositionForm';
 
-interface EditPositionProps {
-    company: Company;
-    positionId: number;
-    tabIndex: string | null;
-    goBack: boolean;
-}
-
-const EditPosition = (props: EditPositionProps) => {
-    const { company, positionId, tabIndex, goBack } = props;
-    const { payPeriod } = useAppContext();
+const EditPosition = ({ company, payPeriod, positionId, tabIndex, goBack }) => {
     const position = useGetPosition(positionId, {
-        onPayPeriodDate: payPeriod,
+        onPayPeriodDate: payPeriod.dateFrom,
         relations: true,
     });
     const positionHistory = usePositionHistoryLast({
         positionId,
-        onPayPeriodDate: payPeriod,
+        onPayPeriodDate: payPeriod.dateFrom,
         relations: true,
     });
 
@@ -35,6 +24,7 @@ const EditPosition = (props: EditPositionProps) => {
                 <PositionForm
                     {...{
                         company,
+                        payPeriod,
                         position: position.data,
                         positionHistory: positionHistory.data,
                         tabIndex,

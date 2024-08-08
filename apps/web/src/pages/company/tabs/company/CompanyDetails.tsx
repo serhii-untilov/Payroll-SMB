@@ -4,10 +4,11 @@ import SelectAccounting from '@/components/SelectAccounting';
 import SelectLaw from '@/components/SelectLaw';
 import SelectPayPeriodField from '@/components/SelectPayPeriodField';
 import TaxIdField from '@/components/TaxIdField';
-import useAppContext from '@/hooks/context/useAppContext';
+import { selectCompany } from '@/store/slices/companySlice';
 import { Grid } from '@mui/material';
 import { Company } from '@repo/openapi';
 import useCompanyDetails from './CompanyDetails.hooks';
+import { store } from '@/store/store';
 
 export type CompanyDetailsProps = {
     company?: Company | undefined;
@@ -15,7 +16,7 @@ export type CompanyDetailsProps = {
 };
 
 export default function CompanyDetails(props: CompanyDetailsProps) {
-    const { company: currentCompany } = useAppContext();
+    const currentCompany = selectCompany(store.getState());
     const { control, isDirty, handleSubmit, onSubmit, onCancel } = useCompanyDetails(props);
 
     return (

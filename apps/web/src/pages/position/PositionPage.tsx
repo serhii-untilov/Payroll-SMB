@@ -1,10 +1,12 @@
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { selectCompany } from '@/store/slices/companySlice';
+import { selectPayPeriod } from '@/store/slices/payPeriodSlice';
+import { store } from '@/store/store';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CreatePosition from './CreatePosition';
 import EditPosition from './EditPosition';
-import ErrorDisplay from '@/components/ErrorDisplay';
-import { useTranslation } from 'react-i18next';
-import useAppContext from '@/hooks/context/useAppContext';
 
 const PositionPage = () => {
     const params = useParams();
@@ -12,16 +14,20 @@ const PositionPage = () => {
     const [searchParams] = useSearchParams();
     const tabIndex = searchParams.get('tab-index');
     const goBack = searchParams.get('return') === 'true';
-    const { company } = useAppContext();
+    const company = selectCompany(store.getState());
+    const payPeriod = selectPayPeriod(store.getState());
     const { t } = useTranslation();
 
     return (
         <>
             {!company && <ErrorDisplay error={{ message: t('The company is not defined') }} />}
-            {company && positionId && (
-                <EditPosition {...{ company, positionId, tabIndex, goBack }} />
+            {!payPeriod && <ErrorDisplay error={{ message: t('The pay period is not defined') }} />}
+            {positionId && company && payPeriod && (
+                <EditPosition {...{ company, payPeriod, positionId, tabIndex, goBack }} />
             )}
-            {company && !positionId && <CreatePosition {...{ company, setPositionId }} />}
+            {!positionId && company && payPeriod && (
+                <CreatePosition {...{ company, payPeriod, setPositionId }} />
+            )}
         </>
     );
 };

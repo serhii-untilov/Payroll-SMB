@@ -1,8 +1,11 @@
-import useAppContext from '@/hooks/context/useAppContext';
 import useLocale from '@/hooks/context/useLocale';
 import { useCalculateCompany } from '@/hooks/queries/useCompany';
 import { useClosePayPeriod, useOpenPayPeriod } from '@/hooks/queries/usePayPeriod';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
+import { selectCompany } from '@/store/slices/companySlice';
+import { setPayPeriod } from '@/store/slices/payPeriodSlice';
+import { store } from '@/store/store';
+import { useAppDispatch } from '@/store/store.hooks';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { GridColDef } from '@mui/x-data-grid';
@@ -16,7 +19,7 @@ import { PayPeriodListProps } from './PayPeriodList';
 
 export default function usePayPeriodList(params: PayPeriodListProps) {
     const navigate = useNavigate();
-    const { payPeriod, setPayPeriod } = useAppContext();
+    const dispatch = useAppDispatch();
     const invalidateQueries = useInvalidateQueries();
     const calculateCompany = useCalculateCompany();
     const closePayPeriod = useClosePayPeriod();
@@ -59,46 +62,39 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
 
     const onClose = useCallback(async () => {
         if (params.currentPayPeriod) {
-            if (params.currentPayPeriod.dateFrom.getTime() !== payPeriod?.getTime()) {
-                await invalidate();
-                return;
-            }
             const next = await closePayPeriod.mutateAsync({
                 id: params.currentPayPeriod.id,
                 dto: {
                     version: params.currentPayPeriod.version,
                 },
             });
-            setPayPeriod(next.dateFrom);
+            dispatch(setPayPeriod(next));
             await invalidate();
         }
-    }, [closePayPeriod, invalidate, params.currentPayPeriod, payPeriod, setPayPeriod]);
+    }, [closePayPeriod, dispatch, invalidate, params.currentPayPeriod]);
 
     const onOpen = useCallback(async () => {
         if (params.currentPayPeriod) {
-            if (params.currentPayPeriod.dateFrom.getTime() !== payPeriod?.getTime()) {
-                await invalidate();
-                return;
-            }
             const prior = await openPayPeriod.mutateAsync({
                 id: params.currentPayPeriod.id,
                 dto: {
                     version: params.currentPayPeriod.version,
                 },
             });
-            setPayPeriod(prior.dateFrom);
+            setPayPeriod(prior);
             await invalidate();
         }
-    }, [invalidate, openPayPeriod, params.currentPayPeriod, payPeriod, setPayPeriod]);
+    }, [invalidate, openPayPeriod, params.currentPayPeriod]);
 
-    const columns = useColumns(payPeriod);
+    const columns = useColumns();
 
     return { payPeriods, columns, onEdit, onCalculate, onClose, onOpen };
 }
 
-function useColumns(payPeriod: Date) {
+function useColumns() {
     const { t } = useTranslation();
     const { locale } = useLocale();
+    const company = selectCompany(store.getState());
 
     return useMemo<GridColDef[]>(() => {
         return [
@@ -112,7 +108,7 @@ function useColumns(payPeriod: Date) {
                     return getPayPeriodName(
                         toDate(params.row.dateFrom),
                         toDate(params.row.dateTo),
-                        isEqual(params.row.dateFrom, payPeriod),
+                        isEqual(params.row.dateFrom, company?.payPeriod),
                         locale.dateLocale,
                     );
                 },
@@ -192,5 +188,5 @@ function useColumns(payPeriod: Date) {
                 },
             },
         ];
-    }, [t, locale, payPeriod]);
+    }, [t, company?.payPeriod, locale.dateLocale]);
 }

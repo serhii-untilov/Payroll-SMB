@@ -2,28 +2,19 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider as StoreProvider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './app/App.tsx';
 import { AppErrorBoundary } from './components/AppErrorBoundary.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { LocaleProvider } from './context/LocaleContext.tsx';
-import './services/i18n/i18n.ts';
 import './index.css';
-
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            refetchOnWindowFocus: false,
-            refetchOnMount: false,
-            refetchOnReconnect: false,
-            retry: true,
-            staleTime: 5 * 60 * 1000,
-        },
-    },
-});
+import './services/i18n/i18n.ts';
+import queryClient from './services/query/queryClient.ts';
+import { store } from './store/store.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
@@ -31,9 +22,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <QueryClientProvider client={queryClient}>
                 <AuthProvider>
                     <BrowserRouter>
-                        <LocaleProvider>
-                            <App />
-                        </LocaleProvider>
+                        <StoreProvider store={store}>
+                            <LocaleProvider>
+                                <App />
+                            </LocaleProvider>
+                        </StoreProvider>
                     </BrowserRouter>
                 </AuthProvider>
             </QueryClientProvider>

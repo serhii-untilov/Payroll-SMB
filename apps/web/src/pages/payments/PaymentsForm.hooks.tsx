@@ -1,11 +1,11 @@
 import { TabComponent } from '@/components/layout/TabsContainer';
-import { PaymentStatus } from '@repo/openapi';
+import useLocale from '@/hooks/context/useLocale';
+import { PaymentStatus, PayPeriod } from '@repo/openapi';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import PaymentList from './tabs/PaymentList';
-import useLocale from '@/hooks/context/useLocale';
 
-export default function usePaymentsForm(companyId: number, payPeriod: Date) {
+export default function usePaymentsForm(companyId: number, payPeriod: PayPeriod) {
     const { t } = useTranslation();
     const { locale } = useLocale();
 
@@ -17,10 +17,13 @@ export default function usePaymentsForm(companyId: number, payPeriod: Date) {
                 label: t('To Pay'),
                 tab: (
                     <PaymentList
-                        {...{ companyId, payPeriod }}
-                        status={PaymentStatus.Draft}
-                        companyPayments={true}
-                        sifPayments={true}
+                        {...{
+                            companyId,
+                            payPeriod: payPeriod.dateFrom,
+                            status: PaymentStatus.Draft,
+                            companyPayments: true,
+                            sifPayments: true,
+                        }}
                     />
                 ),
             },
@@ -28,10 +31,13 @@ export default function usePaymentsForm(companyId: number, payPeriod: Date) {
                 label: t('Paid'),
                 tab: (
                     <PaymentList
-                        {...{ companyId, payPeriod }}
-                        status={PaymentStatus.Paid}
-                        companyPayments={true}
-                        sifPayments={true}
+                        {...{
+                            companyId,
+                            payPeriod: payPeriod.dateFrom,
+                            status: PaymentStatus.Paid,
+                            companyPayments: true,
+                            sifPayments: true,
+                        }}
                     />
                 ),
             },
@@ -39,9 +45,12 @@ export default function usePaymentsForm(companyId: number, payPeriod: Date) {
                 label: t('Company Payments'),
                 tab: (
                     <PaymentList
-                        {...{ companyId, payPeriod }}
-                        companyPayments={true}
-                        sifPayments={false}
+                        {...{
+                            companyId,
+                            payPeriod: payPeriod.dateFrom,
+                            companyPayments: true,
+                            sifPayments: false,
+                        }}
                     />
                 ),
             },
@@ -49,9 +58,12 @@ export default function usePaymentsForm(companyId: number, payPeriod: Date) {
                 label: t(`SCI Payments`),
                 tab: (
                     <PaymentList
-                        {...{ companyId, payPeriod }}
-                        companyPayments={false}
-                        sifPayments={true}
+                        {...{
+                            companyId,
+                            payPeriod: payPeriod.dateFrom,
+                            companyPayments: false,
+                            sifPayments: true,
+                        }}
                     />
                 ),
             },
@@ -59,9 +71,12 @@ export default function usePaymentsForm(companyId: number, payPeriod: Date) {
                 label: t(`All`),
                 tab: (
                     <PaymentList
-                        {...{ companyId, payPeriod }}
-                        companyPayments={true}
-                        sifPayments={true}
+                        {...{
+                            companyId,
+                            payPeriod: payPeriod.dateFrom,
+                            companyPayments: true,
+                            sifPayments: true,
+                        }}
                     />
                 ),
             },

@@ -1,5 +1,6 @@
-import useAppContext from '@/hooks/context/useAppContext';
 import useLocale from '@/hooks/context/useLocale';
+import { selectThemeMode } from '@/store/slices/themeModeSlice';
+import { store } from '@/store/store';
 import { Box } from '@mui/material';
 import { PropsWithChildren, useEffect } from 'react';
 
@@ -7,7 +8,7 @@ const LINEAR_GRADIENT =
     'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)';
 
 export default function WelcomePageLayout(props: PropsWithChildren) {
-    const { themeMode } = useAppContext();
+    const themeMode = selectThemeMode(store.getState());
     const { locale } = useLocale();
 
     useEffect(() => {}, [themeMode, locale]);
