@@ -1,16 +1,17 @@
 import GreetingUser from '@/components/GreetingUser';
 import PageLayout from '@/components/layout/PageLayout';
 import SupportCenter from '@/components/SupportCenter';
+import { useAuth } from '@/hooks/context/useAuth';
+import useLocale from '@/hooks/context/useLocale';
+import { selectThemeMode } from '@/store/slices/themeModeSlice';
+import { store } from '@/store/store';
 import { Grid } from '@mui/material';
 import { Company, PayPeriod, Task } from '@repo/openapi';
+import { useEffect } from 'react';
 import ReminderSection from './sections/reminder/ReminderSection';
 import SummarySection from './sections/summary/SummarySection';
 import TodoSection from './sections/todo/TodoSection';
 import UpcomingSection from './sections/upcoming/UpcomingSection';
-import { useAuth } from '@/hooks/context/useAuth';
-import useAppContext from '@/hooks/context/useAppContext';
-import useLocale from '@/hooks/context/useLocale';
-import { useEffect } from 'react';
 
 type DashboardFormProps = {
     company?: Company;
@@ -19,7 +20,7 @@ type DashboardFormProps = {
 };
 
 const DashboardForm = ({ company, payPeriod, taskList }: DashboardFormProps) => {
-    const { themeMode } = useAppContext();
+    const themeMode = selectThemeMode(store.getState());
     const { user } = useAuth();
     const { locale } = useLocale();
     useEffect(() => {}, [locale, themeMode]);

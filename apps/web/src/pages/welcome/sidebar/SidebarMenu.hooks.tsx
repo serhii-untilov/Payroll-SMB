@@ -1,8 +1,10 @@
-import useAppContext from '@/hooks/context/useAppContext';
 import useLocale from '@/hooks/context/useLocale';
 import useDemo from '@/hooks/useDemo';
 import useSignIn from '@/hooks/useSignIn';
 import useSignUp from '@/hooks/useSignUp';
+import { selectThemeMode, switchThemeMode } from '@/store/slices/themeModeSlice';
+import { store } from '@/store/store';
+import { useAppDispatch } from '@/store/store.hooks';
 import {
     ArrowRightRounded,
     DarkModeOutlined,
@@ -12,17 +14,19 @@ import {
     PersonRounded,
     SearchRounded,
 } from '@mui/icons-material';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const useSidebarMenu = () => {
     const { t } = useTranslation();
     const { locale } = useLocale();
-    const { themeMode, switchThemeMode } = useAppContext();
+    const themeMode = selectThemeMode(store.getState());
+    const dispatch = useAppDispatch();
     const { goDemo } = useDemo();
     const { goSignIn } = useSignIn();
     const { goSignUp } = useSignUp();
     const { toggleLanguage } = useLocale();
+    const onChangeThemeMode = useCallback(() => dispatch(switchThemeMode()), [dispatch]);
 
     const menuItems = useMemo(
         () => [
@@ -55,10 +59,19 @@ const useSidebarMenu = () => {
             {
                 label: themeMode === 'light' ? t('Light theme') : t('Dark theme'),
                 icon: themeMode === 'light' ? <DarkModeOutlined /> : <LightModeOutlined />,
-                onClick: switchThemeMode,
+                onClick: onChangeThemeMode,
             },
         ],
-        [t, locale, switchThemeMode, themeMode, goDemo, goSignUp, goSignIn, toggleLanguage],
+        [
+            goDemo,
+            goSignIn,
+            goSignUp,
+            locale.language,
+            onChangeThemeMode,
+            t,
+            themeMode,
+            toggleLanguage,
+        ],
     );
 
     return { menuItems };

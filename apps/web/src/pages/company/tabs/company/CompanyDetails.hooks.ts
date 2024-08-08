@@ -1,9 +1,11 @@
-import useAppContext from '@/hooks/context/useAppContext';
 import useLocale from '@/hooks/context/useLocale';
 import { useCreateCompany, useUpdateCompany } from '@/hooks/queries/useCompany';
 import useDefaultAccountingId from '@/hooks/useDefaultAccountingId';
 import useDefaultLawId from '@/hooks/useDefaultLawId';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
+import { selectCompany, setCompany } from '@/store/slices/companySlice';
+import { store } from '@/store/store';
+import { useAppDispatch } from '@/store/store.hooks';
 import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
@@ -18,7 +20,8 @@ import { CompanyDetailsProps } from './CompanyDetails';
 
 export default function useCompanyDetails(props: CompanyDetailsProps) {
     const { company, setCompanyId } = props;
-    const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
+    const currentCompany = selectCompany(store.getState());
+    const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const { locale } = useLocale();
     const formSchema = useFormSchema();
@@ -63,14 +66,14 @@ export default function useCompanyDetails(props: CompanyDetailsProps) {
                 if (setCompanyId) setCompanyId(response.id);
                 reset(formSchema.cast(response));
                 if (!currentCompany || currentCompany.id === response.id) {
-                    setCurrentCompany(response);
+                    dispatch(setCompany(response));
                 }
                 if (setCompanyId) setCompanyId(response?.id);
             } catch (e: unknown) {
                 snackbarError(e as AppMessage);
             }
         },
-        [currentCompany, formSchema, isDirty, reset, save, setCompanyId, setCurrentCompany],
+        [currentCompany, dispatch, formSchema, isDirty, reset, save, setCompanyId],
     );
 
     const onCancel = useCallback(async () => {

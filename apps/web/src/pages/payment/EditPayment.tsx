@@ -2,11 +2,11 @@ import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetPayment } from '@/hooks/queries/usePayment';
 import PaymentForm from './PaymentForm';
-import { Company } from '@repo/openapi';
+import { Company, PayPeriod } from '@repo/openapi';
 
 interface EditPaymentProps {
     company: Company;
-    payPeriod: Date;
+    payPeriod: PayPeriod;
     paymentId: number;
     tabIndex: string | null;
     goBack: boolean;

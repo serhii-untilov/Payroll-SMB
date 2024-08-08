@@ -1,9 +1,11 @@
+import ErrorDisplay from '@/components/ErrorDisplay';
+import { selectCompany } from '@/store/slices/companySlice';
+import { selectPayPeriod } from '@/store/slices/payPeriodSlice';
+import { store } from '@/store/store';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CreatePayment from './CreatePayment';
 import EditPayment from './EditPayment';
-import ErrorDisplay from '@/components/ErrorDisplay';
-import useAppContext from '@/hooks/context/useAppContext';
 
 export default function PaymentPage() {
     const params = useParams();
@@ -11,7 +13,8 @@ export default function PaymentPage() {
     const [searchParams] = useSearchParams();
     const tabIndex = searchParams.get('tab-index');
     const goBack = searchParams.get('return') === 'true';
-    const { company, payPeriod } = useAppContext();
+    const company = selectCompany(store.getState());
+    const payPeriod = selectPayPeriod(store.getState());
 
     return (
         <>

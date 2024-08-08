@@ -19,7 +19,7 @@ const usePeopleForm = (props: PeopleFormProps) => {
                     <PositionList
                         companyId={props.company.id}
                         relations={true}
-                        onPayPeriodDate={props.payPeriod}
+                        onPayPeriodDate={props.payPeriod.dateFrom}
                     />
                 ),
             },
@@ -30,7 +30,7 @@ const usePeopleForm = (props: PeopleFormProps) => {
                         companyId={props.company.id}
                         employeesOnly={true}
                         relations={true}
-                        onPayPeriodDate={props.payPeriod}
+                        onPayPeriodDate={props.payPeriod.dateFrom}
                     />
                 ),
             },
@@ -42,7 +42,7 @@ const usePeopleForm = (props: PeopleFormProps) => {
                         companyId={props.company.id}
                         vacanciesOnly={true}
                         relations={true}
-                        onPayPeriodDate={props.payPeriod}
+                        onPayPeriodDate={props.payPeriod.dateFrom}
                     />
                 ),
             },
@@ -55,7 +55,7 @@ const usePeopleForm = (props: PeopleFormProps) => {
                         employeesOnly={true}
                         dismissedOnly={true}
                         relations={true}
-                        onPayPeriodDate={props.payPeriod}
+                        onPayPeriodDate={props.payPeriod.dateFrom}
                     />
                 ),
             },

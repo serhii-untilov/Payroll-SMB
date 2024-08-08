@@ -1,10 +1,14 @@
-import ErrorDisplay from './ErrorDisplay';
-import useAppContext from '@/hooks/context/useAppContext';
-import usePayPeriodOptions from '@/hooks/usePayPeriodOptions';
 import { useGetPayPeriodList } from '@/hooks/queries/usePayPeriod';
+import usePayPeriodOptions from '@/hooks/usePayPeriodOptions';
+import { selectCompany } from '@/store/slices/companySlice';
+import { selectPayPeriod, setPayPeriod } from '@/store/slices/payPeriodSlice';
+import { store } from '@/store/store';
+import { useAppDispatch } from '@/store/store.hooks';
 import { Select, SelectProps } from '@mui/material';
 import { monthBegin } from '@repo/shared';
 import { format } from 'date-fns';
+import { useCallback, useMemo } from 'react';
+import ErrorDisplay from './ErrorDisplay';
 
 type SelectPayPeriodProps = SelectProps<string> & {
     companyId: number | undefined;
@@ -13,8 +17,26 @@ type SelectPayPeriodProps = SelectProps<string> & {
 export default function SelectPayPeriod(props: SelectPayPeriodProps) {
     const { companyId, ...other } = props;
     const { data, isError, error } = useGetPayPeriodList({ companyId });
-    const { company, payPeriod, setPayPeriod } = useAppContext();
+    const company = selectCompany(store.getState());
+    const payPeriod = selectPayPeriod(store.getState());
+    const dispatch = useAppDispatch();
     const options = usePayPeriodOptions(data, company?.payPeriod ?? monthBegin(new Date()));
+    const value = useMemo(
+        () =>
+            options?.length
+                ? format(payPeriod?.dateFrom ?? monthBegin(new Date()), 'yyyy-MM-dd')
+                : '',
+        [options?.length, payPeriod?.dateFrom],
+    );
+    const onChangePeriod = useCallback(
+        (date: Date) => {
+            const payPeriod = data?.find((o) => o.dateFrom.getTime() === date.getTime());
+            if (payPeriod) {
+                dispatch(setPayPeriod(payPeriod));
+            }
+        },
+        [data, dispatch],
+    );
 
     return (
         <>
@@ -25,12 +47,8 @@ export default function SelectPayPeriod(props: SelectPayPeriodProps) {
                     margin="none"
                     fullWidth
                     native={false}
-                    onChange={(event: any) => setPayPeriod(new Date(event.target.value))}
-                    value={
-                        options?.length
-                            ? format(payPeriod || monthBegin(new Date()), 'yyyy-MM-dd')
-                            : ''
-                    }
+                    onChange={(event: any) => onChangePeriod(new Date(event.target.value))}
+                    value={value}
                     label={''}
                     {...other}
                 >

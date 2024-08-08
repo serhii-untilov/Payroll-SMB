@@ -6,14 +6,14 @@ import Toolbar from '@/components/layout/Toolbar';
 import SelectAccPeriod from '@/components/SelectAccPeriod/SelectAccPeriod';
 import { SelectPaymentType } from '@/components/SelectPaymentType';
 import { Grid } from '@mui/material';
-import { Company, Payment, PaymentGroup, PaymentStatus } from '@repo/openapi';
+import { Company, Payment, PaymentGroup, PaymentStatus, PayPeriod } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 import usePaymentTransform from '../../../../hooks/usePaymentTransform';
 import usePaymentDetails from './PaymentDetails.hooks';
 
 export interface PaymentDetailsProps {
     company: Company;
-    payPeriod: Date;
+    payPeriod: PayPeriod;
     payment?: Payment | undefined;
     setPaymentId?: (paymentId: number) => void;
 }

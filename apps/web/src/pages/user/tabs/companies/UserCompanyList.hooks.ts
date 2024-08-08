@@ -1,6 +1,8 @@
 import { api } from '@/api';
-import useAppContext from '@/hooks/context/useAppContext';
 import { useRemoveUserCompany, useRestoreUserCompany } from '@/hooks/queries/useUserCompany';
+import { selectCompany, setCompany } from '@/store/slices/companySlice';
+import { store } from '@/store/store';
+import { useAppDispatch } from '@/store/store.hooks';
 import { snackbarError } from '@/utils/snackbar';
 import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { UserCompany } from '@repo/openapi';
@@ -21,7 +23,8 @@ interface Params {
 const useUserCompanyList = (params: Params) => {
     const { userCompanies, rowSelectionModel, setRowSelectionModel, showDeleted } = params;
     const { t } = useTranslation();
-    const { company: currentCompany, setCompany: setCurrentCompany } = useAppContext();
+    const currentCompany = selectCompany(store.getState());
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const removeUserCompany = useRemoveUserCompany();
     const restoreUserCompany = useRestoreUserCompany();
@@ -32,7 +35,7 @@ const useUserCompanyList = (params: Params) => {
     };
 
     const onSelectCompany = async (companyId: number) => {
-        setCurrentCompany((await api.companiesFindOne(companyId)).data);
+        dispatch(setCompany((await api.companiesFindOne(companyId)).data));
         navigate(`/company/${companyId}?tab-index=0&return=true`);
     };
 

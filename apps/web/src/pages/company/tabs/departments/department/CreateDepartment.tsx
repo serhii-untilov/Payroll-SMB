@@ -1,7 +1,8 @@
+import ErrorDisplay from '@/components/ErrorDisplay';
 import { Dispatch } from 'react';
 import DepartmentForm from './DepartmentForm';
-import useAppContext from '@/hooks/context/useAppContext';
-import ErrorDisplay from '@/components/ErrorDisplay';
+import { selectCompany } from '@/store/slices/companySlice';
+import { store } from '@/store/store';
 
 export interface CreateDepartmentProps {
     open: boolean;
@@ -10,7 +11,7 @@ export interface CreateDepartmentProps {
 }
 
 export default function CreateDepartment(props: CreateDepartmentProps) {
-    const { company } = useAppContext();
+    const company = selectCompany(store.getState());
     return (
         <>
             {!company && <ErrorDisplay error={{ message: 'The Company is not defined' }} />}

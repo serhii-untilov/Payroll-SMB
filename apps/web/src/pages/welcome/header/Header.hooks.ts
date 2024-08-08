@@ -1,7 +1,8 @@
-import useAppContext from '@/hooks/context/useAppContext';
+import { selectThemeMode } from '@/store/slices/themeModeSlice';
+import { store } from '@/store/store';
 
 export default function useHeader() {
-    const { themeMode } = useAppContext();
+    const themeMode = selectThemeMode(store.getState());
 
     const headerProps = {
         maxWidth: 'lg',

@@ -4,13 +4,13 @@ import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
 import SelectPayPeriod from '@/components/SelectPayPeriod';
 import { Box, Grid } from '@mui/material';
-import { Company } from '@repo/openapi';
+import { Company, PayPeriod } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 import usePaymentsForm from './PaymentsForm.hooks';
 
 export type PaymentsFormProps = {
     company: Company;
-    payPeriod: Date;
+    payPeriod: PayPeriod;
     tabIndex: string | null;
     goBack: boolean;
 };

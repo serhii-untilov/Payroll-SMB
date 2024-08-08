@@ -132,8 +132,13 @@ export class CompaniesService {
                 users: { userId },
             },
         });
-        // this._logger.log(`companies/${id}: payPeriod: ${company.payPeriod}`);
         return company;
+    }
+
+    async findFirst(userId: number, relations: boolean = false): Promise<Company | undefined> {
+        const companies = await this.findAll(userId, relations);
+        const id = companies.reduce((a, b) => (a && a > b.id ? a : b.id), 0);
+        return companies.find((o) => o.id === id);
     }
 
     async findOneOrFail(userId: number, id: number, relations: boolean = false): Promise<Company> {

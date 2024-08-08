@@ -58,7 +58,7 @@ export default function usePaymentDetails(props: PaymentDetailsProps) {
                 : await createPayment.mutateAsync({
                       ...(data as CreatePaymentDto),
                       companyId: company.id,
-                      payPeriod: payPeriod,
+                      payPeriod: payPeriod.dateFrom,
                   });
         },
         [company.id, createPayment, dirtyFields, payPeriod, payment, updatePayment],
