@@ -7,7 +7,7 @@ import { selectCompany, setCompany } from '@/store/slices/companySlice';
 import { setPayPeriod } from '@/store/slices/payPeriodSlice';
 import { setServerEvent } from '@/store/slices/serverEventSlice';
 import { selectThemeMode, setThemeMode } from '@/store/slices/themeModeSlice';
-import { setTheme } from '@/store/slices/themeSlice';
+import { selectTheme, setTheme } from '@/store/slices/themeSlice';
 import { store } from '@/store/store';
 import { useAppDispatch } from '@/store/store.hooks';
 import { defaultTheme } from '@/themes/defaultTheme';
@@ -23,6 +23,7 @@ export default function useApp() {
     const dispatch = useAppDispatch();
     const company = selectCompany(store.getState());
     const themeMode = selectThemeMode(store.getState());
+    const theme = selectTheme(store.getState());
 
     useEffect(() => {
         dispatch(setCompactView(!wideScreen));
@@ -101,4 +102,6 @@ export default function useApp() {
             };
         }
     }, [dispatch, eventSource, invalidateQueries]);
+
+    return { theme };
 }

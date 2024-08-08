@@ -1,15 +1,17 @@
-import { Theme } from '@mui/material';
+import { createTheme, responsiveFontSizes, Theme } from '@mui/material';
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
+import { ukUA } from '@mui/material/locale';
+import { defaultTheme } from '@/themes/defaultTheme';
 
 // Define a type for the slice state
 export interface ThemeState {
-    value: Theme | undefined;
+    value: Theme;
 }
 
 // Define the initial state using that type
 const initialState: ThemeState = {
-    value: undefined,
+    value: responsiveFontSizes(createTheme(defaultTheme('light'), ukUA)),
 };
 
 export const themeSlice = createSlice({

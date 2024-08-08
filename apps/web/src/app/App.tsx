@@ -4,14 +4,17 @@ import { useRoutes } from 'react-router-dom';
 import router from '../router/router';
 import './../index.css';
 import useApp from './App.hooks';
+import { ThemeProvider } from '@mui/material';
 
 export default function App() {
     const content = useRoutes(router);
-    useApp();
+    const { theme } = useApp();
     return (
         <>
             <CssBaseline enableColorScheme />
-            <AppSnackbarProvider>{content}</AppSnackbarProvider>
+            <ThemeProvider theme={theme}>
+                <AppSnackbarProvider>{content}</AppSnackbarProvider>
+            </ThemeProvider>
         </>
     );
 }
