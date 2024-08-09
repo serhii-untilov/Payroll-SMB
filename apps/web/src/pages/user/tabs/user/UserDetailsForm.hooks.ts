@@ -1,11 +1,10 @@
 import useLocale from '@/hooks/context/useLocale';
 import { useUpdateUser } from '@/hooks/queries/useUser';
+import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
-import { snackbarFormErrors } from '@/utils/snackbar';
+import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AxiosError } from 'axios';
 import { t } from 'i18next';
-import { enqueueSnackbar } from 'notistack';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { InferType, object, string } from 'yup';
@@ -52,8 +51,7 @@ const useUserDetailsForm = ({ user }) => {
                 reset(response);
                 setLanguage(response?.language);
             } catch (e: unknown) {
-                const error = e as AxiosError;
-                enqueueSnackbar(`${error.code}\n${error.message}`, { variant: 'error' });
+                snackbarError(e as AppMessage);
             }
         },
         [isDirty, reset, save, setLanguage, user],

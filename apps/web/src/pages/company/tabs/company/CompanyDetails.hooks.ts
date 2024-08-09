@@ -26,7 +26,7 @@ export default function useCompanyDetails(props: CompanyDetailsProps) {
     const formSchema = useFormSchema();
     const createCompany = useCreateCompany();
     const updateCompany = useUpdateCompany();
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     type FormType = InferType<typeof formSchema>;
     const {
         control,

@@ -20,7 +20,7 @@ import {
 export default function usePaymentDetails(props: PaymentDetailsProps) {
     const { payment, company, payPeriod, setPaymentId } = props;
     const { t } = useTranslation();
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     const { locale } = useLocale();
     const formSchema = useFormSchema();
     type FormType = yup.InferType<typeof formSchema>;

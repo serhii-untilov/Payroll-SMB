@@ -1,9 +1,10 @@
 import { useAuth } from '@/hooks/context/useAuth';
 import useLocale from '@/hooks/context/useLocale';
-import { errorMessage } from '@/utils/errorMessage';
+import useInvalidateQueries from '@/hooks/useInvalidateQueries';
+import { AppMessage } from '@/types';
+import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthDto } from '@repo/openapi';
-import { enqueueSnackbar } from 'notistack';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +17,7 @@ export default function useSignInPage() {
     const { locale } = useLocale();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { invalidateAllQueries } = useInvalidateQueries();
 
     const formSchema = useMemo(
         () =>
@@ -49,23 +51,19 @@ export default function useSignInPage() {
     });
 
     useEffect(() => {}, [locale]);
-
-    useEffect(() => {
-        errors.email?.message && enqueueSnackbar(t(errors.email?.message), { variant: 'error' });
-        errors.password?.message &&
-            enqueueSnackbar(t(errors.password?.message), { variant: 'error' });
-    }, [errors, t]);
+    useEffect(() => snackbarFormErrors(t, errors), [errors, t]);
 
     const onSubmit: SubmitHandler<AuthDto> = useCallback(
         () => async (data) => {
             try {
                 await login({ ...data, rememberMe });
+                await invalidateAllQueries();
                 navigate('/dashboard');
             } catch (e) {
-                enqueueSnackbar(t(errorMessage(e)), { variant: 'error' });
+                snackbarError(e as AppMessage);
             }
         },
-        [navigate, login, t, rememberMe],
+        [login, rememberMe, invalidateAllQueries, navigate],
     );
 
     return {

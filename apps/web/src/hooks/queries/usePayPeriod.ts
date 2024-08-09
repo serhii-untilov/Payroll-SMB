@@ -40,7 +40,7 @@ type UpdatePayPeriod = {
 };
 
 const useClosePayPeriod = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdatePayPeriod): Promise<PayPeriod> =>
             (await api.payPeriodsClose(id, dto)).data,
@@ -59,7 +59,7 @@ const useClosePayPeriod = () => {
 };
 
 const useOpenPayPeriod = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdatePayPeriod): Promise<PayPeriod> =>
             (await api.payPeriodsOpen(id, dto)).data,

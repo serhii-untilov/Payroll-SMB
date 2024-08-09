@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 
 export default function useInvalidateQueries() {
     const queryClient = useQueryClient();
+
     const invalidateQueries = useCallback(
         async (resourceList: ResourceType[]) =>
             resourceList.forEach(async (key) => {
@@ -11,5 +12,11 @@ export default function useInvalidateQueries() {
             }),
         [queryClient],
     );
-    return invalidateQueries;
+
+    const invalidateAllQueries = useCallback(
+        async () => await queryClient.invalidateQueries({ queryKey: [], refetchType: 'all' }),
+        [queryClient],
+    );
+
+    return { invalidateQueries, invalidateAllQueries };
 }

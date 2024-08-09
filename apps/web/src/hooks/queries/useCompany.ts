@@ -12,7 +12,7 @@ const useGetCompany = (companyId: number) => {
 };
 
 const useCreateCompany = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (dto: CreateCompanyDto): Promise<Company> =>
             (await api.companiesCreate(dto)).data,
@@ -28,7 +28,7 @@ type UpdateCompany = {
 };
 
 const useUpdateCompany = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdateCompany): Promise<Company> =>
             (await api.companiesUpdate(id, dto)).data,
@@ -43,7 +43,7 @@ const useUpdateCompany = () => {
 };
 
 const useRemoveCompany = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.companiesRemove(id)).data,
         onSuccess: () => {
@@ -59,7 +59,7 @@ const useRemoveCompany = () => {
 };
 
 const useCalculateCompany = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => await api.companiesSalaryCalculate(id),
         onSuccess: () => {

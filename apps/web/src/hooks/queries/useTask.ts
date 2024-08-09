@@ -26,7 +26,7 @@ const useGetTask = (taskId: number, params?: FindOneTaskDto) => {
 };
 
 const useCreateTask = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (dto: CreateTaskDto): Promise<Task> => (await api.tasksCreate(dto)).data,
         onSuccess: () => {
@@ -41,7 +41,7 @@ type UpdateTask = {
 };
 
 const useUpdateTask = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdateTask): Promise<Task> =>
             (await api.tasksUpdate(id, dto)).data,
@@ -52,7 +52,7 @@ const useUpdateTask = () => {
 };
 
 const useRemoveTask = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.tasksRemove(id)).data,
         onSuccess: () => {

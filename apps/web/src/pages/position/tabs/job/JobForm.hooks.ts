@@ -27,7 +27,7 @@ import { JobFormProps } from './JobForm';
 const useJobForm = (props: JobFormProps) => {
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     const navigate = useNavigate();
     const formSchema = useFormSchema();
     type FormType = InferType<typeof formSchema>;

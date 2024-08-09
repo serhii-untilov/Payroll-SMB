@@ -16,9 +16,9 @@ export type ApiError = {
     statusCode?: string;
 };
 
-const baseURL = import.meta.env.VITE_APP_URL;
+const baseURL = import.meta.env.VITE_APP_URL ?? import.meta.env.BASE_URL;
 
-console.log('baseURL:', baseURL);
+console.log('baseURL:', baseURL ?? ' is not defined! See the VITE_APP_URL variable.');
 
 export const axiosInstance = axios.create({
     baseURL,
