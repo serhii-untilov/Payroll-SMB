@@ -1,8 +1,7 @@
 import { api } from '@/api';
 import { useRemoveUserCompany, useRestoreUserCompany } from '@/hooks/queries/useUserCompany';
 import { selectCompany, setCompany } from '@/store/slices/companySlice';
-import { store } from '@/store/store';
-import { useAppDispatch } from '@/store/store.hooks';
+import { useAppDispatch, useAppSelector } from '@/store/store.hooks';
 import { snackbarError } from '@/utils/snackbar';
 import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { UserCompany } from '@repo/openapi';
@@ -23,7 +22,7 @@ interface Params {
 const useUserCompanyList = (params: Params) => {
     const { userCompanies, rowSelectionModel, setRowSelectionModel, showDeleted } = params;
     const { t } = useTranslation();
-    const currentCompany = selectCompany(store.getState());
+    const currentCompany = useAppSelector(selectCompany);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const removeUserCompany = useRemoveUserCompany();

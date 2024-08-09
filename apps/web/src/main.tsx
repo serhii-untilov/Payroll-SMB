@@ -16,6 +16,9 @@ import './services/i18n/i18n.ts';
 import queryClient from './services/query/queryClient.ts';
 import { store } from './store/store.ts';
 
+// const mapState = (state: any) => state;
+// export const ConnectedApp = connect(mapState)(App);
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <AppErrorBoundary>
@@ -24,6 +27,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     <BrowserRouter>
                         <StoreProvider store={store}>
                             <LocaleProvider>
+                                {/* <ConnectedApp /> */}
                                 <App />
                             </LocaleProvider>
                         </StoreProvider>

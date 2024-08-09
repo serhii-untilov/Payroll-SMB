@@ -1,5 +1,5 @@
 import { selectCompactView } from '@/store/slices/compactViewSlice';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/store.hooks';
 import { ListItem, ListItemProps } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -21,7 +21,7 @@ const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) =
 
 export function ListItemLink(props: Props) {
     const { icon, primary, to, target, onClick } = props;
-    const compactView = selectCompactView(store.getState());
+    const compactView = useAppSelector(selectCompactView);
 
     return (
         <li>

@@ -4,8 +4,7 @@ import useDefaultAccountingId from '@/hooks/useDefaultAccountingId';
 import useDefaultLawId from '@/hooks/useDefaultLawId';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { selectCompany, setCompany } from '@/store/slices/companySlice';
-import { store } from '@/store/store';
-import { useAppDispatch } from '@/store/store.hooks';
+import { useAppDispatch, useAppSelector } from '@/store/store.hooks';
 import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
@@ -20,7 +19,7 @@ import { CompanyDetailsProps } from './CompanyDetails';
 
 export default function useCompanyDetails(props: CompanyDetailsProps) {
     const { company, setCompanyId } = props;
-    const currentCompany = selectCompany(store.getState());
+    const currentCompany = useAppSelector(selectCompany);
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const { locale } = useLocale();

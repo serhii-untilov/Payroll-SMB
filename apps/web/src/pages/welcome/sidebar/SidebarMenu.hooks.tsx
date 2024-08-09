@@ -3,8 +3,7 @@ import useDemo from '@/hooks/useDemo';
 import useSignIn from '@/hooks/useSignIn';
 import useSignUp from '@/hooks/useSignUp';
 import { selectThemeMode, switchThemeMode } from '@/store/slices/themeModeSlice';
-import { store } from '@/store/store';
-import { useAppDispatch } from '@/store/store.hooks';
+import { useAppDispatch, useAppSelector } from '@/store/store.hooks';
 import {
     ArrowRightRounded,
     DarkModeOutlined,
@@ -20,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 const useSidebarMenu = () => {
     const { t } = useTranslation();
     const { locale } = useLocale();
-    const themeMode = selectThemeMode(store.getState());
+    const themeMode = useAppSelector(selectThemeMode);
     const dispatch = useAppDispatch();
     const { goDemo } = useDemo();
     const { goSignIn } = useSignIn();

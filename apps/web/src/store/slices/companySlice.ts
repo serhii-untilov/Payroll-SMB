@@ -4,12 +4,12 @@ import { Company } from '@repo/openapi';
 
 // Define a type for the slice state
 export interface CompanyState {
-    value: Company | undefined;
+    value: Company | null;
 }
 
 // Define the initial state using that type
 const initialState: CompanyState = {
-    value: undefined,
+    value: null,
 };
 
 export const companySlice = createSlice({
@@ -18,7 +18,7 @@ export const companySlice = createSlice({
     initialState,
     reducers: {
         // Use the PayloadAction type to declare the contents of `action.payload`
-        setCompany: (state, action: PayloadAction<Company | undefined>) => {
+        setCompany: (state, action: PayloadAction<Company | null>) => {
             state.value = action.payload;
         },
     },

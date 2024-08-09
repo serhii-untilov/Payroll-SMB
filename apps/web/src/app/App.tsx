@@ -7,12 +7,12 @@ import useApp from './App.hooks';
 import { ThemeProvider } from '@mui/material';
 
 export default function App() {
-    const content = useRoutes(router);
     const { theme } = useApp();
+    const content = useRoutes(router);
     return (
         <>
-            <CssBaseline enableColorScheme />
             <ThemeProvider theme={theme}>
+                <CssBaseline enableColorScheme />
                 <AppSnackbarProvider>{content}</AppSnackbarProvider>
             </ThemeProvider>
         </>

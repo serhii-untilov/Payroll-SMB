@@ -1,20 +1,29 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './slices/userSlice';
+import compactViewReducer from './slices/compactViewSlice';
 import companyReducer from './slices/companySlice';
 import payPeriodReducer from './slices/payPeriodSlice';
-import compactViewReducer from './slices/compactViewSlice';
-import themeReducer from './slices/themeSlice';
-import themeModeReducer from './slices/themeModeSlice';
 import serverEventReducer from './slices/serverEventSlice';
+import themeModeReducer from './slices/themeModeSlice';
+import userReducer from './slices/userSlice';
 
 export const store = configureStore({
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                // Ignore these action types
+                ignoredActions: ['your/action/type'],
+                // Ignore these field paths in all actions
+                ignoredActionPaths: ['payload'],
+                // Ignore these paths in the state
+                ignoredPaths: ['theme.value', 'company.value', 'payPeriod.value'],
+            },
+        }),
     reducer: {
         user: userReducer,
         company: companyReducer,
         payPeriod: payPeriodReducer,
         compactView: compactViewReducer,
         themeMode: themeModeReducer,
-        theme: themeReducer,
         serverEvent: serverEventReducer,
     },
 });

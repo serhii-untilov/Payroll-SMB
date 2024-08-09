@@ -2,8 +2,7 @@ import { useGetPayPeriodList } from '@/hooks/queries/usePayPeriod';
 import usePayPeriodOptions from '@/hooks/usePayPeriodOptions';
 import { selectCompany } from '@/store/slices/companySlice';
 import { selectPayPeriod, setPayPeriod } from '@/store/slices/payPeriodSlice';
-import { store } from '@/store/store';
-import { useAppDispatch } from '@/store/store.hooks';
+import { useAppDispatch, useAppSelector } from '@/store/store.hooks';
 import { Select, SelectProps } from '@mui/material';
 import { monthBegin } from '@repo/shared';
 import { format } from 'date-fns';
@@ -17,8 +16,8 @@ type SelectPayPeriodProps = SelectProps<string> & {
 export default function SelectPayPeriod(props: SelectPayPeriodProps) {
     const { companyId, ...other } = props;
     const { data, isError, error } = useGetPayPeriodList({ companyId });
-    const company = selectCompany(store.getState());
-    const payPeriod = selectPayPeriod(store.getState());
+    const company = useAppSelector(selectCompany);
+    const payPeriod = useAppSelector(selectPayPeriod);
     const dispatch = useAppDispatch();
     const options = usePayPeriodOptions(data, company?.payPeriod ?? monthBegin(new Date()));
     const value = useMemo(

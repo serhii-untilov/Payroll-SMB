@@ -4,7 +4,7 @@ import { useGetPosition } from '@/hooks/queries/usePosition';
 import { usePositionHistoryList } from '@/hooks/queries/usePositionHistory';
 import { selectCompany } from '@/store/slices/companySlice';
 import { selectPayPeriod } from '@/store/slices/payPeriodSlice';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/store.hooks';
 import { monthBegin } from '@repo/shared';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -14,8 +14,8 @@ const PositionHistoryPage = () => {
     const params = useParams();
     const positionId = Number(params.positionId);
     const { t } = useTranslation();
-    const company = selectCompany(store.getState());
-    const payPeriod = selectPayPeriod(store.getState());
+    const company = useAppSelector(selectCompany);
+    const payPeriod = useAppSelector(selectPayPeriod);
     const position = useGetPosition(positionId, {
         onPayPeriodDate: payPeriod?.dateFrom ?? monthBegin(new Date()),
         relations: true,

@@ -4,8 +4,7 @@ import { useClosePayPeriod, useOpenPayPeriod } from '@/hooks/queries/usePayPerio
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { selectCompany } from '@/store/slices/companySlice';
 import { setPayPeriod } from '@/store/slices/payPeriodSlice';
-import { store } from '@/store/store';
-import { useAppDispatch } from '@/store/store.hooks';
+import { useAppDispatch, useAppSelector } from '@/store/store.hooks';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { GridColDef } from '@mui/x-data-grid';
@@ -94,7 +93,7 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
 function useColumns() {
     const { t } = useTranslation();
     const { locale } = useLocale();
-    const company = selectCompany(store.getState());
+    const company = useAppSelector(selectCompany);
 
     return useMemo<GridColDef[]>(() => {
         return [
