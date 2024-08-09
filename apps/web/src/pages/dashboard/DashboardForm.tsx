@@ -4,7 +4,7 @@ import SupportCenter from '@/components/SupportCenter';
 import { useAuth } from '@/hooks/context/useAuth';
 import useLocale from '@/hooks/context/useLocale';
 import { selectThemeMode } from '@/store/slices/themeModeSlice';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/store.hooks';
 import { Grid } from '@mui/material';
 import { Company, PayPeriod, Task } from '@repo/openapi';
 import { useEffect } from 'react';
@@ -20,7 +20,7 @@ type DashboardFormProps = {
 };
 
 const DashboardForm = ({ company, payPeriod, taskList }: DashboardFormProps) => {
-    const themeMode = selectThemeMode(store.getState());
+    const themeMode = useAppSelector(selectThemeMode);
     const { user } = useAuth();
     const { locale } = useLocale();
     useEffect(() => {}, [locale, themeMode]);

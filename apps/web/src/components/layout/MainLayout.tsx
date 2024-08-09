@@ -2,8 +2,7 @@ import { useAuth } from '@/hooks/context/useAuth';
 import useLocale from '@/hooks/context/useLocale';
 import { selectCompactView, setCompactView } from '@/store/slices/compactViewSlice';
 import { selectThemeMode, switchThemeMode } from '@/store/slices/themeModeSlice';
-import { store } from '@/store/store';
-import { useAppDispatch } from '@/store/store.hooks';
+import { useAppDispatch, useAppSelector } from '@/store/store.hooks';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
@@ -27,8 +26,8 @@ export default function MainLayout() {
     const { logout } = useAuth();
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const compactView = selectCompactView(store.getState());
-    const themeMode = selectThemeMode(store.getState());
+    const compactView = useAppSelector(selectCompactView);
+    const themeMode = useAppSelector(selectThemeMode);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 

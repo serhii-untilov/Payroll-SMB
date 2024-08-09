@@ -1,5 +1,5 @@
 import { selectThemeMode } from '@/store/slices/themeModeSlice';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/store.hooks';
 import { ChevronRightRounded } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export function FeaturesRoleCard(props: Props) {
-    const themeMode = selectThemeMode(store.getState());
+    const themeMode = useAppSelector(selectThemeMode);
     const { name, description, icon, selectedIndex, index, onClick, details } = props;
     const { t } = useTranslation();
     const navigate = useNavigate();

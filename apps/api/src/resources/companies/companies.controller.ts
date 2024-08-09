@@ -69,6 +69,18 @@ export class CompaniesController {
         return await this.service.findAll(userId, relations);
     }
 
+    @Get('first')
+    @UseGuards(AccessTokenGuard)
+    @ApiOkResponse({ description: 'The found record', type: Company })
+    @ApiNotFoundResponse({ description: 'Record not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    async findFirst(@Req() req: Request, @Query() relations: boolean) {
+        const userId = getUserId(req);
+        const company = await this.service.findFirst(userId, relations);
+        if (company?.id) await this.service.availableFindOneOrFail(userId, company.id);
+        return company;
+    }
+
     @Get(':id')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found record', type: Company })
@@ -82,18 +94,6 @@ export class CompaniesController {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId, id);
         return await this.service.findOne(userId, id, relations);
-    }
-
-    @Get('first')
-    @UseGuards(AccessTokenGuard)
-    @ApiOkResponse({ description: 'The found record', type: Company })
-    @ApiNotFoundResponse({ description: 'Record not found' })
-    @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findFirst(@Req() req: Request, @Query() relations: boolean) {
-        const userId = getUserId(req);
-        const company = await this.service.findFirst(userId, relations);
-        if (company?.id) await this.service.availableFindOneOrFail(userId, company.id);
-        return company;
     }
 
     @Patch(':id')

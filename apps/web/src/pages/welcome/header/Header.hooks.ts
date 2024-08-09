@@ -1,8 +1,8 @@
 import { selectThemeMode } from '@/store/slices/themeModeSlice';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/store.hooks';
 
 export default function useHeader() {
-    const themeMode = selectThemeMode(store.getState());
+    const themeMode = useAppSelector(selectThemeMode);
 
     const headerProps = {
         maxWidth: 'lg',

@@ -2,14 +2,14 @@ import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetPositionList } from '@/hooks/queries/usePosition';
 import { selectPayPeriod } from '@/store/slices/payPeriodSlice';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/store.hooks';
 import { FindAllPositionDto } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 import PositionsTab from './PositionsTab';
 
 const PositionList = (props: FindAllPositionDto) => {
     const { data, isLoading, isError, error } = useGetPositionList(props);
-    const payPeriod = selectPayPeriod(store.getState());
+    const payPeriod = useAppSelector(selectPayPeriod);
     const { t } = useTranslation();
 
     return (

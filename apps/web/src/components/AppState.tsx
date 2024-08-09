@@ -1,6 +1,6 @@
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { selectServerEvent } from '@/store/slices/serverEventSlice';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/store.hooks';
 import { snackbarWarning } from '@/utils/snackbar';
 import { CheckCircle } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton } from '@mui/material';
@@ -12,7 +12,7 @@ import { Tooltip } from './layout/Tooltip';
 
 const AppState = () => {
     const { t } = useTranslation();
-    const event = selectServerEvent(store.getState());
+    const event = useAppSelector(selectServerEvent);
     const navigate = useNavigate();
     const isOnline = useOnlineStatus();
 

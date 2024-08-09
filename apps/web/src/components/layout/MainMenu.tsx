@@ -1,6 +1,6 @@
 import useLocale from '@/hooks/context/useLocale';
 import { selectCompany } from '@/store/slices/companySlice';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/store.hooks';
 import BusinessCenterOutlined from '@mui/icons-material/BusinessCenterOutlined';
 import CalculateOutlined from '@mui/icons-material/CalculateOutlined';
 import CreditScore from '@mui/icons-material/CreditScore';
@@ -16,7 +16,7 @@ import { ListItemLink } from './ListItemLink';
 export function MainMenu() {
     const { locale } = useLocale();
     const { t } = useTranslation();
-    const company = selectCompany(store.getState());
+    const company = useAppSelector(selectCompany);
 
     useEffect(() => {}, [company, locale]);
 

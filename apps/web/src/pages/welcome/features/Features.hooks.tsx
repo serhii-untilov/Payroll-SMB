@@ -1,5 +1,5 @@
 import { selectThemeMode } from '@/store/slices/themeModeSlice';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/store.hooks';
 import { BusinessCenterOutlined, PeopleOutlined, Settings } from '@mui/icons-material';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import FeaturesAdministrator from './FeaturesAdministrator';
 import FeaturesEmployee from './FeaturesEmployee';
 
 export default function useFeatures() {
-    const themeMode = selectThemeMode(store.getState());
+    const themeMode = useAppSelector(selectThemeMode);
     const { t } = useTranslation();
     const [selectedIndex, setSelectedIndex] = useState(
         Number(localStorage.getItem('feature-index')),
