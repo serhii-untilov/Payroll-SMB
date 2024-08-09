@@ -27,7 +27,7 @@ const useGetPaymentList = (params: FindAllPaymentDto) => {
 };
 
 const useCreatePayment = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (dto: CreatePaymentDto): Promise<Payment> =>
             (await api.paymentsCreate(dto)).data,
@@ -43,7 +43,7 @@ type UpdatePayment = {
 };
 
 const useUpdatePayment = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdatePayment): Promise<Payment> =>
             (await api.paymentsUpdate(id, dto)).data,
@@ -54,7 +54,7 @@ const useUpdatePayment = () => {
 };
 
 const useRemovePayment = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.paymentsRemove(id)).data,
         onSuccess: () => {
@@ -64,7 +64,7 @@ const useRemovePayment = () => {
 };
 
 const useRestorePayment = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number): Promise<Payment> => (await api.paymentsRestore(id)).data,
         onSuccess: () => {
@@ -74,7 +74,7 @@ const useRestorePayment = () => {
 };
 
 const useProcessPayment = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdatePayment): Promise<Payment> =>
             (await api.paymentsProcess(id, dto)).data,
@@ -91,7 +91,7 @@ const useProcessPayment = () => {
 };
 
 const useWithdrawPayment = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdatePayment): Promise<Payment> =>
             (await api.paymentsWithdraw(id, dto)).data,

@@ -34,7 +34,7 @@ export class AuthService {
             where: { email: user.email },
         });
         if (exists) {
-            throw new ConflictException('User already exists.');
+            throw new ConflictException(`User '${user.email}' already exists`);
         }
         const { password } = user;
         const hashedPassword = await this.hashData(password);

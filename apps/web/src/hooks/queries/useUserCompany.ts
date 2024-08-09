@@ -17,7 +17,7 @@ const useGetUserCompanyList = (params: FindAllUserCompanyDto) => {
 };
 
 const useRemoveUserCompany = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.userCompaniesRemove(id)).data,
         onSuccess: () => {
@@ -27,7 +27,7 @@ const useRemoveUserCompany = () => {
 };
 
 const useRestoreUserCompany = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.userCompaniesRestore(id)).data,
         onSuccess: () => {

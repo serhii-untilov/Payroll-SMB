@@ -18,7 +18,7 @@ export default function useDepartmentForm(props: DepartmentFormProps) {
     const { locale } = useLocale();
     const createDepartment = useCreateDepartment();
     const updateDepartment = useUpdateDepartment();
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     const formSchema = useFormSchema(props);
     type FormType = InferType<typeof formSchema>;
     const {

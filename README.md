@@ -3,8 +3,7 @@
 **Payroll SMB** is a web application that:
 
 - helps employers and employees calculate salaries and taxes according to the chosen country's laws.
-- features a responsive UI design, multi-tenant architecture, auto-generated REST API, role-based access with JWT authorization, event-driven calculation processing, automatic document preparation according to business process schedules, and SSE enabling the
-client to receive automatic updates from the server.
+- features a responsive UI design, multi-tenant architecture, auto-generated REST API, role-based access with JWT authorization, event-driven calculation processing, automatic document preparation according to business process schedules, and SSE enabling the client to receive automatic updates from the server.
 
 ## Key features
 
@@ -77,7 +76,10 @@ git clone https://github.com/serhii-untilov/Payroll-SMB.git
 cd Payroll-SMB
 npm i -g turbo
 npm i -g typeorm
-npm i && npm run build && npm run dev
+npm i
+npm run codegen
+npm run build
+npm run dev
 ```
 
 In development mode, the frontend and backend applications work on different ports:

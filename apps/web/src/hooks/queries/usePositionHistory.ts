@@ -32,7 +32,7 @@ const usePositionHistoryLast = (params: FindAllPositionHistoryDto) => {
 };
 
 const useCreatePositionHistory = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (dto: CreatePositionHistoryDto): Promise<PositionHistory> =>
             (await api.positionHistoryCreate(dto)).data,
@@ -58,7 +58,7 @@ type UpdatePositionHistory = {
 };
 
 const useUpdatePositionHistory = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdatePositionHistory): Promise<PositionHistory> =>
             (await api.positionHistoryUpdate(id, dto)).data,
@@ -79,7 +79,7 @@ const useUpdatePositionHistory = () => {
 };
 
 const useRemovePositionHistory = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.positionHistoryRemove(id)).data,
         onSuccess: () => {

@@ -21,7 +21,7 @@ export default function useApp() {
     const payPeriod = useAppSelector(selectPayPeriod);
     const themeMode = useAppSelector(selectThemeMode);
     const dispatch = useAppDispatch();
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
 
     const theme = useMemo(
         () => responsiveFontSizes(createTheme(defaultTheme(themeMode), locale.locale)),
@@ -63,13 +63,10 @@ export default function useApp() {
 
     useEffect(() => {
         const initPayPeriod = async () => {
-            dispatch(
-                setPayPeriod(
-                    company?.id
-                        ? (await api.payPeriodsFindCurrent({ companyId: company.id })).data
-                        : undefined,
-                ),
-            );
+            const payPeriod = company?.id
+                ? (await api.payPeriodsFindCurrent({ companyId: company.id })).data
+                : undefined;
+            dispatch(setPayPeriod(payPeriod));
         };
         initPayPeriod();
     }, [dispatch, company]);

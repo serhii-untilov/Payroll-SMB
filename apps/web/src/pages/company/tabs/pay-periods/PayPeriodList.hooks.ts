@@ -19,7 +19,7 @@ import { PayPeriodListProps } from './PayPeriodList';
 export default function usePayPeriodList(params: PayPeriodListProps) {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     const calculateCompany = useCalculateCompany();
     const closePayPeriod = useClosePayPeriod();
     const openPayPeriod = useOpenPayPeriod();

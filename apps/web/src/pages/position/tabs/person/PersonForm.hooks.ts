@@ -14,7 +14,7 @@ import { date, InferType, number, object, string } from 'yup';
 
 const usePersonForm = ({ person }) => {
     const { t } = useTranslation();
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     const { locale } = useLocale();
     const updatePerson = useUpdatePerson();
     const formSchema = useFormSchema();

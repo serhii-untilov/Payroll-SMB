@@ -27,7 +27,7 @@ const useGetPaymentPositionList = (params: FindAllPaymentPositionDto) => {
 };
 
 const useCreatePaymentPosition = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (dto: CreatePaymentPositionDto): Promise<PaymentPosition> =>
             (await api.paymentPositionsCreate(dto)).data,
@@ -43,7 +43,7 @@ type UpdatePaymentPosition = {
 };
 
 const useUpdatePaymentPosition = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdatePaymentPosition): Promise<PaymentPosition> =>
             (await api.paymentPositionsUpdate(id, dto)).data,
@@ -54,7 +54,7 @@ const useUpdatePaymentPosition = () => {
 };
 
 const useRemovePaymentPosition = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.paymentPositionsRemove(id)).data,
         onSuccess: () => {

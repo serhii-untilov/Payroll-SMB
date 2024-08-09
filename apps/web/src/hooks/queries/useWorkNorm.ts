@@ -29,7 +29,7 @@ const useGetWorkNormList = (params?: FindWorkNormDto) => {
 };
 
 const useCreateWorkNorm = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (dto: CreateWorkNormDto): Promise<WorkNorm> =>
             (await api.workNormsCreate(dto)).data,
@@ -45,7 +45,7 @@ type UpdateWorkNorm = {
 };
 
 const useUpdateWorkNorm = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdateWorkNorm): Promise<WorkNorm> =>
             (await api.workNormsUpdate(id, dto)).data,
@@ -54,7 +54,7 @@ const useUpdateWorkNorm = () => {
 };
 
 const useRemoveWorkNorm = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.workNormsRemove(id)).data,
         onSuccess: () => invalidateQueries([ResourceType.WorkNorm]),

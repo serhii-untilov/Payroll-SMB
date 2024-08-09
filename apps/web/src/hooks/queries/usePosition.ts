@@ -68,7 +68,7 @@ const useGetPositionByPerson = (params: Partial<FindPositionByPersonDto>) => {
 };
 
 const useCreatePosition = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (dto: CreatePositionDto): Promise<Position> =>
             (await api.positionsCreate(dto)).data,
@@ -84,7 +84,7 @@ type UpdatePosition = {
 };
 
 const useUpdatePosition = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdatePosition): Promise<Position> =>
             (await api.positionsUpdate(id, dto)).data,
@@ -95,7 +95,7 @@ const useUpdatePosition = () => {
 };
 
 const useRemovePosition = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.positionsRemove(id)).data,
         onSuccess: () => {

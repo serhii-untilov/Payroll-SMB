@@ -31,7 +31,7 @@ const useGetDepartmentList = (params: FindAllDepartmentDto) => {
 };
 
 const useCreateDepartment = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (dto: CreateDepartmentDto): Promise<Department> =>
             (await api.departmentsCreate(dto)).data,
@@ -47,7 +47,7 @@ type UpdateDepartment = {
 };
 
 const useUpdateDepartment = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async ({ id, dto }: UpdateDepartment): Promise<Department> =>
             (await api.departmentsUpdate(id, dto)).data,
@@ -58,7 +58,7 @@ const useUpdateDepartment = () => {
 };
 
 const useRemoveDepartment = () => {
-    const invalidateQueries = useInvalidateQueries();
+    const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
         mutationFn: async (id: number) => (await api.departmentsRemove(id)).data,
         onSuccess: () => {
