@@ -1,7 +1,7 @@
 import { AccessTokenGuard, RefreshTokenGuard } from '@/guards';
 import { getRefreshToken, getUserId } from '@/utils';
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiConflictResponse } from '@nestjs/swagger';
+import { ApiOkResponse } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateUserDto } from './../resources/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
@@ -13,14 +13,16 @@ export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Post('register')
-    @ApiConflictResponse({ status: '4XX', description: 'User already exists' })
-    @ApiConflictResponse({ status: '5XX', description: 'User already exists' })
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ type: TokensDto, description: 'The user is registered' })
+    // @ApiConflictResponse({ status: '4XX', description: 'The User is already exists' })
+    // @ApiBadGatewayResponse({ description: 'The User is already exists' })
     async register(@Body() user: CreateUserDto): Promise<TokensDto> {
         return await this.authService.register(user);
     }
 
-    @HttpCode(HttpStatus.OK)
     @Post('login')
+    @HttpCode(HttpStatus.OK)
     async login(@Body() user: AuthDto): Promise<TokensDto> {
         return await this.authService.login(user);
     }
@@ -40,8 +42,8 @@ export class AuthController {
         return this.authService.refreshTokens(userId, refreshToken);
     }
 
-    @HttpCode(HttpStatus.OK)
     @Post('demo')
+    @HttpCode(HttpStatus.OK)
     async demo(): Promise<AuthDto> {
         return await this.authService.demo();
     }

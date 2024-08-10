@@ -1,8 +1,9 @@
 import { AccessType, ResourceType, RoleType, WrapperType } from '@/types';
 import {
     BadRequestException,
-    ConflictException,
     ForbiddenException,
+    HttpException,
+    HttpStatus,
     Inject,
     Injectable,
     NotFoundException,
@@ -32,7 +33,7 @@ export class UsersService {
     async register(payload: CreateUserDto): Promise<User> {
         const exists = await this.repository.findOneBy({ email: payload.email });
         if (exists) {
-            throw new ConflictException('User already exists.');
+            throw new HttpException('User already exists.', HttpStatus.CONFLICT);
         }
         if (!payload.roleId) {
             payload.roleId = await this.rolesService.findRoleByType(RoleType.Employer);
@@ -50,7 +51,7 @@ export class UsersService {
     async create(userId: number, payload: CreateUserDto): Promise<User> {
         const exists = await this.repository.findOneBy({ email: payload.email });
         if (exists) {
-            throw new ConflictException('User already exists.');
+            throw new HttpException('User already exists.', HttpStatus.CONFLICT);
         }
         await this.accessService.availableForUserOrFail(
             userId,

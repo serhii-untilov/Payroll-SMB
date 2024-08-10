@@ -1,7 +1,8 @@
 import { PayPeriodState, ResourceType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import {
-    ConflictException,
+    HttpException,
+    HttpStatus,
     Inject,
     Injectable,
     Logger,
@@ -16,13 +17,14 @@ import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import {
+    ClosePayPeriodDto,
     CreatePayPeriodDto,
     FindAllPayPeriodDto,
     FindCurrentPayPeriodDto,
     FindOnePayPeriodDto,
+    OpenPayPeriodDto,
     UpdatePayPeriodDto,
 } from './dto';
-import { ClosePayPeriodDto, OpenPayPeriodDto } from './dto';
 import { PayPeriod, defaultFieldList } from './entities';
 
 @Injectable()
@@ -53,8 +55,9 @@ export class PayPeriodsService extends AvailableForUserCompany {
             dateTo: payload.dateTo,
         });
         if (existing) {
-            throw new ConflictException(
+            throw new HttpException(
                 `Pay Period '${formatPeriod(payload.dateFrom, payload.dateTo)}' already exists.`,
+                HttpStatus.CONFLICT,
             );
         }
         const intersection = await this.repository.findOneBy({
@@ -63,10 +66,11 @@ export class PayPeriodsService extends AvailableForUserCompany {
             dateTo: MoreThanOrEqual(payload.dateFrom),
         });
         if (intersection) {
-            throw new ConflictException(
+            throw new HttpException(
                 `Pay Period '${formatPeriod(payload.dateFrom, payload.dateTo)}'
                 intersects with period
                 '${formatPeriod(intersection.dateFrom, intersection.dateTo)}'.`,
+                HttpStatus.CONFLICT,
             );
         }
         return await this.repository.save({
@@ -176,8 +180,9 @@ export class PayPeriodsService extends AvailableForUserCompany {
         checkVersionOrFail(current, payload);
         const company = await this.companiesService.findOne(userId, current.companyId);
         if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
-            throw new ConflictException(
+            throw new HttpException(
                 `The record doesn't current period. Try again after reloading.`,
+                HttpStatus.CONFLICT,
             );
         }
         const nextDateFrom = dateUTC(add(current.dateTo, { days: 1 }));
@@ -215,12 +220,13 @@ export class PayPeriodsService extends AvailableForUserCompany {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
         checkVersionOrFail(current, payload);
         if (current.state !== PayPeriodState.Opened) {
-            throw new ConflictException('The given period is not opened.');
+            throw new HttpException('The given period is not opened.', HttpStatus.CONFLICT);
         }
         const company = await this.companiesService.findOne(userId, current.companyId);
         if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
-            throw new ConflictException(
+            throw new HttpException(
                 `The record doesn't current period. Try again after reloading.`,
+                HttpStatus.CONFLICT,
             );
         }
         const priorDateTo = dateUTC(sub(current.dateFrom, { days: 1 }));

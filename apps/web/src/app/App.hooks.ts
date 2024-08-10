@@ -49,7 +49,7 @@ export default function useApp() {
                 user &&
                 (companyId
                     ? (await api.companiesFindOne(companyId)).data
-                    : (await api.companiesFindFirst()).data);
+                    : (await api.companiesFindLast()).data);
             dispatch(setCompany(company));
         };
         initCompany();

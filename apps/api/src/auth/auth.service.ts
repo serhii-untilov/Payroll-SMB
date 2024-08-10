@@ -1,10 +1,10 @@
-import { CreateUserDto } from './../resources/users/dto/create-user.dto';
 import { AccessService, UsersService } from '@/resources';
 import { AccessType, ResourceType, RoleType } from '@/types';
 import {
     BadRequestException,
-    ConflictException,
     ForbiddenException,
+    HttpException,
+    HttpStatus,
     Inject,
     Injectable,
     UnauthorizedException,
@@ -13,6 +13,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './../resources/users/dto/create-user.dto';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';
 
@@ -34,7 +35,7 @@ export class AuthService {
             where: { email: user.email },
         });
         if (exists) {
-            throw new ConflictException(`User '${user.email}' already exists`);
+            throw new HttpException(`User '${user.email}' already exists`, HttpStatus.CONFLICT);
         }
         const { password } = user;
         const hashedPassword = await this.hashData(password);

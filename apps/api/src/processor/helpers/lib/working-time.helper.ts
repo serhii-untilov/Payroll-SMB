@@ -1,11 +1,11 @@
-import { WorkNorm } from './../../../resources/work-norms/entities/work-norm.entity';
-import { PositionHistory } from './../../../resources/position-history/entities/position-history.entity';
-import { Position } from './../../../resources/positions/entities/position.entity';
-import { PayPeriod } from './../../../resources/pay-periods/entities/pay-period.entity';
 import { BalanceWorkingTime, HoursByDay, WorkNormType, WorkingTime } from '@/types';
-import { ConflictException } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { getMaxDate, getMinDate, monthBegin, monthEnd, setBit } from '@repo/shared';
 import { add, sub } from 'date-fns';
+import { PayPeriod } from './../../../resources/pay-periods/entities/pay-period.entity';
+import { PositionHistory } from './../../../resources/position-history/entities/position-history.entity';
+import { Position } from './../../../resources/positions/entities/position.entity';
+import { WorkNorm } from './../../../resources/work-norms/entities/work-norm.entity';
 
 export function getWorkingTimePlan(
     workNorms: WorkNorm[],
@@ -23,7 +23,10 @@ export function getWorkingTimePlan(
 
 export function getWorkingTimeFact(plan: WorkingTime, dateFrom: Date, dateTo: Date): WorkingTime {
     if (monthBegin(dateFrom).getTime() !== monthBegin(dateTo).getTime()) {
-        throw new ConflictException('getFact: dateFrom must be in the same month as the dateTo.');
+        throw new HttpException(
+            'getFact: dateFrom must be in the same month as the dateTo.',
+            HttpStatus.CONFLICT,
+        );
     }
     let days: number = 0;
     let hours: number = 0;

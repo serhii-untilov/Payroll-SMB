@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { CreatePayPeriodCalcMethodDto } from './dto/create-pay-period-calc-method.dto';
@@ -18,8 +18,9 @@ export class PayPeriodsCalcMethodService {
             calcMethod: payload.calcMethod,
         });
         if (existing) {
-            throw new ConflictException(
+            throw new HttpException(
                 `Pay Period Calc Method ${payload.payPeriodId} already exists for PayPeriodId ${payload.payPeriodId}.`,
+                HttpStatus.CONFLICT,
             );
         }
         return await this.repository.save(payload);

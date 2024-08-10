@@ -1,20 +1,20 @@
-import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { HttpException, HttpStatus, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@/types';
 import { maxDate, minDate } from '@repo/shared';
 import { Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
 import { AccessService } from '../access/access.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
+import { FindAllDepartmentDto } from './dto/find-all-department.dto';
+import { FindOneDepartmentDto } from './dto/find-one-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Department } from './entities/department.entity';
 import { DepartmentCreatedEvent } from './events/department-created.event';
 import { DepartmentDeletedEvent } from './events/department-deleted.event';
 import { DepartmentUpdatedEvent } from './events/department-updated.event';
-import { FindAllDepartmentDto } from './dto/find-all-department.dto';
-import { FindOneDepartmentDto } from './dto/find-one-department.dto';
-import { checkVersionOrFail } from '@/utils';
 
 @Injectable()
 export class DepartmentsService extends AvailableForUserCompany {
@@ -47,7 +47,10 @@ export class DepartmentsService extends AvailableForUserCompany {
             name: payload.name,
         });
         if (existing) {
-            throw new ConflictException(`Department '${payload.name}' already exists.`);
+            throw new HttpException(
+                `Department '${payload.name}' already exists.`,
+                HttpStatus.CONFLICT,
+            );
         }
         const created = await this.repository.save({
             ...other,

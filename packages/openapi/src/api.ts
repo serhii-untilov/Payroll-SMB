@@ -7274,8 +7274,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        companiesFindFirst: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/companies/first`;
+        companiesFindLast: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/companies/last`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11770,10 +11770,10 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async companiesFindFirst(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Company>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.companiesFindFirst(options);
+        async companiesFindLast(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Company>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.companiesFindLast(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.companiesFindFirst']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.companiesFindLast']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -13342,8 +13342,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        companiesFindFirst(options?: any): AxiosPromise<Company> {
-            return localVarFp.companiesFindFirst(options).then((request) => request(axios, basePath));
+        companiesFindLast(options?: any): AxiosPromise<Company> {
+            return localVarFp.companiesFindLast(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14636,8 +14636,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public companiesFindFirst(options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).companiesFindFirst(options).then((request) => request(this.axios, this.basePath));
+    public companiesFindLast(options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).companiesFindLast(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

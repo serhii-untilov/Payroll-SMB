@@ -287,5 +287,7 @@
     "Payment Sum": "Сума платежу",
     "Personal Card": "Особова картка",
     "Save and Close": "Зберегти і закрити",
-    "The pay period is not defined": "Розрахунковий період не визначено"
+    "The pay period is not defined": "Розрахунковий період не визначено",
+    "User already exists": "Користувач вже існує",
+    "The user is registered": "Користувача зареєстровано"
 }

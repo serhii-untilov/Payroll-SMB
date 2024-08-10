@@ -69,14 +69,14 @@ export class CompaniesController {
         return await this.service.findAll(userId, relations);
     }
 
-    @Get('first')
+    @Get('last')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found record', type: Company })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findFirst(@Req() req: Request, @Query() relations: boolean) {
+    async findLast(@Req() req: Request, @Query() relations: boolean) {
         const userId = getUserId(req);
-        const company = await this.service.findFirst(userId, relations);
+        const company = await this.service.findLast(userId, relations);
         if (company?.id) await this.service.availableFindOneOrFail(userId, company.id);
         return company;
     }

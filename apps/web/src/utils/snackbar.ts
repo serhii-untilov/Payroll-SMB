@@ -3,7 +3,9 @@ import { enqueueSnackbar, VariantType } from 'notistack';
 import { FieldErrors } from 'react-hook-form';
 
 export function snackbarInfo(info: AppMessage, variant?: VariantType) {
-    const message = info.code || info.message ? `${info.code}\n${info.message}` : 'Unknown message';
+    const code = info.code ?? info.statusCode ?? '';
+    const text = info.message ?? info.name ?? '';
+    const message = `${code}\n${text}`;
     enqueueSnackbar(message, { variant: variant ?? 'info' });
 }
 

@@ -1,6 +1,7 @@
-import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { AccessType, ResourceType } from '@/types';
+import { checkVersionOrFail } from '@/utils';
+import { HttpException, HttpStatus, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../abstract/availableForUser';
 import { AccessService } from '../access/access.service';
@@ -8,7 +9,6 @@ import { CreateWorkNormDto } from './dto/create-work-norm.dto';
 import { FindWorkNormDto } from './dto/find-work-norm.dto';
 import { UpdateWorkNormDto } from './dto/update-work-norm.dto';
 import { WorkNorm } from './entities/work-norm.entity';
-import { checkVersionOrFail } from '@/utils';
 
 @Injectable()
 export class WorkNormsService extends AvailableForUser {
@@ -26,7 +26,10 @@ export class WorkNormsService extends AvailableForUser {
     async create(userId: number, payload: CreateWorkNormDto) {
         const exists = await this.repository.findOneBy({ name: payload.name });
         if (exists) {
-            throw new ConflictException(`WorkNorm '${payload.name}' already exists.`);
+            throw new HttpException(
+                `WorkNorm '${payload.name}' already exists.`,
+                HttpStatus.CONFLICT,
+            );
         }
         const created = await this.repository.save({
             ...payload,
