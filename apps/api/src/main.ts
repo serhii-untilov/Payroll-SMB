@@ -5,17 +5,21 @@ import { Logger, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import 'reflect-metadata';
 import metadata from './metadata';
+import helmet from 'helmet';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    // TODO - revisit and secure this!
+    // app.enableCors({ origin: '*' });
+    app.use(helmet());
+
     const logger = new Logger(bootstrap.name);
     const globalPrefix = 'api';
     app.setGlobalPrefix(globalPrefix);
     const configService = app.get(ConfigService);
     // set up versioning
     app.enableVersioning({ type: VersioningType.URI, prefix: 'v' });
-    // TODO - revisit and secure this!
-    // app.enableCors({ origin: '*' });
+
     const title = configService.get<string>('app.title');
 
     // handle Swagger
