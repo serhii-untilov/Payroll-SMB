@@ -9,17 +9,13 @@ import helmet from 'helmet';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    // TODO - revisit and secure this!
-    // app.enableCors({ origin: '*' });
     app.use(helmet());
-
     const logger = new Logger(bootstrap.name);
     const globalPrefix = 'api';
     app.setGlobalPrefix(globalPrefix);
     const configService = app.get(ConfigService);
     // set up versioning
     app.enableVersioning({ type: VersioningType.URI, prefix: 'v' });
-
     const title = configService.get<string>('app.title');
 
     // handle Swagger
