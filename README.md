@@ -306,6 +306,7 @@ npm i --workspace @repo/web --save react-error-boundary
 npm i --workspace @repo/web --save date-fns
 npm i --workspace @repo/web --save react-number-format
 npm i --workspace @repo/web --save @reduxjs/toolkit react-redux
+npm i --workspace @repo/web --save @tanstack/react-query-devtools
 
 # Init "shared" library for common types and interfaces
 mkdir packages/shared

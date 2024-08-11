@@ -15,6 +15,7 @@ import './index.css';
 import './services/i18n/i18n.ts';
 import queryClient from './services/query/queryClient.ts';
 import { store } from './store/store.ts';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 // const mapState = (state: any) => state;
 // export const ConnectedApp = connect(mapState)(App);
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <AppErrorBoundary>
             <QueryClientProvider client={queryClient}>
+                <ReactQueryDevtools initialIsOpen={false} />
                 <AuthProvider>
                     <BrowserRouter>
                         <StoreProvider store={store}>

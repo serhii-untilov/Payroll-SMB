@@ -23,6 +23,7 @@
     "@repo/openapi": "^1.0.0",
     "@repo/shared": "*",
     "@tanstack/react-query": "^5.35.1",
+    "@tanstack/react-query-devtools": "^5.51.23",
     "axios": "^1.6.7",
     "date-fns": "^3.6.0",
     "i18next": "^23.10.0",
