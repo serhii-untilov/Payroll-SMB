@@ -71,6 +71,22 @@ Payroll SMB should run on most Unix, Linux, macOS and Windows systems as long as
 
 ## Development
 
+### Install tools
+
+Install Java
+
+``` bash
+sudo apt install default-jre
+```
+
+Install Docker
+
+``` bash
+sudo apt install docker docker-composer
+```
+
+### Clone & run the application in dev mode
+
 ``` bash
 git clone https://github.com/serhii-untilov/Payroll-SMB.git
 cd Payroll-SMB
