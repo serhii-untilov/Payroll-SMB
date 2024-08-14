@@ -307,6 +307,7 @@ npm i --workspace @repo/api --save reflect-metadata
 npm i --workspace @repo/api --save-dev @types/node
 npm i --workspace @repo/api --save-dev supertest
 npm i --workspace @repo/api --save helmet
+npm i --workspace @repo/api --save @ngneat/falso
 
 # Init "web" application for front-end
 npm --workspace @repo/web i @tanstack/react-query
