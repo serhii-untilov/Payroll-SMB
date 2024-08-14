@@ -71,9 +71,9 @@ Payroll SMB should run on most Unix, Linux, macOS and Windows systems as long as
 
 ## Development
 
-### Install tools
+### Installing tools
 
-Install Java
+Install Java for the OpenAPI Generator
 
 ``` bash
 sudo apt install default-jre
