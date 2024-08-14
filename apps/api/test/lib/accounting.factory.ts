@@ -1,6 +1,6 @@
-import { Accounting } from './../../src/resources/accounting/entities/accounting.entity';
 import { AccountingType } from '@/types';
 import { incrementalNumber, randCountry } from '@ngneat/falso';
+import { Accounting } from './../../src/resources/accounting/entities/accounting.entity';
 
 const factory = incrementalNumber();
 

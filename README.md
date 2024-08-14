@@ -79,13 +79,20 @@ Install Java
 sudo apt install default-jre
 ```
 
-Install Docker
+Install Docker & Docker Compose
 
 ``` bash
-sudo apt install docker docker-composer
+sudo apt install docker docker-compose
+sudo systemctl start docker.socket
+sudo systemctl enable docker.socket
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+# Reboot if still got error
+reboot
 ```
 
-### Clone & run the application in dev mode
+### Clone project and run the app in dev mode
 
 ``` bash
 git clone https://github.com/serhii-untilov/Payroll-SMB.git
