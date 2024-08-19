@@ -5,7 +5,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { User } from './../resources/users/entities/user.entity';
 import { langPipe } from '../utils/lib/langPipe';
 
-const lang = process.env.LANGUAGE || 'uk';
+const lang = process.env.LANGUAGE ?? 'uk';
 const entity = User;
 const recordList = [
     {
@@ -13,7 +13,7 @@ const recordList = [
         lastName: { en: 'Carefree', uk: 'Безтурботна' },
         email: 'demo@payroll.smb',
         password: 'demo',
-        roleType: RoleType.Employer || 'employer',
+        roleType: RoleType.Employer ?? 'employer',
     },
 ];
 

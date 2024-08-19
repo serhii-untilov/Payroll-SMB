@@ -44,4 +44,4 @@ lerna-debug.log*
 
 **/swagger.json
 
-metadata.ts
+# metadata.ts

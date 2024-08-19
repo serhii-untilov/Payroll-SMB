@@ -3,7 +3,7 @@ import { Role } from './../resources/roles/entities/role.entity';
 import { langPipe } from '../utils/lib/langPipe';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-const lang = process.env.LANGUAGE || 'uk';
+const lang = process.env.LANGUAGE ?? 'uk';
 const entity = Role;
 const recordList = [
     { name: { en: 'System', uk: 'Система' }, type: RoleType.System },

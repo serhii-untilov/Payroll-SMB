@@ -4,7 +4,7 @@ import { PayFundType } from './../resources/pay-fund-types/entities/pay-fund-typ
 import { getSystemUserId } from '../utils/lib/getSystemUserId';
 import { langPipe } from '../utils/lib/langPipe';
 
-const lang = process.env.LANGUAGE || 'uk';
+const lang = process.env.LANGUAGE ?? 'uk';
 const law = process.env.LAW;
 const entity = PayFundType;
 const recordList = [

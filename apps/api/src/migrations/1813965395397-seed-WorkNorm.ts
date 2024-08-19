@@ -4,7 +4,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { getSystemUserId } from '../utils/lib/getSystemUserId';
 import { langPipe } from '../utils/lib/langPipe';
 
-const lang = process.env.LANGUAGE || 'uk';
+const lang = process.env.LANGUAGE ?? 'uk';
 const entity = WorkNorm;
 const recordList = [
     {
