@@ -48,6 +48,7 @@ export default function CreatePerson(props: CreatePersonFormProps) {
                                 onChange={(value) =>
                                     setDialogValue({ ...dialogValue, lastName: value })
                                 }
+                                autoFocus={true}
                             />
                         </Grid>
                         <Grid item xs={12}>

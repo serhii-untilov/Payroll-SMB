@@ -79,6 +79,9 @@ export const SelectPersonForm = (props: SelectPersonFormProps) => {
                                             firstName,
                                             middleName,
                                         });
+                                    } else if (option && !option.inputValue && option.label) {
+                                        toggleOpen(true);
+                                        setDialogValue({ ...defaultValue });
                                     } else {
                                         onChange(option?.value || null);
                                     }
@@ -95,6 +98,12 @@ export const SelectPersonForm = (props: SelectPersonFormProps) => {
                                         filtered.push({
                                             inputValue,
                                             label: `${t('Add')} "${inputValue}"`,
+                                            value: 0,
+                                        });
+                                    } else if (inputValue === '') {
+                                        filtered.push({
+                                            inputValue,
+                                            label: `${t('Add a new person')}`,
                                             value: 0,
                                         });
                                     }

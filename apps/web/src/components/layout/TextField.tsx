@@ -6,14 +6,15 @@ interface TextFieldProps {
     value?: unknown;
     type?: string;
     onChange: (value) => void;
+    autoFocus?: boolean;
 }
 
-export default function TextField({ label, value, type, onChange }: TextFieldProps) {
+export default function TextField({ label, value, type, onChange, autoFocus }: TextFieldProps) {
     return (
         <>
             <InputLabel>{label}</InputLabel>
             <OutlinedInput
-                autoFocus
+                autoFocus={!!autoFocus}
                 size="small"
                 fullWidth
                 id="lastName"
