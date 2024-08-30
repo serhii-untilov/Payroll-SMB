@@ -287,6 +287,10 @@ export class PayrollCalculationService {
     }
 
     private async _calculatePosition() {
+        if (!this.position.personId) {
+            await this.clean();
+            return;
+        }
         this._toInsert = [];
         this._toDeleteIds = [];
         const dateFrom = await this.getMinCalculateDate(this.payPeriod.dateFrom);
@@ -359,5 +363,14 @@ export class PayrollCalculationService {
 
             map[id.toString()] = created.id;
         }
+    }
+
+    private async clean() {
+        await this.payrollsService.deleteBy({
+            positionId: this.position.id,
+        });
+        await this.positionsService.deletePositionBalanceBy({
+            positionId: this.position.id,
+        });
     }
 }

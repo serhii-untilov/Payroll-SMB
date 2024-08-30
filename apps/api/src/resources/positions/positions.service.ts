@@ -9,6 +9,7 @@ import { sub } from 'date-fns';
 import {
     FindManyOptions,
     FindOneOptions,
+    FindOptionsWhere,
     IsNull,
     LessThan,
     LessThanOrEqual,
@@ -264,6 +265,10 @@ export class PositionsService extends AvailableForUserCompany {
         });
         this.eventEmitter.emit('position.deleted', new PositionDeletedEvent(userId, deleted));
         return deleted;
+    }
+
+    async deletePositionBalanceBy(params: FindOptionsWhere<PositionBalance>) {
+        await this.repositoryPositionBalance.delete(params);
     }
 
     async getNextCardNumber(companyId: number): Promise<string> {

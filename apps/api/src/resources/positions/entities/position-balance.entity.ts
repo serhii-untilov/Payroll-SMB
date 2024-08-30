@@ -2,6 +2,7 @@ import {
     AfterLoad,
     Column,
     Entity,
+    Index,
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
@@ -10,6 +11,7 @@ import {
 import { Position } from './position.entity';
 
 @Entity()
+@Index('IDX_POSITION_BALANCE_POSITION_PERIOD', ['positionId', 'payPeriod'])
 export class PositionBalance {
     @PrimaryGeneratedColumn('increment')
     id: number;
