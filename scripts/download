@@ -21,4 +21,4 @@ chmod +x ./update
 chmod +x ./logs
 chmod +x ./stats
 ./stop
-docker compose pull
+docker compose pull --parallel

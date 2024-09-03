@@ -16,19 +16,6 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-            - name: Init
-              working-directory: .
-              run: |
-                  sudo apt install default-jre
-                  npm i -g turbo
-                  npm i -g typeorm
-                  npm i
-                  npm run codegen
-                  npm run build
-                  npm run dev
-            - name: Deploy
-              working-directory: .
-              run: npm run deploy
             - name: Cache Local Images
               id: local-images
               uses: actions/cache@v3
