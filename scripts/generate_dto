@@ -1,4 +1,5 @@
 #!/bin/bash
+npm --workspace=@repo/shared run build
 npm --workspace=@repo/api run build
 npm run db
 rm -rf ./packages/openapi/src
