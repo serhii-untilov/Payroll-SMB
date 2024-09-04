@@ -7040,6 +7040,36 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Get response for a health checker
+         * @summary Ping
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appPing: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/ping`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11685,6 +11715,18 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Get response for a health checker
+         * @summary Ping
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async appPing(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.appPing(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.appPing']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13278,6 +13320,15 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.appGetTitle(options).then((request) => request(axios, basePath));
         },
         /**
+         * Get response for a health checker
+         * @summary Ping
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appPing(options?: any): AxiosPromise<string> {
+            return localVarFp.appPing(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14554,6 +14605,17 @@ export class DefaultApi extends BaseAPI {
      */
     public appGetTitle(options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).appGetTitle(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get response for a health checker
+     * @summary Ping
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public appPing(options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).appPing(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
