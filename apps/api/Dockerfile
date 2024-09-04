@@ -44,6 +44,8 @@ RUN npm run build
 
 # ---------------------- RUN ----------------------------------
 FROM base AS runner
+# For healthcheck
+RUN apk --no-cache add curl
 WORKDIR /app
 # Don't run production as root
 RUN chown -R node:node .
