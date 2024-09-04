@@ -20,6 +20,11 @@ services:
       - .env.docker:/app/.env.docker
     env_file:
       - .env.docker
+    healthcheck:
+      test: [ "CMD-SHELL", "curl", "-f", "" ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
 
   db:
     container_name: payroll-db

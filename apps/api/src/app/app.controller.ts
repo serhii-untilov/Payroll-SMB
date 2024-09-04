@@ -2,6 +2,7 @@ import { Body, Controller, Get, Header, Logger, Param, Post, StreamableFile } fr
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { AppService } from './app.service';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
@@ -12,6 +13,15 @@ export class AppController {
     @Get('/')
     getHello(): string {
         return this.service.getHello();
+    }
+
+    @Get('/ping')
+    @ApiOperation({
+        summary: 'Ping',
+        description: 'Get response for a health checker',
+    })
+    ping(): string {
+        return 'pong';
     }
 
     @Get('/title')
