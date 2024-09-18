@@ -490,3 +490,6 @@ openssl rand -base64 60
 - [**Microservices** - microservices.io](https://microservices.io/)
 - [**Microservices** - NestJS REST API Gateway + gRPC microservices](https://github.com/benjsicam/nestjs-rest-microservices?tab=readme-ov-file)
 - [**Microservices** - How to scale Docker Containers with Docker-Compose](https://brianchristner.io/how-to-scale-a-docker-container-with-docker-compose)
+- [**Minikube** - Installing Minikube on Ubuntu 20.04 LTS](https://medium.com/@areesmoon/installing-minikube-on-ubuntu-20-04-lts-focal-fossa-b10fad9d0511)
+- [**Minikube** - Setting up Minikube and Accessing Minikube Dashboard Remotely](https://medium.com/@areesmoon/setting-up-minikube-and-accessing-minikube-dashboard-09b42fa25fb6)
+- [**API Gateway** - Build an API Gateway with NestJs](https://dev.to/thisdotmedia/build-an-api-gateway-with-nestjs-in-10-minutes-16db)
