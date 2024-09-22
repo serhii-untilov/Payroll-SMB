@@ -3,9 +3,12 @@ df -Th / /home
 
 # Docker
 if [ "$(docker ps -aq)" ]; then
-	docker rm -vf $(docker ps -aq);
+	docker rm -vf $(docker ps -aq)
 fi
 docker builder prune -f
 docker volume prune -f
+docker system prune -a --volumes
+docker container prune
+docker image prune -a
 
 df -Th / /home
