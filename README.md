@@ -94,6 +94,13 @@ reboot
 
 ### Clone project and run the app in dev mode
 
+Before initial build:
+
+- Install Docker and Docker Compose
+- Install Java openjdk LTS version for codegen
+
+Initial build and run app in dev mode:
+
 ``` bash
 git clone https://github.com/serhii-untilov/Payroll-SMB.git
 cd Payroll-SMB
