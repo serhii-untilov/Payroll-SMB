@@ -54,7 +54,7 @@ export default function useSignInPage() {
     useEffect(() => snackbarFormErrors(t, errors), [errors, t]);
 
     const onSubmit: SubmitHandler<AuthDto> = useCallback(
-        () => async (data) => {
+        () => async (data: AuthDto) => {
             try {
                 await login({ ...data, rememberMe });
                 await invalidateAllQueries();
