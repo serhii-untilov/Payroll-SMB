@@ -285,7 +285,7 @@ In **development** mode:
 # Create project
 mkdir nest-react
 cd nest-react
-npm install -D turbo
+npm i -D turbo
 npm i -g @nestjs/cli@latest
 cd apps
 nest new api
