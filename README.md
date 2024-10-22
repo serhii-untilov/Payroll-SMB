@@ -317,7 +317,7 @@ npm i --workspace @repo/api --save helmet
 npm i --workspace @repo/api --save @ngneat/falso
 
 # Init "web" application for front-end
-npm --workspace @repo/web i @tanstack/react-query
+npm i --workspace @repo/web @tanstack/react-query
 npm i --workspace @repo/web --save axios
 npm i --workspace @repo/web --save react-router-dom
 npm i --workspace @repo/web --save react-hook-form
