@@ -98,22 +98,18 @@ export class PersonsService extends AvailableForUser {
         const dateTo = monthEnd(date);
         const personList = await this.repository.query(
             `select p.id, p.birthday
-            from person p
-            where id in (
-            select distinct p.id
-            from
-                person p
-            inner join position pos on
-                pos."personId" = p.id
-            where
-                date_part('month',
-                p.birthday) = date_part('month',
-                to_date($1,
-                'YYYY-MM-DD'))
-                and pos."companyId" = $3
-                and pos."dateFrom" <= to_date($2, 'YYYY-MM-DD')
-                and pos."dateTo" >= to_date($1, 'YYYY-MM-DD')
-            )`,
+             from person p
+             where id in (select distinct p.id
+                          from person p
+                                   inner join position pos on
+                              pos."personId" = p.id
+                          where date_part('month',
+                                          p.birthday) = date_part('month',
+                                                                  to_date($1,
+                                                                          'YYYY-MM-DD'))
+                            and pos."companyId" = $3
+                            and pos."dateFrom" <= to_date($2, 'YYYY-MM-DD')
+                            and pos."dateTo" >= to_date($1, 'YYYY-MM-DD'))`,
             [formatDate(dateFrom), formatDate(dateTo), companyId],
         );
         // personList.forEach((o) => (o.birthday = new Date(o.birthday)));

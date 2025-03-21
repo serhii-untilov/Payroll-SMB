@@ -113,6 +113,7 @@ export class TaskGenerationService {
         this._payments = await this.paymentsService.findAll({
             companyId,
             accPeriod: this.payPeriod.dateFrom,
+            relations: true,
         });
         await this._generate();
     }
