@@ -8,7 +8,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { AvailableForUser } from '../abstract';
 import { AccessService } from '../access/access.service';
 import { CreateUserCompanyDto } from './dto/create-user-company.dto';
@@ -16,6 +16,7 @@ import { FindAllUserCompanyDto } from './dto/find-all-user-company.dto';
 import { FindOneUserCompanyDto } from './dto/find-one-user-company.dto';
 import { UpdateUserCompanyDto } from './dto/update-user-company.dto';
 import { UserCompany } from './entities/user-company.entity';
+import { FindUserCompanyByRoleTypeDto } from './dto/find-all-by-role-type.dto';
 
 @Injectable()
 export class UserCompaniesService extends AvailableForUser {
@@ -124,5 +125,24 @@ export class UserCompaniesService extends AvailableForUser {
             .andWhere('"deletedDate" is null')
             .getRawOne();
         return Number(count);
+    }
+
+    async findAllByRoleType({ roleType, relations, withDeleted }: FindUserCompanyByRoleTypeDto) {
+        return await this.repository.find({
+            where: {
+                role: {
+                    type: roleType,
+                },
+                user: {
+                    isActive: true,
+                    deletedDate: IsNull(),
+                },
+                company: {
+                    deletedDate: IsNull(),
+                },
+            },
+            relations: { company: relations, role: relations },
+            withDeleted,
+        });
     }
 }

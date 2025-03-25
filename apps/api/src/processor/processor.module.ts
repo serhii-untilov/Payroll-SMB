@@ -30,6 +30,7 @@ import { PayrollCalculationService } from './payroll-calculation/payroll-calcula
 import { SseController } from './server-sent-events/sse.controller';
 import { SseService } from './server-sent-events/sse.service';
 import { TaskGenerationService } from './task-generation/task-generator.service';
+import { ScheduleService } from './schedule/schedule.service';
 
 @Module({
     imports: [
@@ -64,6 +65,7 @@ import { TaskGenerationService } from './task-generation/task-generator.service'
         PayPeriodCalculationService,
         SseService,
         PaymentCalculationService,
+        ScheduleService,
     ],
 })
 export class ProcessorModule {}

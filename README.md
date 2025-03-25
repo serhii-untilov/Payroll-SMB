@@ -315,6 +315,7 @@ npm i --workspace @repo/api --save-dev @types/node
 npm i --workspace @repo/api --save-dev supertest
 npm i --workspace @repo/api --save helmet
 npm i --workspace @repo/api --save @ngneat/falso
+npm i --workspace @repo/api --save @nestjs/schedule
 
 # Init "web" application for front-end
 npm i --workspace @repo/web @tanstack/react-query
@@ -405,6 +406,7 @@ npx --workspace @repo/api nest generate service paymentCalculation processor
 npx --workspace @repo/api nest generate controller paymentPositions resources/payments
 npx --workspace @repo/api nest generate controller paymentDeductions resources/payments
 npx --workspace @repo/api nest generate controller paymentFunds resources/payments
+npx --workspace @repo/api nest generate service schedule processor
 
 ```
 

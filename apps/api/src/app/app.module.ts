@@ -29,6 +29,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -70,6 +71,7 @@ import { ErrorsInterceptor } from '@/interceptors/errors.interceptor';
             // and it has no listeners
             ignoreErrors: false,
         }),
+        ScheduleModule.forRoot(),
         AccessModule,
         AccountingModule,
         AuthModule,
