@@ -1,5 +1,5 @@
 # ---------------------- BASE ----------------------------------
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 # ---------------------- BUILD ----------------------------------
 FROM base AS builder
@@ -10,7 +10,7 @@ RUN apk update
 WORKDIR /app
 COPY . .
 # RUN chown -R node:node .
-RUN npm install
+RUN npm ci
 RUN npm i -g turbo
 RUN turbo prune @repo/api --docker
 RUN turbo prune @repo/web --docker
@@ -27,7 +27,7 @@ RUN npm i -g typeorm
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/package-lock.json ./package-lock.json
-RUN npm install
+RUN npm i
 
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
