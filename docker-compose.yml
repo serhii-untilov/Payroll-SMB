@@ -30,6 +30,7 @@ services:
       context: .
       dockerfile: ./packages/postgres/Dockerfile
     image: untilov/postgres
+    restart: always
     hostname: payrollhost
     expose:
       - 5432
