@@ -106,7 +106,8 @@ git clone https://github.com/serhii-untilov/Payroll-SMB.git
 cd Payroll-SMB
 npm i -g turbo
 npm i -g typeorm
-npm i
+npm ci
+docker compose build db
 npm run codegen
 npm run build
 npm run dev
