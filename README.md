@@ -16,6 +16,8 @@
 - Event-driven calculate processing
 - Automatic documents prepared according to the business process schedule
 - Automatic update of data on the client after the completion of the batch calculation on the server (SSE)
+- Easy to install and upgrade with Docker images
+- Multi-Architecture Docker Images for Linux AMD64 and Raspberry Pi Arm64
 
 ## Live Demo
 
@@ -67,7 +69,9 @@ Payroll SMB should run on most Unix, Linux, macOS and Windows systems as long as
 - 1 CPU, 1 core
 - 10 GB of disk space
 
-*The program has been tested with the specified configuration on a [DigitalOcean](https://www.digitalocean.com/products/droplets) VPS. See the [live demo](https://payroll.untilov.com.ua).*
+The program has been tested with the specified configuration on a [DigitalOcean](https://www.digitalocean.com/products/droplets) VPS.<br>
+The program has been tested on a Raspberry Pi server.<br>
+See the [live demo](https://payroll.untilov.com.ua).
 
 ## Development
 
