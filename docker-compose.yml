@@ -5,6 +5,13 @@ services:
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile
+      # platforms:
+      #   - "linux/amd64"
+      #   - "linux/arm64/v8"
+      x-bake:
+        platforms:
+          - linux/arm64
+          - linux/amd64
     image: untilov/payroll
     restart: always
     expose:
@@ -29,6 +36,13 @@ services:
     build:
       context: .
       dockerfile: ./packages/postgres/Dockerfile
+      # platforms:
+      #   - "linux/amd64"
+      #   - "linux/arm64/v8"
+      x-bake:
+        platforms:
+          - linux/amd64
+          - linux/arm64
     image: untilov/postgres
     restart: always
     hostname: payrollhost

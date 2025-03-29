@@ -33,6 +33,7 @@
     "m:revert": "npm run db && turbo run m:revert --filter=@repo/api",
     "d:build": "docker compose build",
     "d:push": "docker compose push",
+    "d:multi": "docker buildx bake --push --progress auto",
     "codegen": "./scripts/generate_dto"
   },
   "devDependencies": {

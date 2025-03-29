@@ -124,6 +124,21 @@ Build docker images and push them on Docker Hub
 docker compose build && docker compose push
 ```
 
+### Multi-Architecture Docker Builds
+
+``` bash
+# install multi-architecture builder plugin
+sudo dnf install docker-buildx-plugin
+# create an instance of a multi-architecture builder plugin
+docker buildx create --use
+# show builderx instances
+docker buildx ls
+# build images by docker-compose.yml and push them into the docker hub repository
+docker buildx bake --push --progress auto --debug
+# or run
+npm run d:multi
+```
+
 ## Production
 
 Pull Docker images and start the application
@@ -503,3 +518,4 @@ openssl rand -base64 60
 - [**Minikube** - Installing Minikube on Ubuntu 20.04 LTS](https://medium.com/@areesmoon/installing-minikube-on-ubuntu-20-04-lts-focal-fossa-b10fad9d0511)
 - [**Minikube** - Setting up Minikube and Accessing Minikube Dashboard Remotely](https://medium.com/@areesmoon/setting-up-minikube-and-accessing-minikube-dashboard-09b42fa25fb6)
 - [**API Gateway** - Build an API Gateway with NestJs](https://dev.to/thisdotmedia/build-an-api-gateway-with-nestjs-in-10-minutes-16db)
+- [**Docker** - Multi-Architecture Builds Are Possible With Docker Compose](https://medium.com/womenintechnology/multi-architecture-builds-are-possible-with-docker-compose-kind-of-2a4e8d166c56)
