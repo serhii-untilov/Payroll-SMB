@@ -14,16 +14,23 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "build": "NODE_ENV=production swc ./tsconfig.build.json",
+        "build": "run-script-os",
+        "build:linux": "NODE_ENV=production swc ./tsconfig.build.json",
+        "build:win32": "set NODE_ENV=production && swc ./tsconfig.build.json",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "format": "prettier --write \"src/**/*.ts\"",
-        "test": "NODE_ENV=development jest --passWithNoTests",
-        "test:watch": "NODE_ENV=development jest --watch"
+        "test": "run-script-os",
+        "test:linux": "NODE_ENV=development jest --passWithNoTests",
+        "test:win32": "set NODE_ENV=development && jest --passWithNoTests",
+        "test:watch": "run-script-os",
+        "test:watch:linux": "NODE_ENV=development jest --watch",
+        "test:watch:win32": "set NODE_ENV=development && jest --watch"
     },
     "dependencies": {
         "ts-loader": "^9.5.1"
     },
     "devDependencies": {
+        "run-script-os": "^1.1.6",
         "ts-node": "^10.9.2",
         "typescript": "^5.3.3"
     },
