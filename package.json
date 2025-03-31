@@ -21,7 +21,9 @@
   ],
   "scripts": {
     "dev": "npm run db && npm --workspace @repo/api run m:run && turbo run dev",
-    "db": "./scripts/docker_db",
+    "db": "run-script-os",
+    "db:linux": "./scripts/docker_db",
+    "db:win32": "scripts\\docker_db.cmd",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -34,7 +36,9 @@
     "d:build": "docker compose build",
     "d:push": "docker compose push",
     "d:multi": "docker buildx bake --push --progress auto",
-    "codegen": "./scripts/generate_dto"
+    "codegen": "run-script-os",
+    "codegen:linux": "./scripts/generate_dto",
+    "codegen:win32": "scripts\\generate_dto.cmd"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.13.4",
@@ -42,6 +46,7 @@
     "eslint-plugin-no-loops": "^0.3.0",
     "eslint-plugin-prettier": "^5.1.3",
     "prettier": "^3.2.5",
+    "run-script-os": "^1.1.6",
     "turbo": "^2.0.6"
   },
   "packageManager": "npm@10.8.1"

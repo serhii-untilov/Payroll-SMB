@@ -336,6 +336,7 @@ npm i --workspace @repo/api --save-dev supertest
 npm i --workspace @repo/api --save helmet
 npm i --workspace @repo/api --save @ngneat/falso
 npm i --workspace @repo/api --save @nestjs/schedule
+npm i --workspace @repo/api --save-dev run-script-os
 
 # Init "web" application for front-end
 npm i --workspace @repo/web @tanstack/react-query
@@ -360,6 +361,7 @@ npm i --workspace @repo/web --save date-fns
 npm i --workspace @repo/web --save react-number-format
 npm i --workspace @repo/web --save @reduxjs/toolkit react-redux
 npm i --workspace @repo/web --save @tanstack/react-query-devtools
+npm i --workspace @repo/web --save-dev run-script-os
 
 # Init "shared" library for common types and interfaces
 mkdir packages/shared
@@ -367,14 +369,17 @@ npm i --workspace @repo/shared --save sqlite3 ts-loader typeorm
 npm i --workspace @repo/shared --save-dev ts-node typescript
 npm i --workspace @repo/shared --save date-fns
 npm i --workspace @repo/shared --save @repo/openapi
+npm i --workspace @repo/shared --save-dev run-script-os
 
-# Init "utils" shared library for common functions
-mkdir packages/utils
-npm i --workspace @repo/shared --save ts-loader
-npm i --workspace @repo/shared --save-dev ts-node typescript jest
+# Init "openapi" shared library for common functions
+mkdir packages/openapi
+npm i --workspace @repo/openapi --save ts-loader
+npm i --workspace @repo/openapi --save-dev ts-node typescript jest
+npm i --workspace @repo/openapi --save-dev run-script-os
 
 # Common packages
 npm i @openapitools/openapi-generator-cli -D
+npm i --save-dev run-script-os
 
 ```
 
