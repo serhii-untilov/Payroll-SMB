@@ -13,13 +13,6 @@
         },
         "baseUrl": "./"
     },
-    "exclude": [
-        "jest.config.ts",
-        "node_modules",
-        "test",
-        "dist",
-        ".*\\.spec\\.[j|t]s.?$",
-        "migrations"
-    ],
+    "exclude": ["jest.config.ts", "node_modules", "test", "dist", ".*\\.spec\\.[j|t]s.?$"],
     "minify": false
 }

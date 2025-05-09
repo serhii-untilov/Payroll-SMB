@@ -21,8 +21,8 @@ export const dbConfig = {
         process.env['DATABASE_TYPE'] === 'sqlite'
             ? process.env['DATABASE_PATH']
             : process.env['DATABASE_NAME'],
-    entities: ['./src/resources/**/*entity.ts'],
-    migrations: ['./src/migrations/**/*.ts'],
+    entities: [__dirname + '/../resources/**/*entity.js'],
+    migrations: [__dirname + '/../migrations/**/*.js'],
 };
 
 export const AppDataSource = new DataSource(getDataSource(dbConfig));
