@@ -12,7 +12,7 @@ const CompanyPage = () => {
 
     return (
         <>
-            {companyId && <EditCompany {...{ companyId, tabIndex, goBack }} />}
+            {!!companyId && <EditCompany {...{ companyId, tabIndex, goBack }} />}
             {!companyId && <CreateCompany {...{ setCompanyId }} />}
         </>
     );

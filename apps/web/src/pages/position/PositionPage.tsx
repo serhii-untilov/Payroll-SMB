@@ -22,10 +22,10 @@ const PositionPage = () => {
         <>
             {!company && <ErrorDisplay error={{ message: t('The company is not defined') }} />}
             {!payPeriod && <ErrorDisplay error={{ message: t('The pay period is not defined') }} />}
-            {positionId && company && payPeriod && (
+            {!!positionId && !!company && !!payPeriod && (
                 <EditPosition {...{ company, payPeriod, positionId, tabIndex, goBack }} />
             )}
-            {!positionId && company && payPeriod && (
+            {!positionId && !!company && !!payPeriod && (
                 <CreatePosition {...{ company, payPeriod, setPositionId }} />
             )}
         </>
