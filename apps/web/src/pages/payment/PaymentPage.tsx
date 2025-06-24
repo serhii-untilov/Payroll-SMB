@@ -20,7 +20,7 @@ export default function PaymentPage() {
         <>
             {!company && <ErrorDisplay error={{ message: 'The company is not defined' }} />}
             {!payPeriod && <ErrorDisplay error={{ message: 'The Pay Period is not defined' }} />}
-            {paymentId && company && payPeriod && (
+            {!!paymentId && company && payPeriod && (
                 <EditPayment {...{ company, payPeriod, paymentId, tabIndex, goBack }} />
             )}
             {!paymentId && company && payPeriod && (
