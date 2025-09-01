@@ -240,11 +240,12 @@ In **development** mode:
 |Department                 |Підрозділ                 |department         |                                                                                |
 |Job                        |Посада                    |job                |                                                                                |
 |Vacancy                    |Вакансія                  |vacancy            |                                                                                |
-|Working time norm          |Норма робочого часу       |workNorm           |                                                                                |
-|Working time calendar      |Виробничий календар       |workCalendar       |                                                                                |
-|Work Schedule              |Розклад роботи            |workSchedule       |                                                                                |
-|Work Sheet                 |Табель робочого часу      |workSheet          |                                                                                |
-|Work Sheet                 |Табель робочого часу      |workSheet          |                                                                                |
+|Working time norm          |Норма робочого часу       |workNorm           |40 годин на тиждень, інші норми - основа Режимів роботи                         |
+|Work Pattern               |Режим роботи              |workPattern        |Довідник "Режими роботи", приклади: п'ятиденка, шестиденка, доба - троє         |
+|Working time calendar      |Виробничий календар       |workCalendar       |Загальний календар підприємства, основа - режими роботи, для кожного місяця     |
+|Planned Timesheet          |Плановий табель           |plannedTimesheet   |Плановий тебель працівників = Загальний календар + режими роботи працівника     |
+|Work Schedule              |Графік роботи             |workSchedule       |Індивідуальний графік роботи працівника                                         |
+|Actual Timesheet           |Фактичний табель          |actualTimesheet    |Фактичний тебель працівників = Плановий табель працівника + відхилення          |
 |Incoming balance           |Вхідний залишок           |inBalance          |                                                                                |
 |Accrual                    |Нарахування               |accrual            |                                                                                |
 |Deduction                  |Утримання                 |deduction          |                                                                                |
