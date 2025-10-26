@@ -193,7 +193,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
 };
 
 AuthProvider.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.element.isRequired,
 };
 
 export default AuthContext;

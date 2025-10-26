@@ -169,8 +169,8 @@ export class PositionsService extends AvailableForUserCompany {
                       }
                     : {}),
                 ...(dismissedOnly ? {} : {}),
+                ...(dismissedOnly ? { dateTo: LessThan(maxDate()) } : {}),
             },
-            ...(dismissedOnly ? { andWhere: { dateTo: LessThan(maxDate()) } } : {}),
         };
         return await this.repository.find(options);
     }

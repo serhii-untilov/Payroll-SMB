@@ -18,7 +18,7 @@ export default function useCompanyForm(params: CompanyFormParams) {
     const { t } = useTranslation();
     const { locale } = useLocale();
     const pageTitle = useMemo(
-        () => (company?.id ? company?.name ?? 'Noname' : t('New Company')),
+        () => (company?.id ? (company?.name ?? 'Noname') : t('New Company')),
         [company?.id, company?.name, t],
     );
     const tabs = useTabs(params);
