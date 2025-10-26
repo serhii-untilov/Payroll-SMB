@@ -41,7 +41,7 @@ Note: Docker required.
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download | bash
 
-cd ~/payroll-smb
+cd ./payroll-smb
 ```
 
 In the .env.docker file replace the variables with desired values: DATABASE_USERNAME, DATABASE_PASSWORD, POSTGRES_USER, POSTGRES_PASSWORD, PGUSER.

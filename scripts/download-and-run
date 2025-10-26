@@ -1,5 +1,5 @@
 #!/bin/sh
-cd ~
+# cd ~
 if ! [ -d ./payroll-smb ]; then
     echo "The ./payroll-smb folder does not exist. Let's create it."
     mkdir payroll-smb
