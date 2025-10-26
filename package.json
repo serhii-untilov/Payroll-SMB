@@ -1,7 +1,7 @@
 {
   "name": "payroll-smb",
-  "version": "1.02.003",
-  "description": "The Payroll SMB Application",
+  "version": "1.03.000",
+  "description": "Payroll SMB Application",
   "author": "Serhii Untilov <s.untilov@gmail.com> (https://untilov.com.ua/)",
   "keywords": [
     "payroll",

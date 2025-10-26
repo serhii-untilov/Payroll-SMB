@@ -55,13 +55,13 @@ const useGetPositionByPerson = (params: Partial<FindPositionByPersonDto>) => {
         queryKey: [ResourceType.Position, params],
         queryFn: async () => {
             return companyId && personId
-                ? (
+                ? ((
                       await api.positionsFindFirstByPersonId({
                           ...params,
                           companyId,
                           personId,
                       })
-                  ).data ?? null
+                  ).data ?? null)
                 : null;
         },
     });

@@ -39,7 +39,7 @@ const AuthGuard: FC<AuthGuardProps> = (props) => {
 };
 
 AuthGuard.propTypes = {
-    children: PropTypes.node,
+    children: PropTypes.element.isRequired,
 };
 
 export default AuthGuard;

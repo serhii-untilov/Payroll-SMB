@@ -132,7 +132,10 @@ docker compose build && docker compose push
 
 ``` bash
 # install multi-architecture builder plugin
-sudo dnf install docker-buildx-plugin
+# Fedora:
+# sudo dnf install docker-buildx-plugin
+# Arch Linux
+sudo pacman install docker-buildx
 # create an instance of a multi-architecture builder plugin
 docker buildx create --use
 # show builderx instances
@@ -381,6 +384,7 @@ npm i --workspace @repo/openapi --save-dev run-script-os
 # Common packages
 npm i @openapitools/openapi-generator-cli -D
 npm i --save-dev run-script-os
+npm i eslint-plugin-react-hooks -D
 
 ```
 
@@ -529,3 +533,7 @@ openssl rand -base64 60
 - [**Minikube** - Setting up Minikube and Accessing Minikube Dashboard Remotely](https://medium.com/@areesmoon/setting-up-minikube-and-accessing-minikube-dashboard-09b42fa25fb6)
 - [**API Gateway** - Build an API Gateway with NestJs](https://dev.to/thisdotmedia/build-an-api-gateway-with-nestjs-in-10-minutes-16db)
 - [**Docker** - Multi-Architecture Builds Are Possible With Docker Compose](https://medium.com/womenintechnology/multi-architecture-builds-are-possible-with-docker-compose-kind-of-2a4e8d166c56)
+- [**ESLint** - eslint-plugin-react-hooks](https://react.dev/reference/eslint-plugin-react-hooks)
+- [**ESLint** - How the React Hooks ESLint plugin saved me hours debugging useEffect](https://maxrozen.com/react-hooks-eslint-plugin-saved-hours-debugging-useeffect)
+- [**React** - Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
+- [**React** - Components and Hooks must be pure](https://react.dev/reference/rules/components-and-hooks-must-be-pure)

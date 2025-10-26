@@ -1,4 +1,4 @@
-import { RoleType } from "@/types";
+import { RoleType } from '@/types';
 
 export class FindUserCompanyByRoleTypeDto {
     roleType: RoleType;
