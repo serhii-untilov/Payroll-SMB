@@ -14,9 +14,9 @@
 ![Coverage](https://img.shields.io/codecov/c/github/serhii-untilov/Payroll-SMB)
 ![Node](https://img.shields.io/node/v/node)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
-![Issues](https://img.shields.io/github/issues/ORG/REPO)
+![Issues](https://img.shields.io/github/issues/serhii-untilov/Payroll-SMB)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
-![Release](https://img.shields.io/github/v/release/ORG/REPO)
+![Release](https://img.shields.io/github/v/release/serhii-untilov/Payroll-SMB)
 ![Monorepo](https://img.shields.io/badge/monorepo-turborepo-blue)
 
 **Payroll SMB** is a web application that:
