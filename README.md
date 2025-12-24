@@ -1,18 +1,14 @@
 # Payroll SMB
 
-![CI](https://github.com/serhii-untilov/Payroll-SMB/actions/workflows/build.yml/badge.svg)
-![Last Commit](https://img.shields.io/github/last-commit/serhii-untilov/Payroll-SMB)
-![Issues](https://img.shields.io/github/issues/serhii-untilov/Payroll-SMB)
-
 ![Turborepo](https://img.shields.io/badge/Turborepo-000000?logo=turborepo&logoColor=white)
 ![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 
-![npm](https://img.shields.io/badge/npm-4A4A4A?logo=npm&logoColor=F69220)
-![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
-![Prettier](https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=black)
+![CI](https://github.com/serhii-untilov/Payroll-SMB/actions/workflows/build.yml/badge.svg)
+![Last Commit](https://img.shields.io/github/last-commit/serhii-untilov/Payroll-SMB)
+![Issues](https://img.shields.io/github/issues/serhii-untilov/Payroll-SMB)
 
 **Payroll SMB** is a web application that:
 
