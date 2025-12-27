@@ -18,7 +18,7 @@ const Welcome = Loadable(lazy(() => import('@/pages/welcome/WelcomePage')));
 const Company = Loadable(lazy(() => import('@/pages/company/CompanyPage')));
 const People = Loadable(lazy(() => import('@/pages/people/PeoplePage')));
 const TimeOff = Loadable(lazy(() => import('@/pages/time-sheet/TimeOffForm')));
-const TimeSheet = Loadable(lazy(() => import('@/pages/time-sheet/TimeSheetForm')));
+const TimeSheet = Loadable(lazy(() => import('@/pages/time-sheet/TimeSheetPage')));
 const Payroll = Loadable(lazy(() => import('@/pages/payroll/PayrollPage')));
 const Payments = Loadable(lazy(() => import('@/pages/payments/PaymentsPage')));
 const Payment = Loadable(lazy(() => import('@/pages/payment/PaymentPage')));
