@@ -17,8 +17,8 @@ const Dashboard = Loadable(lazy(() => import('@/pages/dashboard/DashboardPage'))
 const Welcome = Loadable(lazy(() => import('@/pages/welcome/WelcomePage')));
 const Company = Loadable(lazy(() => import('@/pages/company/CompanyPage')));
 const People = Loadable(lazy(() => import('@/pages/people/PeoplePage')));
-const TimeOff = Loadable(lazy(() => import('@/pages/time-sheet/TimeOffForm')));
-const TimeSheet = Loadable(lazy(() => import('@/pages/time-sheet/TimeSheetPage')));
+// const TimeOff = Loadable(lazy(() => import('@/pages/timesheet/TimeOffForm')));
+// const TimeSheet = Loadable(lazy(() => import('@/pages/timesheet/TimeSheetPage')));
 const Payroll = Loadable(lazy(() => import('@/pages/payroll/PayrollPage')));
 const Payments = Loadable(lazy(() => import('@/pages/payments/PaymentsPage')));
 const Payment = Loadable(lazy(() => import('@/pages/payment/PaymentPage')));
@@ -90,8 +90,8 @@ const router: RouteObject[] = [
                     { path: 'position/:positionId/history', element: <PositionHistory /> },
                 ],
             },
-            { path: 'time-off', element: <TimeOff /> },
-            { path: 'time-sheet', element: <TimeSheet /> },
+            // { path: 'time-off', element: <TimeOff /> },
+            // { path: 'timesheet', element: <TimeSheet /> },
             { path: 'payroll', element: <Payroll /> },
             {
                 path: 'payments',
