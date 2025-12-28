@@ -117,7 +117,7 @@ release: tag release-draft changelog
 
 ## Publish draft release
 release-publish: guard-gh guard-version
-	$(call confirm,"Publish release $(TAG)?")
+# 	$(call confirm,"Publish release $(TAG)?")
 	gh release edit $(TAG) --draft=false
 	@echo "🚀 Published $(TAG)"
 
@@ -127,12 +127,10 @@ release-publish: guard-gh guard-version
 
 ## Build & push Docker images for a specific version
 docker-release: guard-version
-	$(call confirm,"🐳 Build & push Docker images with tag $(TAG)?")
+# 	$(call confirm,"🐳 Build & push Docker images with tag $(TAG)?")
 	@echo "Building Docker images for version $(TAG)..."
-	# Build backend (api)
-	TAG=$(TAG) npm run d:multi --workspace=api
-	# Build frontend (web) if needed
-	TAG=$(TAG) npm run d:multi --workspace=web
+	TAG=$(TAG) npm run d:multi
+# 	TAG=$(TAG) docker buildx bake --push --progress auto --set tags=$(TAG)
 	@echo "✅ Docker images built and pushed with tag $(TAG)"
 
 # -------------------------------------
@@ -170,7 +168,7 @@ release-beta:
 # -------------------------------------
 
 release-delete: guard-gh guard-version
-	$(call confirm,"Delete release $(TAG)?")
+# 	$(call confirm,"Delete release $(TAG)?")
 	gh release delete $(TAG) --yes
 	git tag -d $(TAG)
 	git push origin :refs/tags/$(TAG)
