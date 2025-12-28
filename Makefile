@@ -8,6 +8,7 @@
 #   make release-full VERSION=v1.5.0
 #   make release-publish VERSION=v1.5.0
 #   make release-ci VERSION=v1.5.0
+
 # =====================================
 
 RELEASE_FILE := RELEASE.md
@@ -85,32 +86,27 @@ tag: guard-version guard-clean
 		git push origin $(TAG); \
 	fi
 
-## Generate RELEASE.md + draft GitHub release
-release-draft: guard-gh guard-version
-	@bash -c '\
-		echo "📝 Generating RELEASE.md from git commits for $(TAG)"; \
-		if git describe --tags --abbrev=0 $(TAG)^ >/dev/null 2>&1; then \
-			START_TAG=$$(git describe --tags --abbrev=0 $(TAG)^); \
-		else \
-			START_TAG=$$(git rev-list --max-parents=0 HEAD); \
-		fi; \
-		echo "ℹ️  Generating notes from $$START_TAG..$(TAG)"; \
-		git log --pretty=format:"* %s" $$START_TAG..$(TAG) > $(RELEASE_FILE); \
-		if gh release view $(TAG) >/dev/null 2>&1; then \
-			echo "ℹ️  Updating existing GitHub release $(TAG)"; \
-			gh release edit $(TAG) --notes-file $(RELEASE_FILE); \
-		else \
-			echo "ℹ️  Creating draft release $(TAG)"; \
-			gh release create $(TAG) --draft --notes-file $(RELEASE_FILE); \
-		fi'
+## Create GitHub release directly with auto-generated notes
+release-draft: guard-gh guard-version guard-clean
+	$(call confirm,"Create GitHub release $(TAG)?")
+	@echo "📝 Creating GitHub release $(TAG) with auto-generated notes..."
+	@if gh release view $(TAG) >/dev/null 2>&1; then \
+		echo "⚠️  Release $(TAG) already exists, skipping creation"; \
+	else \
+		gh release create $(TAG) --draft --generate-notes; \
+	fi
+	@echo "✅ GitHub draft release ready: $(TAG)"
 
-## Append RELEASE.md to CHANGELOG.md
+## Append RELEASE.md to CHANGELOG.md if it exists
 changelog:
-	@echo "\n---\n" >> $(CHANGELOG)
-	@cat $(RELEASE_FILE) >> $(CHANGELOG)
-	@echo "✅ Appended to $(CHANGELOG)"
+	@if [ -f $(RELEASE_FILE) ]; then \
+		echo "\n---\n" >> $(CHANGELOG); \
+		cat $(RELEASE_FILE) >> $(CHANGELOG); \
+		echo "✅ Appended to $(CHANGELOG)"; \
+	else \
+		echo "⚠️  $(RELEASE_FILE) not found, skipping changelog update"; \
+	fi
 
-## Full local release flow (draft + changelog)
 release: tag release-draft changelog
 	@echo "✅ Draft release ready: $(TAG)"
 
@@ -126,11 +122,10 @@ release-publish: guard-gh guard-version
 
 ## Build & push Docker images for a specific version
 docker-release: guard-version
-# 	$(call confirm,"🐳 Build & push Docker images with tag $(TAG)?")
-	@echo "Building Docker images for version $(TAG)..."
+# 	$(call confirm,"🐳 Build & push Docker image with tag $(TAG)?")
+	@echo "Building Docker image for version $(TAG)..."
 	TAG=$(TAG) npm run d:multi
-# 	TAG=$(TAG) docker buildx bake --push --progress auto --set tags=$(TAG)
-	@echo "✅ Docker images built and pushed with tag $(TAG)"
+	@echo "✅ Docker image built and pushed with tag $(TAG)"
 
 # -------------------------------------
 # Combined full release + Docker
