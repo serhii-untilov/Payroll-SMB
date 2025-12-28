@@ -2,6 +2,12 @@
 # Full Release + Docker Makefile
 # =====================================
 # Usage examples:
+#   make release-delete
+#   make release
+#   make docker-release
+#   make release-publish
+# -------------------------------------
+#   make release-full
 #   make release VERSION=v1.5.0
 #   make docker-release VERSION=v1.5.0
 #   make release-full VERSION=v1.5.0
