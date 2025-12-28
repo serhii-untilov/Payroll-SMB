@@ -27,7 +27,7 @@
 
 Link to [Live Demo](https://payroll.untilov.com.ua)
 
-## Quick Start
+## Quick Start the latest version
 
 For a quick start, run this command on a Linux server:
 
@@ -40,7 +40,16 @@ Note: Docker required.
 - [Get Docker Desktop](https://docs.docker.com/guides/getting-started/get-docker-desktop/)
 - [How To Install and Use Docker on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 
-## Safe Start
+## Quick Start the certain version
+
+Run this command on a Linux server:
+
+``` bash
+export TAG=v1.03.001 # desired version, see. [Releases page](https://github.com/serhii-untilov/Payroll-SMB/releases)
+curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
+```
+
+## Safe Start the latest version
 
 ``` bash
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download | bash
