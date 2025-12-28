@@ -42,10 +42,15 @@ Note: Docker required.
 
 ## Quick Start the certain version
 
+Choose a desired version on the [Releases page](https://github.com/serhii-untilov/Payroll-SMB/releases)
+For example: v1.03.001
+
+Pull Docker images and start the application
+
 Run this command on a Linux server:
 
 ``` bash
-export TAG=v1.03.001 # desired version, see. [Releases page](https://github.com/serhii-untilov/Payroll-SMB/releases)
+export TAG=v1.03.001 # desired version
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
 ```
 
@@ -159,17 +164,31 @@ docker buildx bake --push --progress auto --debug
 npm run d:multi
 ```
 
+## Create new release
+
+```
+make release-delete
+make release
+make docker-release
+make release-publish
+```
+
 ## Production
+
+Choose a desired version on the [Releases page](https://github.com/serhii-untilov/Payroll-SMB/releases)
+For example: v1.03.001
 
 Pull Docker images and start the application
 
 ``` bash
+export TAG=v1.03.001 # desired version
 curl -s https://raw.githubusercontent.com/serhii-untilov/Payroll-SMB/master/scripts/download-and-run | bash
 ```
 
 Start the application
 
 ``` bash
+export TAG=v1.03.001 # desired version
 ./start
 ```
 
