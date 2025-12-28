@@ -1,14 +1,12 @@
 # =====================================
 # Full Release + Docker Makefile
 # =====================================
-
 # Usage examples:
 #   make release VERSION=v1.5.0
 #   make docker-release VERSION=v1.5.0
 #   make release-full VERSION=v1.5.0
 #   make release-publish VERSION=v1.5.0
 #   make release-ci VERSION=v1.5.0
-
 # =====================================
 
 RELEASE_FILE := RELEASE.md
@@ -88,7 +86,7 @@ tag: guard-version guard-clean
 
 ## Create GitHub release directly with auto-generated notes
 release-draft: guard-gh guard-version guard-clean
-	$(call confirm,"Create GitHub release $(TAG)?")
+# 	$(call confirm,"Create GitHub release $(TAG)?")
 	@echo "📝 Creating GitHub release $(TAG) with auto-generated notes..."
 	@if gh release view $(TAG) >/dev/null 2>&1; then \
 		echo "⚠️  Release $(TAG) already exists, skipping creation"; \
