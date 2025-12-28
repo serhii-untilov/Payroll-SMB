@@ -87,23 +87,22 @@ tag: guard-version guard-clean
 
 ## Generate RELEASE.md + draft GitHub release
 release-draft: guard-gh guard-version
-	@echo "📝 Generating $(RELEASE_FILE) from git commits for $(TAG)"
-	# Determine previous tag or initial commit
-	@if git describe --tags --abbrev=0 $(TAG)^ >/dev/null 2>&1; then \
-		START_TAG=$$(git describe --tags --abbrev=0 $(TAG)^); \
-	else \
-		START_TAG=$$(git rev-list --max-parents=0 HEAD); \
-	fi; \
-	echo "ℹ️  Generating notes from $$START_TAG..$(TAG)"; \
-	git log --pretty=format:"* %s" $$START_TAG..$(TAG) > $(RELEASE_FILE); \
-	# If release exists, update it; otherwise create draft
-	if gh release view $(TAG) >/dev/null 2>&1; then \
-		echo "ℹ️  Updating existing GitHub release $(TAG)"; \
-		gh release edit $(TAG) --notes-file $(RELEASE_FILE); \
-	else \
-		echo "ℹ️  Creating draft release $(TAG)"; \
-		gh release create $(TAG) --draft --notes-file $(RELEASE_FILE); \
-	fi
+	@bash -c '\
+		echo "📝 Generating RELEASE.md from git commits for $(TAG)"; \
+		if git describe --tags --abbrev=0 $(TAG)^ >/dev/null 2>&1; then \
+			START_TAG=$$(git describe --tags --abbrev=0 $(TAG)^); \
+		else \
+			START_TAG=$$(git rev-list --max-parents=0 HEAD); \
+		fi; \
+		echo "ℹ️  Generating notes from $$START_TAG..$(TAG)"; \
+		git log --pretty=format:"* %s" $$START_TAG..$(TAG) > $(RELEASE_FILE); \
+		if gh release view $(TAG) >/dev/null 2>&1; then \
+			echo "ℹ️  Updating existing GitHub release $(TAG)"; \
+			gh release edit $(TAG) --notes-file $(RELEASE_FILE); \
+		else \
+			echo "ℹ️  Creating draft release $(TAG)"; \
+			gh release create $(TAG) --draft --notes-file $(RELEASE_FILE); \
+		fi'
 
 ## Append RELEASE.md to CHANGELOG.md
 changelog:
