@@ -1,0 +1,26 @@
+changelog:
+    categories:
+        - title: 🚀 Features
+          labels:
+              - feat
+              - feature
+
+        - title: 🐛 Bug Fixes
+          labels:
+              - fix
+              - bug
+
+        - title: 🧹 Maintenance
+          labels:
+              - chore
+              - refactor
+              - perf
+              - build
+
+        - title: 📚 Documentation
+          labels:
+              - docs
+
+        - title: 🔧 CI / Tooling
+          labels:
+              - ci
