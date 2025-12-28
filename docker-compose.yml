@@ -12,7 +12,7 @@ services:
         platforms:
           - linux/arm64
           - linux/amd64
-    image: untilov/payroll:${TAG:-latest}
+    image: untilov/payroll
     restart: always
     expose:
       - 3000
