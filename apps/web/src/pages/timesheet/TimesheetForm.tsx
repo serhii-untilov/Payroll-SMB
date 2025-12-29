@@ -6,23 +6,23 @@ import SelectPayPeriod from '@/components/SelectPayPeriod';
 import { Box, Grid } from '@mui/material';
 import { Company, PayPeriod } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
-import useTimeShiftForm from './TimeShiftForm.hooks';
+import { useTimesheetForm } from './TimesheetForm.hooks';
 
-export type TimeShiftFormProps = {
+export type TimesheetFormProps = {
     company: Company;
     payPeriod: PayPeriod;
     tabIndex: string | null;
     goBack: boolean;
 };
 
-const TimeShiftForm = (props: TimeShiftFormProps) => {
+const TimesheetForm = (props: TimesheetFormProps) => {
     const { company, tabIndex, goBack } = props;
     const { t } = useTranslation();
-    const { tabs } = useTimeShiftForm(props);
+    const { tabs } = useTimesheetForm(props);
 
     return (
         <PageLayout>
-            <PageTitle goBack={goBack}>{t('TimeShift')}</PageTitle>
+            <PageTitle goBack={goBack}>{t('Timesheet')}</PageTitle>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={8} md={6} lg={3} sx={{ mb: 1 }}>
                     <InputLabel>{t('Pay Period')}</InputLabel>
@@ -30,7 +30,7 @@ const TimeShiftForm = (props: TimeShiftFormProps) => {
                 </Grid>
             </Grid>
             <Box
-                id="timeShift__tabs-box"
+                id="timesheet__tabs-box"
                 sx={{
                     width: '100%',
                     display: 'flex',
@@ -38,10 +38,10 @@ const TimeShiftForm = (props: TimeShiftFormProps) => {
                     flexGrow: 1,
                 }}
             >
-                <TabsContainer id="timeShift-form-tabs" tabIndex={tabIndex} tabs={tabs} />
+                <TabsContainer id="timesheet-form-tabs" tabIndex={tabIndex} tabs={tabs} />
             </Box>
         </PageLayout>
     );
 };
 
-export default TimeShiftForm;
+export default TimesheetForm;

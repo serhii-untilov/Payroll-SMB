@@ -5,6 +5,7 @@ import {
     FindAllPositionDto,
     FindOnePositionDto,
     FindPositionByPersonDto,
+    FindWorkNormDto,
     Position,
     PositionBalanceExtendedDto,
     ResourceType,
