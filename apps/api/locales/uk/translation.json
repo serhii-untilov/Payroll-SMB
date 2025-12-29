@@ -289,5 +289,10 @@
     "Save and Close": "Зберегти і закрити",
     "The pay period is not defined": "Розрахунковий період не визначено",
     "User already exists": "Користувач вже існує",
-    "The user is registered": "Користувача зареєстровано"
+    "The user is registered": "Користувача зареєстровано",
+    "Working Time Norm": "Норми робочого часу",
+    "Timesheet Calendar": "Календар",
+    "Timesheet": "Табель",
+    "Absence & Downtime": "Неявки та простої",
+    "Summary": "Підсумки"
 }

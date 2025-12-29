@@ -141,7 +141,7 @@ function getPath(task: Task): string {
         case TaskType.FillPositionList:
             return '/people?tab-index=0&return=true';
         case TaskType.PostWorkSheet:
-            return '/time-sheet?return=true';
+            return '/timesheet?return=true';
         case TaskType.PostAccrualDocument:
             return '/payroll?return=true';
         case TaskType.SendApplicationFss:
