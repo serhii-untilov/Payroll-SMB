@@ -3,12 +3,9 @@ export enum RoleType {
     // access to any resource through the API.
     System = 'system',
 
-    Admin = 'admin',
-
-    Employer = 'employer',
-    Observer = 'observer',
-
+    SystemAdmin = 'system-admin',
+    CompanyAdmin = 'company-admin',
+    Accountant = 'accountant',
     Employee = 'employee',
-
-    Guest = 'guest',
+    Manager = 'manager',
 }

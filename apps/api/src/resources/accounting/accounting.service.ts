@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceType } from '@/types';
+import { Resource } from '@/types';
 import { Repository } from 'typeorm';
 import { Accounting } from './entities/accounting.entity';
 
 @Injectable()
 export class AccountingService {
-    public readonly resourceType = ResourceType.Accounting;
+    public readonly resource = Resource.Accounting;
 
     constructor(
         @InjectRepository(Accounting)
@@ -17,7 +17,7 @@ export class AccountingService {
         return await this.repository.find();
     }
 
-    async findOne(id: number): Promise<Accounting> {
+    async findOne(id: string): Promise<Accounting> {
         const accounting = await this.repository.findOneBy({ id });
         if (!accounting) {
             throw new NotFoundException(`Accounting could not be found.`);

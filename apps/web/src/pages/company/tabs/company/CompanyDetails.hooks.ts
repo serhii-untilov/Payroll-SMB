@@ -9,12 +9,12 @@ import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { CreateCompanyDto, PaymentSchedule, ResourceType, UpdateCompanyDto } from '@repo/openapi';
+import { CreateCompanyDto, PaymentSchedule, Resource, UpdateCompanyDto } from '@repo/openapi';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useFormState, useForm as useReactHookForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { date, InferType, number, object, string } from 'yup';
+import { date, InferType, object, string } from 'yup';
 import { CompanyDetailsProps } from './CompanyDetails';
 
 export default function useCompanyDetails(props: CompanyDetailsProps) {
@@ -76,9 +76,9 @@ export default function useCompanyDetails(props: CompanyDetailsProps) {
     );
 
     const onCancel = useCallback(async () => {
-        if (setCompanyId) setCompanyId(Number(company?.id));
+        if (setCompanyId) setCompanyId(company?.id);
         reset(formSchema.cast(company));
-        await invalidateQueries([ResourceType.Company]);
+        await invalidateQueries([Resource.Company]);
     }, [company, reset, setCompanyId, invalidateQueries, formSchema]);
 
     return { control, isDirty, handleSubmit, onSubmit, onCancel };
@@ -91,11 +91,10 @@ function useFormSchema() {
         () =>
             object().shape({
                 name: string().required('Name is required'),
-                lawId: number().positive('Law is required').required().default(defaultLawId),
+                lawId: string().required('Law is required').default(defaultLawId),
                 taxId: string().default(''),
-                accountingId: number()
-                    .positive('Accounting is required')
-                    .required()
+                accountingId: string()
+                    .required('Accounting is required')
                     .default(defaultAccountingId),
                 paymentSchedule: string()
                     .required('Payment Schedule required')

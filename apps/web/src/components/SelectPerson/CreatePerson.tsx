@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 interface CreatePersonFormProps {
     open: boolean;
     handleClose: () => void;
-    onChange: (personId: number) => void;
+    onChange: (personId: string) => void;
     dialogValue: CreatePersonDto;
     setDialogValue: (value: CreatePersonDto) => void;
 }

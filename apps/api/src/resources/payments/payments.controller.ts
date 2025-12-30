@@ -76,7 +76,7 @@ export class PaymentsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() params: FindOnePaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
@@ -93,7 +93,7 @@ export class PaymentsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdatePaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
@@ -107,7 +107,7 @@ export class PaymentsController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Payment })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Payment> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Payment> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
@@ -121,7 +121,7 @@ export class PaymentsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
     @ApiBadRequestResponse({ description: 'Bad request' })
-    async restore(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Payment> {
+    async restore(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Payment> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.restore(userId, id);
@@ -139,7 +139,7 @@ export class PaymentsController {
     @ApiBadRequestResponse({ description: 'Bad request' })
     async process(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() params: ProcessPaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
@@ -159,7 +159,7 @@ export class PaymentsController {
     @ApiBadRequestResponse({ description: 'Bad request' })
     async withdraw(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() params: WithdrawPaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);

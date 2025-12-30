@@ -4,7 +4,7 @@ import ErrorDisplay from './ErrorDisplay';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-    companyId: number | undefined;
+    companyId: string | undefined;
     control: any;
     label?: string;
     id?: string;

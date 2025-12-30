@@ -1,28 +1,17 @@
-import {
-    AfterLoad,
-    Column,
-    Entity,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
-    Relation,
-} from 'typeorm';
+import { AfterLoad, Column, Entity, ManyToOne, OneToMany, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { Company } from './../../companies/entities/company.entity';
-import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class Department extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class Department extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
     @ManyToOne(() => Company, (company) => company.departments)
     company?: Relation<Company>;
 
-    @Column({ type: 'integer' })
-    companyId: number;
+    @Column({ type: 'bigint' })
+    companyId: string;
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;
@@ -33,8 +22,8 @@ export class Department extends Logger {
     @ManyToOne(() => Department, (department) => department.childDepartments, { nullable: true })
     parentDepartment?: Relation<Department> | null;
 
-    @Column({ type: 'integer', nullable: true })
-    parentDepartmentId?: number | null;
+    @Column({ type: 'bigint', nullable: true })
+    parentDepartmentId?: string | null;
 
     @OneToMany(() => Department, (department) => department.parentDepartment)
     childDepartments?: Relation<Department>[];

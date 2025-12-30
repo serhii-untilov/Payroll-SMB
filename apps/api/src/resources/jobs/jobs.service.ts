@@ -1,4 +1,4 @@
-import { AccessType, ResourceType } from '@/types';
+import { Action, Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import {
     BadRequestException,
@@ -16,7 +16,7 @@ import { Job } from './entities/job.entity';
 
 @Injectable()
 export class JobsService {
-    public readonly resourceType = ResourceType.Job;
+    public readonly resource = Resource.Job;
 
     constructor(
         @InjectRepository(Job)
@@ -25,16 +25,12 @@ export class JobsService {
         private accessService: AccessService,
     ) {}
 
-    async create(userId: number, payload: CreateJobDto): Promise<Job> {
+    async create(userId: string, payload: CreateJobDto): Promise<Job> {
         const existing = await this.repository.findOneBy({ name: payload.name });
         if (existing) {
             throw new BadRequestException(`Job '${payload.name}' already exists.`);
         }
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Create,
-        );
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Create);
         return await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -46,7 +42,7 @@ export class JobsService {
         return await this.repository.find();
     }
 
-    async findOne(id: number): Promise<Job> {
+    async findOne(id: string): Promise<Job> {
         const Job = await this.repository.findOneBy({ id });
         if (!Job) {
             throw new NotFoundException(`Job could not be found.`);
@@ -54,12 +50,8 @@ export class JobsService {
         return Job;
     }
 
-    async update(userId: number, id: number, payload: UpdateJobDto): Promise<Job> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Update,
-        );
+    async update(userId: string, id: string, payload: UpdateJobDto): Promise<Job> {
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Update);
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         return await this.repository.save({
@@ -70,12 +62,8 @@ export class JobsService {
         });
     }
 
-    async remove(userId: number, id: number): Promise<Job> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Delete,
-        );
+    async remove(userId: string, id: string): Promise<Job> {
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Delete);
         await this.repository.findOneOrFail({ where: { id } });
         return await this.repository.save({
             id,

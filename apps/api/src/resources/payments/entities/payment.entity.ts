@@ -1,31 +1,19 @@
-import { PaymentType } from './../../payment-types/entities/payment-type.entity';
-import { Company } from './../../companies/entities/company.entity';
-import { PaymentStatus, RecordFlags } from './../../../types';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-    AfterLoad,
-    Column,
-    Entity,
-    Index,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
-    Relation,
-} from 'typeorm';
+import { AfterLoad, Column, Entity, Index, ManyToOne, OneToMany, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
-import { Logger } from './../../abstract/logger.abstract';
+import { PaymentStatus, RecordFlag } from './../../../types';
+import { Company } from './../../companies/entities/company.entity';
+import { PaymentType } from './../../payment-types/entities/payment-type.entity';
 
 @Entity()
 @Index('IDX_PAYMENT_COMP_ACC_STATUS', ['companyId', 'accPeriod', 'status'])
-export class Payment extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class Payment extends BaseEntity {
     @ManyToOne(() => Company, { createForeignKeyConstraints: false })
     company?: Relation<Company>;
 
-    @Column({ type: 'integer' })
-    companyId: number;
+    @Column({ type: 'bigint' })
+    companyId: string;
 
     @Column({ type: 'date' })
     payPeriod: Date;
@@ -42,8 +30,8 @@ export class Payment extends Logger {
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
     paymentType?: PaymentType;
 
-    @Column({ type: 'integer' })
-    paymentTypeId: number;
+    @Column({ type: 'bigint' })
+    paymentTypeId: string;
 
     @Column({ type: 'date' })
     dateFrom: Date; // Between accPeriod.dateFrom and accPeriod.dateTo
@@ -68,8 +56,8 @@ export class Payment extends Logger {
     status: PaymentStatus;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: RecordFlags, enumName: 'RecordFlags' })
-    recordFlags: RecordFlags;
+    @ApiProperty({ enum: RecordFlag, enumName: 'RecordFlags' })
+    recordFlags: RecordFlag;
 
     @Column({ type: 'varchar', length: 256, default: '' })
     description: string;

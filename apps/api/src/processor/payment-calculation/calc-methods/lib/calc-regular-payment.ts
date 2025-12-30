@@ -77,14 +77,14 @@ export class CalcRegularPayment extends CalcPayment {
         return payFundPayPeriodFactSum(this.ctx.payPeriod, this.ctx.payFunds);
     }
 
-    private getGrossPayPaymentTypeIds(): number[] {
+    private getGrossPayPaymentTypeIds(): string[] {
         // TODO: Replace to Entry Table
         return this.ctx.paymentTypes
             .filter((o) => o.paymentPart === PaymentPart.Accruals)
             .map((o) => o.id);
     }
 
-    private getDeductionsPaymentTypeIds(): number[] {
+    private getDeductionsPaymentTypeIds(): string[] {
         // TODO: Replace to Entry Table
         return this.ctx.paymentTypes
             .filter(

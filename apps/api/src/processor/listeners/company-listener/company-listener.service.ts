@@ -51,7 +51,7 @@ export class CompanyListenerService {
         this.runBatch(event.userId, event.companyId);
     }
 
-    private async runBatch(userId: number, companyId: number) {
+    private async runBatch(userId: string, companyId: string) {
         try {
             this._logger.log(`companyId ${companyId} ${ServerEvent.PayrollStarted}`);
             this.sseService.event(companyId, { data: ServerEvent.PayrollStarted });

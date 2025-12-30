@@ -9,7 +9,7 @@ import { WorkNorm } from './../../../resources/work-norms/entities/work-norm.ent
 
 export function getWorkingTimePlan(
     workNorms: WorkNorm[],
-    workNormId: number | null,
+    workNormId: string | null,
     onDate: Date,
 ): WorkingTime {
     if (workNormId) {

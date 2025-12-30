@@ -4,15 +4,15 @@ import {
     FindAllPaymentPositionDto,
     FindOnePaymentPositionDto,
     PaymentPosition,
-    ResourceType,
+    Resource,
     UpdatePaymentPositionDto,
 } from '@repo/openapi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import useInvalidateQueries from '../useInvalidateQueries';
 
-const useGetPaymentPosition = (id: number, params?: FindOnePaymentPositionDto) => {
+const useGetPaymentPosition = (id: string, params?: FindOnePaymentPositionDto) => {
     return useQuery<PaymentPosition, Error>({
-        queryKey: [ResourceType.PaymentPosition, { id, ...params }],
+        queryKey: [Resource.PaymentPosition, { id, ...params }],
         queryFn: async () => (await api.paymentPositionsFindOne(id, params ?? {})).data,
         enabled: !!id,
     });
@@ -20,7 +20,7 @@ const useGetPaymentPosition = (id: number, params?: FindOnePaymentPositionDto) =
 
 const useGetPaymentPositionList = (params: FindAllPaymentPositionDto) => {
     return useQuery<PaymentPosition[], Error>({
-        queryKey: [ResourceType.PaymentPosition, params],
+        queryKey: [Resource.PaymentPosition, params],
         queryFn: async () => (await api.paymentPositionsFindAll(params)).data,
         enabled: !!params.paymentId,
     });
@@ -32,13 +32,13 @@ const useCreatePaymentPosition = () => {
         mutationFn: async (dto: CreatePaymentPositionDto): Promise<PaymentPosition> =>
             (await api.paymentPositionsCreate(dto)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.PaymentPosition, ResourceType.Payment]);
+            invalidateQueries([Resource.PaymentPosition, Resource.Payment]);
         },
     });
 };
 
 type UpdatePaymentPosition = {
-    id: number;
+    id: string;
     dto: UpdatePaymentPositionDto;
 };
 
@@ -48,7 +48,7 @@ const useUpdatePaymentPosition = () => {
         mutationFn: async ({ id, dto }: UpdatePaymentPosition): Promise<PaymentPosition> =>
             (await api.paymentPositionsUpdate(id, dto)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.PaymentPosition, ResourceType.Payment]);
+            invalidateQueries([Resource.PaymentPosition, Resource.Payment]);
         },
     });
 };
@@ -56,9 +56,9 @@ const useUpdatePaymentPosition = () => {
 const useRemovePaymentPosition = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: number) => (await api.paymentPositionsRemove(id)).data,
+        mutationFn: async (id: string) => (await api.paymentPositionsRemove(id)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.PaymentPosition, ResourceType.Payment]);
+            invalidateQueries([Resource.PaymentPosition, Resource.Payment]);
         },
     });
 };

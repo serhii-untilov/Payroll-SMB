@@ -1,7 +1,7 @@
 export class CreatePaymentDeductionDto {
-    id: number;
-    paymentPositionId: number;
-    paymentTypeId: number;
+    id: string;
+    paymentPositionId: string;
+    paymentTypeId: string;
     baseSum: number;
     paySum: number;
     recordFlags: number; // See enum RecordFlags

@@ -1,9 +1,9 @@
-import { ResourceType } from '@/types';
+import { Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AvailableForUser } from '../abstract/availableForUser';
+import { AvailableForUser } from '../abstract/available-for-user';
 import { AccessService } from '../access/access.service';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
@@ -11,7 +11,7 @@ import { MinWage } from './entities/min-wage.entity';
 
 @Injectable()
 export class MinWageService extends AvailableForUser {
-    readonly resourceType = ResourceType.MinWage;
+    readonly resource = Resource.MinWage;
 
     constructor(
         @InjectRepository(MinWage)
@@ -22,7 +22,7 @@ export class MinWageService extends AvailableForUser {
         super(accessService);
     }
 
-    async create(userId: number, payload: CreateMinWageDto): Promise<MinWage> {
+    async create(userId: string, payload: CreateMinWageDto): Promise<MinWage> {
         const created = await this.repository.create({
             ...payload,
             createdUserId: userId,
@@ -35,11 +35,11 @@ export class MinWageService extends AvailableForUser {
         return await this.repository.find();
     }
 
-    async findOne(id: number): Promise<MinWage> {
+    async findOne(id: string): Promise<MinWage> {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async update(userId: number, id: number, payload: UpdateMinWageDto): Promise<MinWage> {
+    async update(userId: string, id: string, payload: UpdateMinWageDto): Promise<MinWage> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -51,7 +51,7 @@ export class MinWageService extends AvailableForUser {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<MinWage> {
+    async remove(userId: string, id: string): Promise<MinWage> {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }

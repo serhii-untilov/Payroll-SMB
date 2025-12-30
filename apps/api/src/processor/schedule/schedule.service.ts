@@ -19,7 +19,7 @@ export class ScheduleService {
     @Cron('0 0 2 * * *')
     async companiesCalculate() {
         this._logger.debug('Schedule event At 02:00 AM');
-        const roleType = RoleType.Employer;
+        const roleType = RoleType.Accountant;
         const userCompanies = await this.userCompaniesService.findAllByRoleType({ roleType });
         userCompanies.forEach(({ userId, companyId }) =>
             this.companiesService.calculatePayroll(userId, companyId),

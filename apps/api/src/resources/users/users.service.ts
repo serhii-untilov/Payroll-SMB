@@ -1,4 +1,4 @@
-import { AccessType, ResourceType, RoleType, WrapperType } from '@/types';
+import { Action, Resource, RoleType, WrapperType } from '@/types';
 import {
     BadRequestException,
     ForbiddenException,
@@ -19,7 +19,7 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-    public readonly resourceType = ResourceType.User;
+    public readonly resource = Resource.User;
 
     constructor(
         @InjectRepository(User)
@@ -36,7 +36,7 @@ export class UsersService {
             throw new HttpException('User already exists.', HttpStatus.CONFLICT);
         }
         if (!payload.roleId) {
-            payload.roleId = await this.rolesService.findRoleByType(RoleType.Employer);
+            payload.roleId = await this.rolesService.findRoleByType(RoleType.Accountant);
         }
         if (!payload.roleId) {
             throw new BadRequestException(`Role should be defined.`);
@@ -48,16 +48,12 @@ export class UsersService {
         return await this.repository.save(payload);
     }
 
-    async create(userId: number, payload: CreateUserDto): Promise<User> {
+    async create(userId: string, payload: CreateUserDto): Promise<User> {
         const exists = await this.repository.findOneBy({ email: payload.email });
         if (exists) {
             throw new HttpException('User already exists.', HttpStatus.CONFLICT);
         }
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Create,
-        );
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Create);
         const currentRoleType = await this.getUserRoleType(userId);
         const newRoleType = await this.rolesService.getRoleType(payload.roleId);
         if (!this.accessService.canOperateRoleType(currentRoleType, newRoleType)) {
@@ -70,12 +66,8 @@ export class UsersService {
         });
     }
 
-    async findAll(userId: number, params: FindManyOptions<User>): Promise<User[]> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Access,
-        );
+    async findAll(userId: string, params: FindManyOptions<User>): Promise<User[]> {
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Read);
         return await this.repository.find(params);
     }
 
@@ -91,13 +83,9 @@ export class UsersService {
         return user;
     }
 
-    async update(userId: number, id: number, payload: UpdateUserDto): Promise<User> {
+    async update(userId: string, id: string, payload: UpdateUserDto): Promise<User> {
         if (userId !== id) {
-            await this.accessService.availableForUserOrFail(
-                userId,
-                this.resourceType,
-                AccessType.Update,
-            );
+            await this.accessService.availableForUserOrFail(userId, this.resource, Action.Update);
         }
         if (payload?.roleId) {
             const userRoleType = await this.getUserRoleType(userId);
@@ -118,12 +106,8 @@ export class UsersService {
         });
     }
 
-    async remove(userId: number, id: number): Promise<User> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Delete,
-        );
+    async remove(userId: string, id: string): Promise<User> {
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Delete);
         const user = await this.repository.findOneOrFail({ where: { id } });
         const userRoleType = await this.getUserRoleType(userId);
         const deleteRoleType = await this.rolesService.getRoleType(user.roleId);
@@ -142,7 +126,7 @@ export class UsersService {
         return publicUser;
     }
 
-    async getUserRoleType(id: number): Promise<RoleType> {
+    async getUserRoleType(id: string): Promise<RoleType> {
         const user = await this.repository.findOneOrFail({
             where: { id },
             relations: { role: true },
@@ -153,7 +137,7 @@ export class UsersService {
         return user.role.type;
     }
 
-    async getSystemUserId(): Promise<number> {
+    async getSystemUserId(): Promise<string> {
         const user = await this.repository.findOneOrFail({
             select: { id: true },
             relations: { role: true },

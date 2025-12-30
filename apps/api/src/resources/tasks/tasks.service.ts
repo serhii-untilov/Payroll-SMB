@@ -1,10 +1,10 @@
-import { ResourceType, TaskStatus, TaskType } from '@/types';
+import { Resource, TaskStatus, TaskType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
+import { AvailableForUserCompany } from '../abstract/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -15,7 +15,7 @@ import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TasksService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.Task;
+    public readonly resource = Resource.Task;
 
     constructor(
         @InjectRepository(Task)
@@ -28,12 +28,12 @@ export class TasksService extends AvailableForUserCompany {
         super(accessService);
     }
 
-    async getCompanyId(entityId: number): Promise<number> {
+    async getCompanyId(entityId: string): Promise<string> {
         return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true }))
             .companyId;
     }
 
-    async create(userId: number, payload: CreateTaskDto): Promise<Task> {
+    async create(userId: string, payload: CreateTaskDto): Promise<Task> {
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -79,7 +79,7 @@ export class TasksService extends AvailableForUserCompany {
         );
     }
 
-    async findOne(id: number, params?: FindOneTaskDto) {
+    async findOne(id: string, params?: FindOneTaskDto) {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: {
@@ -88,7 +88,7 @@ export class TasksService extends AvailableForUserCompany {
         });
     }
 
-    async update(userId: number, id: number, payload: UpdateTaskDto) {
+    async update(userId: string, id: string, payload: UpdateTaskDto) {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -101,7 +101,7 @@ export class TasksService extends AvailableForUserCompany {
     }
 
     // Soft delete
-    async remove(userId: number, id: number): Promise<Task> {
+    async remove(userId: string, id: string): Promise<Task> {
         await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({
             where: { id },
@@ -111,7 +111,7 @@ export class TasksService extends AvailableForUserCompany {
     }
 
     // Hard delete
-    async delete(id: number): Promise<Task> {
+    async delete(id: string): Promise<Task> {
         const deleted = await this.repository.findOneOrFail({
             where: { id },
             withDeleted: true,

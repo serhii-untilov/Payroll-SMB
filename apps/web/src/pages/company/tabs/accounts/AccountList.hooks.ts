@@ -11,7 +11,7 @@ export default function useAccountList() {
         console.log('onAdd');
     }, []);
 
-    const onEditAccount = useCallback((_accountId: number) => {
+    const onEditAccount = useCallback((_accountId: string) => {
         console.log('onEdit');
     }, []);
 

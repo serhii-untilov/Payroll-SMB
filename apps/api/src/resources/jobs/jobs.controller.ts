@@ -61,7 +61,7 @@ export class JobsController {
     @ApiOkResponse({ description: 'The found record', type: Job })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: number) {
+    async findOne(@Param('id', ParseIntPipe) id: string) {
         return await this.service.findOne(id);
     }
 
@@ -73,7 +73,7 @@ export class JobsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdateJobDto,
     ) {
         const userId = getUserId(req);
@@ -86,7 +86,7 @@ export class JobsController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Job })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
         const userId = getUserId(req);
         return await this.service.remove(userId, id);
     }

@@ -67,7 +67,7 @@ export class WorkNormsController {
     @ApiOkResponse({ description: 'The found record', type: WorkNorm })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: number, @Body() params: FindWorkNormDto) {
+    async findOne(@Param('id', ParseIntPipe) id: string, @Body() params: FindWorkNormDto) {
         return await this.service.findOne(id, params);
     }
 
@@ -79,7 +79,7 @@ export class WorkNormsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdateWorkNormDto,
     ) {
         const userId = getUserId(req);
@@ -93,7 +93,7 @@ export class WorkNormsController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: WorkNorm })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId);
         return await this.service.remove(userId, id);

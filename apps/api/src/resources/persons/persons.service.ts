@@ -1,11 +1,11 @@
-import { ResourceType } from '@/types';
+import { Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { formatDate, monthBegin, monthEnd } from '@repo/shared';
 import { Repository } from 'typeorm';
-import { AvailableForUser } from '../abstract/availableForUser';
+import { AvailableForUser } from '../abstract/available-for-user';
 import { AccessService } from '../access/access.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { FindAllPersonDto } from './dto/find-all-person.dto';
@@ -17,7 +17,7 @@ import { PersonUpdatedEvent } from './events/person-updated.event';
 
 @Injectable()
 export class PersonsService extends AvailableForUser {
-    public readonly resourceType = ResourceType.Person;
+    public readonly resource = Resource.Person;
 
     constructor(
         @InjectRepository(Person)
@@ -44,7 +44,7 @@ export class PersonsService extends AvailableForUser {
         return !!found.length;
     }
 
-    async create(userId: number, payload: CreatePersonDto): Promise<Person> {
+    async create(userId: string, payload: CreatePersonDto): Promise<Person> {
         const exists = await this.exists(payload);
         if (exists) {
             throw new BadRequestException(
@@ -64,12 +64,12 @@ export class PersonsService extends AvailableForUser {
         return await this.repository.find();
     }
 
-    async findOne(id: number): Promise<Person> {
+    async findOne(id: string): Promise<Person> {
         const person = await this.repository.findOneOrFail({ where: { id } });
         return person;
     }
 
-    async update(userId: number, id: number, payload: UpdatePersonDto): Promise<Person> {
+    async update(userId: string, id: string, payload: UpdatePersonDto): Promise<Person> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -83,7 +83,7 @@ export class PersonsService extends AvailableForUser {
         return updated;
     }
 
-    async remove(userId: number, id: number): Promise<Person> {
+    async remove(userId: string, id: string): Promise<Person> {
         await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
         this.eventEmitter.emit('person.deleted', new PersonDeletedEvent(userId, id));
@@ -91,9 +91,9 @@ export class PersonsService extends AvailableForUser {
     }
 
     async findByBirthdayInMonth(
-        companyId: number,
+        companyId: string,
         date: Date,
-    ): Promise<{ id: number; birthday: Date }[]> {
+    ): Promise<{ id: string; birthday: Date }[]> {
         const dateFrom = monthBegin(date);
         const dateTo = monthEnd(date);
         const personList = await this.repository.query(

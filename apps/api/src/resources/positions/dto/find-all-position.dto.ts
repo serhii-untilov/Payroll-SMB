@@ -1,5 +1,5 @@
 export class FindAllPositionDto {
-    companyId: number;
+    companyId: string;
     onDate?: Date;
     onPayPeriodDate?: Date;
     relations?: boolean;

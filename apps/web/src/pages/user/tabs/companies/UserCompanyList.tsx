@@ -64,7 +64,7 @@ const UserCompanyList = (props: UserCompanyListProps) => {
                 columns={columns}
                 checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
+                    setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
                 onCellKeyDown={(

@@ -1,7 +1,7 @@
 import CompanyForm from './CompanyForm';
 
 interface CreateCompanyProps {
-    setCompanyId: (companyId: number) => void;
+    setCompanyId: (companyId: string) => void;
 }
 
 export default function CreateCompany(props: CreateCompanyProps) {

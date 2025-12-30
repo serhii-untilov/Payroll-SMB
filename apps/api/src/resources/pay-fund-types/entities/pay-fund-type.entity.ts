@@ -1,13 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Column, Entity } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { PayFundCalcMethod, PayFundGroup } from './../../../types';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class PayFundType extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class PayFundType extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 

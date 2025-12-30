@@ -4,7 +4,7 @@ import ErrorDisplay from './../ErrorDisplay';
 import SelectAccPeriodForm from './SelectAccPeriodForm';
 
 type Props = SelectProps<string> & {
-    companyId: number;
+    companyId: string;
     control: any;
     label?: string;
     id?: string;

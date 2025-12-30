@@ -1,10 +1,10 @@
 import { api } from '@/api';
-import { ResourceType } from '@repo/openapi';
+import { Resource } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
 const useGetAppTitle = () => {
     return useQuery<string, Error>({
-        queryKey: [ResourceType.AppTitle],
+        queryKey: [Resource.AppTitle],
         queryFn: async () => (await api.appGetTitle()).data,
     });
 };

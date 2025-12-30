@@ -5,11 +5,11 @@ import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import PaymentList from './tabs/PaymentList';
 
-export default function usePaymentsForm(companyId: number, payPeriod: PayPeriod) {
+export default function usePaymentsForm(companyId: string, payPeriod: PayPeriod) {
     const { t } = useTranslation();
     const { locale } = useLocale();
 
-    useEffect(() => {}, [locale]);
+    useEffect(() => { }, [locale]);
 
     const tabs = useMemo<TabComponent[]>(
         () => [

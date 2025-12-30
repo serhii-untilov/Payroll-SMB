@@ -6,14 +6,14 @@ import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'ty
 
 @Entity()
 export class PayFund {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+    @PrimaryGeneratedColumn('identity')
+    id: string;
 
     @ManyToOne(() => Position, { createForeignKeyConstraints: false })
     position?: Position;
 
-    @Column({ type: 'integer' })
-    positionId: number;
+    @Column({ type: 'bigint' })
+    positionId: string;
 
     @Column({ type: 'date' })
     payPeriod: Date;
@@ -24,8 +24,8 @@ export class PayFund {
     @ManyToOne(() => PayFundType, { createForeignKeyConstraints: false })
     payFundType?: PayFundType;
 
-    @Column({ type: 'integer' })
-    payFundTypeId: number;
+    @Column({ type: 'bigint' })
+    payFundTypeId: string;
 
     @Column({ type: 'varchar', length: 30 })
     @ApiProperty({ enum: PayFundCategory, enumName: 'PayFundCategory' })

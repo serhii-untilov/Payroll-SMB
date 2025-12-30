@@ -34,13 +34,13 @@ export class PayPeriodsCalcMethodService {
         return await this.repository.findOneOrFail(params);
     }
 
-    async update(id: number, payload: UpdatePayPeriodCalcMethodDto): Promise<PayPeriodCalcMethod> {
+    async update(id: string, payload: UpdatePayPeriodCalcMethodDto): Promise<PayPeriodCalcMethod> {
         await this.repository.findOneOrFail({ where: { id } });
         await this.repository.save({ ...payload, id });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async delete(ids: number[]) {
+    async delete(ids: string[]) {
         await this.repository.delete(ids);
     }
 }

@@ -18,7 +18,7 @@ export class SseController {
         type: MessageEvent,
     })
     getCompanyStream(
-        @Param('companyId', ParseIntPipe) companyId: number,
+        @Param('companyId', ParseIntPipe) companyId: string,
     ): Observable<MessageEvent> {
         // return this.service.companyEvents.get(companyId) || new Observable();
         return this.service.getObservable(companyId);

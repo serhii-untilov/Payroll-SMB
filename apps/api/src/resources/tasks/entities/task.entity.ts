@@ -1,19 +1,16 @@
-import { Company } from './../../companies/entities/company.entity';
-import { Logger } from './../../abstract/logger.abstract';
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { TaskStatus, TaskType } from './../../../types';
 import { ApiProperty } from '@nestjs/swagger';
+import { AfterLoad, Column, Entity, ManyToOne, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
+import { TaskStatus, TaskType } from './../../../types';
+import { Company } from './../../companies/entities/company.entity';
 
 @Entity()
-export class Task extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class Task extends BaseEntity {
     @ManyToOne(() => Company, { createForeignKeyConstraints: false })
     company?: Relation<Company>;
 
-    @Column({ type: 'integer' })
-    companyId: number;
+    @Column({ type: 'bigint' })
+    companyId: string;
 
     @Column({ type: 'varchar', length: 30 })
     @ApiProperty({ enum: TaskType, enumName: 'TaskType' })
@@ -32,8 +29,8 @@ export class Task extends Logger {
     @ApiProperty({ enum: TaskStatus, enumName: 'TaskStatus' })
     status: TaskStatus;
 
-    @Column({ type: 'integer', nullable: true })
-    entityId: number | null;
+    @Column({ type: 'bigint', nullable: true })
+    entityId: string | null;
 
     @AfterLoad()
     transform() {

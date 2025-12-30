@@ -1,5 +1,5 @@
 export class CreatePayPeriodDto {
-    companyId: number;
+    companyId: string;
     dateFrom: Date;
     dateTo: Date;
     state: string; // See PayPeriodState

@@ -1,6 +1,6 @@
 export class FindPositionByPersonDto {
-    companyId: number;
-    personId: number;
+    companyId: string;
+    personId: string;
     onDate?: Date;
     onPayPeriodDate?: Date;
     relations?: boolean;

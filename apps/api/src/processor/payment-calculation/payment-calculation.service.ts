@@ -22,11 +22,12 @@ import { PaymentGroup } from '@/types';
 import { dateUTC } from '@repo/shared';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { CalcAdvance, CalcFastPayment, CalcPayment, CalcRegularPayment } from './calc-methods';
+import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PaymentCalculationService {
     logger: Logger = new Logger(PaymentCalculationService.name);
-    userId: number;
+    userId: string;
     company: Company;
     paymentTypes: PaymentType[];
     position: Position;
@@ -36,7 +37,7 @@ export class PaymentCalculationService {
     payFunds: PayFund[];
     payments: Payment[];
     paymentPositions: PaymentPosition[];
-    paymentPositionId: number;
+    paymentPositionId: string;
 
     constructor(
         @Inject(forwardRef(() => CompaniesService))
@@ -59,16 +60,17 @@ export class PaymentCalculationService {
         public payPeriodCalculationService: PayPeriodCalculationService,
     ) {}
 
-    private initPaymentPositionId() {
-        this.paymentPositionId = this.paymentPositions.reduce((a, b) => Math.max(a, b.id), 0);
+    // private initPaymentPositionId() {
+    //     this.paymentPositionId = this.paymentPositions.reduce((a, b) => Math.max(a, b.id), 0);
+    // }
+
+    public getNextPaymentPositionId(): string {
+        // this.paymentPositionId++;
+        // return this.paymentPositionId;
+        return SnowflakeServiceSingleton.nextId();
     }
 
-    public getNextPaymentPositionId(): number {
-        this.paymentPositionId++;
-        return this.paymentPositionId;
-    }
-
-    public async calculateCompany(userId: number, companyId: number) {
+    public async calculateCompany(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, calculateCompany: ${companyId}`);
         this.userId = userId;
         this.company = await this.companiesService.findOne(userId, companyId);
@@ -86,7 +88,7 @@ export class PaymentCalculationService {
             companyId,
             accPeriod: this.payPeriod.dateFrom,
         });
-        const changedPaymentIds: number[] = [];
+        const changedPaymentIds: string[] = [];
         for (const position of positions) {
             this.position = position;
             changedPaymentIds.push(...(await this._calculatePosition()));
@@ -99,7 +101,7 @@ export class PaymentCalculationService {
         );
     }
 
-    public async calculatePosition(userId: number, positionId: number) {
+    public async calculatePosition(userId: string, positionId: string) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
         this.position = await this.positionsService.findOne(positionId, { relations: true });
         this.userId = userId;
@@ -122,18 +124,19 @@ export class PaymentCalculationService {
         );
     }
 
-    private async _calculatePosition(): Promise<number[]> {
+    private async _calculatePosition(): Promise<string[]> {
         this.payrolls = await this.getPayrolls();
         this.payFunds = await this.getPayFunds();
         this.paymentPositions = await this.getPaymentPositions();
-        this.initPaymentPositionId();
+        // this.initPaymentPositionId();
         const paymentTypeList = this.paymentTypes.filter(
             (o) => o.paymentGroup === PaymentGroup.Payments,
         );
         const current: PaymentPosition[] = [];
         for (const paymentType of paymentTypeList) {
-            // Pass copy of objects to prevent mutation
-            const calcMethod = this.calcMethodFactory({ ...paymentType }, [...current]);
+            // // Pass copy of objects to prevent mutation
+            // const calcMethod = this.calcMethodFactory({ ...paymentType }, [...current]);
+            const calcMethod = this.calcMethodFactory(paymentType, [...current]);
             if (calcMethod) {
                 current.push(calcMethod.calculate());
             }
@@ -156,8 +159,8 @@ export class PaymentCalculationService {
     private async save(
         toInsert: PaymentPosition[],
         toDelete: PaymentPosition[],
-    ): Promise<number[]> {
-        const changedPaymentIds: number[] = [];
+    ): Promise<string[]> {
+        const changedPaymentIds: string[] = [];
         for (const paymentPosition of toDelete) {
             if (paymentPosition?.payment?.id) {
                 changedPaymentIds.push(paymentPosition.payment.id);

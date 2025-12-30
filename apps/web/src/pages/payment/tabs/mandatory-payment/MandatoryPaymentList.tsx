@@ -48,7 +48,7 @@ export function MandatoryPaymentList(props: MandatoryPaymentListProps) {
                 rows={props.paymentList || []}
                 columns={columns}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
+                    setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
                 onCellKeyDown={(

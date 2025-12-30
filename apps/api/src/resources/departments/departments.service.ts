@@ -1,11 +1,11 @@
-import { ResourceType } from '@/types';
+import { Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { HttpException, HttpStatus, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { maxDate, minDate } from '@repo/shared';
 import { Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
+import { AvailableForUserCompany } from '../abstract/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { FindAllDepartmentDto } from './dto/find-all-department.dto';
@@ -18,7 +18,7 @@ import { DepartmentUpdatedEvent } from './events/department-updated.event';
 
 @Injectable()
 export class DepartmentsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.Department;
+    public readonly resource = Resource.Department;
 
     constructor(
         @InjectRepository(Department)
@@ -30,7 +30,7 @@ export class DepartmentsService extends AvailableForUserCompany {
         super(accessService);
     }
 
-    async getCompanyId(entityId: number): Promise<number> {
+    async getCompanyId(entityId: string): Promise<string> {
         return (
             await this.repository.findOneOrFail({
                 select: { companyId: true },
@@ -40,7 +40,7 @@ export class DepartmentsService extends AvailableForUserCompany {
         ).companyId;
     }
 
-    async create(userId: number, payload: CreateDepartmentDto): Promise<Department> {
+    async create(userId: string, payload: CreateDepartmentDto): Promise<Department> {
         const { dateFrom, dateTo, ...other } = payload;
         const existing = await this.repository.findOneBy({
             companyId: payload.companyId,
@@ -74,7 +74,7 @@ export class DepartmentsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(id: number, params?: FindOneDepartmentDto): Promise<Department> {
+    async findOne(id: string, params?: FindOneDepartmentDto): Promise<Department> {
         return await this.repository.findOneOrFail({
             relations: {
                 company: !!params?.relations,
@@ -85,7 +85,7 @@ export class DepartmentsService extends AvailableForUserCompany {
         });
     }
 
-    async update(userId: number, id: number, payload: UpdateDepartmentDto): Promise<Department> {
+    async update(userId: string, id: string, payload: UpdateDepartmentDto): Promise<Department> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -99,7 +99,7 @@ export class DepartmentsService extends AvailableForUserCompany {
         return updated;
     }
 
-    async remove(userId: number, id: number): Promise<Department> {
+    async remove(userId: string, id: string): Promise<Department> {
         await this.repository.save({
             id,
             deletedUserId: userId,
@@ -110,7 +110,7 @@ export class DepartmentsService extends AvailableForUserCompany {
         return deleted;
     }
 
-    async count(companyId: number): Promise<number> {
+    async count(companyId: string): Promise<number> {
         const { count } = await this.repository
             .createQueryBuilder('department')
             .select('COUNT(*)', 'count')

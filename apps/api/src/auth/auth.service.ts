@@ -1,5 +1,5 @@
 import { AccessService, UsersService } from '@/resources';
-import { AccessType, ResourceType, RoleType } from '@/types';
+import { Action, Resource, RoleType } from '@/types';
 import {
     BadRequestException,
     ForbiddenException,
@@ -63,7 +63,7 @@ export class AuthService {
         return tokens;
     }
 
-    async logout(userId: number): Promise<null> {
+    async logout(userId: string): Promise<null> {
         this.usersService.update(userId, userId, { refreshToken: null });
         return null;
     }
@@ -72,13 +72,13 @@ export class AuthService {
         return await bcrypt.hash(data, 10);
     }
 
-    async updateRefreshToken(userId: number, refreshToken: string | null) {
+    async updateRefreshToken(userId: string, refreshToken: string | null) {
         const hashedRefreshToken = refreshToken ? await this.hashData(refreshToken) : null;
         await this.usersService.update(userId, userId, { refreshToken: hashedRefreshToken });
         return this.usersService.findOne({ where: { id: userId } });
     }
 
-    async getTokens(userId: number, email: string, skipRefreshToken?: boolean): Promise<TokensDto> {
+    async getTokens(userId: string, email: string, skipRefreshToken?: boolean): Promise<TokensDto> {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(
                 {
@@ -110,7 +110,7 @@ export class AuthService {
         };
     }
 
-    async refreshTokens(userId: number, refreshToken: string) {
+    async refreshTokens(userId: string, refreshToken: string) {
         const user = await this.usersService.findOne({ where: { id: userId } });
         if (!user || !user.refreshToken) throw new ForbiddenException('Access Denied');
         // const refreshTokenMatches = await argon2.verify(user.refreshToken, refreshToken);
@@ -123,9 +123,9 @@ export class AuthService {
 
     async demo(): Promise<AuthDto> {
         await this.accessService.availableForRoleTypeOrFail(
-            RoleType.Employer,
-            ResourceType.Demo,
-            AccessType.Access,
+            RoleType.Accountant,
+            Resource.Demo,
+            Action.Read,
         );
         if (process.env['DEMO_AVAILABLE'] === 'true') {
             return {

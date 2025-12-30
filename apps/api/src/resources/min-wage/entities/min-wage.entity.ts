@@ -1,12 +1,9 @@
-import { Logger } from './../../abstract/logger.abstract';
-import { AfterLoad, Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, Index } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 
 @Entity()
 @Index('MIN_WAGE_DATE_FROM_INDEX', ['dateFrom', 'dateTo', 'paySum'], { unique: true })
-export class MinWage extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class MinWage extends BaseEntity {
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;
 

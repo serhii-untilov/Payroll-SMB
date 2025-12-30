@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { User } from './../../resources/users/entities/user.entity';
 
-export async function getSystemUserId(dataSource: DataSource): Promise<number> {
+export async function getSystemUserId(dataSource: DataSource): Promise<string> {
     const { user_id } = await dataSource
         .getRepository(User)
         .createQueryBuilder('user')

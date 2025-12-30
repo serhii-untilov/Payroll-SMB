@@ -8,7 +8,7 @@ interface CompanyFormProps {
     company?: Company;
     tabIndex?: string | null;
     goBack?: boolean;
-    setCompanyId?: (companyId: number) => void;
+    setCompanyId?: (companyId: string) => void;
 }
 
 export default function CompanyForm(props: CompanyFormProps) {

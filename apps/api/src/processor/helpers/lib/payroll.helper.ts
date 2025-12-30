@@ -1,6 +1,6 @@
 import { Payroll } from './../../../resources/payrolls/entities/payroll.entity';
 import { PayPeriod } from './../../../resources/pay-periods/entities/pay-period.entity';
-import { RecordFlags } from '@/types';
+import { RecordFlag } from '@/types';
 
 export function getPayrollUnionRecord(
     payroll: Payroll,
@@ -13,7 +13,7 @@ export function getPayrollUnionRecord(
             (o) =>
                 o.parentId === payroll.id &&
                 o.payPeriod.getTime() <= payPeriod.dateTo.getTime() &&
-                o.recordFlags & RecordFlags.Cancel,
+                o.recordFlags & RecordFlag.Cancel,
         )
         .forEach((o) => {
             result.factDays += o.factDays;
@@ -27,7 +27,7 @@ export function accPeriodFactSum(
     payPeriod: PayPeriod,
     accPeriod: PayPeriod,
     payrolls: Payroll[],
-    paymentTypeIds: number[],
+    paymentTypeIds: string[],
 ): number {
     return payrolls
         .filter(
@@ -43,7 +43,7 @@ export function accPeriodFactSum(
 export function payPeriodFactSum(
     payPeriod: PayPeriod,
     payrolls: Payroll[],
-    paymentTypeIds: number[],
+    paymentTypeIds: string[],
 ): number {
     return payrolls
         .filter(

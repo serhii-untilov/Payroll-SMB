@@ -11,7 +11,7 @@ export default function useMandatoryPaymentList(_props: MandatoryPaymentListProp
     // TODO
     const onAddPayment = useCallback(() => console.log('onEditPayment'), []);
     const onDeletePayment = useCallback(async () => console.log('onDeletePayment'), []);
-    const onEditPayment = useCallback((id: number) => navigate(`/payments/${id}`), [navigate]);
+    const onEditPayment = useCallback((id: string) => navigate(`/payments/${id}`), [navigate]);
 
     const columns = useMemo(
         () => [

@@ -74,7 +74,7 @@ export class TasksController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() params?: FindOneTaskDto,
     ) {
         const userId = getUserId(req);
@@ -91,7 +91,7 @@ export class TasksController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdateTaskDto,
     ): Promise<Task> {
         const userId = getUserId(req);
@@ -105,7 +105,7 @@ export class TasksController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Task })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Task> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Task> {
         const userId = getUserId(req);
         await this.tasksService.availableDeleteOrFail(userId, id);
         return await this.tasksService.remove(userId, id);

@@ -12,7 +12,7 @@ import useCompanyDetails from './CompanyDetails.hooks';
 
 export type CompanyDetailsProps = {
     company?: Company | undefined;
-    setCompanyId?: (companyId: number) => void;
+    setCompanyId?: (companyId: string | null | undefined) => void;
 };
 
 export default function CompanyDetails(props: CompanyDetailsProps) {

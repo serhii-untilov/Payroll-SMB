@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 interface DepartmentListParams {
     setOpenForm: Dispatch<boolean>;
-    setDepartmentId: Dispatch<number | null>;
+    setDepartmentId: Dispatch<string>;
     rowSelectionModel: GridRowSelectionModel;
     gridRef: any;
 }
@@ -16,12 +16,12 @@ export default function useDepartmentList(params: DepartmentListParams) {
     const columns = useColumns();
 
     const onAddDepartment = useCallback(() => {
-        params.setDepartmentId(null);
+        params.setDepartmentId('');
         params.setOpenForm(true);
     }, [params]);
 
     const onEditDepartment = useCallback(
-        (departmentId: number) => {
+        (departmentId: string) => {
             params.setDepartmentId(departmentId);
             params.setOpenForm(true);
         },
@@ -29,8 +29,8 @@ export default function useDepartmentList(params: DepartmentListParams) {
     );
 
     const onDeleteDepartment = useCallback(async () => {
-        for (const id of params.rowSelectionModel) {
-            await removeDepartment.mutateAsync(+id);
+        for (const id of params.rowSelectionModel.map(String)) {
+            await removeDepartment.mutateAsync(id);
         }
     }, [params.rowSelectionModel, removeDepartment]);
 

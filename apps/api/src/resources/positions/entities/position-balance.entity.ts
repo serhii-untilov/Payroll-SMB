@@ -13,15 +13,15 @@ import { Position } from './position.entity';
 @Entity()
 @Index('IDX_POSITION_BALANCE_POSITION_PERIOD', ['positionId', 'payPeriod'])
 export class PositionBalance {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+    @PrimaryGeneratedColumn('identity')
+    id: string;
 
     @ManyToOne(() => Position, (position) => position.balance)
     @JoinColumn()
     position?: Relation<Position>;
 
-    @Column({ type: 'integer' })
-    positionId: number;
+    @Column({ type: 'bigint' })
+    positionId: string;
 
     @Column({ type: 'date' })
     payPeriod: Date;

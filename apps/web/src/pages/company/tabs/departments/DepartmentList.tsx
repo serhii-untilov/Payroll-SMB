@@ -21,7 +21,7 @@ export type DepartmentListProps = {
 export default function DepartmentList(props: DepartmentListProps) {
     const { departments } = props;
     const [openForm, setOpenForm] = useState(false);
-    const [departmentId, setDepartmentId] = useState<number | null>(null);
+    const [departmentId, setDepartmentId] = useState<string>();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const { columns, onAddDepartment, onEditDepartment, onDeleteDepartment, onTreeView } =
@@ -51,7 +51,7 @@ export default function DepartmentList(props: DepartmentListProps) {
                 columns={columns}
                 checkboxSelection={true}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
+                    setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
                 onCellKeyDown={(

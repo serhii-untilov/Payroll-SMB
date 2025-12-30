@@ -31,17 +31,18 @@ import {
 } from './task-generator';
 import { FixedSequenceNumber, TaskSequenceNumber } from './task-sequence-number';
 import { Payment } from '@/resources/payments/entities/payment.entity';
+import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskGenerationService {
     private _logger: Logger = new Logger(TaskGenerationService.name);
-    private _userId: number;
+    private _userId: string;
     private _company: Company;
     private _payPeriod: PayPeriod;
     private _priorTaskList: Task[] = [];
     private _currentTaskList: Task[] = [];
     private _sequenceNumber: TaskSequenceNumber;
-    private _id: number = 0;
+    // private _id: string = 0;
     private _payments: Payment[];
 
     constructor(
@@ -87,15 +88,16 @@ export class TaskGenerationService {
         return this._sequenceNumber;
     }
     public get id() {
-        this._id = this._id + 1;
-        return this._id;
+        // this._id = this._id + 1;
+        // return this._id;
+        return SnowflakeServiceSingleton.nextId();
     }
 
     public get payments() {
         return this._payments;
     }
 
-    public async generate(userId: number, companyId: number) {
+    public async generate(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, generate for companyId: ${companyId}`);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
@@ -107,9 +109,9 @@ export class TaskGenerationService {
             onPayPeriodDate: this.payPeriod.dateFrom,
             relations: false,
         });
-        this._id = this.priorTaskList
-            .filter((o) => o.status === TaskStatus.DoneByUser)
-            .reduce((a, b) => (a > b.id ? a : b.id), 0);
+        // this._id = this.priorTaskList
+        //     .filter((o) => o.status === TaskStatus.DoneByUser)
+        //     .reduce((a, b) => (a > b.id ? a : b.id), 0);
         this._payments = await this.paymentsService.findAll({
             companyId,
             accPeriod: this.payPeriod.dateFrom,
@@ -144,9 +146,9 @@ export class TaskGenerationService {
         this._save(toInsert, toDelete);
     }
 
-    private _merge(): { toInsert: Task[]; toDelete: number[] } {
-        const toDelete: number[] = [];
-        const processed: number[] = [];
+    private _merge(): { toInsert: Task[]; toDelete: string[] } {
+        const toDelete: string[] = [];
+        const processed: string[] = [];
         for (const task of this.priorTaskList) {
             const found = this.currentTaskList.find(
                 (o) =>
@@ -169,7 +171,7 @@ export class TaskGenerationService {
         return { toInsert, toDelete };
     }
 
-    private _save(toInsert: Task[], toDelete: number[]) {
+    private _save(toInsert: Task[], toDelete: string[]) {
         for (const id of toDelete) {
             this.tasksService.delete(id);
         }

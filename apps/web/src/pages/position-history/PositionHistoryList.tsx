@@ -44,7 +44,7 @@ export default function PositionHistoryList(props: PositionHistoryListProps) {
                     columns={columns}
                     checkboxSelection={true}
                     onRowSelectionModelChange={(newRowSelectionModel) => {
-                        setRowSelectionModel(newRowSelectionModel);
+                        setRowSelectionModel(newRowSelectionModel.map(String));
                     }}
                     rowSelectionModel={rowSelectionModel}
                     onCellKeyDown={(

@@ -4,7 +4,7 @@ import ErrorDisplay from './ErrorDisplay';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-    companyId: number;
+    companyId: string;
     control: any;
     label?: string;
     id?: string;

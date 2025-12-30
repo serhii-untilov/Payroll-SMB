@@ -10,7 +10,7 @@ export default function usePositionHistoryList(props: PositionHistoryListProps) 
 
     // TODO
     const onAdd = useCallback(async () => console.log('onAdd'), []);
-    const onEdit = useCallback((_id: number) => console.log('onEdit'), []);
+    const onEdit = useCallback((_id: string) => console.log('onEdit'), []);
     const onDelete = useCallback(async () => console.log('onDelete'), []);
 
     const getRowStatus = useCallback((_params: any) => 'Normal', []);

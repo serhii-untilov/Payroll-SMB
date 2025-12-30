@@ -10,7 +10,7 @@ import useLocale from '@/hooks/context/useLocale';
 
 interface CompanyFormParams {
     company?: Company;
-    setCompanyId?: (companyId: number) => void;
+    setCompanyId?: (companyId: string) => void;
 }
 
 export default function useCompanyForm(params: CompanyFormParams) {
@@ -22,7 +22,7 @@ export default function useCompanyForm(params: CompanyFormParams) {
         [company?.id, company?.name, t],
     );
     const tabs = useTabs(params);
-    useEffect(() => {}, [locale]);
+    useEffect(() => { }, [locale]);
     return { pageTitle, tabs };
 }
 

@@ -1,5 +1,5 @@
 import { AccessService, AvailableForUserCompany } from '@/resources';
-import { ResourceType } from '@/types';
+import { Resource } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,7 +10,7 @@ import { PaymentFund } from './entities/payment-fund.entity';
 
 @Injectable()
 export class PaymentFundsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.Payment;
+    public readonly resource = Resource.Payment;
 
     constructor(
         @InjectRepository(PaymentFund)
@@ -25,7 +25,7 @@ export class PaymentFundsService extends AvailableForUserCompany {
         super(accessService);
     }
 
-    async getCompanyId(entityId: number): Promise<number> {
+    async getCompanyId(entityId: string): Promise<string> {
         const paymentFund = await this.repository.findOneOrFail({
             where: { id: entityId },
             withDeleted: true,
@@ -39,7 +39,7 @@ export class PaymentFundsService extends AvailableForUserCompany {
         ).companyId;
     }
 
-    async create(userId: number, payload: CreatePaymentFundDto): Promise<PaymentFund> {
+    async create(userId: string, payload: CreatePaymentFundDto): Promise<PaymentFund> {
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -48,7 +48,7 @@ export class PaymentFundsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(paymentPositionId: number, relations: boolean = false): Promise<PaymentFund[]> {
+    async findAll(paymentPositionId: string, relations: boolean = false): Promise<PaymentFund[]> {
         if (!paymentPositionId) {
             throw new BadRequestException('Should be defined paymentPositionId');
         }
@@ -61,7 +61,7 @@ export class PaymentFundsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(id: number, relations: boolean = false): Promise<PaymentFund> {
+    async findOne(id: string, relations: boolean = false): Promise<PaymentFund> {
         const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { paymentPosition: relations, payFundType: relations },
@@ -69,7 +69,7 @@ export class PaymentFundsService extends AvailableForUserCompany {
         return record;
     }
 
-    async update(userId: number, id: number, payload: UpdatePaymentFundDto): Promise<PaymentFund> {
+    async update(userId: string, id: string, payload: UpdatePaymentFundDto): Promise<PaymentFund> {
         await this.repository.save({
             ...payload,
             id,
@@ -79,7 +79,7 @@ export class PaymentFundsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(id: number): Promise<void> {
+    async remove(id: string): Promise<void> {
         await this.repository.delete(id);
     }
 }

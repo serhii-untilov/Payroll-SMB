@@ -65,7 +65,7 @@ export class PaymentTypesController {
     @ApiOkResponse({ description: 'The found record', type: PaymentType })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<PaymentType> {
+    async findOne(@Param('id', ParseIntPipe) id: string): Promise<PaymentType> {
         return await this.service.findOne(id);
     }
 
@@ -77,7 +77,7 @@ export class PaymentTypesController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() updatePaymentTypeDto: UpdatePaymentTypeDto,
     ) {
         const userId = getUserId(req);
@@ -90,7 +90,7 @@ export class PaymentTypesController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: PaymentType })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
         const userId = getUserId(req);
         return await this.service.remove(userId, id);
     }

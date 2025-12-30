@@ -5,8 +5,8 @@ import EditDepartment from './EditDepartment';
 export interface DepartmentDialogProps {
     open: boolean;
     setOpen: Dispatch<boolean>;
-    departmentId: number | null;
-    setDepartmentId: Dispatch<number>;
+    departmentId: string | undefined;
+    setDepartmentId: Dispatch<string>;
 }
 
 export default function DepartmentDialog(props: DepartmentDialogProps) {

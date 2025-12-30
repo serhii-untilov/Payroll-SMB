@@ -1,5 +1,5 @@
 export class CreateUserCompanyDto {
-    userId: number;
-    companyId: number;
-    roleId: number;
+    userId: string;
+    companyId: string;
+    roleId: string;
 }

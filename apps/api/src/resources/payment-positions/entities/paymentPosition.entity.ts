@@ -1,26 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RecordFlags } from './../../../types';
-import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { Logger } from '../../abstract/logger.abstract';
+import { AfterLoad, Column, Entity, ManyToOne, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { Payment } from '../../payments/entities/payment.entity';
 import { Position } from '../../positions/entities/position.entity';
+import { RecordFlag } from './../../../types';
 
 @Entity()
-export class PaymentPosition extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class PaymentPosition extends BaseEntity {
     @ManyToOne(() => Payment, (payment) => payment.paymentPositions)
     payment?: Relation<Payment>;
 
-    @Column({ type: 'integer' })
-    paymentId: number;
+    @Column({ type: 'bigint' })
+    paymentId: string;
 
     @ManyToOne(() => Position, { createForeignKeyConstraints: false })
     position?: Relation<Position>;
 
-    @Column({ type: 'integer' })
-    positionId: number;
+    @Column({ type: 'bigint' })
+    positionId: string;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     baseSum: number;
@@ -35,8 +32,8 @@ export class PaymentPosition extends Logger {
     funds: number;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: RecordFlags, enumName: 'RecordFlags' })
-    recordFlags: RecordFlags;
+    @ApiProperty({ enum: RecordFlag, enumName: 'RecordFlags' })
+    recordFlags: RecordFlag;
 
     @AfterLoad()
     transform() {

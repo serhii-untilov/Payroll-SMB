@@ -18,7 +18,7 @@ interface SelectPersonFormProps {
 export type SelectPersonOption = {
     inputValue: string;
     label: string;
-    value: number;
+    value: string | null;
 };
 
 const filter = createFilterOptions<SelectPersonOption>();
@@ -98,13 +98,13 @@ export const SelectPersonForm = (props: SelectPersonFormProps) => {
                                         filtered.push({
                                             inputValue,
                                             label: `${t('Add')} "${inputValue}"`,
-                                            value: 0,
+                                            value: null,
                                         });
                                     } else if (inputValue === '') {
                                         filtered.push({
                                             inputValue,
                                             label: `${t('Add a new person')}`,
-                                            value: 0,
+                                            value: null,
                                         });
                                     }
 

@@ -4,7 +4,7 @@ import { useGetCompany } from '@/hooks/queries/useCompany';
 import CompanyForm from './CompanyForm';
 
 interface EditCompanyProps {
-    companyId: number;
+    companyId: string;
     tabIndex: string | null;
     goBack: boolean;
 }

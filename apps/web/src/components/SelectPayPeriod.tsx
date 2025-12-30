@@ -10,7 +10,7 @@ import { useCallback, useMemo } from 'react';
 import ErrorDisplay from './ErrorDisplay';
 
 type SelectPayPeriodProps = SelectProps<string> & {
-    companyId: number | undefined;
+    companyId: string | undefined;
 };
 
 export default function SelectPayPeriod(props: SelectPayPeriodProps) {

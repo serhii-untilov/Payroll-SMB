@@ -5,12 +5,12 @@ import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { CreateDepartmentDto, ResourceType } from '@repo/openapi';
+import { CreateDepartmentDto, Resource } from '@repo/openapi';
 import { maxDate, minDate } from '@repo/shared';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { date, InferType, number, object, ObjectSchema, string } from 'yup';
+import { date, InferType, object, ObjectSchema, string } from 'yup';
 import { DepartmentFormProps } from './DepartmentForm';
 
 export default function useDepartmentForm(props: DepartmentFormProps) {
@@ -74,7 +74,7 @@ export default function useDepartmentForm(props: DepartmentFormProps) {
     const onCancel = useCallback(async () => {
         reset();
         props.setOpen(false);
-        await invalidateQueries([ResourceType.Department]);
+        await invalidateQueries([Resource.Department]);
     }, [props, invalidateQueries, reset]);
 
     return { control, handleSubmit, onSubmit, onCancel };
@@ -85,10 +85,10 @@ function useFormSchema(props: DepartmentFormProps) {
         () =>
             object({
                 name: string().required('Name is required').default(''),
-                companyId: number().required('Company is required').default(props.company?.id),
+                companyId: string().required('Company is required').default(props.company?.id),
                 dateFrom: date().default(minDate()),
                 dateTo: date().default(maxDate()),
-                parentDepartmentId: number().nullable(),
+                parentDepartmentId: string().nullable(),
             }),
         [props],
     );

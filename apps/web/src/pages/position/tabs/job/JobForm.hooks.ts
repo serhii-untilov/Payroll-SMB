@@ -14,7 +14,7 @@ import {
     CreatePositionHistoryDto,
     Position,
     PositionHistory,
-    ResourceType,
+    Resource,
 } from '@repo/openapi';
 import { MAX_SEQUENCE_NUMBER, maxDate, minDate } from '@repo/shared';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -58,7 +58,7 @@ const useJobForm = (props: JobFormProps) => {
     const formData_Position = useCallback(
         (data: FormType): CreatePositionDto => {
             const { cardNumber, sequenceNumber, description, personId, dateFrom, dateTo } = data;
-            const companyId = props.company.id || 0;
+            const companyId = props.company.id;
             return {
                 companyId,
                 cardNumber,
@@ -150,7 +150,7 @@ const useJobForm = (props: JobFormProps) => {
 
     const onCancel = useCallback(async () => {
         reset(formData);
-        await invalidateQueries([ResourceType.Position, ResourceType.PositionHistory]);
+        await invalidateQueries([Resource.Position, Resource.PositionHistory]);
     }, [formData, invalidateQueries, reset]);
 
     const onClickHistory = useCallback(() => {
@@ -170,16 +170,16 @@ function useFormSchema() {
                 cardNumber: string().ensure(),
                 sequenceNumber: number().default(MAX_SEQUENCE_NUMBER),
                 description: string().ensure(),
-                personId: number().required().nullable(),
+                personId: string().required().nullable(),
                 fullName: string().nullable(),
                 dateFrom: date().required().default(minDate()),
                 dateTo: date().required().default(maxDate()),
                 name: string().nullable(),
                 // A PositionHistory record actual on the current PayPeriod
-                departmentId: number().nullable(),
-                jobId: number().nullable(),
-                workNormId: number().nullable(),
-                paymentTypeId: number().nullable(),
+                departmentId: string().nullable(),
+                jobId: string().nullable(),
+                workNormId: string().nullable(),
+                paymentTypeId: string().nullable(),
                 wage: number().nullable().notRequired().optional(),
                 rate: number().nullable().notRequired().optional().min(0).max(2),
                 positionHistoryVersion: number().nullable(),

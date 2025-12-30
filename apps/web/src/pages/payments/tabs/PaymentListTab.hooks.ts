@@ -20,13 +20,13 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
 
     // TODO
     const onAddPayment = useCallback(() => console.log('onAddPayment'), []);
-    const onEditPayment = useCallback((id: number) => navigate(`/payments/${id}`), [navigate]);
+    const onEditPayment = useCallback((id: string) => navigate(`/payments/${id}`), [navigate]);
 
     const onDeletePayment = useCallback(async () => {
-        for (const id of rowSelectionModel) {
-            const payment = payments.find((o) => o.id === Number(id));
+        for (const id of rowSelectionModel.map(String)) {
+            const payment = payments.find((o) => o.id === id);
             if (payment?.status === PaymentStatus.Draft) {
-                await removePayment.mutateAsync(+id);
+                await removePayment.mutateAsync(id);
             }
         }
     }, [payments, removePayment, rowSelectionModel]);
@@ -62,10 +62,10 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
     );
 
     const onRestoreDeleted = useCallback(async () => {
-        for (const id of rowSelectionModel) {
-            const payment = payments.find((o) => o.id === Number(id));
+        for (const id of rowSelectionModel.map(String)) {
+            const payment = payments.find((o) => o.id === id);
             if (payment?.status === PaymentStatus.Draft && payment.deletedDate) {
-                await restorePayment.mutateAsync(+id);
+                await restorePayment.mutateAsync(id);
             }
         }
     }, [payments, restorePayment, rowSelectionModel]);

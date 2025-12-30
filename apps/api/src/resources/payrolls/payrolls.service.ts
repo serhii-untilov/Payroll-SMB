@@ -1,4 +1,4 @@
-import { CalcMethod, ResourceType, WrapperType } from '@/types';
+import { CalcMethod, Resource, WrapperType } from '@/types';
 import {
     PaymentGroupsTotal,
     PaymentPartsTotal,
@@ -9,7 +9,7 @@ import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
+import { AvailableForUserCompany } from '../abstract/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePayrollDto } from './dto/create-payroll.dto';
@@ -19,20 +19,18 @@ import { Payroll } from './entities/payroll.entity';
 
 @Injectable()
 export class PayrollsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.Payroll;
+    public readonly resource = Resource.Payroll;
 
     constructor(
-        @InjectRepository(Payroll)
-        private repository: Repository<Payroll>,
-        @Inject(forwardRef(() => AccessService))
-        public accessService: WrapperType<AccessService>,
+        @InjectRepository(Payroll) private repository: Repository<Payroll>,
+        @Inject(forwardRef(() => AccessService)) public accessService: WrapperType<AccessService>,
         @Inject(forwardRef(() => PositionsService))
         private positionsService: WrapperType<PositionsService>,
     ) {
         super(accessService);
     }
 
-    async getCompanyId(entityId: number): Promise<number> {
+    async getCompanyId(entityId: string): Promise<string> {
         const { positionId } = await this.repository.findOneOrFail({
             select: { positionId: true },
             where: { id: entityId },
@@ -41,11 +39,11 @@ export class PayrollsService extends AvailableForUserCompany {
         return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
-    async getPositionCompanyId(positionId: number): Promise<number> {
+    async getPositionCompanyId(positionId: string): Promise<string> {
         return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
-    async create(userId: number, payload: CreatePayrollDto): Promise<Payroll> {
+    async create(userId: string, payload: CreatePayrollDto): Promise<Payroll> {
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -73,7 +71,7 @@ export class PayrollsService extends AvailableForUserCompany {
     }
 
     async findBetween(
-        positionId: number,
+        positionId: string,
         dateFrom: Date,
         dateTo: Date,
         relations?: boolean,
@@ -90,7 +88,7 @@ export class PayrollsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(id: number, relations: boolean): Promise<Payroll> {
+    async findOne(id: string, relations: boolean): Promise<Payroll> {
         const payroll = await this.repository.findOneOrFail({
             where: { id },
             relations: { position: relations, paymentType: relations },
@@ -98,7 +96,7 @@ export class PayrollsService extends AvailableForUserCompany {
         return payroll;
     }
 
-    async update(userId: number, id: number, payload: UpdatePayrollDto): Promise<Payroll> {
+    async update(userId: string, id: string, payload: UpdatePayrollDto): Promise<Payroll> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -110,12 +108,12 @@ export class PayrollsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<Payroll> {
+    async remove(userId: string, id: string): Promise<Payroll> {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
-    async delete(id: number) {
+    async delete(id: string) {
         await this.repository.delete(id);
     }
 
@@ -124,7 +122,7 @@ export class PayrollsService extends AvailableForUserCompany {
     }
 
     async payrollPositionPaymentParts(
-        positionId: number,
+        positionId: string,
         payPeriod: Date,
     ): Promise<PaymentPartsTotal> {
         const records = await this.repository
@@ -146,7 +144,7 @@ export class PayrollsService extends AvailableForUserCompany {
     }
 
     async payrollPositionPaymentGroups(
-        positionId: number,
+        positionId: string,
         payPeriod: Date,
     ): Promise<PaymentGroupsTotal> {
         const records = await this.repository
@@ -168,7 +166,7 @@ export class PayrollsService extends AvailableForUserCompany {
     }
 
     async payrollCompanyPaymentParts(
-        companyId: number,
+        companyId: string,
         payPeriod: Date,
     ): Promise<PaymentPartsTotal> {
         const records = await this.repository
@@ -192,7 +190,7 @@ export class PayrollsService extends AvailableForUserCompany {
     }
 
     async payrollCompanyPaymentGroups(
-        companyId: number,
+        companyId: string,
         payPeriod: Date,
     ): Promise<PaymentGroupsTotal> {
         const records = await this.repository
@@ -216,7 +214,7 @@ export class PayrollsService extends AvailableForUserCompany {
     }
 
     async payrollCompanyCalcMethods(
-        companyId: number,
+        companyId: string,
         payPeriod: Date,
     ): Promise<{ calcMethod: CalcMethod; factSum: number }[]> {
         return await this.repository
@@ -233,9 +231,9 @@ export class PayrollsService extends AvailableForUserCompany {
     }
 
     async payrollCompanyCalcMethodsByPositions(
-        companyId: number,
+        companyId: string,
         payPeriod: Date,
-    ): Promise<{ positionId: number; calcMethod: string; factSum: number }[]> {
+    ): Promise<{ positionId: string; calcMethod: string; factSum: number }[]> {
         return await this.repository
             .createQueryBuilder('payroll')
             .select('payroll.positionId', 'positionId')

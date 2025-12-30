@@ -7,7 +7,7 @@ interface JobTabProps {
     payPeriod: PayPeriod;
     position?: Position | undefined;
     positionHistory?: PositionHistory | undefined;
-    setPositionId?: Dispatch<number> | undefined;
+    setPositionId?: Dispatch<string> | undefined;
 }
 
 const JobTab = (props: JobTabProps) => {

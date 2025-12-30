@@ -1,30 +1,19 @@
-import { PaymentType } from './../../payment-types/entities/payment-type.entity';
-import { WorkNorm } from './../../work-norms/entities/work-norm.entity';
-import { Job } from './../../jobs/entities/job.entity';
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { Department } from './../../departments/entities/department.entity';
+import { Job } from './../../jobs/entities/job.entity';
+import { PaymentType } from './../../payment-types/entities/payment-type.entity';
 import { Position } from './../../positions/entities/position.entity';
-import {
-    AfterLoad,
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    Relation,
-} from 'typeorm';
-import { Logger } from './../../abstract/logger.abstract';
+import { WorkNorm } from './../../work-norms/entities/work-norm.entity';
 
 @Entity()
-export class PositionHistory extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class PositionHistory extends BaseEntity {
     @ManyToOne(() => Position, (position) => position.history)
     @JoinColumn()
     position?: Relation<Position>;
 
-    @Column({ type: 'integer' })
-    positionId: number;
+    @Column({ type: 'bigint' })
+    positionId: string;
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;
@@ -36,29 +25,29 @@ export class PositionHistory extends Logger {
     @JoinColumn()
     department?: Relation<Department>;
 
-    @Column({ type: 'integer', nullable: true })
-    departmentId: number | null;
+    @Column({ type: 'bigint', nullable: true })
+    departmentId: string | null;
 
     @ManyToOne(() => Job, { createForeignKeyConstraints: false })
     @JoinColumn()
     job?: Relation<Job>;
 
-    @Column({ type: 'integer', nullable: true })
-    jobId: number | null;
+    @Column({ type: 'bigint', nullable: true })
+    jobId: string | null;
 
     @ManyToOne(() => WorkNorm, { createForeignKeyConstraints: false })
     @JoinColumn()
     workNorm?: Relation<WorkNorm>;
 
-    @Column({ type: 'integer', nullable: true })
-    workNormId: number | null;
+    @Column({ type: 'bigint', nullable: true })
+    workNormId: string | null;
 
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
     @JoinColumn()
     paymentType?: Relation<PaymentType>;
 
-    @Column({ type: 'integer', nullable: true })
-    paymentTypeId: number | null;
+    @Column({ type: 'bigint', nullable: true })
+    paymentTypeId: string | null;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     wage: number;

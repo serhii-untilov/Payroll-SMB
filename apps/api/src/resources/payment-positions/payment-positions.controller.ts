@@ -79,7 +79,7 @@ export class PaymentPositionsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() params: FindOnePaymentPositionDto,
     ): Promise<PaymentPosition> {
         const userId = getUserId(req);
@@ -95,7 +95,7 @@ export class PaymentPositionsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdatePaymentPositionDto,
     ): Promise<PaymentPosition> {
         const userId = getUserId(req);
@@ -114,7 +114,7 @@ export class PaymentPositionsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
     ): Promise<PaymentPosition> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);

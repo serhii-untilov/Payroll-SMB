@@ -38,7 +38,7 @@ export class DepartmentListenerService {
         this.runBatch(event.userId, event.companyId);
     }
 
-    private async runBatch(userId: number, companyId: number) {
+    private async runBatch(userId: string, companyId: string) {
         try {
             this.sseService.event(companyId, { data: ServerEvent.TasklistStarted });
             await this.taskListService.generate(userId, companyId);

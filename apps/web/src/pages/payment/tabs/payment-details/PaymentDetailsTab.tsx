@@ -15,7 +15,7 @@ export interface PaymentDetailsProps {
     company: Company;
     payPeriod: PayPeriod;
     payment?: Payment | undefined;
-    setPaymentId?: (paymentId: number) => void;
+    setPaymentId?: (paymentId: string) => void;
 }
 
 const PaymentDetailsTab = (props: PaymentDetailsProps) => {
@@ -68,7 +68,7 @@ const PaymentDetailsTab = (props: PaymentDetailsProps) => {
                             <SelectAccPeriod
                                 disabled={!!payment?.id}
                                 control={control}
-                                companyId={Number(props.company?.id)}
+                                companyId={props.company?.id}
                                 name="accPeriod"
                                 label={t('Accounting Period')}
                             />

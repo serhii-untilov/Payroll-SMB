@@ -32,13 +32,13 @@ export default function useEmployeePaymentList(rowSelectionModel: GridRowSelecti
     const onAddPayment = useCallback(() => console.log('onAddPayment'), []);
 
     const onEditPayment = useCallback(
-        (id: number) => navigate(`/people/position/${id}?return=true`),
+        (id: string) => navigate(`/people/position/${id}?return=true`),
         [navigate],
     );
 
     const onDeletePayment = useCallback(async () => {
-        for (const id of rowSelectionModel) {
-            await removePaymentPosition.mutateAsync(+id);
+        for (const id of rowSelectionModel.map(String)) {
+            await removePaymentPosition.mutateAsync(id);
         }
     }, [removePaymentPosition, rowSelectionModel]);
 

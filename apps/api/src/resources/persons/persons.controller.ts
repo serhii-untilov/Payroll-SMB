@@ -65,7 +65,7 @@ export class PersonsController {
     @ApiOkResponse({ description: 'The found record', type: Person })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Person> {
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);
         return await this.service.findOne(id);
@@ -79,7 +79,7 @@ export class PersonsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdatePersonDto,
     ): Promise<Person> {
         const userId = getUserId(req);
@@ -93,7 +93,7 @@ export class PersonsController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Person })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Person> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Person> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId);
         return await this.service.remove(userId, id);

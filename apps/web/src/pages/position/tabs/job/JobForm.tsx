@@ -22,7 +22,7 @@ export interface JobFormProps {
     company: Company;
     position?: Position | undefined;
     positionHistory?: PositionHistory | undefined;
-    setPositionId?: Dispatch<number> | undefined;
+    setPositionId?: Dispatch<string> | undefined;
 }
 
 // TODO: refactor

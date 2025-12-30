@@ -1,30 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-    AfterLoad,
-    Column,
-    Entity,
-    Index,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    Relation,
-} from 'typeorm';
+import { AfterLoad, Column, Entity, Index, ManyToOne, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
-import { FixedFlags, HoursByDay, RecordFlags, ResourceType } from './../../../types';
-import { Logger } from './../../abstract/logger.abstract';
+import { FixedFlag, HoursByDay, RecordFlag, Resource } from './../../../types';
 
 @Entity()
 @Index('IDX_PAYROLL_POSITION_PAY_PERIOD', ['positionId', 'payPeriod'])
 @Index('IDX_PAYROLL_SOURCE_TYPE_ID', ['sourceType', 'sourceId'])
-export class Payroll extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class Payroll extends BaseEntity {
     @ManyToOne(() => Position, { createForeignKeyConstraints: false })
     position?: Relation<Position>;
 
-    @Column({ type: 'integer' })
-    positionId: number;
+    @Column({ type: 'bigint' })
+    positionId: string;
 
     @Column({ type: 'date' })
     payPeriod: Date;
@@ -35,8 +24,8 @@ export class Payroll extends Logger {
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
     paymentType?: Relation<PaymentType>;
 
-    @Column({ type: 'integer' })
-    paymentTypeId: number;
+    @Column({ type: 'bigint' })
+    paymentTypeId: string;
 
     @Column({ type: 'date' })
     dateFrom: Date;
@@ -45,11 +34,11 @@ export class Payroll extends Logger {
     dateTo: Date;
 
     @Column({ type: 'varchar', length: 20, default: '' })
-    @ApiProperty({ enum: ResourceType, enumName: 'ResourceType' })
-    sourceType: ResourceType;
+    @ApiProperty({ enum: Resource, enumName: 'Resource' })
+    sourceType: Resource;
 
-    @Column({ type: 'integer', nullable: true })
-    sourceId: number | null;
+    @Column({ type: 'bigint', nullable: true })
+    sourceId: string | null;
 
     @Column({ type: 'date', nullable: true })
     dateBegin: Date | null;
@@ -85,12 +74,12 @@ export class Payroll extends Logger {
     mask2: number;
 
     @Column({ type: 'bigint' })
-    @ApiProperty({ enum: RecordFlags, default: 0, enumName: 'RecordFlags' })
-    recordFlags: RecordFlags;
+    @ApiProperty({ enum: RecordFlag, default: 0, enumName: 'RecordFlags' })
+    recordFlags: RecordFlag;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: FixedFlags, enumName: 'FixedFlags' })
-    fixedFlags: FixedFlags;
+    @ApiProperty({ enum: FixedFlag, enumName: 'FixedFlags' })
+    fixedFlags: FixedFlag;
 
     @Column({ type: 'jsonb', nullable: true })
     planHoursByDay: HoursByDay | null;
@@ -98,8 +87,8 @@ export class Payroll extends Logger {
     @Column({ type: 'jsonb', nullable: true })
     factHoursByDay: HoursByDay | null;
 
-    @Column({ type: 'integer', nullable: true })
-    parentId: number | null;
+    @Column({ type: 'bigint', nullable: true })
+    parentId: string | null;
 
     @AfterLoad()
     transform() {

@@ -1,11 +1,11 @@
 import { api } from '@/api';
-import { Company, CreateCompanyDto, ResourceType, UpdateCompanyDto } from '@repo/openapi';
+import { Company, CreateCompanyDto, Resource, UpdateCompanyDto } from '@repo/openapi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import useInvalidateQueries from '../useInvalidateQueries';
 
-const useGetCompany = (companyId: number) => {
+const useGetCompany = (companyId: string) => {
     return useQuery<Company, Error>({
-        queryKey: [ResourceType.Company, { companyId }],
+        queryKey: [Resource.Company, { companyId }],
         queryFn: async () => (await api.companiesFindOne(companyId)).data,
         enabled: !!companyId,
     });
@@ -17,13 +17,13 @@ const useCreateCompany = () => {
         mutationFn: async (dto: CreateCompanyDto): Promise<Company> =>
             (await api.companiesCreate(dto)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.Company, ResourceType.PayPeriod]);
+            invalidateQueries([Resource.Company, Resource.PayPeriod]);
         },
     });
 };
 
 type UpdateCompany = {
-    id: number;
+    id: string;
     dto: UpdateCompanyDto;
 };
 
@@ -33,11 +33,7 @@ const useUpdateCompany = () => {
         mutationFn: async ({ id, dto }: UpdateCompany): Promise<Company> =>
             (await api.companiesUpdate(id, dto)).data,
         onSuccess: () => {
-            invalidateQueries([
-                ResourceType.Company,
-                ResourceType.PayPeriod,
-                ResourceType.Position,
-            ]);
+            invalidateQueries([Resource.Company, Resource.PayPeriod, Resource.Position]);
         },
     });
 };
@@ -45,14 +41,14 @@ const useUpdateCompany = () => {
 const useRemoveCompany = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: number) => (await api.companiesRemove(id)).data,
+        mutationFn: async (id: string) => (await api.companiesRemove(id)).data,
         onSuccess: () => {
             invalidateQueries([
-                ResourceType.Company,
-                ResourceType.PayPeriod,
-                ResourceType.Department,
-                ResourceType.Position,
-                ResourceType.Task,
+                Resource.Company,
+                Resource.PayPeriod,
+                Resource.Department,
+                Resource.Position,
+                Resource.Task,
             ]);
         },
     });
@@ -61,13 +57,13 @@ const useRemoveCompany = () => {
 const useCalculateCompany = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: number) => await api.companiesSalaryCalculate(id),
+        mutationFn: async (id: string) => await api.companiesSalaryCalculate(id),
         onSuccess: () => {
             invalidateQueries([
-                ResourceType.Company,
-                ResourceType.PayPeriod,
-                ResourceType.Position,
-                ResourceType.Task,
+                Resource.Company,
+                Resource.PayPeriod,
+                Resource.Position,
+                Resource.Task,
             ]);
         },
     });

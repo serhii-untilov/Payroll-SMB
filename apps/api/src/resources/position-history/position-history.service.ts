@@ -1,11 +1,11 @@
-import { ResourceType } from '@/types';
+import { Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { add, sub } from 'date-fns';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
+import { AvailableForUserCompany } from '../abstract/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
@@ -18,7 +18,7 @@ import { PositionHistory } from './entities/position-history.entity';
 
 @Injectable()
 export class PositionHistoryService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.Position;
+    public readonly resource = Resource.Position;
 
     constructor(
         @InjectRepository(PositionHistory)
@@ -34,7 +34,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         super(accessService);
     }
 
-    async getCompanyId(entityId: number): Promise<number> {
+    async getCompanyId(entityId: string): Promise<string> {
         const { positionId } = await this.repository.findOneOrFail({
             select: { positionId: true },
             where: { id: entityId },
@@ -43,11 +43,11 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
-    async getPositionCompanyId(positionId: number): Promise<number> {
+    async getPositionCompanyId(positionId: string): Promise<string> {
         return (await this.positionsService.findOne(positionId, { withDeleted: true })).companyId;
     }
 
-    async create(userId: number, payload: CreatePositionHistoryDto): Promise<PositionHistory> {
+    async create(userId: string, payload: CreatePositionHistoryDto): Promise<PositionHistory> {
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -97,7 +97,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return response;
     }
 
-    async findOne(id: number, params?: FindOnePositionHistoryDto): Promise<PositionHistory> {
+    async findOne(id: string, params?: FindOnePositionHistoryDto): Promise<PositionHistory> {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: {
@@ -111,8 +111,8 @@ export class PositionHistoryService extends AvailableForUserCompany {
     }
 
     async update(
-        userId: number,
-        id: number,
+        userId: string,
+        id: string,
         payload: UpdatePositionHistoryDto,
     ): Promise<PositionHistory> {
         const record = await this.repository.findOneOrFail({ where: { id } });
@@ -129,7 +129,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<PositionHistory> {
+    async remove(userId: string, id: string): Promise<PositionHistory> {
         const deleted = await this.repository.save({
             id,
             deletedUserId: userId,
@@ -143,7 +143,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
     }
 
     private async normalizeAfterCreateOrUpdate(
-        userId: number,
+        userId: string,
         record: PositionHistory,
     ): Promise<void> {
         const position = await this.positionsService.findOne(record.positionId);
@@ -189,7 +189,7 @@ export class PositionHistoryService extends AvailableForUserCompany {
         }
     }
 
-    private async normalizeAfterDeleted(userId: number, record: PositionHistory): Promise<void> {
+    private async normalizeAfterDeleted(userId: string, record: PositionHistory): Promise<void> {
         const position = await this.positionsService.findOne(record.positionId);
         if (!position) {
             throw new NotFoundException('Position not found.');

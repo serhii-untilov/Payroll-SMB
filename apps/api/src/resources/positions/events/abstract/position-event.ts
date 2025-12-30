@@ -8,9 +8,9 @@ export enum PositionEventType {
 
 export abstract class PositionEvent {
     private _type: PositionEventType;
-    private _userId: number;
-    private _positionId: number;
-    private _companyId: number;
+    private _userId: string;
+    private _positionId: string;
+    private _companyId: string;
 
     public get type() {
         return this._type;
@@ -25,7 +25,7 @@ export abstract class PositionEvent {
         return this._companyId;
     }
 
-    constructor(type: PositionEventType, userId: number, position: Position) {
+    constructor(type: PositionEventType, userId: string, position: Position) {
         this._type = type;
         this._userId = userId;
         this._positionId = position.id;

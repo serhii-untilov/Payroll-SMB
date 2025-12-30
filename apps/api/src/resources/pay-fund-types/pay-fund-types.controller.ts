@@ -64,7 +64,7 @@ export class PayFundTypesController {
     @ApiOkResponse({ description: 'The found record', type: PayFundType })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId);
         return await this.service.findOne(id);
@@ -78,7 +78,7 @@ export class PayFundTypesController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() updateFundTypeDto: UpdatePayFundTypeDto,
     ) {
         const userId = getUserId(req);
@@ -92,7 +92,7 @@ export class PayFundTypesController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: PayFundType })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId);
         return await this.service.remove(userId, id);

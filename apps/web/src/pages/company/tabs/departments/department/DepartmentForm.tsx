@@ -18,7 +18,7 @@ export interface DepartmentFormProps {
     open: boolean;
     setOpen: Dispatch<boolean>;
     department?: Department;
-    setDepartmentId?: Dispatch<number>;
+    setDepartmentId?: Dispatch<string>;
 }
 
 export default function DepartmentForm(props: DepartmentFormProps) {

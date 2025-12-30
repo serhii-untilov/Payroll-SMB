@@ -1,4 +1,4 @@
-import { AccessType, ResourceType, RoleType } from '@/types';
+import { Action, Resource, RoleType } from '@/types';
 import {
     BadRequestException,
     ForbiddenException,
@@ -20,7 +20,7 @@ import { Access } from './entities/access.entity';
 
 @Injectable()
 export class AccessService {
-    public readonly resourceType = ResourceType.Access;
+    public readonly resource = Resource.Access;
 
     constructor(
         @InjectRepository(Access)
@@ -31,12 +31,12 @@ export class AccessService {
         private userRepository: Repository<User>,
     ) {}
 
-    async create(userId: number, data: CreateAccessDto): Promise<Access> {
+    async create(userId: string, data: CreateAccessDto): Promise<Access> {
         const exists = await this.exists(data);
         if (exists) {
             throw new BadRequestException(`Access record already exists.`);
         }
-        await this.availableForUserOrFail(userId, this.resourceType, AccessType.Create);
+        await this.availableForUserOrFail(userId, this.resource, Action.Create);
         return await this.repository.save({
             ...data,
             createdUserId: userId,
@@ -44,33 +44,33 @@ export class AccessService {
         });
     }
 
-    async findAll(roleType: string, resourceType: string): Promise<Access[]> {
+    async findAll(roleType: string, resource: string): Promise<Access[]> {
         const where = {};
         if (roleType) where['roleType'] = roleType;
-        if (resourceType) where['resourceType'] = resourceType;
+        if (resource) where['resource'] = resource;
         return await this.repository.find(where);
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async update(userId: number, id: number, data: UpdateAccessDto): Promise<Access> {
+    async update(userId: string, id: string, data: UpdateAccessDto): Promise<Access> {
         const record = this.repository.findOneBy({ id });
         if (!record) {
             throw new NotFoundException(`Access record could not be found.`);
         }
-        await this.availableForUserOrFail(userId, this.resourceType, AccessType.Update);
+        await this.availableForUserOrFail(userId, this.resource, Action.Update);
         await this.repository.save({ ...data, id, updatedUserId: userId, updatedDate: new Date() });
         return await this.repository.save({ id, ...data });
     }
 
-    async remove(userId: number, id: number) {
+    async remove(userId: string, id: string) {
         const record = await this.repository.findOne({ where: { id } });
         if (!record) {
             throw new NotFoundException(`Access record could not be found.`);
         }
-        await this.availableForUserOrFail(userId, this.resourceType, AccessType.Delete);
+        await this.availableForUserOrFail(userId, this.resource, Action.Delete);
         return await this.repository.save({
             ...record,
             id,
@@ -93,15 +93,15 @@ export class AccessService {
 
     async availableForRoleTypeOrFail(
         roleType: RoleType,
-        resourceType: ResourceType,
-        accessType: AccessType,
+        resource: Resource,
+        action: Action,
     ): Promise<void> {
-        if (!this.available({ roleType, resourceType, accessType })) {
+        if (!this.available({ roleType, resource, action })) {
             throw new ForbiddenException(`User doesn't have access to the requested resource.`);
         }
     }
 
-    async getUserRoleType(id: number): Promise<RoleType> {
+    async getUserRoleType(id: string): Promise<RoleType> {
         const user = await this.userRepository.findOneOrFail({
             where: { id },
             relations: { role: true },
@@ -116,22 +116,22 @@ export class AccessService {
         const roleType = await this.getUserRoleType(params.userId);
         return this.available({
             roleType,
-            resourceType: params.resourceType,
-            accessType: params.accessType,
+            resource: params.resource,
+            action: params.action,
         });
     }
 
     async availableForUserOrFail(
-        userId: number,
-        resourceType: ResourceType,
-        accessType: AccessType,
+        userId: string,
+        resource: Resource,
+        action: Action,
     ): Promise<void> {
-        if (!(await this.availableForUser({ userId, resourceType, accessType }))) {
+        if (!(await this.availableForUser({ userId, resource, action }))) {
             throw new ForbiddenException(`User doesn't have access to the requested resource.`);
         }
     }
 
-    async getUserCompanyRoleType(userId: number, companyId: number): Promise<RoleType> {
+    async getUserCompanyRoleType(userId: string, companyId: string): Promise<RoleType> {
         const record = await this.userCompanyRepository.findOneOrFail({
             where: { userId, companyId },
             relations: { role: true },
@@ -149,19 +149,24 @@ export class AccessService {
         }
         return await this.available({
             roleType,
-            resourceType: params.resourceType,
-            accessType: params.accessType,
+            resource: params.resource,
+            action: params.action,
         });
     }
 
     async availableForUserCompanyOrFail(
-        userId: number,
-        companyId: number,
-        resourceType: ResourceType,
-        accessType: AccessType,
+        userId: string,
+        companyId: string,
+        resource: Resource,
+        action: Action,
     ): Promise<void> {
         if (
-            !(await this.availableForUserCompany({ userId, companyId, resourceType, accessType }))
+            !(await this.availableForUserCompany({
+                userId,
+                companyId,
+                resource,
+                action,
+            }))
         ) {
             throw new ForbiddenException(
                 `User doesn't have access to the requested Company's resource.`,
@@ -170,23 +175,23 @@ export class AccessService {
     }
 
     canRegisterUserByRoleType(roleType: string): boolean {
-        const canRegister = [RoleType.Employer, RoleType.Employee, RoleType.Guest];
+        const canRegister = [RoleType.Accountant, RoleType.Employee, RoleType.Manager];
         return canRegister.includes(roleType as RoleType);
     }
 
     canOperateRoleType(parentUserRoleType: string, childUserRoleType: string) {
         const whoMadeWho = [
             // ADMIN
-            { parent: RoleType.Admin, child: RoleType.Admin },
-            { parent: RoleType.Admin, child: RoleType.Employer },
-            { parent: RoleType.Admin, child: RoleType.Observer },
-            { parent: RoleType.Admin, child: RoleType.Employee },
-            { parent: RoleType.Admin, child: RoleType.Guest },
+            { parent: RoleType.SystemAdmin, child: RoleType.SystemAdmin },
+            { parent: RoleType.SystemAdmin, child: RoleType.Accountant },
+            { parent: RoleType.SystemAdmin, child: RoleType.Manager },
+            { parent: RoleType.SystemAdmin, child: RoleType.Employee },
+            { parent: RoleType.SystemAdmin, child: RoleType.Manager },
             // EMPLOYER
-            { parent: RoleType.Employer, child: RoleType.Employee },
-            { parent: RoleType.Employer, child: RoleType.Observer },
-            { parent: RoleType.Employer, child: RoleType.Employee },
-            { parent: RoleType.Employer, child: RoleType.Guest },
+            { parent: RoleType.Accountant, child: RoleType.Employee },
+            { parent: RoleType.Accountant, child: RoleType.Manager },
+            { parent: RoleType.Accountant, child: RoleType.Employee },
+            { parent: RoleType.Accountant, child: RoleType.Manager },
         ];
         return (
             whoMadeWho.findIndex(

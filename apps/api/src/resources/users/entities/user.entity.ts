@@ -1,12 +1,9 @@
+import { Column, Entity, ManyToOne, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { Role } from '../../roles/entities/role.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { Logger } from './../../abstract/logger.abstract';
 
 @Entity()
-export class User extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class User extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
     firstName: string;
 
@@ -32,5 +29,5 @@ export class User extends Logger {
     role?: Relation<Role>;
 
     @Column()
-    roleId: number;
+    roleId: string;
 }

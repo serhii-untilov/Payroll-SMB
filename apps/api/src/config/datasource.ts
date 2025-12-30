@@ -3,6 +3,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 import * as dotenv from 'dotenv';
 import { DatabaseType, DataSource, DataSourceOptions } from 'typeorm';
 import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+import { PluralSnakeNamingStrategy } from './lib/plural-snake-naming.strategy';
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ export const dbConfig = {
             : process.env['DATABASE_NAME'],
     entities: [__dirname + '/../resources/**/*entity.js'],
     migrations: [__dirname + '/../migrations/**/*.js'],
+    namingStrategy: new PluralSnakeNamingStrategy(),
 };
 
 export const AppDataSource = new DataSource(getDataSource(dbConfig));

@@ -1,10 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Accounting } from './../../accounting/entities/accounting.entity';
-import { Department } from './../../departments/entities/department.entity';
-import { Law } from './../../laws/entities/law.entity';
-import { Position } from './../../positions/entities/position.entity';
-import { UserCompany } from './../../user-companies/entities/user-company.entity';
-import { PaymentSchedule } from './../../../types/lib/PaymentSchedule';
 import { monthBegin, monthEnd } from '@repo/shared';
 import {
     AfterLoad,
@@ -14,16 +8,18 @@ import {
     Entity,
     ManyToOne,
     OneToMany,
-    PrimaryGeneratedColumn,
     Relation,
 } from 'typeorm';
-import { Logger } from './../../abstract/logger.abstract';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
+import { PaymentSchedule } from './../../../types/lib/PaymentSchedule';
+import { Accounting } from './../../accounting/entities/accounting.entity';
+import { Department } from './../../departments/entities/department.entity';
+import { Law } from './../../laws/entities/law.entity';
+import { Position } from './../../positions/entities/position.entity';
+import { UserCompany } from './../../user-companies/entities/user-company.entity';
 
 @Entity()
-export class Company extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class Company extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
@@ -35,16 +31,16 @@ export class Company extends Logger {
     })
     law?: Relation<Law>;
 
-    @Column({ type: 'integer', nullable: true })
-    lawId: number;
+    @Column({ type: 'bigint', nullable: true })
+    lawId: string;
 
     @ManyToOne(() => Accounting, {
         createForeignKeyConstraints: false,
     })
     accounting?: Relation<Accounting>;
 
-    @Column({ type: 'integer', nullable: true })
-    accountingId: number;
+    @Column({ type: 'bigint', nullable: true })
+    accountingId: string;
 
     @Column({ type: 'varchar', length: 10, default: PaymentSchedule.LastDay })
     @ApiProperty({ enum: PaymentSchedule, enumName: 'PaymentSchedule' })

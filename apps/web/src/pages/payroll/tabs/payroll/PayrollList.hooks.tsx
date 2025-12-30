@@ -19,7 +19,7 @@ export default function usePayrollList(_params: PayrollListParams) {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const onEditPosition = (positionId: number) => {
+    const onEditPosition = (positionId: string) => {
         navigate(`/people/position/${positionId}?return=true`);
     };
 
@@ -27,10 +27,10 @@ export default function usePayrollList(_params: PayrollListParams) {
         return params.row?.deletedDate
             ? 'Deleted'
             : params.row?.dateTo < maxDate()
-              ? 'Dismissed'
-              : !params.row?.personId
-                ? 'Vacancy'
-                : 'Normal';
+                ? 'Dismissed'
+                : !params.row?.personId
+                    ? 'Vacancy'
+                    : 'Normal';
     }, []);
 
     const columns = useMemo<GridColDef[]>(
@@ -119,8 +119,8 @@ export default function usePayrollList(_params: PayrollListParams) {
                                         factHours > planHours
                                             ? 'error.main'
                                             : factHours < planHours
-                                              ? 'warning.main'
-                                              : ''
+                                                ? 'warning.main'
+                                                : ''
                                     }
                                 >
                                     {unit === 'hour' ? factHours.toFixed(2) : factDays || ''}
@@ -243,8 +243,8 @@ export default function usePayrollList(_params: PayrollListParams) {
                                             params.row.accruals > 0 && incomeTax <= 0
                                                 ? 'warning.main'
                                                 : !params.row.accruals && !incomeTax
-                                                  ? 'disabled'
-                                                  : ''
+                                                    ? 'disabled'
+                                                    : ''
                                         }
                                     >
                                         {sumFormatter(incomeTax)}
@@ -266,8 +266,8 @@ export default function usePayrollList(_params: PayrollListParams) {
                                             params.row.accruals > 0 && militaryTax <= 0
                                                 ? 'warning.main'
                                                 : !params.row.accruals && !militaryTax
-                                                  ? 'disabled'
-                                                  : ''
+                                                    ? 'disabled'
+                                                    : ''
                                         }
                                     >
                                         {sumFormatter(militaryTax)}
@@ -343,8 +343,8 @@ export default function usePayrollList(_params: PayrollListParams) {
                                         outBalance < 0
                                             ? 'error.main'
                                             : outBalance > 0
-                                              ? 'primary.main'
-                                              : 'divider'
+                                                ? 'primary.main'
+                                                : 'divider'
                                     }
                                 >
                                     {sumFormatter(outBalance, false)}
@@ -375,8 +375,8 @@ export default function usePayrollList(_params: PayrollListParams) {
                                             accruals > 0 && fundECB <= 0
                                                 ? 'warning.main'
                                                 : !fundECB
-                                                  ? 'divider'
-                                                  : ''
+                                                    ? 'divider'
+                                                    : ''
                                         }
                                     >
                                         {sumFormatter(fundECB, false)}

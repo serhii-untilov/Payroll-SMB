@@ -13,15 +13,15 @@ import { PayPeriod } from './pay-period.entity';
 
 @Entity()
 export class PayPeriodCalcMethod {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+    @PrimaryGeneratedColumn('identity')
+    id: string;
 
     @ManyToOne(() => PayPeriod, (payPeriod) => payPeriod.calcMethods)
     @JoinColumn()
     payPeriod?: Relation<PayPeriod>;
 
-    @Column({ type: 'integer' })
-    payPeriodId: number;
+    @Column({ type: 'bigint' })
+    payPeriodId: string;
 
     @Column({ type: 'varchar', length: 30 })
     @ApiProperty({ enum: CalcMethod, enumName: 'CalcMethod' })

@@ -7,7 +7,7 @@ import { Company, PayPeriod } from '@repo/openapi';
 interface EditPaymentProps {
     company: Company;
     payPeriod: PayPeriod;
-    paymentId: number;
+    paymentId: string;
     tabIndex: string | null;
     goBack: boolean;
 }

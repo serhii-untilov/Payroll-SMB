@@ -42,7 +42,7 @@ const EmployeePaymentsList = ({ paymentList }) => {
                 rows={paymentList || []}
                 columns={columns}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
+                    setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
                 onCellKeyDown={(

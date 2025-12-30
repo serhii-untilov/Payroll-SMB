@@ -1,10 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import { PluralSnakeNamingStrategy } from './plural-snake-naming.strategy';
 
 @Injectable()
 export class TypeormConfigService implements TypeOrmOptionsFactory {
-    private logger = new Logger(TypeormConfigService.name);
     constructor(private configService: ConfigService) {}
 
     createTypeOrmOptions(): TypeOrmModuleOptions {
@@ -20,6 +20,7 @@ export class TypeormConfigService implements TypeOrmOptionsFactory {
             synchronize: dbConfig.synchronize,
             logging: dbConfig.logging,
             autoLoadEntities: true,
+            namingStrategy: new PluralSnakeNamingStrategy(),
         };
     }
 }

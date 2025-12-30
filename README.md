@@ -373,6 +373,7 @@ npm i --workspace @repo/api --save helmet
 npm i --workspace @repo/api --save @ngneat/falso
 npm i --workspace @repo/api --save @nestjs/schedule
 npm i --workspace @repo/api --save-dev run-script-os
+npm i --workspace @repo/api --save flake-idgen biguint-format
 
 # Init "web" application for front-end
 npm i --workspace @repo/web @tanstack/react-query

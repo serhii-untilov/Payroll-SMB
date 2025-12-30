@@ -1,6 +1,6 @@
 export class FindPayrollDto {
-    companyId?: number;
-    positionId?: number;
+    companyId?: string;
+    positionId?: string;
     payPeriod?: Date;
     relations?: boolean;
 }

@@ -3,9 +3,9 @@ import { Observable, Subject, map } from 'rxjs';
 
 @Injectable()
 export class SseService {
-    public companyEvents = new Map<number, Subject<MessageEvent>>();
+    public companyEvents = new Map<string, Subject<MessageEvent>>();
 
-    event(companyId: number, data: MessageEvent) {
+    event(companyId: string, data: MessageEvent) {
         let eventSubject = this.companyEvents.get(companyId);
         if (!eventSubject) {
             eventSubject = new Subject<MessageEvent>();
@@ -14,7 +14,7 @@ export class SseService {
         eventSubject.next(data);
     }
 
-    getObservable(companyId: number): Observable<MessageEvent> {
+    getObservable(companyId: string): Observable<MessageEvent> {
         let eventSubject = this.companyEvents.get(companyId);
         if (!eventSubject) {
             // throw new NotFoundException(`Event stream with ID ${companyId} not found`);

@@ -6,7 +6,7 @@ import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ResourceType, UpdatePersonDto } from '@repo/openapi';
+import { Resource, UpdatePersonDto } from '@repo/openapi';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -65,7 +65,7 @@ const usePersonForm = ({ person }) => {
 
     const onCancel = useCallback(async () => {
         reset(formSchema.cast(person));
-        await invalidateQueries([ResourceType.Person]);
+        await invalidateQueries([Resource.Person]);
     }, [formSchema, person, invalidateQueries, reset]);
 
     return { control, isDirty, handleSubmit, onSubmit, onCancel };
@@ -75,7 +75,7 @@ function useFormSchema() {
     return useMemo(
         () =>
             object().shape({
-                id: number().required(),
+                id: string().required(),
                 lastName: string().required(),
                 firstName: string().required(),
                 middleName: string(),

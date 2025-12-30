@@ -1,4 +1,4 @@
-import { AccessType, ResourceType } from '@/types';
+import { Action, Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import {
     BadRequestException,
@@ -26,7 +26,7 @@ import { CompanyUpdatedEvent } from './events/company-updated.event';
 @Injectable()
 export class CompaniesService {
     private _logger: Logger = new Logger(CompaniesService.name);
-    public readonly resourceType = ResourceType.Company;
+    public readonly resource = Resource.Company;
 
     constructor(
         @InjectRepository(Company)
@@ -40,50 +40,42 @@ export class CompaniesService {
         private eventEmitter: EventEmitter2,
     ) {}
 
-    async availableFindAllOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Access,
-        );
+    async availableFindAllOrFail(userId: string) {
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Read);
     }
 
-    async availableFindOneOrFail(userId: number, id: number) {
+    async availableFindOneOrFail(userId: string, id: string) {
         await this.accessService.availableForUserCompanyOrFail(
             userId,
             id,
-            this.resourceType,
-            AccessType.Access,
+            this.resource,
+            Action.Read,
         );
     }
 
-    async availableCreateOrFail(userId: number) {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Create,
-        );
+    async availableCreateOrFail(userId: string) {
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Create);
     }
 
-    async availableUpdateOrFail(userId: number, id: number) {
+    async availableUpdateOrFail(userId: string, id: string) {
         await this.accessService.availableForUserCompanyOrFail(
             userId,
             id,
-            this.resourceType,
-            AccessType.Update,
+            this.resource,
+            Action.Update,
         );
     }
 
-    async availableDeleteOrFail(userId: number, id: number) {
+    async availableDeleteOrFail(userId: string, id: string) {
         await this.accessService.availableForUserCompanyOrFail(
             userId,
             id,
-            this.resourceType,
-            AccessType.Delete,
+            this.resource,
+            Action.Delete,
         );
     }
 
-    async create(userId: number, payload: CreateCompanyDto): Promise<Company> {
+    async create(userId: string, payload: CreateCompanyDto): Promise<Company> {
         const existing = await this.usersCompanyService.findOneByCompanyName(userId, payload.name);
         if (existing) {
             throw new BadRequestException(`Company '${payload.name}' already exists.`);
@@ -107,7 +99,7 @@ export class CompaniesService {
         return created;
     }
 
-    async findAll(userId: number, relations: boolean): Promise<Company[]> {
+    async findAll(userId: string, relations: boolean): Promise<Company[]> {
         return await this.repository.find({
             relations: {
                 law: relations,
@@ -120,7 +112,7 @@ export class CompaniesService {
         });
     }
 
-    async findOne(userId: number, id: number, relations: boolean = false): Promise<Company> {
+    async findOne(userId: string, id: string, relations: boolean = false): Promise<Company> {
         const company = await this.repository.findOneOrFail({
             relations: {
                 law: !!relations,
@@ -135,13 +127,16 @@ export class CompaniesService {
         return company;
     }
 
-    async findLast(userId: number, relations: boolean = false): Promise<Company | undefined> {
+    async findLast(userId: string, relations: boolean = false): Promise<Company | undefined> {
         const companies = await this.findAll(userId, relations);
-        const id = companies.reduce((a, b) => (a && a > b.id ? a : b.id), 0);
-        return companies.find((o) => o.id === id);
+        const maxId = companies.reduce<bigint>((max, c) => {
+            const id = BigInt(c.id);
+            return id > max ? id : max;
+        }, 0n);
+        return companies.find((o) => o.id === String(maxId));
     }
 
-    async findOneOrFail(userId: number, id: number, relations: boolean = false): Promise<Company> {
+    async findOneOrFail(userId: string, id: string, relations: boolean = false): Promise<Company> {
         const company = await this.findOne(userId, id, relations);
         if (!company) {
             throw new NotFoundException(`Company could not be found or user doesn't have access.`);
@@ -149,7 +144,7 @@ export class CompaniesService {
         return company;
     }
 
-    async update(userId: number, id: number, payload: UpdateCompanyDto): Promise<Company> {
+    async update(userId: string, id: string, payload: UpdateCompanyDto): Promise<Company> {
         await this.usersCompanyService.getUserCompanyRoleTypeOrFail(userId, id);
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
@@ -164,7 +159,7 @@ export class CompaniesService {
         return updated;
     }
 
-    async remove(userId: number, id: number): Promise<Company> {
+    async remove(userId: string, id: string): Promise<Company> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         if (record.createdUserId === userId) {
             await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
@@ -180,7 +175,7 @@ export class CompaniesService {
         );
     }
 
-    async calculatePayroll(userId: number, id: number): Promise<void> {
+    async calculatePayroll(userId: string, id: string): Promise<void> {
         const company = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('company.calculate', new CompanyCalculateEvent(userId, company));
     }

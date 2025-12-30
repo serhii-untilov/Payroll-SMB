@@ -1,4 +1,4 @@
-import { ResourceType, RoleType, WrapperType } from '@/types';
+import { Resource, RoleType, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import {
     ForbiddenException,
@@ -20,7 +20,7 @@ import { FindUserCompanyByRoleTypeDto } from './dto/find-all-by-role-type.dto';
 
 @Injectable()
 export class UserCompaniesService extends AvailableForUser {
-    public readonly resourceType = ResourceType.Company;
+    public readonly resource = Resource.Company;
 
     constructor(
         @InjectRepository(UserCompany)
@@ -31,7 +31,7 @@ export class UserCompaniesService extends AvailableForUser {
         super(accessService);
     }
 
-    async create(userId: number, payload: CreateUserCompanyDto) {
+    async create(userId: string, payload: CreateUserCompanyDto) {
         return await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -47,7 +47,7 @@ export class UserCompaniesService extends AvailableForUser {
         });
     }
 
-    async findOne(id: number, { relations, withDeleted }: FindOneUserCompanyDto) {
+    async findOne(id: string, { relations, withDeleted }: FindOneUserCompanyDto) {
         const userCompany = this.repository.findOneOrFail({
             where: { id },
             relations: { company: relations, role: relations },
@@ -56,14 +56,14 @@ export class UserCompaniesService extends AvailableForUser {
         return userCompany;
     }
 
-    async findOneByCompanyName(userId: number, name: string) {
+    async findOneByCompanyName(userId: string, name: string) {
         return await this.repository.findOne({
             relations: { company: true },
             where: { userId, company: { name } },
         });
     }
 
-    async update(userId: number, id: number, payload: UpdateUserCompanyDto) {
+    async update(userId: string, id: string, payload: UpdateUserCompanyDto) {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -75,7 +75,7 @@ export class UserCompaniesService extends AvailableForUser {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<UserCompany> {
+    async remove(userId: string, id: string): Promise<UserCompany> {
         await this.repository.save({
             id,
             deletedUserId: userId,
@@ -84,7 +84,7 @@ export class UserCompaniesService extends AvailableForUser {
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
-    async restore(userId: number, id: number): Promise<UserCompany> {
+    async restore(userId: string, id: string): Promise<UserCompany> {
         await this.repository.save({
             id,
             deletedUserId: null,
@@ -95,7 +95,7 @@ export class UserCompaniesService extends AvailableForUser {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async getUserCompanyRoleType(userId: number, companyId: number): Promise<RoleType> {
+    async getUserCompanyRoleType(userId: string, companyId: string): Promise<RoleType> {
         const record = await this.repository.findOneOrFail({
             where: { userId, companyId },
             relations: { role: true },
@@ -106,7 +106,7 @@ export class UserCompaniesService extends AvailableForUser {
         return record.role.type;
     }
 
-    async getUserCompanyRoleTypeOrFail(userId: number, companyId: number): Promise<RoleType> {
+    async getUserCompanyRoleTypeOrFail(userId: string, companyId: string): Promise<RoleType> {
         const roleType = await this.getUserCompanyRoleType(userId, companyId);
         if (!roleType) {
             throw new ForbiddenException(
@@ -116,7 +116,7 @@ export class UserCompaniesService extends AvailableForUser {
         return roleType;
     }
 
-    async count(userId: number, companyId: number): Promise<number> {
+    async count(userId: string, companyId: string): Promise<number> {
         const { count } = await this.repository
             .createQueryBuilder('user_company')
             .select('COUNT(*)', 'count')

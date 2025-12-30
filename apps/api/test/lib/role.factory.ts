@@ -10,7 +10,7 @@ export const createMockRole = (data?: Partial<Role>): Role => {
     return {
         id,
         name,
-        type: RoleType.Guest,
+        type: RoleType.Manager,
         ...data,
     };
 };

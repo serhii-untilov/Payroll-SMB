@@ -1,5 +1,5 @@
 export class FindAllUserCompanyDto {
-    userId: number;
+    userId: string;
     relations?: boolean = false;
     withDeleted?: boolean = false;
 }

@@ -1,11 +1,11 @@
 import { api } from '@/api';
-import { FindAllUserCompanyDto, ResourceType, UserCompany } from '@repo/openapi';
+import { FindAllUserCompanyDto, Resource, UserCompany } from '@repo/openapi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import useInvalidateQueries from '../useInvalidateQueries';
 
 const useGetUserCompanyList = (params: FindAllUserCompanyDto) => {
     return useQuery<UserCompany[], Error>({
-        queryKey: [ResourceType.Company, params],
+        queryKey: [Resource.Company, params],
         queryFn: async () =>
             (await api.userCompaniesFindAll(params)).data.sort((a, b) =>
                 (a.company?.name || '')
@@ -19,9 +19,9 @@ const useGetUserCompanyList = (params: FindAllUserCompanyDto) => {
 const useRemoveUserCompany = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: number) => (await api.userCompaniesRemove(id)).data,
+        mutationFn: async (id: string) => (await api.userCompaniesRemove(id)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.Company]);
+            invalidateQueries([Resource.Company]);
         },
     });
 };
@@ -29,9 +29,9 @@ const useRemoveUserCompany = () => {
 const useRestoreUserCompany = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: number) => (await api.userCompaniesRestore(id)).data,
+        mutationFn: async (id: string) => (await api.userCompaniesRestore(id)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.Company]);
+            invalidateQueries([Resource.Company]);
         },
     });
 };

@@ -7,7 +7,7 @@ import DepartmentForm from './DepartmentForm';
 export interface CreateDepartmentProps {
     open: boolean;
     setOpen: Dispatch<boolean>;
-    setDepartmentId: Dispatch<number>;
+    setDepartmentId: Dispatch<string>;
 }
 
 export default function CreateDepartment(props: CreateDepartmentProps) {

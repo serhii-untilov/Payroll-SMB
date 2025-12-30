@@ -57,7 +57,7 @@ export class RolesController {
     @Get(':id')
     @ApiOkResponse({ description: 'The found record', type: Role })
     @ApiNotFoundResponse({ description: 'Record not found' })
-    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Role> {
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Role> {
         const userId = getUserId(req);
         return await this.service.findOne(userId, id);
     }
@@ -70,7 +70,7 @@ export class RolesController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdateRoleDto,
     ): Promise<Role> {
         const userId = getUserId(req);
@@ -83,7 +83,7 @@ export class RolesController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Role })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Role> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Role> {
         const userId = getUserId(req);
         return await this.service.remove(userId, id);
     }

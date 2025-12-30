@@ -1,16 +1,7 @@
-import { Logger } from '../../abstract';
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract';
 import { Company } from '../../companies/entities/company.entity';
 import { PayPeriodState } from './../../../types';
-import {
-    AfterLoad,
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
-    Relation,
-} from 'typeorm';
 import { PayPeriodCalcMethod } from './pay-period-calc-method.entity';
 
 export const defaultFieldList = {
@@ -23,16 +14,13 @@ export const defaultFieldList = {
 };
 
 @Entity()
-export class PayPeriod extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class PayPeriod extends BaseEntity {
     @ManyToOne(() => Company, (company) => company.departments)
     @JoinColumn()
     company?: Relation<Company>;
 
-    @Column({ type: 'integer' })
-    companyId: number;
+    @Column({ type: 'bigint' })
+    companyId: string;
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;

@@ -12,7 +12,7 @@ export interface PaymentFormProps {
     payment?: Payment;
     tabIndex?: string | null;
     goBack?: boolean;
-    setPaymentId?: (paymentId: number) => void;
+    setPaymentId?: (paymentId: string) => void;
 }
 
 const PaymentForm = (props: PaymentFormProps) => {

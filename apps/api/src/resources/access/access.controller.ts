@@ -20,8 +20,8 @@ import {
     getSchemaPath,
 } from '@nestjs/swagger';
 import { Request } from 'express';
-import { AccessTokenGuard } from './../../guards';
-import { getUserId } from './../../utils';
+import { AccessTokenGuard } from '../../guards';
+import { getUserId } from '../../utils';
 import { AccessService } from './access.service';
 import {
     AvailableAccessDto,
@@ -59,9 +59,9 @@ export class AccessController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(
         @Param('roleType') roleType: string,
-        @Param('resourceType') resourceType: string,
+        @Param('resource') resource: string,
     ): Promise<Access[]> {
-        return await this.accessService.findAll(roleType, resourceType);
+        return await this.accessService.findAll(roleType, resource);
     }
 
     @Get(':id')
@@ -69,7 +69,7 @@ export class AccessController {
     @ApiOkResponse({ description: 'The found record', type: Access })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<Access> {
+    async findOne(@Param('id', ParseIntPipe) id: string): Promise<Access> {
         return await this.accessService.findOne(id);
     }
 
@@ -81,7 +81,7 @@ export class AccessController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdateAccessDto,
     ): Promise<Access> {
         const userId = getUserId(req);
@@ -94,7 +94,7 @@ export class AccessController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Access })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Access> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Access> {
         const userId = getUserId(req);
         return await this.accessService.remove(userId, id);
     }

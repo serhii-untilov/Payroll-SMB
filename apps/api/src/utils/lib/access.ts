@@ -1,20 +1,12 @@
 import { CreateAccessDto } from './../../resources/access/dto/create-access.dto';
-import { AccessType, ResourceType, RoleType } from './../../types';
+import { Action, Resource, RoleType } from './../../types';
 
-export function generateAccess_Full(
-    roleType: RoleType,
-    resourceType: ResourceType,
-): CreateAccessDto[] {
-    return [AccessType.Access, AccessType.Create, AccessType.Update, AccessType.Delete].map(
-        (key) => {
-            return { roleType, resourceType, accessType: key };
-        },
-    );
+export function generateAccess_Full(roleType: RoleType, resource: Resource): CreateAccessDto[] {
+    return [Action.Read, Action.Create, Action.Update, Action.Delete].map((key) => {
+        return { roleType, resource, action: key };
+    });
 }
 
-export function generateAccess_ReadOnly(
-    roleType: RoleType,
-    resourceType: ResourceType,
-): CreateAccessDto[] {
-    return [{ roleType, resourceType, accessType: AccessType.Access }];
+export function generateAccess_ReadOnly(roleType: RoleType, resource: Resource): CreateAccessDto[] {
+    return [{ roleType, resource, action: Action.Read }];
 }

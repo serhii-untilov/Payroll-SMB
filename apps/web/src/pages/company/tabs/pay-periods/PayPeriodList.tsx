@@ -43,7 +43,7 @@ export function PayPeriodList(props: PayPeriodListProps) {
                 }}
                 checkboxSelection={false}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
+                    setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
                 onCellKeyDown={(

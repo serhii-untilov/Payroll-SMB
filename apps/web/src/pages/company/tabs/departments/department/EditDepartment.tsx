@@ -9,7 +9,7 @@ import DepartmentForm from './DepartmentForm';
 export interface EditDepartmentProps {
     open: boolean;
     setOpen: Dispatch<boolean>;
-    departmentId: number;
+    departmentId: string;
 }
 
 export default function EditDepartment(props: EditDepartmentProps) {

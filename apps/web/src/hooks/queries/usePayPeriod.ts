@@ -4,7 +4,7 @@ import {
     FindCurrentPayPeriodDto,
     FindOnePayPeriodDto,
     PayPeriod,
-    ResourceType,
+    Resource,
     UpdatePayPeriodDto,
 } from '@repo/openapi';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ import useInvalidateQueries from '../useInvalidateQueries';
 
 const useGetPayPeriodList = (params: FindAllPayPeriodDto) => {
     return useQuery<PayPeriod[], Error>({
-        queryKey: [ResourceType.PayPeriod, 'all', params],
+        queryKey: [Resource.PayPeriod, 'all', params],
         queryFn: async () =>
             (await api.payPeriodsFindAll(params)).data.sort(
                 (a, b) => a.dateFrom.getTime() - b.dateFrom.getTime(),
@@ -20,22 +20,22 @@ const useGetPayPeriodList = (params: FindAllPayPeriodDto) => {
     });
 };
 
-const useGetPayPeriod = (id: number, options: FindOnePayPeriodDto) => {
+const useGetPayPeriod = (id: string, options: FindOnePayPeriodDto) => {
     return useQuery<PayPeriod, Error>({
-        queryKey: [ResourceType.PayPeriod, 'one', { id, ...options }],
+        queryKey: [Resource.PayPeriod, 'one', { id, ...options }],
         queryFn: async () => (await api.payPeriodsFindOne(id, options)).data,
     });
 };
 
 const useGetCurrentPayPeriod = (params: FindCurrentPayPeriodDto) => {
     return useQuery<PayPeriod, Error>({
-        queryKey: [ResourceType.PayPeriod, 'current', { params }],
+        queryKey: [Resource.PayPeriod, 'current', { params }],
         queryFn: async () => (await api.payPeriodsFindCurrent(params)).data,
     });
 };
 
 type UpdatePayPeriod = {
-    id: number;
+    id: string;
     dto: UpdatePayPeriodDto;
 };
 
@@ -46,13 +46,13 @@ const useClosePayPeriod = () => {
             (await api.payPeriodsClose(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([
-                ResourceType.PayPeriod,
-                ResourceType.Payroll,
-                ResourceType.Position,
-                ResourceType.Payment,
-                ResourceType.PaymentPosition,
-                ResourceType.Company,
-                ResourceType.Task,
+                Resource.PayPeriod,
+                Resource.Payroll,
+                Resource.Position,
+                Resource.Payment,
+                Resource.PaymentPosition,
+                Resource.Company,
+                Resource.Task,
             ]);
         },
     });
@@ -65,13 +65,13 @@ const useOpenPayPeriod = () => {
             (await api.payPeriodsOpen(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([
-                ResourceType.PayPeriod,
-                ResourceType.Payroll,
-                ResourceType.Position,
-                ResourceType.Payment,
-                ResourceType.PaymentPosition,
-                ResourceType.Company,
-                ResourceType.Task,
+                Resource.PayPeriod,
+                Resource.Payroll,
+                Resource.Position,
+                Resource.Payment,
+                Resource.PaymentPosition,
+                Resource.Company,
+                Resource.Task,
             ]);
         },
     });

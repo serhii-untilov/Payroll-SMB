@@ -1,23 +1,12 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { getFullName } from '@repo/shared';
+import { AfterInsert, AfterLoad, AfterUpdate, Column, Entity, OneToMany } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { Sex } from './../../../types/lib/Sex';
 import { Position } from './../../positions/entities/position.entity';
-import { Logger } from './../../abstract/logger.abstract';
-import {
-    AfterInsert,
-    AfterLoad,
-    AfterUpdate,
-    Column,
-    Entity,
-    OneToMany,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
-import { getFullName } from '@repo/shared';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
-export class Person extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class Person extends BaseEntity {
     @Column({ type: 'varchar', length: 30 })
     firstName: string;
 

@@ -24,7 +24,7 @@ import {
     UsersModule,
     WorkNormsModule,
 } from '@/resources';
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -35,6 +35,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ErrorsInterceptor } from '@/interceptors/errors.interceptor';
+import { SnowflakeModule } from '@/snowflake/snowflake.module';
+import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
 
 @Module({
     imports: [
@@ -71,6 +73,7 @@ import { ErrorsInterceptor } from '@/interceptors/errors.interceptor';
             // and it has no listeners
             ignoreErrors: false,
         }),
+        SnowflakeModule,
         ScheduleModule.forRoot(),
         AccessModule,
         AccountingModule,
@@ -105,4 +108,15 @@ import { ErrorsInterceptor } from '@/interceptors/errors.interceptor';
         },
     ],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+    onModuleInit() {
+        // Why OnModuleInit?
+        // Runs once per process
+        // Runs before controllers / services handle requests
+        // Perfect place for global initialization
+        SnowflakeServiceSingleton.init({
+            workerId: Number(process.env.SNOWFLAKE_WORKER_ID ?? 0),
+            epoch: 1577836800000,
+        });
+    }
+}

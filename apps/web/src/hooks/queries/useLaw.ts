@@ -1,17 +1,17 @@
 import { api } from '@/api';
-import { Law, ResourceType } from '@repo/openapi';
+import { Law, Resource } from '@repo/openapi';
 import { useQuery } from '@tanstack/react-query';
 
-const useGetLaw = (id: number) => {
+const useGetLaw = (id: string) => {
     return useQuery<Law, Error>({
-        queryKey: [ResourceType.Law],
+        queryKey: [Resource.Law],
         queryFn: async () => (await api.lawsFindOne(id)).data,
     });
 };
 
 const useGetLawList = () => {
     return useQuery<Law[], Error>({
-        queryKey: [ResourceType.Law, 'list'],
+        queryKey: [Resource.Law, 'list'],
         queryFn: async () => (await api.lawsFindAll()).data,
     });
 };

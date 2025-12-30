@@ -1,13 +1,7 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import useGrid from '@/hooks/useGrid';
-import {
-    GridCellParams,
-    GridRowParams,
-    GridRowSelectionModel,
-    MuiEvent,
-    useGridApiRef,
-} from '@mui/x-data-grid';
+import { GridCellParams, GridRowParams, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import { Payment } from '@repo/openapi';
 import { Dispatch, useState } from 'react';
 import usePaymentListTab from './PaymentListTab.hooks';
@@ -19,7 +13,7 @@ export interface PaymentListTabProps {
 }
 
 export function PaymentListTab(props: PaymentListTabProps) {
-    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState<string[]>([]);
     const gridRef = useGridApiRef();
     const {
         columns,
@@ -61,7 +55,7 @@ export function PaymentListTab(props: PaymentListTabProps) {
                 rows={props.payments || []}
                 columns={columns}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
+                    setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
                 onCellKeyDown={(

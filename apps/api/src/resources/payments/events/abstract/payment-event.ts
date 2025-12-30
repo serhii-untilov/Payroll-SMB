@@ -8,8 +8,8 @@ export enum PaymentEventType {
 
 export abstract class PaymentEvent {
     private _type: PaymentEventType;
-    private _userId: number;
-    private _companyId: number;
+    private _userId: string;
+    private _companyId: string;
 
     public get type() {
         return this._type;
@@ -21,7 +21,7 @@ export abstract class PaymentEvent {
         return this._companyId;
     }
 
-    constructor(type: PaymentEventType, userId: number, payment: Payment) {
+    constructor(type: PaymentEventType, userId: string, payment: Payment) {
         this._type = type;
         this._userId = userId;
         this._companyId = payment.companyId;

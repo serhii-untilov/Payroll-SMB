@@ -1,11 +1,11 @@
 import { PaymentStatus } from '@/types';
 
 export class FindAllPaymentDto {
-    companyId: number;
-    positionId?: number;
+    companyId: string;
+    positionId?: string;
     payPeriod?: Date;
     accPeriod?: Date;
-    paymentTypeId?: number;
+    paymentTypeId?: string;
     status?: PaymentStatus;
     relations?: boolean;
     withDeleted?: boolean;

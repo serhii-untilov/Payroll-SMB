@@ -3,7 +3,7 @@ import {
     CreateTaskDto,
     FindAllTaskDto,
     FindOneTaskDto,
-    ResourceType,
+    Resource,
     Task,
     UpdateTaskDto,
 } from '@repo/openapi';
@@ -12,14 +12,14 @@ import useInvalidateQueries from '../useInvalidateQueries';
 
 const useGetTaskList = (params: FindAllTaskDto) => {
     return useQuery<Task[], Error>({
-        queryKey: [ResourceType.Task, params],
+        queryKey: [Resource.Task, params],
         queryFn: async () => (await api.tasksFindAll(params)).data,
     });
 };
 
-const useGetTask = (taskId: number, params?: FindOneTaskDto) => {
+const useGetTask = (taskId: string, params?: FindOneTaskDto) => {
     return useQuery<Task, Error>({
-        queryKey: [ResourceType.Task, { taskId, params }],
+        queryKey: [Resource.Task, { taskId, params }],
         queryFn: async () => (await api.tasksFindOne(taskId, params ?? {})).data,
         enabled: !!taskId,
     });
@@ -30,13 +30,13 @@ const useCreateTask = () => {
     return useMutation({
         mutationFn: async (dto: CreateTaskDto): Promise<Task> => (await api.tasksCreate(dto)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.Task, ResourceType.PayPeriod]);
+            invalidateQueries([Resource.Task, Resource.PayPeriod]);
         },
     });
 };
 
 type UpdateTask = {
-    id: number;
+    id: string;
     dto: UpdateTaskDto;
 };
 
@@ -46,7 +46,7 @@ const useUpdateTask = () => {
         mutationFn: async ({ id, dto }: UpdateTask): Promise<Task> =>
             (await api.tasksUpdate(id, dto)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.Task, ResourceType.PayPeriod, ResourceType.Position]);
+            invalidateQueries([Resource.Task, Resource.PayPeriod, Resource.Position]);
         },
     });
 };
@@ -54,14 +54,14 @@ const useUpdateTask = () => {
 const useRemoveTask = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: number) => (await api.tasksRemove(id)).data,
+        mutationFn: async (id: string) => (await api.tasksRemove(id)).data,
         onSuccess: () => {
             invalidateQueries([
-                ResourceType.Task,
-                ResourceType.PayPeriod,
-                ResourceType.Department,
-                ResourceType.Position,
-                ResourceType.Task,
+                Resource.Task,
+                Resource.PayPeriod,
+                Resource.Department,
+                Resource.Position,
+                Resource.Task,
             ]);
         },
     });

@@ -77,7 +77,7 @@ export class DepartmentsController {
         @Req()
         req: Request,
         @Param('id', ParseIntPipe)
-        id: number,
+        id: string,
         @Body() params: FindOneDepartmentDto,
     ) {
         const userId = getUserId(req);
@@ -94,7 +94,7 @@ export class DepartmentsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdateDepartmentDto,
     ) {
         const userId = getUserId(req);
@@ -108,7 +108,7 @@ export class DepartmentsController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Department })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);

@@ -26,7 +26,7 @@ export class AccountingController {
     @ApiOkResponse({ description: 'The found record', type: Accounting })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<Accounting> {
+    async findOne(@Param('id', ParseIntPipe) id: string): Promise<Accounting> {
         return await this.accountingService.findOne(id);
     }
 }

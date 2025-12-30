@@ -11,7 +11,7 @@ export default function useManagerList() {
         console.log('onAdd');
     }, []);
 
-    const onEditManager = useCallback((_managerId: number) => {
+    const onEditManager = useCallback((_managerId: string) => {
         console.log('onEdit');
     }, []);
 

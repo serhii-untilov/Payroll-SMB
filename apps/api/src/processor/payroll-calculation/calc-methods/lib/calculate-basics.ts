@@ -2,7 +2,7 @@ import { PositionHistory } from './../../../../resources/position-history/entiti
 import { Payroll } from './../../../../resources/payrolls/entities/payroll.entity';
 import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
 import { getWorkingTimeFact, getWorkingTimePlan } from '@/processor/helpers';
-import { CalcMethod, RecordFlags, WorkingTime } from '@/types';
+import { CalcMethod, RecordFlag, WorkingTime } from '@/types';
 import { NotFoundException } from '@nestjs/common';
 import { PaymentGroup } from '@/types';
 import { getMaxDate, getMinDate } from '@repo/shared';
@@ -70,7 +70,7 @@ function makePayroll(
         factHours: fact.hours,
         factSum: 0,
         mask1: fact.mask,
-        recordFlags: RecordFlags.Auto,
+        recordFlags: RecordFlag.Auto,
         planHoursByDay: plan.hoursByDay,
         factHoursByDay: fact.hoursByDay,
     });

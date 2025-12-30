@@ -33,7 +33,7 @@ const useUserCompanyList = (params: Params) => {
         navigate(`/profile/company/?tab-index=0&return=true`);
     };
 
-    const onSelectCompany = async (companyId: number) => {
+    const onSelectCompany = async (companyId: string) => {
         dispatch(setCompany((await api.companiesFindOne(companyId)).data));
         navigate(`/company/${companyId}?tab-index=0&return=true`);
     };
@@ -43,7 +43,7 @@ const useUserCompanyList = (params: Params) => {
         for (const id of notDeletedSelection()) {
             const companyId = userCompanies?.find((o) => o.id === id)?.companyId;
             if (companyId !== currentCompany?.id) {
-                await removeUserCompany.mutateAsync(Number(id));
+                await removeUserCompany.mutateAsync(id);
             } else {
                 attemptToDeleteCurrentCompany = true;
             }
@@ -54,25 +54,25 @@ const useUserCompanyList = (params: Params) => {
         }
     };
 
-    const deletedSelection = (): number[] => {
+    const deletedSelection = (): string[] => {
         return rowSelectionModel
+            .map(String)
             .filter((id) =>
                 userCompanies?.find(
-                    (userCompany) => userCompany.id === Number(id) && userCompany.deletedDate,
+                    (userCompany) => userCompany.id === id && userCompany.deletedDate,
                 ),
-            )
-            .map((o) => Number(o));
+            );
     };
 
-    const notDeletedSelection = (): number[] => {
+    const notDeletedSelection = (): string[] => {
         return rowSelectionModel
+            .map(String)
             .filter((id) =>
                 userCompanies?.find(
-                    (userCompany) =>
-                        userCompany.id === Number(id) && userCompany.deletedDate === null,
+                    (userCompany) => userCompany.id === id && userCompany.deletedDate === null,
                 ),
             )
-            .map((o) => Number(o));
+            .map((o) => o);
     };
 
     const onRestoreDeleted = async () => {

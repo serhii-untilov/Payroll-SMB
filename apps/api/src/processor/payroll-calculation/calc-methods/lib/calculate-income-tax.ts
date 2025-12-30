@@ -1,5 +1,5 @@
 import { accPeriodFactSum } from '@/processor/helpers';
-import { CalcMethod, RecordFlags } from '@/types';
+import { CalcMethod, RecordFlag } from '@/types';
 import { PaymentPart } from '@/types';
 import { getMaxDate, getMinDate } from '@repo/shared';
 import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
@@ -41,7 +41,7 @@ function makePayroll(
         dateFrom,
         dateTo,
         factSum: 0,
-        recordFlags: RecordFlags.Auto,
+        recordFlags: RecordFlag.Auto,
     });
     return payroll;
 }

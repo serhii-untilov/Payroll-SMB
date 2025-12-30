@@ -3,7 +3,7 @@ import {
     CreatePositionHistoryDto,
     FindAllPositionHistoryDto,
     PositionHistory,
-    ResourceType,
+    Resource,
     UpdatePositionHistoryDto,
 } from '@repo/openapi';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -11,7 +11,7 @@ import useInvalidateQueries from '../useInvalidateQueries';
 
 const usePositionHistoryList = (params: FindAllPositionHistoryDto) => {
     return useQuery<PositionHistory[], Error>({
-        queryKey: [ResourceType.PositionHistory, params],
+        queryKey: [Resource.PositionHistory, params],
         queryFn: async () => {
             return (await api.positionHistoryFindAll(params)).data.sort(
                 (a, b) => a.dateFrom.getTime() - b.dateFrom.getTime(),
@@ -23,7 +23,7 @@ const usePositionHistoryList = (params: FindAllPositionHistoryDto) => {
 
 const usePositionHistoryLast = (params: FindAllPositionHistoryDto) => {
     return useQuery<PositionHistory, Error>({
-        queryKey: [ResourceType.PositionHistory, { ...params, last: true }],
+        queryKey: [Resource.PositionHistory, { ...params, last: true }],
         queryFn: async () => {
             return (await api.positionHistoryFindLast({ ...params, last: true })).data;
         },
@@ -38,22 +38,22 @@ const useCreatePositionHistory = () => {
             (await api.positionHistoryCreate(dto)).data,
         onSuccess: () => {
             invalidateQueries([
-                ResourceType.PositionHistory,
-                ResourceType.Position,
-                ResourceType.Payroll,
-                ResourceType.PayFund,
-                ResourceType.Payment,
-                ResourceType.PaymentPosition,
-                ResourceType.PayPeriod,
-                ResourceType.Company,
-                ResourceType.Task,
+                Resource.PositionHistory,
+                Resource.Position,
+                Resource.Payroll,
+                Resource.PayFund,
+                Resource.Payment,
+                Resource.PaymentPosition,
+                Resource.PayPeriod,
+                Resource.Company,
+                Resource.Task,
             ]);
         },
     });
 };
 
 type UpdatePositionHistory = {
-    id: number;
+    id: string;
     dto: UpdatePositionHistoryDto;
 };
 
@@ -64,15 +64,15 @@ const useUpdatePositionHistory = () => {
             (await api.positionHistoryUpdate(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([
-                ResourceType.PositionHistory,
-                ResourceType.Position,
-                ResourceType.Payroll,
-                ResourceType.PayFund,
-                ResourceType.Payment,
-                ResourceType.PaymentPosition,
-                ResourceType.PayPeriod,
-                ResourceType.Company,
-                ResourceType.Task,
+                Resource.PositionHistory,
+                Resource.Position,
+                Resource.Payroll,
+                Resource.PayFund,
+                Resource.Payment,
+                Resource.PaymentPosition,
+                Resource.PayPeriod,
+                Resource.Company,
+                Resource.Task,
             ]);
         },
     });
@@ -81,18 +81,18 @@ const useUpdatePositionHistory = () => {
 const useRemovePositionHistory = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: number) => (await api.positionHistoryRemove(id)).data,
+        mutationFn: async (id: string) => (await api.positionHistoryRemove(id)).data,
         onSuccess: () => {
             invalidateQueries([
-                ResourceType.PositionHistory,
-                ResourceType.Position,
-                ResourceType.Payroll,
-                ResourceType.PayFund,
-                ResourceType.Payment,
-                ResourceType.PaymentPosition,
-                ResourceType.PayPeriod,
-                ResourceType.Company,
-                ResourceType.Task,
+                Resource.PositionHistory,
+                Resource.Position,
+                Resource.Payroll,
+                Resource.PayFund,
+                Resource.Payment,
+                Resource.PaymentPosition,
+                Resource.PayPeriod,
+                Resource.Company,
+                Resource.Task,
             ]);
         },
     });

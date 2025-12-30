@@ -74,7 +74,7 @@ export class PositionsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() params: FindOnePositionDto,
     ): Promise<Position> {
         const userId = getUserId(req);
@@ -91,7 +91,7 @@ export class PositionsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdatePositionDto,
     ): Promise<Position> {
         const userId = getUserId(req);
@@ -105,7 +105,7 @@ export class PositionsController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Position })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<Position> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Position> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);

@@ -5,7 +5,7 @@ import {
     PayPeriodsService,
     PaymentPositionsService,
 } from '@/resources';
-import { PaymentStatus, RecordFlags, ResourceType, WrapperType } from '@/types';
+import { PaymentStatus, RecordFlag, Resource, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -25,7 +25,7 @@ import { PaymentCreatedEvent, PaymentDeletedEvent, PaymentUpdatedEvent } from '.
 
 @Injectable()
 export class PaymentsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.Payment;
+    public readonly resource = Resource.Payment;
     private logger: Logger = new Logger(PaymentsService.name);
 
     constructor(
@@ -44,12 +44,12 @@ export class PaymentsService extends AvailableForUserCompany {
         super(accessService);
     }
 
-    async getCompanyId(entityId: number): Promise<number> {
+    async getCompanyId(entityId: string): Promise<string> {
         return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true }))
             .companyId;
     }
 
-    async create(userId: number, payload: CreatePaymentDto): Promise<Payment> {
+    async create(userId: string, payload: CreatePaymentDto): Promise<Payment> {
         const { companyId, payPeriod, accPeriod, ...other } = payload;
         const company = await this.companiesService.findOne(userId, payload.companyId);
         const accPeriodRecord = await this.payPeriodsService.findOneBy({
@@ -70,7 +70,7 @@ export class PaymentsService extends AvailableForUserCompany {
             dateFrom: payload.dateFrom || accPeriodRecord.dateFrom,
             dateTo: payload.dateTo || accPeriodRecord.dateTo,
             status: payload.status || PaymentStatus.Draft,
-            recordFlags: payload.recordFlags || RecordFlags.Auto,
+            recordFlags: payload.recordFlags || RecordFlag.Auto,
             createdUserId: userId,
             updatedUserId: userId,
         });
@@ -101,7 +101,7 @@ export class PaymentsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(id: number, params?: FindOnePaymentDto): Promise<Payment> {
+    async findOne(id: string, params?: FindOnePaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({
             withDeleted: !!params?.withDeleted,
             where: { id },
@@ -115,7 +115,7 @@ export class PaymentsService extends AvailableForUserCompany {
         return found.length ? found[0] : null;
     }
 
-    async update(userId: number, id: number, payload: UpdatePaymentDto): Promise<Payment> {
+    async update(userId: string, id: string, payload: UpdatePaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -127,14 +127,14 @@ export class PaymentsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<Payment> {
+    async remove(userId: string, id: string): Promise<Payment> {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
         this.eventEmitter.emit('payment.deleted', new PaymentDeletedEvent(userId, deleted));
         return deleted;
     }
 
-    async restore(userId: number, id: number): Promise<Payment> {
+    async restore(userId: string, id: string): Promise<Payment> {
         await this.repository.save({
             id,
             deletedDate: null,
@@ -151,7 +151,7 @@ export class PaymentsService extends AvailableForUserCompany {
         await this.repository.delete(ids);
     }
 
-    async getNextDocNumber(companyId: number, payPeriod: Date): Promise<string> {
+    async getNextDocNumber(companyId: string, payPeriod: Date): Promise<string> {
         const first = await this.repository.findOneBy({ companyId, payPeriod, docNumber: '1' });
         if (!first) return '1';
         const result = await this.repository.query(
@@ -177,7 +177,7 @@ export class PaymentsService extends AvailableForUserCompany {
         return result[0].freeNumber.toString();
     }
 
-    async updateTotals(userId: number, paymentIds: number[]) {
+    async updateTotals(userId: string, paymentIds: string[]) {
         for (const id of paymentIds) {
             const totals = await this.paymentPositionsService.calculateTotals(id);
             await this.repository.save({
@@ -189,7 +189,7 @@ export class PaymentsService extends AvailableForUserCompany {
         }
     }
 
-    async process(userId: number, id: number, payload: ProcessPaymentDto): Promise<Payment> {
+    async process(userId: string, id: string, payload: ProcessPaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },
@@ -204,7 +204,7 @@ export class PaymentsService extends AvailableForUserCompany {
         return updated;
     }
 
-    async withdraw(userId: number, id: number, payload: WithdrawPaymentDto): Promise<Payment> {
+    async withdraw(userId: string, id: string, payload: WithdrawPaymentDto): Promise<Payment> {
         const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },

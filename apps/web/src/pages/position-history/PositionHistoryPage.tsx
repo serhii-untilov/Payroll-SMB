@@ -12,7 +12,7 @@ import PositionHistoryList from './PositionHistoryList';
 
 const PositionHistoryPage = () => {
     const params = useParams();
-    const positionId = Number(params.positionId);
+    const positionId = params.positionId ?? '';
     const { t } = useTranslation();
     const company = useAppSelector(selectCompany);
     const payPeriod = useAppSelector(selectPayPeriod);

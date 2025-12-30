@@ -1,7 +1,7 @@
 import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
 import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
 import { Payment } from './../../../../resources/payments/entities/payment.entity';
-import { PaymentStatus, RecordFlags } from '@/types';
+import { PaymentStatus, RecordFlag } from '@/types';
 import { PaymentCalculationService } from '../../payment-calculation.service';
 
 export abstract class CalcPayment {
@@ -38,7 +38,7 @@ export abstract class CalcPayment {
             paySum: 0,
             funds: 0,
             status: PaymentStatus.Draft,
-            recordFlags: RecordFlags.Auto,
+            recordFlags: RecordFlag.Auto,
         });
     }
 
@@ -52,7 +52,7 @@ export abstract class CalcPayment {
             deductions: 0,
             paySum: 0,
             funds: 0,
-            recordFlags: RecordFlags.Auto,
+            recordFlags: RecordFlag.Auto,
         });
     }
 }

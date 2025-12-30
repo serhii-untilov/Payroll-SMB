@@ -4,5 +4,5 @@ import { useMemo } from 'react';
 
 export default function useDefaultLawId() {
     const { data } = useGetLawList();
-    return useMemo(() => data?.find((o) => o.type === LawType.Ukraine)?.id ?? 0, [data]);
+    return useMemo(() => data?.find((o) => o.type === LawType.Ukraine)?.id, [data]);
 }

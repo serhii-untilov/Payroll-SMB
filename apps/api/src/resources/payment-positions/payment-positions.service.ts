@@ -1,5 +1,5 @@
 import { AccessService, AvailableForUserCompany, PayrollsService } from '@/resources';
-import { ResourceType, WrapperType } from '@/types';
+import { Resource, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,7 @@ import { PaymentPosition } from './entities/paymentPosition.entity';
 
 @Injectable()
 export class PaymentPositionsService extends AvailableForUserCompany {
-    public readonly resourceType = ResourceType.PaymentPosition;
+    public readonly resource = Resource.PaymentPosition;
 
     constructor(
         @InjectRepository(PaymentPosition)
@@ -31,7 +31,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         super(accessService);
     }
 
-    async getCompanyId(entityId: number): Promise<number> {
+    async getCompanyId(entityId: string): Promise<string> {
         const paymentPosition = await this.repository.findOneOrFail({
             where: { id: entityId },
             withDeleted: true,
@@ -41,11 +41,11 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         ).companyId;
     }
 
-    async getPaymentCompanyId(paymentId: number): Promise<number> {
+    async getPaymentCompanyId(paymentId: string): Promise<string> {
         return (await this.paymentsService.findOne(paymentId, { withDeleted: true })).companyId;
     }
 
-    async create(userId: number, payload: CreatePaymentPositionDto): Promise<PaymentPosition> {
+    async create(userId: string, payload: CreatePaymentPositionDto): Promise<PaymentPosition> {
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -73,7 +73,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         });
     }
 
-    async findByPositionId(positionId: number, accPeriod: Date): Promise<PaymentPosition[]> {
+    async findByPositionId(positionId: string, accPeriod: Date): Promise<PaymentPosition[]> {
         return await this.repository.find({
             relations: {
                 payment: true,
@@ -86,7 +86,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         });
     }
 
-    async findOne(id: number, params?: FindOnePaymentPositionDto): Promise<PaymentPosition> {
+    async findOne(id: string, params?: FindOnePaymentPositionDto): Promise<PaymentPosition> {
         const record = await this.repository.findOneOrFail({
             withDeleted: !!params?.withDeleted,
             where: { id },
@@ -103,7 +103,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         return record;
     }
 
-    async update(userId: number, id: number, payload: UpdatePaymentPositionDto) {
+    async update(userId: string, id: string, payload: UpdatePaymentPositionDto) {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -115,16 +115,16 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<PaymentPosition> {
+    async remove(userId: string, id: string): Promise<PaymentPosition> {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
-    async delete(ids: number[]) {
+    async delete(ids: string[]) {
         await this.repository.delete(ids);
     }
 
-    async calculateTotals(paymentId: number) {
+    async calculateTotals(paymentId: string) {
         const totals = await this.repository
             .createQueryBuilder('payment_position')
             .select('SUM("baseSum")', 'baseSum')
@@ -141,7 +141,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         };
     }
 
-    async process(userId: number, payment: Payment) {
+    async process(userId: string, payment: Payment) {
         const paymentPositions = await this.findAll({ paymentId: payment.id, relations: true });
         for (const paymentPosition of paymentPositions) {
             if (!payment?.company?.payPeriod) {
@@ -154,7 +154,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
                 paymentTypeId: payment.paymentTypeId,
                 dateFrom: payment.dateFrom,
                 dateTo: payment.dateTo,
-                sourceType: ResourceType.Payment,
+                sourceType: Resource.Payment,
                 sourceId: payment.id,
                 planSum: paymentPosition.baseSum,
                 factSum: paymentPosition.paySum,
@@ -163,9 +163,9 @@ export class PaymentPositionsService extends AvailableForUserCompany {
         }
     }
 
-    async withdraw(paymentId: number) {
+    async withdraw(paymentId: string) {
         await this.payrollsService.deleteBy({
-            sourceType: ResourceType.Payment,
+            sourceType: Resource.Payment,
             sourceId: paymentId,
         });
     }

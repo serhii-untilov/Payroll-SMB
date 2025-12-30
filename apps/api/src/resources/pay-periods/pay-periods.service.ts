@@ -1,4 +1,4 @@
-import { PayPeriodState, ResourceType } from '@/types';
+import { PayPeriodState, Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import {
     HttpException,
@@ -13,7 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { dateUTC, formatPeriod, monthBegin, monthEnd } from '@repo/shared';
 import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/availableForUserCompany';
+import { AvailableForUserCompany } from '../abstract/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import {
@@ -30,7 +30,7 @@ import { PayPeriod, defaultFieldList } from './entities';
 @Injectable()
 export class PayPeriodsService extends AvailableForUserCompany {
     private _logger: Logger = new Logger(PayPeriodsService.name);
-    public readonly resourceType = ResourceType.PayPeriod;
+    public readonly resource = Resource.PayPeriod;
 
     constructor(
         @InjectRepository(PayPeriod)
@@ -43,12 +43,12 @@ export class PayPeriodsService extends AvailableForUserCompany {
         super(accessService);
     }
 
-    async getCompanyId(entityId: number): Promise<number> {
+    async getCompanyId(entityId: string): Promise<string> {
         return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true }))
             .companyId;
     }
 
-    async create(userId: number, payload: CreatePayPeriodDto): Promise<PayPeriod> {
+    async create(userId: string, payload: CreatePayPeriodDto): Promise<PayPeriod> {
         const existing = await this.repository.findOneBy({
             companyId: payload.companyId,
             dateFrom: payload.dateFrom,
@@ -103,7 +103,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
         }
     }
 
-    async findOne(id: number, params?: FindOnePayPeriodDto): Promise<PayPeriod> {
+    async findOne(id: string, params?: FindOnePayPeriodDto): Promise<PayPeriod> {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: { company: !!params?.relations },
@@ -117,7 +117,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
         return found;
     }
 
-    async update(userId: number, id: number, payload: UpdatePayPeriodDto): Promise<PayPeriod> {
+    async update(userId: string, id: string, payload: UpdatePayPeriodDto): Promise<PayPeriod> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         return await this.repository.save({
@@ -128,18 +128,18 @@ export class PayPeriodsService extends AvailableForUserCompany {
         });
     }
 
-    async remove(userId: number, id: number): Promise<PayPeriod> {
+    async remove(userId: string, id: string): Promise<PayPeriod> {
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 
-    async delete(ids: number[]): Promise<void> {
+    async delete(ids: string[]): Promise<void> {
         if (ids.length) {
             await this.repository.delete(ids);
         }
     }
 
-    async findCurrent(userId: number, params: FindCurrentPayPeriodDto): Promise<PayPeriod> {
+    async findCurrent(userId: string, params: FindCurrentPayPeriodDto): Promise<PayPeriod> {
         const { companyId, fullFieldList, relations } = params;
         if (!companyId) {
             return Object.assign(new PayPeriod(), {
@@ -160,7 +160,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
         return payPeriod;
     }
 
-    async countClosed(companyId: number): Promise<number> {
+    async countClosed(companyId: string): Promise<number> {
         const { count } = await this.repository
             .createQueryBuilder('pay_period')
             .select('COUNT(*)', 'count')
@@ -172,8 +172,8 @@ export class PayPeriodsService extends AvailableForUserCompany {
     }
 
     async close(
-        userId: number,
-        currentPayPeriodId: number,
+        userId: string,
+        currentPayPeriodId: string,
         payload: ClosePayPeriodDto,
     ): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
@@ -213,8 +213,8 @@ export class PayPeriodsService extends AvailableForUserCompany {
     }
 
     async open(
-        userId: number,
-        currentPayPeriodId: number,
+        userId: string,
+        currentPayPeriodId: string,
         payload: OpenPayPeriodDto,
     ): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });

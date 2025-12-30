@@ -3,7 +3,7 @@ import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { CreatePaymentDto, ResourceType, UpdatePaymentDto } from '@repo/openapi';
+import { CreatePaymentDto, Resource, UpdatePaymentDto } from '@repo/openapi';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -77,7 +77,7 @@ export default function usePaymentDetails(props: PaymentDetailsProps) {
 
     const onCancel = async () => {
         reset((payment as FormType) || {});
-        await invalidateQueries([ResourceType.Payment, ResourceType.PaymentPosition]);
+        await invalidateQueries([Resource.Payment, Resource.PaymentPosition]);
     };
 
     const onProcess = async () => {
@@ -105,7 +105,7 @@ function useFormSchema() {
                 docNumber: yup.string(),
                 docDate: yup.date(),
                 accPeriod: yup.date().required('Accounting Period is required'),
-                paymentTypeId: yup.number().required('Payment Type is required'),
+                paymentTypeId: yup.string().required('Payment Type is required'),
                 baseSum: yup.number(),
                 deductions: yup.number(),
                 paySum: yup.number(),

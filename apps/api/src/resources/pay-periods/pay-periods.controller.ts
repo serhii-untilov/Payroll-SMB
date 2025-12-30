@@ -90,7 +90,7 @@ export class PayPeriodsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() params: FindOnePayPeriodDto,
     ) {
         const userId = getUserId(req);
@@ -106,7 +106,7 @@ export class PayPeriodsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdatePayPeriodDto,
     ) {
         const userId = getUserId(req);
@@ -120,7 +120,7 @@ export class PayPeriodsController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: PayPeriod })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
@@ -136,7 +136,7 @@ export class PayPeriodsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async close(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: ClosePayPeriodDto,
     ) {
         const userId = getUserId(req);
@@ -154,7 +154,7 @@ export class PayPeriodsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async open(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: OpenPayPeriodDto,
     ) {
         const userId = getUserId(req);

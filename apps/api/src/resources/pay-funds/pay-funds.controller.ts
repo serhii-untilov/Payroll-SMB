@@ -64,7 +64,7 @@ export class PayFundsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Query('relations', ParseBoolPipe) relations: boolean,
     ): Promise<PayFund> {
         const userId = getUserId(req);
@@ -79,7 +79,7 @@ export class PayFundsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdatePayFundDto,
     ): Promise<PayFund> {
         const userId = getUserId(req);
@@ -93,7 +93,7 @@ export class PayFundsController {
     @ApiOkResponse({ description: 'The updated record', type: PayFund })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<PayFund> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<PayFund> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);

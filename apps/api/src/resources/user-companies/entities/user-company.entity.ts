@@ -1,19 +1,16 @@
+import { Column, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { Company } from '../../companies/entities/company.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
-import { Logger } from '../../abstract/logger.abstract';
 import { User } from '../../users/entities/user.entity';
 
 @Entity()
-export class UserCompany extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class UserCompany extends BaseEntity {
     @ManyToOne(() => User, { createForeignKeyConstraints: false })
     user?: Relation<User>;
 
     @Column()
-    userId: number;
+    userId: string;
 
     // @ManyToOne(() => Company, { createForeignKeyConstraints: false })
     @ManyToOne(() => Company, (company) => company.users)
@@ -21,11 +18,11 @@ export class UserCompany extends Logger {
     company?: Relation<Company>;
 
     @Column()
-    companyId: number;
+    companyId: string;
 
     @ManyToOne(() => Role, { createForeignKeyConstraints: false })
     role?: Relation<Role>;
 
     @Column()
-    roleId: number;
+    roleId: string;
 }

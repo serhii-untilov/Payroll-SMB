@@ -1,14 +1,11 @@
-import { WorkNormType } from './../../../types';
-import { Column, PrimaryGeneratedColumn, OneToMany, Entity, AfterLoad, Relation } from 'typeorm';
-import { WorkNormPeriod } from './work-norm-period.entity';
-import { Logger } from './../../abstract/logger.abstract';
 import { ApiProperty } from '@nestjs/swagger';
+import { AfterLoad, Column, Entity, OneToMany, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
+import { WorkNormType } from './../../../types';
+import { WorkNormPeriod } from './work-norm-period.entity';
 
 @Entity()
-export class WorkNorm extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class WorkNorm extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 

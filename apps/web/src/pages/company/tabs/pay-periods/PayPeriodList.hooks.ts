@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store.hooks';
 import { getPayPeriodName } from '@/utils/getPayPeriodName';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { GridColDef } from '@mui/x-data-grid';
-import { ResourceType } from '@repo/openapi';
+import { Resource } from '@repo/openapi';
 import { toDate } from '@repo/shared';
 import { isEqual } from 'date-fns';
 import { useCallback, useMemo } from 'react';
@@ -37,7 +37,7 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
     );
 
     const onEdit = useCallback(
-        (_id: number) => {
+        (_id: string) => {
             navigate('/payroll?tab-index=0&return=true');
         },
         [navigate],
@@ -45,13 +45,13 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
 
     const invalidate = useCallback(async () => {
         await invalidateQueries([
-            ResourceType.PayPeriod,
-            ResourceType.Payroll,
-            ResourceType.Position,
-            ResourceType.Payment,
-            ResourceType.PaymentPosition,
-            ResourceType.Company,
-            ResourceType.Task,
+            Resource.PayPeriod,
+            Resource.Payroll,
+            Resource.Position,
+            Resource.Payment,
+            Resource.PaymentPosition,
+            Resource.Company,
+            Resource.Task,
         ]);
     }, [invalidateQueries]);
 

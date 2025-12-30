@@ -1,4 +1,4 @@
 export class FindAllPositionBalanceDto {
-    companyId: number;
+    companyId: string;
     payPeriod?: Date;
 }

@@ -29,7 +29,7 @@ export class LawsController {
     @ApiOkResponse({ description: 'The found record', type: Law })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<Law> {
+    async findOne(@Param('id', ParseIntPipe) id: string): Promise<Law> {
         return await this.lawsService.findOne(id);
     }
 }

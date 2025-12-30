@@ -9,7 +9,7 @@ import EditPayment from './EditPayment';
 
 export default function PaymentPage() {
     const params = useParams();
-    const [paymentId, setPaymentId] = useState(Number(params.paymentId));
+    const [paymentId, setPaymentId] = useState(params.paymentId);
     const [searchParams] = useSearchParams();
     const tabIndex = searchParams.get('tab-index');
     const goBack = searchParams.get('return') === 'true';

@@ -1,6 +1,6 @@
 export class CreateWorkNormPeriodDto {
-    id: number;
-    workNormId: number;
+    id: string;
+    workNormId: string;
     day: number;
     hours: number;
 }

@@ -47,7 +47,7 @@ export class UsersController {
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreateUserDto): Promise<PublicUserDataDto> {
-        const userId: number = getUserId(req);
+        const userId: string = getUserId(req);
         const user = await this.usersService.create(userId, payload);
         return this.usersService.toPublic(user);
     }
@@ -63,7 +63,7 @@ export class UsersController {
         @Req() req: Request,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations: boolean,
     ): Promise<PublicUserDataDto[]> {
-        const userId: number = getUserId(req);
+        const userId: string = getUserId(req);
         const users = await this.usersService.findAll(userId, { relations: { role: !!relations } });
         return users.map((user) => this.usersService.toPublic(user));
     }
@@ -78,7 +78,7 @@ export class UsersController {
         @Req() req: Request,
         @Body() params: FindOneUserDto,
     ): Promise<PublicUserDataDto> {
-        const id: number = getUserId(req);
+        const id: string = getUserId(req);
         const user = await this.usersService.findOneOrFail({
             where: { id },
             relations: { role: !!params.relations },
@@ -92,7 +92,7 @@ export class UsersController {
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Query('relations', new ParseBoolPipe({ optional: true })) relations?: boolean,
     ): Promise<PublicUserDataDto> {
         const user = await this.usersService.findOneOrFail({
@@ -110,7 +110,7 @@ export class UsersController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdateUserDto,
     ): Promise<PublicUserDataDto> {
         const userId = getUserId(req);
@@ -129,7 +129,7 @@ export class UsersController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
     ): Promise<PublicUserDataDto> {
         const userId = getUserId(req);
         const user = await this.usersService.remove(userId, id);

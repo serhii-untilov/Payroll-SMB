@@ -12,4 +12,5 @@ export class CreateTaskDto extends OmitType(Task, [
     'deletedDate',
     'deletedUserId',
     'version',
+    'generateId',
 ]) {}

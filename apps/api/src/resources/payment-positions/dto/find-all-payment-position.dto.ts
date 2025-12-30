@@ -1,4 +1,4 @@
 export class FindAllPaymentPositionDto {
-    paymentId: number;
+    paymentId: string;
     relations?: boolean;
 }

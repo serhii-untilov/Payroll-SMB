@@ -66,7 +66,7 @@ export class UserCompaniesController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() params: FindOneUserCompanyDto,
     ): Promise<UserCompany> {
         const userId = getUserId(req);
@@ -80,7 +80,7 @@ export class UserCompaniesController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: UserCompany })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number): Promise<UserCompany> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<UserCompany> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId);
         return await this.service.remove(userId, id);
@@ -95,7 +95,7 @@ export class UserCompaniesController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async restore(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
     ): Promise<UserCompany> {
         const userId = getUserId(req);
         return await this.service.restore(userId, id);

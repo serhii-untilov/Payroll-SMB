@@ -41,7 +41,7 @@ export class EcbSalary extends PayFundCalc {
         });
     }
 
-    getPaymentTypeIds(): number[] {
+    getPaymentTypeIds(): string[] {
         // TODO: Replace to Entry Table
         const calcMethods: string[] = [CalcMethod.Salary, CalcMethod.Wage];
         const paymentGroups: string[] = [

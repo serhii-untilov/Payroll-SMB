@@ -50,7 +50,7 @@ const PayrollList = (props: PayrollListProps) => {
                 rows={props.balances || []}
                 columns={columns}
                 onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
+                    setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
                 onCellKeyDown={(

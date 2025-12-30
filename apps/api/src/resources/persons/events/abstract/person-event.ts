@@ -6,8 +6,8 @@ export enum PersonEventType {
 
 export abstract class PersonEvent {
     private _type: PersonEventType;
-    private _userId: number;
-    private _id: number;
+    private _userId: string;
+    private _id: string;
 
     public get type() {
         return this._type;
@@ -19,7 +19,7 @@ export abstract class PersonEvent {
         return this._id;
     }
 
-    constructor(type: PersonEventType, userId: number, id: number) {
+    constructor(type: PersonEventType, userId: string, id: string) {
         this._type = type;
         this._userId = userId;
         this._id = id;

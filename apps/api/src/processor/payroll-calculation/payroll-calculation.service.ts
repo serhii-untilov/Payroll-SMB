@@ -14,15 +14,16 @@ import {
     PositionsService,
     WorkNormsService,
 } from '@/resources';
-import { RecordFlags, WorkingTime } from '@/types';
+import { RecordFlag, WorkingTime } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { calculateBasics, calculateIncomeTax, calculateMilitaryTax } from './calc-methods';
+import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
     private _logger: Logger = new Logger(PayrollCalculationService.name);
-    private _userId: number;
+    private _userId: string;
     private _company: Company;
     private _paymentTypes: PaymentType[];
     private _workNorms: WorkNorm[];
@@ -30,9 +31,9 @@ export class PayrollCalculationService {
     public payPeriod: PayPeriod;
     private _accPeriods: PayPeriod[];
     private _payrolls: Payroll[];
-    private _payrollId = 0;
+    // private _payrollId = 0;
     private _toInsert: Payroll[] = [];
-    private _toDeleteIds: number[] = [];
+    private _toDeleteIds: string[] = [];
     // Synthetic working time, for totals only, not for calculate payroll
     private _syntheticTimePlan: WorkingTime;
     private _syntheticTimeFact: WorkingTime;
@@ -96,7 +97,7 @@ export class PayrollCalculationService {
         this._syntheticTimeFact = fact;
     }
 
-    public async calculateCompany(userId: number, companyId: number) {
+    public async calculateCompany(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, calculateCompany: ${companyId}`);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
@@ -117,7 +118,7 @@ export class PayrollCalculationService {
         await this._calculateCompanyTotals();
     }
 
-    public async calculateCompanyTotals(userId: number, companyId: number) {
+    public async calculateCompanyTotals(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, calculateCompanyTotals: ${companyId}`);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
@@ -133,7 +134,7 @@ export class PayrollCalculationService {
         await this.payPeriodCalculationService.updateCalcMethods(this.payPeriod.id);
     }
 
-    public async calculatePosition(userId: number, positionId: number) {
+    public async calculatePosition(userId: string, positionId: string) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
         this._position = await this.positionsService.findOne(positionId, { relations: true });
         this._userId = userId;
@@ -146,15 +147,16 @@ export class PayrollCalculationService {
         await this._calculateCompanyTotals();
     }
 
-    public getNextPayrollId(): number {
-        this._payrollId++;
-        return this._payrollId;
+    public getNextPayrollId(): string {
+        // this._payrollId++;
+        // return this._payrollId;
+        return SnowflakeServiceSingleton.nextId();
     }
 
-    public merge(paymentTypeIds: number[], accPeriod: PayPeriod, payrolls: Payroll[]): void {
+    public merge(paymentTypeIds: string[], accPeriod: PayPeriod, payrolls: Payroll[]): void {
         const toInsert: Payroll[] = [];
-        const toDeleteIds: number[] = [];
-        const processedIds: number[] = [];
+        const toDeleteIds: string[] = [];
+        const processedIds: string[] = [];
         // When in this.payrolls exists the same record:
         // - skip record
         // When in this.payrolls exists the same record, but factSum doesn't the same:
@@ -168,7 +170,7 @@ export class PayrollCalculationService {
                     o.accPeriod.getTime() === record.accPeriod.getTime() &&
                     o.dateFrom.getTime() === record.dateFrom.getTime() &&
                     o.dateTo.getTime() === record.dateTo.getTime() &&
-                    (o.recordFlags & RecordFlags.Cancel) === 0,
+                    (o.recordFlags & RecordFlag.Cancel) === 0,
             );
             if (!found) {
                 toInsert.push(Object.assign({ ...record, id: this.getNextPayrollId() }));
@@ -191,7 +193,7 @@ export class PayrollCalculationService {
                     // skip record
                 } else {
                     if (
-                        found.recordFlags & RecordFlags.Auto &&
+                        found.recordFlags & RecordFlag.Auto &&
                         found.payPeriod.getTime() >= this.payPeriod.dateFrom.getTime() &&
                         found.payPeriod.getTime() <= this.payPeriod.dateTo.getTime()
                     ) {
@@ -210,7 +212,7 @@ export class PayrollCalculationService {
                             payPeriod: this.payPeriod.dateFrom,
                             sourceType: null,
                             sourceId: null,
-                            recordFlags: RecordFlags.Auto | RecordFlags.Cancel,
+                            recordFlags: RecordFlag.Auto | RecordFlag.Cancel,
                             fixedFlags: 0,
                             parentId: found.id,
                             factSum: -foundUnionCancel.factSum,
@@ -239,13 +241,13 @@ export class PayrollCalculationService {
                 o.accPeriod.getTime() >= accPeriod.dateFrom.getTime() &&
                 o.accPeriod.getTime() <= accPeriod.dateTo.getTime() &&
                 o.payPeriod.getTime() <= this.payPeriod.dateTo.getTime() &&
-                !(o.recordFlags & RecordFlags.Cancel) &&
+                !(o.recordFlags & RecordFlag.Cancel) &&
                 paymentTypeIds.includes(o.paymentTypeId) &&
                 !processedIds.includes(o.id),
         );
         for (const record of toCancel) {
             if (
-                record.recordFlags & RecordFlags.Auto &&
+                record.recordFlags & RecordFlag.Auto &&
                 record.payPeriod.getTime() >= this.payPeriod.dateFrom.getTime() &&
                 record.payPeriod.getTime() <= this.payPeriod.dateTo.getTime()
             ) {
@@ -263,7 +265,7 @@ export class PayrollCalculationService {
                         payPeriod: this.payPeriod.dateFrom,
                         sourceType: null,
                         sourceId: null,
-                        recordFlags: RecordFlags.Auto | RecordFlags.Cancel,
+                        recordFlags: RecordFlag.Auto | RecordFlag.Cancel,
                         fixedFlags: 0,
                         parentId: record.id,
                         factSum: -recordUnionCancel.factSum,
@@ -282,9 +284,9 @@ export class PayrollCalculationService {
         this._workNorms = await this.workNormsService.findAll({ relations: true });
     }
 
-    private initNextPayrollId() {
-        this._payrollId = this.payrolls.reduce((a, b) => Math.max(a, b.id), 0);
-    }
+    // private initNextPayrollId() {
+    //     this._payrollId = this.payrolls.reduce((a, b) => Math.max(a, b.id), 0);
+    // }
 
     private async _calculatePosition() {
         if (!this.position.personId) {
@@ -306,7 +308,7 @@ export class PayrollCalculationService {
             dateTo,
             true,
         );
-        this.initNextPayrollId();
+        // this.initNextPayrollId();
         calculateBasics(this);
         calculateIncomeTax(this);
         calculateMilitaryTax(this);
@@ -352,9 +354,9 @@ export class PayrollCalculationService {
             await this.payrollsService.delete(this._toDeleteIds[i]);
         }
         const map = {};
-        this._toInsert.sort((a, b) => (a.parentId ?? 0) - (b.parentId ?? 0));
+        this._toInsert.sort((a, b) => (BigInt(a.parentId ?? 0) < BigInt(b.parentId ?? 0) ? -1 : 1));
         for (const { id, parentId, ...record } of this._toInsert) {
-            const newParentId: number = parentId ? map[parentId.toString()] || parentId : parentId;
+            const newParentId: string = parentId ? map[parentId.toString()] || parentId : parentId;
             const created = await this.payrollsService.create(this.userId, {
                 ...record,
                 ...(newParentId ? { parentId: newParentId } : {}),

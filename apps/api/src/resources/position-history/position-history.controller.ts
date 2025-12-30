@@ -99,7 +99,7 @@ export class PositionHistoryController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() params: FindOnePositionHistoryDto,
     ): Promise<PositionHistory> {
         const userId = getUserId(req);
@@ -117,7 +117,7 @@ export class PositionHistoryController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdatePositionHistoryDto,
     ): Promise<PositionHistory> {
         const userId = getUserId(req);
@@ -136,7 +136,7 @@ export class PositionHistoryController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
     ): Promise<PositionHistory> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);

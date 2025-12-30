@@ -1,31 +1,19 @@
+import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
+import { BaseEntity } from '../../abstract/base-entity.abstract';
 import { Company } from './../../companies/entities/company.entity';
 import { Person } from './../../persons/entities/person.entity';
 import { PositionHistory } from './../../position-history/entities/position-history.entity';
-import {
-    AfterLoad,
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
-    Relation,
-} from 'typeorm';
-import { Logger } from './../../abstract/logger.abstract';
 import { PositionBalance } from './position-balance.entity';
 
 @Entity()
-export class Position extends Logger {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-
+export class Position extends BaseEntity {
     @ManyToOne(() => Company, (company) => company.positions)
     // @ManyToOne(() => Company, { createForeignKeyConstraints: false })
     @JoinColumn()
     company?: Relation<Company>;
 
-    @Column({ type: 'integer' })
-    companyId: number;
+    @Column({ type: 'bigint' })
+    companyId: string;
 
     @Column({ type: 'varchar', length: 15 })
     cardNumber: string; // Табельний номер
@@ -40,8 +28,8 @@ export class Position extends Logger {
     @JoinColumn()
     person?: Relation<Person>;
 
-    @Column({ type: 'integer', nullable: true })
-    personId: number | null; // Vacancy, if not defined
+    @Column({ type: 'bigint', nullable: true })
+    personId: string | null; // Vacancy, if not defined
 
     @Column({ type: 'date', default: '1900-01-01' })
     dateFrom: Date;

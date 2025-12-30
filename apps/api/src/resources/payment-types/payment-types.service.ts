@@ -1,4 +1,4 @@
-import { AccessType, ResourceType } from '@/types';
+import { Action, Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,7 +11,7 @@ import { PaymentType } from './entities/payment-type.entity';
 
 @Injectable()
 export class PaymentTypesService {
-    public readonly resourceType = ResourceType.PaymentType;
+    public readonly resource = Resource.PaymentType;
 
     constructor(
         @InjectRepository(PaymentType)
@@ -20,16 +20,12 @@ export class PaymentTypesService {
         private accessService: AccessService,
     ) {}
 
-    async create(userId: number, payload: CreatePaymentTypeDto): Promise<PaymentType> {
+    async create(userId: string, payload: CreatePaymentTypeDto): Promise<PaymentType> {
         const existing = await this.repository.findOneBy({ name: payload.name });
         if (existing) {
             throw new BadRequestException(`PaymentType '${payload.name}' already exists.`);
         }
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Create,
-        );
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Create);
         return await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -57,11 +53,11 @@ export class PaymentTypesService {
             : await this.repository.find();
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async update(userId: number, id: number, payload: UpdatePaymentTypeDto): Promise<PaymentType> {
+    async update(userId: string, id: string, payload: UpdatePaymentTypeDto): Promise<PaymentType> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -73,12 +69,8 @@ export class PaymentTypesService {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<PaymentType> {
-        await this.accessService.availableForUserOrFail(
-            userId,
-            this.resourceType,
-            AccessType.Delete,
-        );
+    async remove(userId: string, id: string): Promise<PaymentType> {
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Delete);
         await this.repository.findOneOrFail({ where: { id } });
         return await this.repository.save({
             id,

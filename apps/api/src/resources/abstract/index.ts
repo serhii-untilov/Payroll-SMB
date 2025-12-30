@@ -1,3 +1,3 @@
-export * from './availableForUser';
-export * from './availableForUserCompany';
-export * from './logger.abstract';
+export * from './available-for-user';
+export * from './available-for-user-company';
+export * from './base-entity.abstract';

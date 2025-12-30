@@ -1,9 +1,9 @@
-import { ResourceType } from '@/types';
+import { Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AvailableForUser } from '../abstract/availableForUser';
+import { AvailableForUser } from '../abstract/available-for-user';
 import { AccessService } from '../access/access.service';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
 import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';
@@ -11,7 +11,7 @@ import { PayFundType } from './entities/pay-fund-type.entity';
 
 @Injectable()
 export class PayFundTypesService extends AvailableForUser {
-    public readonly resourceType = ResourceType.FundType;
+    public readonly resource = Resource.FundType;
 
     constructor(
         @InjectRepository(PayFundType)
@@ -22,7 +22,7 @@ export class PayFundTypesService extends AvailableForUser {
         super(accessService);
     }
 
-    async create(userId: number, payload: CreatePayFundTypeDto): Promise<PayFundType> {
+    async create(userId: string, payload: CreatePayFundTypeDto): Promise<PayFundType> {
         const existing = await this.repository.findOneBy({ name: payload.name });
         if (existing) {
             throw new BadRequestException(`FundType '${payload.name}' already exists.`);
@@ -38,11 +38,11 @@ export class PayFundTypesService extends AvailableForUser {
         return await this.repository.find();
     }
 
-    async findOne(id: number): Promise<PayFundType> {
+    async findOne(id: string): Promise<PayFundType> {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async update(userId: number, id: number, payload: UpdatePayFundTypeDto): Promise<PayFundType> {
+    async update(userId: string, id: string, payload: UpdatePayFundTypeDto): Promise<PayFundType> {
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -54,7 +54,7 @@ export class PayFundTypesService extends AvailableForUser {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: number, id: number): Promise<PayFundType> {
+    async remove(userId: string, id: string): Promise<PayFundType> {
         await this.repository.findOneOrFail({ where: { id } });
         return await this.repository.save({
             id,

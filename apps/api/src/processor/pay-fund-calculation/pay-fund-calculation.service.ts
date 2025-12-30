@@ -21,11 +21,12 @@ import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { EcbMinWage, EcbSalary } from './calc-methods';
 import { PayFundCalc } from './calc-methods/abstract/pay-fund-calc';
+import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayFundCalculationService {
     private _logger: Logger = new Logger(PayFundCalculationService.name);
-    private _userId: number;
+    private _userId: string;
     private _company: Company;
     private _paymentTypes: PaymentType[];
     private _payFundTypes: PayFundType[];
@@ -35,7 +36,7 @@ export class PayFundCalculationService {
     private _accPeriods: PayPeriod[];
     private _payrolls: Payroll[];
     private _priorPayFunds: PayFund[];
-    private _payFundId: number;
+    // private _payFundId: string;
 
     constructor(
         @Inject(forwardRef(() => CompaniesService))
@@ -92,7 +93,7 @@ export class PayFundCalculationService {
         return this._priorPayFunds;
     }
 
-    public async calculateCompany(userId: number, companyId: number) {
+    public async calculateCompany(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, calculateCompany: ${companyId}`);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
@@ -113,7 +114,7 @@ export class PayFundCalculationService {
         await this._calculateCompanyTotals();
     }
 
-    public async calculateCompanyTotals(userId: number, companyId: number) {
+    public async calculateCompanyTotals(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, calculateCompanyTotals: ${companyId}`);
         this._userId = userId;
         this._company = await this.companiesService.findOne(userId, companyId);
@@ -129,7 +130,7 @@ export class PayFundCalculationService {
         await this.payPeriodCalculationService.updateCalcMethods(this.payPeriod.id);
     }
 
-    public async calculatePosition(userId: number, positionId: number) {
+    public async calculatePosition(userId: string, positionId: string) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
         this._position = await this.positionsService.findOne(positionId, { relations: true });
         this._userId = userId;
@@ -142,18 +143,19 @@ export class PayFundCalculationService {
         await this._calculateCompanyTotals();
     }
 
-    public getNextPayFundId(): number {
-        this._payFundId++;
-        return this._payFundId;
+    public getNextPayFundId(): string {
+        // this._payFundId++;
+        // return this._payFundId;
+        return SnowflakeServiceSingleton.nextId();
     }
 
     public merge(
         accPeriod: PayPeriod,
         currentPayFunds: PayFund[],
-    ): { toInsert: PayFund[]; toDeleteIds: number[] } {
+    ): { toInsert: PayFund[]; toDeleteIds: string[] } {
         const toInsert: PayFund[] = [];
-        const toDeleteIds: number[] = [];
-        const processedIds: number[] = [];
+        const toDeleteIds: string[] = [];
+        const processedIds: string[] = [];
         // Sub prior from current
         this.priorPayFunds
             .filter(
@@ -224,9 +226,10 @@ export class PayFundCalculationService {
         this._minWages = await this.minWageService.findAll();
     }
 
-    private initNextPayFundId() {
-        this._payFundId = this.priorPayFunds.reduce((a, b) => Math.max(a, b.id), 0);
-    }
+    // private initNextPayFundId() {
+    //     this._payFundId = this.priorPayFunds.reduce((a, b) => Math.max(a, b.id), 0);
+    //     return this._payFundId
+    // }
 
     private getCalcMethod(
         accPeriod: PayPeriod,
@@ -262,7 +265,7 @@ export class PayFundCalculationService {
             dateTo,
             true,
         );
-        this.initNextPayFundId();
+        // this.initNextPayFundId();
         for (const accPeriod of this.accPeriods) {
             const current: PayFund[] = [];
             this.payFundTypes.forEach((payFundType) => {
@@ -288,7 +291,7 @@ export class PayFundCalculationService {
         return payPeriodDateTo;
     }
 
-    private async save(toInsert: PayFund[], toDeleteIds: number[]) {
+    private async save(toInsert: PayFund[], toDeleteIds: string[]) {
         if (toDeleteIds.length) {
             await this.payFundsService.delete(toDeleteIds);
         }

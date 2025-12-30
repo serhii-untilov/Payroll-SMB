@@ -4,15 +4,15 @@ import {
     Department,
     FindAllDepartmentDto,
     FindOneDepartmentDto,
-    ResourceType,
+    Resource,
     UpdateDepartmentDto,
 } from '@repo/openapi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import useInvalidateQueries from '../useInvalidateQueries';
 
-const useGetDepartment = (id: number, options?: FindOneDepartmentDto) => {
+const useGetDepartment = (id: string, options?: FindOneDepartmentDto) => {
     return useQuery<Department, Error>({
-        queryKey: [ResourceType.Department, { id, ...options }],
+        queryKey: [Resource.Department, { id, ...options }],
         queryFn: async () => (await api.departmentsFindOne(id, options ?? {})).data,
         enabled: !!id,
     });
@@ -20,7 +20,7 @@ const useGetDepartment = (id: number, options?: FindOneDepartmentDto) => {
 
 const useGetDepartmentList = (params: FindAllDepartmentDto) => {
     return useQuery<Department[], Error>({
-        queryKey: [ResourceType.Department, params],
+        queryKey: [Resource.Department, params],
         queryFn: async () => {
             return (await api.departmentsFindAll(params)).data.sort((a, b) =>
                 a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
@@ -36,13 +36,13 @@ const useCreateDepartment = () => {
         mutationFn: async (dto: CreateDepartmentDto): Promise<Department> =>
             (await api.departmentsCreate(dto)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.Department, ResourceType.Task]);
+            invalidateQueries([Resource.Department, Resource.Task]);
         },
     });
 };
 
 type UpdateDepartment = {
-    id: number;
+    id: string;
     dto: UpdateDepartmentDto;
 };
 
@@ -52,7 +52,7 @@ const useUpdateDepartment = () => {
         mutationFn: async ({ id, dto }: UpdateDepartment): Promise<Department> =>
             (await api.departmentsUpdate(id, dto)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.Department]);
+            invalidateQueries([Resource.Department]);
         },
     });
 };
@@ -60,9 +60,9 @@ const useUpdateDepartment = () => {
 const useRemoveDepartment = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: number) => (await api.departmentsRemove(id)).data,
+        mutationFn: async (id: string) => (await api.departmentsRemove(id)).data,
         onSuccess: () => {
-            invalidateQueries([ResourceType.Department, ResourceType.Task]);
+            invalidateQueries([Resource.Department, Resource.Task]);
         },
     });
 };

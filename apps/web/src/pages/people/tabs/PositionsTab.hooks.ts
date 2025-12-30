@@ -19,12 +19,12 @@ const usePositionsTab = (props: Props) => {
 
     const onAddPosition = () => navigate('/people/position/?tab-index=0&return=true');
 
-    const onEditPosition = (positionId: number) =>
+    const onEditPosition = (positionId: string) =>
         navigate(`/people/position/${positionId}?return=true`);
 
     const onDeletePosition = async () => {
-        for (const id of props.rowSelectionModel) {
-            await removePosition.mutateAsync(+id);
+        for (const id of props.rowSelectionModel.map(String)) {
+            await removePosition.mutateAsync(id);
         }
     };
 

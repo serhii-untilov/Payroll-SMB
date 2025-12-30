@@ -1,25 +1,25 @@
 import { PaymentType } from '../../payment-types/entities/payment-type.entity';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
-import { RecordFlags } from './../../../types';
+import { RecordFlag } from './../../../types';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class PaymentDeduction {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+    @PrimaryGeneratedColumn('identity')
+    id: string;
 
     @ManyToOne(() => PaymentPosition, { createForeignKeyConstraints: false })
     paymentPosition?: PaymentPosition;
 
-    @Column({ type: 'integer' })
-    paymentPositionId: number;
+    @Column({ type: 'bigint' })
+    paymentPositionId: string;
 
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
     paymentType?: PaymentType;
 
-    @Column({ type: 'integer' })
-    paymentTypeId: number;
+    @Column({ type: 'bigint' })
+    paymentTypeId: string;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     baseSum: number;
@@ -28,8 +28,8 @@ export class PaymentDeduction {
     paySum: number;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: RecordFlags, enumName: 'RecordFlags' })
-    recordFlags: RecordFlags;
+    @ApiProperty({ enum: RecordFlag, enumName: 'RecordFlags' })
+    recordFlags: RecordFlag;
 
     @AfterLoad()
     transform() {
