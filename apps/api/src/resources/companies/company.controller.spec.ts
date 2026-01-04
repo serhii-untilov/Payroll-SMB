@@ -4,26 +4,24 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from 'test';
-import { AccessService } from '../access/access.service';
 import { UserRoleService } from '../user-role/user-role.service';
-import { UserService } from '../users/users.service';
-import { CompaniesController } from './companies.controller';
-import { CompaniesService } from './companies.service';
-import { Company } from './entities/company.entity';
+import { UserService } from '../user/user.service';
+import { CompanyController } from './company.controller';
+import { CompanyService } from './company.service';
+import { CompanyEntity } from './entities/company.entity';
 
-describe('CompaniesController', () => {
-    let controller: CompaniesController;
-    let service: CompaniesService;
+describe('CompanyController', () => {
+    let controller: CompanyController;
+    let service: CompanyService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [CompaniesController],
+            controllers: [CompanyController],
             providers: [
-                CompaniesService,
-                { provide: getRepositoryToken(Company), useFactory: repositoryMockFactory },
+                CompanyService,
+                { provide: getRepositoryToken(CompanyEntity), useFactory: repositoryMockFactory },
                 { provide: UserService, useValue: createMock<UserService>() },
                 { provide: UserRoleService, useValue: createMock<UserRoleService>() },
-                { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
                 {
                     provide: PayrollCalculationService,
@@ -32,8 +30,8 @@ describe('CompaniesController', () => {
             ],
         }).compile();
 
-        controller = module.get<CompaniesController>(CompaniesController);
-        service = module.get<CompaniesService>(CompaniesService);
+        controller = module.get<CompanyController>(CompanyController);
+        service = module.get<CompanyService>(CompanyService);
     });
 
     it('should be defined', () => {

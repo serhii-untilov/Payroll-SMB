@@ -1,14 +1,18 @@
-import { AuthService } from '@/auth/auth.service';
 import { QueryPolicy } from '@/resources/common/policy/query-policy.interface';
 import { Action, Resource } from '@/types';
 import { Injectable } from '@nestjs/common';
 import { ListPersonsQuery } from '../queries/list-persons.query';
+import { UserAccessService } from '@/resources/user-access/user-access.service';
 
 @Injectable()
 export class ListPersonsPolicy implements QueryPolicy<ListPersonsQuery> {
-    constructor(private readonly auth: AuthService) {}
+    constructor(private readonly userAccess: UserAccessService) {}
 
-    async canExecute(_: ListPersonsQuery, userId: string, companyId?: string): Promise<boolean> {
-        return await this.auth.can(userId, Resource.Person, Action.Read, { companyId });
+    async canExecute(query: ListPersonsQuery): Promise<boolean> {
+        return await this.userAccess.canUser({
+            userId: query.userId,
+            resource: Resource.Person,
+            action: Action.Read,
+        });
     }
 }

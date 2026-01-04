@@ -1,33 +1,30 @@
-import { randCountry } from '@ngneat/falso';
 import { Test, TestingModule } from '@nestjs/testing';
-import { RolesController } from './roles.controller';
-import { RolesService } from './roles.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { randCountry } from '@ngneat/falso';
+import { Request } from 'express';
 import { createMockRole, repositoryMockFactory } from 'test';
 import { Role } from './entities/role.entity';
-import { Request } from 'express';
-import { AccessService } from '../access/access.service';
-import { createMock } from '@golevelup/ts-jest';
+import { RoleController } from './role.controller';
+import { RoleService } from './role.service';
 
-describe('RolesController', () => {
-    let controller: RolesController;
-    let service: RolesService;
+describe('RoleController', () => {
+    let controller: RoleController;
+    let service: RoleService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [RolesController],
+            controllers: [RoleController],
             providers: [
-                RolesService,
+                RoleService,
                 {
                     provide: getRepositoryToken(Role),
                     useFactory: repositoryMockFactory,
                 },
-                { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();
 
-        controller = module.get<RolesController>(RolesController);
-        service = module.get<RolesService>(RolesService);
+        controller = module.get<RoleController>(RoleController);
+        service = module.get<RoleService>(RoleService);
     });
 
     it('should be defined', () => {
@@ -53,7 +50,7 @@ describe('RolesController', () => {
         const role = createMockRole();
         const newName = randCountry();
         const updatedRole = { ...role, name: newName };
-        jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(updatedRole));
+        jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(void 0));
         const res = await controller.update({ body: {} } as any as Request, role.id, {
             name: newName,
         });
@@ -62,7 +59,7 @@ describe('RolesController', () => {
 
     it.skip('should remove a role', async () => {
         const role = createMockRole();
-        jest.spyOn(service, 'remove').mockReturnValue(Promise.resolve(role));
+        jest.spyOn(service, 'remove').mockReturnValue(Promise.resolve(void 0));
         const res = await controller.remove({ body: {} } as any as Request, role.id);
         expect(res).toStrictEqual(role);
     });

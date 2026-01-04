@@ -27,6 +27,7 @@ import { PersonReadDto } from './queries/dto/person-read.dto';
 import { PersonSearchDto } from './queries/dto/person-search.dto';
 import { FindPersonByIdQuery } from './queries/find-person-by-id.query';
 import { ListPersonsQuery } from './queries/list-persons.query';
+import { ListPersonsQueryDto } from './queries/dto/list-persons-query.dto';
 
 @ApiBearerAuth()
 @ApiTags('Persons')
@@ -100,19 +101,16 @@ export class PersonController {
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(@Req() req: Request, @Param('id') id: string): Promise<PersonReadDto> {
-        const _userId = getUserId(req);
-        // TODO: check user role permissions
-        return await this.queryBus.execute(new FindPersonByIdQuery(id));
+        const userId = getUserId(req);
+        return await this.queryBus.execute(new FindPersonByIdQuery(userId, id));
     }
 
     @Get()
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found records', type: ListPersonsDto })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    // Offset pagination
-    async findAll(@Req() req: Request, @Query() query: ListPersonsQuery): Promise<ListPersonsDto> {
-        const _userId = getUserId(req);
-        // TODO: check user role permissions
-        return this.queryBus.execute(query);
+    async findAll(@Req() req: Request, @Query() query: ListPersonsQueryDto): Promise<ListPersonsDto> {
+        const userId = getUserId(req);
+        return this.queryBus.execute(new ListPersonsQuery(userId, query));
     }
 }

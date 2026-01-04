@@ -1,28 +1,22 @@
-import { Resource, RoleType, WrapperType } from '@/types';
-import { checkVersionOrFail } from '@/utils';
-import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
+import { Resource, RoleType } from '@/types';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
-import { AvailableForUser } from '../common/base';
-import { AccessService } from '../access/access.service';
 import { CreateUserRoleDto } from './dto/create-user-role.dto';
 import { FindUserRoleDto } from './dto/find-user-role.dto';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 import { UserRole } from './entities/user-role.entity';
 
 @Injectable()
-export class UserRoleService extends AvailableForUser {
+export class UserRoleService {
     public readonly userRoleResource = Resource.Company;
 
-    constructor(
-        @InjectRepository(UserRole) private repository: Repository<UserRole>,
-        @Inject(forwardRef(() => AccessService)) public accessService: WrapperType<AccessService>,
-    ) {
-        super(accessService);
-    }
+    constructor(@InjectRepository(UserRole) private repository: Repository<UserRole>) {}
 
     async create(userId: string, payload: CreateUserRoleDto) {
         return await this.repository.save({
+            id: IdGenerator.nextId(),
             ...payload,
             createdUserId: userId,
             updatedUserId: userId,
@@ -55,7 +49,6 @@ export class UserRoleService extends AvailableForUser {
 
     async update(userId: string, id: string, payload: UpdateUserRoleDto) {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        checkVersionOrFail(record, payload);
         await this.repository.save({
             id,
             ...payload,

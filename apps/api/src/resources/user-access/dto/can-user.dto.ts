@@ -1,7 +1,7 @@
 import { Action, Resource } from '@/types';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumberString, IsOptional } from 'class-validator';
-import { AccessContextDto } from './access-context.dto';
+import { ActionContextDto } from './action-context.dto';
 import { Type } from 'class-transformer';
 
 export class CanUserDto {
@@ -18,8 +18,8 @@ export class CanUserDto {
     @IsOptional()
     action: Action;
 
-    @ApiPropertyOptional({ type: () => AccessContextDto })
+    @ApiPropertyOptional({ type: () => ActionContextDto })
     @IsOptional()
-    @Type(() => AccessContextDto)
-    context?: AccessContextDto;
+    @Type(() => ActionContextDto)
+    context?: ActionContextDto;
 }

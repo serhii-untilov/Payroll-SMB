@@ -1,8 +1,8 @@
 import { PayPeriodSummary } from '../../resources/pay-periods/entities/pay-period-summary.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { Company } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from './../../resources/companies/entities/company.entity';
 import {
-    CompaniesService,
+    CompanyService,
     PayFundsService,
     PayPeriodsCalcMethodService,
     PayPeriodsService,
@@ -24,12 +24,12 @@ import { IdGenerator } from '@/snowflake/snowflake.singleton';
 export class PayPeriodCalculationService {
     private _logger: Logger = new Logger(PayPeriodCalculationService.name);
     private _userId: string;
-    private _company: Company;
+    private _company: CompanyEntity;
     // private _id: string = 0;
 
     constructor(
-        @Inject(forwardRef(() => CompaniesService))
-        private companiesService: CompaniesService,
+        @Inject(forwardRef(() => CompanyService))
+        private companiesService: CompanyService,
         @Inject(forwardRef(() => PayPeriodsService))
         private payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => PayPeriodsCalcMethodService))
@@ -50,7 +50,7 @@ export class PayPeriodCalculationService {
     public get userId() {
         return this._userId;
     }
-    public get company(): Company {
+    public get company(): CompanyEntity {
         return this._company;
     }
     public get id() {

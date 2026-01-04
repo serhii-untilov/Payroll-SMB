@@ -10,7 +10,7 @@ import {
 import { Between, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../common/base/available-for-user-company';
 import { AccessService } from '../access/access.service';
-import { CompaniesService } from '../companies/companies.service';
+import { CompanyService } from '../companies/company.service';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePayFundDto } from './dto/create-pay-fund.dto';
 import { FindPayFundDto } from './dto/find-pay-fund.dto';
@@ -28,8 +28,8 @@ export class PayFundsService extends AvailableForUserCompany {
         public accessService: AccessService,
         @Inject(forwardRef(() => PositionsService))
         private positionsService: PositionsService,
-        @Inject(forwardRef(() => CompaniesService))
-        private companiesService: CompaniesService,
+        @Inject(forwardRef(() => CompanyService))
+        private companiesService: CompanyService,
     ) {
         super(accessService);
     }

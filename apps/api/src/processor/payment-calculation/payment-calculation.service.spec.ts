@@ -1,6 +1,6 @@
 import {
     AccessService,
-    CompaniesService,
+    CompanyService,
     PayFundsService,
     PaymentPositionsService,
     PaymentsService,
@@ -23,7 +23,7 @@ describe('PaymentCalculationService', () => {
                 PaymentCalculationService,
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: PaymentTypesService, useValue: createMock<PaymentTypesService>() },
-                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
+                { provide: CompanyService, useValue: createMock<CompanyService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
                 { provide: PayFundsService, useValue: createMock<PayFundsService>() },

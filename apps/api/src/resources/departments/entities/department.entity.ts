@@ -1,14 +1,14 @@
 import { AfterLoad, Column, Entity, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
-import { Company } from './../../companies/entities/company.entity';
+import { CompanyEntity } from './../../companies/entities/company.entity';
 
 @Entity()
 export class Department extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @ManyToOne(() => Company, (company) => company.departments)
-    company?: Relation<Company>;
+    @ManyToOne(() => CompanyEntity, (company) => company.departments)
+    company?: Relation<CompanyEntity>;
 
     @Column({ type: 'bigint' })
     companyId: string;

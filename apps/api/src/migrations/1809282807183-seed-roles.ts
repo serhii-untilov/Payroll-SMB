@@ -1,5 +1,5 @@
 import { RoleType } from '../types';
-import { Role } from '../resources/roles/entities/role.entity';
+import { Role } from '../resources/role/entities/role.entity';
 import { langPipe } from '../utils/lib/lang-pipe';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 

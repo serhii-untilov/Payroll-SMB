@@ -3,5 +3,6 @@ export enum Action {
     Create = 'create',
     Read = 'read',
     Update = 'update',
-    Delete = 'delete',
+    Remove = 'remove',
+    Restore = 'restore',
 }

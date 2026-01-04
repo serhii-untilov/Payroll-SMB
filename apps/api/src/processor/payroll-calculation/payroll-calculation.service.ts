@@ -3,11 +3,11 @@ import { Position } from './../../resources/positions/entities/position.entity';
 import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
 import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { Company } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from './../../resources/companies/entities/company.entity';
 import { calcBalanceWorkTime, getPayrollUnionRecord } from '@/processor/helpers';
 import {
     AccessService,
-    CompaniesService,
+    CompanyService,
     PayPeriodsService,
     PaymentTypesService,
     PayrollsService,
@@ -24,7 +24,7 @@ import { IdGenerator } from '@/snowflake/snowflake.singleton';
 export class PayrollCalculationService {
     private _logger: Logger = new Logger(PayrollCalculationService.name);
     private _userId: string;
-    private _company: Company;
+    private _company: CompanyEntity;
     private _paymentTypes: PaymentType[];
     private _workTimeNorms: WorkTimeNorm[];
     private _position: Position;
@@ -41,8 +41,8 @@ export class PayrollCalculationService {
     constructor(
         @Inject(forwardRef(() => AccessService))
         private accessService: AccessService,
-        @Inject(forwardRef(() => CompaniesService))
-        private companiesService: CompaniesService,
+        @Inject(forwardRef(() => CompanyService))
+        private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypesService))
         private paymentTypesService: PaymentTypesService,
         @Inject(forwardRef(() => PayPeriodsService))

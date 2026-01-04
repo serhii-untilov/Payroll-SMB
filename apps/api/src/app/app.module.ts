@@ -3,7 +3,7 @@ import { appConfig, authConfig, dbConfig, googleConfig, TypeormConfigService } f
 import {
     AccessModule,
     AccountingModule,
-    CompaniesModule,
+    CompanyModule,
     DepartmentsModule,
     JobsModule,
     LawsModule,
@@ -78,7 +78,7 @@ import { IdGenerator } from '@/snowflake/snowflake.singleton';
         AccessModule,
         AccountingModule,
         AuthModule,
-        CompaniesModule,
+        CompanyModule,
         DepartmentsModule,
         JobsModule,
         LawsModule,

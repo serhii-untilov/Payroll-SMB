@@ -5,9 +5,9 @@ import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.ent
 import { PayFundType } from './../../resources/pay-fund-types/entities/pay-fund-type.entity';
 import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
 import { MinWage } from './../../resources/min-wage/entities/min-wage.entity';
-import { Company } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from './../../resources/companies/entities/company.entity';
 import {
-    CompaniesService,
+    CompanyService,
     MinWageService,
     PayFundTypesService,
     PayFundsService,
@@ -27,7 +27,7 @@ import { IdGenerator } from '@/snowflake/snowflake.singleton';
 export class PayFundCalculationService {
     private _logger: Logger = new Logger(PayFundCalculationService.name);
     private _userId: string;
-    private _company: Company;
+    private _company: CompanyEntity;
     private _paymentTypes: PaymentType[];
     private _payFundTypes: PayFundType[];
     private _minWages: MinWage[];
@@ -39,8 +39,8 @@ export class PayFundCalculationService {
     // private _payFundId: string;
 
     constructor(
-        @Inject(forwardRef(() => CompaniesService))
-        private companiesService: CompaniesService,
+        @Inject(forwardRef(() => CompanyService))
+        private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypesService))
         private paymentTypesService: PaymentTypesService,
         @Inject(forwardRef(() => PayFundTypesService))

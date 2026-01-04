@@ -1,4 +1,4 @@
-import { Company } from './../../src/resources/companies/entities/company.entity';
+import { CompanyEntity } from './../../src/resources/companies/entities/company.entity';
 import { createMockDepartment } from './department.factory';
 import { incrementalNumber, randCompanyName } from '@ngneat/falso';
 import { createMockLaw } from './law.factory';
@@ -10,7 +10,7 @@ import { PaymentSchedule } from '@/types';
 
 const factory = incrementalNumber();
 
-export const createMockCompany = (data?: Partial<Company>) => {
+export const createMockCompany = (data?: Partial<CompanyEntity>) => {
     const law = createMockLaw();
     const accounting = createMockAccounting();
     const user = createMockUser();

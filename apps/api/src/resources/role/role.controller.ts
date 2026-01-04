@@ -14,12 +14,12 @@ import { Request } from 'express';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
-import { RolesService } from './roles.service';
+import { RoleService } from './role.service';
 
 @Controller('roles')
 @ApiBearerAuth()
-export class RolesController {
-    constructor(private readonly service: RolesService) {}
+export class RoleController {
+    constructor(private readonly service: RoleService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
@@ -61,9 +61,9 @@ export class RolesController {
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: string,
         @Body() payload: UpdateRoleDto,
-    ): Promise<Role> {
+    ): Promise<void> {
         const userId = getUserId(req);
-        return await this.service.update(userId, id, payload);
+        await this.service.update(userId, id, payload);
     }
 
     @Delete(':id')
@@ -72,8 +72,8 @@ export class RolesController {
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Role })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Role> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<void> {
         const userId = getUserId(req);
-        return await this.service.remove(userId, id);
+        await this.service.remove(userId, id);
     }
 }

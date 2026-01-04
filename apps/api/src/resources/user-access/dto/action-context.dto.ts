@@ -2,7 +2,7 @@ import { Field } from '@/types/lib/field';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumberString, IsOptional } from 'class-validator';
 
-export class AccessContextDto {
+export class ActionContextDto {
     @ApiPropertyOptional()
     @IsOptional()
     @IsNumberString()

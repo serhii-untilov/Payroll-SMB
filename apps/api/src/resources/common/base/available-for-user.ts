@@ -26,6 +26,6 @@ export abstract class AvailableForUser {
     }
 
     async availableDeleteOrFail(userId: string) {
-        await this.accessService.availableForUserOrFail(userId, this.userRoleResource, Action.Delete);
+        await this.accessService.availableForUserOrFail(userId, this.userRoleResource, Action.Remove);
     }
 }

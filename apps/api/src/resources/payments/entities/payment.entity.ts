@@ -3,14 +3,14 @@ import { AfterLoad, Column, Entity, Index, ManyToOne, OneToMany, Relation } from
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
 import { PaymentStatus, RecordFlag } from './../../../types';
-import { Company } from './../../companies/entities/company.entity';
+import { CompanyEntity } from './../../companies/entities/company.entity';
 import { PaymentType } from './../../payment-types/entities/payment-type.entity';
 
 @Entity()
 @Index('IDX_PAYMENT_COMP_ACC_STATUS', ['companyId', 'accPeriod', 'status'])
 export class Payment extends BaseEntity {
-    @ManyToOne(() => Company, { createForeignKeyConstraints: false })
-    company?: Relation<Company>;
+    @ManyToOne(() => CompanyEntity, { createForeignKeyConstraints: false })
+    company?: Relation<CompanyEntity>;
 
     @Column({ type: 'bigint' })
     companyId: string;

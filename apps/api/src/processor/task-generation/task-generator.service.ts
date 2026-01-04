@@ -1,8 +1,8 @@
 import { Task } from './../../resources/tasks/entities/task.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { Company } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from './../../resources/companies/entities/company.entity';
 import {
-    CompaniesService,
+    CompanyService,
     DepartmentsService,
     PayPeriodsService,
     PaymentsService,
@@ -37,7 +37,7 @@ import { IdGenerator } from '@/snowflake/snowflake.singleton';
 export class TaskGenerationService {
     private _logger: Logger = new Logger(TaskGenerationService.name);
     private _userId: string;
-    private _company: Company;
+    private _company: CompanyEntity;
     private _payPeriod: PayPeriod;
     private _priorTaskList: Task[] = [];
     private _currentTaskList: Task[] = [];
@@ -46,8 +46,8 @@ export class TaskGenerationService {
     private _payments: Payment[];
 
     constructor(
-        @Inject(forwardRef(() => CompaniesService))
-        private companiesService: CompaniesService,
+        @Inject(forwardRef(() => CompanyService))
+        private companiesService: CompanyService,
         @Inject(forwardRef(() => PayPeriodsService))
         public payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => TasksService))

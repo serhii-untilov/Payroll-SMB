@@ -1,4 +1,4 @@
-import { Role } from './../../src/resources/roles/entities/role.entity';
+import { Role } from '../../src/resources/role/entities/role.entity';
 import { RoleType } from '@/types';
 import { incrementalNumber, randRole } from '@ngneat/falso';
 

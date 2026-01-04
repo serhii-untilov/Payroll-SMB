@@ -1,7 +1,7 @@
 import {
     AccessService,
     AvailableForUserCompany,
-    CompaniesService,
+    CompanyService,
     PayPeriodsService,
     PaymentPositionsService,
 } from '@/resources';
@@ -37,8 +37,8 @@ export class PaymentsService extends AvailableForUserCompany {
         public paymentPositionsService: WrapperType<PaymentPositionsService>,
         @Inject(forwardRef(() => PayPeriodsService))
         public payPeriodsService: WrapperType<PayPeriodsService>,
-        @Inject(forwardRef(() => CompaniesService))
-        public companiesService: WrapperType<CompaniesService>,
+        @Inject(forwardRef(() => CompanyService))
+        public companiesService: WrapperType<CompanyService>,
         private eventEmitter: EventEmitter2,
     ) {
         super(accessService);

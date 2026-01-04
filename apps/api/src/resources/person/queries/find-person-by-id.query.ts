@@ -1,3 +1,6 @@
 export class FindPersonByIdQuery {
-    constructor(public readonly id: string) {}
+    constructor(
+        public readonly userId: string,
+        public readonly id: string,
+    ) {}
 }

@@ -57,7 +57,7 @@ export class JobsService {
     }
 
     async remove(userId: string, id: string): Promise<Job> {
-        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Delete);
+        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Remove);
         await this.repository.findOneOrFail({ where: { id } });
         return await this.repository.save({
             id,

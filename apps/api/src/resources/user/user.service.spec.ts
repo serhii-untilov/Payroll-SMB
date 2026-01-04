@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { MockType, createMockUser, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
-import { RolesService } from '../roles/roles.service';
+import { RoleService } from '../role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
@@ -23,7 +23,7 @@ describe('UserService', () => {
                 UserService,
                 { provide: getRepositoryToken(User), useFactory: repositoryMockFactory },
                 { provide: AccessService, useValue: createMock<AccessService>() },
-                { provide: RolesService, useValue: createMock<RolesService>() },
+                { provide: RoleService, useValue: createMock<RoleService>() },
             ],
         }).compile();
 

@@ -1,7 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccessModule } from '../access';
-import { CompaniesModule } from '../companies';
+import { CompanyModule } from '../companies';
 import { PayPeriodsModule } from '../pay-periods';
 import { PaymentPositionsModule } from '../payment-positions';
 import { PayrollsModule } from '../payrolls/payrolls.module';
@@ -14,7 +14,7 @@ import { PaymentsService } from './payments.service';
     imports: [
         TypeOrmModule.forFeature([Payment]),
         forwardRef(() => AccessModule),
-        forwardRef(() => CompaniesModule),
+        forwardRef(() => CompanyModule),
         forwardRef(() => PaymentPositionsModule),
         forwardRef(() => PayPeriodsModule),
         forwardRef(() => PayrollsModule),

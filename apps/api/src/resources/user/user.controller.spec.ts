@@ -6,7 +6,7 @@ import { Request } from 'express';
 import * as _ from 'lodash';
 import { createMockUser, repositoryMockFactory } from 'test';
 import { AccessService } from '../access/access.service';
-import { RolesService } from '../roles/roles.service';
+import { RoleService } from '../role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -17,7 +17,7 @@ describe('UserController', () => {
     let controller: UserController;
     let service: UserService;
     let accessService: AccessService;
-    let rolesService: RolesService;
+    let rolesService: RoleService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -26,14 +26,14 @@ describe('UserController', () => {
                 UserService,
                 { provide: getRepositoryToken(User), useFactory: repositoryMockFactory },
                 { provide: AccessService, useValue: createMock<AccessService>() },
-                { provide: RolesService, useValue: createMock<RolesService>() },
+                { provide: RoleService, useValue: createMock<RoleService>() },
             ],
         }).compile();
 
         controller = module.get<UserController>(UserController);
         service = module.get<UserService>(UserService);
         accessService = module.get<AccessService>(AccessService);
-        rolesService = module.get<RolesService>(RolesService);
+        rolesService = module.get<RoleService>(RoleService);
     });
 
     it('should be defined', () => {

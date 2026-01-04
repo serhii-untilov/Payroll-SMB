@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Role } from '../../resources/roles/entities/role.entity';
+import { Role } from '../../resources/role/entities/role.entity';
 
 export async function getRoleIdByType(dataSource: DataSource, roleType: string): Promise<number> {
     const { role_id } = await dataSource

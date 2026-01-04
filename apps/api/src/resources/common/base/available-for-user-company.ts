@@ -32,6 +32,6 @@ export abstract class AvailableForUserCompany {
 
     async availableDeleteOrFail(userId: string, entityId: string) {
         const companyId = await this.getCompanyId(entityId);
-        await this.accessService.availableForUserCompanyOrFail(userId, companyId, this.resource, Action.Delete);
+        await this.accessService.availableForUserCompanyOrFail(userId, companyId, this.resource, Action.Remove);
     }
 }

@@ -1,16 +1,16 @@
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
-import { Company } from './../../companies/entities/company.entity';
+import { CompanyEntity } from './../../companies/entities/company.entity';
 import { Person } from './../../persons/entities/person.entity';
 import { PositionHistory } from './../../position-history/entities/position-history.entity';
 import { PositionBalance } from './position-balance.entity';
 
 @Entity()
 export class Position extends BaseEntity {
-    @ManyToOne(() => Company, (company) => company.positions)
+    @ManyToOne(() => CompanyEntity, (company) => company.positions)
     // @ManyToOne(() => Company, { createForeignKeyConstraints: false })
     @JoinColumn()
-    company?: Relation<Company>;
+    company?: Relation<CompanyEntity>;
 
     @Column({ type: 'bigint' })
     companyId: string;

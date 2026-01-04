@@ -5,9 +5,9 @@ import { PaymentPosition } from './../../resources/payment-positions/entities/pa
 import { Payment } from './../../resources/payments/entities/payment.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
 import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
-import { Company } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from './../../resources/companies/entities/company.entity';
 import {
-    CompaniesService,
+    CompanyService,
     PayFundsService,
     PayPeriodsService,
     PaymentPositionsService,
@@ -28,7 +28,7 @@ import { IdGenerator } from '@/snowflake/snowflake.singleton';
 export class PaymentCalculationService {
     logger: Logger = new Logger(PaymentCalculationService.name);
     userId: string;
-    company: Company;
+    company: CompanyEntity;
     paymentTypes: PaymentType[];
     position: Position;
     payPeriod: PayPeriod;
@@ -40,8 +40,8 @@ export class PaymentCalculationService {
     paymentPositionId: string;
 
     constructor(
-        @Inject(forwardRef(() => CompaniesService))
-        private companiesService: CompaniesService,
+        @Inject(forwardRef(() => CompanyService))
+        private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypesService))
         private paymentTypesService: PaymentTypesService,
         @Inject(forwardRef(() => PayPeriodsService))

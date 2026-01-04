@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { RoleType } from '@/types';
-import { CompaniesService, UserRoleService } from '@/resources';
+import { CompanyService, UserRoleService } from '@/resources';
 
 @Injectable()
 export class ScheduleService {
@@ -12,8 +12,8 @@ export class ScheduleService {
         private schedulerRegistry: SchedulerRegistry,
         @Inject(forwardRef(() => UserRoleService))
         private userCompaniesService: UserRoleService,
-        @Inject(forwardRef(() => CompaniesService))
-        private companiesService: CompaniesService,
+        @Inject(forwardRef(() => CompanyService))
+        private companiesService: CompanyService,
     ) {}
 
     @Cron('0 0 2 * * *')

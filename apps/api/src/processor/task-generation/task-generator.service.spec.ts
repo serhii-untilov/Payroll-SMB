@@ -1,5 +1,5 @@
 import {
-    CompaniesService,
+    CompanyService,
     DepartmentsService,
     PaymentsService,
     PayPeriodsService,
@@ -19,7 +19,7 @@ describe('TaskGenerationService', () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 TaskGenerationService,
-                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
+                { provide: CompanyService, useValue: createMock<CompanyService>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
                 { provide: TasksService, useValue: createMock<TasksService>() },
                 { provide: DepartmentsService, useValue: createMock<DepartmentsService>() },

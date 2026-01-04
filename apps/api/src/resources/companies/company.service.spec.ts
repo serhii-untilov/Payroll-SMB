@@ -1,34 +1,32 @@
 import { createMock } from '@golevelup/ts-jest';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 import { MockType, createMockCompany, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
 import { UserRoleService } from '../user-role/user-role.service';
-import { UserService } from '../users/users.service';
-import { CompaniesService } from './companies.service';
-import { Company } from './entities/company.entity';
-import { AccessService } from '../access/access.service';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UserService } from '../user/user.service';
+import { CompanyService } from './company.service';
+import { CompanyEntity } from './entities/company.entity';
 
-describe('CompaniesService', () => {
-    let service: CompaniesService;
-    let repoMock: MockType<Repository<Company>>;
+describe('CompanyService', () => {
+    let service: CompanyService;
+    let repoMock: MockType<Repository<CompanyEntity>>;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                CompaniesService,
-                { provide: getRepositoryToken(Company), useFactory: repositoryMockFactory },
+                CompanyService,
+                { provide: getRepositoryToken(CompanyEntity), useFactory: repositoryMockFactory },
                 { provide: UserService, useValue: createMock<UserService>() },
                 { provide: UserRoleService, useValue: createMock<UserRoleService>() },
-                { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],
         }).compile();
 
-        service = module.get<CompaniesService>(CompaniesService);
-        repoMock = module.get(getRepositoryToken(Company));
+        service = module.get<CompanyService>(CompanyService);
+        repoMock = module.get(getRepositoryToken(CompanyEntity));
     });
 
     it('should be defined', () => {

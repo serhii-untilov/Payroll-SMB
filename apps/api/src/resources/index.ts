@@ -18,7 +18,7 @@ export * from './payrolls';
 export * from './persons';
 export * from './position-history';
 export * from './positions';
-export * from './roles';
+export * from './role';
 export * from './tasks';
 export * from './user-role';
 export * from './users';

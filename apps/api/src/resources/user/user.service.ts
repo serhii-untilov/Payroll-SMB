@@ -13,7 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as _ from 'lodash';
 import { FindOneOptions, Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';
-import { RolesService } from '../roles/roles.service';
+import { RoleService } from '../role/role.service';
 import { UserRole } from '../user-role/entities/user-role.entity';
 import { CreateUserDto, PublicUserDataDto, UpdateUserDto } from './dto';
 import { User } from './entities/user.entity';
@@ -26,7 +26,7 @@ export class UserService {
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(UserRole) private userCompanyRepository: Repository<UserRole>,
         @Inject(forwardRef(() => AccessService)) private accessService: WrapperType<AccessService>,
-        @Inject(forwardRef(() => RolesService)) private rolesService: WrapperType<RolesService>,
+        @Inject(forwardRef(() => RoleService)) private rolesService: WrapperType<RoleService>,
     ) {}
 
     async register(payload: CreateUserDto): Promise<User> {

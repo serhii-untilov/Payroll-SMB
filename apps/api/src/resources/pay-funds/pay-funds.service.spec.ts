@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from 'test';
 import { AccessService } from '../access/access.service';
-import { CompaniesService } from '../companies/companies.service';
+import { CompanyService } from '../companies/company.service';
 import { PositionsService } from '../positions/positions.service';
 import { PayFund } from './entities/pay-fund.entity';
 import { PayFundsService } from './pay-funds.service';
@@ -20,7 +20,7 @@ describe('FundService', () => {
                     useFactory: repositoryMockFactory,
                 },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
-                { provide: CompaniesService, useValue: createMock<CompaniesService>() },
+                { provide: CompanyService, useValue: createMock<CompanyService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();

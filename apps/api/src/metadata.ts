@@ -42,7 +42,7 @@ export default async () => {
             './resources/user-role/entities/user-role.entity'
         ),
         ['./types/lib/role-type']: await import('./types/lib/role-type'),
-        ['./resources/roles/entities/role.entity']: await import('./resources/roles/entities/role.entity'),
+        ['./resources/roles/entities/role.entity']: await import('./resources/role/entities/role.entity'),
         ['./resources/users/entities/user.entity']: await import('./resources/users/entities/user.entity'),
         ['./types/lib/resource']: await import('./types/lib/resource'),
         ['./types/lib/action']: await import('./types/lib/action'),
@@ -126,7 +126,7 @@ export default async () => {
                             name: { required: true, type: () => String },
                             company: {
                                 required: false,
-                                type: () => t['./resources/companies/entities/company.entity'].Company,
+                                type: () => t['./resources/companies/entities/company.entity'].CompanyEntity,
                             },
                             companyId: { required: true, type: () => String },
                             dateFrom: { required: true, type: () => Date },
@@ -300,7 +300,7 @@ export default async () => {
                         Position: {
                             company: {
                                 required: false,
-                                type: () => t['./resources/companies/entities/company.entity'].Company,
+                                type: () => t['./resources/companies/entities/company.entity'].CompanyEntity,
                             },
                             companyId: { required: true, type: () => String },
                             cardNumber: { required: true, type: () => String },
@@ -365,7 +365,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/roles/entities/role.entity'),
+                    import('./resources/role/entities/role.entity'),
                     {
                         Role: {
                             name: { required: true, type: () => String },
@@ -397,7 +397,7 @@ export default async () => {
                             userId: { required: true, type: () => String },
                             company: {
                                 required: false,
-                                type: () => t['./resources/companies/entities/company.entity'].Company,
+                                type: () => t['./resources/companies/entities/company.entity'].CompanyEntity,
                             },
                             companyId: { required: true, type: () => String },
                             role: { required: false, type: () => t['./resources/roles/entities/role.entity'].Role },
@@ -471,8 +471,8 @@ export default async () => {
                         },
                     },
                 ],
-                [import('./resources/roles/dto/create-role.dto'), { CreateRoleDto: {} }],
-                [import('./resources/roles/dto/update-role.dto'), { UpdateRoleDto: {} }],
+                [import('./resources/role/dto/create-role.dto'), { CreateRoleDto: {} }],
+                [import('./resources/role/dto/update-role.dto'), { UpdateRoleDto: {} }],
                 [
                     import('./resources/users/dto/create-user.dto'),
                     {
@@ -499,7 +499,7 @@ export default async () => {
                         PayPeriod: {
                             company: {
                                 required: false,
-                                type: () => t['./resources/companies/entities/company.entity'].Company,
+                                type: () => t['./resources/companies/entities/company.entity'].CompanyEntity,
                             },
                             companyId: { required: true, type: () => String },
                             dateFrom: { required: true, type: () => Date },
@@ -646,7 +646,7 @@ export default async () => {
                         Payment: {
                             company: {
                                 required: false,
-                                type: () => t['./resources/companies/entities/company.entity'].Company,
+                                type: () => t['./resources/companies/entities/company.entity'].CompanyEntity,
                             },
                             companyId: { required: true, type: () => String },
                             payPeriod: { required: true, type: () => Date },
@@ -704,7 +704,7 @@ export default async () => {
                         Task: {
                             company: {
                                 required: false,
-                                type: () => t['./resources/companies/entities/company.entity'].Company,
+                                type: () => t['./resources/companies/entities/company.entity'].CompanyEntity,
                             },
                             companyId: { required: true, type: () => String },
                             type: { required: true, enum: t['./types/lib/task-type'].TaskType },
@@ -1191,15 +1191,15 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/companies/companies.controller'),
+                    import('./resources/companies/company.controller'),
                     {
                         CompaniesController: {
-                            create: { type: t['./resources/companies/entities/company.entity'].Company },
-                            findAll: { type: [t['./resources/companies/entities/company.entity'].Company] },
-                            findLast: { type: t['./resources/companies/entities/company.entity'].Company },
-                            findOne: { type: t['./resources/companies/entities/company.entity'].Company },
-                            update: { type: t['./resources/companies/entities/company.entity'].Company },
-                            remove: { type: t['./resources/companies/entities/company.entity'].Company },
+                            create: { type: t['./resources/companies/entities/company.entity'].CompanyEntity },
+                            findAll: { type: [t['./resources/companies/entities/company.entity'].CompanyEntity] },
+                            findLast: { type: t['./resources/companies/entities/company.entity'].CompanyEntity },
+                            findOne: { type: t['./resources/companies/entities/company.entity'].CompanyEntity },
+                            update: { type: t['./resources/companies/entities/company.entity'].CompanyEntity },
+                            remove: { type: t['./resources/companies/entities/company.entity'].CompanyEntity },
                             salaryCalculate: {},
                         },
                     },
@@ -1215,7 +1215,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/roles/roles.controller'),
+                    import('./resources/role/role.controller'),
                     {
                         RolesController: {
                             create: { type: t['./resources/roles/entities/role.entity'].Role },

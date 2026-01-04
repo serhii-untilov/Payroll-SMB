@@ -1,5 +1,4 @@
-import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
-import { Company } from './../entities/company.entity';
+import { PartialType } from '@nestjs/swagger';
 import { CreateCompanyDto } from './create-company.dto';
 
-export class UpdateCompanyDto extends IntersectionType(PickType(Company, ['version']), PartialType(CreateCompanyDto)) {}
+export class UpdateCompanyDto extends PartialType(CreateCompanyDto) {}

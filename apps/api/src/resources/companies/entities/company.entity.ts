@@ -1,20 +1,20 @@
+import { BaseEntity } from '@/resources/common/base';
 import { ApiProperty } from '@nestjs/swagger';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { PaymentSchedule } from '../../../types/lib/payment-schedule';
+import { UserRole } from '../../user-role/entities/user-role.entity';
 import { Accounting } from './../../accounting/entities/accounting.entity';
 import { Department } from './../../departments/entities/department.entity';
 import { Law } from './../../laws/entities/law.entity';
 import { Position } from './../../positions/entities/position.entity';
-import { UserRole } from '../../user-role/entities/user-role.entity';
-import { BaseEntity } from '@/resources/common/base';
 
 @Entity()
-export class Company extends BaseEntity {
+export class CompanyEntity extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @Column({ type: 'varchar', length: 15, default: '' })
+    @Column({ type: 'varchar', length: 15, default: '', nullable: true })
     taxId: string;
 
     @ManyToOne(() => Law, {
@@ -76,7 +76,7 @@ export class Company extends BaseEntity {
     }
 }
 
-function normalize(record: Company) {
+function normalize(record: CompanyEntity) {
     record.payPeriod = monthBegin(record.payPeriod || new Date());
     record.checkDate = monthEnd(record.payPeriod || new Date());
 }

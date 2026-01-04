@@ -1,7 +1,6 @@
 import { RoleType } from '@/types';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { UserRoleService } from '../user-role';
-import { UserService } from '../users';
 import { CanUserDto } from './dto/can-user.dto';
 
 /**
@@ -19,10 +18,7 @@ import { CanUserDto } from './dto/can-user.dto';
  */
 @Injectable()
 export class UserAccessService {
-    constructor(
-        @Inject(forwardRef(() => UserService)) private usersService: UserService,
-        @Inject(forwardRef(() => UserRoleService)) private userRoleService: UserRoleService,
-    ) {}
+    constructor(@Inject(forwardRef(() => UserRoleService)) private userRoleService: UserRoleService) {}
 
     async canUser(dto: CanUserDto): Promise<boolean> {
         if (await this.userRoleService.hasGlobalRole(dto.userId, RoleType.SystemAdmin)) {

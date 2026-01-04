@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
-import { Company } from '../../companies/entities/company.entity';
-import { Role } from '../../roles/entities/role.entity';
-import { User } from '../../users/entities/user.entity';
+import { CompanyEntity } from '../../companies/entities/company.entity';
+import { Role } from '../../role/entities/role.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class UserRole extends BaseEntity {
@@ -19,9 +19,9 @@ export class UserRole extends BaseEntity {
     roleId: string;
 
     // @ManyToOne(() => Company, { createForeignKeyConstraints: false })
-    @ManyToOne(() => Company, (company) => company.users)
+    @ManyToOne(() => CompanyEntity, (company) => company.users)
     @JoinColumn()
-    company?: Relation<Company>;
+    company?: Relation<CompanyEntity>;
 
     @Column({ nullable: true })
     companyId: string;

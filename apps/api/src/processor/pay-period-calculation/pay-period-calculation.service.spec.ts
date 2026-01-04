@@ -1,5 +1,5 @@
 import {
-    CompaniesService,
+    CompanyService,
     PayFundsService,
     PayPeriodsCalcMethodService,
     PayPeriodsService,
@@ -19,8 +19,8 @@ describe('PayPeriodCalculationService', () => {
             providers: [
                 PayPeriodCalculationService,
                 {
-                    provide: CompaniesService,
-                    useValue: createMock<CompaniesService>(),
+                    provide: CompanyService,
+                    useValue: createMock<CompanyService>(),
                 },
                 {
                     provide: PayPeriodsService,

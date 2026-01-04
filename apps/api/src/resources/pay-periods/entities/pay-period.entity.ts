@@ -1,6 +1,6 @@
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base';
-import { Company } from '../../companies/entities/company.entity';
+import { CompanyEntity } from '../../companies/entities/company.entity';
 import { PayPeriodState } from './../../../types';
 import { PayPeriodSummary } from './pay-period-summary.entity';
 
@@ -15,9 +15,9 @@ export const defaultFieldList = {
 
 @Entity()
 export class PayPeriod extends BaseEntity {
-    @ManyToOne(() => Company, (company) => company.departments)
+    @ManyToOne(() => CompanyEntity, (company) => company.departments)
     @JoinColumn()
-    company?: Relation<Company>;
+    company?: Relation<CompanyEntity>;
 
     @Column({ type: 'bigint' })
     companyId: string;
