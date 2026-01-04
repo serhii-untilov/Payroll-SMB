@@ -890,7 +890,7 @@ export interface CreatePayPeriodDto {
      * @type {number}
      * @memberof CreatePayPeriodDto
      */
-    'other_accruals'?: number;
+    'otherAccruals'?: number;
     /**
      * 
      * @type {number}
@@ -908,7 +908,7 @@ export interface CreatePayPeriodDto {
      * @type {number}
      * @memberof CreatePayPeriodDto
      */
-    'other_deductions'?: number;
+    'otherDeductions'?: number;
     /**
      * 
      * @type {number}
@@ -1441,7 +1441,7 @@ export interface CreatePositionHistoryDto {
      * @type {string}
      * @memberof CreatePositionHistoryDto
      */
-    'workNormId'?: string | null;
+    'workTimeNormId'?: string | null;
     /**
      * 
      * @type {string}
@@ -1573,33 +1573,75 @@ export interface CreateUserDto {
 /**
  * 
  * @export
- * @interface CreateWorkNormDto
+ * @interface CreateWorkTimeNormDto
  */
-export interface CreateWorkNormDto {
+export interface CreateWorkTimeNormDto {
     /**
      * 
-     * @type {WorkNormType}
-     * @memberof CreateWorkNormDto
+     * @type {WorkTimeNormType}
+     * @memberof CreateWorkTimeNormDto
      */
-    'type': WorkNormType;
+    'type': WorkTimeNormType;
     /**
      * 
      * @type {string}
-     * @memberof CreateWorkNormDto
+     * @memberof CreateWorkTimeNormDto
      */
     'name': string;
     /**
      * 
+     * @type {string}
+     * @memberof CreateWorkTimeNormDto
+     */
+    'code'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateWorkTimeNormDto
+     */
+    'description'?: string;
+    /**
+     * 
      * @type {Date}
-     * @memberof CreateWorkNormDto
+     * @memberof CreateWorkTimeNormDto
      */
     'dateFrom'?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof CreateWorkNormDto
+     * @memberof CreateWorkTimeNormDto
      */
     'dateTo'?: Date;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateWorkTimeNormDto
+     */
+    'applyHolidays'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateWorkTimeNormDto
+     */
+    'applyShortenedDays'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateWorkTimeNormDto
+     */
+    'applyMovedDays'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateWorkTimeNormDto
+     */
+    'applyPhases'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateWorkTimeNormDto
+     */
+    'applyRate'?: boolean;
 }
 
 
@@ -2336,13 +2378,13 @@ export interface FindPositionByPersonDto {
 /**
  * 
  * @export
- * @interface FindWorkNormDto
+ * @interface FindWorkTimeNormDto
  */
-export interface FindWorkNormDto {
+export interface FindWorkTimeNormDto {
     /**
      * 
      * @type {boolean}
-     * @memberof FindWorkNormDto
+     * @memberof FindWorkTimeNormDto
      */
     'relations'?: boolean;
 }
@@ -2893,7 +2935,7 @@ export interface PayPeriod {
      * @type {number}
      * @memberof PayPeriod
      */
-    'other_accruals': number;
+    'otherAccruals': number;
     /**
      * 
      * @type {number}
@@ -2911,7 +2953,7 @@ export interface PayPeriod {
      * @type {number}
      * @memberof PayPeriod
      */
-    'other_deductions': number;
+    'otherDeductions': number;
     /**
      * 
      * @type {number}
@@ -2938,10 +2980,10 @@ export interface PayPeriod {
     'funds': number;
     /**
      * 
-     * @type {Array<PayPeriodCalcMethod>}
+     * @type {Array<PayPeriodSummary>}
      * @memberof PayPeriod
      */
-    'calcMethods'?: Array<PayPeriodCalcMethod>;
+    'calcMethods'?: Array<PayPeriodSummary>;
     /**
      * 
      * @type {Date}
@@ -2994,37 +3036,37 @@ export interface PayPeriod {
 /**
  * 
  * @export
- * @interface PayPeriodCalcMethod
+ * @interface PayPeriodSummary
  */
-export interface PayPeriodCalcMethod {
+export interface PayPeriodSummary {
     /**
      * 
      * @type {CalcMethod}
-     * @memberof PayPeriodCalcMethod
+     * @memberof PayPeriodSummary
      */
     'calcMethod': CalcMethod;
     /**
      * 
      * @type {string}
-     * @memberof PayPeriodCalcMethod
+     * @memberof PayPeriodSummary
      */
     'id': string;
     /**
      * 
      * @type {PayPeriod}
-     * @memberof PayPeriodCalcMethod
+     * @memberof PayPeriodSummary
      */
     'payPeriod'?: PayPeriod;
     /**
      * 
      * @type {string}
-     * @memberof PayPeriodCalcMethod
+     * @memberof PayPeriodSummary
      */
     'payPeriodId': string;
     /**
      * 
      * @type {number}
-     * @memberof PayPeriodCalcMethod
+     * @memberof PayPeriodSummary
      */
     'factSum': number;
 }
@@ -3208,10 +3250,10 @@ export const PaymentGroup = {
     Vacations: 'vacations',
     Sicks: 'sicks',
     Refunds: 'refunds',
-    OtherAccruals: 'other_accruals',
+    OtherAccruals: 'other-accruals',
     Taxes: 'taxes',
     Payments: 'payments',
-    OtherDeductions: 'other_deductions'
+    OtherDeductions: 'other-deductions'
 } as const;
 
 export type PaymentGroup = typeof PaymentGroup[keyof typeof PaymentGroup];
@@ -4030,7 +4072,7 @@ export interface PositionBalance {
      * @type {number}
      * @memberof PositionBalance
      */
-    'other_accruals': number;
+    'otherAccruals': number;
     /**
      * 
      * @type {number}
@@ -4048,7 +4090,7 @@ export interface PositionBalance {
      * @type {number}
      * @memberof PositionBalance
      */
-    'other_deductions': number;
+    'otherDeductions': number;
     /**
      * 
      * @type {number}
@@ -4079,7 +4121,7 @@ export interface PositionBalanceExtendedDto {
      * @type {string}
      * @memberof PositionBalanceExtendedDto
      */
-    'workNormName'?: string;
+    'workTimeNormName'?: string;
     /**
      * 
      * @type {string}
@@ -4211,7 +4253,7 @@ export interface PositionBalanceExtendedDto {
      * @type {number}
      * @memberof PositionBalanceExtendedDto
      */
-    'other_accruals': number;
+    'otherAccruals': number;
     /**
      * 
      * @type {number}
@@ -4229,7 +4271,7 @@ export interface PositionBalanceExtendedDto {
      * @type {number}
      * @memberof PositionBalanceExtendedDto
      */
-    'other_deductions': number;
+    'otherDeductions': number;
     /**
      * 
      * @type {number}
@@ -4313,7 +4355,7 @@ export interface PositionBalanceExtendedDto {
      * @type {string}
      * @memberof PositionBalanceExtendedDto
      */
-    'workNormId': string | null;
+    'workTimeNormId': string | null;
     /**
      * 
      * @type {string}
@@ -4389,16 +4431,16 @@ export interface PositionHistory {
     'jobId': string | null;
     /**
      * 
-     * @type {WorkNorm}
+     * @type {WorkTimeNorm}
      * @memberof PositionHistory
      */
-    'workNorm'?: WorkNorm;
+    'workTimeNorm'?: WorkTimeNorm;
     /**
      * 
      * @type {string}
      * @memberof PositionHistory
      */
-    'workNormId': string | null;
+    'workTimeNormId': string | null;
     /**
      * 
      * @type {PaymentType}
@@ -4605,44 +4647,44 @@ export type RecordFlags = typeof RecordFlags[keyof typeof RecordFlags];
  */
 
 export const Resource = {
-    Access: 'Access',
-    Account: 'Account',
-    Accounting: 'Accounting',
-    AppTitle: 'App Title',
-    Candidate: 'Candidate',
-    Company: 'Company',
-    Dashboard: 'Dashboard',
-    Demo: 'Demo',
-    Department: 'Department',
-    Dismissed: 'Dismissed',
-    Documents: 'Documents',
-    FundType: 'Fund Type',
-    Job: 'Job',
-    Law: 'Law',
-    Manager: 'Manager',
-    MaximalBaseUfc: 'Maximal Base UFC',
-    MinimalWage: 'Minimal Wage',
-    Notes: 'Notes',
-    PayFund: 'Pay Fund',
-    Payment: 'Payment',
-    PaymentPosition: 'Payment Position',
-    PaymentType: 'Payment Type',
-    PayPeriod: 'Pay Period',
-    Payroll: 'Payroll',
-    Person: 'Person',
-    Position: 'Position',
-    PositionHistory: 'Position History',
-    Profile: 'Profile',
-    Report: 'Report',
-    Role: 'Role',
-    RoleAccess: 'Role Access',
-    Task: 'Task',
-    TimeOff: 'Time Off',
-    TimeSheet: 'Time Sheet',
-    User: 'User',
-    UserAccess: 'User Access',
-    Vacancy: 'Vacancy',
-    WorkNorm: 'Work Norm'
+    Access: 'access',
+    Account: 'account',
+    Accounting: 'accounting',
+    AppTitle: 'app-title',
+    Candidate: 'candidate',
+    Company: 'company',
+    Dashboard: 'dashboard',
+    Demo: 'demo',
+    Department: 'department',
+    Dismissed: 'dismissed',
+    Document: 'document',
+    FundType: 'fund-type',
+    Job: 'job',
+    Law: 'law',
+    Manager: 'manager',
+    MaxBaseUfc: 'max-base-ufc',
+    MinWage: 'min-wage',
+    Notes: 'notes',
+    PayFund: 'pay-fund',
+    Payment: 'payment',
+    PaymentPosition: 'payment-position',
+    PaymentType: 'payment-type',
+    PayPeriod: 'pay-period',
+    Payroll: 'payroll',
+    Person: 'person',
+    Position: 'position',
+    PositionHistory: 'position-history',
+    Profile: 'profile',
+    Report: 'report',
+    Role: 'role',
+    RoleAccess: 'role-access',
+    Task: 'task',
+    TimeOff: 'time-off',
+    Timesheet: 'timesheet',
+    User: 'user',
+    UserAccess: 'user-access',
+    Vacancy: 'vacancy',
+    WorkTimeNorm: 'work-time-norm'
 } as const;
 
 export type Resource = typeof Resource[keyof typeof Resource];
@@ -5332,7 +5374,7 @@ export interface UpdatePayPeriodDto {
      * @type {number}
      * @memberof UpdatePayPeriodDto
      */
-    'other_accruals'?: number;
+    'otherAccruals'?: number;
     /**
      * 
      * @type {number}
@@ -5350,7 +5392,7 @@ export interface UpdatePayPeriodDto {
      * @type {number}
      * @memberof UpdatePayPeriodDto
      */
-    'other_deductions'?: number;
+    'otherDeductions'?: number;
     /**
      * 
      * @type {number}
@@ -5377,10 +5419,10 @@ export interface UpdatePayPeriodDto {
     'funds'?: number;
     /**
      * 
-     * @type {Array<PayPeriodCalcMethod>}
+     * @type {Array<PayPeriodSummary>}
      * @memberof UpdatePayPeriodDto
      */
-    'calcMethods'?: Array<PayPeriodCalcMethod>;
+    'calcMethods'?: Array<PayPeriodSummary>;
 }
 /**
  * 
@@ -5925,7 +5967,7 @@ export interface UpdatePositionHistoryDto {
      * @type {string}
      * @memberof UpdatePositionHistoryDto
      */
-    'workNormId'?: string | null;
+    'workTimeNormId'?: string | null;
     /**
      * 
      * @type {string}
@@ -6129,39 +6171,81 @@ export interface UpdateUserDto {
 /**
  * 
  * @export
- * @interface UpdateWorkNormDto
+ * @interface UpdateWorkTimeNormDto
  */
-export interface UpdateWorkNormDto {
+export interface UpdateWorkTimeNormDto {
     /**
      * 
-     * @type {WorkNormType}
-     * @memberof UpdateWorkNormDto
+     * @type {WorkTimeNormType}
+     * @memberof UpdateWorkTimeNormDto
      */
-    'type'?: WorkNormType;
+    'type'?: WorkTimeNormType;
     /**
      * 
      * @type {number}
-     * @memberof UpdateWorkNormDto
+     * @memberof UpdateWorkTimeNormDto
      */
     'version': number;
     /**
      * 
      * @type {string}
-     * @memberof UpdateWorkNormDto
+     * @memberof UpdateWorkTimeNormDto
      */
     'name'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof UpdateWorkTimeNormDto
+     */
+    'code'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateWorkTimeNormDto
+     */
+    'description'?: string;
+    /**
+     * 
      * @type {Date}
-     * @memberof UpdateWorkNormDto
+     * @memberof UpdateWorkTimeNormDto
      */
     'dateFrom'?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof UpdateWorkNormDto
+     * @memberof UpdateWorkTimeNormDto
      */
     'dateTo'?: Date;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateWorkTimeNormDto
+     */
+    'applyHolidays'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateWorkTimeNormDto
+     */
+    'applyShortenedDays'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateWorkTimeNormDto
+     */
+    'applyMovedDays'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateWorkTimeNormDto
+     */
+    'applyPhases'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateWorkTimeNormDto
+     */
+    'applyRate'?: boolean;
 }
 
 
@@ -6381,85 +6465,127 @@ export interface WithdrawPaymentDto {
 /**
  * 
  * @export
- * @interface WorkNorm
+ * @interface WorkTimeNorm
  */
-export interface WorkNorm {
+export interface WorkTimeNorm {
     /**
      * 
-     * @type {WorkNormType}
-     * @memberof WorkNorm
+     * @type {WorkTimeNormType}
+     * @memberof WorkTimeNorm
      */
-    'type': WorkNormType;
+    'type': WorkTimeNormType;
     /**
      * 
      * @type {string}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
+     */
+    'code': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkTimeNorm
      */
     'name': string;
     /**
      * 
+     * @type {string}
+     * @memberof WorkTimeNorm
+     */
+    'description': string;
+    /**
+     * 
      * @type {Date}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'dateFrom': Date;
     /**
      * 
      * @type {Date}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'dateTo': Date;
     /**
      * 
-     * @type {Array<WorkNormPeriod>}
-     * @memberof WorkNorm
+     * @type {boolean}
+     * @memberof WorkTimeNorm
      */
-    'periods'?: Array<WorkNormPeriod>;
+    'applyHolidays': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof WorkTimeNorm
+     */
+    'applyShortenedDays': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof WorkTimeNorm
+     */
+    'applyMovedDays': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof WorkTimeNorm
+     */
+    'applyPhases': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof WorkTimeNorm
+     */
+    'applyRate': boolean;
+    /**
+     * 
+     * @type {Array<WorkTimeNormDay>}
+     * @memberof WorkTimeNorm
+     */
+    'days'?: Array<WorkTimeNormDay>;
     /**
      * 
      * @type {Date}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'createdDate': Date;
     /**
      * 
      * @type {string}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'createdUserId'?: string | null;
     /**
      * 
      * @type {Date}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'updatedDate': Date;
     /**
      * 
      * @type {string}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'updatedUserId'?: string | null;
     /**
      * 
      * @type {Date}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'deletedDate'?: Date | null;
     /**
      * 
      * @type {string}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'deletedUserId'?: string | null;
     /**
      * 
      * @type {number}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'version': number;
     /**
      * 
      * @type {string}
-     * @memberof WorkNorm
+     * @memberof WorkTimeNorm
      */
     'id': string;
 }
@@ -6468,79 +6594,79 @@ export interface WorkNorm {
 /**
  * 
  * @export
- * @interface WorkNormPeriod
+ * @interface WorkTimeNormDay
  */
-export interface WorkNormPeriod {
+export interface WorkTimeNormDay {
     /**
      * 
-     * @type {WorkNorm}
-     * @memberof WorkNormPeriod
+     * @type {WorkTimeNorm}
+     * @memberof WorkTimeNormDay
      */
-    'workNorm'?: WorkNorm;
+    'workTimeNorm'?: WorkTimeNorm;
     /**
      * 
      * @type {string}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
-    'workNormId': string;
+    'workTimeNormId': string;
     /**
      * 
      * @type {number}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'day': number;
     /**
      * 
      * @type {number}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'hours': number;
     /**
      * 
      * @type {Date}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'createdDate': Date;
     /**
      * 
      * @type {string}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'createdUserId'?: string | null;
     /**
      * 
      * @type {Date}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'updatedDate': Date;
     /**
      * 
      * @type {string}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'updatedUserId'?: string | null;
     /**
      * 
      * @type {Date}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'deletedDate'?: Date | null;
     /**
      * 
      * @type {string}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'deletedUserId'?: string | null;
     /**
      * 
      * @type {number}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'version': number;
     /**
      * 
      * @type {string}
-     * @memberof WorkNormPeriod
+     * @memberof WorkTimeNormDay
      */
     'id': string;
 }
@@ -6550,13 +6676,15 @@ export interface WorkNormPeriod {
  * @enum {string}
  */
 
-export const WorkNormType = {
-    Weekly: 'weekly',
-    Periodic: 'periodic',
-    Shifted: 'shifted'
+export const WorkTimeNormType = {
+    Day: 'day',
+    Month: 'month',
+    Quarter: 'quarter',
+    HalfYear: 'half-year',
+    Year: 'year'
 } as const;
 
-export type WorkNormType = typeof WorkNormType[keyof typeof WorkNormType];
+export type WorkTimeNormType = typeof WorkTimeNormType[keyof typeof WorkTimeNormType];
 
 
 
@@ -11369,14 +11497,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Create Work Norm record
-         * @param {CreateWorkNormDto} createWorkNormDto 
+         * @param {CreateWorkTimeNormDto} createWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsCreate: async (createWorkNormDto: CreateWorkNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createWorkNormDto' is not null or undefined
-            assertParamExists('workNormsCreate', 'createWorkNormDto', createWorkNormDto)
-            const localVarPath = `/api/work-norms`;
+        workTimeNormCreate: async (createWorkTimeNormDto: CreateWorkTimeNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createWorkTimeNormDto' is not null or undefined
+            assertParamExists('workTimeNormCreate', 'createWorkTimeNormDto', createWorkTimeNormDto)
+            const localVarPath = `/api/work-time-norms`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11399,7 +11527,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createWorkNormDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createWorkTimeNormDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11408,14 +11536,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {FindWorkNormDto} findWorkNormDto 
+         * @param {FindWorkTimeNormDto} findWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsFindAll: async (findWorkNormDto: FindWorkNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'findWorkNormDto' is not null or undefined
-            assertParamExists('workNormsFindAll', 'findWorkNormDto', findWorkNormDto)
-            const localVarPath = `/api/work-norms/find`;
+        workTimeNormFindAll: async (findWorkTimeNormDto: FindWorkTimeNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'findWorkTimeNormDto' is not null or undefined
+            assertParamExists('workTimeNormFindAll', 'findWorkTimeNormDto', findWorkTimeNormDto)
+            const localVarPath = `/api/work-time-norms/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11438,7 +11566,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(findWorkNormDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(findWorkTimeNormDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11448,16 +11576,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {string} id 
-         * @param {FindWorkNormDto} findWorkNormDto 
+         * @param {FindWorkTimeNormDto} findWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsFindOne: async (id: string, findWorkNormDto: FindWorkNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        workTimeNormFindOne: async (id: string, findWorkTimeNormDto: FindWorkTimeNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('workNormsFindOne', 'id', id)
-            // verify required parameter 'findWorkNormDto' is not null or undefined
-            assertParamExists('workNormsFindOne', 'findWorkNormDto', findWorkNormDto)
-            const localVarPath = `/api/work-norms/find/{id}`
+            assertParamExists('workTimeNormFindOne', 'id', id)
+            // verify required parameter 'findWorkTimeNormDto' is not null or undefined
+            assertParamExists('workTimeNormFindOne', 'findWorkTimeNormDto', findWorkTimeNormDto)
+            const localVarPath = `/api/work-time-norms/find/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11481,7 +11609,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(findWorkNormDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(findWorkTimeNormDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11495,10 +11623,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsRemove: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        workTimeNormRemove: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('workNormsRemove', 'id', id)
-            const localVarPath = `/api/work-norms/{id}`
+            assertParamExists('workTimeNormRemove', 'id', id)
+            const localVarPath = `/api/work-time-norms/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11530,16 +11658,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Update a Work Norm record
          * @param {string} id 
-         * @param {UpdateWorkNormDto} updateWorkNormDto 
+         * @param {UpdateWorkTimeNormDto} updateWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsUpdate: async (id: string, updateWorkNormDto: UpdateWorkNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        workTimeNormUpdate: async (id: string, updateWorkTimeNormDto: UpdateWorkTimeNormDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('workNormsUpdate', 'id', id)
-            // verify required parameter 'updateWorkNormDto' is not null or undefined
-            assertParamExists('workNormsUpdate', 'updateWorkNormDto', updateWorkNormDto)
-            const localVarPath = `/api/work-norms/{id}`
+            assertParamExists('workTimeNormUpdate', 'id', id)
+            // verify required parameter 'updateWorkTimeNormDto' is not null or undefined
+            assertParamExists('workTimeNormUpdate', 'updateWorkTimeNormDto', updateWorkTimeNormDto)
+            const localVarPath = `/api/work-time-norms/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -11563,7 +11691,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateWorkNormDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateWorkTimeNormDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -13155,39 +13283,39 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Create Work Norm record
-         * @param {CreateWorkNormDto} createWorkNormDto 
+         * @param {CreateWorkTimeNormDto} createWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async workNormsCreate(createWorkNormDto: CreateWorkNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkNorm>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.workNormsCreate(createWorkNormDto, options);
+        async workTimeNormCreate(createWorkTimeNormDto: CreateWorkTimeNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkTimeNorm>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.workTimeNormCreate(createWorkTimeNormDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workNormsCreate']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workTimeNormCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {FindWorkNormDto} findWorkNormDto 
+         * @param {FindWorkTimeNormDto} findWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async workNormsFindAll(findWorkNormDto: FindWorkNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WorkNorm>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.workNormsFindAll(findWorkNormDto, options);
+        async workTimeNormFindAll(findWorkTimeNormDto: FindWorkTimeNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WorkTimeNorm>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.workTimeNormFindAll(findWorkTimeNormDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workNormsFindAll']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workTimeNormFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @param {string} id 
-         * @param {FindWorkNormDto} findWorkNormDto 
+         * @param {FindWorkTimeNormDto} findWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async workNormsFindOne(id: string, findWorkNormDto: FindWorkNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkNorm>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.workNormsFindOne(id, findWorkNormDto, options);
+        async workTimeNormFindOne(id: string, findWorkTimeNormDto: FindWorkTimeNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkTimeNorm>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.workTimeNormFindOne(id, findWorkTimeNormDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workNormsFindOne']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workTimeNormFindOne']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -13197,24 +13325,24 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async workNormsRemove(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkNorm>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.workNormsRemove(id, options);
+        async workTimeNormRemove(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkTimeNorm>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.workTimeNormRemove(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workNormsRemove']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workTimeNormRemove']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @summary Update a Work Norm record
          * @param {string} id 
-         * @param {UpdateWorkNormDto} updateWorkNormDto 
+         * @param {UpdateWorkTimeNormDto} updateWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async workNormsUpdate(id: string, updateWorkNormDto: UpdateWorkNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkNorm>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.workNormsUpdate(id, updateWorkNormDto, options);
+        async workTimeNormUpdate(id: string, updateWorkTimeNormDto: UpdateWorkTimeNormDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkTimeNorm>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.workTimeNormUpdate(id, updateWorkTimeNormDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workNormsUpdate']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.workTimeNormUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -14430,31 +14558,31 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary Create Work Norm record
-         * @param {CreateWorkNormDto} createWorkNormDto 
+         * @param {CreateWorkTimeNormDto} createWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsCreate(createWorkNormDto: CreateWorkNormDto, options?: any): AxiosPromise<WorkNorm> {
-            return localVarFp.workNormsCreate(createWorkNormDto, options).then((request) => request(axios, basePath));
+        workTimeNormCreate(createWorkTimeNormDto: CreateWorkTimeNormDto, options?: any): AxiosPromise<WorkTimeNorm> {
+            return localVarFp.workTimeNormCreate(createWorkTimeNormDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {FindWorkNormDto} findWorkNormDto 
+         * @param {FindWorkTimeNormDto} findWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsFindAll(findWorkNormDto: FindWorkNormDto, options?: any): AxiosPromise<Array<WorkNorm>> {
-            return localVarFp.workNormsFindAll(findWorkNormDto, options).then((request) => request(axios, basePath));
+        workTimeNormFindAll(findWorkTimeNormDto: FindWorkTimeNormDto, options?: any): AxiosPromise<Array<WorkTimeNorm>> {
+            return localVarFp.workTimeNormFindAll(findWorkTimeNormDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {string} id 
-         * @param {FindWorkNormDto} findWorkNormDto 
+         * @param {FindWorkTimeNormDto} findWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsFindOne(id: string, findWorkNormDto: FindWorkNormDto, options?: any): AxiosPromise<WorkNorm> {
-            return localVarFp.workNormsFindOne(id, findWorkNormDto, options).then((request) => request(axios, basePath));
+        workTimeNormFindOne(id: string, findWorkTimeNormDto: FindWorkTimeNormDto, options?: any): AxiosPromise<WorkTimeNorm> {
+            return localVarFp.workTimeNormFindOne(id, findWorkTimeNormDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14463,19 +14591,19 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsRemove(id: string, options?: any): AxiosPromise<WorkNorm> {
-            return localVarFp.workNormsRemove(id, options).then((request) => request(axios, basePath));
+        workTimeNormRemove(id: string, options?: any): AxiosPromise<WorkTimeNorm> {
+            return localVarFp.workTimeNormRemove(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Update a Work Norm record
          * @param {string} id 
-         * @param {UpdateWorkNormDto} updateWorkNormDto 
+         * @param {UpdateWorkTimeNormDto} updateWorkTimeNormDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        workNormsUpdate(id: string, updateWorkNormDto: UpdateWorkNormDto, options?: any): AxiosPromise<WorkNorm> {
-            return localVarFp.workNormsUpdate(id, updateWorkNormDto, options).then((request) => request(axios, basePath));
+        workTimeNormUpdate(id: string, updateWorkTimeNormDto: UpdateWorkTimeNormDto, options?: any): AxiosPromise<WorkTimeNorm> {
+            return localVarFp.workTimeNormUpdate(id, updateWorkTimeNormDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -15938,36 +16066,36 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary Create Work Norm record
-     * @param {CreateWorkNormDto} createWorkNormDto 
+     * @param {CreateWorkTimeNormDto} createWorkTimeNormDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public workNormsCreate(createWorkNormDto: CreateWorkNormDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).workNormsCreate(createWorkNormDto, options).then((request) => request(this.axios, this.basePath));
+    public workTimeNormCreate(createWorkTimeNormDto: CreateWorkTimeNormDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).workTimeNormCreate(createWorkTimeNormDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {FindWorkNormDto} findWorkNormDto 
+     * @param {FindWorkTimeNormDto} findWorkTimeNormDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public workNormsFindAll(findWorkNormDto: FindWorkNormDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).workNormsFindAll(findWorkNormDto, options).then((request) => request(this.axios, this.basePath));
+    public workTimeNormFindAll(findWorkTimeNormDto: FindWorkTimeNormDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).workTimeNormFindAll(findWorkTimeNormDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {string} id 
-     * @param {FindWorkNormDto} findWorkNormDto 
+     * @param {FindWorkTimeNormDto} findWorkTimeNormDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public workNormsFindOne(id: string, findWorkNormDto: FindWorkNormDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).workNormsFindOne(id, findWorkNormDto, options).then((request) => request(this.axios, this.basePath));
+    public workTimeNormFindOne(id: string, findWorkTimeNormDto: FindWorkTimeNormDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).workTimeNormFindOne(id, findWorkTimeNormDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15978,21 +16106,21 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public workNormsRemove(id: string, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).workNormsRemove(id, options).then((request) => request(this.axios, this.basePath));
+    public workTimeNormRemove(id: string, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).workTimeNormRemove(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Update a Work Norm record
      * @param {string} id 
-     * @param {UpdateWorkNormDto} updateWorkNormDto 
+     * @param {UpdateWorkTimeNormDto} updateWorkTimeNormDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public workNormsUpdate(id: string, updateWorkNormDto: UpdateWorkNormDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).workNormsUpdate(id, updateWorkNormDto, options).then((request) => request(this.axios, this.basePath));
+    public workTimeNormUpdate(id: string, updateWorkTimeNormDto: UpdateWorkTimeNormDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).workTimeNormUpdate(id, updateWorkTimeNormDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

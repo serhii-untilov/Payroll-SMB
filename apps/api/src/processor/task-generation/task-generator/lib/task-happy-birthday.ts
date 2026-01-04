@@ -15,8 +15,8 @@ export class TaskHappyBirthday extends TaskGenerator {
         );
         return personList.map((person) => {
             const task = this.makeTask();
-            task.dateFrom = new Date(task.dateFrom.setDate(person.birthday.getDate()));
-            task.dateTo = new Date(task.dateFrom.setDate(person.birthday.getDate()));
+            task.dateFrom = new Date(task.dateFrom.setDate(person.birthDate.getDate()));
+            task.dateTo = new Date(task.dateFrom.setDate(person.birthDate.getDate()));
             task.entityId = person.id;
             return task;
         });

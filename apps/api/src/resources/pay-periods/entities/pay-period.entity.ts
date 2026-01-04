@@ -1,8 +1,8 @@
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
-import { BaseEntity } from '../../abstract';
+import { BaseEntity } from '../../common/base';
 import { Company } from '../../companies/entities/company.entity';
 import { PayPeriodState } from './../../../types';
-import { PayPeriodCalcMethod } from './pay-period-calc-method.entity';
+import { PayPeriodSummary } from './pay-period-summary.entity';
 
 export const defaultFieldList = {
     select: {
@@ -57,13 +57,13 @@ export class PayPeriod extends BaseEntity {
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     refunds: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    other_accruals: number;
+    otherAccruals: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     taxes: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     payments: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    other_deductions: number;
+    otherDeductions: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     outBalance: number;
@@ -75,8 +75,8 @@ export class PayPeriod extends BaseEntity {
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     funds: number;
 
-    @OneToMany(() => PayPeriodCalcMethod, (payPeriodCalcMethod) => payPeriodCalcMethod.payPeriod)
-    calcMethods?: Relation<PayPeriodCalcMethod>[];
+    @OneToMany(() => PayPeriodSummary, (payPeriodCalcMethod) => payPeriodCalcMethod.payPeriod)
+    calcMethods?: Relation<PayPeriodSummary>[];
 
     @AfterLoad()
     transform() {
@@ -93,10 +93,10 @@ export class PayPeriod extends BaseEntity {
         this.vacations = Number(this.vacations);
         this.sicks = Number(this.sicks);
         this.refunds = Number(this.refunds);
-        this.other_accruals = Number(this.other_accruals);
+        this.otherAccruals = Number(this.otherAccruals);
         this.taxes = Number(this.taxes);
         this.payments = Number(this.payments);
-        this.other_deductions = Number(this.other_deductions);
+        this.otherDeductions = Number(this.otherDeductions);
         this.outBalance = Number(this.outBalance);
         this.outCompanyDebt = Number(this.outCompanyDebt);
         this.outEmployeeDebt = Number(this.outEmployeeDebt);

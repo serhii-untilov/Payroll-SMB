@@ -21,10 +21,7 @@ export default function SelectPayPeriod(props: SelectPayPeriodProps) {
     const dispatch = useAppDispatch();
     const options = usePayPeriodOptions(data, company?.payPeriod ?? monthBegin(new Date()));
     const value = useMemo(
-        () =>
-            options?.length
-                ? format(payPeriod?.dateFrom ?? monthBegin(new Date()), 'yyyy-MM-dd')
-                : '',
+        () => (options?.length ? format(payPeriod?.dateFrom ?? monthBegin(new Date()), 'yyyy-MM-dd') : ''),
         [options?.length, payPeriod?.dateFrom],
     );
     const onChangePeriod = useCallback(

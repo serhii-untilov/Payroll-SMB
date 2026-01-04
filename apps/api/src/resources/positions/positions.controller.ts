@@ -23,7 +23,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { FindAllPositionDto } from './dto/find-all-position.dto';
@@ -50,7 +50,7 @@ export class PositionsController {
     async create(@Req() req: Request, @Body() payload: CreatePositionDto): Promise<Position> {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId, payload.companyId);
-        return await this.service.create(userId, deepStringToShortDate(payload));
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Post('find')
@@ -63,7 +63,7 @@ export class PositionsController {
     async findAll(@Req() req: Request, @Body() payload: FindAllPositionDto): Promise<Position[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, payload.companyId);
-        return await this.service.findAll(deepStringToShortDate(payload));
+        return await this.service.findAll(deepTransformToShortDate(payload));
     }
 
     @Post('find/:id')
@@ -96,7 +96,7 @@ export class PositionsController {
     ): Promise<Position> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, deepStringToShortDate(payload));
+        return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')
@@ -126,7 +126,7 @@ export class PositionsController {
     ): Promise<PositionBalanceExtendedDto[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, payload.companyId);
-        return await this.service.findAllBalance(deepStringToShortDate(payload));
+        return await this.service.findAllBalance(deepTransformToShortDate(payload));
     }
 
     @Post('position-by-person')
@@ -134,10 +134,7 @@ export class PositionsController {
     @ApiOkResponse({ description: 'The found record', type: Position })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findFirstByPersonId(
-        @Req() req: Request,
-        @Body() payload: FindPositionByPersonDto,
-    ): Promise<Position> {
+    async findFirstByPersonId(@Req() req: Request, @Body() payload: FindPositionByPersonDto): Promise<Position> {
         const userId = getUserId(req);
         const found = await this.service.findFirstByPersonId(payload);
         await this.service.availableFindAllOrFail(userId, found.companyId);

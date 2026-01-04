@@ -14,11 +14,7 @@ const AppSnackbarProvider = ({ children }: PropsWithChildren) => {
                 horizontal: 'right',
             }}
             action={(snackbarId) => (
-                <IconButton
-                    sx={{ color: 'white' }}
-                    onClick={() => closeSnackbar(snackbarId)}
-                    aria-label="close"
-                >
+                <IconButton sx={{ color: 'white' }} onClick={() => closeSnackbar(snackbarId)} aria-label="close">
                     <Close fontSize="small" />
                 </IconButton>
             )}

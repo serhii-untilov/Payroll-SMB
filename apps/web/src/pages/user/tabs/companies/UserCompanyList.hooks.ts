@@ -57,20 +57,14 @@ const useUserCompanyList = (params: Params) => {
     const deletedSelection = (): string[] => {
         return rowSelectionModel
             .map(String)
-            .filter((id) =>
-                userCompanies?.find(
-                    (userCompany) => userCompany.id === id && userCompany.deletedDate,
-                ),
-            );
+            .filter((id) => userCompanies?.find((userCompany) => userCompany.id === id && userCompany.deletedDate));
     };
 
     const notDeletedSelection = (): string[] => {
         return rowSelectionModel
             .map(String)
             .filter((id) =>
-                userCompanies?.find(
-                    (userCompany) => userCompany.id === id && userCompany.deletedDate === null,
-                ),
+                userCompanies?.find((userCompany) => userCompany.id === id && userCompany.deletedDate === null),
             )
             .map((o) => o);
     };

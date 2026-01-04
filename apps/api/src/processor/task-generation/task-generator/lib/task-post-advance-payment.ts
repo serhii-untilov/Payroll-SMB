@@ -26,15 +26,11 @@ export class TaskPostAdvancePayment extends TaskGenerator {
 
     countDraft() {
         return this.ctx.payments.filter(
-            (o) =>
-                o.paymentType?.calcMethod === CalcMethod.AdvancedPayment &&
-                o.status === PaymentStatus.Draft,
+            (o) => o.paymentType?.calcMethod === CalcMethod.AdvancedPayment && o.status === PaymentStatus.Draft,
         ).length;
     }
 
     count() {
-        return this.ctx.payments.filter(
-            (o) => o.paymentType?.calcMethod === CalcMethod.AdvancedPayment,
-        ).length;
+        return this.ctx.payments.filter((o) => o.paymentType?.calcMethod === CalcMethod.AdvancedPayment).length;
     }
 }

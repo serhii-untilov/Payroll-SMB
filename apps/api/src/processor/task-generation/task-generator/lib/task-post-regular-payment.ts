@@ -22,15 +22,11 @@ export class TaskPostRegularPayment extends TaskGenerator {
 
     countDraft() {
         return this.ctx.payments.filter(
-            (o) =>
-                o.paymentType?.calcMethod === CalcMethod.RegularPayment &&
-                o.status === PaymentStatus.Draft,
+            (o) => o.paymentType?.calcMethod === CalcMethod.RegularPayment && o.status === PaymentStatus.Draft,
         ).length;
     }
 
     count() {
-        return this.ctx.payments.filter(
-            (o) => o.paymentType?.calcMethod === CalcMethod.RegularPayment,
-        ).length;
+        return this.ctx.payments.filter((o) => o.paymentType?.calcMethod === CalcMethod.RegularPayment).length;
     }
 }

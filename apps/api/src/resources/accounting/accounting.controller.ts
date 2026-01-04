@@ -1,10 +1,5 @@
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import {
-    ApiForbiddenResponse,
-    ApiNotFoundResponse,
-    ApiOkResponse,
-    getSchemaPath,
-} from '@nestjs/swagger';
+import { ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
 import { AccountingService } from './accounting.service';
 import { Accounting } from './entities/accounting.entity';
 

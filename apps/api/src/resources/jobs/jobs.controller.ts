@@ -1,17 +1,6 @@
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    Req,
-    UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -71,11 +60,7 @@ export class JobsController {
     @ApiOkResponse({ description: 'The updated record', type: Job })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async update(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() payload: UpdateJobDto,
-    ) {
+    async update(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: UpdateJobDto) {
         const userId = getUserId(req);
         return await this.service.update(userId, id, payload);
     }

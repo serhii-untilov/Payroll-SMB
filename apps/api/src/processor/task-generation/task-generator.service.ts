@@ -6,10 +6,10 @@ import {
     DepartmentsService,
     PayPeriodsService,
     PaymentsService,
-    PersonsService,
+    PersonService,
     PositionsService,
     TasksService,
-    UserCompaniesService,
+    UserRoleService,
 } from '@/resources';
 import { TaskStatus, TaskType } from '@/types';
 import { Inject, Injectable, Logger, NotFoundException, Scope, forwardRef } from '@nestjs/common';
@@ -31,7 +31,7 @@ import {
 } from './task-generator';
 import { FixedSequenceNumber, TaskSequenceNumber } from './task-sequence-number';
 import { Payment } from '@/resources/payments/entities/payment.entity';
-import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskGenerationService {
@@ -56,10 +56,10 @@ export class TaskGenerationService {
         public departmentsService: DepartmentsService,
         @Inject(forwardRef(() => PositionsService))
         public positionsService: PositionsService,
-        @Inject(forwardRef(() => PersonsService))
-        public personsService: PersonsService,
-        @Inject(forwardRef(() => UserCompaniesService))
-        public userCompaniesService: UserCompaniesService,
+        @Inject(forwardRef(() => PersonService))
+        public personsService: PersonService,
+        @Inject(forwardRef(() => UserRoleService))
+        public userCompaniesService: UserRoleService,
         @Inject(forwardRef(() => PaymentsService))
         public paymentsService: PaymentsService,
     ) {
@@ -90,7 +90,7 @@ export class TaskGenerationService {
     public get id() {
         // this._id = this._id + 1;
         // return this._id;
-        return SnowflakeServiceSingleton.nextId();
+        return IdGenerator.nextId();
     }
 
     public get payments() {
@@ -165,9 +165,7 @@ export class TaskGenerationService {
                 toDelete.push(task.id);
             }
         }
-        const toInsert = this.currentTaskList.filter(
-            (task) => !processed.find((id) => id === task.id),
-        );
+        const toInsert = this.currentTaskList.filter((task) => !processed.find((id) => id === task.id));
         return { toInsert, toDelete };
     }
 

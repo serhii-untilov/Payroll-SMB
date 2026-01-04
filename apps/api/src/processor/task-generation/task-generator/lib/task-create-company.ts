@@ -10,10 +10,7 @@ export class TaskCreateCompany extends TaskGenerator {
 
     async getTaskList(): Promise<Task[]> {
         const task = this.makeTask();
-        const count = await this.ctx.userCompaniesService.count(
-            this.ctx.userId,
-            this.ctx.company.id,
-        );
+        const count = await this.ctx.userCompaniesService.count(this.ctx.userId, this.ctx.company.id);
         task.status = count ? TaskStatus.Done : TaskStatus.Todo;
         if (count) {
             const countClosed = await this.ctx.payPeriodsService.countClosed(this.ctx.company.id);

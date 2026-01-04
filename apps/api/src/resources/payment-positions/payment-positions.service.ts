@@ -36,9 +36,7 @@ export class PaymentPositionsService extends AvailableForUserCompany {
             where: { id: entityId },
             withDeleted: true,
         });
-        return (
-            await this.paymentsService.findOne(paymentPosition.paymentId, { withDeleted: true })
-        ).companyId;
+        return (await this.paymentsService.findOne(paymentPosition.paymentId, { withDeleted: true })).companyId;
     }
 
     async getPaymentCompanyId(paymentId: string): Promise<string> {

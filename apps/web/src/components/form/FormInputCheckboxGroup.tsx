@@ -15,13 +15,7 @@ export interface Props {
     setValue?: any;
 }
 
-export const FormInputCheckboxGroup: React.FC<Props> = ({
-    name,
-    control,
-    label,
-    options,
-    setValue,
-}) => {
+export const FormInputCheckboxGroup: React.FC<Props> = ({ name, control, label, options, setValue }) => {
     const [selectedItems, setSelectedItems] = useState<any>([]);
     // we are handling the selection manually here
     const handleSelect = (value: any) => {

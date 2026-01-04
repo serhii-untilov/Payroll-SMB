@@ -27,9 +27,7 @@ const useGetPositionList = (params: FindAllPositionDto) => {
         queryKey: [Resource.Position, params],
         queryFn: async () =>
             (await api.positionsFindAll(params)).data.sort(
-                (a, b) =>
-                    (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) -
-                    (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
+                (a, b) => (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) - (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
             ),
         enabled: !!params?.companyId,
     });
@@ -40,9 +38,7 @@ const useGetPositionBalanceList = (params: FindAllPositionBalanceDto) => {
         queryKey: [Resource.Position, 'balanceExtended', params],
         queryFn: async () => {
             return (await api.positionsFindBalance(params)).data.sort(
-                (a, b) =>
-                    (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) -
-                    (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
+                (a, b) => (Number(a.cardNumber) || MAX_SEQUENCE_NUMBER) - (Number(b.cardNumber) || MAX_SEQUENCE_NUMBER),
             );
         },
         enabled: !!params.companyId && !!params.payPeriod,
@@ -70,8 +66,7 @@ const useGetPositionByPerson = (params: Partial<FindPositionByPersonDto>) => {
 const useCreatePosition = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (dto: CreatePositionDto): Promise<Position> =>
-            (await api.positionsCreate(dto)).data,
+        mutationFn: async (dto: CreatePositionDto): Promise<Position> => (await api.positionsCreate(dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Position, Resource.Task]);
         },
@@ -86,8 +81,7 @@ type UpdatePosition = {
 const useUpdatePosition = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdatePosition): Promise<Position> =>
-            (await api.positionsUpdate(id, dto)).data,
+        mutationFn: async ({ id, dto }: UpdatePosition): Promise<Position> => (await api.positionsUpdate(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Position, Resource.Task]);
         },

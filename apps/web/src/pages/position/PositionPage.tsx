@@ -25,9 +25,7 @@ const PositionPage = () => {
             {!!positionId && !!company && !!payPeriod && (
                 <EditPosition {...{ company, payPeriod, positionId, tabIndex, goBack }} />
             )}
-            {!positionId && !!company && !!payPeriod && (
-                <CreatePosition {...{ company, payPeriod, setPositionId }} />
-            )}
+            {!positionId && !!company && !!payPeriod && <CreatePosition {...{ company, payPeriod, setPositionId }} />}
         </>
     );
 };

@@ -1,4 +1,4 @@
-export * from './abstract';
+export * from './common/base';
 export * from './access';
 export * from './accounting';
 export * from './companies';
@@ -20,6 +20,6 @@ export * from './position-history';
 export * from './positions';
 export * from './roles';
 export * from './tasks';
-export * from './user-companies';
+export * from './user-role';
 export * from './users';
-export * from './work-norms';
+export * from './work-time-norm';

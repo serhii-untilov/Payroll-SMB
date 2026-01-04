@@ -3,7 +3,7 @@ import { checkVersionOrFail } from '@/utils';
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AvailableForUser } from '../abstract/available-for-user';
+import { AvailableForUser } from '../common/base/available-for-user';
 import { AccessService } from '../access/access.service';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
@@ -11,7 +11,7 @@ import { MinWage } from './entities/min-wage.entity';
 
 @Injectable()
 export class MinWageService extends AvailableForUser {
-    readonly resource = Resource.MinWage;
+    readonly userRoleResource = Resource.MinWage;
 
     constructor(
         @InjectRepository(MinWage)

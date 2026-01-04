@@ -10,10 +10,7 @@ export function getPayPeriodName(
     template: string = 'y LLLL',
 ): string {
     const state = isCurrent ? `(${t('current')})` : '';
-    if (
-        isEqual(dateUTC(dateFrom), monthBegin(dateFrom)) &&
-        isEqual(dateUTC(dateTo), monthEnd(dateTo))
-    ) {
+    if (isEqual(dateUTC(dateFrom), monthBegin(dateFrom)) && isEqual(dateUTC(dateTo), monthEnd(dateTo))) {
         return `${format(dateFrom, template, { locale })} ${state}`;
     }
     const yearMonth = format(dateFrom, template, { locale });

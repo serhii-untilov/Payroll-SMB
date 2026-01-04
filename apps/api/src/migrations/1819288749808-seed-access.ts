@@ -1,9 +1,9 @@
 import { Resource, RoleType } from '../types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Access } from '../resources/access/entities/access.entity';
-import { getSystemUserId } from '../utils/lib/getSystemUserId';
+import { getSystemUserId } from '../utils/lib/system-user';
 import { generateAccess_Full, generateAccess_ReadOnly } from '../utils/lib/access';
-import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 
 // Default access rules by Role Type.
 // This table is read only for all role types. Changes for this table available only by migrations.
@@ -28,7 +28,7 @@ const recordList = [
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.Department),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.Manager),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.Account),
-    ...generateAccess_Full(RoleType.SystemAdmin, Resource.WorkNorm),
+    ...generateAccess_Full(RoleType.SystemAdmin, Resource.WorkTimeNorm),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.PaymentType),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.PayPeriod),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.Position),
@@ -37,9 +37,9 @@ const recordList = [
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.Candidate),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.Dismissed),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.TimeOff),
-    ...generateAccess_Full(RoleType.SystemAdmin, Resource.Documents),
+    ...generateAccess_Full(RoleType.SystemAdmin, Resource.Document),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.Notes),
-    ...generateAccess_Full(RoleType.SystemAdmin, Resource.TimeSheet),
+    ...generateAccess_Full(RoleType.SystemAdmin, Resource.Timesheet),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.Payroll),
     ...generateAccess_Full(RoleType.SystemAdmin, Resource.Report),
 
@@ -56,7 +56,7 @@ const recordList = [
     ...generateAccess_Full(RoleType.Accountant, Resource.Department),
     ...generateAccess_Full(RoleType.Accountant, Resource.Manager),
     ...generateAccess_Full(RoleType.Accountant, Resource.Account),
-    ...generateAccess_ReadOnly(RoleType.Accountant, Resource.WorkNorm),
+    ...generateAccess_ReadOnly(RoleType.Accountant, Resource.WorkTimeNorm),
     ...generateAccess_ReadOnly(RoleType.Accountant, Resource.PaymentType),
     ...generateAccess_Full(RoleType.Accountant, Resource.PayPeriod),
     ...generateAccess_Full(RoleType.Accountant, Resource.Position),
@@ -65,9 +65,9 @@ const recordList = [
     ...generateAccess_Full(RoleType.Accountant, Resource.Candidate),
     ...generateAccess_Full(RoleType.Accountant, Resource.Dismissed),
     ...generateAccess_Full(RoleType.Accountant, Resource.TimeOff),
-    ...generateAccess_Full(RoleType.Accountant, Resource.Documents),
+    ...generateAccess_Full(RoleType.Accountant, Resource.Document),
     ...generateAccess_Full(RoleType.Accountant, Resource.Notes),
-    ...generateAccess_Full(RoleType.Accountant, Resource.TimeSheet),
+    ...generateAccess_Full(RoleType.Accountant, Resource.Timesheet),
     ...generateAccess_Full(RoleType.Accountant, Resource.Payroll),
     ...generateAccess_Full(RoleType.Accountant, Resource.Report),
     // OBSERVER
@@ -83,7 +83,7 @@ const recordList = [
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Department),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Manager),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Account),
-    ...generateAccess_ReadOnly(RoleType.Manager, Resource.WorkNorm),
+    ...generateAccess_ReadOnly(RoleType.Manager, Resource.WorkTimeNorm),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.PaymentType),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.PayPeriod),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Position),
@@ -92,9 +92,9 @@ const recordList = [
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Candidate),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Dismissed),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.TimeOff),
-    ...generateAccess_ReadOnly(RoleType.Manager, Resource.Documents),
+    ...generateAccess_ReadOnly(RoleType.Manager, Resource.Document),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Notes),
-    ...generateAccess_ReadOnly(RoleType.Manager, Resource.TimeSheet),
+    ...generateAccess_ReadOnly(RoleType.Manager, Resource.Timesheet),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Payroll),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Report),
 
@@ -110,7 +110,7 @@ const recordList = [
     ...generateAccess_ReadOnly(RoleType.Employee, Resource.Department),
     ...generateAccess_ReadOnly(RoleType.Employee, Resource.Manager),
     // ...generateAccess_ReadOnly(RoleType.EMPLOYEE, Resource.ACCOUNT),
-    ...generateAccess_ReadOnly(RoleType.Employee, Resource.WorkNorm),
+    ...generateAccess_ReadOnly(RoleType.Employee, Resource.WorkTimeNorm),
     ...generateAccess_ReadOnly(RoleType.Employee, Resource.PaymentType),
     ...generateAccess_ReadOnly(RoleType.Employee, Resource.PayPeriod),
     ...generateAccess_ReadOnly(RoleType.Employee, Resource.Position),
@@ -119,9 +119,9 @@ const recordList = [
     // ...generateAccess_ReadOnly(RoleType.EMPLOYEE, Resource.CANDIDATE),
     // ...generateAccess_ReadOnly(RoleType.EMPLOYEE, Resource.DISMISSED),
     ...generateAccess_ReadOnly(RoleType.Employee, Resource.TimeOff),
-    ...generateAccess_ReadOnly(RoleType.Employee, Resource.Documents),
+    ...generateAccess_ReadOnly(RoleType.Employee, Resource.Document),
     ...generateAccess_ReadOnly(RoleType.Employee, Resource.Notes),
-    ...generateAccess_ReadOnly(RoleType.Employee, Resource.TimeSheet),
+    ...generateAccess_ReadOnly(RoleType.Employee, Resource.Timesheet),
     ...generateAccess_ReadOnly(RoleType.Employee, Resource.Payroll),
     ...generateAccess_ReadOnly(RoleType.Employee, Resource.Report),
     // GUEST
@@ -136,7 +136,7 @@ const recordList = [
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Department),
     // ...generateAccess_ReadOnly(RoleType.GUEST, Resource.MANAGER),
     // ...generateAccess_ReadOnly(RoleType.GUEST, Resource.ACCOUNT),
-    ...generateAccess_ReadOnly(RoleType.Manager, Resource.WorkNorm),
+    ...generateAccess_ReadOnly(RoleType.Manager, Resource.WorkTimeNorm),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.PaymentType),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.PayPeriod),
     ...generateAccess_ReadOnly(RoleType.Manager, Resource.Position),
@@ -200,7 +200,7 @@ const recordList = [
 
 export class Seed1819288749808 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
-        SnowflakeServiceSingleton.init();
+        IdGenerator.init();
         const dataSource = queryRunner.connection;
         const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
@@ -208,7 +208,7 @@ export class Seed1819288749808 implements MigrationInterface {
                 ...recordList[n],
                 createdUserId: userId,
                 updatedUserId: userId,
-                id: SnowflakeServiceSingleton.nextId(),
+                id: IdGenerator.nextId(),
             };
             await dataSource.createQueryBuilder().insert().into(entity).values(record).execute();
         }

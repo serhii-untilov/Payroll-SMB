@@ -40,10 +40,7 @@ export default function ManagerList(props: ManagerListProps) {
                     setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
-                onCellKeyDown={(
-                    params: GridCellParams,
-                    event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                ) => {
+                onCellKeyDown={(params: GridCellParams, event: MuiEvent<React.KeyboardEvent<HTMLElement>>) => {
                     if (event.code === 'Enter') {
                         onEditManager(params.row.id);
                     }

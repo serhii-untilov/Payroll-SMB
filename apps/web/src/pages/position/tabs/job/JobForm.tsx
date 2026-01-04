@@ -8,7 +8,7 @@ import { SelectDepartment } from '@/components/SelectDepartment';
 import { SelectJob } from '@/components/SelectJob';
 import { SelectPaymentType } from '@/components/SelectPaymentType';
 import SelectPerson from '@/components/SelectPerson/SelectPerson';
-import { SelectWorkNorm } from '@/components/SelectWorkNorm';
+import { SelectWorkTimeNorm } from '@/components/SelectWorkTimeNorm';
 import SequenceField from '@/components/SequenceField';
 import WageField from '@/components/WageField';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
@@ -29,8 +29,7 @@ export interface JobFormProps {
 const JobForm = (props: JobFormProps) => {
     const { company, position } = props;
     const { t } = useTranslation();
-    const { control, isDirty, handleSubmit, onSubmit, onCancel, onClickHistory } =
-        useJobForm(props);
+    const { control, isDirty, handleSubmit, onSubmit, onCancel, onClickHistory } = useJobForm(props);
 
     return (
         <>
@@ -81,7 +80,7 @@ const JobForm = (props: JobFormProps) => {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <SelectWorkNorm companyId={company.id} control={control} />
+                                <SelectWorkTimeNorm companyId={company.id} control={control} />
                             </Grid>
 
                             <Grid item xs={12} sm={6} md={3}>
@@ -108,25 +107,18 @@ const JobForm = (props: JobFormProps) => {
                             <Grid item xs={12} md={6}>
                                 {position && position?.personId ? (
                                     <Grid item xs={12}>
-                                        <Button
-                                            startIcon={<HistoryRounded />}
-                                            onClick={() => onClickHistory()}
-                                        >
+                                        <Button startIcon={<HistoryRounded />} onClick={() => onClickHistory()}>
                                             {t('Assignments History')}
                                         </Button>
                                     </Grid>
                                 ) : null}
                                 <Grid item xs={12}>
-                                    <Button startIcon={<AddCircleRounded />}>
-                                        {t('Add Work Address')}
-                                    </Button>
+                                    <Button startIcon={<AddCircleRounded />}>{t('Add Work Address')}</Button>
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Grid item xs={12}>
-                                    <Button startIcon={<AddCircleRounded />}>
-                                        {t('Add Additional Earning Type')}
-                                    </Button>
+                                    <Button startIcon={<AddCircleRounded />}>{t('Add Additional Earning Type')}</Button>
                                 </Grid>
                                 {position && position?.personId ? (
                                     <Grid item xs={12}>

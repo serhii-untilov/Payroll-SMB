@@ -17,9 +17,7 @@ const UserCompanyTab = ({ user }) => {
         <>
             {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
-            {userCompanyList && (
-                <UserCompanyList {...{ user, userCompanyList, showDeleted, setShowDeleted }} />
-            )}
+            {userCompanyList && <UserCompanyList {...{ user, userCompanyList, showDeleted, setShowDeleted }} />}
         </>
     );
 };

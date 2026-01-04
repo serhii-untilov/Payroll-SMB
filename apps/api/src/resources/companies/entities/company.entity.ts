@@ -1,22 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { monthBegin, monthEnd } from '@repo/shared';
-import {
-    AfterLoad,
-    BeforeInsert,
-    BeforeUpdate,
-    Column,
-    Entity,
-    ManyToOne,
-    OneToMany,
-    Relation,
-} from 'typeorm';
-import { BaseEntity } from '../../abstract/base-entity.abstract';
-import { PaymentSchedule } from './../../../types/lib/PaymentSchedule';
+import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, OneToMany, Relation } from 'typeorm';
+import { PaymentSchedule } from '../../../types/lib/payment-schedule';
 import { Accounting } from './../../accounting/entities/accounting.entity';
 import { Department } from './../../departments/entities/department.entity';
 import { Law } from './../../laws/entities/law.entity';
 import { Position } from './../../positions/entities/position.entity';
-import { UserCompany } from './../../user-companies/entities/user-company.entity';
+import { UserRole } from '../../user-role/entities/user-role.entity';
+import { BaseEntity } from '@/resources/common/base';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -64,8 +55,8 @@ export class Company extends BaseEntity {
     @OneToMany(() => Position, (position) => position.company)
     positions?: Relation<Position>[];
 
-    @OneToMany(() => UserCompany, (userCompany) => userCompany.company)
-    users?: Relation<UserCompany>[];
+    @OneToMany(() => UserRole, (userCompany) => userCompany.company)
+    users?: Relation<UserRole>[];
 
     @BeforeInsert()
     beforeInsert() {

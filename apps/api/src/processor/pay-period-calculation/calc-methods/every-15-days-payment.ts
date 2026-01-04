@@ -12,11 +12,7 @@ export class Every15daysPayment extends PeriodListGenerator {
 
     public getPeriodList(dateFrom: Date, dateTo: Date): PayPeriod[] {
         const periodList: PayPeriod[] = [];
-        for (
-            let d = monthBegin(dateFrom);
-            d.getTime() < monthEnd(dateTo).getTime();
-            d = addMonths(d, 1)
-        ) {
+        for (let d = monthBegin(dateFrom); d.getTime() < monthEnd(dateTo).getTime(); d = addMonths(d, 1)) {
             const period1 = this.makePeriod();
             period1.dateFrom = monthBegin(d);
             period1.dateTo = addDays(period1.dateFrom, 14);

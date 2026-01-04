@@ -21,8 +21,7 @@ export interface PaymentDetailsProps {
 const PaymentDetailsTab = (props: PaymentDetailsProps) => {
     const payment = usePaymentTransform(props.payment);
     const { t } = useTranslation();
-    const { control, isDirty, handleSubmit, onSubmit, onCancel, onProcess, onWithdraw } =
-        usePaymentDetails(props);
+    const { control, isDirty, handleSubmit, onSubmit, onCancel, onProcess, onWithdraw } = usePaymentDetails(props);
 
     return (
         <>
@@ -32,14 +31,7 @@ const PaymentDetailsTab = (props: PaymentDetailsProps) => {
                 onProcess={payment?.status === PaymentStatus.Draft ? onProcess : 'disabled'}
                 onWithdraw={payment?.status !== PaymentStatus.Draft ? onWithdraw : 'disabled'}
             />
-            <Grid
-                container
-                component="form"
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-                spacing={2}
-                sx={{ mb: 1 }}
-            >
+            <Grid container component="form" onSubmit={handleSubmit(onSubmit)} noValidate spacing={2} sx={{ mb: 1 }}>
                 <Grid item md={12} lg={10} xl={8}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={12} lg={3}>
@@ -96,23 +88,13 @@ const PaymentDetailsTab = (props: PaymentDetailsProps) => {
                                 disabled
                                 control={control}
                                 name="paySum"
-                                label={t(
-                                    payment?.status === PaymentStatus.Paid
-                                        ? PaymentStatus.Paid
-                                        : 'Net Pay',
-                                )}
+                                label={t(payment?.status === PaymentStatus.Paid ? PaymentStatus.Paid : 'Net Pay')}
                                 type="text"
                                 sx={{ fontWeight: 'bold' }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12} lg={4}>
-                            <FormNumberField
-                                disabled
-                                control={control}
-                                name="funds"
-                                label={t('Funds')}
-                                type="text"
-                            />
+                            <FormNumberField disabled control={control} name="funds" label={t('Funds')} type="text" />
                         </Grid>
                         <Grid item xs={12} sm={12} lg={4}>
                             <FormNumberField

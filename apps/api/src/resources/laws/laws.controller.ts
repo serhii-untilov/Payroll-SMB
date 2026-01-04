@@ -1,11 +1,6 @@
 import { AccessTokenGuard } from '@/guards';
 import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
-import {
-    ApiForbiddenResponse,
-    ApiNotFoundResponse,
-    ApiOkResponse,
-    getSchemaPath,
-} from '@nestjs/swagger';
+import { ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
 import { Law } from './entities/law.entity';
 import { LawsService } from './laws.service';
 

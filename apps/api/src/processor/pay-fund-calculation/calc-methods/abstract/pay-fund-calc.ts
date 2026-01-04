@@ -9,12 +9,7 @@ export abstract class PayFundCalc {
     payFundType: PayFundType;
     current: PayFund[];
 
-    constructor(
-        ctx: PayFundCalculationService,
-        accPeriod: PayPeriod,
-        payFundType: PayFundType,
-        current: PayFund[],
-    ) {
+    constructor(ctx: PayFundCalculationService, accPeriod: PayPeriod, payFundType: PayFundType, current: PayFund[]) {
         this.ctx = ctx;
         this.accPeriod = accPeriod;
         this.payFundType = payFundType;

@@ -1,12 +1,12 @@
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
-import { BaseEntity } from '../../abstract/base-entity.abstract';
+import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { Department } from './../../departments/entities/department.entity';
 import { Job } from './../../jobs/entities/job.entity';
 import { PaymentType } from './../../payment-types/entities/payment-type.entity';
 import { Position } from './../../positions/entities/position.entity';
-import { WorkNorm } from './../../work-norms/entities/work-norm.entity';
+import { WorkTimeNorm } from '../../work-time-norm/entities/work-time-norm.entity';
 
-@Entity()
+@Entity({ name: 'position_history' })
 export class PositionHistory extends BaseEntity {
     @ManyToOne(() => Position, (position) => position.history)
     @JoinColumn()
@@ -35,12 +35,12 @@ export class PositionHistory extends BaseEntity {
     @Column({ type: 'bigint', nullable: true })
     jobId: string | null;
 
-    @ManyToOne(() => WorkNorm, { createForeignKeyConstraints: false })
+    @ManyToOne(() => WorkTimeNorm, { createForeignKeyConstraints: false })
     @JoinColumn()
-    workNorm?: Relation<WorkNorm>;
+    workTimeNorm?: Relation<WorkTimeNorm>;
 
     @Column({ type: 'bigint', nullable: true })
-    workNormId: string | null;
+    workTimeNormId: string | null;
 
     @ManyToOne(() => PaymentType, { createForeignKeyConstraints: false })
     @JoinColumn()

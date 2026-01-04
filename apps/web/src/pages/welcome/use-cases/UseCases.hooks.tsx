@@ -19,10 +19,7 @@ const useUseCases = () => {
                     t('CorporateStructureDescription4'),
                     t('CorporateStructureDescription5'),
                 ],
-                image:
-                    locale.language === 'uk'
-                        ? 'corporate-system-uk.png'
-                        : 'corporate-system-en.png',
+                image: locale.language === 'uk' ? 'corporate-system-uk.png' : 'corporate-system-en.png',
             },
             {
                 name: t('Independent enterprises'),
@@ -33,8 +30,7 @@ const useUseCases = () => {
                     t('IndependentEnterprisesDescription4'),
                     t('IndependentEnterprisesDescription5'),
                 ],
-                image:
-                    locale.language === 'uk' ? 'isolated-system-uk.png' : 'isolated-system-en.png',
+                image: locale.language === 'uk' ? 'isolated-system-uk.png' : 'isolated-system-en.png',
             },
             {
                 name: t('Single enterprise'),

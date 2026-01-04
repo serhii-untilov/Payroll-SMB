@@ -24,8 +24,7 @@ const Screenshots = () => {
                     p: 2,
                     borderRadius: 3,
                     // From https://css.glass
-                    bgcolor: (theme) =>
-                        theme.palette.mode === 'dark' ? '' : 'rgba(255, 255, 255, 0.3)',
+                    bgcolor: (theme) => (theme.palette.mode === 'dark' ? '' : 'rgba(255, 255, 255, 0.3)'),
                     boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                     backdropFilter: 'blur(5px)',
                     webkitBackdropFilter: 'blur(5px)',
@@ -48,10 +47,7 @@ const Screenshots = () => {
                     src={image}
                 />
                 <ButtonGroup variant="text" sx={{ m: 1, p: 1 }}>
-                    <Button
-                        startIcon={<KeyboardArrowLeftRounded />}
-                        onClick={onPriorImage}
-                    ></Button>
+                    <Button startIcon={<KeyboardArrowLeftRounded />} onClick={onPriorImage}></Button>
                     <Button endIcon={<KeyboardArrowRightRounded />} onClick={onNextImage}></Button>
                 </ButtonGroup>
             </Box>

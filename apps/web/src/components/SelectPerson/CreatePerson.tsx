@@ -1,14 +1,7 @@
 import { Button } from '@/components/layout/Button';
 import TextField from '@/components/layout/TextField';
 import { useCreatePerson } from '@/hooks/queries/usePerson';
-import {
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Grid,
-} from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from '@mui/material';
 import { CreatePersonDto } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 
@@ -45,9 +38,7 @@ export default function CreatePerson(props: CreatePersonFormProps) {
                             <TextField
                                 label={t('Last Name')}
                                 value={dialogValue.lastName}
-                                onChange={(value) =>
-                                    setDialogValue({ ...dialogValue, lastName: value })
-                                }
+                                onChange={(value) => setDialogValue({ ...dialogValue, lastName: value })}
                                 autoFocus={true}
                             />
                         </Grid>
@@ -55,43 +46,35 @@ export default function CreatePerson(props: CreatePersonFormProps) {
                             <TextField
                                 label={t('First Name')}
                                 value={dialogValue.firstName}
-                                onChange={(value) =>
-                                    setDialogValue({ ...dialogValue, firstName: value })
-                                }
+                                onChange={(value) => setDialogValue({ ...dialogValue, firstName: value })}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 label={t('Middle Name')}
                                 value={dialogValue.middleName}
-                                onChange={(value) =>
-                                    setDialogValue({ ...dialogValue, middleName: value })
-                                }
+                                onChange={(value) => setDialogValue({ ...dialogValue, middleName: value })}
                             />
                         </Grid>
                         <Grid item xs={4}>
                             <TextField
                                 label={t('Tax ID')}
                                 value={dialogValue.taxId}
-                                onChange={(value) =>
-                                    setDialogValue({ ...dialogValue, taxId: value })
-                                }
+                                onChange={(value) => setDialogValue({ ...dialogValue, taxId: value })}
                             />
                         </Grid>
                         <Grid item xs={4}>
                             <TextField
                                 label={t('Birth Date')}
-                                value={dialogValue.birthday}
-                                onChange={(value) =>
-                                    setDialogValue({ ...dialogValue, birthday: new Date(value) })
-                                }
+                                value={dialogValue.birthDate}
+                                onChange={(value) => setDialogValue({ ...dialogValue, birthDate: new Date(value) })}
                             />
                         </Grid>
                         <Grid item xs={4}>
                             <TextField
                                 label={t('Sex')}
-                                value={dialogValue.sex}
-                                onChange={(value) => setDialogValue({ ...dialogValue, sex: value })}
+                                value={dialogValue.gender}
+                                onChange={(value) => setDialogValue({ ...dialogValue, gender: value })}
                             />
                         </Grid>
                     </Grid>

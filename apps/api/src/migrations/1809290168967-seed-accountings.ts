@@ -1,7 +1,8 @@
-import { langPipe } from '../utils/lib/langPipe';
+import { langPipe } from '../utils/lib/lang-pipe';
 import { Accounting } from '../resources/accounting/entities/accounting.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { AccountingType } from '../types';
+import { getSystemUserId } from '@/utils';
 
 const lang = process.env.LANGUAGE ?? 'uk';
 const entity = Accounting;
@@ -16,12 +17,14 @@ const recordList = [
 export class Seed1809290168967 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
+        const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
+            const record = { ...recordList[n], createdUserId: userId, updatedUserId: userId };
             await dataSource
                 .createQueryBuilder()
                 .insert()
                 .into(entity)
-                .values(langPipe(lang, recordList[n]))
+                .values(langPipe(lang, record))
                 .orUpdate(['name', 'type'], ['id'])
                 .execute();
         }
@@ -31,12 +34,7 @@ export class Seed1809290168967 implements MigrationInterface {
         const dataSource = queryRunner.connection;
         for (let n = 0; n < recordList.length; n++) {
             const record = langPipe(lang, recordList[n]);
-            await dataSource
-                .createQueryBuilder()
-                .delete()
-                .from(entity)
-                .where('id = :id', { id: record.id })
-                .execute();
+            await dataSource.createQueryBuilder().delete().from(entity).where('id = :id', { id: record.id }).execute();
         }
     }
 }

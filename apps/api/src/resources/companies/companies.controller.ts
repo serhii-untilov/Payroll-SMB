@@ -6,7 +6,6 @@ import {
     Delete,
     Get,
     Inject,
-    Logger,
     Param,
     ParseIntPipe,
     Patch,
@@ -25,7 +24,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -35,8 +34,6 @@ import { Company } from './entities/company.entity';
 @Controller('companies')
 @ApiBearerAuth()
 export class CompaniesController {
-    private _logger: Logger = new Logger(CompaniesService.name);
-
     constructor(
         @Inject(forwardRef(() => CompaniesService))
         private readonly service: CompaniesService,
@@ -53,7 +50,7 @@ export class CompaniesController {
     async create(@Req() req: Request, @Body() payload: CreateCompanyDto) {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
-        return await this.service.create(userId, deepStringToShortDate(payload));
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Get()
@@ -86,11 +83,7 @@ export class CompaniesController {
     @ApiOkResponse({ description: 'The found record', type: Company })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Query() relations: boolean,
-    ) {
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Query() relations: boolean) {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId, id);
         return await this.service.findOne(userId, id, relations);
@@ -102,14 +95,10 @@ export class CompaniesController {
     @ApiOkResponse({ description: 'The updated record', type: Company })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async update(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() payload: UpdateCompanyDto,
-    ) {
+    async update(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: UpdateCompanyDto) {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, deepStringToShortDate(payload));
+        return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')
@@ -129,10 +118,7 @@ export class CompaniesController {
     @ApiOperation({ summary: 'Calculate salary for a company' })
     @ApiOkResponse({ description: 'Salary has been successfully calculated' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async salaryCalculate(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-    ): Promise<void> {
+    async salaryCalculate(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<void> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         await this.service.calculatePayroll(userId, id);

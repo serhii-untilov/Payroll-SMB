@@ -16,7 +16,8 @@
 - Auto-generated REST API
 - REST API documented in Open API by Swagger
 - Mono-repository, shared types libs between back-end and front-end apps
-- Role-based access, JWT authorization
+- JWT authorization
+- Access model supports all three permission dimensions: Role-based (RBAC), Row-level (ABAC), and Field-level
 - Event-driven calculate processing
 - Automatic documents prepared according to the business process schedule
 - Automatic update of data on the client after the completion of the batch calculation on the server (SSE)
@@ -275,7 +276,7 @@ In **development** mode:
 |Department                 |Підрозділ                 |department         |                                                                                |
 |Job                        |Посада                    |job                |                                                                                |
 |Vacancy                    |Вакансія                  |vacancy            |                                                                                |
-|Working time norm          |Норма робочого часу       |workNorm           |40 годин на тиждень, інші норми - основа Режимів роботи                         |
+|Working time norm          |Норма робочого часу       |workTimeNorm           |40 годин на тиждень, інші норми - основа Режимів роботи                         |
 |Work Pattern               |Режим роботи              |workPattern        |Довідник "Режими роботи", приклади: п'ятиденка, шестиденка, доба - троє         |
 |Working time calendar      |Виробничий календар       |workCalendar       |Загальний календар підприємства, основа - режими роботи, для кожного місяця     |
 |Planned Timesheet          |Плановий табель           |plannedTimesheet   |Плановий тебель працівників = Загальний календар + режими роботи працівника     |
@@ -374,6 +375,9 @@ npm i --workspace @repo/api --save @ngneat/falso
 npm i --workspace @repo/api --save @nestjs/schedule
 npm i --workspace @repo/api --save-dev run-script-os
 npm i --workspace @repo/api --save flake-idgen biguint-format
+npm i --workspace @repo/api --save class-validator class-transformer
+npm i --workspace @repo/api --save @nestjs/cqrs
+
 
 # Init "web" application for front-end
 npm i --workspace @repo/web @tanstack/react-query
@@ -425,24 +429,24 @@ npm i eslint-plugin-react-hooks -D
 
 ``` bash
 # Create resources
-npx --workspace @repo/api nest generate resource users resources
-npx --workspace @repo/api nest generate resource laws resources
+npx --workspace @repo/api nest generate resource user resources
+npx --workspace @repo/api nest generate resource law resources
 npx --workspace @repo/api nest generate resource accounting resources
-npx --workspace @repo/api nest generate resource companies resources
-npx --workspace @repo/api nest generate resource userCompanies resources
-npx --workspace @repo/api nest generate resource users resources
-npx --workspace @repo/api nest generate resource locales resources
+npx --workspace @repo/api nest generate resource company resources
+npx --workspace @repo/api nest generate resource userCompany resources
+npx --workspace @repo/api nest generate resource user resources
+npx --workspace @repo/api nest generate resource locale resources
 npx --workspace @repo/api nest g module auth
 npx --workspace @repo/api nest g controller auth
 npx --workspace @repo/api nest g service auth
-npx --workspace @repo/api nest generate resource departments resources
-npx --workspace @repo/api nest generate resource jobs resources
-npx --workspace @repo/api nest generate resource paymentTypes resources
-npx --workspace @repo/api nest generate resource workNorms resources
-npx --workspace @repo/api nest generate resource workNormPeriods resources
-npx --workspace @repo/api nest generate resource payPeriods resources
-npx --workspace @repo/api nest generate resource persons resources
-npx --workspace @repo/api nest generate resource positions resources
+npx --workspace @repo/api nest generate resource department resources
+npx --workspace @repo/api nest generate resource job resources
+npx --workspace @repo/api nest generate resource paymentType resources
+npx --workspace @repo/api nest generate resource workTimeNorm resources
+npx --workspace @repo/api nest generate resource workTimeNormPeriod resources
+npx --workspace @repo/api nest generate resource payPeriod resources
+npx --workspace @repo/api nest generate resource person resources
+npx --workspace @repo/api nest generate resource position resources
 npx --workspace @repo/api nest generate resource positionHistory resources
 npx --workspace @repo/api nest generate resource access resources
 npx --workspace @repo/api nest generate resource payroll resources
@@ -450,26 +454,28 @@ npx --workspace @repo/api nest generate resource processor
 npx --workspace @repo/api nest generate service summaryCalculation processor
 npx --workspace @repo/api nest generate service balanceCalculation processor
 npx --workspace @repo/api nest generate service positionListener processor/listeners
-npx --workspace @repo/api nest generate resource fundTypes resources
-npx --workspace @repo/api nest generate resource funds resources
+npx --workspace @repo/api nest generate resource fundType resources
+npx --workspace @repo/api nest generate resource fund resources
 npx --workspace @repo/api nest generate resource minWage resources
-npx --workspace @repo/api nest generate resource maxBaseECB resources
+npx --workspace @repo/api nest generate resource maxBaseEcb resources
 npx --workspace @repo/api nest generate service payFundCalculation processor
 npx --workspace @repo/api nest generate service companyListener processor/listeners
-npx --workspace @repo/api nest generate resource tasks resources
+npx --workspace @repo/api nest generate resource task resources
 npx --workspace @repo/api nest generate service taskList processor
 npx --workspace @repo/api nest generate service payPeriodCalculation processor
 npx --workspace @repo/api nest generate controller serverEvent processor
 npx --workspace @repo/api nest generate service serverEvent processor/serverEvent
-npx --workspace @repo/api nest generate resource payments resources
-npx --workspace @repo/api nest generate service paymentPositions resources/payments
-npx --workspace @repo/api nest generate service paymentDeductions resources/payments
-npx --workspace @repo/api nest generate service paymentFunds resources/payments
+npx --workspace @repo/api nest generate resource payment resources
+npx --workspace @repo/api nest generate service paymentPosition resources/payments
+npx --workspace @repo/api nest generate service paymentDeduction resources/payments
+npx --workspace @repo/api nest generate service paymentFund resources/payments
 npx --workspace @repo/api nest generate service paymentCalculation processor
-npx --workspace @repo/api nest generate controller paymentPositions resources/payments
-npx --workspace @repo/api nest generate controller paymentDeductions resources/payments
-npx --workspace @repo/api nest generate controller paymentFunds resources/payments
+npx --workspace @repo/api nest generate controller paymentPosition resources/payments
+npx --workspace @repo/api nest generate controller paymentDeduction resources/payments
+npx --workspace @repo/api nest generate controller paymentFund resources/payments
 npx --workspace @repo/api nest generate service schedule processor
+npx --workspace @repo/api nest generate resource auditLog resources
+npx --workspace @repo/api nest generate resource userAccess resources
 
 ```
 
@@ -570,3 +576,7 @@ openssl rand -base64 60
 - [**ESLint** - How the React Hooks ESLint plugin saved me hours debugging useEffect](https://maxrozen.com/react-hooks-eslint-plugin-saved-hours-debugging-useeffect)
 - [**React** - Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
 - [**React** - Components and Hooks must be pure](https://react.dev/reference/rules/components-and-hooks-must-be-pure)
+- [**CQRS** - CQRS Pattern in Nest.js](https://dev.to/jacobandrewsky/cqrs-pattern-in-nestjs-4n3p)
+- [**CQRS** - CQRS, Event Sourcing and DDD](https://dou.ua/forums/topic/33239)
+- [**CQRS** - Типы CQRS](https://habr.com/ru/articles/268627)
+- [**Outbox** - Паттерн Outbox](https://habr.com/ru/companies/lamoda/articles/678932)

@@ -1,5 +1,5 @@
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
-import { BaseEntity } from '../../abstract/base-entity.abstract';
+import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { Company } from './../../companies/entities/company.entity';
 import { Person } from './../../persons/entities/person.entity';
 import { PositionHistory } from './../../position-history/entities/position-history.entity';

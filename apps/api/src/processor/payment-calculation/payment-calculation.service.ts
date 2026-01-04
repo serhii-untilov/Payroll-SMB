@@ -22,7 +22,7 @@ import { PaymentGroup } from '@/types';
 import { dateUTC } from '@repo/shared';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { CalcAdvance, CalcFastPayment, CalcPayment, CalcRegularPayment } from './calc-methods';
-import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PaymentCalculationService {
@@ -67,7 +67,7 @@ export class PaymentCalculationService {
     public getNextPaymentPositionId(): string {
         // this.paymentPositionId++;
         // return this.paymentPositionId;
-        return SnowflakeServiceSingleton.nextId();
+        return IdGenerator.nextId();
     }
 
     public async calculateCompany(userId: string, companyId: string) {
@@ -95,9 +95,7 @@ export class PaymentCalculationService {
         }
         await this.paymentsService.updateTotals(
             this.userId,
-            changedPaymentIds.filter(
-                (id, index, array) => index === array.findIndex((o) => o === id),
-            ),
+            changedPaymentIds.filter((id, index, array) => index === array.findIndex((o) => o === id)),
         );
     }
 
@@ -118,9 +116,7 @@ export class PaymentCalculationService {
         const changedPaymentIds = await this._calculatePosition();
         await this.paymentsService.updateTotals(
             this.userId,
-            changedPaymentIds.filter(
-                (id, index, array) => index === array.findIndex((o) => o === id),
-            ),
+            changedPaymentIds.filter((id, index, array) => index === array.findIndex((o) => o === id)),
         );
     }
 
@@ -129,9 +125,7 @@ export class PaymentCalculationService {
         this.payFunds = await this.getPayFunds();
         this.paymentPositions = await this.getPaymentPositions();
         // this.initPaymentPositionId();
-        const paymentTypeList = this.paymentTypes.filter(
-            (o) => o.paymentGroup === PaymentGroup.Payments,
-        );
+        const paymentTypeList = this.paymentTypes.filter((o) => o.paymentGroup === PaymentGroup.Payments);
         const current: PaymentPosition[] = [];
         for (const paymentType of paymentTypeList) {
             // // Pass copy of objects to prevent mutation
@@ -156,10 +150,7 @@ export class PaymentCalculationService {
         throw new Error('Undefined calc method.');
     }
 
-    private async save(
-        toInsert: PaymentPosition[],
-        toDelete: PaymentPosition[],
-    ): Promise<string[]> {
+    private async save(toInsert: PaymentPosition[], toDelete: PaymentPosition[]): Promise<string[]> {
         const changedPaymentIds: string[] = [];
         for (const paymentPosition of toDelete) {
             if (paymentPosition?.payment?.id) {
@@ -235,9 +226,7 @@ export class PaymentCalculationService {
                     ),
             )
             .map((c) => {
-                const found = paymentPositions.find(
-                    (p) => p?.payment?.paymentTypeId === c?.payment?.paymentTypeId,
-                );
+                const found = paymentPositions.find((p) => p?.payment?.paymentTypeId === c?.payment?.paymentTypeId);
                 if (found) {
                     c.baseSum = c.baseSum - found.baseSum;
                     c.deductions = c.deductions - found.deductions;
@@ -269,18 +258,12 @@ export class PaymentCalculationService {
     }
 
     private async getPaymentPositions(): Promise<PaymentPosition[]> {
-        return await this.paymentPositionsService.findByPositionId(
-            this.position.id,
-            this.payPeriod.dateFrom,
-        );
+        return await this.paymentPositionsService.findByPositionId(this.position.id, this.payPeriod.dateFrom);
     }
 
     private async createPayment(payload: Payment): Promise<Payment> {
         const { id: _, ...payment } = payload;
-        payment.docNumber = await this.paymentsService.getNextDocNumber(
-            this.company.id,
-            this.payPeriod.dateFrom,
-        );
+        payment.docNumber = await this.paymentsService.getNextDocNumber(this.company.id, this.payPeriod.dateFrom);
         payment.docDate = dateUTC(payment.dateFrom);
         return await this.paymentsService.create(this.userId, payment);
     }

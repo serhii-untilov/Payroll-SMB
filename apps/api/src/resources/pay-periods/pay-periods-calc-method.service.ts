@@ -1,18 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { CreatePayPeriodCalcMethodDto } from './dto/create-pay-period-calc-method.dto';
-import { UpdatePayPeriodCalcMethodDto } from './dto/update-pay-period-calc-method.dto';
-import { PayPeriodCalcMethod } from './entities/pay-period-calc-method.entity';
+import { CreatePayPeriodSummaryDto } from './dto/create-pay-period-calc-method.dto';
+import { UpdatePayPeriodSummaryDto } from './dto/update-pay-period-calc-method.dto';
+import { PayPeriodSummary } from './entities/pay-period-summary.entity';
 
 @Injectable()
 export class PayPeriodsCalcMethodService {
     constructor(
-        @InjectRepository(PayPeriodCalcMethod)
-        private repository: Repository<PayPeriodCalcMethod>,
+        @InjectRepository(PayPeriodSummary)
+        private repository: Repository<PayPeriodSummary>,
     ) {}
 
-    async create(payload: CreatePayPeriodCalcMethodDto): Promise<PayPeriodCalcMethod> {
+    async create(payload: CreatePayPeriodSummaryDto): Promise<PayPeriodSummary> {
         const existing = await this.repository.findOneBy({
             payPeriodId: payload.payPeriodId,
             calcMethod: payload.calcMethod,
@@ -26,15 +26,15 @@ export class PayPeriodsCalcMethodService {
         return await this.repository.save(payload);
     }
 
-    async findAll(options: FindManyOptions<PayPeriodCalcMethod>): Promise<PayPeriodCalcMethod[]> {
+    async findAll(options: FindManyOptions<PayPeriodSummary>): Promise<PayPeriodSummary[]> {
         return await this.repository.find(options);
     }
 
-    async findOne(params: FindOneOptions<PayPeriodCalcMethod>): Promise<PayPeriodCalcMethod> {
+    async findOne(params: FindOneOptions<PayPeriodSummary>): Promise<PayPeriodSummary> {
         return await this.repository.findOneOrFail(params);
     }
 
-    async update(id: string, payload: UpdatePayPeriodCalcMethodDto): Promise<PayPeriodCalcMethod> {
+    async update(id: string, payload: UpdatePayPeriodSummaryDto): Promise<PayPeriodSummary> {
         await this.repository.findOneOrFail({ where: { id } });
         await this.repository.save({ ...payload, id });
         return await this.repository.findOneOrFail({ where: { id } });

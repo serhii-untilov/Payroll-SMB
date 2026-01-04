@@ -6,13 +6,13 @@ import { UsersModule } from '../users/users.module';
 import { CompaniesController } from './companies.controller';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
-import { UserCompaniesModule } from '../user-companies';
+import { UserRoleModule } from '../user-role';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Company]),
         forwardRef(() => UsersModule),
-        forwardRef(() => UserCompaniesModule),
+        forwardRef(() => UserRoleModule),
         forwardRef(() => AccessModule),
         forwardRef(() => ProcessorModule),
     ],

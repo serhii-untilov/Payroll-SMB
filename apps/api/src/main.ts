@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
-import { Logger, VersioningType } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import 'reflect-metadata';
 import metadata from './metadata';
@@ -16,14 +16,16 @@ async function bootstrap() {
     const configService = app.get(ConfigService);
     // set up versioning
     app.enableVersioning({ type: VersioningType.URI, prefix: 'v' });
+    app.useGlobalPipes(
+        new ValidationPipe({
+            whitelist: true,
+            transform: true,
+        }),
+    );
     const title = configService.get<string>('app.title');
 
     // handle Swagger
-    const config = new DocumentBuilder()
-        .setTitle(`${title} REST API`)
-        .setVersion('1.0')
-        .addBearerAuth()
-        .build();
+    const config = new DocumentBuilder().setTitle(`${title} REST API`).setVersion('1.0').addBearerAuth().build();
     await SwaggerModule.loadPluginMetadata(metadata);
     const document = SwaggerModule.createDocument(app, config);
     const apiVersion = 'v1';

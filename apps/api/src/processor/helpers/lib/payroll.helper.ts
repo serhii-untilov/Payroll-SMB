@@ -2,11 +2,7 @@ import { Payroll } from './../../../resources/payrolls/entities/payroll.entity';
 import { PayPeriod } from './../../../resources/pay-periods/entities/pay-period.entity';
 import { RecordFlag } from '@/types';
 
-export function getPayrollUnionRecord(
-    payroll: Payroll,
-    payrolls: Payroll[],
-    payPeriod: PayPeriod,
-): Payroll {
+export function getPayrollUnionRecord(payroll: Payroll, payrolls: Payroll[], payPeriod: PayPeriod): Payroll {
     const result = Object.assign(payroll);
     payrolls
         .filter(
@@ -40,11 +36,7 @@ export function accPeriodFactSum(
         .reduce((a, b) => a + b.factSum, 0);
 }
 
-export function payPeriodFactSum(
-    payPeriod: PayPeriod,
-    payrolls: Payroll[],
-    paymentTypeIds: string[],
-): number {
+export function payPeriodFactSum(payPeriod: PayPeriod, payrolls: Payroll[], paymentTypeIds: string[]): number {
     return payrolls
         .filter(
             (o) =>

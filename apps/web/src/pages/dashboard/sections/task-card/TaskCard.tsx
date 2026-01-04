@@ -52,9 +52,7 @@ export default function TaskCard(props: TaskCardProps) {
                 </Grid>
             </Grid>
             <Grid item xs={1}>
-                {statusIcon && (
-                    <IconButton onClick={() => onStatusClick()}>{statusIcon}</IconButton>
-                )}
+                {statusIcon && <IconButton onClick={() => onStatusClick()}>{statusIcon}</IconButton>}
             </Grid>
         </Box>
     );

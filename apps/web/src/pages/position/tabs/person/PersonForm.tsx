@@ -6,7 +6,7 @@ import { TabLayout } from '@/components/layout/TabLayout';
 import Toolbar from '@/components/layout/Toolbar';
 import MiddleNameField from '@/components/MiddleNameField';
 import PhoneField from '@/components/PhoneField';
-import { SelectSex } from '@/components/SelectSex';
+import { SelectGender } from '@/components/SelectGender';
 import TaxIdField from '@/components/TaxIdField';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
@@ -41,15 +41,10 @@ const PersonForm = ({ person }) => {
                         <TaxIdField control={control} />
                     </Grid>
                     <Grid item xs={12} sm={12} md={4}>
-                        <FormDateField
-                            control={control}
-                            name="birthday"
-                            id="birthday"
-                            label={t('Birth Date')}
-                        />
+                        <FormDateField control={control} name="birthDate" id="birthDate" label={t('Birth Date')} />
                     </Grid>
                     <Grid item xs={12} sm={12} md={4}>
-                        <SelectSex control={control} name="sex" id="sex" label={t('Sex')} />
+                        <SelectGender control={control} name="gender" id="gender" label={t('Sex')} />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <PhoneField control={control} />
@@ -61,21 +56,15 @@ const PersonForm = ({ person }) => {
                 <Grid container sx={{ mt: 2 }} md={12} lg={10} xl={8} spacing={2}>
                     <Grid item xs={12} md={6}>
                         <Grid item xs={12}>
-                            <Button startIcon={<AddCircleRounded />}>
-                                {t('Add Payment Method')}
-                            </Button>
+                            <Button startIcon={<AddCircleRounded />}>{t('Add Payment Method')}</Button>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button startIcon={<AddCircleRounded />}>
-                                {t('Add Tax Exemption')}
-                            </Button>
+                            <Button startIcon={<AddCircleRounded />}>{t('Add Tax Exemption')}</Button>
                         </Grid>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Grid item xs={12}>
-                            <Button startIcon={<AddCircleRounded />}>
-                                {t('Add Home Address')}
-                            </Button>
+                            <Button startIcon={<AddCircleRounded />}>{t('Add Home Address')}</Button>
                         </Grid>
                     </Grid>
                 </Grid>

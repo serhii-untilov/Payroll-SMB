@@ -1,4 +1,4 @@
-import { PayPeriodCalcMethod } from './../../resources/pay-periods/entities/pay-period-calc-method.entity';
+import { PayPeriodSummary } from '../../resources/pay-periods/entities/pay-period-summary.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
 import { Company } from './../../resources/companies/entities/company.entity';
 import {
@@ -8,7 +8,7 @@ import {
     PayPeriodsService,
     PayrollsService,
     PositionsService,
-    UsersService,
+    UserService,
 } from '@/resources';
 import { PaymentSchedule } from '@/types';
 import { PaymentPart } from '@/types';
@@ -18,7 +18,7 @@ import { addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { PeriodListGenerator } from './calc-methods/abstract/period-list-generator';
 import { EndOfMonthPayment } from './calc-methods/end-of-month-payment';
 import { Every15daysPayment } from './calc-methods/every-15-days-payment';
-import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayPeriodCalculationService {
@@ -40,8 +40,8 @@ export class PayPeriodCalculationService {
         private payFundsService: PayFundsService,
         @Inject(forwardRef(() => PositionsService))
         private positionsService: PositionsService,
-        @Inject(forwardRef(() => UsersService))
-        private usersService: UsersService,
+        @Inject(forwardRef(() => UserService))
+        private usersService: UserService,
     ) {}
 
     public get logger() {
@@ -56,7 +56,7 @@ export class PayPeriodCalculationService {
     public get id() {
         // this._id = this._id + 1;
         // return this._id;
-        return SnowflakeServiceSingleton.nextId();
+        return IdGenerator.nextId();
     }
 
     private getGenerator(): PeriodListGenerator {
@@ -135,17 +135,9 @@ export class PayPeriodCalculationService {
         );
         // Calculate Out Balance
         const outBalance =
-            inBalance +
-            (paymentParts[PaymentPart.Accruals] || 0) -
-            (paymentParts[PaymentPart.Deductions] || 0);
-        const outCompanyDebt = await this.positionsService.calcCompanyDebt(
-            payPeriod.companyId,
-            payPeriod.dateFrom,
-        );
-        const outEmployeeDebt = await this.positionsService.calcEmployeeDebt(
-            payPeriod.companyId,
-            payPeriod.dateFrom,
-        );
+            inBalance + (paymentParts[PaymentPart.Accruals] || 0) - (paymentParts[PaymentPart.Deductions] || 0);
+        const outCompanyDebt = await this.positionsService.calcCompanyDebt(payPeriod.companyId, payPeriod.dateFrom);
+        const outEmployeeDebt = await this.positionsService.calcEmployeeDebt(payPeriod.companyId, payPeriod.dateFrom);
         const funds = await this.payFundsService.paySum(payPeriod.companyId, payPeriod.dateFrom);
         const systemUserId = await this.usersService.getSystemUserId();
         return await this.payPeriodsService.update(systemUserId, payPeriod.id, {
@@ -162,7 +154,7 @@ export class PayPeriodCalculationService {
         });
     }
 
-    async updateCalcMethods(id: string): Promise<PayPeriodCalcMethod[]> {
+    async updateCalcMethods(id: string): Promise<PayPeriodSummary[]> {
         const payPeriod = await this.payPeriodsService.findOneBy({ where: { id } });
         const calculatedRecords = await this.payrollsService.payrollCompanyCalcMethods(
             payPeriod.companyId,

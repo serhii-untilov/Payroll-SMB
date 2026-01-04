@@ -1,10 +1,10 @@
-import { WorkNorm } from './../../resources/work-norms/entities/work-norm.entity';
+import { WorkTimeNorm } from '../../resources/work-time-norm/entities/work-time-norm.entity';
 import { Position } from './../../resources/positions/entities/position.entity';
 import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
 import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
 import { Company } from './../../resources/companies/entities/company.entity';
-import { calcBalanceWorkingTime, getPayrollUnionRecord } from '@/processor/helpers';
+import { calcBalanceWorkTime, getPayrollUnionRecord } from '@/processor/helpers';
 import {
     AccessService,
     CompaniesService,
@@ -12,13 +12,13 @@ import {
     PaymentTypesService,
     PayrollsService,
     PositionsService,
-    WorkNormsService,
+    WorkTimeNormService,
 } from '@/resources';
-import { RecordFlag, WorkingTime } from '@/types';
+import { RecordFlag, WorkTime } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { calculateBasics, calculateIncomeTax, calculateMilitaryTax } from './calc-methods';
-import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
@@ -26,7 +26,7 @@ export class PayrollCalculationService {
     private _userId: string;
     private _company: Company;
     private _paymentTypes: PaymentType[];
-    private _workNorms: WorkNorm[];
+    private _workTimeNorms: WorkTimeNorm[];
     private _position: Position;
     public payPeriod: PayPeriod;
     private _accPeriods: PayPeriod[];
@@ -35,8 +35,8 @@ export class PayrollCalculationService {
     private _toInsert: Payroll[] = [];
     private _toDeleteIds: string[] = [];
     // Synthetic working time, for totals only, not for calculate payroll
-    private _syntheticTimePlan: WorkingTime;
-    private _syntheticTimeFact: WorkingTime;
+    private _syntheticTimePlan: WorkTime;
+    private _syntheticTimeFact: WorkTime;
 
     constructor(
         @Inject(forwardRef(() => AccessService))
@@ -51,8 +51,8 @@ export class PayrollCalculationService {
         private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService))
         private payrollsService: PayrollsService,
-        @Inject(forwardRef(() => WorkNormsService))
-        public workNormsService: WorkNormsService,
+        @Inject(forwardRef(() => WorkTimeNormService))
+        public workTimeNormService: WorkTimeNormService,
         @Inject(forwardRef(() => PayPeriodCalculationService))
         private payPeriodCalculationService: PayPeriodCalculationService,
     ) {}
@@ -69,8 +69,8 @@ export class PayrollCalculationService {
     public get paymentTypes() {
         return this._paymentTypes;
     }
-    public get workNorms() {
-        return this._workNorms;
+    public get workTimeNorms() {
+        return this._workTimeNorms;
     }
     public get position() {
         return this._position;
@@ -90,10 +90,10 @@ export class PayrollCalculationService {
     public get syntheticTimeFact() {
         return this._syntheticTimeFact;
     }
-    public set syntheticTimePlan(plan: WorkingTime) {
+    public set syntheticTimePlan(plan: WorkTime) {
         this._syntheticTimePlan = plan;
     }
-    public set syntheticTimeFact(fact: WorkingTime) {
+    public set syntheticTimeFact(fact: WorkTime) {
         this._syntheticTimeFact = fact;
     }
 
@@ -150,7 +150,7 @@ export class PayrollCalculationService {
     public getNextPayrollId(): string {
         // this._payrollId++;
         // return this._payrollId;
-        return SnowflakeServiceSingleton.nextId();
+        return IdGenerator.nextId();
     }
 
     public merge(paymentTypeIds: string[], accPeriod: PayPeriod, payrolls: Payroll[]): void {
@@ -176,11 +176,7 @@ export class PayrollCalculationService {
                 toInsert.push(Object.assign({ ...record, id: this.getNextPayrollId() }));
             } else {
                 processedIds.push(found.id); // memorize to avoid cancelling the found record
-                const foundUnionCancel = getPayrollUnionRecord(
-                    found,
-                    this.payrolls,
-                    this.payPeriod,
-                );
+                const foundUnionCancel = getPayrollUnionRecord(found, this.payrolls, this.payPeriod);
                 if (
                     (record.factSum || 0) === (foundUnionCancel.factSum || 0) &&
                     (record.factDays || 0) === (foundUnionCancel.factDays || 0) &&
@@ -253,11 +249,7 @@ export class PayrollCalculationService {
             ) {
                 toDeleteIds.push(record.id);
             } else {
-                const recordUnionCancel = getPayrollUnionRecord(
-                    record,
-                    this.payrolls,
-                    this.payPeriod,
-                );
+                const recordUnionCancel = getPayrollUnionRecord(record, this.payrolls, this.payPeriod);
                 toInsert.push(
                     Object.assign({
                         ...record,
@@ -281,7 +273,7 @@ export class PayrollCalculationService {
 
     private async loadResources() {
         this._paymentTypes = await this.paymentTypesService.findAll();
-        this._workNorms = await this.workNormsService.findAll({ relations: true });
+        this._workTimeNorms = await this.workTimeNormService.findAll({ relations: true });
     }
 
     // private initNextPayrollId() {
@@ -302,27 +294,14 @@ export class PayrollCalculationService {
             dateFrom,
             dateTo,
         });
-        this._payrolls = await this.payrollsService.findBetween(
-            this.position.id,
-            dateFrom,
-            dateTo,
-            true,
-        );
+        this._payrolls = await this.payrollsService.findBetween(this.position.id, dateFrom, dateTo, true);
         // this.initNextPayrollId();
         calculateBasics(this);
         calculateIncomeTax(this);
         calculateMilitaryTax(this);
         await this.save();
-        const balanceWorkingTime = calcBalanceWorkingTime(
-            this.workNorms,
-            this.position,
-            this.payPeriod,
-        );
-        await this.positionsService.calculateBalance(
-            this.position.id,
-            this.payPeriod.dateFrom,
-            balanceWorkingTime,
-        );
+        const balanceWorkingTime = calcBalanceWorkTime(this.workTimeNorms, this.position, this.payPeriod);
+        await this.positionsService.calculateBalance(this.position.id, this.payPeriod.dateFrom, balanceWorkingTime);
         this._toInsert = [];
         this._toDeleteIds = [];
     }
@@ -340,9 +319,7 @@ export class PayrollCalculationService {
     public getPayrollsAccPeriod(accPeriod: Date) {
         return [
             ...this._payrolls.filter(
-                (o) =>
-                    o.accPeriod.getTime() === accPeriod.getTime() &&
-                    !this._toDeleteIds.includes(o.id),
+                (o) => o.accPeriod.getTime() === accPeriod.getTime() && !this._toDeleteIds.includes(o.id),
             ),
             ...this._toInsert.filter((o) => o.accPeriod.getTime() === accPeriod.getTime()),
         ];

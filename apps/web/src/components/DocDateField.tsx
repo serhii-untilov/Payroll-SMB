@@ -8,12 +8,5 @@ interface DocDateProps {
 
 export default function DocDateField(props: DocDateProps) {
     const { t } = useTranslation();
-    return (
-        <FormDateField
-            disabled={props.disabled}
-            control={props.control}
-            name="docDate"
-            label={t('Date')}
-        />
-    );
+    return <FormDateField disabled={props.disabled} control={props.control} name="docDate" label={t('Date')} />;
 }

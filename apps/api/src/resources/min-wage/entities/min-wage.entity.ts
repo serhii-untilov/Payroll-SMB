@@ -1,5 +1,5 @@
 import { AfterLoad, Column, Entity, Index } from 'typeorm';
-import { BaseEntity } from '../../abstract/base-entity.abstract';
+import { BaseEntity } from '../../common/base/base-entity.abstract';
 
 @Entity()
 @Index('MIN_WAGE_DATE_FROM_INDEX', ['dateFrom', 'dateTo', 'paySum'], { unique: true })

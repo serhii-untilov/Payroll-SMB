@@ -53,9 +53,7 @@ const UserCompanyList = (props: UserCompanyListProps) => {
                 onExport={userCompanies?.length ? onExport : 'disabled'}
                 onShowHistory={'disabled'}
                 onShowDeleted={onShowDeleted}
-                onRestoreDeleted={
-                    showDeleted && deletedSelection().length ? onRestoreDeleted : 'disabled'
-                }
+                onRestoreDeleted={showDeleted && deletedSelection().length ? onRestoreDeleted : 'disabled'}
             />
             <DataGrid
                 getRowStatus={getRowStatus}
@@ -76,11 +74,9 @@ const UserCompanyList = (props: UserCompanyListProps) => {
                         onSelectCompany(params.row.id);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    _event: MuiEvent,
-                    _details: GridCallbackDetails,
-                ) => onSelectCompany(params.row.id)}
+                onRowDoubleClick={(params: GridRowParams, _event: MuiEvent, _details: GridCallbackDetails) =>
+                    onSelectCompany(params.row.id)
+                }
             />
         </>
     );

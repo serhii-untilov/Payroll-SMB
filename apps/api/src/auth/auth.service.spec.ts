@@ -1,4 +1,4 @@
-import { AccessService, UsersService } from '@/resources';
+import { AccessService, UserService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -14,7 +14,7 @@ describe('AuthService', () => {
                 AuthService,
                 JwtService,
                 ConfigService,
-                { provide: UsersService, useValue: createMock<UsersService>() },
+                { provide: UserService, useValue: createMock<UserService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
             ],
         }).compile();

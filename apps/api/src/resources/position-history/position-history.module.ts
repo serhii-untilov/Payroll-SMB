@@ -8,12 +8,7 @@ import { PositionHistoryController } from './position-history.controller';
 import { PositionHistoryService } from './position-history.service';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([PositionHistory]),
-        PositionsModule,
-        PayPeriodsModule,
-        AccessModule,
-    ],
+    imports: [TypeOrmModule.forFeature([PositionHistory]), PositionsModule, PayPeriodsModule, AccessModule],
     controllers: [PositionHistoryController],
     providers: [PositionHistoryService],
     exports: [PositionHistoryService],

@@ -5,8 +5,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from 'test';
 import { AccessService } from '../access/access.service';
-import { UserCompaniesService } from '../user-companies/user-companies.service';
-import { UsersService } from '../users/users.service';
+import { UserRoleService } from '../user-role/user-role.service';
+import { UserService } from '../users/users.service';
 import { CompaniesController } from './companies.controller';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
@@ -21,8 +21,8 @@ describe('CompaniesController', () => {
             providers: [
                 CompaniesService,
                 { provide: getRepositoryToken(Company), useFactory: repositoryMockFactory },
-                { provide: UsersService, useValue: createMock<UsersService>() },
-                { provide: UserCompaniesService, useValue: createMock<UserCompaniesService>() },
+                { provide: UserService, useValue: createMock<UserService>() },
+                { provide: UserRoleService, useValue: createMock<UserRoleService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
                 {

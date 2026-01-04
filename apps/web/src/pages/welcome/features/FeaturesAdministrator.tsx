@@ -8,9 +8,7 @@ const FeaturesAdministrator = ({ isEmbedded }) => {
     const { featuresAdministrator } = useFeatures();
     return (
         <>
-            {!isEmbedded && (
-                <PageTitle title={t('Administrator')} goBack={true} hideAppState={true} />
-            )}
+            {!isEmbedded && <PageTitle title={t('Administrator')} goBack={true} hideAppState={true} />}
             <Box sx={isEmbedded ? {} : { p: 1 }}>
                 <ul>
                     {featuresAdministrator.map((item, index) => (

@@ -27,11 +27,7 @@ export function FormTextField(props: FormTextFieldProps) {
                         size="small"
                         error={error != undefined}
                         onChange={(e) => {
-                            onChange(
-                                e.target.value ||
-                                    props.defaultValue ||
-                                    (props.type === 'number' ? 0 : ''),
-                            );
+                            onChange(e.target.value || props.defaultValue || (props.type === 'number' ? 0 : ''));
                         }}
                         value={value || ''}
                         fullWidth

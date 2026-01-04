@@ -92,9 +92,7 @@ export const LocaleProvider: FC<LocaleProviderProps> = (props) => {
     }
 
     return (
-        <LocaleContext.Provider
-            value={{ locale, setLocale, setLanguage, toggleLanguage, supportedLocales }}
-        >
+        <LocaleContext.Provider value={{ locale, setLocale, setLanguage, toggleLanguage, supportedLocales }}>
             {children}
         </LocaleContext.Provider>
     );

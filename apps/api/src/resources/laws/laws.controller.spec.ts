@@ -12,10 +12,7 @@ describe('LawsController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [LawsController],
-            providers: [
-                LawsService,
-                { provide: getRepositoryToken(Law), useFactory: repositoryMockFactory },
-            ],
+            providers: [LawsService, { provide: getRepositoryToken(Law), useFactory: repositoryMockFactory }],
         }).compile();
 
         controller = module.get<LawsController>(LawsController);

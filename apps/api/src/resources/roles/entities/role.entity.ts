@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity } from 'typeorm';
 import { RoleType } from './../../../types';
-import { BaseEntity } from '@/resources/abstract';
+import { BaseEntity } from '@/resources/common/base';
 
 @Entity()
 export class Role extends BaseEntity {

@@ -14,9 +14,7 @@ const useGetPayPeriodList = (params: FindAllPayPeriodDto) => {
     return useQuery<PayPeriod[], Error>({
         queryKey: [Resource.PayPeriod, 'all', params],
         queryFn: async () =>
-            (await api.payPeriodsFindAll(params)).data.sort(
-                (a, b) => a.dateFrom.getTime() - b.dateFrom.getTime(),
-            ),
+            (await api.payPeriodsFindAll(params)).data.sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime()),
     });
 };
 
@@ -77,10 +75,4 @@ const useOpenPayPeriod = () => {
     });
 };
 
-export {
-    useGetPayPeriod,
-    useGetPayPeriodList,
-    useGetCurrentPayPeriod,
-    useClosePayPeriod,
-    useOpenPayPeriod,
-};
+export { useGetPayPeriod, useGetPayPeriodList, useGetCurrentPayPeriod, useClosePayPeriod, useOpenPayPeriod };

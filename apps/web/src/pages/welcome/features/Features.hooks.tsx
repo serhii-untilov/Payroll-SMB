@@ -10,9 +10,7 @@ import FeaturesEmployee from './FeaturesEmployee';
 export default function useFeatures() {
     const themeMode = useAppSelector(selectThemeMode);
     const { t } = useTranslation();
-    const [selectedIndex, setSelectedIndex] = useState(
-        Number(localStorage.getItem('feature-index')),
-    );
+    const [selectedIndex, setSelectedIndex] = useState(Number(localStorage.getItem('feature-index')));
 
     useEffect(() => {
         localStorage.setItem('feature-index', selectedIndex.toString());
@@ -64,9 +62,7 @@ export default function useFeatures() {
             {
                 name: t('Accountant'),
                 description: [t('accountantFeature1'), t('accountantFeature2')],
-                icon: (
-                    <BusinessCenterOutlined color={themeMode === 'light' ? 'primary' : 'primary'} />
-                ),
+                icon: <BusinessCenterOutlined color={themeMode === 'light' ? 'primary' : 'primary'} />,
                 roleFeatures: <FeaturesAccountant isEmbedded={true} />,
                 details: '/accountant-features',
             },

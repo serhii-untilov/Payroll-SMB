@@ -19,10 +19,7 @@ const Header = () => {
         <>
             <Box id="header" sx={headerProps}>
                 <Box sx={backGroundProps}>
-                    <Box
-                        id="header__left-side"
-                        sx={{ my: 'auto', display: 'flex', align: 'stretch', px: 1 }}
-                    >
+                    <Box id="header__left-side" sx={{ my: 'auto', display: 'flex', align: 'stretch', px: 1 }}>
                         <Link to="/dashboard">
                             <Logo disabled={true} />
                         </Link>
@@ -32,10 +29,7 @@ const Header = () => {
                             </Link>
                         </Box>
                     </Box>
-                    <Box
-                        id="header__right-side"
-                        sx={{ my: 'auto', display: 'flex', align: 'center', px: 2, gap: 1 }}
-                    >
+                    <Box id="header__right-side" sx={{ my: 'auto', display: 'flex', align: 'center', px: 2, gap: 1 }}>
                         <Box sx={{ display: { xs: 'none', sm: 'block', md: 'block' } }}>
                             <DemoButton />
                         </Box>

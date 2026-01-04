@@ -1,13 +1,7 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import useGrid from '@/hooks/useGrid';
-import {
-    GridCellParams,
-    GridRowParams,
-    GridRowSelectionModel,
-    MuiEvent,
-    useGridApiRef,
-} from '@mui/x-data-grid';
+import { GridCellParams, GridRowParams, GridRowSelectionModel, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import { Company, Department } from '@repo/openapi';
 import { useState } from 'react';
 import DepartmentDialog from './department/DepartmentDialog';
@@ -24,13 +18,12 @@ export default function DepartmentList(props: DepartmentListProps) {
     const [departmentId, setDepartmentId] = useState<string>();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
-    const { columns, onAddDepartment, onEditDepartment, onDeleteDepartment, onTreeView } =
-        useDepartmentList({
-            setOpenForm,
-            setDepartmentId,
-            rowSelectionModel,
-            gridRef,
-        });
+    const { columns, onAddDepartment, onEditDepartment, onDeleteDepartment, onTreeView } = useDepartmentList({
+        setOpenForm,
+        setDepartmentId,
+        rowSelectionModel,
+        gridRef,
+    });
     const { onPrint, onExport } = useGrid(gridRef);
 
     return (
@@ -54,10 +47,7 @@ export default function DepartmentList(props: DepartmentListProps) {
                     setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
-                onCellKeyDown={(
-                    params: GridCellParams,
-                    event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                ) => {
+                onCellKeyDown={(params: GridCellParams, event: MuiEvent<React.KeyboardEvent<HTMLElement>>) => {
                     if (event.code === 'Enter') {
                         onEditDepartment(params.row.id);
                     }

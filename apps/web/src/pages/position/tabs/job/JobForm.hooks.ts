@@ -1,21 +1,12 @@
 import useLocale from '@/hooks/context/useLocale';
 import { useCreatePosition, useUpdatePosition } from '@/hooks/queries/usePosition';
-import {
-    useCreatePositionHistory,
-    useUpdatePositionHistory,
-} from '@/hooks/queries/usePositionHistory';
+import { useCreatePositionHistory, useUpdatePositionHistory } from '@/hooks/queries/usePositionHistory';
 import useInvalidateQueries from '@/hooks/useInvalidateQueries';
 import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-    CreatePositionDto,
-    CreatePositionHistoryDto,
-    Position,
-    PositionHistory,
-    Resource,
-} from '@repo/openapi';
+import { CreatePositionDto, CreatePositionHistoryDto, Position, PositionHistory, Resource } from '@repo/openapi';
 import { MAX_SEQUENCE_NUMBER, maxDate, minDate } from '@repo/shared';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
@@ -73,8 +64,15 @@ const useJobForm = (props: JobFormProps) => {
     );
 
     const formData_PositionHistory = useCallback((data: FormType): CreatePositionHistoryDto => {
-        const { departmentId, jobId, workNormId, paymentTypeId, wage, rate } = data;
-        return { departmentId, jobId, workNormId, paymentTypeId, wage: wage || 0, rate: rate || 1 };
+        const { departmentId, jobId, workTimeNormId, paymentTypeId, wage, rate } = data;
+        return {
+            departmentId,
+            jobId,
+            workTimeNormId,
+            paymentTypeId,
+            wage: wage || 0,
+            rate: rate || 1,
+        };
     }, []);
 
     const onSubmit = useCallback<SubmitHandler<FormType>>(
@@ -86,11 +84,7 @@ const useJobForm = (props: JobFormProps) => {
             const positionData = formData_Position(data);
             const positionHistoryData = formData_PositionHistory(data);
             const positionDirtyValues = getDirtyValues(dirtyFields, positionData, true);
-            const positionHistoryDirtyValues = getDirtyValues(
-                dirtyFields,
-                positionHistoryData,
-                true,
-            );
+            const positionHistoryDirtyValues = getDirtyValues(dirtyFields, positionHistoryData, true);
             try {
                 const { position, positionHistory } = props;
                 let pos = position;
@@ -178,7 +172,7 @@ function useFormSchema() {
                 // A PositionHistory record actual on the current PayPeriod
                 departmentId: string().nullable(),
                 jobId: string().nullable(),
-                workNormId: string().nullable(),
+                workTimeNormId: string().nullable(),
                 paymentTypeId: string().nullable(),
                 wage: number().nullable().notRequired().optional(),
                 rate: number().nullable().notRequired().optional().min(0).max(2),
@@ -188,10 +182,7 @@ function useFormSchema() {
     );
 }
 
-function getFormData(
-    position: Position | undefined | null,
-    positionHistory: PositionHistory | undefined | null,
-) {
+function getFormData(position: Position | undefined | null, positionHistory: PositionHistory | undefined | null) {
     return {
         // Position fields
         cardNumber: position?.cardNumber || '',
@@ -204,7 +195,7 @@ function getFormData(
         // Position history fields
         departmentId: positionHistory?.departmentId || null,
         jobId: positionHistory?.jobId || null,
-        workNormId: positionHistory?.workNormId || null,
+        workTimeNormId: positionHistory?.workTimeNormId || null,
         paymentTypeId: positionHistory?.paymentTypeId || null,
         wage: positionHistory?.wage || 0,
         rate: positionHistory?.rate || 0,

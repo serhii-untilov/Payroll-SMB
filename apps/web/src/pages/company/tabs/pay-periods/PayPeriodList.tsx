@@ -1,13 +1,7 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import useGrid from '@/hooks/useGrid';
-import {
-    GridCellParams,
-    GridRowParams,
-    GridRowSelectionModel,
-    MuiEvent,
-    useGridApiRef,
-} from '@mui/x-data-grid';
+import { GridCellParams, GridRowParams, GridRowSelectionModel, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import { Company, PayPeriod } from '@repo/openapi';
 import { useState } from 'react';
 import usePayPeriodList from './PayPeriodList.hooks';
@@ -46,10 +40,7 @@ export function PayPeriodList(props: PayPeriodListProps) {
                     setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
-                onCellKeyDown={(
-                    params: GridCellParams,
-                    event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                ) => {
+                onCellKeyDown={(params: GridCellParams, event: MuiEvent<React.KeyboardEvent<HTMLElement>>) => {
                     if (event.code === 'Enter') {
                         onEdit(params.row.id);
                     }

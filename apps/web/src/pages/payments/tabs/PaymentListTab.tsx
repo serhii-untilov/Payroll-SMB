@@ -58,10 +58,7 @@ export function PaymentListTab(props: PaymentListTabProps) {
                     setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
-                onCellKeyDown={(
-                    params: GridCellParams,
-                    event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                ) => {
+                onCellKeyDown={(params: GridCellParams, event: MuiEvent<React.KeyboardEvent<HTMLElement>>) => {
                     if (event.code === 'Enter') {
                         onEditPayment(params.row.id);
                     }

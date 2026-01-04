@@ -27,10 +27,10 @@ export default function usePayrollList(_params: PayrollListParams) {
         return params.row?.deletedDate
             ? 'Deleted'
             : params.row?.dateTo < maxDate()
-                ? 'Dismissed'
-                : !params.row?.personId
-                    ? 'Vacancy'
-                    : 'Normal';
+              ? 'Dismissed'
+              : !params.row?.personId
+                ? 'Vacancy'
+                : 'Normal';
     }, []);
 
     const columns = useMemo<GridColDef[]>(
@@ -53,24 +53,15 @@ export default function usePayrollList(_params: PayrollListParams) {
                 renderCell: (params) => {
                     const unit = getUnitByCalcMethod(params.row?.calcMethod || '');
                     const unitName = unit === 'month' ? '' : ` / ${t(unit)}`;
-                    const fullName = getFullName(
-                        params.row.lastName,
-                        params.row.firstName,
-                        params.row.middleName,
-                    );
+                    const fullName = getFullName(params.row.lastName, params.row.firstName, params.row.middleName);
                     const wage = params.row?.wage;
                     const rate = params.row?.rate;
                     return (
                         <div style={{ width: '100%' }}>
-                            <Typography
-                                sx={{ fontSize: '1rem', fontWeight: 'medium' }}
-                                color={'primary'}
-                            >
+                            <Typography sx={{ fontSize: '1rem', fontWeight: 'medium' }} color={'primary'}>
                                 {fullName}
                             </Typography>
-                            <Typography color="textSecondary">
-                                {params.row?.jobName || ''}
-                            </Typography>
+                            <Typography color="textSecondary">{params.row?.jobName || ''}</Typography>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography
                                     color={wage ? 'textSecondary' : 'warning.main'}
@@ -119,8 +110,8 @@ export default function usePayrollList(_params: PayrollListParams) {
                                         factHours > planHours
                                             ? 'error.main'
                                             : factHours < planHours
-                                                ? 'warning.main'
-                                                : ''
+                                              ? 'warning.main'
+                                              : ''
                                     }
                                 >
                                     {unit === 'hour' ? factHours.toFixed(2) : factDays || ''}
@@ -145,13 +136,8 @@ export default function usePayrollList(_params: PayrollListParams) {
                     return (
                         <Box sx={{ width: '100%' }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography color={inBalance ? 'warning.main' : 'divider'}>
-                                    {t('Debt')}
-                                </Typography>
-                                <Typography
-                                    sx={{ textAlign: 'right' }}
-                                    color={inBalance ? 'warning.main' : 'divider'}
-                                >
+                                <Typography color={inBalance ? 'warning.main' : 'divider'}>{t('Debt')}</Typography>
+                                <Typography sx={{ textAlign: 'right' }} color={inBalance ? 'warning.main' : 'divider'}>
                                     {sumFormatter(inBalance, false)}
                                 </Typography>
                             </Box>
@@ -188,25 +174,19 @@ export default function usePayrollList(_params: PayrollListParams) {
                             {adjustments ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Typography>{t('Adjustments')}</Typography>
-                                    <Typography sx={{ textAlign: 'right' }}>
-                                        {sumFormatter(adjustments)}
-                                    </Typography>
+                                    <Typography sx={{ textAlign: 'right' }}>{sumFormatter(adjustments)}</Typography>
                                 </Box>
                             ) : null}
                             {bonus ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Typography>{t('Bonus')}</Typography>
-                                    <Typography sx={{ textAlign: 'right' }}>
-                                        {sumFormatter(bonus)}
-                                    </Typography>
+                                    <Typography sx={{ textAlign: 'right' }}>{sumFormatter(bonus)}</Typography>
                                 </Box>
                             ) : null}
                             {otherEarnings ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Typography>{t('Other Earnings')}</Typography>
-                                    <Typography sx={{ textAlign: 'right' }}>
-                                        {sumFormatter(otherEarnings)}
-                                    </Typography>
+                                    <Typography sx={{ textAlign: 'right' }}>{sumFormatter(otherEarnings)}</Typography>
                                 </Box>
                             ) : null}
                         </Box>
@@ -232,9 +212,7 @@ export default function usePayrollList(_params: PayrollListParams) {
                         <Box sx={{ width: '100%' }}>
                             {incomeTax || accruals ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Typography
-                                        color={!params.row.accruals && !incomeTax ? 'disabled' : ''}
-                                    >
+                                    <Typography color={!params.row.accruals && !incomeTax ? 'disabled' : ''}>
                                         {t('Income Tax')}
                                     </Typography>
                                     <Typography
@@ -243,8 +221,8 @@ export default function usePayrollList(_params: PayrollListParams) {
                                             params.row.accruals > 0 && incomeTax <= 0
                                                 ? 'warning.main'
                                                 : !params.row.accruals && !incomeTax
-                                                    ? 'disabled'
-                                                    : ''
+                                                  ? 'disabled'
+                                                  : ''
                                         }
                                     >
                                         {sumFormatter(incomeTax)}
@@ -253,11 +231,7 @@ export default function usePayrollList(_params: PayrollListParams) {
                             ) : null}
                             {militaryTax || accruals ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Typography
-                                        color={
-                                            !params.row.accruals && !militaryTax ? 'disabled' : ''
-                                        }
-                                    >
+                                    <Typography color={!params.row.accruals && !militaryTax ? 'disabled' : ''}>
                                         {t('Military Tax')}
                                     </Typography>
                                     <Typography
@@ -266,8 +240,8 @@ export default function usePayrollList(_params: PayrollListParams) {
                                             params.row.accruals > 0 && militaryTax <= 0
                                                 ? 'warning.main'
                                                 : !params.row.accruals && !militaryTax
-                                                    ? 'disabled'
-                                                    : ''
+                                                  ? 'disabled'
+                                                  : ''
                                         }
                                     >
                                         {sumFormatter(militaryTax)}
@@ -277,9 +251,7 @@ export default function usePayrollList(_params: PayrollListParams) {
                             {otherDeductions ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Typography>{t('Other Deductions')}</Typography>
-                                    <Typography sx={{ textAlign: 'right' }}>
-                                        {sumFormatter(otherDeductions)}
-                                    </Typography>
+                                    <Typography sx={{ textAlign: 'right' }}>{sumFormatter(otherDeductions)}</Typography>
                                 </Box>
                             ) : null}
                         </Box>
@@ -306,9 +278,7 @@ export default function usePayrollList(_params: PayrollListParams) {
                     return (
                         <Box sx={{ width: '100%' }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography color={netPay ? '' : 'divider'}>
-                                    {t('Net Pay')}
-                                </Typography>
+                                <Typography color={netPay ? '' : 'divider'}>{t('Net Pay')}</Typography>
                                 <Typography
                                     sx={{
                                         textAlign: 'right',
@@ -322,30 +292,17 @@ export default function usePayrollList(_params: PayrollListParams) {
                             </Box>
                             {paid || accruals ? (
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Typography color={paid ? '' : 'divider'}>
-                                        {t('Paid')}
-                                    </Typography>
-                                    <Typography
-                                        sx={{ textAlign: 'right' }}
-                                        color={paid ? '' : 'divider'}
-                                    >
+                                    <Typography color={paid ? '' : 'divider'}>{t('Paid')}</Typography>
+                                    <Typography sx={{ textAlign: 'right' }} color={paid ? '' : 'divider'}>
                                         {sumFormatter(paid, false)}
                                     </Typography>
                                 </Box>
                             ) : null}
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography color={outBalance ? '' : 'divider'}>
-                                    {t('Debt')}
-                                </Typography>
+                                <Typography color={outBalance ? '' : 'divider'}>{t('Debt')}</Typography>
                                 <Typography
                                     sx={{ textAlign: 'right' }}
-                                    color={
-                                        outBalance < 0
-                                            ? 'error.main'
-                                            : outBalance > 0
-                                                ? 'primary.main'
-                                                : 'divider'
-                                    }
+                                    color={outBalance < 0 ? 'error.main' : outBalance > 0 ? 'primary.main' : 'divider'}
                                 >
                                     {sumFormatter(outBalance, false)}
                                 </Typography>
@@ -372,11 +329,7 @@ export default function usePayrollList(_params: PayrollListParams) {
                                     <Typography
                                         sx={{ textAlign: 'right' }}
                                         color={
-                                            accruals > 0 && fundECB <= 0
-                                                ? 'warning.main'
-                                                : !fundECB
-                                                    ? 'divider'
-                                                    : ''
+                                            accruals > 0 && fundECB <= 0 ? 'warning.main' : !fundECB ? 'divider' : ''
                                         }
                                     >
                                         {sumFormatter(fundECB, false)}

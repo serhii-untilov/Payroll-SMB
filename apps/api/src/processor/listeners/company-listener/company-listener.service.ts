@@ -1,18 +1,16 @@
-import { PayPeriodCalculationService } from '@/processor/pay-period-calculation/pay-period-calculation.service';
 import { PayFundCalculationService } from '@/processor/pay-fund-calculation/pay-fund-calculation.service';
+import { PayPeriodCalculationService } from '@/processor/pay-period-calculation/pay-period-calculation.service';
 import { PaymentCalculationService } from '@/processor/payment-calculation/payment-calculation.service';
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
 import { CompanyCreatedEvent, CompanyDeletedEvent, CompanyUpdatedEvent } from '@/resources';
 import { ServerEvent } from '@/types';
-import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class CompanyListenerService {
-    private _logger: Logger = new Logger(CompanyListenerService.name);
-
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
         private payrollCalculationService: PayrollCalculationService,

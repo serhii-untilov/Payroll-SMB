@@ -1,7 +1,10 @@
 import FlakeId = require('flake-idgen');
 import intformat = require('biguint-format');
 
-class SnowflakeServiceSingleton {
+/**
+ * IdGenerator Singleton
+ */
+export class IdGenerator {
     private static flake: FlakeId;
 
     static init(options?: { workerId?: number; epoch?: number }) {
@@ -20,5 +23,3 @@ class SnowflakeServiceSingleton {
         return intformat(this.flake.next(), 'dec');
     }
 }
-
-export { SnowflakeServiceSingleton };

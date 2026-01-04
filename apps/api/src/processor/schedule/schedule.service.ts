@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { RoleType } from '@/types';
-import { CompaniesService, UserCompaniesService } from '@/resources';
+import { CompaniesService, UserRoleService } from '@/resources';
 
 @Injectable()
 export class ScheduleService {
@@ -10,8 +10,8 @@ export class ScheduleService {
     constructor(
         @Inject(forwardRef(() => SchedulerRegistry))
         private schedulerRegistry: SchedulerRegistry,
-        @Inject(forwardRef(() => UserCompaniesService))
-        private userCompaniesService: UserCompaniesService,
+        @Inject(forwardRef(() => UserRoleService))
+        private userCompaniesService: UserRoleService,
         @Inject(forwardRef(() => CompaniesService))
         private companiesService: CompaniesService,
     ) {}
@@ -21,8 +21,6 @@ export class ScheduleService {
         this._logger.debug('Schedule event At 02:00 AM');
         const roleType = RoleType.Accountant;
         const userCompanies = await this.userCompaniesService.findAllByRoleType({ roleType });
-        userCompanies.forEach(({ userId, companyId }) =>
-            this.companiesService.calculatePayroll(userId, companyId),
-        );
+        userCompanies.forEach(({ userId, companyId }) => this.companiesService.calculatePayroll(userId, companyId));
     }
 }

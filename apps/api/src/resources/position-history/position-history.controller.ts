@@ -23,7 +23,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindAllPositionHistoryDto } from './dto/find-all-position-history.dto';
@@ -44,14 +44,11 @@ export class PositionHistoryController {
         type: PositionHistory,
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async create(
-        @Req() req: Request,
-        @Body() payload: CreatePositionHistoryDto,
-    ): Promise<PositionHistory> {
+    async create(@Req() req: Request, @Body() payload: CreatePositionHistoryDto): Promise<PositionHistory> {
         const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(payload.positionId);
         await this.service.availableCreateOrFail(userId, companyId);
-        return await this.service.create(userId, deepStringToShortDate(payload));
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Post('find/')
@@ -62,14 +59,11 @@ export class PositionHistoryController {
         schema: { type: 'array', items: { $ref: getSchemaPath(PositionHistory) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(
-        @Req() req: Request,
-        @Body() params: FindAllPositionHistoryDto,
-    ): Promise<PositionHistory[]> {
+    async findAll(@Req() req: Request, @Body() params: FindAllPositionHistoryDto): Promise<PositionHistory[]> {
         const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(params.positionId);
         await this.service.availableCreateOrFail(userId, companyId);
-        return await this.service.findAll(deepStringToShortDate(params));
+        return await this.service.findAll(deepTransformToShortDate(params));
     }
 
     @Post('find/last')
@@ -78,15 +72,12 @@ export class PositionHistoryController {
     @ApiOkResponse({ description: 'The found record', type: PositionHistory })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findLast(
-        @Req() req: Request,
-        @Body() params: FindAllPositionHistoryDto,
-    ): Promise<PositionHistory | null> {
+    async findLast(@Req() req: Request, @Body() params: FindAllPositionHistoryDto): Promise<PositionHistory | null> {
         const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(params.positionId);
         await this.service.availableFindAllOrFail(userId, companyId);
         const response = await this.service.findAll({
-            ...deepStringToShortDate(params),
+            ...deepTransformToShortDate(params),
             last: true,
         });
         return response.length ? response[0] : null;
@@ -122,7 +113,7 @@ export class PositionHistoryController {
     ): Promise<PositionHistory> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, deepStringToShortDate(payload));
+        return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')
@@ -134,10 +125,7 @@ export class PositionHistoryController {
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-    ): Promise<PositionHistory> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<PositionHistory> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);

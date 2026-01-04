@@ -25,8 +25,7 @@ const useGetPersonList = () => {
 const useCreatePerson = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (dto: CreatePersonDto): Promise<Person> =>
-            (await api.personsCreate(dto)).data,
+        mutationFn: async (dto: CreatePersonDto): Promise<Person> => (await api.personsCreate(dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Person, Resource.Task]);
         },
@@ -41,8 +40,7 @@ type UpdatePerson = {
 const useUpdatePerson = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdatePerson): Promise<Person> =>
-            (await api.personsUpdate(id, dto)).data,
+        mutationFn: async ({ id, dto }: UpdatePerson): Promise<Person> => (await api.personsUpdate(id, dto)).data,
         onSuccess: () => invalidateQueries([Resource.Person, Resource.Task]),
     });
 };

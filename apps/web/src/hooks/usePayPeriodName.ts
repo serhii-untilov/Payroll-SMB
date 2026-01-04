@@ -10,13 +10,7 @@ export default function usePayPeriodName(payPeriod: PayPeriod | undefined) {
         return (
             payPeriod &&
             capitalizeFirstChar(
-                getPayPeriodName(
-                    payPeriod.dateFrom,
-                    payPeriod.dateTo,
-                    false,
-                    locale.dateLocale,
-                    'LLLL y',
-                ),
+                getPayPeriodName(payPeriod.dateFrom, payPeriod.dateTo, false, locale.dateLocale, 'LLLL y'),
             )
         );
     }, [locale, payPeriod]);

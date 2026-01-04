@@ -36,11 +36,7 @@ export default function SignIn() {
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
                     <EmailField control={control} autoFocus sx={{ mb: [2] }} />
                     <PasswordField control={control} sx={{ mb: [2] }} />
-                    <RememberMe
-                        checked={rememberMe}
-                        setRememberMe={setRememberMe}
-                        sx={{ mb: [2] }}
-                    />
+                    <RememberMe checked={rememberMe} setRememberMe={setRememberMe} sx={{ mb: [2] }} />
                     <Button
                         type="submit"
                         fullWidth

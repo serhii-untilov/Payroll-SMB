@@ -15,10 +15,7 @@ const usePaymentForm = (props: PaymentFormProps) => {
 
     useEffect(() => {}, [locale]);
 
-    const title = useMemo(
-        () => (payment?.id ? payment?.paymentType?.name : t('New Payment')),
-        [payment, t],
-    );
+    const title = useMemo(() => (payment?.id ? payment?.paymentType?.name : t('New Payment')), [payment, t]);
 
     const totalSum = useMemo(
         () => (payment?.paySum || 0) + (payment?.deductions || 0) + (payment?.funds || 0),
@@ -29,9 +26,7 @@ const usePaymentForm = (props: PaymentFormProps) => {
         const status = payment?.status || PaymentStatus.Draft;
         const docDate = dateUTC(payment?.docDate || new Date());
         const now = dateUTC(new Date());
-        return status === PaymentStatus.Draft && docDate.getTime() <= now.getTime()
-            ? 'warning'
-            : 'primary';
+        return status === PaymentStatus.Draft && docDate.getTime() <= now.getTime() ? 'warning' : 'primary';
     }, [payment]);
 
     const tabs = useMemo(

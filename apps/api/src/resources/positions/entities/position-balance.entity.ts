@@ -1,13 +1,4 @@
-import {
-    AfterLoad,
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    Relation,
-} from 'typeorm';
+import { AfterLoad, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Position } from './position.entity';
 
 @Entity()
@@ -61,13 +52,13 @@ export class PositionBalance {
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     refunds: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    other_accruals: number;
+    otherAccruals: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     taxes: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     payments: number;
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
-    other_deductions: number;
+    otherDeductions: number;
 
     @Column({ type: 'decimal', precision: 15, scale: 2, default: 0 })
     outBalance: number;
@@ -84,10 +75,10 @@ export class PositionBalance {
         this.vacations = Number(this.vacations);
         this.sicks = Number(this.sicks);
         this.refunds = Number(this.refunds);
-        this.other_accruals = Number(this.other_accruals);
+        this.otherAccruals = Number(this.otherAccruals);
         this.taxes = Number(this.taxes);
         this.payments = Number(this.payments);
-        this.other_deductions = Number(this.other_deductions);
+        this.otherDeductions = Number(this.otherDeductions);
         this.outBalance = Number(this.outBalance);
     }
 }

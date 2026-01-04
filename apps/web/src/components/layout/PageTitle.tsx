@@ -30,12 +30,7 @@ export default function PageTitle(props: Props) {
         >
             <Typography component="h2" color="primary.main" variant="h2" noWrap {...other}>
                 {!!goBack && (
-                    <IconButton
-                        aria-label="Go Back"
-                        color="primary"
-                        sx={{ mr: 1 }}
-                        onClick={onGoBack}
-                    >
+                    <IconButton aria-label="Go Back" color="primary" sx={{ mr: 1 }} onClick={onGoBack}>
                         <ArrowBackIosNewRounded />
                     </IconButton>
                 )}

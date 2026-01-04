@@ -45,8 +45,7 @@ export class PaymentsService extends AvailableForUserCompany {
     }
 
     async getCompanyId(entityId: string): Promise<string> {
-        return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true }))
-            .companyId;
+        return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true })).companyId;
     }
 
     async create(userId: string, payload: CreatePaymentDto): Promise<Payment> {
@@ -64,8 +63,7 @@ export class PaymentsService extends AvailableForUserCompany {
             payPeriod: payPeriod ?? company.payPeriod,
             accPeriod: accPeriod ?? payPeriod ?? company.payPeriod,
             docNumber:
-                payload.docNumber ||
-                (await this.getNextDocNumber(payload.companyId, payPeriod ?? company.payPeriod)),
+                payload.docNumber || (await this.getNextDocNumber(payload.companyId, payPeriod ?? company.payPeriod)),
             docDate: payload.docDate || dateUTC(new Date()),
             dateFrom: payload.dateFrom || accPeriodRecord.dateFrom,
             dateTo: payload.dateTo || accPeriodRecord.dateTo,

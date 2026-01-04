@@ -21,7 +21,7 @@ import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { EcbMinWage, EcbSalary } from './calc-methods';
 import { PayFundCalc } from './calc-methods/abstract/pay-fund-calc';
-import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayFundCalculationService {
@@ -146,13 +146,10 @@ export class PayFundCalculationService {
     public getNextPayFundId(): string {
         // this._payFundId++;
         // return this._payFundId;
-        return SnowflakeServiceSingleton.nextId();
+        return IdGenerator.nextId();
     }
 
-    public merge(
-        accPeriod: PayPeriod,
-        currentPayFunds: PayFund[],
-    ): { toInsert: PayFund[]; toDeleteIds: string[] } {
+    public merge(accPeriod: PayPeriod, currentPayFunds: PayFund[]): { toInsert: PayFund[]; toDeleteIds: string[] } {
         const toInsert: PayFund[] = [];
         const toDeleteIds: string[] = [];
         const processedIds: string[] = [];
@@ -220,9 +217,7 @@ export class PayFundCalculationService {
 
     private async loadResources() {
         this._paymentTypes = await this.paymentTypesService.findAll();
-        this._payFundTypes = (await this.payFundTypesService.findAll()).sort(
-            (a, b) => a.sequence - b.sequence,
-        );
+        this._payFundTypes = (await this.payFundTypesService.findAll()).sort((a, b) => a.sequence - b.sequence);
         this._minWages = await this.minWageService.findAll();
     }
 
@@ -231,11 +226,7 @@ export class PayFundCalculationService {
     //     return this._payFundId
     // }
 
-    private getCalcMethod(
-        accPeriod: PayPeriod,
-        payFundType: PayFundType,
-        current: PayFund[],
-    ): PayFundCalc | null {
+    private getCalcMethod(accPeriod: PayPeriod, payFundType: PayFundType, current: PayFund[]): PayFundCalc | null {
         if (payFundType.calcMethod === PayFundCalcMethod.EcbSalary) {
             return new EcbSalary(this, accPeriod, payFundType, current);
         } else if (payFundType.calcMethod === PayFundCalcMethod.EcbMinWage) {
@@ -253,18 +244,8 @@ export class PayFundCalculationService {
             dateFrom,
             dateTo,
         });
-        this._payrolls = await this.payrollsService.findBetween(
-            this.position.id,
-            dateFrom,
-            dateTo,
-            true,
-        );
-        this._priorPayFunds = await this.payFundsService.findBetween(
-            this.position.id,
-            dateFrom,
-            dateTo,
-            true,
-        );
+        this._payrolls = await this.payrollsService.findBetween(this.position.id, dateFrom, dateTo, true);
+        this._priorPayFunds = await this.payFundsService.findBetween(this.position.id, dateFrom, dateTo, true);
         // this.initNextPayFundId();
         for (const accPeriod of this.accPeriods) {
             const current: PayFund[] = [];

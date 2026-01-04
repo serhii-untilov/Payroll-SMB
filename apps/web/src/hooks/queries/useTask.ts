@@ -1,12 +1,5 @@
 import { api } from '@/api';
-import {
-    CreateTaskDto,
-    FindAllTaskDto,
-    FindOneTaskDto,
-    Resource,
-    Task,
-    UpdateTaskDto,
-} from '@repo/openapi';
+import { CreateTaskDto, FindAllTaskDto, FindOneTaskDto, Resource, Task, UpdateTaskDto } from '@repo/openapi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import useInvalidateQueries from '../useInvalidateQueries';
 
@@ -43,8 +36,7 @@ type UpdateTask = {
 const useUpdateTask = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdateTask): Promise<Task> =>
-            (await api.tasksUpdate(id, dto)).data,
+        mutationFn: async ({ id, dto }: UpdateTask): Promise<Task> => (await api.tasksUpdate(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Task, Resource.PayPeriod, Resource.Position]);
         },

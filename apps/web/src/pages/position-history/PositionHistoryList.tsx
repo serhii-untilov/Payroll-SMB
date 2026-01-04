@@ -23,8 +23,7 @@ export type PositionHistoryListProps = {
 export default function PositionHistoryList(props: PositionHistoryListProps) {
     const gridRef = useGridApiRef();
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-    const { pageTitle, columns, onAdd, onEdit, onDelete, getRowStatus } =
-        usePositionHistoryList(props);
+    const { pageTitle, columns, onAdd, onEdit, onDelete, getRowStatus } = usePositionHistoryList(props);
     const { onPrint, onExport } = useGrid(gridRef);
 
     return (
@@ -56,11 +55,9 @@ export default function PositionHistoryList(props: PositionHistoryListProps) {
                             onEdit(params.row.id);
                         }
                     }}
-                    onRowDoubleClick={(
-                        params: GridRowParams,
-                        _event: MuiEvent,
-                        _details: GridCallbackDetails,
-                    ) => onEdit(params.row.id)}
+                    onRowDoubleClick={(params: GridRowParams, _event: MuiEvent, _details: GridCallbackDetails) =>
+                        onEdit(params.row.id)
+                    }
                 />
             </PageLayout>
         </>

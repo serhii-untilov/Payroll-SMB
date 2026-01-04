@@ -61,13 +61,7 @@ const usePeopleForm = (props: PeopleFormProps) => {
             },
             {
                 label: t('All'),
-                tab: (
-                    <PositionList
-                        companyId={props.company.id}
-                        includeDeleted={true}
-                        relations={true}
-                    />
-                ),
+                tab: <PositionList companyId={props.company.id} includeDeleted={true} relations={true} />,
             },
         ],
         [props, t],

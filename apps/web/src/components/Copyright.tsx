@@ -7,9 +7,7 @@ const Copyright = () => {
         <Link to={Website} target="_blank" rel="noreferrer">
             <Typography sx={{ color: 'grey.700', display: 'inline' }}>Copyright © </Typography>
             <Typography sx={{ color: 'primary.main', display: 'inline' }}>{Author}</Typography>{' '}
-            <Typography sx={{ color: 'grey.700', display: 'inline' }}>
-                2024 - {new Date().getFullYear()}
-            </Typography>
+            <Typography sx={{ color: 'grey.700', display: 'inline' }}>2024 - {new Date().getFullYear()}</Typography>
         </Link>
     );
 };

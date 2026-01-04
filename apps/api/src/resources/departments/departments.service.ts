@@ -5,7 +5,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { maxDate, minDate } from '@repo/shared';
 import { Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/available-for-user-company';
+import { AvailableForUserCompany } from '../common/base/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { FindAllDepartmentDto } from './dto/find-all-department.dto';
@@ -47,10 +47,7 @@ export class DepartmentsService extends AvailableForUserCompany {
             name: payload.name,
         });
         if (existing) {
-            throw new HttpException(
-                `Department '${payload.name}' already exists.`,
-                HttpStatus.CONFLICT,
-            );
+            throw new HttpException(`Department '${payload.name}' already exists.`, HttpStatus.CONFLICT);
         }
         const created = await this.repository.save({
             ...other,

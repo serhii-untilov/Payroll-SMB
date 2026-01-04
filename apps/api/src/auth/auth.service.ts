@@ -1,4 +1,4 @@
-import { AccessService, UsersService } from '@/resources';
+import { AccessService, UserService } from '@/resources';
 import { Action, Resource, RoleType } from '@/types';
 import {
     BadRequestException,
@@ -20,14 +20,10 @@ import { TokensDto } from './dto/tokens.dto';
 @Injectable()
 export class AuthService {
     constructor(
-        @Inject(forwardRef(() => UsersService))
-        private usersService: UsersService,
-        @Inject(forwardRef(() => JwtService))
-        private jwtService: JwtService,
-        @Inject(forwardRef(() => ConfigService))
-        private configService: ConfigService,
-        @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
+        @Inject(forwardRef(() => UserService)) private usersService: UserService,
+        @Inject(forwardRef(() => JwtService)) private jwtService: JwtService,
+        @Inject(forwardRef(() => ConfigService)) private configService: ConfigService,
+        @Inject(forwardRef(() => AccessService)) private accessService: AccessService,
     ) {}
 
     async register(user: CreateUserDto): Promise<TokensDto> {
@@ -55,7 +51,7 @@ export class AuthService {
         if (!user) {
             throw new BadRequestException('User not found');
         }
-        if (!(await bcrypt.compare(auth.password, user.password))) {
+        if (!(await bcrypt.compare(auth.password, user.passwordHash))) {
             throw new UnauthorizedException('Password is incorrect');
         }
         const tokens = await this.getTokens(user.id, user.email, !auth.rememberMe);
@@ -68,17 +64,17 @@ export class AuthService {
         return null;
     }
 
-    async hashData(data) {
+    private async hashData(data) {
         return await bcrypt.hash(data, 10);
     }
 
-    async updateRefreshToken(userId: string, refreshToken: string | null) {
+    private async updateRefreshToken(userId: string, refreshToken: string | null) {
         const hashedRefreshToken = refreshToken ? await this.hashData(refreshToken) : null;
         await this.usersService.update(userId, userId, { refreshToken: hashedRefreshToken });
         return this.usersService.findOne({ where: { id: userId } });
     }
 
-    async getTokens(userId: string, email: string, skipRefreshToken?: boolean): Promise<TokensDto> {
+    private async getTokens(userId: string, email: string, skipRefreshToken?: boolean): Promise<TokensDto> {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(
                 {
@@ -122,11 +118,7 @@ export class AuthService {
     }
 
     async demo(): Promise<AuthDto> {
-        await this.accessService.availableForRoleTypeOrFail(
-            RoleType.Accountant,
-            Resource.Demo,
-            Action.Read,
-        );
+        await this.accessService.availableForRoleTypeOrFail(RoleType.Accountant, Resource.Demo, Action.Read);
         if (process.env['DEMO_AVAILABLE'] === 'true') {
             return {
                 email: process.env['DEMO_LOGIN'] || '',

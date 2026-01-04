@@ -35,10 +35,7 @@ export default function MainLayout() {
 
     const onSwitchThemeMode = useCallback(() => dispatch(switchThemeMode()), [dispatch]);
 
-    const onToggleCompactView = useCallback(
-        () => dispatch(setCompactView(!compactView)),
-        [compactView, dispatch],
-    );
+    const onToggleCompactView = useCallback(() => dispatch(setCompactView(!compactView)), [compactView, dispatch]);
 
     const onLogout = useCallback(() => {
         logout();
@@ -94,22 +91,12 @@ export default function MainLayout() {
                     </Box>
                     <Box>
                         <List disablePadding component="nav" sx={{ mx: ['auto'], mb: [3] }}>
-                            <ListItemLink
-                                to="/profile"
-                                primary={t('Profile')}
-                                icon={<PersonOutlined />}
-                            />
+                            <ListItemLink to="/profile" primary={t('Profile')} icon={<PersonOutlined />} />
 
                             <ListItemButton
                                 onClick={onSwitchThemeMode}
                                 primary={themeMode === 'light' ? t('Light theme') : t('Dark theme')}
-                                icon={
-                                    themeMode === 'light' ? (
-                                        <LightModeOutlined />
-                                    ) : (
-                                        <DarkModeOutlined />
-                                    )
-                                }
+                                icon={themeMode === 'light' ? <LightModeOutlined /> : <DarkModeOutlined />}
                             />
 
                             <ListItemLink
@@ -119,11 +106,7 @@ export default function MainLayout() {
                                 icon={<Support />}
                             />
 
-                            <ListItemButton
-                                onClick={onLogout}
-                                primary={t('Logout')}
-                                icon={<Logout />}
-                            />
+                            <ListItemButton onClick={onLogout} primary={t('Logout')} icon={<Logout />} />
                         </List>
                     </Box>
                 </Box>

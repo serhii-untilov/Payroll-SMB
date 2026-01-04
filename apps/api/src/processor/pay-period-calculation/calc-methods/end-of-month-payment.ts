@@ -12,11 +12,7 @@ export class EndOfMonthPayment extends PeriodListGenerator {
 
     public getPeriodList(dateFrom: Date, dateTo: Date): PayPeriod[] {
         const periodList: PayPeriod[] = [];
-        for (
-            let d = monthBegin(dateFrom);
-            d.getTime() < monthEnd(dateTo).getTime();
-            d = addMonths(d, 1)
-        ) {
+        for (let d = monthBegin(dateFrom); d.getTime() < monthEnd(dateTo).getTime(); d = addMonths(d, 1)) {
             const period = this.makePeriod();
             period.dateFrom = monthBegin(d);
             period.dateTo = monthEnd(d);

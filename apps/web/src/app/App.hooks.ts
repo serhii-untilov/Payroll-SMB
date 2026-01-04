@@ -48,9 +48,7 @@ export default function useApp() {
             const companyId = localStorage.getItem('companyId');
             const company =
                 user &&
-                (companyId
-                    ? (await api.companiesFindOne(companyId)).data
-                    : (await api.companiesFindLast()).data);
+                (companyId ? (await api.companiesFindOne(companyId)).data : (await api.companiesFindLast()).data);
             dispatch(setCompany(company));
         };
         initCompany();
@@ -73,9 +71,7 @@ export default function useApp() {
     }, [dispatch, company]);
 
     const eventSource = useMemo(() => {
-        return company?.id
-            ? new EventSource(`/api/server-events/company-stream/${company?.id}`)
-            : null;
+        return company?.id ? new EventSource(`/api/server-events/company-stream/${company?.id}`) : null;
     }, [company]);
 
     useEffect(() => {

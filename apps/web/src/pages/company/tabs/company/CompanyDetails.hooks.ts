@@ -93,12 +93,8 @@ function useFormSchema() {
                 name: string().required('Name is required'),
                 lawId: string().required('Law is required').default(defaultLawId),
                 taxId: string().default(''),
-                accountingId: string()
-                    .required('Accounting is required')
-                    .default(defaultAccountingId),
-                paymentSchedule: string()
-                    .required('Payment Schedule required')
-                    .default(PaymentSchedule.LastDay),
+                accountingId: string().required('Accounting is required').default(defaultAccountingId),
+                paymentSchedule: string().required('Payment Schedule required').default(PaymentSchedule.LastDay),
                 dateFrom: date().default(minDate()).required(),
                 dateTo: date().default(maxDate()).required(),
                 payPeriod: date().required('Pay Period required').default(monthBegin(new Date())),

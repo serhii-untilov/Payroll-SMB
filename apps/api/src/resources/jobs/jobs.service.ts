@@ -1,12 +1,6 @@
 import { Action, Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
-import {
-    BadRequestException,
-    Inject,
-    Injectable,
-    NotFoundException,
-    forwardRef,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AccessService } from '../access/access.service';

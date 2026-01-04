@@ -39,10 +39,7 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
         () =>
             !!rowSelectionModel.find((id) =>
                 payments.find(
-                    (payment) =>
-                        payment.id === id &&
-                        payment.status === PaymentStatus.Draft &&
-                        payment.deletedDate,
+                    (payment) => payment.id === id && payment.status === PaymentStatus.Draft && payment.deletedDate,
                 ),
             ),
         [rowSelectionModel, payments],
@@ -52,10 +49,7 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
         () =>
             !!rowSelectionModel.find((id) =>
                 payments.find(
-                    (payment) =>
-                        payment.id === id &&
-                        payment.status === PaymentStatus.Draft &&
-                        !payment.deletedDate,
+                    (payment) => payment.id === id && payment.status === PaymentStatus.Draft && !payment.deletedDate,
                 ),
             ),
         [rowSelectionModel, payments],
@@ -168,8 +162,7 @@ function useColumns() {
                 width: 190,
                 sortable: true,
                 valueGetter: (params) => {
-                    const mandatoryPayments =
-                        (params.row?.deductions || 0) + (params.row?.funds || 0);
+                    const mandatoryPayments = (params.row?.deductions || 0) + (params.row?.funds || 0);
                     return sumFormatter(mandatoryPayments);
                 },
             },
@@ -180,10 +173,7 @@ function useColumns() {
                 width: 150,
                 sortable: true,
                 valueGetter: (params) => {
-                    const total =
-                        (params.row?.paySum || 0) +
-                        (params.row?.deductions || 0) +
-                        (params.row?.funds || 0);
+                    const total = (params.row?.paySum || 0) + (params.row?.deductions || 0) + (params.row?.funds || 0);
                     return sumFormatter(total);
                 },
             },

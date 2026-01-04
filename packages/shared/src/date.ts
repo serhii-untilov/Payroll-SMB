@@ -50,14 +50,14 @@ export function deepStringToDate(obj: any): any {
 }
 
 // Convert strings to a short dates (YYYY-MM-DD) in a given object
-export function deepStringToShortDate(obj: any): any {
+export function deepTransformToShortDate(obj: any): any {
     if (obj === null || obj === undefined) {
         return obj;
     }
 
     if (Array.isArray(obj)) {
         for (let i = 0; i < obj.length; i++) {
-            deepStringToShortDate(obj[i]);
+            deepTransformToShortDate(obj[i]);
         }
         return obj;
     }
@@ -68,7 +68,7 @@ export function deepStringToShortDate(obj: any): any {
             if (isIsoDateString(value)) {
                 obj[key] = formatDate(parseISO(value));
             } else if (typeof value === 'object') {
-                deepStringToShortDate(value);
+                deepTransformToShortDate(value);
             }
         }
         return obj;
@@ -146,20 +146,7 @@ export function maxDate(): Date {
 
 export function getMonthName(date: Date): string {
     const d = new Date(date);
-    const names = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-    ];
+    const names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return names[d.getMonth()];
 }
 
@@ -193,8 +180,7 @@ export function date2view(date: Date): string | null {
 export function view2date(date: string, defaultValue: string | null = null): string {
     if (date && date.length) return formatDate(normalizeDate(new Date(date)));
 
-    if (defaultValue && defaultValue.length)
-        return formatDate(normalizeDate(new Date(defaultValue)));
+    if (defaultValue && defaultValue.length) return formatDate(normalizeDate(new Date(defaultValue)));
 
     return formatDate(minDate());
 }

@@ -19,9 +19,7 @@ const PayrollTab = (props: PayrollTabProps) => {
         <>
             {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
-            {data && (
-                <PayrollList company={props.company} payPeriod={props.payPeriod} balances={data} />
-            )}
+            {data && <PayrollList company={props.company} payPeriod={props.payPeriod} balances={data} />}
         </>
     );
 };

@@ -19,8 +19,7 @@ const usePositionsTab = (props: Props) => {
 
     const onAddPosition = () => navigate('/people/position/?tab-index=0&return=true');
 
-    const onEditPosition = (positionId: string) =>
-        navigate(`/people/position/${positionId}?return=true`);
+    const onEditPosition = (positionId: string) => navigate(`/people/position/${positionId}?return=true`);
 
     const onDeletePosition = async () => {
         for (const id of props.rowSelectionModel.map(String)) {
@@ -90,21 +89,17 @@ function useColumns(payPeriod: PayPeriod) {
                 width: 300,
                 sortable: true,
                 valueGetter: (params) => {
-                    return payPeriod
-                        ? params.row?.history?.findLast((o) => findFn(o))?.department?.name || ''
-                        : '';
+                    return payPeriod ? params.row?.history?.findLast((o) => findFn(o))?.department?.name || '' : '';
                 },
             },
             {
-                field: 'workNorm',
-                headerName: t('Work Norm'),
+                field: 'workTimeNorm',
+                headerName: t('Work Time Norm'),
                 type: 'string',
                 width: 250,
                 sortable: true,
                 valueGetter: (params) => {
-                    return payPeriod
-                        ? params.row?.history?.findLast((o) => findFn(o))?.workNorm?.name || ''
-                        : '';
+                    return payPeriod ? params.row?.history?.findLast((o) => findFn(o))?.workTimeNorm?.name || '' : '';
                 },
             },
             {
@@ -114,9 +109,7 @@ function useColumns(payPeriod: PayPeriod) {
                 width: 190,
                 sortable: true,
                 valueGetter: (params) => {
-                    return payPeriod
-                        ? params.row?.history?.findLast((o) => findFn(o))?.paymentType?.name || ''
-                        : '';
+                    return payPeriod ? params.row?.history?.findLast((o) => findFn(o))?.paymentType?.name || '' : '';
                 },
             },
             {
@@ -126,9 +119,7 @@ function useColumns(payPeriod: PayPeriod) {
                 width: 110,
                 sortable: true,
                 valueGetter: (params) => {
-                    const wage = payPeriod
-                        ? params.row?.history?.findLast((o) => findFn(o))?.wage || ''
-                        : '';
+                    const wage = payPeriod ? params.row?.history?.findLast((o) => findFn(o))?.wage || '' : '';
                     return Number(wage) === 0 ? '' : wage;
                 },
             },
@@ -139,9 +130,7 @@ function useColumns(payPeriod: PayPeriod) {
                 width: 80,
                 sortable: true,
                 valueGetter: (params) => {
-                    return payPeriod
-                        ? params.row?.history?.findLast((o) => findFn(o))?.rate || ''
-                        : '';
+                    return payPeriod ? params.row?.history?.findLast((o) => findFn(o))?.rate || '' : '';
                 },
             },
             {

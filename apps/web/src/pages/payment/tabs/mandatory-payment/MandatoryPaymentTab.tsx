@@ -24,9 +24,7 @@ const MandatoryPaymentTab = (props: Props) => {
         <>
             {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
-            {paymentList && (
-                <MandatoryPaymentList {...{ company, payPeriod, payment, paymentList }} />
-            )}
+            {paymentList && <MandatoryPaymentList {...{ company, payPeriod, payment, paymentList }} />}
         </>
     );
 };

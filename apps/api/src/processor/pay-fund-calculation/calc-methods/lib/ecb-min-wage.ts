@@ -7,12 +7,7 @@ import { PayFundCalculationService } from './../../pay-fund-calculation.service'
 import { PayFundCalc } from './../abstract/pay-fund-calc';
 
 export class EcbMinWage extends PayFundCalc {
-    constructor(
-        ctx: PayFundCalculationService,
-        accPeriod: PayPeriod,
-        payFundType: PayFundType,
-        current: PayFund[],
-    ) {
+    constructor(ctx: PayFundCalculationService, accPeriod: PayPeriod, payFundType: PayFundType, current: PayFund[]) {
         super(ctx, accPeriod, payFundType, current);
     }
 
@@ -49,9 +44,7 @@ export class EcbMinWage extends PayFundCalc {
     }
 
     getPriorBaseSum(): number {
-        const payFundIds = this.ctx.payFundTypes
-            .filter((o) => o.group === PayFundGroup.Ecb)
-            .map((o) => o.id);
+        const payFundIds = this.ctx.payFundTypes.filter((o) => o.group === PayFundGroup.Ecb).map((o) => o.id);
         return this.current
             .filter((o) => payFundIds.includes(o.payFundTypeId))
             .reduce((a, b) => {

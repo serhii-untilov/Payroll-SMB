@@ -61,16 +61,7 @@ const useSidebarMenu = () => {
                 onClick: onChangeThemeMode,
             },
         ],
-        [
-            goDemo,
-            goSignIn,
-            goSignUp,
-            locale.language,
-            onChangeThemeMode,
-            t,
-            themeMode,
-            toggleLanguage,
-        ],
+        [goDemo, goSignIn, goSignUp, locale.language, onChangeThemeMode, t, themeMode, toggleLanguage],
     );
 
     return { menuItems };

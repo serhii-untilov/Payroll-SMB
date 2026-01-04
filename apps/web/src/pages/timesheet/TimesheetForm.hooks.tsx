@@ -15,7 +15,7 @@ export const useTimesheetForm = (_props: TimesheetFormProps) => {
     const { t } = useTranslation();
     const { locale } = useLocale();
 
-    useEffect(() => { }, [locale]);
+    useEffect(() => {}, [locale]);
 
     const tabs = useMemo<TabComponent[]>(
         () => [

@@ -4,8 +4,7 @@ import { useAppSelector } from '@/store/store.hooks';
 import { Box } from '@mui/material';
 import { PropsWithChildren, useEffect } from 'react';
 
-const LINEAR_GRADIENT =
-    'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)';
+const LINEAR_GRADIENT = 'linear-gradient(to bottom, #CFE5FD, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff)';
 
 export default function WelcomePageLayout(props: PropsWithChildren) {
     const themeMode = useAppSelector(selectThemeMode);

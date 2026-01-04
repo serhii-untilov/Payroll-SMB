@@ -11,10 +11,7 @@ export function useOptions(data: PayPeriod[], currentPayPeriod: Date) {
         () =>
             data?.map((period: any) => {
                 return (
-                    <MenuItem
-                        key={format(period.dateFrom, 'yyyy-MM-dd')}
-                        value={format(period.dateFrom, 'yyyy-MM-dd')}
-                    >
+                    <MenuItem key={format(period.dateFrom, 'yyyy-MM-dd')} value={format(period.dateFrom, 'yyyy-MM-dd')}>
                         {getPayPeriodName(
                             period.dateFrom,
                             period.dateTo,

@@ -9,7 +9,7 @@ export class CreatePositionHistoryDto extends IntersectionType(
             'position',
             'department',
             'job',
-            'workNorm',
+            'workTimeNorm',
             'paymentType',
             'paymentType',
             'createdDate',

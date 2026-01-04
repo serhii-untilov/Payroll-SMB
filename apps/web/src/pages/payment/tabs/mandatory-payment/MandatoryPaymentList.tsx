@@ -1,12 +1,6 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
-import {
-    GridCellParams,
-    GridRowParams,
-    GridRowSelectionModel,
-    MuiEvent,
-    useGridApiRef,
-} from '@mui/x-data-grid';
+import { GridCellParams, GridRowParams, GridRowSelectionModel, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import { Company, Payment, PayPeriod } from '@repo/openapi';
 import { useState } from 'react';
 import useMandatoryPaymentList from './MandatoryPaymentList.hooks';
@@ -21,8 +15,7 @@ export type MandatoryPaymentListProps = {
 export function MandatoryPaymentList(props: MandatoryPaymentListProps) {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
-    const { columns, onAddPayment, onDeletePayment, onEditPayment } =
-        useMandatoryPaymentList(props);
+    const { columns, onAddPayment, onDeletePayment, onEditPayment } = useMandatoryPaymentList(props);
     const { onPrint, onExport } = useGrid(gridRef);
 
     return (
@@ -51,10 +44,7 @@ export function MandatoryPaymentList(props: MandatoryPaymentListProps) {
                     setRowSelectionModel(newRowSelectionModel.map(String));
                 }}
                 rowSelectionModel={rowSelectionModel}
-                onCellKeyDown={(
-                    params: GridCellParams,
-                    event: MuiEvent<React.KeyboardEvent<HTMLElement>>,
-                ) => {
+                onCellKeyDown={(params: GridCellParams, event: MuiEvent<React.KeyboardEvent<HTMLElement>>) => {
                     if (event.code === 'Enter') {
                         onEditPayment(params.row.id);
                     }

@@ -5,7 +5,7 @@ import {
     PayPeriodsService,
     PayrollsService,
     PositionsService,
-    WorkNormsService,
+    WorkTimeNormService,
 } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -25,7 +25,7 @@ describe('ProcessorService', () => {
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
-                { provide: WorkNormsService, useValue: createMock<WorkNormsService>() },
+                { provide: WorkTimeNormService, useValue: createMock<WorkTimeNormService>() },
                 {
                     provide: PayPeriodCalculationService,
                     useValue: createMock<PayPeriodCalculationService>(),

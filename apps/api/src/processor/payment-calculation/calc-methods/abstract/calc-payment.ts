@@ -10,11 +10,7 @@ export abstract class CalcPayment {
     dateFrom: Date;
     current: PaymentPosition[];
 
-    constructor(
-        ctx: PaymentCalculationService,
-        paymentType: PaymentType,
-        current: PaymentPosition[],
-    ) {
+    constructor(ctx: PaymentCalculationService, paymentType: PaymentType, current: PaymentPosition[]) {
         this.ctx = ctx;
         this.paymentType = paymentType;
         this.current = current;

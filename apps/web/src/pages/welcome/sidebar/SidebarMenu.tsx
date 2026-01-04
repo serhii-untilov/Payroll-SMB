@@ -1,14 +1,5 @@
 import { Divider } from '@/components/layout/Divider';
-import {
-    Box,
-    Drawer,
-    Link,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-} from '@mui/material';
+import { Box, Drawer, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import useSidebarMenu from './SidebarMenu.hooks';
 
 type SidebarMenuProps = {
@@ -39,10 +30,7 @@ const SidebarMenu = (props: SidebarMenuProps) => {
                         ) : (
                             <ListItem key={item.label} disablePadding>
                                 <Link href={item.href} underline="none">
-                                    <ListItemButton
-                                        onClick={item.onClick}
-                                        sx={{ color: 'text.primary' }}
-                                    >
+                                    <ListItemButton onClick={item.onClick} sx={{ color: 'text.primary' }}>
                                         <ListItemIcon>{item.icon}</ListItemIcon>
                                         <ListItemText primary={item.label} />
                                     </ListItemButton>

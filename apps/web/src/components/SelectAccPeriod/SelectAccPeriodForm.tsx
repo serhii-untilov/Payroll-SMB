@@ -37,11 +37,7 @@ export default function SelectAccPeriodForm(props: Props) {
                             fullWidth
                             native={false}
                             onChange={(event: any) => new Date(event.target.value)}
-                            value={
-                                options?.length
-                                    ? format(value || monthBegin(new Date()), 'yyyy-MM-dd')
-                                    : ''
-                            }
+                            value={options?.length ? format(value || monthBegin(new Date()), 'yyyy-MM-dd') : ''}
                             {...other}
                             label={''}
                         >

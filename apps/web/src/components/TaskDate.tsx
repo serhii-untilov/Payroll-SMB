@@ -14,9 +14,7 @@ const TaskDate = ({ date }) => {
                 borderRadius: 2,
             }}
         >
-            <Typography sx={{ color: 'text.primary', textAlign: 'center' }}>
-                {date.split(' ')[0]}
-            </Typography>
+            <Typography sx={{ color: 'text.primary', textAlign: 'center' }}>{date.split(' ')[0]}</Typography>
             <Typography sx={{ color: 'text.primary', textAlign: 'center' }}>
                 {date.split(' ')[1].replace('.', '')}
             </Typography>

@@ -1,4 +1,4 @@
-import { getSystemUserId } from '../utils/lib/getSystemUserId';
+import { getSystemUserId } from '../utils/lib/system-user';
 import { MinWage } from '../resources/min-wage/entities/min-wage.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 

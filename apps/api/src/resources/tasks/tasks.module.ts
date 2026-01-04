@@ -7,11 +7,7 @@ import { AccessModule } from '../access/access.module';
 import { PayPeriodsModule } from '../pay-periods/pay-periods.module';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Task]),
-        forwardRef(() => AccessModule),
-        forwardRef(() => PayPeriodsModule),
-    ],
+    imports: [TypeOrmModule.forFeature([Task]), forwardRef(() => AccessModule), forwardRef(() => PayPeriodsModule)],
     controllers: [TasksController],
     providers: [TasksService],
     exports: [TasksService],

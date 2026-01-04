@@ -23,9 +23,7 @@ export default function PaymentPage() {
             {!!paymentId && company && payPeriod && (
                 <EditPayment {...{ company, payPeriod, paymentId, tabIndex, goBack }} />
             )}
-            {!paymentId && company && payPeriod && (
-                <CreatePayment {...{ company, payPeriod, setPaymentId }} />
-            )}
+            {!paymentId && company && payPeriod && <CreatePayment {...{ company, payPeriod, setPaymentId }} />}
         </>
     );
 }

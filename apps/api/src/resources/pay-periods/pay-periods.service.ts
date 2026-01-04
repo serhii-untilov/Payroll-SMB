@@ -1,19 +1,11 @@
 import { PayPeriodState, Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
-import {
-    HttpException,
-    HttpStatus,
-    Inject,
-    Injectable,
-    Logger,
-    NotFoundException,
-    forwardRef,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { dateUTC, formatPeriod, monthBegin, monthEnd } from '@repo/shared';
 import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/available-for-user-company';
+import { AvailableForUserCompany } from '../common/base/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import {
@@ -44,8 +36,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
     }
 
     async getCompanyId(entityId: string): Promise<string> {
-        return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true }))
-            .companyId;
+        return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true })).companyId;
     }
 
     async create(userId: string, payload: CreatePayPeriodDto): Promise<PayPeriod> {
@@ -171,11 +162,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
         return Number(count);
     }
 
-    async close(
-        userId: string,
-        currentPayPeriodId: string,
-        payload: ClosePayPeriodDto,
-    ): Promise<PayPeriod> {
+    async close(userId: string, currentPayPeriodId: string, payload: ClosePayPeriodDto): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
         checkVersionOrFail(current, payload);
         const company = await this.companiesService.findOne(userId, current.companyId);
@@ -212,11 +199,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: next.id } });
     }
 
-    async open(
-        userId: string,
-        currentPayPeriodId: string,
-        payload: OpenPayPeriodDto,
-    ): Promise<PayPeriod> {
+    async open(userId: string, currentPayPeriodId: string, payload: OpenPayPeriodDto): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
         checkVersionOrFail(current, payload);
         if (current.state !== PayPeriodState.Opened) {
@@ -251,11 +234,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
 
 function getPeriodList(dateFrom: Date, dateTo: Date): PayPeriod[] {
     const periodList: PayPeriod[] = [];
-    for (
-        let d = monthBegin(dateFrom);
-        d.getTime() < monthEnd(dateTo).getTime();
-        d = addMonths(d, 1)
-    ) {
+    for (let d = monthBegin(dateFrom); d.getTime() < monthEnd(dateTo).getTime(); d = addMonths(d, 1)) {
         const period = Object.assign({
             id: 0,
             companyId: 0,

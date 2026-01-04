@@ -22,9 +22,7 @@ export default function EditDepartment(props: EditDepartmentProps) {
             {!company && <ErrorDisplay error={{ message: 'The Company is not defined' }} />}
             {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
-            {company && data && (
-                <DepartmentForm {...{ company, open, setOpen, department: data }} />
-            )}
+            {company && data && <DepartmentForm {...{ company, open, setOpen, department: data }} />}
         </>
     );
 }

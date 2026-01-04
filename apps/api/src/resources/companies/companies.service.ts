@@ -5,16 +5,15 @@ import {
     ForbiddenException,
     Inject,
     Injectable,
-    Logger,
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AccessService } from '../access/access.service';
-import { UserCompaniesService } from '../user-companies/user-companies.service';
-import { UsersService } from '../users/users.service';
+// import { AccessService } from '../access/access.service';
+import { UserRoleService } from '../user-role/user-role.service';
+// import { UserService } from '../users/users.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
@@ -22,58 +21,39 @@ import { CompanyCalculateEvent } from './events/company-calculate.event';
 import { CompanyCreatedEvent } from './events/company-created.event';
 import { CompanyDeletedEvent } from './events/company-deleted.event';
 import { CompanyUpdatedEvent } from './events/company-updated.event';
+import { UserService } from '../user';
 
 @Injectable()
 export class CompaniesService {
-    private _logger: Logger = new Logger(CompaniesService.name);
     public readonly resource = Resource.Company;
 
     constructor(
-        @InjectRepository(Company)
-        private repository: Repository<Company>,
-        @Inject(forwardRef(() => UsersService))
-        private usersService: UsersService,
-        @Inject(forwardRef(() => UserCompaniesService))
-        private usersCompanyService: UserCompaniesService,
-        @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
+        @InjectRepository(Company) private repository: Repository<Company>,
+        @Inject(forwardRef(() => UserService)) private usersService: UserService,
+        @Inject(forwardRef(() => UserRoleService)) private usersCompanyService: UserRoleService,
+        // @Inject(forwardRef(() => AccessService)) private accessService: AccessService,
         private eventEmitter: EventEmitter2,
     ) {}
 
-    async availableFindAllOrFail(userId: string) {
-        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Read);
-    }
+    // async availableFindAllOrFail(userId: string) {
+    //     await this.accessService.availableForUserOrFail(userId, this.resource, Action.Read);
+    // }
 
-    async availableFindOneOrFail(userId: string, id: string) {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            id,
-            this.resource,
-            Action.Read,
-        );
-    }
+    // async availableFindOneOrFail(userId: string, id: string) {
+    //     await this.accessService.availableForUserCompanyOrFail(userId, id, this.resource, Action.Read);
+    // }
 
-    async availableCreateOrFail(userId: string) {
-        await this.accessService.availableForUserOrFail(userId, this.resource, Action.Create);
-    }
+    // async availableCreateOrFail(userId: string) {
+    //     await this.accessService.availableForUserOrFail(userId, this.resource, Action.Create);
+    // }
 
-    async availableUpdateOrFail(userId: string, id: string) {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            id,
-            this.resource,
-            Action.Update,
-        );
-    }
+    // async availableUpdateOrFail(userId: string, id: string) {
+    //     await this.accessService.availableForUserCompanyOrFail(userId, id, this.resource, Action.Update);
+    // }
 
-    async availableDeleteOrFail(userId: string, id: string) {
-        await this.accessService.availableForUserCompanyOrFail(
-            userId,
-            id,
-            this.resource,
-            Action.Delete,
-        );
-    }
+    // async availableDeleteOrFail(userId: string, id: string) {
+    //     await this.accessService.availableForUserCompanyOrFail(userId, id, this.resource, Action.Delete);
+    // }
 
     async create(userId: string, payload: CreateCompanyDto): Promise<Company> {
         const existing = await this.usersCompanyService.findOneByCompanyName(userId, payload.name);
@@ -170,9 +150,7 @@ export class CompaniesService {
             this.eventEmitter.emit('company.deleted', new CompanyDeletedEvent(userId, deleted));
             return deleted;
         }
-        throw new ForbiddenException(
-            `User doesn't have access to the requested Company's resource.`,
-        );
+        throw new ForbiddenException(`User doesn't have access to the requested Company's resource.`);
     }
 
     async calculatePayroll(userId: string, id: string): Promise<void> {

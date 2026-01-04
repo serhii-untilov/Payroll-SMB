@@ -1,8 +1,8 @@
 import { PaymentGroup, PaymentPart } from '../types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { CalcMethod } from '../types';
-import { getSystemUserId } from '../utils/lib/getSystemUserId';
-import { langPipe } from '../utils/lib/langPipe';
+import { getSystemUserId } from '../utils/lib/system-user';
+import { langPipe } from '../utils/lib/lang-pipe';
 import { PaymentType } from '../resources/payment-types/entities/payment-type.entity';
 
 const lang = process.env.LANGUAGE ?? 'uk';
@@ -190,10 +190,7 @@ export class Seed1813973393208 implements MigrationInterface {
                 .insert()
                 .into(entity)
                 .values(langPipe(lang, record))
-                .orUpdate(
-                    ['name', 'payment_part', 'payment_group', 'calc_method', 'description'],
-                    ['id'],
-                )
+                .orUpdate(['name', 'payment_part', 'payment_group', 'calc_method', 'description'], ['id'])
                 .execute();
         }
     }

@@ -48,9 +48,7 @@ function makePayroll(
 
 function calcPlanSum(ctx: PayrollCalculationService, accPeriod: PayPeriod): number {
     // TODO: Entry Table
-    const paymentTypeIds = ctx.paymentTypes
-        .filter((o) => o.paymentPart === PaymentPart.Accruals)
-        .map((o) => o.id);
+    const paymentTypeIds = ctx.paymentTypes.filter((o) => o.paymentPart === PaymentPart.Accruals).map((o) => o.id);
     const payrolls = ctx.getPayrollsAccPeriod(accPeriod.dateFrom);
     return accPeriodFactSum(ctx.payPeriod, accPeriod, payrolls, paymentTypeIds);
 }

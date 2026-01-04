@@ -29,8 +29,7 @@ const useGetPaymentList = (params: FindAllPaymentDto) => {
 const useCreatePayment = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (dto: CreatePaymentDto): Promise<Payment> =>
-            (await api.paymentsCreate(dto)).data,
+        mutationFn: async (dto: CreatePaymentDto): Promise<Payment> => (await api.paymentsCreate(dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Payment, Resource.Task]);
         },
@@ -45,8 +44,7 @@ type UpdatePayment = {
 const useUpdatePayment = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdatePayment): Promise<Payment> =>
-            (await api.paymentsUpdate(id, dto)).data,
+        mutationFn: async ({ id, dto }: UpdatePayment): Promise<Payment> => (await api.paymentsUpdate(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Payment, Resource.Task]);
         },
@@ -76,8 +74,7 @@ const useRestorePayment = () => {
 const useProcessPayment = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdatePayment): Promise<Payment> =>
-            (await api.paymentsProcess(id, dto)).data,
+        mutationFn: async ({ id, dto }: UpdatePayment): Promise<Payment> => (await api.paymentsProcess(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([
                 Resource.Payment,
@@ -93,8 +90,7 @@ const useProcessPayment = () => {
 const useWithdrawPayment = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdatePayment): Promise<Payment> =>
-            (await api.paymentsWithdraw(id, dto)).data,
+        mutationFn: async ({ id, dto }: UpdatePayment): Promise<Payment> => (await api.paymentsWithdraw(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([
                 Resource.Payment,

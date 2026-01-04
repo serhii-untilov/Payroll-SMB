@@ -1,4 +1,4 @@
-import { langPipe } from '../utils/lib/langPipe';
+import { langPipe } from '../utils/lib/lang-pipe';
 import { Law } from '../resources/laws/entities/law.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { LawType } from '../types';
@@ -25,12 +25,7 @@ export class Seed1809290156431 implements MigrationInterface {
         const dataSource = queryRunner.connection;
         for (let n = 0; n < recordList.length; n++) {
             const record = langPipe(lang, recordList[n]);
-            await dataSource
-                .createQueryBuilder()
-                .delete()
-                .from(entity)
-                .where('id = :id', { id: record.id })
-                .execute();
+            await dataSource.createQueryBuilder().delete().from(entity).where('id = :id', { id: record.id }).execute();
         }
     }
 }

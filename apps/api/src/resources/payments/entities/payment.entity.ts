@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AfterLoad, Column, Entity, Index, ManyToOne, OneToMany, Relation } from 'typeorm';
-import { BaseEntity } from '../../abstract/base-entity.abstract';
+import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
 import { PaymentStatus, RecordFlag } from './../../../types';
 import { Company } from './../../companies/entities/company.entity';

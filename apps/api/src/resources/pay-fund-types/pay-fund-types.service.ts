@@ -3,7 +3,7 @@ import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AvailableForUser } from '../abstract/available-for-user';
+import { AvailableForUser } from '../common/base/available-for-user';
 import { AccessService } from '../access/access.service';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
 import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';
@@ -11,7 +11,7 @@ import { PayFundType } from './entities/pay-fund-type.entity';
 
 @Injectable()
 export class PayFundTypesService extends AvailableForUser {
-    public readonly resource = Resource.FundType;
+    public readonly userRoleResource = Resource.FundType;
 
     constructor(
         @InjectRepository(PayFundType)

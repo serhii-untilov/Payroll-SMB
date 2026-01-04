@@ -4,7 +4,7 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/available-for-user-company';
+import { AvailableForUserCompany } from '../common/base/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -29,8 +29,7 @@ export class TasksService extends AvailableForUserCompany {
     }
 
     async getCompanyId(entityId: string): Promise<string> {
-        return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true }))
-            .companyId;
+        return (await this.repository.findOneOrFail({ where: { id: entityId }, withDeleted: true })).companyId;
     }
 
     async create(userId: string, payload: CreateTaskDto): Promise<Task> {
@@ -148,7 +147,5 @@ export class TasksService extends AvailableForUserCompany {
 }
 
 function sortedTaskList(list: Task[]): Task[] {
-    return [...list].sort(
-        (a, b) => a.sequenceNumber - b.sequenceNumber || a.dateTo.getTime() - b.dateTo.getTime(),
-    );
+    return [...list].sort((a, b) => a.sequenceNumber - b.sequenceNumber || a.dateTo.getTime() - b.dateTo.getTime());
 }

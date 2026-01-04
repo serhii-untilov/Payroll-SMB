@@ -7,27 +7,13 @@ import { CalcMethodBalanceDto } from './calc-method-balance.dto';
 
 export class PositionBalanceExtendedDto extends IntersectionType(
     PositionBalance,
-    PickType(Position, [
-        'companyId',
-        'cardNumber',
-        'sequenceNumber',
-        'personId',
-        'dateFrom',
-        'dateTo',
-    ]),
+    PickType(Position, ['companyId', 'cardNumber', 'sequenceNumber', 'personId', 'dateFrom', 'dateTo']),
     PickType(Person, ['firstName', 'lastName', 'middleName', 'taxId']),
-    PickType(PositionHistory, [
-        'departmentId',
-        'jobId',
-        'workNormId',
-        'paymentTypeId',
-        'wage',
-        'rate',
-    ]),
+    PickType(PositionHistory, ['departmentId', 'jobId', 'workTimeNormId', 'paymentTypeId', 'wage', 'rate']),
 ) {
     departmentName?: string;
     jobName?: string;
-    workNormName?: string;
+    workTimeNormName?: string;
     paymentTypeName?: string;
     calcMethod?: string;
     paySumECB?: number;

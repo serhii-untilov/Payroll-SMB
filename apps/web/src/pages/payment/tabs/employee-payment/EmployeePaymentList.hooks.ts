@@ -31,10 +31,7 @@ export default function useEmployeePaymentList(rowSelectionModel: GridRowSelecti
     // TODO
     const onAddPayment = useCallback(() => console.log('onAddPayment'), []);
 
-    const onEditPayment = useCallback(
-        (id: string) => navigate(`/people/position/${id}?return=true`),
-        [navigate],
-    );
+    const onEditPayment = useCallback((id: string) => navigate(`/people/position/${id}?return=true`), [navigate]);
 
     const onDeletePayment = useCallback(async () => {
         for (const id of rowSelectionModel.map(String)) {
@@ -113,8 +110,7 @@ const useColumns = () => {
                 width: 190,
                 sortable: true,
                 valueGetter: (params) => {
-                    const mandatoryPayments =
-                        (params.row?.deductions || 0) + (params.row?.funds || 0);
+                    const mandatoryPayments = (params.row?.deductions || 0) + (params.row?.funds || 0);
                     return sumFormatter(mandatoryPayments);
                 },
             },
@@ -125,10 +121,7 @@ const useColumns = () => {
                 width: 150,
                 sortable: true,
                 valueGetter: (params) => {
-                    const total =
-                        (params.row?.paySum || 0) +
-                        (params.row?.deductions || 0) +
-                        (params.row?.funds || 0);
+                    const total = (params.row?.paySum || 0) + (params.row?.deductions || 0) + (params.row?.funds || 0);
                     return sumFormatter(total);
                 },
             },

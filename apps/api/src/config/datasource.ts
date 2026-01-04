@@ -18,10 +18,7 @@ export const dbConfig = {
     username: process.env['DATABASE_USERNAME'],
     synchronize: process.env['DATABASE_SYNCHRONIZE'] === 'true',
     logging: process.env['DATABASE_LOGGING_ENABLED'] === 'true',
-    database:
-        process.env['DATABASE_TYPE'] === 'sqlite'
-            ? process.env['DATABASE_PATH']
-            : process.env['DATABASE_NAME'],
+    database: process.env['DATABASE_TYPE'] === 'sqlite' ? process.env['DATABASE_PATH'] : process.env['DATABASE_NAME'],
     entities: [__dirname + '/../resources/**/*entity.js'],
     migrations: [__dirname + '/../migrations/**/*.js'],
     namingStrategy: new PluralSnakeNamingStrategy(),

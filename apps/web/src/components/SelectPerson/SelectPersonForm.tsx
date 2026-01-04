@@ -50,14 +50,10 @@ export const SelectPersonForm = (props: SelectPersonFormProps) => {
                                 getOptionLabel={getOptionLabel}
                                 getOptionKey={(option) => option?.value || ''}
                                 value={options?.find((o) => o.value === value) || null}
-                                isOptionEqualToValue={(option, value) =>
-                                    option?.value === value?.value
-                                }
+                                isOptionEqualToValue={(option, value) => option?.value === value?.value}
                                 onChange={(_event, option) => {
                                     if (typeof option === 'string') {
-                                        const [lastName, firstName, middleName] = (
-                                            option as string
-                                        ).split(' ', 3);
+                                        const [lastName, firstName, middleName] = (option as string).split(' ', 3);
                                         // timeout to avoid instant validation of the dialog's form.
                                         setTimeout(() => {
                                             toggleOpen(true);
@@ -70,8 +66,7 @@ export const SelectPersonForm = (props: SelectPersonFormProps) => {
                                         });
                                     } else if (option && option.inputValue) {
                                         // Create a new value from the user input
-                                        const [lastName, firstName, middleName] =
-                                            option.inputValue.split(' ', 3);
+                                        const [lastName, firstName, middleName] = option.inputValue.split(' ', 3);
                                         toggleOpen(true);
                                         setDialogValue({
                                             ...defaultValue,
@@ -91,9 +86,7 @@ export const SelectPersonForm = (props: SelectPersonFormProps) => {
                                     const filtered = filter(options, params);
                                     const { inputValue } = params;
                                     // Suggest the creation of a new value
-                                    const isExisting = options.some(
-                                        (option) => inputValue === option.label,
-                                    );
+                                    const isExisting = options.some((option) => inputValue === option.label);
                                     if (inputValue !== '' && !isExisting) {
                                         filtered.push({
                                             inputValue,

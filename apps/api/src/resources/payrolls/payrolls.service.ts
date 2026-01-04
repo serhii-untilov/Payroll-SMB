@@ -1,15 +1,10 @@
 import { CalcMethod, Resource, WrapperType } from '@/types';
-import {
-    PaymentGroupsTotal,
-    PaymentPartsTotal,
-    defaultPaymentGroupsTotal,
-    defaultPaymentPartsTotal,
-} from '@/types';
+import { PaymentGroupsTotal, PaymentPartsTotal, defaultPaymentGroupsTotal, defaultPaymentPartsTotal } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/available-for-user-company';
+import { AvailableForUserCompany } from '../common/base/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePayrollDto } from './dto/create-payroll.dto';
@@ -70,12 +65,7 @@ export class PayrollsService extends AvailableForUserCompany {
         });
     }
 
-    async findBetween(
-        positionId: string,
-        dateFrom: Date,
-        dateTo: Date,
-        relations?: boolean,
-    ): Promise<Payroll[]> {
+    async findBetween(positionId: string, dateFrom: Date, dateTo: Date, relations?: boolean): Promise<Payroll[]> {
         return await this.repository.find({
             where: {
                 positionId,
@@ -121,10 +111,7 @@ export class PayrollsService extends AvailableForUserCompany {
         await this.repository.delete(params);
     }
 
-    async payrollPositionPaymentParts(
-        positionId: string,
-        payPeriod: Date,
-    ): Promise<PaymentPartsTotal> {
+    async payrollPositionPaymentParts(positionId: string, payPeriod: Date): Promise<PaymentPartsTotal> {
         const records = await this.repository
             .createQueryBuilder('payroll')
             .select('paymentType.paymentPart', 'paymentPart')
@@ -143,10 +130,7 @@ export class PayrollsService extends AvailableForUserCompany {
         };
     }
 
-    async payrollPositionPaymentGroups(
-        positionId: string,
-        payPeriod: Date,
-    ): Promise<PaymentGroupsTotal> {
+    async payrollPositionPaymentGroups(positionId: string, payPeriod: Date): Promise<PaymentGroupsTotal> {
         const records = await this.repository
             .createQueryBuilder('payroll')
             .select('paymentType.paymentGroup', 'paymentGroup')
@@ -165,10 +149,7 @@ export class PayrollsService extends AvailableForUserCompany {
         };
     }
 
-    async payrollCompanyPaymentParts(
-        companyId: string,
-        payPeriod: Date,
-    ): Promise<PaymentPartsTotal> {
+    async payrollCompanyPaymentParts(companyId: string, payPeriod: Date): Promise<PaymentPartsTotal> {
         const records = await this.repository
             .createQueryBuilder('payroll')
             .select('paymentType.paymentPart', 'paymentPart')
@@ -189,10 +170,7 @@ export class PayrollsService extends AvailableForUserCompany {
         };
     }
 
-    async payrollCompanyPaymentGroups(
-        companyId: string,
-        payPeriod: Date,
-    ): Promise<PaymentGroupsTotal> {
+    async payrollCompanyPaymentGroups(companyId: string, payPeriod: Date): Promise<PaymentGroupsTotal> {
         const records = await this.repository
             .createQueryBuilder('payroll')
             .select('paymentType.paymentGroup', 'paymentGroup')

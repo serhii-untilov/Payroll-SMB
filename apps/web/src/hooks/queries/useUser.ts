@@ -31,8 +31,7 @@ const useGetCurrentUser = () => {
 const useCreateUser = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (dto: CreateUserDto): Promise<PublicUserDataDto> =>
-            (await api.usersCreate(dto)).data,
+        mutationFn: async (dto: CreateUserDto): Promise<PublicUserDataDto> => (await api.usersCreate(dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.User]);
         },
@@ -47,8 +46,7 @@ type UpdateUser = {
 const useUpdateUser = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdateUser): Promise<User> =>
-            (await api.usersUpdate(id, dto)).data,
+        mutationFn: async ({ id, dto }: UpdateUser): Promise<User> => (await api.usersUpdate(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.User]);
         },
@@ -65,11 +63,4 @@ const useRemoveUser = () => {
     });
 };
 
-export {
-    useCreateUser,
-    useGetCurrentUser,
-    useGetUser,
-    useGetUserList,
-    useRemoveUser,
-    useUpdateUser,
-};
+export { useCreateUser, useGetCurrentUser, useGetUser, useGetUserList, useRemoveUser, useUpdateUser };

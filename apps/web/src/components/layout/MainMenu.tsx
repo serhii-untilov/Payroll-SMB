@@ -18,7 +18,7 @@ export function MainMenu() {
     const { t } = useTranslation();
     const company = useAppSelector(selectCompany);
 
-    useEffect(() => { }, [company, locale]);
+    useEffect(() => {}, [company, locale]);
 
     return (
         <List component="nav" sx={{ mx: ['auto'] }}>
@@ -29,22 +29,10 @@ export function MainMenu() {
                 icon={<BusinessCenterOutlined />}
             />
 
-            {company && (
-                <ListItemLink to="/people" primary={t('People')} icon={<PeopleOutlined />} />
-            )}
-            {company && (
-                <ListItemLink to="/timesheet" primary={t('Timesheet')} icon={<Schedule />} />
-            )}
-            {company && (
-                <ListItemLink
-                    to="/payroll"
-                    primary={t('Salary Report')}
-                    icon={<CalculateOutlined />}
-                />
-            )}
-            {company && (
-                <ListItemLink to="/payments" primary={t('Payments')} icon={<CreditScore />} />
-            )}
+            {company && <ListItemLink to="/people" primary={t('People')} icon={<PeopleOutlined />} />}
+            {company && <ListItemLink to="/timesheet" primary={t('Timesheet')} icon={<Schedule />} />}
+            {company && <ListItemLink to="/payroll" primary={t('Salary Report')} icon={<CalculateOutlined />} />}
+            {company && <ListItemLink to="/payments" primary={t('Payments')} icon={<CreditScore />} />}
             {company && <ListItemLink to="/reports" primary={t('Reports')} icon={<Equalizer />} />}
         </List>
     );

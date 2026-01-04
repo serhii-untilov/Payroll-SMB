@@ -16,7 +16,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PositionListenerService {
-    private _logger: Logger = new Logger(PositionListenerService.name);
+    private readonly logger: Logger = new Logger(PositionListenerService.name);
 
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
@@ -33,19 +33,19 @@ export class PositionListenerService {
 
     @OnEvent('position.created')
     async handlePositionCreatedEvent(event: PositionCreatedEvent) {
-        this._logger.log(`${JSON.stringify(event)}`);
+        this.logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
     @OnEvent('position.updated')
     async handlePositionUpdatedEvent(event: PositionUpdatedEvent) {
-        this._logger.log(`${JSON.stringify(event)}`);
+        this.logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
     @OnEvent('position.deleted')
     async handlePositionDeletedEvent(event: PositionDeletedEvent) {
-        this._logger.log(`${JSON.stringify(event)}`);
+        this.logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
@@ -53,27 +53,15 @@ export class PositionListenerService {
         try {
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollStarted });
             if (event.type !== PositionEventType.DELETED) {
-                await this.payrollCalculationService.calculatePosition(
-                    event.userId,
-                    event.positionId,
-                );
-                await this.payFundCalculationService.calculatePosition(
-                    event.userId,
-                    event.positionId,
-                );
-                await this.paymentCalculationService.calculatePosition(
-                    event.userId,
-                    event.positionId,
-                );
+                await this.payrollCalculationService.calculatePosition(event.userId, event.positionId);
+                await this.payFundCalculationService.calculatePosition(event.userId, event.positionId);
+                await this.paymentCalculationService.calculatePosition(event.userId, event.positionId);
             }
-            await this.payrollCalculationService.calculateCompanyTotals(
-                event.userId,
-                event.companyId,
-            );
+            await this.payrollCalculationService.calculateCompanyTotals(event.userId, event.companyId);
             await this.taskListService.generate(event.userId, event.companyId);
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollFinished });
         } catch (e) {
-            this._logger.fatal(`companyId ${event.companyId} ${ServerEvent.PayrollFailed} ${e}`);
+            this.logger.fatal(`companyId ${event.companyId} ${ServerEvent.PayrollFailed} ${e}`);
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollFailed });
         }
     }

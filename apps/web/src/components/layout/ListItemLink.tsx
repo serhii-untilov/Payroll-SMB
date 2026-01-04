@@ -33,9 +33,7 @@ export function ListItemLink(props: Props) {
                 sx={{
                     '&.active': {
                         color: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? theme.palette.common.white
-                                : theme.palette.common.black,
+                            theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black,
                         bgcolor: 'primary.main',
                         opacity: 1,
                         borderRadius: '3px',
@@ -65,9 +63,7 @@ export function ListItemLink(props: Props) {
                     my: [0.3],
                     px: [1],
                     color: (theme) =>
-                        theme.palette.mode === 'light'
-                            ? theme.palette.common.black
-                            : theme.palette.common.white,
+                        theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
                 }}
             >
                 {icon ? (

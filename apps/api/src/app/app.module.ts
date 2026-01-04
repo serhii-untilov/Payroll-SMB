@@ -15,14 +15,14 @@ import {
     PaymentTypesModule,
     PayPeriodsModule,
     PayrollsModule,
-    PersonsModule,
+    PersonModule,
     PositionHistoryModule,
     PositionsModule,
     RolesModule,
     TasksModule,
-    UserCompaniesModule,
+    UserRoleModule,
     UsersModule,
-    WorkNormsModule,
+    WorkTimeNormModule,
 } from '@/resources';
 import { Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -36,7 +36,7 @@ import { AppService } from './app.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ErrorsInterceptor } from '@/interceptors/errors.interceptor';
 import { SnowflakeModule } from '@/snowflake/snowflake.module';
-import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 
 @Module({
     imports: [
@@ -90,14 +90,14 @@ import { SnowflakeServiceSingleton } from '@/snowflake/snowflake.singleton';
         PaymentsModule,
         PaymentPositionsModule,
         PayrollsModule,
-        PersonsModule,
+        PersonModule,
         PositionHistoryModule,
         PositionsModule,
         RolesModule,
         TasksModule,
-        UserCompaniesModule,
+        UserRoleModule,
         UsersModule,
-        WorkNormsModule,
+        WorkTimeNormModule,
     ],
     controllers: [AppController],
     providers: [
@@ -114,7 +114,7 @@ export class AppModule implements OnModuleInit {
         // Runs once per process
         // Runs before controllers / services handle requests
         // Perfect place for global initialization
-        SnowflakeServiceSingleton.init({
+        IdGenerator.init({
             workerId: Number(process.env.SNOWFLAKE_WORKER_ID ?? 0),
             epoch: 1577836800000,
         });

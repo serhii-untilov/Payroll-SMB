@@ -9,9 +9,7 @@ const PayrollCalcDate = ({ payPeriod }) => {
 
     return (
         <Link to={'/payroll?tab-index=0&return=true'}>
-            <Typography sx={{ textAlign: 'end', display: 'inline' }}>
-                {t('Calculation was completed')}:{' '}
-            </Typography>{' '}
+            <Typography sx={{ textAlign: 'end', display: 'inline' }}>{t('Calculation was completed')}: </Typography>{' '}
             <Typography
                 sx={{
                     display: 'inline',

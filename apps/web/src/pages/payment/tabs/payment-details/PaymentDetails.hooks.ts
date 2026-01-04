@@ -10,12 +10,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { PaymentDetailsProps } from './PaymentDetailsTab';
 import { AppMessage } from '@/types';
-import {
-    useCreatePayment,
-    useProcessPayment,
-    useUpdatePayment,
-    useWithdrawPayment,
-} from '@/hooks/queries/usePayment';
+import { useCreatePayment, useProcessPayment, useUpdatePayment, useWithdrawPayment } from '@/hooks/queries/usePayment';
 
 export default function usePaymentDetails(props: PaymentDetailsProps) {
     const { payment, company, payPeriod, setPaymentId } = props;

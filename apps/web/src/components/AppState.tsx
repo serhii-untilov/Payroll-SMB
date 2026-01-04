@@ -23,11 +23,7 @@ const AppState = () => {
     }, [isOnline, t]);
 
     const color = useMemo(() => {
-        return event.includes('failed') || event.includes('error')
-            ? 'error'
-            : isOnline
-              ? 'primary'
-              : 'warning';
+        return event.includes('failed') || event.includes('error') ? 'error' : isOnline ? 'primary' : 'warning';
     }, [event, isOnline]);
 
     const onButtonClick = useCallback(() => navigate('/dashboard'), [navigate]);
@@ -40,12 +36,7 @@ const AppState = () => {
                         <CheckCircle />
                     </IconButton>
                 ) : (
-                    <CircularProgress
-                        onClick={onButtonClick}
-                        size={34}
-                        thickness={3}
-                        color={color}
-                    />
+                    <CircularProgress onClick={onButtonClick} size={34} thickness={3} color={color} />
                 )}
             </Tooltip>
         </Box>

@@ -1,8 +1,8 @@
 import { PayFundCalcMethod, PayFundGroup } from '../types';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { PayFundType } from '../resources/pay-fund-types/entities/pay-fund-type.entity';
-import { getSystemUserId } from '../utils/lib/getSystemUserId';
-import { langPipe } from '../utils/lib/langPipe';
+import { getSystemUserId } from '../utils/lib/system-user';
+import { langPipe } from '../utils/lib/lang-pipe';
 
 const lang = process.env.LANGUAGE ?? 'uk';
 const law = process.env.LAW;
@@ -120,10 +120,7 @@ export class Seed1816557460889 implements MigrationInterface {
                 .insert()
                 .into(entity)
                 .values(langPipe(lang, record))
-                .orUpdate(
-                    ['name', 'group', 'calc_method', 'sequence', 'description', 'updated_user_id'],
-                    ['id'],
-                )
+                .orUpdate(['name', 'group', 'calc_method', 'sequence', 'description', 'updated_user_id'], ['id'])
                 .execute();
         }
     }

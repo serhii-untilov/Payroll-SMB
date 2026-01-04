@@ -16,11 +16,7 @@ interface Props {
 export const FormInputRadioGroup: React.FC<Props> = ({ name, control, label, options }) => {
     const generateRadioOptions = () => {
         return options.map((singleOption) => (
-            <FormControlLabel
-                value={singleOption.value}
-                label={singleOption.label}
-                control={<Radio />}
-            />
+            <FormControlLabel value={singleOption.value} label={singleOption.label} control={<Radio />} />
         ));
     };
     return (

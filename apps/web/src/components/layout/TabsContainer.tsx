@@ -19,17 +19,14 @@ const PREFIX = 'tab-index-';
 
 export function TabsContainer(props: TabsContainerProps) {
     const { id, tabs } = props;
-    const [tabIndex, setTab] = useState<number>(
-        Number(props.tabIndex ?? localStorage.getItem(PREFIX + id)),
-    );
+    const [tabIndex, setTab] = useState<number>(Number(props.tabIndex ?? localStorage.getItem(PREFIX + id)));
 
     const handleChangeTab = (_event: SyntheticEvent, tabIndex: number) => {
         setTab(tabIndex);
         localStorage.setItem(PREFIX + id, tabIndex.toString());
     };
 
-    const getLabel = (label: string | (() => string)) =>
-        typeof label === 'function' ? label() : label;
+    const getLabel = (label: string | (() => string)) => (typeof label === 'function' ? label() : label);
     const isDisabled = (disabled: boolean | (() => boolean)) =>
         typeof disabled === 'function' ? disabled() : !!disabled;
 
@@ -37,13 +34,7 @@ export function TabsContainer(props: TabsContainerProps) {
         <>
             <Tabs value={tabIndex} onChange={handleChangeTab}>
                 {tabs.map((tab, index) => {
-                    return (
-                        <Tab
-                            key={index}
-                            label={getLabel(tab.label)}
-                            disabled={isDisabled(tab.disabled ?? false)}
-                        />
-                    );
+                    return <Tab key={index} label={getLabel(tab.label)} disabled={isDisabled(tab.disabled ?? false)} />;
                 })}
             </Tabs>
             {tabs.map((tab, index) => {

@@ -4,11 +4,7 @@ import { PaymentCalculationService } from '../../payment-calculation.service';
 import { CalcPayment } from '../abstract/calc-payment';
 
 export class CalcFastPayment extends CalcPayment {
-    constructor(
-        ctx: PaymentCalculationService,
-        paymentType: PaymentType,
-        current: PaymentPosition[],
-    ) {
+    constructor(ctx: PaymentCalculationService, paymentType: PaymentType, current: PaymentPosition[]) {
         super(ctx, paymentType, current);
     }
 

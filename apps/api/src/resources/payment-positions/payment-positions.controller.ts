@@ -22,7 +22,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
 import { FindAllPaymentPositionDto } from './dto/find-all-payment-position.dto';
@@ -44,14 +44,11 @@ export class PaymentPositionsController {
         type: PaymentPosition,
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async create(
-        @Req() req: Request,
-        @Body() payload: CreatePaymentPositionDto,
-    ): Promise<PaymentPosition> {
+    async create(@Req() req: Request, @Body() payload: CreatePaymentPositionDto): Promise<PaymentPosition> {
         const userId = getUserId(req);
         const companyId = await this.service.getCompanyId(payload.paymentId);
         await this.service.availableCreateOrFail(userId, companyId);
-        return await this.service.create(userId, deepStringToShortDate(payload));
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Post('find')
@@ -61,14 +58,11 @@ export class PaymentPositionsController {
         schema: { type: 'array', items: { $ref: getSchemaPath(PaymentPosition) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(
-        @Req() req: Request,
-        @Body() params: FindAllPaymentPositionDto,
-    ): Promise<PaymentPosition[]> {
+    async findAll(@Req() req: Request, @Body() params: FindAllPaymentPositionDto): Promise<PaymentPosition[]> {
         const userId = getUserId(req);
         const companyId = await this.service.getPaymentCompanyId(params.paymentId);
         await this.service.availableFindAllOrFail(userId, companyId);
-        return await this.service.findAll(deepStringToShortDate(params));
+        return await this.service.findAll(deepTransformToShortDate(params));
     }
 
     @Post('find/:id')
@@ -100,7 +94,7 @@ export class PaymentPositionsController {
     ): Promise<PaymentPosition> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, deepStringToShortDate(payload));
+        return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')
@@ -112,10 +106,7 @@ export class PaymentPositionsController {
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-    ): Promise<PaymentPosition> {
+    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<PaymentPosition> {
         const userId = getUserId(req);
         await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);

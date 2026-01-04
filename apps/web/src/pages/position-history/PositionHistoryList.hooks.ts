@@ -49,12 +49,12 @@ export default function usePositionHistoryList(props: PositionHistoryListProps) 
                 valueGetter: (params: any) => params?.row?.department?.name || '',
             },
             {
-                field: 'workNorm',
+                field: 'workTimeNorm',
                 headerName: t('Work Norm'),
                 type: 'string',
                 width: 250,
                 sortable: true,
-                valueGetter: (params: any) => params?.row?.workNorm?.name || '',
+                valueGetter: (params: any) => params?.row?.workTimeNorm?.name || '',
             },
             {
                 field: 'paymentType',

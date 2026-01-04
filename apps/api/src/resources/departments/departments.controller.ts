@@ -22,7 +22,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
@@ -47,7 +47,7 @@ export class DepartmentsController {
     async create(@Req() req: Request, @Body() payload: CreateDepartmentDto) {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId, payload.companyId);
-        return await this.service.create(userId, deepStringToShortDate(payload));
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Post('find')
@@ -58,10 +58,7 @@ export class DepartmentsController {
         schema: { type: 'array', items: { $ref: getSchemaPath(Department) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(
-        @Req() req: Request,
-        @Body() params: FindAllDepartmentDto,
-    ): Promise<Department[]> {
+    async findAll(@Req() req: Request, @Body() params: FindAllDepartmentDto): Promise<Department[]> {
         const userId = getUserId(req);
         await this.service.availableFindAllOrFail(userId, params.companyId);
         return await this.service.findAll(params);
@@ -92,14 +89,10 @@ export class DepartmentsController {
     @ApiOkResponse({ description: 'The updated record', type: Department })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async update(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() payload: UpdateDepartmentDto,
-    ) {
+    async update(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: UpdateDepartmentDto) {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, deepStringToShortDate(payload));
+        return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')

@@ -37,19 +37,11 @@ export function FeaturesRoleCard(props: Props) {
                 boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                 backdropFilter: 'blur(5px)',
                 webkitBackdropFilter: 'blur(5px)',
-                border:
-                    index === selectedIndex
-                        ? '1px solid white'
-                        : '1px solid rgba(255, 255, 255, 0.3)',
+                border: index === selectedIndex ? '1px solid white' : '1px solid rgba(255, 255, 255, 0.3)',
                 bgcolor: {
                     xs: 'inherit',
                     sm: 'inherit',
-                    md:
-                        index === selectedIndex
-                            ? themeMode === 'light'
-                                ? '#e3f2fd'
-                                : ''
-                            : 'inherit',
+                    md: index === selectedIndex ? (themeMode === 'light' ? '#e3f2fd' : '') : 'inherit',
                 },
                 '&:hover': {
                     xs: {},

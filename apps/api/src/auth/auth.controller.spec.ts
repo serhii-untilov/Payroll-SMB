@@ -1,6 +1,6 @@
 import { User } from './../resources/users/entities/user.entity';
 import { appConfig, authConfig, dbConfig, googleConfig } from '@/config';
-import { AccessService, UsersService } from '@/resources';
+import { AccessService, UserService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -18,8 +18,8 @@ describe('AuthController', () => {
 
     beforeAll(async () => {
         mockUser = createMockUser();
-        mockUserUnhashedPassword = mockUser.password;
-        mockUser.password = await bcrypt.hash(mockUserUnhashedPassword, 10);
+        mockUserUnhashedPassword = mockUser.passwordHash;
+        mockUser.passwordHash = await bcrypt.hash(mockUserUnhashedPassword, 10);
     });
 
     beforeEach(async () => {
@@ -36,7 +36,7 @@ describe('AuthController', () => {
             providers: [
                 AuthService,
                 ConfigService,
-                { provide: UsersService, useValue: createMock<UsersService>() },
+                { provide: UserService, useValue: createMock<UserService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
             ],
             controllers: [AuthController],

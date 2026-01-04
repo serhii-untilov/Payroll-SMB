@@ -28,7 +28,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePayFundDto } from './dto/create-pay-fund.dto';
 import { FindPayFundDto } from './dto/find-pay-fund.dto';
@@ -52,7 +52,7 @@ export class PayFundsController {
         const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(payload.positionId);
         await this.service.availableCreateOrFail(userId, companyId);
-        return await this.service.create(userId, deepStringToShortDate(payload));
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Get(':id')
@@ -84,7 +84,7 @@ export class PayFundsController {
     ): Promise<PayFund> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, deepStringToShortDate(payload));
+        return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')
@@ -118,6 +118,6 @@ export class PayFundsController {
         } else {
             throw new BadRequestException('Company or Position should be defined.');
         }
-        return await this.service.findAll(deepStringToShortDate(params));
+        return await this.service.findAll(deepTransformToShortDate(params));
     }
 }

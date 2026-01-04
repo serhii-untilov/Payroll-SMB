@@ -32,11 +32,7 @@ export default function DepartmentForm(props: DepartmentFormProps) {
                 <DialogContent>
                     <Grid container item xs={12} spacing={2}>
                         <Grid item xs={12}>
-                            <DepartmentName
-                                control={control}
-                                autoFocus
-                                sx={{ fontWeight: 'bold' }}
-                            />
+                            <DepartmentName control={control} autoFocus sx={{ fontWeight: 'bold' }} />
                         </Grid>
                         <Grid item xs={6}>
                             <DateFrom control={control} />

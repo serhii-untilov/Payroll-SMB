@@ -1,9 +1,8 @@
-import { BalanceWorkingTime, Resource, WrapperType } from '@/types';
+import { WorkTimeBalance, PaymentPart, Resource, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaymentPart } from '@/types';
 import { MAX_SEQUENCE_NUMBER, maxDate } from '@repo/shared';
 import { sub } from 'date-fns';
 import {
@@ -17,7 +16,7 @@ import {
     Not,
     Repository,
 } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/available-for-user-company';
+import { AvailableForUserCompany } from '../common/base/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
@@ -117,7 +116,7 @@ export class PositionsService extends AvailableForUserCompany {
                     ? {
                           department: true,
                           job: true,
-                          workNorm: true,
+                          workTimeNorm: true,
                           paymentType: true,
                       }
                     : false,
@@ -126,7 +125,7 @@ export class PositionsService extends AvailableForUserCompany {
                           history: {
                               department: true,
                               job: true,
-                              workNorm: true,
+                              workTimeNorm: true,
                               paymentType: true,
                           },
                       }
@@ -136,7 +135,7 @@ export class PositionsService extends AvailableForUserCompany {
                           history: {
                               department: true,
                               job: true,
-                              workNorm: true,
+                              workTimeNorm: true,
                               paymentType: true,
                           },
                       }
@@ -189,7 +188,7 @@ export class PositionsService extends AvailableForUserCompany {
                     ? {
                           department: true,
                           job: true,
-                          workNorm: true,
+                          workTimeNorm: true,
                           paymentType: true,
                       }
                     : false,
@@ -215,7 +214,7 @@ export class PositionsService extends AvailableForUserCompany {
                     ? {
                           department: true,
                           job: true,
-                          workNorm: true,
+                          workTimeNorm: true,
                           paymentType: true,
                       }
                     : false,
@@ -295,11 +294,7 @@ export class PositionsService extends AvailableForUserCompany {
         return result[0].freeNumber.toString();
     }
 
-    async calculateBalance(
-        positionId: string,
-        payPeriod: Date,
-        balanceWorkingTime: BalanceWorkingTime,
-    ) {
+    async calculateBalance(positionId: string, payPeriod: Date, balanceWorkingTime: WorkTimeBalance) {
         const position = await this.repository.findOneByOrFail({ id: positionId });
         const prevPayPeriod = await this.payPeriodsService.findOneBy({
             where: {
@@ -312,14 +307,8 @@ export class PositionsService extends AvailableForUserCompany {
                   where: { positionId, payPeriod: prevPayPeriod.dateFrom },
               })
             : null;
-        const paymentParts = await this.payrollsService.payrollPositionPaymentParts(
-            positionId,
-            payPeriod,
-        );
-        const paymentGroups = await this.payrollsService.payrollPositionPaymentGroups(
-            positionId,
-            payPeriod,
-        );
+        const paymentParts = await this.payrollsService.payrollPositionPaymentParts(positionId, payPeriod);
+        const paymentGroups = await this.payrollsService.payrollPositionPaymentGroups(positionId, payPeriod);
         const positionBalance =
             (await this.repositoryPositionBalance.findOne({
                 where: { positionId, payPeriod },
@@ -334,9 +323,7 @@ export class PositionsService extends AvailableForUserCompany {
             ...paymentParts,
             ...paymentGroups,
             outBalance:
-                inBalance +
-                (paymentParts[PaymentPart.Accruals] || 0) -
-                (paymentParts[PaymentPart.Deductions] || 0),
+                inBalance + (paymentParts[PaymentPart.Accruals] || 0) - (paymentParts[PaymentPart.Deductions] || 0),
         });
     }
 
@@ -349,92 +336,113 @@ export class PositionsService extends AvailableForUserCompany {
         });
         const result = await this.repositoryPositionBalance.query(
             `select
-                pb.id, pb."positionId", p."companyId", pb."payPeriod",
-                pb."inBalance",
+                pb.id, pb.position_id, p.company_id, pb.pay_period,
+                pb.in_balance,
                 pb.accruals, pb.deductions,
-                pb."basic", pb."adjustments", pb."bonuses", pb."vacations", pb."sicks", pb."refunds", pb."other_accruals",
-                pb."taxes", pb."payments", pb."other_deductions",
-                pb."outBalance",
-                p."cardNumber", p."sequenceNumber",
-                to_char(p."dateFrom", 'yyyy-mm-dd') "dateFrom",
-                to_char(p."dateTo", 'yyyy-mm-dd') "dateTo",
-                p."personId", p2."firstName", p2."lastName", p2."middleName", p2."taxId",
-                ph."departmentId", d."name" "departmentName",
-                ph."jobId", j."name" "jobName",
-                ph."workNormId", wn."name" "workNormName",
-                ph."paymentTypeId", pt."name" "paymentTypeName", pt."calcMethod",
+                pb.basic, pb.adjustments, pb.bonuses, pb.vacations, pb.sicks, pb.refunds, pb.other_accruals,
+                pb.taxes, pb.payments, pb.other_deductions,
+                pb.out_balance,
+                p.card_number", p.sequence_number,
+                to_char(p.date_from", 'yyyy-mm-dd') date_from,
+                to_char(p.date_to, 'yyyy-mm-dd') date_to,
+                p.person_id, p2.first_name, p2.last_lame, p2.middle_name, p2.tax_id,
+                ph.department_id, d."name" department_name,
+                ph.job_id, j."name" job_name,
+                ph.work_time_norm_id, wn."name" work_time_norm_name,
+                ph.payment_type_id, pt."name" payment_type_name, pt.calc_method,
                 ph.wage, ph.rate,
-                pb."planDays", pb."planHours",
-                pb."factDays", pb."factHours",
-                t1."paySum" "paySumECB"
+                pb.plan_days, pb.plan_hours,
+                pb.fact_days, pb.fact_hours,
+                t1.pay_sum pay_sum_ecb
             from position_balance pb
-            inner join "position" p on p.id = pb."positionId" and p."companyId" = $1
-                and p."deletedDate" is null
-            inner join person p2 on p2.id = p."personId"
-            inner join position_history ph on ph."positionId" = p.id and ph.id =
+            inner join position p on p.id = pb.position_id and p.company_id = $1
+                and p.deleted_date is null
+            inner join person p2 on p2.id = p.person_id
+            inner join position_history ph on ph.position_id = p.id and ph.id =
             (	select max(ph2.id)
                 from position_history ph2
-                where ph2."positionId" = p.id
-                and ph2."dateFrom" =
-                (	select max(ph3."dateFrom")
+                where ph2.position_id = p.id
+                and ph2.date_from =
+                (	select max(ph3.date_from)
                     from position_history ph3
-                    where ph3."positionId" = p.id
-                    and ph3."dateFrom" <= $2
+                    where ph3.position_id = p.id
+                    and ph3.date_from <= $2
                 )
             )
-            left join department d on d.id = ph."departmentId"
-            left join job j on j.id = ph."jobId"
-            left join work_norm wn on wn.id = ph."workNormId"
-            left join payment_type pt on pt.id = ph."paymentTypeId"
+            left join department d on d.id = ph.department_id
+            left join job j on j.id = ph.job_id
+            left join work_time_norm wn on wn.id = ph.work_time_norm_id
+            left join payment_type pt on pt.id = ph.payment_type_id
             left join (
-            	select ppf.id, sum(pf."paySum") "paySum"
+            	select ppf.id, sum(pf.pay_sum) pay_sum
             	from pay_fund pf
-            	inner join "position" ppf on ppf.id = pf."positionId"
-            	inner join pay_fund_type pft on pft.id = pf."payFundTypeId"
-            	where ppf."companyId" = $1
-            		and pf."payPeriod" = $3
-            		and pft."group" = 'ECB'
+            	inner join position ppf on ppf.id = pf.position_id
+            	inner join pay_fund_type pft on pft.id = pf.pay_fund_type_id
+            	where ppf.company_id = $1
+            		and pf.pay_period = $3
+            		and pft.group = 'ECB'
             	group by ppf.id
-            ) t1 on pb."positionId" = t1.id
-            where p."companyId" = $1
-                and pb."payPeriod" = $3`,
+            ) t1 on pb.position_id = t1.id
+            where p.company_id = $1
+                and pb.pay_period = $3`,
             [params.companyId, payPeriod.dateTo, payPeriod.dateFrom],
         );
         const calcMethodBalance = await this.payrollsService.payrollCompanyCalcMethodsByPositions(
             params.companyId,
             payPeriod.dateFrom,
         );
-        result.forEach((o) => {
-            o.dateFrom = new Date(o.dateFrom);
-            o.dateTo = new Date(o.dateTo);
-            o.accruals = Number(o.accruals);
-            o.adjustments = Number(o.adjustments);
-            o.basic = Number(o.basic);
-            o.bonuses = Number(o.bonuses);
-            o.deductions = Number(o.deductions);
-            o.inBalance = Number(o.inBalance);
-            o.other_accruals = Number(o.other_accruals);
-            o.other_deductions = Number(o.other_deductions);
-            o.outBalance = Number(o.outBalance);
-            o.payments = Number(o.payments);
-            o.rate = Number(o.rate);
-            o.refunds = Number(o.refunds);
-            o.sicks = Number(o.sicks);
-            o.taxes = Number(o.taxes);
-            o.vacations = Number(o.vacations);
-            o.wage = Number(o.wage);
-            o.planDays = Number(o.planDays);
-            o.planHours = Number(o.planHours);
-            o.factDays = Number(o.factDays);
-            o.factHours = Number(o.factHours);
-            o.paySumECB = Number(o.paySumECB);
-            o.calcMethodBalance = calcMethodBalance
-                .filter((b) => b.positionId === o.positionId)
-                .map((b) => {
-                    return { calcMethod: b.calcMethod, factSum: Number(b.factSum) };
-                });
+        return result.map((o: any) => {
+            return {
+                id: o.id,
+                payPeriod: new Date(o.pay_period),
+                positionId: o.position_id,
+                companyId: o.company_id,
+                firstName: o.first_name,
+                lastName: o.last_name,
+                middleName: o.middle_name,
+                taxId: o.taxId,
+                cardNumber: o.card_number,
+                sequenceNumber: o.sequence_number,
+                personId: o.person_id,
+                departmentName: o.department_name,
+                jobName: o.job_name,
+                workTimeNormName: o.work_time_norm_name,
+                paymentTypeName: o.payment_type_name,
+                departmentId: o.department_id,
+                jobId: o.job_id,
+                workTimeNormId: o.work_time_norm_id,
+                paymentTypeId: o.payment_type_id,
+                calcMethod: o.calcMethod,
+                dateFrom: new Date(o.date_from),
+                dateTo: new Date(o.date_to),
+                accruals: Number(o.accruals),
+                adjustments: Number(o.adjustments),
+                basic: Number(o.basic),
+                bonuses: Number(o.bonuses),
+                deductions: Number(o.deductions),
+                inBalance: Number(o.in_balance),
+                otherAccruals: Number(o.other_accruals),
+                otherDeductions: Number(o.other_deductions),
+                outBalance: Number(o.out_balance),
+                payments: Number(o.payments),
+                rate: Number(o.rate),
+                refunds: Number(o.refunds),
+                sicks: Number(o.sicks),
+                taxes: Number(o.taxes),
+                vacations: Number(o.vacations),
+                wage: Number(o.wage),
+                planDays: Number(o.plan_days),
+                planHours: Number(o.plan_hours),
+                factDays: Number(o.fact_days),
+                factHours: Number(o.fact_hours),
+                paySumECB: Number(o.pay_sum_ecb),
+                calcMethodBalance: calcMethodBalance
+                    .filter((b) => b.positionId === o.positionId)
+                    .map((b) => {
+                        return { calcMethod: b.calcMethod, factSum: Number(b.factSum) };
+                    }),
+            };
         });
-        return result;
     }
 
     async calcCompanyDebt(companyId: string, payPeriod: Date): Promise<number> {
@@ -487,7 +495,7 @@ export class PositionsService extends AvailableForUserCompany {
                     ? {
                           department: true,
                           job: true,
-                          workNorm: true,
+                          workTimeNorm: true,
                           paymentType: true,
                       }
                     : false,
@@ -512,7 +520,7 @@ export class PositionsService extends AvailableForUserCompany {
                     ? {
                           department: true,
                           job: true,
-                          workNorm: true,
+                          workTimeNorm: true,
                           paymentType: true,
                       }
                     : false,

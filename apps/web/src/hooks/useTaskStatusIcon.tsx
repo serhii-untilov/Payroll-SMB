@@ -1,10 +1,4 @@
-import {
-    CropSquare,
-    DoneRounded,
-    FileDownloadDoneRounded,
-    LoopRounded,
-    NotInterested,
-} from '@mui/icons-material';
+import { CropSquare, DoneRounded, FileDownloadDoneRounded, LoopRounded, NotInterested } from '@mui/icons-material';
 import { Task, TaskStatus } from '@repo/openapi';
 import { useMemo } from 'react';
 

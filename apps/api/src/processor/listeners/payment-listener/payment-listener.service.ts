@@ -59,24 +59,15 @@ export class PaymentListenerService {
         try {
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollStarted });
             if (event.type !== PaymentEventType.DELETED) {
-                await this.payrollCalculationService.calculateCompany(
-                    event.userId,
-                    event.companyId,
-                );
-                await this.payFundCalculationService.calculateCompany(
-                    event.userId,
-                    event.companyId,
-                );
+                await this.payrollCalculationService.calculateCompany(event.userId, event.companyId);
+                await this.payFundCalculationService.calculateCompany(event.userId, event.companyId);
                 // To avoid recursion
                 // await this.paymentCalculationService.calculateCompany(
                 //     event.userId,
                 //     event.companyId,
                 // );
             }
-            await this.payrollCalculationService.calculateCompanyTotals(
-                event.userId,
-                event.companyId,
-            );
+            await this.payrollCalculationService.calculateCompanyTotals(event.userId, event.companyId);
             await this.taskListService.generate(event.userId, event.companyId);
             this.sseService.event(event.companyId, { data: ServerEvent.PayrollFinished });
         } catch (e) {

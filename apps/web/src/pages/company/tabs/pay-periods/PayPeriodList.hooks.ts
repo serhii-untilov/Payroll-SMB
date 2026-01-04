@@ -27,11 +27,7 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
     const payPeriods = useMemo(
         () =>
             params.payPeriods
-                ?.filter(
-                    (o) =>
-                        o.dateFrom.getTime() <=
-                        (params.currentPayPeriod?.dateFrom || new Date()).getTime(),
-                )
+                ?.filter((o) => o.dateFrom.getTime() <= (params.currentPayPeriod?.dateFrom || new Date()).getTime())
                 .sort((a, b) => b.dateFrom.getTime() - a.dateFrom.getTime()),
         [params],
     );

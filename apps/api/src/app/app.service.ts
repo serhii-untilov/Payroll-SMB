@@ -1,11 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as fsPromise from 'fs/promises';
 
 @Injectable()
 export class AppService {
-    private _logger: Logger = new Logger(AppService.name);
-
     constructor(private configService: ConfigService) {}
 
     getHello(name?: string): string {

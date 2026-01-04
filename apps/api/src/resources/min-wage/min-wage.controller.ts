@@ -1,18 +1,7 @@
 import { MinWage } from './entities/min-wage.entity';
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    Req,
-    UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -22,7 +11,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
@@ -44,7 +33,7 @@ export class MinWageController {
     async create(@Req() req: Request, @Body() payload: CreateMinWageDto): Promise<MinWage> {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId);
-        return await this.service.create(userId, deepStringToShortDate(payload));
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Post()
@@ -84,7 +73,7 @@ export class MinWageController {
     ): Promise<MinWage> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId);
-        return await this.service.update(userId, id, deepStringToShortDate(payload));
+        return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')

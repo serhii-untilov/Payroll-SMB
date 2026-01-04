@@ -1,9 +1,9 @@
 import { RoleType } from '../types';
 import * as bcrypt from 'bcrypt';
-import { getRoleIdByType } from '../utils/lib/getSystemRoleId';
+import { getRoleIdByType } from '../utils/lib/system-role';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { User } from '../resources/users/entities/user.entity';
-import { langPipe } from '../utils/lib/langPipe';
+import { langPipe } from '../utils/lib/lang-pipe';
 import { getSystemUserId } from '@/utils';
 
 const lang = process.env.LANGUAGE ?? 'uk';
@@ -19,43 +19,51 @@ const recordList = [
     },
     {
         id: '2',
-        firstName: { en: 'Admin', uk: 'Адміністратор' },
+        firstName: { en: 'System Admin', uk: 'Адміністратор системи' },
         lastName: '',
-        email: 'admin@payroll.smb',
+        email: 'system.admin@payroll.smb',
         password: 'admin',
-        roleType: RoleType.SystemAdmin ?? 'admin',
+        roleType: RoleType.SystemAdmin,
     },
     {
         id: '3',
-        firstName: { en: 'User', uk: 'Користувач' },
+        firstName: { en: 'Company Admin', uk: 'Адміністратор підприємства' },
         lastName: '',
-        email: 'user@payroll.smb',
-        password: 'user',
-        roleType: RoleType.Accountant ?? 'employer',
+        email: 'company.admin@payroll.smb',
+        password: 'admin',
+        roleType: RoleType.CompanyAdmin,
     },
     {
         id: '4',
-        firstName: { en: 'User', uk: 'Працівник' },
+        firstName: { en: 'Accountant', uk: 'Бухгалтер' },
         lastName: '',
-        email: 'employee@payroll.smb',
-        password: 'employee',
-        roleType: RoleType.Employee ?? 'employee',
+        email: 'accountant@payroll.smb',
+        password: 'accountant',
+        roleType: RoleType.Accountant,
     },
     {
         id: '5',
-        firstName: { en: 'Guest', uk: 'Гість' },
+        firstName: { en: 'Employee', uk: 'Працівник' },
         lastName: '',
-        email: 'guest@payroll.smb',
-        password: 'guest',
-        roleType: RoleType.Manager ?? 'guest',
+        email: 'employee@payroll.smb',
+        password: 'employee',
+        roleType: RoleType.Employee,
     },
     {
         id: '6',
+        firstName: { en: 'Manager', uk: 'Керівник' },
+        lastName: '',
+        email: 'manager@payroll.smb',
+        password: 'manager',
+        roleType: RoleType.Manager,
+    },
+    {
+        id: '7',
         firstName: { en: 'Maria', uk: 'Марія' },
         lastName: { en: 'Carefree', uk: 'Безтурботна' },
         email: 'demo@payroll.smb',
         password: 'demo',
-        roleType: RoleType.Accountant ?? 'employer',
+        roleType: RoleType.Accountant,
     },
 ];
 
@@ -74,10 +82,7 @@ export class Seed1809283090804 implements MigrationInterface {
                 .insert()
                 .into(entity)
                 .values(langPipe(lang, record))
-                .orUpdate(
-                    ['first_name', 'last_name', 'password', 'email', 'role_id', 'updated_user_id'],
-                    ['id'],
-                )
+                .orUpdate(['first_name', 'last_name', 'password', 'email', 'role_id', 'updated_user_id'], ['id'])
                 .execute();
         }
     }

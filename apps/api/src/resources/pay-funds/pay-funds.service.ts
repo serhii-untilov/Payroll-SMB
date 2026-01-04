@@ -8,7 +8,7 @@ import {
     defaultPayFundGroupsTotal,
 } from '@/types';
 import { Between, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../abstract/available-for-user-company';
+import { AvailableForUserCompany } from '../common/base/available-for-user-company';
 import { AccessService } from '../access/access.service';
 import { CompaniesService } from '../companies/companies.service';
 import { PositionsService } from '../positions/positions.service';
@@ -74,12 +74,7 @@ export class PayFundsService extends AvailableForUserCompany {
         });
     }
 
-    async findBetween(
-        positionId: string,
-        dateFrom: Date,
-        dateTo: Date,
-        relations?: boolean,
-    ): Promise<PayFund[]> {
+    async findBetween(positionId: string, dateFrom: Date, dateTo: Date, relations?: boolean): Promise<PayFund[]> {
         return await this.repository.find({
             where: {
                 positionId,
@@ -118,10 +113,7 @@ export class PayFundsService extends AvailableForUserCompany {
         await this.repository.delete(ids);
     }
 
-    async payFundPositionPayFundCategories(
-        positionId: string,
-        payPeriod: Date,
-    ): Promise<PayFundCategoryTotal> {
+    async payFundPositionPayFundCategories(positionId: string, payPeriod: Date): Promise<PayFundCategoryTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('pay-fund-type.payFundCategory', 'payFundCategory')
@@ -140,10 +132,7 @@ export class PayFundsService extends AvailableForUserCompany {
         };
     }
 
-    async payFundPositionPayFundGroups(
-        positionId: string,
-        payPeriod: Date,
-    ): Promise<PayFundGroupTotal> {
+    async payFundPositionPayFundGroups(positionId: string, payPeriod: Date): Promise<PayFundGroupTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('payFundType.payFundGroup', 'payFundGroup')
@@ -162,10 +151,7 @@ export class PayFundsService extends AvailableForUserCompany {
         };
     }
 
-    async payFundCompanyPayFundCategories(
-        companyId: string,
-        payPeriod: Date,
-    ): Promise<PayFundCategoryTotal> {
+    async payFundCompanyPayFundCategories(companyId: string, payPeriod: Date): Promise<PayFundCategoryTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('payFundType.payFundCategory', 'payFundCategory')
@@ -186,10 +172,7 @@ export class PayFundsService extends AvailableForUserCompany {
         };
     }
 
-    async payFundCompanyPayFundGroups(
-        companyId: string,
-        payPeriod: Date,
-    ): Promise<PayFundGroupTotal> {
+    async payFundCompanyPayFundGroups(companyId: string, payPeriod: Date): Promise<PayFundGroupTotal> {
         const records = await this.repository
             .createQueryBuilder('pay-fund')
             .select('payFundType.payFundGroup', 'payFundGroup')

@@ -28,7 +28,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { FindPayrollDto } from './dto/find-payroll.dto';
@@ -52,7 +52,7 @@ export class PayrollsController {
         const userId = getUserId(req);
         const companyId = await this.service.getPositionCompanyId(payload.positionId);
         await this.service.availableCreateOrFail(userId, companyId);
-        return await this.service.create(userId, deepStringToShortDate(payload));
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Post('find')
@@ -74,7 +74,7 @@ export class PayrollsController {
         } else {
             throw new BadRequestException('Company or Position required.');
         }
-        return await this.service.findAll(deepStringToShortDate(params));
+        return await this.service.findAll(deepTransformToShortDate(params));
     }
 
     @Get(':id')
@@ -105,7 +105,7 @@ export class PayrollsController {
     ): Promise<Payroll> {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, deepStringToShortDate(payload));
+        return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')

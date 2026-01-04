@@ -22,7 +22,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { FindAllTaskDto } from './dto/find-all-task.dto';
@@ -47,7 +47,7 @@ export class TasksController {
     async create(@Req() req: Request, @Body() payload: CreateTaskDto): Promise<Task> {
         const userId = getUserId(req);
         await this.tasksService.availableCreateOrFail(userId, payload.companyId);
-        return await this.tasksService.create(userId, deepStringToShortDate(payload));
+        return await this.tasksService.create(userId, deepTransformToShortDate(payload));
     }
 
     @Post('find')
@@ -63,7 +63,7 @@ export class TasksController {
         if (payload.companyId) {
             await this.tasksService.availableFindAllOrFail(userId, payload.companyId);
         }
-        return await this.tasksService.findAll(deepStringToShortDate(payload));
+        return await this.tasksService.findAll(deepTransformToShortDate(payload));
     }
 
     @Post('find/:id')
@@ -72,11 +72,7 @@ export class TasksController {
     @ApiOkResponse({ description: 'The found record', type: Task })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() params?: FindOneTaskDto,
-    ) {
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() params?: FindOneTaskDto) {
         const userId = getUserId(req);
         const found = await this.tasksService.findOne(id, params);
         await this.tasksService.availableFindAllOrFail(userId, found.companyId);
@@ -96,7 +92,7 @@ export class TasksController {
     ): Promise<Task> {
         const userId = getUserId(req);
         await this.tasksService.availableUpdateOrFail(userId, id);
-        return await this.tasksService.update(userId, id, deepStringToShortDate(payload));
+        return await this.tasksService.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')

@@ -25,9 +25,7 @@ export function ListItemButton(props: Props) {
                     '&.active': {
                         color: 'white',
                         bgcolor: (theme) =>
-                            theme.palette.mode === 'dark'
-                                ? theme.palette.primary.dark
-                                : theme.palette.primary.main,
+                            theme.palette.mode === 'dark' ? theme.palette.primary.dark : theme.palette.primary.main,
                         borderRadius: '5px',
                         py: [0.5],
                         my: [0.3],

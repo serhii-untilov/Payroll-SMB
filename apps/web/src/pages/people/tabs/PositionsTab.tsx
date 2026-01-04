@@ -22,8 +22,11 @@ const PositionsTab = (props: PositionListTabProps) => {
     const { positions, payPeriod } = props;
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
-    const { columns, getRowStatus, onAddPosition, onEditPosition, onDeletePosition } =
-        usePositionsTab({ ...props, payPeriod, rowSelectionModel });
+    const { columns, getRowStatus, onAddPosition, onEditPosition, onDeletePosition } = usePositionsTab({
+        ...props,
+        payPeriod,
+        rowSelectionModel,
+    });
     const { onPrint, onExport } = useGrid(gridRef);
 
     return (
@@ -61,11 +64,9 @@ const PositionsTab = (props: PositionListTabProps) => {
                         onEditPosition(params.row.id);
                     }
                 }}
-                onRowDoubleClick={(
-                    params: GridRowParams,
-                    _event: MuiEvent,
-                    _details: GridCallbackDetails,
-                ) => onEditPosition(params.row.id)}
+                onRowDoubleClick={(params: GridRowParams, _event: MuiEvent, _details: GridCallbackDetails) =>
+                    onEditPosition(params.row.id)
+                }
             />
         </>
     );

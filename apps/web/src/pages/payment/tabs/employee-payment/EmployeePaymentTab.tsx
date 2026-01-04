@@ -18,9 +18,7 @@ const EmployeePaymentTab = ({ company, payPeriod, payment }) => {
         <>
             {isLoading && <LoadingDisplay />}
             {isError && <ErrorDisplay error={error} />}
-            {paymentList && (
-                <EmployeePaymentsList {...{ company, payPeriod, payment, paymentList }} />
-            )}
+            {paymentList && <EmployeePaymentsList {...{ company, payPeriod, payment, paymentList }} />}
         </>
     );
 };

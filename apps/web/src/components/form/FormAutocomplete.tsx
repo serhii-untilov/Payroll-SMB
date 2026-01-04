@@ -43,9 +43,7 @@ export const FormAutocomplete = (props: Props) => {
                             getOptionKey={(option) => option?.value || ''}
                             value={props.options.find((o) => o.value === value) || null}
                             isOptionEqualToValue={(option, value) => {
-                                return (
-                                    option?.value && value?.value && option?.value === value?.value
-                                );
+                                return option?.value && value?.value && option?.value === value?.value;
                             }}
                             onChange={(_event, item) => {
                                 onChange(item?.value || (props.valueType === 'number' ? null : ''));

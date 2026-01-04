@@ -4,8 +4,8 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
 import { MockType, createMockCompany, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
-import { UserCompaniesService } from '../user-companies/user-companies.service';
-import { UsersService } from '../users/users.service';
+import { UserRoleService } from '../user-role/user-role.service';
+import { UserService } from '../users/users.service';
 import { CompaniesService } from './companies.service';
 import { Company } from './entities/company.entity';
 import { AccessService } from '../access/access.service';
@@ -20,8 +20,8 @@ describe('CompaniesService', () => {
             providers: [
                 CompaniesService,
                 { provide: getRepositoryToken(Company), useFactory: repositoryMockFactory },
-                { provide: UsersService, useValue: createMock<UsersService>() },
-                { provide: UserCompaniesService, useValue: createMock<UserCompaniesService>() },
+                { provide: UserService, useValue: createMock<UserService>() },
+                { provide: UserRoleService, useValue: createMock<UserRoleService>() },
                 { provide: AccessService, useValue: createMock<AccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],

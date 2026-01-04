@@ -30,6 +30,6 @@ module.exports = {
                 ignoreRestSiblings: true,
             },
         ],
-        'max-len': ['error', { code: 100, ignoreComments: true }],
+        'max-len': ['error', { code: 120, ignoreComments: true }],
     },
 };

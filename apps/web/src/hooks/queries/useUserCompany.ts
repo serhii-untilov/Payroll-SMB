@@ -8,9 +8,7 @@ const useGetUserCompanyList = (params: FindAllUserCompanyDto) => {
         queryKey: [Resource.Company, params],
         queryFn: async () =>
             (await api.userCompaniesFindAll(params)).data.sort((a, b) =>
-                (a.company?.name || '')
-                    .toUpperCase()
-                    .localeCompare((b.company?.name || '').toUpperCase()),
+                (a.company?.name || '').toUpperCase().localeCompare((b.company?.name || '').toUpperCase()),
             ),
         enabled: !!params.userId,
     });

@@ -9,7 +9,7 @@ export default function usePaymentsForm(companyId: string, payPeriod: PayPeriod)
     const { t } = useTranslation();
     const { locale } = useLocale();
 
-    useEffect(() => { }, [locale]);
+    useEffect(() => {}, [locale]);
 
     const tabs = useMemo<TabComponent[]>(
         () => [

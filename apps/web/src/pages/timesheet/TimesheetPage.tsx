@@ -18,9 +18,7 @@ const TimesheetPage = () => {
         <>
             {!company && <ErrorDisplay error={{ message: t('The company is not defined') }} />}
             {!payPeriod && <ErrorDisplay error={{ message: t('The pay period is not defined') }} />}
-            {company && payPeriod && (
-                <TimesheetForm {...{ company, payPeriod, tabIndex, goBack }} />
-            )}
+            {company && payPeriod && <TimesheetForm {...{ company, payPeriod, tabIndex, goBack }} />}
         </>
     );
 };

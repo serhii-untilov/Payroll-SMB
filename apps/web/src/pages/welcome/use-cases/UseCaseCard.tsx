@@ -6,15 +6,13 @@ const UseCaseCard = ({ item, index }) => {
         <Box
             sx={{
                 display: 'flex',
-                flexDirection:
-                    index % 2 ? { xs: 'column', md: 'row-reverse' } : { xs: 'column', md: 'row' },
+                flexDirection: index % 2 ? { xs: 'column', md: 'row-reverse' } : { xs: 'column', md: 'row' },
                 gap: { xs: 2, md: 6 },
                 borderRadius: 3,
                 py: 3,
                 px: 3,
                 // From https://css.glass
-                background: (theme) =>
-                    theme.palette.mode === 'dark' ? '' : 'rgba(255, 255, 255, 0.3)',
+                background: (theme) => (theme.palette.mode === 'dark' ? '' : 'rgba(255, 255, 255, 0.3)'),
                 boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                 backdropFilter: 'blur(5px)',
                 webkitBackdropFilter: 'blur(5px)',

@@ -30,9 +30,7 @@ export class PaymentDeductionsService extends AvailableForUserCompany {
             where: { id: entityId },
             withDeleted: true,
         });
-        const paymentPosition = await this.paymentPositionsService.findOne(
-            paymentDeduction.paymentPositionId,
-        );
+        const paymentPosition = await this.paymentPositionsService.findOne(paymentDeduction.paymentPositionId);
         return (await this.paymentsService.findOne(paymentPosition.paymentId)).companyId;
     }
 
@@ -45,10 +43,7 @@ export class PaymentDeductionsService extends AvailableForUserCompany {
         return await this.repository.findOneOrFail({ where: { id: created.id } });
     }
 
-    async findAll(
-        paymentPositionId: string,
-        relations: boolean = false,
-    ): Promise<PaymentDeduction[]> {
+    async findAll(paymentPositionId: string, relations: boolean = false): Promise<PaymentDeduction[]> {
         if (!paymentPositionId) {
             throw new BadRequestException('Should be defined paymentPositionId');
         }
@@ -69,11 +64,7 @@ export class PaymentDeductionsService extends AvailableForUserCompany {
         return record;
     }
 
-    async update(
-        userId: string,
-        id: string,
-        payload: UpdatePaymentDeductionDto,
-    ): Promise<PaymentDeduction> {
+    async update(userId: string, id: string, payload: UpdatePaymentDeductionDto): Promise<PaymentDeduction> {
         await this.repository.save({
             ...payload,
             id,

@@ -1,10 +1,7 @@
 import { DefaultNamingStrategy, NamingStrategyInterface } from 'typeorm';
 import { snakeCase } from 'typeorm/util/StringUtils';
 
-export class PluralSnakeNamingStrategy
-    extends DefaultNamingStrategy
-    implements NamingStrategyInterface
-{
+export class PluralSnakeNamingStrategy extends DefaultNamingStrategy implements NamingStrategyInterface {
     tableName(className: string, customName?: string): string {
         return customName ? customName : this.pluralize(snakeCase(className));
     }
@@ -21,11 +18,7 @@ export class PluralSnakeNamingStrategy
         return snakeCase(`${relationName}_${referencedColumnName}`);
     }
 
-    joinTableName(
-        firstTableName: string,
-        secondTableName: string,
-        firstPropertyName: string,
-    ): string {
+    joinTableName(firstTableName: string, secondTableName: string, firstPropertyName: string): string {
         return snakeCase(`${firstTableName}_${firstPropertyName}_${secondTableName}`);
     }
 
@@ -34,9 +27,7 @@ export class PluralSnakeNamingStrategy
     }
 
     foreignKeyName(tableName: string, columnNames: string[], referencedTableName: string): string {
-        return `fk_${snakeCase(tableName)}_${columnNames.join('_')}_${snakeCase(
-            referencedTableName,
-        )}`;
+        return `fk_${snakeCase(tableName)}_${columnNames.join('_')}_${snakeCase(referencedTableName)}`;
     }
 
     private pluralize(name: string): string {

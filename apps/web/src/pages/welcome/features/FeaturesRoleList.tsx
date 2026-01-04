@@ -7,10 +7,7 @@ const FeaturesRoleList = () => {
 
     return (
         <Box id="features-by-roles" sx={{ display: 'flex', gap: 2 }}>
-            <Box
-                id="features-by-roles__left-side"
-                sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 4 }}
-            >
+            <Box id="features-by-roles__left-side" sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 4 }}>
                 {featuresByRoles.map((item, index) => (
                     <FeaturesRoleCard
                         key={index}
@@ -34,8 +31,7 @@ const FeaturesRoleList = () => {
                     borderRadius: 3,
                     p: 2,
                     // From https://css.glass
-                    bgcolor: (theme) =>
-                        theme.palette.mode === 'dark' ? '' : 'rgba(255, 255, 255, 0.3)',
+                    bgcolor: (theme) => (theme.palette.mode === 'dark' ? '' : 'rgba(255, 255, 255, 0.3)'),
                     boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                     backdropFilter: 'blur(5px)',
                     webkitBackdropFilter: 'blur(5px)',

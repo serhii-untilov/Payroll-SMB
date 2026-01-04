@@ -8,12 +8,7 @@ import { PayFundCalculationService } from './../../pay-fund-calculation.service'
 import { PayFundCalc } from './../abstract/pay-fund-calc';
 
 export class EcbSalary extends PayFundCalc {
-    constructor(
-        ctx: PayFundCalculationService,
-        accPeriod: PayPeriod,
-        payFundType: PayFundType,
-        current: PayFund[],
-    ) {
+    constructor(ctx: PayFundCalculationService, accPeriod: PayPeriod, payFundType: PayFundType, current: PayFund[]) {
         super(ctx, accPeriod, payFundType, current);
     }
 
@@ -53,19 +48,12 @@ export class EcbSalary extends PayFundCalc {
             PaymentGroup.OtherAccruals,
         ];
         return this.ctx.paymentTypes
-            .filter(
-                (o) => calcMethods.includes(o.calcMethod) || paymentGroups.includes(o.paymentGroup),
-            )
+            .filter((o) => calcMethods.includes(o.calcMethod) || paymentGroups.includes(o.paymentGroup))
             .map((o) => o.id);
     }
 
     calcIncomeSum(): number {
-        return accPeriodFactSum(
-            this.ctx.payPeriod,
-            this.accPeriod,
-            this.ctx.payrolls,
-            this.getPaymentTypeIds(),
-        );
+        return accPeriodFactSum(this.ctx.payPeriod, this.accPeriod, this.ctx.payrolls, this.getPaymentTypeIds());
     }
 
     getMinWage() {

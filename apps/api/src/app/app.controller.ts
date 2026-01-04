@@ -1,13 +1,11 @@
-import { Body, Controller, Get, Header, Logger, Param, Post, StreamableFile } from '@nestjs/common';
+import { Body, Controller, Get, Header, Param, Post, StreamableFile } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { AppService } from './app.service';
-import { ApiOperation } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
-    private _logger: Logger = new Logger(AppController.name);
-
     constructor(private readonly service: AppService) {}
 
     @Get('/')
@@ -39,11 +37,7 @@ export class AppController {
 
     @Post('/locales/add/:lng/:ns')
     @Header('Content-Type', 'application/json')
-    async addLocales(
-        @Param('lng') lng: string,
-        @Param('ns') ns: string,
-        @Body() payload: { key: string },
-    ) {
+    async addLocales(@Param('lng') lng: string, @Param('ns') ns: string, @Body() payload: { key: string }) {
         const { key } = payload;
         await this.service.addLocaleKey(lng, ns, key);
     }

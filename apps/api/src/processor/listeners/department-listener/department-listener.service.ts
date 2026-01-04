@@ -1,18 +1,12 @@
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
-import {
-    DepartmentCreatedEvent,
-    DepartmentDeletedEvent,
-    DepartmentUpdatedEvent,
-} from '@/resources';
+import { DepartmentCreatedEvent, DepartmentDeletedEvent, DepartmentUpdatedEvent } from '@/resources';
 import { ServerEvent } from '@/types';
-import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class DepartmentListenerService {
-    private _logger: Logger = new Logger(DepartmentListenerService.name);
-
     constructor(
         @Inject(forwardRef(() => TaskGenerationService))
         private taskListService: TaskGenerationService,

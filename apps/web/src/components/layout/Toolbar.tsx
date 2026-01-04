@@ -104,11 +104,7 @@ export default function Toolbar(props: Props) {
                         <OfflinePinRounded />
                     </ToolbarItem>
 
-                    <ToolbarItem
-                        item={props?.onCancel}
-                        title={t('Cancel changes')}
-                        color={'warning'}
-                    >
+                    <ToolbarItem item={props?.onCancel} title={t('Cancel changes')} color={'warning'}>
                         <CancelIcon />
                     </ToolbarItem>
 
@@ -168,11 +164,7 @@ export default function Toolbar(props: Props) {
                         <DeleteSweepRounded />
                     </ToolbarItem>
 
-                    <ToolbarItem
-                        item={props?.onRestoreDeleted}
-                        title={t('Restore deleted')}
-                        color={'warning'}
-                    >
+                    <ToolbarItem item={props?.onRestoreDeleted} title={t('Restore deleted')} color={'warning'}>
                         <RestoreFromTrashRounded />
                     </ToolbarItem>
 

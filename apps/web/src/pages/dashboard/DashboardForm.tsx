@@ -35,12 +35,7 @@ const DashboardForm = ({ company, payPeriod, taskList }: DashboardFormProps) => 
                         {company && <SummarySection {...{ company, payPeriod }} />}
                     </Grid>
                     <Grid item>
-                        <Grid
-                            container
-                            flexDirection="row"
-                            justifyContent="space-around"
-                            spacing={3}
-                        >
+                        <Grid container flexDirection="row" justifyContent="space-around" spacing={3}>
                             <Grid item xs={12} md={6}>
                                 <TodoSection taskList={taskList} />
                             </Grid>

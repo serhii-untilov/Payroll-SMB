@@ -1,8 +1,8 @@
 import { PositionHistory } from './../../../../resources/position-history/entities/position-history.entity';
 import { Payroll } from './../../../../resources/payrolls/entities/payroll.entity';
 import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
-import { getWorkingTimeFact, getWorkingTimePlan } from '@/processor/helpers';
-import { CalcMethod, RecordFlag, WorkingTime } from '@/types';
+import { getWorkTimeFact, getWorkTimePlan } from '@/processor/helpers';
+import { CalcMethod, RecordFlag, WorkTime } from '@/types';
 import { NotFoundException } from '@nestjs/common';
 import { PaymentGroup } from '@/types';
 import { getMaxDate, getMinDate } from '@repo/shared';
@@ -19,16 +19,10 @@ export function calculateBasics(ctx: PayrollCalculationService) {
             ) || [];
         const payrolls: Payroll[] = [];
         for (const assignment of assignments) {
-            const dateFrom = getMaxDate(
-                assignment.dateFrom,
-                getMaxDate(accPeriod.dateFrom, ctx.position.dateFrom),
-            );
-            const dateTo = getMinDate(
-                assignment.dateTo,
-                getMinDate(accPeriod.dateTo, ctx.position.dateTo),
-            );
-            const plan = getWorkingTimePlan(ctx.workNorms, assignment.workNormId, dateFrom);
-            const fact = getWorkingTimeFact(plan, dateFrom, dateTo);
+            const dateFrom = getMaxDate(assignment.dateFrom, getMaxDate(accPeriod.dateFrom, ctx.position.dateFrom));
+            const dateTo = getMinDate(assignment.dateTo, getMinDate(accPeriod.dateTo, ctx.position.dateTo));
+            const plan = getWorkTimePlan(ctx.workTimeNorms, assignment.workTimeNormId, dateFrom);
+            const fact = getWorkTimeFact(plan, dateFrom, dateTo);
             const payroll = makePayroll(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact);
             const paymentType = ctx.paymentTypes.find((o) => o.id === payroll.paymentTypeId);
             if (!paymentType) {
@@ -38,9 +32,7 @@ export function calculateBasics(ctx: PayrollCalculationService) {
             payroll.factSum = calcMethod ? calcMethod(payroll) : 0;
             payrolls.push(payroll);
         }
-        const basicIds = ctx.paymentTypes
-            .filter((o) => o.paymentGroup === PaymentGroup.Basic)
-            .map((o) => o.id);
+        const basicIds = ctx.paymentTypes.filter((o) => o.paymentGroup === PaymentGroup.Basic).map((o) => o.id);
         ctx.merge(basicIds, accPeriod, payrolls);
     }
 }
@@ -51,8 +43,8 @@ function makePayroll(
     accPeriod: PayPeriod,
     dateFrom: Date,
     dateTo: Date,
-    plan: WorkingTime,
-    fact: WorkingTime,
+    plan: WorkTime,
+    fact: WorkTime,
 ): Payroll {
     const payroll = Object.assign({
         id: ctx.getNextPayrollId(),
@@ -90,9 +82,7 @@ function getCalcMethod(calcMethod: string): (payroll: Payroll) => number {
 }
 
 function calcSalary(payroll: Payroll) {
-    return payroll.planDays
-        ? ((payroll.planSum * payroll.factDays) / payroll.planDays) * Math.min(1, payroll.rate)
-        : 0;
+    return payroll.planDays ? ((payroll.planSum * payroll.factDays) / payroll.planDays) * Math.min(1, payroll.rate) : 0;
 }
 
 function calcWage(payroll: Payroll) {

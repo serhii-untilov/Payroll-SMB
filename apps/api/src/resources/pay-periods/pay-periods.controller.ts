@@ -23,7 +23,7 @@ import {
     ApiOperation,
     getSchemaPath,
 } from '@nestjs/swagger';
-import { deepStringToShortDate } from '@repo/shared';
+import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import {
     CreatePayPeriodDto,
@@ -51,7 +51,7 @@ export class PayPeriodsController {
     async create(@Req() req: Request, @Body() payload: CreatePayPeriodDto) {
         const userId = getUserId(req);
         await this.service.availableCreateOrFail(userId, payload.companyId);
-        return await this.service.create(userId, deepStringToShortDate(payload));
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Post('find')
@@ -88,11 +88,7 @@ export class PayPeriodsController {
     @ApiOkResponse({ description: 'The found record', type: PayPeriod })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() params: FindOnePayPeriodDto,
-    ) {
+    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() params: FindOnePayPeriodDto) {
         const userId = getUserId(req);
         await this.service.availableFindOneOrFail(userId, id);
         return await this.service.findOne(id, params);
@@ -104,14 +100,10 @@ export class PayPeriodsController {
     @ApiOkResponse({ description: 'The updated record', type: PayPeriod })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async update(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() payload: UpdatePayPeriodDto,
-    ) {
+    async update(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: UpdatePayPeriodDto) {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
-        return await this.service.update(userId, id, deepStringToShortDate(payload));
+        return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
     @Delete(':id')
@@ -134,11 +126,7 @@ export class PayPeriodsController {
         type: PayPeriod,
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async close(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() payload: ClosePayPeriodDto,
-    ) {
+    async close(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: ClosePayPeriodDto) {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.close(userId, id, payload);
@@ -152,11 +140,7 @@ export class PayPeriodsController {
         type: PayPeriod,
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async open(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() payload: OpenPayPeriodDto,
-    ) {
+    async open(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: OpenPayPeriodDto) {
         const userId = getUserId(req);
         await this.service.availableUpdateOrFail(userId, id);
         return await this.service.open(userId, id, payload);

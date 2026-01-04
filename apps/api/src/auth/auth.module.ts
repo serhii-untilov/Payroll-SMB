@@ -6,11 +6,7 @@ import { AuthService } from './auth.service';
 import { AccessTokenStrategy, RefreshTokenStrategy } from './strategies';
 
 @Module({
-    imports: [
-        JwtModule.register({}),
-        forwardRef(() => UsersModule),
-        forwardRef(() => AccessModule),
-    ],
+    imports: [JwtModule.register({}), forwardRef(() => UsersModule), forwardRef(() => AccessModule)],
     controllers: [AuthController],
     providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
 })

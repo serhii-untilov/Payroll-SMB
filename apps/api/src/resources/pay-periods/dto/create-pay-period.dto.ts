@@ -14,10 +14,10 @@ export class CreatePayPeriodDto {
     vacations?: number;
     sicks?: number;
     refunds?: number;
-    other_accruals?: number;
+    otherAccruals?: number;
     taxes?: number;
     payments?: number;
-    other_deductions?: number;
+    otherDeductions?: number;
     outBalance?: number;
     outCompanyDebt?: number;
     outEmployeeDebt?: number;

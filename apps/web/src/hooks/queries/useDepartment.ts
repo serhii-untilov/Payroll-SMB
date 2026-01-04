@@ -33,8 +33,7 @@ const useGetDepartmentList = (params: FindAllDepartmentDto) => {
 const useCreateDepartment = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (dto: CreateDepartmentDto): Promise<Department> =>
-            (await api.departmentsCreate(dto)).data,
+        mutationFn: async (dto: CreateDepartmentDto): Promise<Department> => (await api.departmentsCreate(dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Department, Resource.Task]);
         },
@@ -67,10 +66,4 @@ const useRemoveDepartment = () => {
     });
 };
 
-export {
-    useGetDepartment,
-    useGetDepartmentList,
-    useCreateDepartment,
-    useUpdateDepartment,
-    useRemoveDepartment,
-};
+export { useGetDepartment, useGetDepartmentList, useCreateDepartment, useUpdateDepartment, useRemoveDepartment };
