@@ -35,6 +35,7 @@ export enum Resource {
     Timesheet = 'timesheet',
     User = 'user',
     UserAccess = 'user-access',
+    UserRole = 'user-role',
     Vacancy = 'vacancy',
     WorkTimeNorm = 'work-time-norm',
 }

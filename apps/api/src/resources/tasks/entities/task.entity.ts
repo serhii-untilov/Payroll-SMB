@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AfterLoad, Column, Entity, ManyToOne, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { TaskStatus, TaskType } from './../../../types';
-import { CompanyEntity } from './../../companies/entities/company.entity';
+import { CompanyEntity } from '../../company/entities/company.entity';
 
 @Entity()
 export class Task extends BaseEntity {

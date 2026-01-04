@@ -4,10 +4,10 @@ import { monthBegin, monthEnd } from '@repo/shared';
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { PaymentSchedule } from '../../../types/lib/payment-schedule';
 import { UserRole } from '../../user-role/entities/user-role.entity';
-import { Accounting } from './../../accounting/entities/accounting.entity';
-import { Department } from './../../departments/entities/department.entity';
-import { Law } from './../../laws/entities/law.entity';
-import { Position } from './../../positions/entities/position.entity';
+import { Accounting } from '../../accounting/entities/accounting.entity';
+import { Department } from '../../departments/entities/department.entity';
+import { Law } from '../../laws/entities/law.entity';
+import { Position } from '../../positions/entities/position.entity';
 
 @Entity()
 export class CompanyEntity extends BaseEntity {

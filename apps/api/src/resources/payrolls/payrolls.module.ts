@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payroll } from './entities/payroll.entity';
 import { PositionsModule } from '../positions/positions.module';
 import { AccessModule } from '../access/access.module';
-import { CompanyModule } from '../companies/company.module';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
     imports: [

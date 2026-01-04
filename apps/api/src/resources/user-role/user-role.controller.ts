@@ -1,4 +1,5 @@
 import { AccessTokenGuard } from '@/guards';
+import { RoleType } from '@/types';
 import { getUserId } from '@/utils';
 import {
     Body,
@@ -26,7 +27,6 @@ import { FindUserRoleDto } from './dto';
 import { CreateUserRoleDto } from './dto/create-user-role.dto';
 import { UserRole } from './entities/user-role.entity';
 import { UserRoleService } from './user-role.service';
-import { RoleType } from '@/types';
 
 @Controller('user-roles')
 export class UserRoleController {
@@ -38,10 +38,9 @@ export class UserRoleController {
         description: 'The found records',
         schema: { type: 'array', items: { $ref: getSchemaPath(UserRole) } },
     })
-    async create(@Req() req: Request, payload: CreateUserRoleDto): Promise<UserRole> {
+    async create(@Req() req: Request, dto: CreateUserRoleDto): Promise<string> {
         const userId = getUserId(req);
-        await this.service.availableCreateOrFail(userId);
-        return await this.service.create(userId, payload);
+        return await this.service.create(userId, dto);
     }
 
     @Post('find')
@@ -52,10 +51,9 @@ export class UserRoleController {
         schema: { type: 'array', items: { $ref: getSchemaPath(UserRole) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Req() req: Request, @Body() params: FindUserRoleDto): Promise<UserRole[]> {
+    async findAll(@Req() req: Request, @Body() dto: FindUserRoleDto): Promise<UserRole[]> {
         const userId = getUserId(req);
-        this.service.availableFindAllOrFail(userId);
-        return await this.service.findAll(params);
+        return await this.service.findAll(userId, dto);
     }
 
     @Post('find/:id')

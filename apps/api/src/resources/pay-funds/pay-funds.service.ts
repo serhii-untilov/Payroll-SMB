@@ -10,7 +10,7 @@ import {
 import { Between, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../common/base/available-for-user-company';
 import { AccessService } from '../access/access.service';
-import { CompanyService } from '../companies/company.service';
+import { CompanyService } from '../company/company.service';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePayFundDto } from './dto/create-pay-fund.dto';
 import { FindPayFundDto } from './dto/find-pay-fund.dto';

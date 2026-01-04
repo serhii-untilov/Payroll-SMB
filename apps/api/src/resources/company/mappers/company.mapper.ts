@@ -3,8 +3,19 @@ import { CompanyReadDto } from '../dto/company-read.dto';
 import { UpdateCompanyDto } from '../dto/update-company.dto';
 import { CompanyEntity } from '../entities/company.entity';
 import { CompanyListItemDto } from '../dto/company-list-item.dto';
+import { CreateCompanyDto } from '../dto/create-company.dto';
 
-export class CompanyMapper extends BaseMapper<CompanyEntity, CompanyReadDto, UpdateCompanyDto, CompanyListItemDto> {
+export class CompanyMapper extends BaseMapper<
+    CompanyEntity,
+    CompanyReadDto,
+    CreateCompanyDto,
+    UpdateCompanyDto,
+    CompanyListItemDto
+> {
+    constructor() {
+        super(CompanyEntity);
+    }
+
     toReadDto(entity: CompanyEntity): CompanyReadDto {
         return {
             id: entity.id,

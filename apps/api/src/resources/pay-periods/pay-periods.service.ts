@@ -7,7 +7,7 @@ import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../common/base/available-for-user-company';
 import { AccessService } from '../access/access.service';
-import { CompanyService } from '../companies/company.service';
+import { CompanyService } from '../company/company.service';
 import {
     ClosePayPeriodDto,
     CreatePayPeriodDto,

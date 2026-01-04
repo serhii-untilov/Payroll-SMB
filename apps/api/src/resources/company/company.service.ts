@@ -1,6 +1,6 @@
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { Action, Resource, RoleType } from '@/types';
-import { ForbiddenException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -39,9 +39,7 @@ export class CompanyService extends BaseUserAccess {
         super(userAccess, Resource.Company);
     }
     async create(userId: string, dto: CreateCompanyDto): Promise<string> {
-        if (!(await this.canUser(userId, Action.Create))) {
-            throw new ForbiddenException();
-        }
+        await this.canOrFail(userId, Action.Create);
         const role = await this.roleService.findRoleByType(RoleType.CompanyAdmin);
         const id = IdGenerator.nextId();
         const company = await this.repository.save({ id, ...dto, createdUserId: userId, updatedUserId: userId });
@@ -51,9 +49,7 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, dto: UpdateCompanyDto): Promise<void> {
-        if (!(await this.canUser(userId, Action.Update, id))) {
-            throw new ForbiddenException();
-        }
+        await this.canOrFail(userId, Action.Update, id);
         await this.repository.update(
             { id, version },
             {
@@ -67,17 +63,12 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        if (!(await this.canUser(userId, Action.Remove, id))) {
-            throw new ForbiddenException();
-        }
+        await this.canOrFail(userId, Action.Remove, id);
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
         this.eventEmitter.emit(CompanyDeletedEvent.name, new CompanyDeletedEvent(userId, id));
     }
 
     async findAll(userId: string, query: ListCompaniesQueryDto): Promise<ListCompaniesDto> {
-        if (!(await this.canUser(userId, Action.Read))) {
-            throw new ForbiddenException();
-        }
         const qb = this.repository.createQueryBuilder('p').distinct(true);
         // search
         ApplyFiltersUtil.apply(qb, 'p', query.search);
@@ -99,9 +90,6 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<CompanyReadDto> {
-        if (!(await this.canUser(userId, Action.Read, id))) {
-            throw new ForbiddenException();
-        }
         const company = await this.repository.findOneOrFail({
             relations: {
                 law: true,

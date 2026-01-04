@@ -2,9 +2,7 @@
 export default async () => {
     const t = {
         ['./types/lib/accounting-type']: await import('./types/lib/accounting-type'),
-        ['./resources/companies/entities/company.entity']: await import(
-            './resources/companies/entities/company.entity'
-        ),
+        ['./resources/companies/entities/company.entity']: await import('./resources/company/entities/company.entity'),
         ['./resources/departments/entities/department.entity']: await import(
             './resources/departments/entities/department.entity'
         ),
@@ -329,7 +327,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/companies/entities/company.entity'),
+                    import('./resources/company/entities/company.entity'),
                     {
                         Company: {
                             name: { required: true, type: () => String },
@@ -491,8 +489,8 @@ export default async () => {
                 ],
                 [import('./resources/users/dto/public-user-data.dto'), { PublicUserDataDto: {} }],
                 [import('./resources/users/dto/update-user.dto'), { UpdateUserDto: {} }],
-                [import('./resources/companies/dto/create-company.dto'), { CreateCompanyDto: {} }],
-                [import('./resources/companies/dto/update-company.dto'), { UpdateCompanyDto: {} }],
+                [import('./resources/company/dto/create-company.dto'), { CreateCompanyDto: {} }],
+                [import('./resources/company/dto/update-company.dto'), { UpdateCompanyDto: {} }],
                 [
                     import('./resources/pay-periods/entities/pay-period.entity'),
                     {
@@ -1191,7 +1189,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/companies/company.controller'),
+                    import('./resources/company/company.controller'),
                     {
                         CompaniesController: {
                             create: { type: t['./resources/companies/entities/company.entity'].CompanyEntity },

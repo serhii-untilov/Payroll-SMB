@@ -1,4 +1,4 @@
-import { CompanyEntity } from './../../src/resources/companies/entities/company.entity';
+import { CompanyEntity } from '../../src/resources/company/entities/company.entity';
 import { createMockDepartment } from './department.factory';
 import { incrementalNumber, randCompanyName } from '@ngneat/falso';
 import { createMockLaw } from './law.factory';

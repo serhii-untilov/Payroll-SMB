@@ -1,5 +1,5 @@
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
-import { Resource, RoleType } from '@/types';
+import { Action, Resource, RoleType } from '@/types';
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
@@ -7,20 +7,40 @@ import { CreateUserRoleDto } from './dto/create-user-role.dto';
 import { FindUserRoleDto } from './dto/find-user-role.dto';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 import { UserRole } from './entities/user-role.entity';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
+import { UserAccessService } from '../user-access/user-access.service';
 
 @Injectable()
-export class UserRoleService {
+export class UserRoleService extends BaseUserAccess {
     public readonly userRoleResource = Resource.Company;
 
-    constructor(@InjectRepository(UserRole) private repository: Repository<UserRole>) {}
+    constructor(
+        @InjectRepository(UserRole) private repository: Repository<UserRole>,
+        readonly userAccess: UserAccessService,
+    ) {
+        super(userAccess, Resource.UserRole);
+    }
 
-    async create(userId: string, payload: CreateUserRoleDto) {
-        return await this.repository.save({
-            id: IdGenerator.nextId(),
-            ...payload,
-            createdUserId: userId,
-            updatedUserId: userId,
-        });
+    async create(userId: string, dto: CreateUserRoleDto): Promise<string> {
+        await this.canOrFail(userId, Action.Create);
+        const id = IdGenerator.nextId();
+        await this.repository.save({ id, ...dto, createdUserId: userId, updatedUserId: userId });
+        return id;
+    }
+
+    async update(userId: string, id: string, version: number, payload: UpdateUserRoleDto): Promise<void> {
+        await this.canOrFail(userId, Action.Update, id);
+        await this.repository.update({ id, version }, { ...payload, updatedUserId: userId, updatedDate: new Date() });
+    }
+
+    async remove(userId: string, id: string, version: number): Promise<void> {
+        await this.canOrFail(userId, Action.Remove, id);
+        await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
+    }
+
+    async restore(userId: string, id: string, version: number): Promise<void> {
+        await this.canOrFail(userId, Action.Restore, id);
+        await this.repository.update({ id, version }, { deletedUserId: null, deletedDate: null });
     }
 
     async findAll({ userId, relations, withDeleted }: FindUserRoleDto) {
@@ -45,37 +65,6 @@ export class UserRoleService {
             relations: { company: true },
             where: { userId, company: { name } },
         });
-    }
-
-    async update(userId: string, id: string, payload: UpdateUserRoleDto) {
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        await this.repository.save({
-            id,
-            ...payload,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
-        return await this.repository.findOneOrFail({ where: { id } });
-    }
-
-    async remove(userId: string, id: string): Promise<UserRole> {
-        await this.repository.save({
-            id,
-            deletedUserId: userId,
-            deletedDate: new Date(),
-        });
-        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
-    }
-
-    async restore(userId: string, id: string): Promise<UserRole> {
-        await this.repository.save({
-            id,
-            deletedUserId: null,
-            deletedDate: null,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
-        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async hasGlobalRole(userId: string, roleType: RoleType): Promise<boolean> {

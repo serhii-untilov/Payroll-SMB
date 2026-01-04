@@ -18,6 +18,7 @@ export class ListPersonsHandler implements IQueryHandler<ListPersonsQuery, ListP
         @InjectRepository(PersonEntity)
         private readonly repository: Repository<PersonEntity>,
         private readonly policy: ListPersonsPolicy,
+        private readonly mapper: PersonMapper,
     ) {}
 
     async execute(query: ListPersonsQuery): Promise<ListPersonsDto> {
@@ -38,7 +39,7 @@ export class ListPersonsHandler implements IQueryHandler<ListPersonsQuery, ListP
         const { page, limit } = PaginationUtils.apply(qb, query.query.page);
         const [rows, total] = await qb.getManyAndCount();
         return {
-            items: rows.map(PersonMapper.toListItem),
+            items: rows.map(this.mapper.toListItemDto),
             page: {
                 page,
                 limit,

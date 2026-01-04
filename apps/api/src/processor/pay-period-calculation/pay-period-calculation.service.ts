@@ -1,6 +1,6 @@
 import { PayPeriodSummary } from '../../resources/pay-periods/entities/pay-period-summary.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { CompanyEntity } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import {
     CompanyService,
     PayFundsService,

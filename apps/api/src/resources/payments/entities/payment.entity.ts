@@ -3,7 +3,7 @@ import { AfterLoad, Column, Entity, Index, ManyToOne, OneToMany, Relation } from
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
 import { PaymentStatus, RecordFlag } from './../../../types';
-import { CompanyEntity } from './../../companies/entities/company.entity';
+import { CompanyEntity } from '../../company/entities/company.entity';
 import { PaymentType } from './../../payment-types/entities/payment-type.entity';
 
 @Entity()

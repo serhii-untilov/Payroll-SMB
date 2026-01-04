@@ -3,7 +3,7 @@ import { Position } from './../../resources/positions/entities/position.entity';
 import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
 import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { CompanyEntity } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import { calcBalanceWorkTime, getPayrollUnionRecord } from '@/processor/helpers';
 import {
     AccessService,

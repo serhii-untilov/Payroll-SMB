@@ -8,7 +8,7 @@ import { PaymentPositionsService } from '../payment-positions/payment-positions.
 import { PaymentsService } from './payments.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
-import { CompanyService } from '../companies';
+import { CompanyService } from '../company';
 
 describe('PaymentsService', () => {
     let service: PaymentsService;

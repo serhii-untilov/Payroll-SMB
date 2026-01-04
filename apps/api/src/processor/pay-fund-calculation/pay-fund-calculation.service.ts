@@ -5,7 +5,7 @@ import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.ent
 import { PayFundType } from './../../resources/pay-fund-types/entities/pay-fund-type.entity';
 import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
 import { MinWage } from './../../resources/min-wage/entities/min-wage.entity';
-import { CompanyEntity } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import {
     CompanyService,
     MinWageService,

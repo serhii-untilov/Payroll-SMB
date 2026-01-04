@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from 'test';
 import { AccessService } from '../access/access.service';
-import { CompanyService } from '../companies/company.service';
+import { CompanyService } from '../company/company.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionsService } from '../positions/positions.service';
 import { Payment } from './entities/payment.entity';

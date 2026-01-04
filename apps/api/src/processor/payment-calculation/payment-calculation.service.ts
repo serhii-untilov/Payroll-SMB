@@ -5,7 +5,7 @@ import { PaymentPosition } from './../../resources/payment-positions/entities/pa
 import { Payment } from './../../resources/payments/entities/payment.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
 import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
-import { CompanyEntity } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import {
     CompanyService,
     PayFundsService,

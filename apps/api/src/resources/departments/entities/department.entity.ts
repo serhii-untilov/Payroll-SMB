@@ -1,6 +1,6 @@
 import { AfterLoad, Column, Entity, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
-import { CompanyEntity } from './../../companies/entities/company.entity';
+import { CompanyEntity } from '../../company/entities/company.entity';
 
 @Entity()
 export class Department extends BaseEntity {

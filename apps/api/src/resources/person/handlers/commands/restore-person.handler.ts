@@ -18,7 +18,7 @@ export class RestorePersonHandler {
             where: { id: command.personId },
             withDeleted: true,
         });
-        const personAfter = PersonMapper.fromEntity(personBefore);
+        const personAfter = PersonMapper.toReadDto(personBefore);
         const changes = PersonMapper.diff(personBefore, personAfter);
         const result = await this.personRepository.update(
             { id: command.personId, version: command.version },

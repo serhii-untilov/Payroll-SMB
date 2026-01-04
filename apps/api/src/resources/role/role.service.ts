@@ -1,5 +1,5 @@
 import { Action, Resource, RoleType } from '@/types';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, Repository } from 'typeorm';
 import { BaseUserAccess } from '../common/base/user-access.abstract';
@@ -18,9 +18,7 @@ export class RoleService extends BaseUserAccess {
     }
 
     async create(userId: string, dto: CreateRoleDto): Promise<Role> {
-        if (!(await this.canUser(userId, Action.Create))) {
-            throw new ForbiddenException();
-        }
+        await this.canOrFail(userId, Action.Create);
         return await this.repository.save({
             ...dto,
             createdUserId: userId,
@@ -28,32 +26,29 @@ export class RoleService extends BaseUserAccess {
         });
     }
 
+    async update(userId: string, id: string, version: number, data: UpdateRoleDto): Promise<void> {
+        await this.canOrFail(userId, Action.Update, id);
+        await this.repository.update({ id, version }, { ...data, updatedUserId: userId, updatedDate: new Date() });
+    }
+
+    async remove(userId: string, id: string, version: number): Promise<void> {
+        await this.canOrFail(userId, Action.Remove, id);
+        await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
+    }
+
+    async restore(userId: string, id: string, version: number): Promise<void> {
+        await this.canOrFail(userId, Action.Restore, id);
+        await this.repository.update({ id, version }, { deletedUserId: null, deletedDate: null });
+    }
+
     async findAll(userId: string, params?: FindManyOptions): Promise<Role[]> {
-        if (!(await this.canUser(userId, Action.Read))) {
-            throw new ForbiddenException();
-        }
+        await this.canOrFail(userId, Action.Read);
         return await this.repository.find(params);
     }
 
     async findOne(userId: string, id: string): Promise<Role> {
-        if (!(await this.canUser(userId, Action.Read, id))) {
-            throw new ForbiddenException();
-        }
+        await this.canOrFail(userId, Action.Read, id);
         return await this.repository.findOneOrFail({ where: { id } });
-    }
-
-    async update(userId: string, id: string, data: UpdateRoleDto): Promise<void> {
-        if (!(await this.canUser(userId, Action.Update, id))) {
-            throw new ForbiddenException();
-        }
-        await this.repository.update({ id }, { ...data, updatedUserId: userId, updatedDate: new Date() });
-    }
-
-    async remove(userId: string, id: string): Promise<void> {
-        if (!(await this.canUser(userId, Action.Remove, id))) {
-            throw new ForbiddenException();
-        }
-        await this.repository.update({ id }, { deletedUserId: userId, deletedDate: new Date() });
     }
 
     async getRoleType(id: string): Promise<string> {

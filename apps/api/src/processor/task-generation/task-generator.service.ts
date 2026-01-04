@@ -1,6 +1,6 @@
 import { Task } from './../../resources/tasks/entities/task.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { CompanyEntity } from './../../resources/companies/entities/company.entity';
+import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import {
     CompanyService,
     DepartmentsService,
