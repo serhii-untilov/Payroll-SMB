@@ -1,5 +1,5 @@
 import {
-    AccessService,
+    UserAccessService,
     CompanyService,
     MinWageService,
     PayFundsService,
@@ -21,7 +21,7 @@ describe('PayFundCalculationService', () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 PayFundCalculationService,
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 { provide: PayFundTypesService, useValue: createMock<PayFundTypesService>() },
                 { provide: PaymentTypesService, useValue: createMock<PaymentTypesService>() },
                 { provide: CompanyService, useValue: createMock<CompanyService>() },

@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { FindAllTaskDto } from './dto/find-all-task.dto';
@@ -20,8 +20,8 @@ export class TasksService extends AvailableForUserCompany {
     constructor(
         @InjectRepository(Task)
         private repository: Repository<Task>,
-        @Inject(forwardRef(() => AccessService))
-        accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        accessService: UserAccessService,
         @Inject(forwardRef(() => PayPeriodsService))
         private readonly payPeriodsService: PayPeriodsService,
     ) {

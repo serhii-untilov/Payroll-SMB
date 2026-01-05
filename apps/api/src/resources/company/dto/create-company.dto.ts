@@ -1,7 +1,7 @@
 import { PaymentSchedule } from '@/types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsNumberString, IsOptional, IsString } from 'class-validator';
 
 export class CreateCompanyDto {
     @ApiProperty()
@@ -14,12 +14,12 @@ export class CreateCompanyDto {
     taxId?: string;
 
     @ApiPropertyOptional()
-    @IsString()
+    @IsNumberString()
     @IsOptional()
     lawId?: string;
 
     @ApiPropertyOptional()
-    @IsString()
+    @IsNumberString()
     @IsOptional()
     accountingId?: string;
 

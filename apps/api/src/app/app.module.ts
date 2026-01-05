@@ -1,7 +1,7 @@
 import { AuthModule } from '@/auth/auth.module';
 import { appConfig, authConfig, dbConfig, googleConfig, TypeormConfigService } from '@/config';
+import { ErrorsInterceptor } from '@/interceptors/errors.interceptor';
 import {
-    AccessModule,
     AccountingModule,
     CompanyModule,
     DepartmentsModule,
@@ -20,23 +20,23 @@ import {
     PositionsModule,
     RolesModule,
     TasksModule,
+    UserAccessModule,
+    UserModule,
     UserRoleModule,
-    UsersModule,
     WorkTimeNormModule,
 } from '@/resources';
+import { SnowflakeModule } from '@/snowflake/snowflake.module';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ScheduleModule } from '@nestjs/schedule';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { ErrorsInterceptor } from '@/interceptors/errors.interceptor';
-import { SnowflakeModule } from '@/snowflake/snowflake.module';
-import { IdGenerator } from '@/snowflake/snowflake.singleton';
 
 @Module({
     imports: [
@@ -73,9 +73,6 @@ import { IdGenerator } from '@/snowflake/snowflake.singleton';
             // and it has no listeners
             ignoreErrors: false,
         }),
-        SnowflakeModule,
-        ScheduleModule.forRoot(),
-        AccessModule,
         AccountingModule,
         AuthModule,
         CompanyModule,
@@ -85,18 +82,21 @@ import { IdGenerator } from '@/snowflake/snowflake.singleton';
         MinWageModule,
         PayFundsModule,
         PayFundTypesModule,
+        PaymentPositionsModule,
+        PaymentsModule,
         PaymentTypesModule,
         PayPeriodsModule,
-        PaymentsModule,
-        PaymentPositionsModule,
         PayrollsModule,
         PersonModule,
         PositionHistoryModule,
         PositionsModule,
         RolesModule,
+        ScheduleModule.forRoot(),
+        SnowflakeModule,
         TasksModule,
+        UserAccessModule,
+        UserModule,
         UserRoleModule,
-        UsersModule,
         WorkTimeNormModule,
     ],
     controllers: [AppController],

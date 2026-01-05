@@ -6,7 +6,7 @@ import { randEmail } from '@ngneat/falso';
 import * as _ from 'lodash';
 import { MockType, createMockUser, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { RoleService } from '../role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
@@ -22,7 +22,7 @@ describe('UserService', () => {
             providers: [
                 UserService,
                 { provide: getRepositoryToken(User), useFactory: repositoryMockFactory },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 { provide: RoleService, useValue: createMock<RoleService>() },
             ],
         }).compile();

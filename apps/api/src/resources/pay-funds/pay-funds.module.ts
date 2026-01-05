@@ -1,6 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AccessModule } from '../access/access.module';
+import { UserAccessModule } from '../user-access';
 import { CompanyModule } from '../company/company.module';
 import { PositionsModule } from '../positions/positions.module';
 import { PayFund } from './entities/pay-fund.entity';
@@ -12,7 +12,7 @@ import { PayFundsService } from './pay-funds.service';
         TypeOrmModule.forFeature([PayFund]),
         forwardRef(() => PositionsModule),
         forwardRef(() => CompanyModule),
-        forwardRef(() => AccessModule),
+        forwardRef(() => UserAccessModule),
     ],
     controllers: [PayFundsController],
     providers: [PayFundsService],

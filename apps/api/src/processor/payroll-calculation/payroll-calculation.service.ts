@@ -6,7 +6,7 @@ import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.ent
 import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import { calcBalanceWorkTime, getPayrollUnionRecord } from '@/processor/helpers';
 import {
-    AccessService,
+    UserAccessService,
     CompanyService,
     PayPeriodsService,
     PaymentTypesService,
@@ -39,8 +39,8 @@ export class PayrollCalculationService {
     private _syntheticTimeFact: WorkTime;
 
     constructor(
-        @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        private accessService: UserAccessService,
         @Inject(forwardRef(() => CompanyService))
         private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypesService))

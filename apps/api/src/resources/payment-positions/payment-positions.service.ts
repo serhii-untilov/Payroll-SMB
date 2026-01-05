@@ -1,4 +1,4 @@
-import { AccessService, AvailableForUserCompany, PayrollsService } from '@/resources';
+import { UserAccessService, AvailableForUserCompany, PayrollsService } from '@/resources';
 import { Resource, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
@@ -21,8 +21,8 @@ export class PaymentPositionsService extends AvailableForUserCompany {
     constructor(
         @InjectRepository(PaymentPosition)
         private repository: Repository<PaymentPosition>,
-        @Inject(forwardRef(() => AccessService))
-        public accessService: WrapperType<AccessService>,
+        @Inject(forwardRef(() => UserAccessService))
+        public accessService: WrapperType<UserAccessService>,
         @Inject(forwardRef(() => PaymentsService))
         public paymentsService: WrapperType<PaymentsService>,
         @Inject(forwardRef(() => PayrollsService))

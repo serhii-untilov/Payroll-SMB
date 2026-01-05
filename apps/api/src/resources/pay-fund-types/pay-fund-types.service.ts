@@ -4,7 +4,7 @@ import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/com
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../common/base/available-for-user';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
 import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';
 import { PayFundType } from './entities/pay-fund-type.entity';
@@ -16,8 +16,8 @@ export class PayFundTypesService extends AvailableForUser {
     constructor(
         @InjectRepository(PayFundType)
         private repository: Repository<PayFundType>,
-        @Inject(forwardRef(() => AccessService))
-        accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        accessService: UserAccessService,
     ) {
         super(accessService);
     }

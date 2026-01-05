@@ -1,4 +1,4 @@
-import { AccessService, UserService } from '@/resources';
+import { UserAccessService, UserService } from '@/resources';
 import { Action, Resource, RoleType } from '@/types';
 import {
     BadRequestException,
@@ -13,7 +13,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from './../resources/users/dto/create-user.dto';
+import { CreateUserDto } from './../resources/user/dto/create-user.dto';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';
 
@@ -23,7 +23,7 @@ export class AuthService {
         @Inject(forwardRef(() => UserService)) private usersService: UserService,
         @Inject(forwardRef(() => JwtService)) private jwtService: JwtService,
         @Inject(forwardRef(() => ConfigService)) private configService: ConfigService,
-        @Inject(forwardRef(() => AccessService)) private accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService)) private accessService: UserAccessService,
     ) {}
 
     async register(user: CreateUserDto): Promise<TokensDto> {

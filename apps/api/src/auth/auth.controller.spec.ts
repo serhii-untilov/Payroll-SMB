@@ -1,6 +1,6 @@
-import { User } from './../resources/users/entities/user.entity';
+import { User } from './../resources/user/entities/user.entity';
 import { appConfig, authConfig, dbConfig, googleConfig } from '@/config';
-import { AccessService, UserService } from '@/resources';
+import { UserAccessService, UserService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -37,7 +37,7 @@ describe('AuthController', () => {
                 AuthService,
                 ConfigService,
                 { provide: UserService, useValue: createMock<UserService>() },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
             ],
             controllers: [AuthController],
             exports: [],

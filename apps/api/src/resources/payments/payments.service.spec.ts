@@ -2,7 +2,7 @@ import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from 'test';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { Payment } from './entities/payment.entity';
 import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
 import { PaymentsService } from './payments.service';
@@ -25,7 +25,7 @@ describe('PaymentsService', () => {
                     provide: PaymentPositionsService,
                     useValue: createMock<PaymentPositionsService>(),
                 },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
                 { provide: CompanyService, useValue: createMock<CompanyService>() },

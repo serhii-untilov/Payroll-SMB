@@ -1,6 +1,6 @@
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
-import { Department } from './../../departments/entities/department.entity';
+import { DepartmentEntity } from './../../departments/entities/department.entity';
 import { Job } from './../../jobs/entities/job.entity';
 import { PaymentType } from './../../payment-types/entities/payment-type.entity';
 import { Position } from './../../positions/entities/position.entity';
@@ -21,9 +21,9 @@ export class PositionHistory extends BaseEntity {
     @Column({ type: 'date', default: '9999-12-31' })
     dateTo: Date;
 
-    @ManyToOne(() => Department, { createForeignKeyConstraints: false })
+    @ManyToOne(() => DepartmentEntity, { createForeignKeyConstraints: false })
     @JoinColumn()
-    department?: Relation<Department>;
+    department?: Relation<DepartmentEntity>;
 
     @Column({ type: 'bigint', nullable: true })
     departmentId: string | null;

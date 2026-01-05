@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { PayFundType } from './entities/pay-fund-type.entity';
 import { PayFundTypesService } from './pay-fund-types.service';
 
@@ -16,7 +16,7 @@ describe('PayFundTypesService', () => {
             providers: [
                 PayFundTypesService,
                 { provide: getRepositoryToken(PayFundType), useFactory: repositoryMockFactory },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
             ],
         }).compile();
 

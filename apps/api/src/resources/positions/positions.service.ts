@@ -17,7 +17,7 @@ import {
     Repository,
 } from 'typeorm';
 import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { CreatePositionDto } from './dto/create-position.dto';
@@ -47,8 +47,8 @@ export class PositionsService extends AvailableForUserCompany {
         @Inject(forwardRef(() => PayrollsService))
         private payrollsService: WrapperType<PayrollsService>,
         private eventEmitter: EventEmitter2,
-        @Inject(forwardRef(() => AccessService))
-        accessService: WrapperType<AccessService>,
+        @Inject(forwardRef(() => UserAccessService))
+        accessService: WrapperType<UserAccessService>,
     ) {
         super(accessService);
     }

@@ -131,13 +131,13 @@ export default async () => {
                             dateTo: { required: true, type: () => Date },
                             parentDepartment: {
                                 required: false,
-                                type: () => t['./resources/departments/entities/department.entity'].Department,
+                                type: () => t['./resources/departments/entities/department.entity'].DepartmentEntity,
                                 nullable: true,
                             },
                             parentDepartmentId: { required: false, type: () => String, nullable: true },
                             childDepartments: {
                                 required: false,
-                                type: () => [t['./resources/departments/entities/department.entity'].Department],
+                                type: () => [t['./resources/departments/entities/department.entity'].DepartmentEntity],
                             },
                         },
                     },
@@ -240,7 +240,7 @@ export default async () => {
                             dateTo: { required: true, type: () => Date },
                             department: {
                                 required: false,
-                                type: () => t['./resources/departments/entities/department.entity'].Department,
+                                type: () => t['./resources/departments/entities/department.entity'].DepartmentEntity,
                             },
                             departmentId: { required: true, type: () => String, nullable: true },
                             job: { required: false, type: () => t['./resources/jobs/entities/job.entity'].Job },
@@ -349,7 +349,7 @@ export default async () => {
                             checkDate: { required: true, type: () => Date },
                             departments: {
                                 required: false,
-                                type: () => [t['./resources/departments/entities/department.entity'].Department],
+                                type: () => [t['./resources/departments/entities/department.entity'].DepartmentEntity],
                             },
                             positions: {
                                 required: false,
@@ -1255,11 +1255,13 @@ export default async () => {
                     import('./resources/departments/departments.controller'),
                     {
                         DepartmentsController: {
-                            create: { type: t['./resources/departments/entities/department.entity'].Department },
-                            findAll: { type: [t['./resources/departments/entities/department.entity'].Department] },
-                            findOne: { type: t['./resources/departments/entities/department.entity'].Department },
-                            update: { type: t['./resources/departments/entities/department.entity'].Department },
-                            remove: { type: t['./resources/departments/entities/department.entity'].Department },
+                            create: { type: t['./resources/departments/entities/department.entity'].DepartmentEntity },
+                            findAll: {
+                                type: [t['./resources/departments/entities/department.entity'].DepartmentEntity],
+                            },
+                            findOne: { type: t['./resources/departments/entities/department.entity'].DepartmentEntity },
+                            update: { type: t['./resources/departments/entities/department.entity'].DepartmentEntity },
+                            remove: { type: t['./resources/departments/entities/department.entity'].DepartmentEntity },
                         },
                     },
                 ],

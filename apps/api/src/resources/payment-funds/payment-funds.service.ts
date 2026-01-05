@@ -1,4 +1,4 @@
-import { AccessService, AvailableForUserCompany } from '@/resources';
+import { UserAccessService, AvailableForUserCompany } from '@/resources';
 import { Resource } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,8 +15,8 @@ export class PaymentFundsService extends AvailableForUserCompany {
     constructor(
         @InjectRepository(PaymentFund)
         private repository: Repository<PaymentFund>,
-        @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        public accessService: UserAccessService,
         @Inject(forwardRef(() => PaymentsService))
         public paymentsService: PaymentsService,
         @Inject(forwardRef(() => PaymentPositionsService))

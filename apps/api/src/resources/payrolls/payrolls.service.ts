@@ -5,7 +5,7 @@ import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/com
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { PositionsService } from '../positions/positions.service';
 import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { FindPayrollDto } from './dto/find-payroll.dto';
@@ -18,7 +18,7 @@ export class PayrollsService extends AvailableForUserCompany {
 
     constructor(
         @InjectRepository(Payroll) private repository: Repository<Payroll>,
-        @Inject(forwardRef(() => AccessService)) public accessService: WrapperType<AccessService>,
+        @Inject(forwardRef(() => UserAccessService)) public accessService: WrapperType<UserAccessService>,
         @Inject(forwardRef(() => PositionsService))
         private positionsService: WrapperType<PositionsService>,
     ) {

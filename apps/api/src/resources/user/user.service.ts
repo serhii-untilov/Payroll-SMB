@@ -12,7 +12,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import * as _ from 'lodash';
 import { FindOneOptions, Repository } from 'typeorm';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { RoleService } from '../role/role.service';
 import { UserRole } from '../user-role/entities/user-role.entity';
 import { CreateUserDto, PublicUserDataDto, UpdateUserDto } from './dto';
@@ -25,7 +25,7 @@ export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(UserRole) private userCompanyRepository: Repository<UserRole>,
-        @Inject(forwardRef(() => AccessService)) private accessService: WrapperType<AccessService>,
+        @Inject(forwardRef(() => UserAccessService)) private accessService: WrapperType<UserAccessService>,
         @Inject(forwardRef(() => RoleService)) private rolesService: WrapperType<RoleService>,
     ) {}
 

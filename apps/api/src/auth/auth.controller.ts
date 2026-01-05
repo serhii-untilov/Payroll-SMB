@@ -3,7 +3,7 @@ import { getRefreshToken, getUserId } from '@/utils';
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { Request } from 'express';
-import { CreateUserDto } from './../resources/users/dto/create-user.dto';
+import { CreateUserDto } from './../resources/user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { TokensDto } from './dto/tokens.dto';

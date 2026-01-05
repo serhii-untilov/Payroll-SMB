@@ -4,7 +4,7 @@ import { TasksService } from './tasks.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { repositoryMockFactory } from 'test';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { createMock } from '@golevelup/ts-jest';
 
@@ -21,7 +21,7 @@ describe('TasksController', () => {
                     provide: getRepositoryToken(Task),
                     useFactory: repositoryMockFactory,
                 },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
             ],
         }).compile();

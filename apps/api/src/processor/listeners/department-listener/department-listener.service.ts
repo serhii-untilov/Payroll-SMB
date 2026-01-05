@@ -14,19 +14,19 @@ export class DepartmentListenerService {
         private sseService: SseService,
     ) {}
 
-    @OnEvent('department.created')
+    @OnEvent(DepartmentCreatedEvent.name)
     async handleDepartmentCreatedEvent(event: DepartmentCreatedEvent) {
         this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event.userId, event.companyId);
     }
 
-    @OnEvent('department.updated')
+    @OnEvent(DepartmentUpdatedEvent.name)
     async handleDepartmentUpdatedEvent(event: DepartmentUpdatedEvent) {
         this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event.userId, event.companyId);
     }
 
-    @OnEvent('department.deleted')
+    @OnEvent(DepartmentDeletedEvent.name)
     async handleDepartmentDeletedEvent(event: DepartmentDeletedEvent) {
         this._logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event.userId, event.companyId);

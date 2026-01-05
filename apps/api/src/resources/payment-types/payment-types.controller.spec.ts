@@ -2,7 +2,7 @@ import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from 'test';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { PaymentType } from './entities/payment-type.entity';
 import { PaymentTypesController } from './payment-types.controller';
 import { PaymentTypesService } from './payment-types.service';
@@ -17,7 +17,7 @@ describe('PaymentTypesController', () => {
             providers: [
                 PaymentTypesService,
                 { provide: getRepositoryToken(PaymentType), useFactory: repositoryMockFactory },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
             ],
         }).compile();
 

@@ -1,6 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AccessModule } from '../access';
+import { UserAccessModule } from '../user-access';
 import { PaymentPositionsModule } from '../payment-positions';
 import { PaymentDeduction } from './entities/payment-deduction.entity';
 import { PaymentDeductionsController } from './payment-deductions.controller';
@@ -10,7 +10,7 @@ import { PaymentDeductionsService } from './payment-deductions.service';
     imports: [
         TypeOrmModule.forFeature([PaymentDeduction]),
         forwardRef(() => PaymentsModule),
-        forwardRef(() => AccessModule),
+        forwardRef(() => UserAccessModule),
         forwardRef(() => PaymentPositionsModule),
     ],
     controllers: [PaymentDeductionsController],

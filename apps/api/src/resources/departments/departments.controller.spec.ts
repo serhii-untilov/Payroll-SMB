@@ -3,10 +3,10 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from 'test';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { DepartmentsController } from './departments.controller';
-import { DepartmentsService } from './departments.service';
-import { Department } from './entities/department.entity';
+import { DepartmentsService } from './department.service';
+import { DepartmentEntity } from './entities/department.entity';
 
 describe('DepartmentsController', () => {
     let controller: DepartmentsController;
@@ -17,8 +17,8 @@ describe('DepartmentsController', () => {
             controllers: [DepartmentsController],
             providers: [
                 DepartmentsService,
-                { provide: getRepositoryToken(Department), useFactory: repositoryMockFactory },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: getRepositoryToken(DepartmentEntity), useFactory: repositoryMockFactory },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],
         }).compile();

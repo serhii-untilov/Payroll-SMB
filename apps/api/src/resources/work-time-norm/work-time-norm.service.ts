@@ -4,7 +4,7 @@ import { HttpException, HttpStatus, Inject, Injectable, forwardRef } from '@nest
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../common/base/available-for-user';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreateWorkTimeNormDto } from './dto/create-work-time-norm.dto';
 import { FindWorkTimeNormDto } from './dto/find-work-time-norm.dto';
 import { UpdateWorkTimeNormDto } from './dto/update-work-time-norm.dto';
@@ -17,8 +17,8 @@ export class WorkTimeNormService extends AvailableForUser {
     constructor(
         @InjectRepository(WorkTimeNorm)
         private repository: Repository<WorkTimeNorm>,
-        @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        public accessService: UserAccessService,
     ) {
         super(accessService);
     }

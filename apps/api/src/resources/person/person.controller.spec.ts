@@ -3,13 +3,13 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from 'test';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { PersonEntity } from './entities/person.entity';
 import { PersonController } from './person.controller';
 
 describe('PersonController', () => {
     let controller: PersonController;
-    let accessService: AccessService;
+    let accessService: UserAccessService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -19,13 +19,13 @@ describe('PersonController', () => {
                     provide: getRepositoryToken(PersonEntity),
                     useFactory: repositoryMockFactory,
                 },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],
         }).compile();
 
         controller = module.get<PersonController>(PersonController);
-        accessService = module.get<AccessService>(AccessService);
+        accessService = module.get<UserAccessService>(UserAccessService);
     });
 
     it('should be defined', () => {

@@ -1,4 +1,4 @@
-import { WorkTimeNormType } from '@/types/lib/work-time-norm-type';
+import { WorkTimeNormType } from '@/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { AfterLoad, Column, Entity, OneToMany, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';

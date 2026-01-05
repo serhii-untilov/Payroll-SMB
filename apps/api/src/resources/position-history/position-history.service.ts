@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { add, sub } from 'date-fns';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 import { PositionsService } from '../positions/positions.service';
@@ -27,8 +27,8 @@ export class PositionHistoryService extends AvailableForUserCompany {
         private readonly positionsService: PositionsService,
         @Inject(forwardRef(() => PayPeriodsService))
         private readonly payPeriodsService: PayPeriodsService,
-        @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        public accessService: UserAccessService,
         private eventEmitter: EventEmitter2,
     ) {
         super(accessService);

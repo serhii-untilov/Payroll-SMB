@@ -6,7 +6,7 @@ import { dateUTC, formatPeriod, monthBegin, monthEnd } from '@repo/shared';
 import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CompanyService } from '../company/company.service';
 import {
     ClosePayPeriodDto,
@@ -27,8 +27,8 @@ export class PayPeriodsService extends AvailableForUserCompany {
     constructor(
         @InjectRepository(PayPeriod)
         private repository: Repository<PayPeriod>,
-        @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        public accessService: UserAccessService,
         @Inject(forwardRef(() => CompanyService))
         private companiesService: CompanyService,
     ) {

@@ -1,4 +1,4 @@
-import { Field } from '@/types/lib/field';
+import { Field } from '@/types';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumberString, IsOptional } from 'class-validator';
 

@@ -3,10 +3,10 @@ import { UserRoleService } from './user-role.service';
 import { UserRoleController } from './user-role.controller';
 import { UserRole } from './entities/user-role.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AccessModule } from '../access';
+import { UserAccessModule } from '../user-access';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserRole]), forwardRef(() => AccessModule)],
+    imports: [TypeOrmModule.forFeature([UserRole]), forwardRef(() => UserAccessModule)],
     controllers: [UserRoleController],
     providers: [UserRoleService],
     exports: [UserRoleService],

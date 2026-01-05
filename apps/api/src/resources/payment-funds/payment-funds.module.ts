@@ -1,6 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AccessModule } from '../access';
+import { UserAccessModule } from '../user-access';
 import { PaymentPositionsModule } from '../payment-positions';
 import { PaymentsModule } from '../payments';
 import { PaymentFund } from './entities/payment-fund.entity';
@@ -10,7 +10,7 @@ import { PaymentFundsService } from './payment-funds.service';
 @Module({
     imports: [
         TypeOrmModule.forFeature([PaymentFund]),
-        forwardRef(() => AccessModule),
+        forwardRef(() => UserAccessModule),
         forwardRef(() => PaymentsModule),
         forwardRef(() => PaymentPositionsModule),
     ],

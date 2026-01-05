@@ -3,7 +3,7 @@ import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { Job } from './entities/job.entity';
@@ -15,8 +15,8 @@ export class JobsService {
     constructor(
         @InjectRepository(Job)
         private repository: Repository<Job>,
-        @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        private accessService: UserAccessService,
     ) {}
 
     async create(userId: string, payload: CreateJobDto): Promise<Job> {

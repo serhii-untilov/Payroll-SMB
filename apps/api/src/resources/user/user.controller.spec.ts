@@ -5,7 +5,7 @@ import { randUser } from '@ngneat/falso';
 import { Request } from 'express';
 import * as _ from 'lodash';
 import { createMockUser, repositoryMockFactory } from 'test';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { RoleService } from '../role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -16,7 +16,7 @@ import { UserService } from './user.service';
 describe('UserController', () => {
     let controller: UserController;
     let service: UserService;
-    let accessService: AccessService;
+    let accessService: UserAccessService;
     let rolesService: RoleService;
 
     beforeEach(async () => {
@@ -25,14 +25,14 @@ describe('UserController', () => {
             providers: [
                 UserService,
                 { provide: getRepositoryToken(User), useFactory: repositoryMockFactory },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 { provide: RoleService, useValue: createMock<RoleService>() },
             ],
         }).compile();
 
         controller = module.get<UserController>(UserController);
         service = module.get<UserService>(UserService);
-        accessService = module.get<AccessService>(AccessService);
+        accessService = module.get<UserAccessService>(UserAccessService);
         rolesService = module.get<RoleService>(RoleService);
     });
 

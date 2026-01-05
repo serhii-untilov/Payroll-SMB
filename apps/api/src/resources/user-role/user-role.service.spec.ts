@@ -2,7 +2,7 @@ import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from 'test';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { UserRoleService } from './user-role.service';
 import { UserRole } from './entities/user-role.entity';
 
@@ -14,7 +14,7 @@ describe('UserRoleService', () => {
             providers: [
                 UserRoleService,
                 { provide: getRepositoryToken(UserRole), useFactory: repositoryMockFactory },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
             ],
         }).compile();
 

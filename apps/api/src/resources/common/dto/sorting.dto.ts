@@ -1,12 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsIn } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsIn, IsString } from 'class-validator';
 
 export class SortingDto {
-    @ApiProperty()
+    @ApiPropertyOptional()
     @IsString()
-    field: string;
+    field?: string;
 
-    @ApiProperty({ enum: ['ASC', 'DESC'] })
+    @ApiPropertyOptional({ enum: ['ASC', 'DESC'] })
     @IsIn(['ASC', 'DESC'])
-    order: 'ASC' | 'DESC';
+    order?: 'ASC' | 'DESC';
 }

@@ -1,10 +1,10 @@
-import { Department } from './../../src/resources/departments/entities/department.entity';
+import { DepartmentEntity } from './../../src/resources/departments/entities/department.entity';
 import { incrementalNumber, randDepartment } from '@ngneat/falso';
 import { maxDate, minDate } from '@repo/shared';
 
 const factory = incrementalNumber();
 
-export const createMockDepartment = (data?: Partial<Department>) => {
+export const createMockDepartment = (data?: Partial<DepartmentEntity>) => {
     const id = factory();
     const name = randDepartment();
     return {

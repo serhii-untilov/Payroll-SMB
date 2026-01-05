@@ -11,7 +11,7 @@ import { SortingUtils } from '../common/db/sorting.utils';
 import { RoleService } from '../role';
 import { UserAccessService } from '../user-access/user-access.service';
 import { UserRoleService } from '../user-role/user-role.service';
-import { COMPANY_SORTABLE_FIELDS } from './dto/company-list-item.dto';
+import { COMPANY_SORTING_MAP } from './dto/company-list-item.dto';
 import { CompanyReadDto } from './dto/company-read.dto';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { ListCompaniesQueryDto } from './dto/list-companies-query.dto';
@@ -75,7 +75,7 @@ export class CompanyService extends BaseUserAccess {
         // filters
         ApplyFiltersUtil.apply(qb, 'p', query.filters);
         // sorting
-        SortingUtils.apply(qb, 'p', query.sorting, COMPANY_SORTABLE_FIELDS, { field: 'id', order: 'ASC' });
+        SortingUtils.apply(qb, query.sorting, COMPANY_SORTING_MAP, { field: 'name', order: 'ASC' });
         // relations
         qb.leftJoinAndSelect('p.law', 'law')
             .leftJoinAndSelect('p.accounting', 'accounting')
@@ -124,6 +124,6 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async calculatePayroll(userId: string, id: string): Promise<void> {
-        this.eventEmitter.emit('company.calculate', new CalculateCompanyEvent(userId, id));
+        this.eventEmitter.emit(CalculateCompanyEvent.name, new CalculateCompanyEvent(userId, id));
     }
 }

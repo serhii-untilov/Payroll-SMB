@@ -1,5 +1,5 @@
 import {
-    AccessModule,
+    UserAccessModule,
     CompanyModule,
     DepartmentsModule,
     MinWageModule,
@@ -14,7 +14,7 @@ import {
     PositionsModule,
     TasksModule,
     UserRoleModule,
-    UsersModule,
+    UserModule,
     WorkTimeNormModule,
 } from '@/resources';
 import { Module, forwardRef } from '@nestjs/common';
@@ -34,7 +34,7 @@ import { ScheduleService } from './schedule/schedule.service';
 
 @Module({
     imports: [
-        forwardRef(() => AccessModule),
+        forwardRef(() => UserAccessModule),
         forwardRef(() => PaymentTypesModule),
         forwardRef(() => PayFundTypesModule),
         forwardRef(() => CompanyModule),
@@ -47,7 +47,7 @@ import { ScheduleService } from './schedule/schedule.service';
         forwardRef(() => TasksModule),
         forwardRef(() => DepartmentsModule),
         forwardRef(() => PersonModule),
-        forwardRef(() => UsersModule),
+        forwardRef(() => UserModule),
         forwardRef(() => PaymentsModule),
         forwardRef(() => PaymentPositionsModule),
         forwardRef(() => UserRoleModule),

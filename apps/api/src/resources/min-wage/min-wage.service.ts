@@ -4,7 +4,7 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AvailableForUser } from '../common/base/available-for-user';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
 import { MinWage } from './entities/min-wage.entity';
@@ -16,8 +16,8 @@ export class MinWageService extends AvailableForUser {
     constructor(
         @InjectRepository(MinWage)
         private repository: Repository<MinWage>,
-        @Inject(forwardRef(() => AccessService))
-        public accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        public accessService: UserAccessService,
     ) {
         super(accessService);
     }

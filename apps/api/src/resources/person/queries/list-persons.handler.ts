@@ -9,7 +9,7 @@ import { PersonEntity } from '../entities/person.entity';
 import { PersonMapper } from '../mappers/person.mapper';
 import { ListPersonsPolicy } from '../policy/list-persons.policy';
 import { ListPersonsDto } from './dto/list-persons.dto';
-import { PERSON_SORTABLE_FIELDS } from './dto/person-list-item.dto';
+import { PERSON_SORTING_MAP } from './dto/person-list-item.dto';
 import { ListPersonsQuery } from './list-persons.query';
 
 @QueryHandler(ListPersonsQuery)
@@ -31,10 +31,7 @@ export class ListPersonsHandler implements IQueryHandler<ListPersonsQuery, ListP
         // filters
         ApplyFiltersUtil.apply(qb, 'p', query.query.filters);
         // sorting
-        SortingUtils.apply(qb, 'p', query.query.sorting, PERSON_SORTABLE_FIELDS, {
-            field: 'id',
-            order: 'ASC',
-        });
+        SortingUtils.apply(qb, query.query.sorting, PERSON_SORTING_MAP, { field: 'lastName', order: 'ASC' });
         // pagination
         const { page, limit } = PaginationUtils.apply(qb, query.query.page);
         const [rows, total] = await qb.getManyAndCount();

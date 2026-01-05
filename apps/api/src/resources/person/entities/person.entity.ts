@@ -1,6 +1,6 @@
+import { Gender } from '@/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { AfterInsert, AfterLoad, AfterUpdate, Column, Entity, Index, OneToMany } from 'typeorm';
-import { Gender } from '../../../types/lib/gender';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { Position } from '../../positions/entities/position.entity';
 import { PersonMapper } from '../mappers/person.mapper';

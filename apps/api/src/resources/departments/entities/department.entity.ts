@@ -3,7 +3,7 @@ import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { CompanyEntity } from '../../company/entities/company.entity';
 
 @Entity()
-export class Department extends BaseEntity {
+export class DepartmentEntity extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
@@ -19,14 +19,14 @@ export class Department extends BaseEntity {
     @Column({ type: 'date', default: '9999-12-31' })
     dateTo: Date;
 
-    @ManyToOne(() => Department, (department) => department.childDepartments, { nullable: true })
-    parentDepartment?: Relation<Department> | null;
+    @ManyToOne(() => DepartmentEntity, (department) => department.childDepartments, { nullable: true })
+    parentDepartment?: Relation<DepartmentEntity> | null;
 
     @Column({ type: 'bigint', nullable: true })
     parentDepartmentId?: string | null;
 
-    @OneToMany(() => Department, (department) => department.parentDepartment)
-    childDepartments?: Relation<Department>[];
+    @OneToMany(() => DepartmentEntity, (department) => department.parentDepartment)
+    childDepartments?: Relation<DepartmentEntity>[];
 
     @AfterLoad()
     transform() {

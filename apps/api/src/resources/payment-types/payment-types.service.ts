@@ -3,7 +3,7 @@ import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
 import { FindAllPaymentTypeDto } from './dto/find-all-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
@@ -16,8 +16,8 @@ export class PaymentTypesService {
     constructor(
         @InjectRepository(PaymentType)
         private repository: Repository<PaymentType>,
-        @Inject(forwardRef(() => AccessService))
-        private accessService: AccessService,
+        @Inject(forwardRef(() => UserAccessService))
+        private accessService: UserAccessService,
     ) {}
 
     async create(userId: string, payload: CreatePaymentTypeDto): Promise<PaymentType> {

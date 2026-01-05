@@ -1,5 +1,5 @@
 import {
-    AccessService,
+    UserAccessService,
     AvailableForUserCompany,
     CompanyService,
     PayPeriodsService,
@@ -31,8 +31,8 @@ export class PaymentsService extends AvailableForUserCompany {
     constructor(
         @InjectRepository(Payment)
         private repository: Repository<Payment>,
-        @Inject(forwardRef(() => AccessService))
-        public accessService: WrapperType<AccessService>,
+        @Inject(forwardRef(() => UserAccessService))
+        public accessService: WrapperType<UserAccessService>,
         @Inject(forwardRef(() => PaymentPositionsService))
         public paymentPositionsService: WrapperType<PaymentPositionsService>,
         @Inject(forwardRef(() => PayPeriodsService))

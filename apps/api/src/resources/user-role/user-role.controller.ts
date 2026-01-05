@@ -67,32 +67,30 @@ export class UserRoleController {
         @Body() params: FindUserRoleDto,
     ): Promise<UserRole> {
         const userId = getUserId(req);
-        this.service.availableFindAllOrFail(userId);
         return await this.service.findOne(id, params);
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a User Company record' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: UserRole })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<UserRole> {
+    async remove(@Req() req: Request, @Param('id') id: string, @Param('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
-        await this.service.availableDeleteOrFail(userId);
-        return await this.service.remove(userId, id);
+        await this.service.remove(userId, id, version);
     }
 
-    @Post(':id/restore')
+    @Post('restore/:id/:version')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Restore a User Company record' })
     @ApiOkResponse({ description: 'The record has been successfully restored', type: UserRole })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async restore(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<UserRole> {
+    async restore(@Req() req: Request, @Param('id') id: string, @Param('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
-        return await this.service.restore(userId, id);
+        await this.service.restore(userId, id, version);
     }
 
     @Get('has-global-role/:roleType')

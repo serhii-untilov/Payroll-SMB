@@ -1,21 +1,19 @@
-import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
+import { SelectQueryBuilder } from 'typeorm';
 import { SortingDto } from '../dto';
 
 export class SortingUtils {
-    static apply<TEntity extends ObjectLiteral>(
-        qb: SelectQueryBuilder<TEntity>,
-        alias: string,
+    static apply(
+        qb: SelectQueryBuilder<any>,
         sorting: SortingDto | undefined,
-        allowedFields: readonly (keyof TEntity)[],
-        defaultSorting: { field: keyof TEntity; order: 'ASC' | 'DESC' },
-    ) {
-        const field = sorting?.field;
+        sortableMap: Record<string, string>,
+        defaultSort: { field: string; order: 'ASC' | 'DESC' },
+    ): void {
+        const field = sorting?.field ?? defaultSort.field;
+        const order = sorting?.order ?? defaultSort.order;
 
-        if (field && allowedFields.includes(field as keyof TEntity)) {
-            qb.addOrderBy(`${alias}.${field}`, sorting!.order);
-            return;
-        }
+        const column = sortableMap[field];
+        if (!column) return;
 
-        qb.addOrderBy(`${alias}.${String(defaultSorting.field)}`, defaultSorting.order);
+        qb.orderBy(column, order);
     }
 }

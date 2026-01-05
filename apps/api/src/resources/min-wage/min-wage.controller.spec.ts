@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
-import { AccessService } from '../access/access.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { MinWage } from './entities/min-wage.entity';
 import { MinWageController } from './min-wage.controller';
 import { MinWageService } from './min-wage.service';
@@ -18,7 +18,7 @@ describe('MinWageController', () => {
             providers: [
                 MinWageService,
                 { provide: getRepositoryToken(MinWage), useFactory: repositoryMockFactory },
-                { provide: AccessService, useValue: createMock<AccessService>() },
+                { provide: UserAccessService, useValue: createMock<UserAccessService>() },
             ],
         }).compile();
 
