@@ -5,6 +5,7 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     HttpCode,
     HttpStatus,
     Param,
@@ -83,21 +84,14 @@ export class PositionHistoryController {
         return response.length ? response[0] : null;
     }
 
-    @Post('find/:id')
+    @Get(':id')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found record', type: PositionHistory })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() params: FindOnePositionHistoryDto,
-    ): Promise<PositionHistory> {
+    async findOne(@Req() req: Request, @Param('id') id: string): Promise<PositionHistory> {
         const userId = getUserId(req);
-        const found = await this.service.findOne(id, params);
-        const companyId = await this.service.getPositionCompanyId(found.positionId);
-        await this.service.availableFindOneOrFail(userId, companyId);
-        return found;
+        return await this.service.findOne(userId, id);
     }
 
     @Patch(':id')
@@ -112,7 +106,6 @@ export class PositionHistoryController {
         @Body() payload: UpdatePositionHistoryDto,
     ): Promise<PositionHistory> {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 

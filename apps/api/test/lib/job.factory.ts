@@ -1,9 +1,9 @@
-import { Job } from './../../src/resources/jobs/entities/job.entity';
+import { JobEntity } from '../../src/resources/job/entities/job.entity';
 import { incrementalNumber, randJobTitle } from '@ngneat/falso';
 
 const factory = incrementalNumber();
 
-export const createMockJob = (data?: Partial<Job>): Job => {
+export const createMockJob = (data?: Partial<JobEntity>): JobEntity => {
     const id = factory();
     const name = randJobTitle();
     return {

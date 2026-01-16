@@ -29,21 +29,22 @@ export class UserRoleService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, payload: UpdateUserRoleDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, id);
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update({ id, version }, { ...payload, updatedUserId: userId, updatedDate: new Date() });
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, id);
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
     }
 
     async restore(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Restore, id);
+        await this.canOrFail(userId, Action.Restore, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: null, deletedDate: null });
     }
 
-    async findAll({ userId, relations, withDeleted }: FindUserRoleDto) {
+    async findAll({ userId: string, relations, withDeleted }: FindUserRoleDto) {
+        await this.canOrFail(userId, Action.Read);
         return await this.repository.find({
             where: { userId },
             relations: { company: relations, role: relations },

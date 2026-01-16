@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Job } from '../resources/jobs/entities/job.entity';
+import { JobEntity } from '../resources/job/entities/job.entity';
 import { getSystemUserId } from '../utils/lib/system-user';
 import { langPipe } from '../utils/lib/lang-pipe';
 
 const lang = process.env.LANGUAGE ?? 'uk';
-const entity = Job;
+const entity = JobEntity;
 const recordList = [
     { id: '1', name: { en: 'Director', uk: 'Директор' } },
     { id: '2', name: { en: 'Marketing Manager', uk: 'Менеджер з маркетингу' } },

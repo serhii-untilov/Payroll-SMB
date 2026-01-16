@@ -4,6 +4,7 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     HttpCode,
     HttpStatus,
     Param,
@@ -50,7 +51,7 @@ export class TasksController {
         return await this.tasksService.create(userId, deepTransformToShortDate(payload));
     }
 
-    @Post('find')
+    @Post('list')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
@@ -66,7 +67,7 @@ export class TasksController {
         return await this.tasksService.findAll(deepTransformToShortDate(payload));
     }
 
-    @Post('find/:id')
+    @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: Task })

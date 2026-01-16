@@ -3,7 +3,7 @@ import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.ent
 import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import {
     CompanyService,
-    DepartmentsService,
+    DepartmentService,
     PayPeriodsService,
     PaymentsService,
     PersonService,
@@ -52,8 +52,8 @@ export class TaskGenerationService {
         public payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => TasksService))
         private tasksService: TasksService,
-        @Inject(forwardRef(() => DepartmentsService))
-        public departmentsService: DepartmentsService,
+        @Inject(forwardRef(() => DepartmentService))
+        public departmentsService: DepartmentService,
         @Inject(forwardRef(() => PositionsService))
         public positionsService: PositionsService,
         @Inject(forwardRef(() => PersonService))

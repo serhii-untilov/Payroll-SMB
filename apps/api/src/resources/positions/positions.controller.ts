@@ -53,7 +53,7 @@ export class PositionsController {
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
-    @Post('find')
+    @Post('list')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({
         description: 'The found records',
@@ -66,7 +66,7 @@ export class PositionsController {
         return await this.service.findAll(deepTransformToShortDate(payload));
     }
 
-    @Post('find/:id')
+    @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: Position })

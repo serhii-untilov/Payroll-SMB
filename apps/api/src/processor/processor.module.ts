@@ -1,7 +1,7 @@
 import {
     UserAccessModule,
     CompanyModule,
-    DepartmentsModule,
+    DepartmentModule,
     MinWageModule,
     PayFundTypesModule,
     PayFundsModule,
@@ -45,7 +45,7 @@ import { ScheduleService } from './schedule/schedule.service';
         forwardRef(() => WorkTimeNormModule),
         forwardRef(() => MinWageModule),
         forwardRef(() => TasksModule),
-        forwardRef(() => DepartmentsModule),
+        forwardRef(() => DepartmentModule),
         forwardRef(() => PersonModule),
         forwardRef(() => UserModule),
         forwardRef(() => PaymentsModule),

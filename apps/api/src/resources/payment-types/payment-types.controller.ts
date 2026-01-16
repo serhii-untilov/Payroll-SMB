@@ -48,7 +48,7 @@ export class PaymentTypesController {
         return await this.service.create(userId, payload);
     }
 
-    @Post('find')
+    @Post('list')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
@@ -60,7 +60,7 @@ export class PaymentTypesController {
         return await this.service.findAll(payload);
     }
 
-    @Get('id')
+    @Get(':id')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({ description: 'The found record', type: PaymentType })
     @ApiNotFoundResponse({ description: 'Record not found' })

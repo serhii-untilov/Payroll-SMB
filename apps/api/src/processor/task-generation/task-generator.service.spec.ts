@@ -1,6 +1,6 @@
 import {
     CompanyService,
-    DepartmentsService,
+    DepartmentService,
     PaymentsService,
     PayPeriodsService,
     PersonService,
@@ -22,7 +22,7 @@ describe('TaskGenerationService', () => {
                 { provide: CompanyService, useValue: createMock<CompanyService>() },
                 { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
                 { provide: TasksService, useValue: createMock<TasksService>() },
-                { provide: DepartmentsService, useValue: createMock<DepartmentsService>() },
+                { provide: DepartmentService, useValue: createMock<DepartmentService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PersonService, useValue: createMock<PersonService>() },
                 { provide: UserRoleService, useValue: createMock<UserRoleService>() },

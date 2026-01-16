@@ -83,7 +83,7 @@ export class PersonController {
         await this.commandBus.execute(new RemovePersonCommand(userId, id, version));
     }
 
-    @Post(':id/restore')
+    @Post(':id/restore/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Restore a Person record' })
     @ApiOkResponse({ description: 'The restored record' })

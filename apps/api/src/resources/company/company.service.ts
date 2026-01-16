@@ -11,7 +11,6 @@ import { SortingUtils } from '../common/db/sorting.utils';
 import { RoleService } from '../role';
 import { UserAccessService } from '../user-access/user-access.service';
 import { UserRoleService } from '../user-role/user-role.service';
-import { COMPANY_SORTING_MAP } from './dto/company-list-item.dto';
 import { CompanyReadDto } from './dto/company-read.dto';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { ListCompaniesQueryDto } from './dto/list-companies-query.dto';
@@ -23,6 +22,7 @@ import { CompanyCreatedEvent } from './events/company-created.event';
 import { CompanyDeletedEvent } from './events/company-deleted.event';
 import { CompanyUpdatedEvent } from './events/company-updated.event';
 import { CompanyMapper } from './mappers/company.mapper';
+import { CompanyRestoredEvent } from './events/company-restored.event';
 
 @Injectable()
 export class CompanyService extends BaseUserAccess {
@@ -49,7 +49,7 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, dto: UpdateCompanyDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, id);
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -63,23 +63,36 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, id);
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
         this.eventEmitter.emit(CompanyDeletedEvent.name, new CompanyDeletedEvent(userId, id));
     }
 
+    async restore(userId: string, id: string, version: number): Promise<void> {
+        await this.canOrFail(userId, Action.Restore, { resourceId: id });
+        await this.repository.update({ id, version }, { deletedDate: null, deletedUserId: null });
+        this.eventEmitter.emit(CompanyRestoredEvent.name, new CompanyRestoredEvent(userId, id));
+    }
+
     async findAll(userId: string, query: ListCompaniesQueryDto): Promise<ListCompaniesDto> {
-        const qb = this.repository.createQueryBuilder('p').distinct(true);
+        await this.canOrFail(userId, Action.Read);
+        const qb = this.repository.createQueryBuilder('c').distinct(true);
         // search
-        ApplyFiltersUtil.apply(qb, 'p', query.search);
+        ApplyFiltersUtil.apply(qb, 'c', query.search);
         // filters
-        ApplyFiltersUtil.apply(qb, 'p', query.filters);
+        ApplyFiltersUtil.apply(qb, 'c', query.filters);
         // sorting
+        const COMPANY_SORTING_MAP = {
+            name: 'c.name',
+            taxId: 'c.taxId',
+            dateFrom: 'c.dateFrom',
+            payPeriod: 'c.payPeriod',
+        } as const;
         SortingUtils.apply(qb, query.sorting, COMPANY_SORTING_MAP, { field: 'name', order: 'ASC' });
         // relations
-        qb.leftJoinAndSelect('p.law', 'law')
-            .leftJoinAndSelect('p.accounting', 'accounting')
-            .innerJoin('p.users', 'users', 'users.userId = :userId', { userId });
+        qb.leftJoinAndSelect('c.law', 'law')
+            .leftJoinAndSelect('c.accounting', 'accounting')
+            .innerJoin('c.users', 'users', 'users.userId = :userId', { userId });
         // pagination
         const { page, limit } = PaginationUtils.apply(qb, query.page);
         const [rows, total] = await qb.getManyAndCount();
@@ -90,6 +103,7 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<CompanyReadDto> {
+        await this.canOrFail(userId, Action.Read, { resourceId: id });
         const company = await this.repository.findOneOrFail({
             relations: {
                 law: true,

@@ -49,7 +49,7 @@ export class WorkTimeNormController {
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
-    @Post('find')
+    @Post('list')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
@@ -61,7 +61,7 @@ export class WorkTimeNormController {
         return await this.service.findAll(params);
     }
 
-    @Post('find/:id')
+    @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: WorkTimeNorm })

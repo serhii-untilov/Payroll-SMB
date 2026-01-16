@@ -94,7 +94,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
         }
     }
 
-    async findOne(id: string, params?: FindOnePayPeriodDto): Promise<PayPeriod> {
+    async findOne(userId: string, id: string): Promise<PayPeriodReadDto> {
         return await this.repository.findOneOrFail({
             where: { id },
             relations: { company: !!params?.relations },

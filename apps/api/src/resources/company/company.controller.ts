@@ -81,7 +81,22 @@ export class CompanyController {
         await this.service.remove(userId, id, version);
     }
 
-    @Post()
+    @Post(':id/restore/:version')
+    @UseGuards(AccessTokenGuard)
+    @ApiOperation({ summary: 'Restore a company' })
+    @ApiOkResponse({ description: 'The record has been successfully restored', type: CompanyEntity })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
+    async restore(
+        @Req() req: Request,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
+    ): Promise<void> {
+        const userId = getUserId(req);
+        await this.service.restore(userId, id, version);
+    }
+
+    @Post('list')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({
         description: 'The found records',
@@ -108,17 +123,17 @@ export class CompanyController {
     @ApiOkResponse({ description: 'The found record', type: CompanyEntity })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<CompanyReadDto> {
+    async findOne(@Req() req: Request, @Param('id') id: string): Promise<CompanyReadDto> {
         const userId = getUserId(req);
         return await this.service.findOne(userId, id);
     }
 
-    @Get(':id/calculate-payroll')
+    @Post(':id/calculate-payroll')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Calculate salary for a company' })
-    @ApiOkResponse({ description: 'Salary has been successfully calculated' })
+    @ApiOkResponse({ description: 'Calculate Salary started' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async salaryCalculate(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<void> {
+    async salaryCalculate(@Req() req: Request, @Param('id') id: string): Promise<void> {
         const userId = getUserId(req);
         await this.service.calculatePayroll(userId, id);
     }

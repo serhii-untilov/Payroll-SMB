@@ -99,7 +99,7 @@ export class PayFundsController {
         return await this.service.remove(userId, id);
     }
 
-    @Post('find')
+    @Post('list')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({

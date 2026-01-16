@@ -4,6 +4,7 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     HttpCode,
     HttpStatus,
     Param,
@@ -51,7 +52,7 @@ export class PaymentPositionsController {
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
-    @Post('find')
+    @Post('list')
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({
         description: 'The found records',
@@ -65,20 +66,15 @@ export class PaymentPositionsController {
         return await this.service.findAll(deepTransformToShortDate(params));
     }
 
-    @Post('find/:id')
+    @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: PaymentPosition })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() params: FindOnePaymentPositionDto,
-    ): Promise<PaymentPosition> {
+    async findOne(@Req() req: Request, @Param('id') id: string): Promise<PaymentPosition> {
         const userId = getUserId(req);
-        await this.service.availableFindOneOrFail(userId, id);
-        return await this.service.findOne(id, params);
+        return await this.service.findOne(userId, id);
     }
 
     @Patch(':id')

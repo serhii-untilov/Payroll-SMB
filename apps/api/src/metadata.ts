@@ -4,7 +4,7 @@ export default async () => {
         ['./types/lib/accounting-type']: await import('./types/lib/accounting-type'),
         ['./resources/companies/entities/company.entity']: await import('./resources/company/entities/company.entity'),
         ['./resources/departments/entities/department.entity']: await import(
-            './resources/departments/entities/department.entity'
+            './resources/department/entities/department.entity'
         ),
         ['./types/lib/sex']: await import('./types/lib/gender'),
         ['./resources/positions/entities/position.entity']: await import(
@@ -20,7 +20,7 @@ export default async () => {
         ['./resources/work-time-norm/entities/work-time-norm-day.entity']: await import(
             './resources/work-time-norm/entities/work-time-norm-day.entity'
         ),
-        ['./resources/jobs/entities/job.entity']: await import('./resources/jobs/entities/job.entity'),
+        ['./resources/jobs/entities/job.entity']: await import('./resources/job/entities/job.entity'),
         ['./resources/payment-types/entities/payment-type.entity']: await import(
             './resources/payment-types/entities/payment-type.entity'
         ),
@@ -118,7 +118,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/departments/entities/department.entity'),
+                    import('./resources/department/entities/department.entity'),
                     {
                         Department: {
                             name: { required: true, type: () => String },
@@ -174,7 +174,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/jobs/entities/job.entity'),
+                    import('./resources/job/entities/job.entity'),
                     { Job: { name: { required: true, type: () => String } } },
                 ],
                 [
@@ -243,7 +243,7 @@ export default async () => {
                                 type: () => t['./resources/departments/entities/department.entity'].DepartmentEntity,
                             },
                             departmentId: { required: true, type: () => String, nullable: true },
-                            job: { required: false, type: () => t['./resources/jobs/entities/job.entity'].Job },
+                            job: { required: false, type: () => t['./resources/jobs/entities/job.entity'].JobEntity },
                             jobId: { required: true, type: () => String, nullable: true },
                             workTimeNorm: {
                                 required: false,
@@ -714,21 +714,21 @@ export default async () => {
                         },
                     },
                 ],
-                [import('./resources/departments/dto/create-department.dto'), { CreateDepartmentDto: {} }],
+                [import('./resources/department/dto/create-department.dto'), { CreateDepartmentDto: {} }],
                 [
-                    import('./resources/departments/dto/find-all-department.dto'),
+                    import('./resources/department/dto/find-all-department.dto'),
                     { FindAllDepartmentDto: { relations: { required: false, type: () => Boolean } } },
                 ],
                 [
-                    import('./resources/departments/dto/find-one-department.dto'),
+                    import('./resources/department/dto/find-one-department.dto'),
                     { FindOneDepartmentDto: { relations: { required: false, type: () => Boolean } } },
                 ],
-                [import('./resources/departments/dto/update-department.dto'), { UpdateDepartmentDto: {} }],
+                [import('./resources/department/dto/update-department.dto'), { UpdateDepartmentDto: {} }],
                 [
-                    import('./resources/jobs/dto/create-job.dto'),
+                    import('./resources/job/dto/create-job.dto'),
                     { CreateJobDto: { name: { required: true, type: () => String } } },
                 ],
-                [import('./resources/jobs/dto/update-job.dto'), { UpdateJobDto: {} }],
+                [import('./resources/job/dto/update-job.dto'), { UpdateJobDto: {} }],
                 [
                     import('./resources/min-wage/dto/create-min-wage.dto'),
                     {
@@ -1252,7 +1252,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/departments/departments.controller'),
+                    import('./resources/department/department.controller'),
                     {
                         DepartmentsController: {
                             create: { type: t['./resources/departments/entities/department.entity'].DepartmentEntity },
@@ -1266,14 +1266,14 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/jobs/jobs.controller'),
+                    import('./resources/job/job.controller'),
                     {
                         JobsController: {
-                            create: { type: t['./resources/jobs/entities/job.entity'].Job },
-                            findAll: { type: [t['./resources/jobs/entities/job.entity'].Job] },
-                            findOne: { type: t['./resources/jobs/entities/job.entity'].Job },
-                            update: { type: t['./resources/jobs/entities/job.entity'].Job },
-                            remove: { type: t['./resources/jobs/entities/job.entity'].Job },
+                            create: { type: t['./resources/jobs/entities/job.entity'].JobEntity },
+                            findAll: { type: [t['./resources/jobs/entities/job.entity'].JobEntity] },
+                            findOne: { type: t['./resources/jobs/entities/job.entity'].JobEntity },
+                            update: { type: t['./resources/jobs/entities/job.entity'].JobEntity },
+                            remove: { type: t['./resources/jobs/entities/job.entity'].JobEntity },
                         },
                     },
                 ],

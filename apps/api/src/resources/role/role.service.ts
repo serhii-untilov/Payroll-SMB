@@ -27,17 +27,17 @@ export class RoleService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, data: UpdateRoleDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, id);
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update({ id, version }, { ...data, updatedUserId: userId, updatedDate: new Date() });
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, id);
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
     }
 
     async restore(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Restore, id);
+        await this.canOrFail(userId, Action.Restore, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: null, deletedDate: null });
     }
 
@@ -47,7 +47,7 @@ export class RoleService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<Role> {
-        await this.canOrFail(userId, Action.Read, id);
+        await this.canOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 

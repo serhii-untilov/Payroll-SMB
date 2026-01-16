@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { Accounting } from '../../accounting/entities/accounting.entity';
-import { DepartmentEntity } from '../../departments/entities/department.entity';
+import { DepartmentEntity } from '../../department/entities/department.entity';
 import { Law } from '../../laws/entities/law.entity';
 import { Position } from '../../positions/entities/position.entity';
 import { UserRole } from '../../user-role/entities/user-role.entity';

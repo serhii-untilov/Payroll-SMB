@@ -43,7 +43,7 @@ export class UserRoleController {
         return await this.service.create(userId, dto);
     }
 
-    @Post('find')
+    @Post('list')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
@@ -81,7 +81,7 @@ export class UserRoleController {
         await this.service.remove(userId, id, version);
     }
 
-    @Post('restore/:id/:version')
+    @Post(':id/restore/:version')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Restore a User Company record' })

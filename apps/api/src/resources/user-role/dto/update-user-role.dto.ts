@@ -1,4 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/swagger';
-import { UserRole } from '../entities/user-role.entity';
+import { PartialType } from '@nestjs/swagger';
+import { CreateUserRoleDto } from './create-user-role.dto';
 
-export class UpdateUserRoleDto extends PartialType(OmitType(UserRole, ['id'])) {}
+export class UpdateUserRoleDto extends PartialType(CreateUserRoleDto) {}

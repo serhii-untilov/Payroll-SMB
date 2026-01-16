@@ -5,6 +5,7 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     HttpCode,
     HttpStatus,
     Param,
@@ -54,7 +55,7 @@ export class PaymentsController {
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
-    @Post('find')
+    @Post('list')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({
@@ -64,25 +65,18 @@ export class PaymentsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request, @Body() params: FindAllPaymentDto): Promise<Payment[]> {
         const userId = getUserId(req);
-        await this.service.availableFindAllOrFail(userId, params.companyId);
         return await this.service.findAll(deepTransformToShortDate(params));
     }
 
-    @Post('find/:id')
+    @Get(':id')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: Payment })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(
-        @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
-        @Body() params: FindOnePaymentDto,
-    ): Promise<Payment> {
+    async findOne(@Req() req: Request, @Param('id') id: string): Promise<Payment> {
         const userId = getUserId(req);
-        const found = await this.service.findOne(id, params);
-        await this.service.availableFindOneOrFail(userId, found.companyId);
-        return found;
+        return await this.service.findOne(userId, id);
     }
 
     @Patch(':id')
@@ -113,7 +107,7 @@ export class PaymentsController {
         return await this.service.remove(userId, id);
     }
 
-    @Post('restore/:id')
+    @Post(':id/restore/:version')
     @UseGuards(AccessTokenGuard)
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Restore the deleted payment record' })
@@ -123,7 +117,6 @@ export class PaymentsController {
     @ApiBadRequestResponse({ description: 'Bad request' })
     async restore(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Payment> {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.restore(userId, id);
     }
 

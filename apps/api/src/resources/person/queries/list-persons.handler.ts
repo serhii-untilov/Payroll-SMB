@@ -9,7 +9,6 @@ import { PersonEntity } from '../entities/person.entity';
 import { PersonMapper } from '../mappers/person.mapper';
 import { ListPersonsPolicy } from '../policy/list-persons.policy';
 import { ListPersonsDto } from './dto/list-persons.dto';
-import { PERSON_SORTING_MAP } from './dto/person-list-item.dto';
 import { ListPersonsQuery } from './list-persons.query';
 
 @QueryHandler(ListPersonsQuery)
@@ -26,15 +25,31 @@ export class ListPersonsHandler implements IQueryHandler<ListPersonsQuery, ListP
             throw new ForbiddenException();
         }
         const qb = this.repository.createQueryBuilder('p');
+
         // search
         ApplyFiltersUtil.apply(qb, 'p', query.query.search);
+
         // filters
         ApplyFiltersUtil.apply(qb, 'p', query.query.filters);
+
         // sorting
+        const PERSON_SORTING_MAP = {
+            firstName: 'firstName',
+            lastName: 'lastName',
+            middleName: 'middleName',
+            fullName: 'fullName',
+            birthDate: 'birthDate',
+            taxId: 'taxId',
+            gender: 'gender',
+            phone: 'phone',
+            email: 'email',
+        } as const;
         SortingUtils.apply(qb, query.query.sorting, PERSON_SORTING_MAP, { field: 'lastName', order: 'ASC' });
+
         // pagination
         const { page, limit } = PaginationUtils.apply(qb, query.query.page);
         const [rows, total] = await qb.getManyAndCount();
+
         return {
             items: rows.map(this.mapper.toListItemDto),
             page: {
