@@ -25,7 +25,13 @@
 
 ## Live Demo
 
-Link to [Live Demo](https://payroll.untilov.com.ua)
+- [Live Demo](https://payroll.untilov.com.ua)
+
+## Open API
+
+- [Open API](https://payroll.untilov.com.ua/api/v1/)
+- [swagger.json](https://payroll.untilov.com.ua/api/v1/swagger.json)
+- [swagger.yaml](https://payroll.untilov.com.ua/api/v1/swagger.yaml)
 
 ## Quick Start the latest version
 
