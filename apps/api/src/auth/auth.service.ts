@@ -33,11 +33,11 @@ export class AuthService {
         if (exists) {
             throw new HttpException(`User '${user.email}' already exists`, HttpStatus.CONFLICT);
         }
-        const { password } = user;
-        const hashedPassword = await this.hashData(password);
+        const { password, ...rest } = user;
+        const passwordHash = await this.hashData(password);
         const newUser = await this.usersService.register({
-            ...user,
-            password: hashedPassword,
+            ...rest,
+            password: passwordHash,
         });
         const tokens = await this.getTokens(newUser.id, newUser.email);
         await this.updateRefreshToken(newUser.id, tokens.refreshToken);

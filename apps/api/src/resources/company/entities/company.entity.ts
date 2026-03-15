@@ -23,7 +23,7 @@ export class CompanyEntity extends BaseEntity {
     law?: Relation<Law>;
 
     @Column({ type: 'bigint', nullable: true })
-    lawId: string;
+    lawId: string | null;
 
     @ManyToOne(() => Accounting, {
         createForeignKeyConstraints: false,
@@ -31,7 +31,7 @@ export class CompanyEntity extends BaseEntity {
     accounting?: Relation<Accounting>;
 
     @Column({ type: 'bigint', nullable: true })
-    accountingId: string;
+    accountingId: string | null;
 
     @Column({ type: 'varchar', length: 10, default: PaymentSchedule.LastDay })
     @ApiProperty({ enum: PaymentSchedule, enumName: 'PaymentSchedule' })
@@ -59,24 +59,24 @@ export class CompanyEntity extends BaseEntity {
     users?: Relation<UserRole>[];
 
     @BeforeInsert()
-    beforeInsert() {
-        normalize(this);
-    }
     @BeforeUpdate()
-    beforeUpdate() {
+    normalizePeriods() {
         normalize(this);
     }
 
     @AfterLoad()
-    transform() {
-        this.dateFrom = new Date(this.dateFrom);
-        this.dateTo = new Date(this.dateTo);
-        this.payPeriod = new Date(this.payPeriod);
-        this.checkDate = new Date(this.checkDate);
+    normalizeDates() {
+        if (this.dateFrom) this.dateFrom = new Date(this.dateFrom);
+        if (this.dateTo) this.dateTo = new Date(this.dateTo);
+        if (this.payPeriod) this.payPeriod = new Date(this.payPeriod);
+        if (this.checkDate) this.checkDate = new Date(this.checkDate);
     }
 }
 
 function normalize(record: CompanyEntity) {
-    record.payPeriod = monthBegin(record.payPeriod || new Date());
-    record.checkDate = monthEnd(record.payPeriod || new Date());
+    const baseDate = record.payPeriod ?? new Date();
+    const normalizedPayPeriod = monthBegin(baseDate);
+
+    record.payPeriod = normalizedPayPeriod;
+    record.checkDate = monthEnd(normalizedPayPeriod);
 }
