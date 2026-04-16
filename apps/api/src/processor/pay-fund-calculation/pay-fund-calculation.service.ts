@@ -49,20 +49,15 @@ export class PayFundCalculationService {
 
     private async initContext(userId: string, companyId: string): Promise<Context> {
         const company = await this.companiesService.findOne(userId, companyId);
-        const paymentTypes = await this.paymentTypesService.findAll();
-        const payFundTypes = (await this.payFundTypesService.findAll()).sort((a, b) => a.sequence - b.sequence);
-        const minWages = await this.minWageService.findAll();
-        const payPeriod = await this.payPeriodsService.findOneBy({
-            where: { companyId: company.id, dateFrom: company.payPeriod },
-        });
-
         return {
             userId,
             company,
-            paymentTypes,
-            payFundTypes,
-            minWages,
-            payPeriod,
+            paymentTypes: await this.paymentTypesService.findAll(),
+            payFundTypes: (await this.payFundTypesService.findAll()).sort((a, b) => a.sequence - b.sequence),
+            minWages: await this.minWageService.findAll(),
+            payPeriod: await this.payPeriodsService.findOneBy({
+                where: { companyId: company.id, dateFrom: company.payPeriod },
+            }),
         };
     }
 
