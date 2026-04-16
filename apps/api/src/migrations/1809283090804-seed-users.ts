@@ -2,7 +2,7 @@ import { RoleType } from '../types';
 import * as bcrypt from 'bcrypt';
 import { getRoleIdByType } from '../utils/lib/system-role';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { User } from '../resources/users/entities/user.entity';
+import { User } from '../resources/user/entities/user.entity';
 import { langPipe } from '../utils/lib/lang-pipe';
 import { getSystemUserId } from '@/utils';
 

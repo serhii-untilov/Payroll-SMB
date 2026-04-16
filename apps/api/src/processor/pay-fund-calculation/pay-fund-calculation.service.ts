@@ -1,11 +1,3 @@
-import { Position } from './../../resources/positions/entities/position.entity';
-import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
-import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
-import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { PayFundType } from './../../resources/pay-fund-types/entities/pay-fund-type.entity';
-import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
-import { MinWage } from './../../resources/min-wage/entities/min-wage.entity';
-import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import {
     CompanyService,
     MinWageService,
@@ -16,150 +8,118 @@ import {
     PayrollsService,
     PositionsService,
 } from '@/resources';
+import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { PayFundCalcMethod } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
+import { MinWage } from './../../resources/min-wage/entities/min-wage.entity';
+import { PayFundType } from './../../resources/pay-fund-types/entities/pay-fund-type.entity';
+import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
+import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
+import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
+import { Position } from './../../resources/positions/entities/position.entity';
 import { EcbMinWage, EcbSalary } from './calc-methods';
 import { PayFundCalc } from './calc-methods/abstract/pay-fund-calc';
-import { IdGenerator } from '@/snowflake/snowflake.singleton';
 
+type Context = {
+    userId: string;
+    company: CompanyReadDto;
+    paymentTypes: PaymentType[];
+    payFundTypes: PayFundType[];
+    minWages: MinWage[];
+    payPeriod: PayPeriod;
+};
 @Injectable({ scope: Scope.REQUEST })
 export class PayFundCalculationService {
-    private _logger: Logger = new Logger(PayFundCalculationService.name);
-    private _userId: string;
-    private _company: CompanyEntity;
-    private _paymentTypes: PaymentType[];
-    private _payFundTypes: PayFundType[];
-    private _minWages: MinWage[];
-    private _position: Position;
-    private _payPeriod: PayPeriod;
-    private _accPeriods: PayPeriod[];
-    private _payrolls: Payroll[];
-    private _priorPayFunds: PayFund[];
-    // private _payFundId: string;
+    private logger: Logger = new Logger(PayFundCalculationService.name);
 
     constructor(
-        @Inject(forwardRef(() => CompanyService))
-        private companiesService: CompanyService,
-        @Inject(forwardRef(() => PaymentTypesService))
-        private paymentTypesService: PaymentTypesService,
-        @Inject(forwardRef(() => PayFundTypesService))
-        private payFundTypesService: PayFundTypesService,
-        @Inject(forwardRef(() => PayPeriodsService))
-        private payPeriodsService: PayPeriodsService,
-        @Inject(forwardRef(() => PositionsService))
-        private positionsService: PositionsService,
-        @Inject(forwardRef(() => PayrollsService))
-        private payrollsService: PayrollsService,
-        @Inject(forwardRef(() => PayFundsService))
-        private payFundsService: PayFundsService,
-        @Inject(forwardRef(() => MinWageService))
-        public minWageService: MinWageService,
+        @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
+        @Inject(forwardRef(() => PaymentTypesService)) private paymentTypesService: PaymentTypesService,
+        @Inject(forwardRef(() => PayFundTypesService)) private payFundTypesService: PayFundTypesService,
+        @Inject(forwardRef(() => PayPeriodsService)) private payPeriodsService: PayPeriodsService,
+        @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
+        @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
+        @Inject(forwardRef(() => PayFundsService)) private payFundsService: PayFundsService,
+        @Inject(forwardRef(() => MinWageService)) public minWageService: MinWageService,
         @Inject(forwardRef(() => PayPeriodCalculationService))
         public payPeriodCalculationService: PayPeriodCalculationService,
     ) {}
 
-    public get logger() {
-        return this._logger;
-    }
-    public get userId() {
-        return this._userId;
-    }
-    public get company() {
-        return this._company;
-    }
-    public get paymentTypes() {
-        return this._paymentTypes;
-    }
-    public get payFundTypes() {
-        return this._payFundTypes;
-    }
-    public get minWages() {
-        return this._minWages;
-    }
-    public get position() {
-        return this._position;
-    }
-    public get payPeriod() {
-        return this._payPeriod;
-    }
-    public get accPeriods() {
-        return this._accPeriods;
-    }
-    public get payrolls() {
-        return this._payrolls;
-    }
-    public get priorPayFunds() {
-        return this._priorPayFunds;
+    private async initContext(userId: string, companyId: string): Promise<Context> {
+        const company = await this.companiesService.findOne(userId, companyId);
+        const paymentTypes = await this.paymentTypesService.findAll();
+        const payFundTypes = (await this.payFundTypesService.findAll()).sort((a, b) => a.sequence - b.sequence);
+        const minWages = await this.minWageService.findAll();
+        const payPeriod = await this.payPeriodsService.findOneBy({
+            where: { companyId: company.id, dateFrom: company.payPeriod },
+        });
+
+        return {
+            userId,
+            company,
+            paymentTypes,
+            payFundTypes,
+            minWages,
+            payPeriod,
+        };
     }
 
     public async calculateCompany(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, calculateCompany: ${companyId}`);
-        this._userId = userId;
-        this._company = await this.companiesService.findOne(userId, companyId);
-        await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOneBy({
-            where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
-        });
+        const ctx = await this.initContext(userId, companyId);
         const positions = await this.positionsService.findAll({
             companyId,
-            onPayPeriodDate: this.company.payPeriod,
+            onPayPeriodDate: ctx.company.payPeriod,
             employeesOnly: true,
             relations: true,
         });
         for (const position of positions) {
-            this._position = position;
-            await this._calculatePosition();
+            await this._calculatePosition(ctx, position);
         }
-        await this._calculateCompanyTotals();
+        await this._calculateCompanyTotals(ctx);
     }
 
     public async calculateCompanyTotals(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, calculateCompanyTotals: ${companyId}`);
-        this._userId = userId;
-        this._company = await this.companiesService.findOne(userId, companyId);
-        await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOneBy({
-            where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
-        });
-        await this._calculateCompanyTotals();
+        const ctx = await this.initContext(userId, companyId);
+        await this._calculateCompanyTotals(ctx);
     }
 
-    private async _calculateCompanyTotals() {
-        await this.payPeriodCalculationService.updateBalance(this.payPeriod.id);
-        await this.payPeriodCalculationService.updateCalcMethods(this.payPeriod.id);
+    private async _calculateCompanyTotals(ctx: Context) {
+        await this.payPeriodCalculationService.updateBalance(ctx.payPeriod.id);
+        await this.payPeriodCalculationService.updateCalcMethods(ctx.payPeriod.id);
     }
 
     public async calculatePosition(userId: string, positionId: string) {
         this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
-        this._position = await this.positionsService.findOne(positionId, { relations: true });
-        this._userId = userId;
-        this._company = await this.companiesService.findOne(userId, this.position.companyId);
-        await this.loadResources();
-        this._payPeriod = await this.payPeriodsService.findOneBy({
-            where: { companyId: this.company.id, dateFrom: this.company.payPeriod },
-        });
-        await this._calculatePosition();
-        await this._calculateCompanyTotals();
+        const position = await this.positionsService.findOne(positionId, { relations: true });
+        const ctx = await this.initContext(userId, position.companyId);
+        await this._calculatePosition(ctx, position);
+        await this._calculateCompanyTotals(ctx);
     }
 
     public getNextPayFundId(): string {
-        // this._payFundId++;
-        // return this._payFundId;
         return IdGenerator.nextId();
     }
 
-    public merge(accPeriod: PayPeriod, currentPayFunds: PayFund[]): { toInsert: PayFund[]; toDeleteIds: string[] } {
+    public merge(
+        ctx: Context,
+        accPeriod: PayPeriod,
+        currentPayFunds: PayFund[],
+        priorPayFunds: PayFund[],
+    ): { toInsert: PayFund[]; toDeleteIds: string[] } {
         const toInsert: PayFund[] = [];
         const toDeleteIds: string[] = [];
         const processedIds: string[] = [];
         // Sub prior from current
-        this.priorPayFunds
+        priorPayFunds
             .filter(
                 (o) =>
                     o.accPeriod.getTime() >= accPeriod.dateFrom.getTime() &&
                     o.accPeriod.getTime() <= accPeriod.dateTo.getTime() &&
-                    o.payPeriod.getTime() <= this.payPeriod.dateTo.getTime(),
+                    o.payPeriod.getTime() <= ctx.payPeriod.dateTo.getTime(),
             )
             .forEach((prior) => {
                 const current = currentPayFunds.find(
@@ -173,7 +133,7 @@ export class PayFundCalculationService {
                     if (current.paySum === prior.paySum) {
                         processedIds.push(current.id);
                     } else {
-                        if (prior.payPeriod.getTime() === this.payPeriod.dateFrom.getTime()) {
+                        if (prior.payPeriod.getTime() === ctx.payPeriod.dateFrom.getTime()) {
                             toDeleteIds.push(prior.id);
                         } else {
                             toInsert.push(
@@ -188,7 +148,7 @@ export class PayFundCalculationService {
                         }
                     }
                 } else {
-                    if (prior.payPeriod.getTime() < this.payPeriod.dateFrom.getTime()) {
+                    if (prior.payPeriod.getTime() < ctx.payPeriod.dateFrom.getTime()) {
                         toInsert.push(
                             Object.assign({
                                 ...prior,
@@ -215,15 +175,9 @@ export class PayFundCalculationService {
         return { toInsert, toDeleteIds };
     }
 
-    private async loadResources() {
-        this._paymentTypes = await this.paymentTypesService.findAll();
-        this._payFundTypes = (await this.payFundTypesService.findAll()).sort((a, b) => a.sequence - b.sequence);
-        this._minWages = await this.minWageService.findAll();
-    }
-
     // private initNextPayFundId() {
-    //     this._payFundId = this.priorPayFunds.reduce((a, b) => Math.max(a, b.id), 0);
-    //     return this._payFundId
+    //     this.payFundId = this.priorPayFunds.reduce((a, b) => Math.max(a, b.id), 0);
+    //     return this.payFundId
     // }
 
     private getCalcMethod(accPeriod: PayPeriod, payFundType: PayFundType, current: PayFund[]): PayFundCalc | null {
@@ -236,28 +190,28 @@ export class PayFundCalculationService {
         return null;
     }
 
-    private async _calculatePosition() {
-        const dateFrom = await this.getMinCalculateDate(this.payPeriod.dateFrom);
-        const dateTo = await this.getMaxCalculateDate(this.payPeriod.dateTo);
-        this._accPeriods = await this.payPeriodsService.findAll({
-            companyId: this.company.id,
+    private async _calculatePosition(ctx: Context, position: Position) {
+        const dateFrom = await this.getMinCalculateDate(ctx.payPeriod.dateFrom);
+        const dateTo = await this.getMaxCalculateDate(ctx.payPeriod.dateTo);
+        const accPeriods = await this.payPeriodsService.findAll({
+            companyId: ctx.company.id,
             dateFrom,
             dateTo,
         });
-        this._payrolls = await this.payrollsService.findBetween(this.position.id, dateFrom, dateTo, true);
-        this._priorPayFunds = await this.payFundsService.findBetween(this.position.id, dateFrom, dateTo, true);
+        // const payrolls = await this.payrollsService.findBetween(position.id, dateFrom, dateTo, true);
+        const priorPayFunds = await this.payFundsService.findBetween(position.id, dateFrom, dateTo, true);
         // this.initNextPayFundId();
-        for (const accPeriod of this.accPeriods) {
-            const current: PayFund[] = [];
-            this.payFundTypes.forEach((payFundType) => {
-                const calcMethod = this.getCalcMethod(accPeriod, payFundType, current);
+        for (const accPeriod of accPeriods) {
+            const currentPayFunds: PayFund[] = [];
+            ctx.payFundTypes.forEach((payFundType) => {
+                const calcMethod = this.getCalcMethod(accPeriod, payFundType, currentPayFunds);
                 if (calcMethod) {
                     const payFund = calcMethod.calculate();
-                    current.push(payFund);
+                    currentPayFunds.push(payFund);
                 }
             });
-            const { toInsert, toDeleteIds } = this.merge(accPeriod, current);
-            await this.save(toInsert, toDeleteIds);
+            const { toInsert, toDeleteIds } = this.merge(ctx, accPeriod, currentPayFunds, priorPayFunds);
+            await this.save(ctx.userId, toInsert, toDeleteIds);
         }
         // await this.positionsService.calculateBalance(this.position.id, this.payPeriod.dateFrom);
     }
@@ -272,13 +226,13 @@ export class PayFundCalculationService {
         return payPeriodDateTo;
     }
 
-    private async save(toInsert: PayFund[], toDeleteIds: string[]) {
+    private async save(userId: string, toInsert: PayFund[], toDeleteIds: string[]) {
         if (toDeleteIds.length) {
             await this.payFundsService.delete(toDeleteIds);
         }
         for (const record of toInsert) {
             const { id: _, ...payload } = record;
-            await this.payFundsService.create(this.userId, payload);
+            await this.payFundsService.create(userId, payload);
         }
     }
 }

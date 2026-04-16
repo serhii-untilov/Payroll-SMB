@@ -2,11 +2,12 @@ import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
 import { DepartmentCreatedEvent, DepartmentDeletedEvent, DepartmentUpdatedEvent } from '@/resources';
 import { ServerEvent } from '@/types';
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class DepartmentListenerService {
+    private logger: Logger = new Logger(DepartmentListenerService.name);
     constructor(
         @Inject(forwardRef(() => TaskGenerationService))
         private taskListService: TaskGenerationService,
@@ -16,30 +17,30 @@ export class DepartmentListenerService {
 
     @OnEvent(DepartmentCreatedEvent.name)
     async handleDepartmentCreatedEvent(event: DepartmentCreatedEvent) {
-        this._logger.log(`${JSON.stringify(event)}`);
-        this.runBatch(event.userId, event.companyId);
+        this.logger.log(`${JSON.stringify(event)}`);
+        this.runBatch(event.userId, event.departmentId);
     }
 
     @OnEvent(DepartmentUpdatedEvent.name)
     async handleDepartmentUpdatedEvent(event: DepartmentUpdatedEvent) {
-        this._logger.log(`${JSON.stringify(event)}`);
-        this.runBatch(event.userId, event.companyId);
+        this.logger.log(`${JSON.stringify(event)}`);
+        this.runBatch(event.userId, event.departmentId);
     }
 
     @OnEvent(DepartmentDeletedEvent.name)
     async handleDepartmentDeletedEvent(event: DepartmentDeletedEvent) {
-        this._logger.log(`${JSON.stringify(event)}`);
-        this.runBatch(event.userId, event.companyId);
+        this.logger.log(`${JSON.stringify(event)}`);
+        this.runBatch(event.userId, event.departmentId);
     }
 
-    private async runBatch(userId: string, companyId: string) {
+    private async runBatch(userId: string, departmentId: string) {
         try {
-            this.sseService.event(companyId, { data: ServerEvent.TasklistStarted });
-            await this.taskListService.generate(userId, companyId);
-            this.sseService.event(companyId, { data: ServerEvent.TasklistFinished });
+            this.sseService.event(departmentId, { data: ServerEvent.TasklistStarted });
+            await this.taskListService.generate(userId, departmentId);
+            this.sseService.event(departmentId, { data: ServerEvent.TasklistFinished });
         } catch (e) {
-            this._logger.fatal(`companyId ${companyId} ${ServerEvent.TasklistFailed} ${e}`);
-            this.sseService.event(companyId, { data: ServerEvent.TasklistFailed });
+            this.logger.fatal(`departmentId ${departmentId} ${ServerEvent.TasklistFailed} ${e}`);
+            this.sseService.event(departmentId, { data: ServerEvent.TasklistFailed });
         }
     }
 }

@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as fsPromise from 'fs/promises';
 
 @Injectable()
 export class AppService {
-    constructor(private configService: ConfigService) {}
+    constructor(
+        private configService: ConfigService,
+        private readonly logger = new Logger(AppService.name),
+    ) {}
 
     getHello(name?: string): string {
         return `Hello ${name || 'World'}!`;
@@ -40,7 +43,7 @@ export class AppService {
         try {
             return await fsPromise.writeFile(fileName, content);
         } catch (error) {
-            this._logger.error(error.message);
+            this.logger.error(error.message);
         }
     }
 }

@@ -1,5 +1,4 @@
-import { UserAccessService, UserService } from '@/resources';
-import { Action, Resource, RoleType } from '@/types';
+import { UserService } from '@/resources';
 import {
     BadRequestException,
     ForbiddenException,
@@ -23,7 +22,7 @@ export class AuthService {
         @Inject(forwardRef(() => UserService)) private usersService: UserService,
         @Inject(forwardRef(() => JwtService)) private jwtService: JwtService,
         @Inject(forwardRef(() => ConfigService)) private configService: ConfigService,
-        @Inject(forwardRef(() => UserAccessService)) private accessService: UserAccessService,
+        // @Inject(forwardRef(() => UserAccessService)) private accessService: UserAccessService,
     ) {}
 
     async register(user: CreateUserDto): Promise<TokensDto> {
@@ -118,7 +117,7 @@ export class AuthService {
     }
 
     async demo(): Promise<AuthDto> {
-        await this.accessService.availableForRoleTypeOrFail(RoleType.Accountant, Resource.Demo, Action.Read);
+        // await this.accessService.availableForRoleTypeOrFail(RoleType.Accountant, Resource.Demo, Action.Read);
         if (process.env['DEMO_AVAILABLE'] === 'true') {
             return {
                 email: process.env['DEMO_LOGIN'] || '',

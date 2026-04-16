@@ -24,7 +24,7 @@ export default async () => {
         ['./resources/payment-types/entities/payment-type.entity']: await import(
             './resources/payment-types/entities/payment-type.entity'
         ),
-        ['./resources/persons/entities/person.entity']: await import('./resources/persons/entities/person.entity'),
+        ['./resources/person/entities/person.entity']: await import('./resources/person/entities/person.entity'),
         ['./resources/position-history/entities/position-history.entity']: await import(
             './resources/position-history/entities/position-history.entity'
         ),
@@ -41,7 +41,7 @@ export default async () => {
         ),
         ['./types/lib/role-type']: await import('./types/lib/role-type'),
         ['./resources/roles/entities/role.entity']: await import('./resources/role/entities/role.entity'),
-        ['./resources/users/entities/user.entity']: await import('./resources/users/entities/user.entity'),
+        ['./resources/user/entities/user.entity']: await import('./resources/user/entities/user.entity'),
         ['./types/lib/resource']: await import('./types/lib/resource'),
         ['./types/lib/action']: await import('./types/lib/action'),
         ['./resources/pay-periods/entities/pay-period-summary.entity']: await import(
@@ -68,11 +68,10 @@ export default async () => {
         ['./resources/positions/dto/calc-method-balance.dto']: await import(
             './resources/positions/dto/calc-method-balance.dto'
         ),
-        ['./resources/access/entities/access.entity']: await import('./resources/access/entities/access.entity'),
         ['./processor/server-sent-events/lib/MessageEvent']: await import(
             './processor/server-sent-events/lib/MessageEvent'
         ),
-        ['./resources/users/dto/public-user-date.dto']: await import('./resources/users/dto/public-user-data.dto'),
+        ['./resources/user/dto/public-user-date.dto']: await import('./resources/user/dto/public-user-data.dto'),
         ['./resources/min-wage/entities/min-wage.entity']: await import(
             './resources/min-wage/entities/min-wage.entity'
         ),
@@ -153,7 +152,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/persons/entities/person.entity'),
+                    import('./resources/person/entities/person.entity'),
                     {
                         Person: {
                             firstName: { required: true, type: () => String },
@@ -306,7 +305,7 @@ export default async () => {
                             description: { required: true, type: () => String },
                             person: {
                                 required: false,
-                                type: () => t['./resources/persons/entities/person.entity'].Person,
+                                type: () => t['./resources/person/entities/person.entity'].PersonEntity,
                             },
                             personId: { required: true, type: () => String, nullable: true },
                             dateFrom: { required: true, type: () => Date },
@@ -372,7 +371,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/users/entities/user.entity'),
+                    import('./resources/user/entities/user.entity'),
                     {
                         User: {
                             firstName: { required: true, type: () => String },
@@ -391,7 +390,7 @@ export default async () => {
                     import('./resources/user-role/entities/user-role.entity'),
                     {
                         UserCompany: {
-                            user: { required: false, type: () => t['./resources/users/entities/user.entity'].User },
+                            user: { required: false, type: () => t['./resources/user/entities/user.entity'].User },
                             userId: { required: true, type: () => String },
                             company: {
                                 required: false,
@@ -404,32 +403,6 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/access/entities/access.entity'),
-                    {
-                        Access: {
-                            roleType: { required: true, enum: t['./types/lib/role-type'].RoleType },
-                            resource: { required: true, enum: t['./types/lib/resource'].Resource },
-                            action: { required: true, enum: t['./types/lib/action'].Action },
-                        },
-                    },
-                ],
-                [import('./resources/access/dto/create-access.dto'), { CreateAccessDto: {} }],
-                [import('./resources/access/dto/available-access.dto'), { AvailableAccessDto: {} }],
-                [
-                    import('./resources/access/dto/available-access-user.dto'),
-                    { AvailableAccessUserDto: { userId: { required: true, type: () => String } } },
-                ],
-                [
-                    import('./resources/access/dto/available-access-user-company.dto'),
-                    {
-                        AvailableAccessUserCompanyDto: {
-                            userId: { required: true, type: () => String },
-                            companyId: { required: true, type: () => String },
-                        },
-                    },
-                ],
-                [import('./resources/access/dto/update-access.dto'), { UpdateAccessDto: {} }],
-                [
                     import('./resources/user-role/dto/create-user-role.dto'),
                     {
                         CreateUserCompanyDto: {
@@ -439,40 +412,11 @@ export default async () => {
                         },
                     },
                 ],
-                [
-                    import('./resources/user-role/dto/find-all-user-role.dto'),
-                    {
-                        FindAllUserCompanyDto: {
-                            userId: { required: true, type: () => String },
-                            relations: { required: false, type: () => Boolean, default: false },
-                            withDeleted: { required: false, type: () => Boolean, default: false },
-                        },
-                    },
-                ],
-                [
-                    import('./resources/user-role/dto/find-one-user-company.dto'),
-                    {
-                        FindOneUserCompanyDto: {
-                            relations: { required: false, type: () => Boolean },
-                            withDeleted: { required: false, type: () => Boolean },
-                        },
-                    },
-                ],
                 [import('./resources/user-role/dto/update-user-role.dto'), { UpdateUserCompanyDto: {} }],
-                [
-                    import('./resources/user-role/dto/find-user-role.dto'),
-                    {
-                        FindUserCompanyByRoleTypeDto: {
-                            roleType: { required: true, enum: t['./types/lib/role-type'].RoleType },
-                            relations: { required: false, type: () => Boolean, default: false },
-                            withDeleted: { required: false, type: () => Boolean, default: false },
-                        },
-                    },
-                ],
                 [import('./resources/role/dto/create-role.dto'), { CreateRoleDto: {} }],
                 [import('./resources/role/dto/update-role.dto'), { UpdateRoleDto: {} }],
                 [
-                    import('./resources/users/dto/create-user.dto'),
+                    import('./resources/user/dto/create-user.dto'),
                     {
                         CreateUserDto: {
                             firstName: { required: true, type: () => String },
@@ -484,11 +428,11 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/users/dto/find-one-user.dto'),
+                    import('./resources/user/dto/find-one-user.dto'),
                     { FindOneUserDto: { relations: { required: false, type: () => Boolean } } },
                 ],
-                [import('./resources/users/dto/public-user-data.dto'), { PublicUserDataDto: {} }],
-                [import('./resources/users/dto/update-user.dto'), { UpdateUserDto: {} }],
+                [import('./resources/user/dto/public-user-data.dto'), { PublicUserDataDto: {} }],
+                [import('./resources/user/dto/update-user.dto'), { UpdateUserDto: {} }],
                 [import('./resources/company/dto/create-company.dto'), { CreateCompanyDto: {} }],
                 [import('./resources/company/dto/update-company.dto'), { UpdateCompanyDto: {} }],
                 [
@@ -715,14 +659,6 @@ export default async () => {
                     },
                 ],
                 [import('./resources/department/dto/create-department.dto'), { CreateDepartmentDto: {} }],
-                [
-                    import('./resources/department/dto/find-all-department.dto'),
-                    { FindAllDepartmentDto: { relations: { required: false, type: () => Boolean } } },
-                ],
-                [
-                    import('./resources/department/dto/find-one-department.dto'),
-                    { FindOneDepartmentDto: { relations: { required: false, type: () => Boolean } } },
-                ],
                 [import('./resources/department/dto/update-department.dto'), { UpdateDepartmentDto: {} }],
                 [
                     import('./resources/job/dto/create-job.dto'),
@@ -1059,9 +995,8 @@ export default async () => {
                     },
                 ],
                 [import('./resources/payment-types/dto/update-payment-type.dto'), { UpdatePaymentTypeDto: {} }],
-                [import('./resources/persons/dto/create-person.dto'), { CreatePersonDto: {} }],
-                [import('./resources/persons/dto/update-person.dto'), { UpdatePersonDto: {} }],
-                [import('./resources/persons/dto/find-all-person.dto'), { FindAllPersonDto: {} }],
+                [import('./resources/person/commands/dto/create-person.dto'), { CreatePersonDto: {} }],
+                [import('./resources/person/commands/dto/update-person.dto'), { UpdatePersonDto: {} }],
                 [
                     import('./resources/position-history/dto/create-position-history.dto'),
                     { CreatePositionHistoryDto: {} },
@@ -1165,21 +1100,6 @@ export default async () => {
             ],
             controllers: [
                 [
-                    import('./resources/access/access.controller'),
-                    {
-                        AccessController: {
-                            create: { type: t['./resources/access/entities/access.entity'].Access },
-                            findAll: { type: [t['./resources/access/entities/access.entity'].Access] },
-                            findOne: { type: t['./resources/access/entities/access.entity'].Access },
-                            update: { type: t['./resources/access/entities/access.entity'].Access },
-                            remove: { type: t['./resources/access/entities/access.entity'].Access },
-                            available: { type: Boolean },
-                            availableForUser: { type: Boolean },
-                            availableForUserCompany: { type: Boolean },
-                        },
-                    },
-                ],
-                [
                     import('./resources/accounting/accounting.controller'),
                     {
                         AccountingController: {
@@ -1225,15 +1145,15 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/users/users.controller'),
+                    import('./resources/user/user.controller'),
                     {
                         UsersController: {
-                            create: { type: t['./resources/users/dto/public-user-date.dto'].PublicUserDataDto },
-                            findAll: { type: [t['./resources/users/dto/public-user-date.dto'].PublicUserDataDto] },
-                            findCurrent: { type: t['./resources/users/dto/public-user-date.dto'].PublicUserDataDto },
-                            findOne: { type: t['./resources/users/dto/public-user-date.dto'].PublicUserDataDto },
-                            update: { type: t['./resources/users/dto/public-user-date.dto'].PublicUserDataDto },
-                            remove: { type: t['./resources/users/dto/public-user-date.dto'].PublicUserDataDto },
+                            create: { type: t['./resources/user/dto/public-user-date.dto'].PublicUserDataDto },
+                            findAll: { type: [t['./resources/user/dto/public-user-date.dto'].PublicUserDataDto] },
+                            findCurrent: { type: t['./resources/user/dto/public-user-date.dto'].PublicUserDataDto },
+                            findOne: { type: t['./resources/user/dto/public-user-date.dto'].PublicUserDataDto },
+                            update: { type: t['./resources/user/dto/public-user-date.dto'].PublicUserDataDto },
+                            remove: { type: t['./resources/user/dto/public-user-date.dto'].PublicUserDataDto },
                         },
                     },
                 ],
@@ -1430,14 +1350,14 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/persons/person.controller'),
+                    import('./resources/person/person.controller'),
                     {
                         PersonsController: {
-                            create: { type: t['./resources/persons/entities/person.entity'].Person },
-                            findAll: { type: [t['./resources/persons/entities/person.entity'].Person] },
-                            findOne: { type: t['./resources/persons/entities/person.entity'].Person },
-                            update: { type: t['./resources/persons/entities/person.entity'].Person },
-                            remove: { type: t['./resources/persons/entities/person.entity'].Person },
+                            create: { type: t['./resources/person/entities/person.entity'].PersonEntity },
+                            findAll: { type: [t['./resources/person/entities/person.entity'].PersonEntity] },
+                            findOne: { type: t['./resources/person/entities/person.entity'].PersonEntity },
+                            update: { type: t['./resources/person/entities/person.entity'].PersonEntity },
+                            remove: { type: t['./resources/person/entities/person.entity'].PersonEntity },
                         },
                     },
                 ],
