@@ -4,16 +4,27 @@ import { PayFund } from './../../../../resources/pay-funds/entities/pay-fund.ent
 import { accPeriodFactSum } from '@/processor/helpers';
 import { CalcMethod, PayFundCategory } from '@/types';
 import { PaymentGroup } from '@/types';
-import { PayFundCalculationService } from './../../pay-fund-calculation.service';
+import { Context, PayFundCalculationService } from './../../pay-fund-calculation.service';
 import { PayFundCalc } from './../abstract/pay-fund-calc';
+import { Position } from '@/resources/positions/entities';
 
 export class EcbSalary extends PayFundCalc {
-    constructor(ctx: PayFundCalculationService, accPeriod: PayPeriod, payFundType: PayFundType, current: PayFund[]) {
-        super(ctx, accPeriod, payFundType, current);
+    constructor(
+        // ctx: PayFundCalculationService,
+        accPeriod: PayPeriod,
+        payFundType: PayFundType,
+        current: PayFund[],
+    ) {
+        super(
+            // ctx,
+            accPeriod,
+            payFundType,
+            current,
+        );
     }
 
-    calculate(): PayFund {
-        const payFund = this.makePayFund();
+    calculate(ctx: Context, position: Position): PayFund {
+        const payFund = this.makePayFund(ctx, position);
         payFund.incomeSum = this.calcIncomeSum();
         payFund.baseSum = this.calcBaseSum(payFund);
         payFund.rate = this.getRate();
@@ -21,22 +32,7 @@ export class EcbSalary extends PayFundCalc {
         return payFund;
     }
 
-    private makePayFund(): PayFund {
-        return Object.assign({
-            id: this.ctx.getNextPayFundId(),
-            positionId: this.ctx.position.id,
-            payPeriod: this.ctx.payPeriod.dateFrom,
-            accPeriod: this.accPeriod.dateFrom,
-            payFundTypeId: this.payFundType.id,
-            payFundCategory: PayFundCategory.Employees,
-            incomeSum: 0,
-            baseSum: 0,
-            rate: 0,
-            paySum: 0,
-        });
-    }
-
-    getPaymentTypeIds(): string[] {
+    getPaymentTypeIds(ctx: Context): string[] {
         // TODO: Replace to Entry Table
         const calcMethods: string[] = [CalcMethod.Salary, CalcMethod.Wage];
         const paymentGroups: string[] = [
@@ -47,13 +43,13 @@ export class EcbSalary extends PayFundCalc {
             PaymentGroup.Refunds,
             PaymentGroup.OtherAccruals,
         ];
-        return this.ctx.paymentTypes
+        return ctx.paymentTypes
             .filter((o) => calcMethods.includes(o.calcMethod) || paymentGroups.includes(o.paymentGroup))
             .map((o) => o.id);
     }
 
-    calcIncomeSum(): number {
-        return accPeriodFactSum(this.ctx.payPeriod, this.accPeriod, this.ctx.payrolls, this.getPaymentTypeIds());
+    calcIncomeSum(ctx: Context): number {
+        return accPeriodFactSum(ctx.payPeriod, this.accPeriod, ctx.payrolls, this.getPaymentTypeIds(ctx));
     }
 
     getMinWage() {

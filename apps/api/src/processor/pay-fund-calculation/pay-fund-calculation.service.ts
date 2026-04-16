@@ -9,7 +9,6 @@ import {
     PositionsService,
 } from '@/resources';
 import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
-import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { PayFundCalcMethod } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
@@ -22,7 +21,7 @@ import { Position } from './../../resources/positions/entities/position.entity';
 import { EcbMinWage, EcbSalary } from './calc-methods';
 import { PayFundCalc } from './calc-methods/abstract/pay-fund-calc';
 
-type Context = {
+export type Context = {
     userId: string;
     company: CompanyReadDto;
     paymentTypes: PaymentType[];
@@ -30,6 +29,7 @@ type Context = {
     minWages: MinWage[];
     payPeriod: PayPeriod;
 };
+
 @Injectable({ scope: Scope.REQUEST })
 export class PayFundCalculationService {
     private logger: Logger = new Logger(PayFundCalculationService.name);
@@ -98,10 +98,6 @@ export class PayFundCalculationService {
         const ctx = await this.initContext(userId, position.companyId);
         await this._calculatePosition(ctx, position);
         await this._calculateCompanyTotals(ctx);
-    }
-
-    public getNextPayFundId(): string {
-        return IdGenerator.nextId();
     }
 
     public merge(
@@ -198,7 +194,7 @@ export class PayFundCalculationService {
             dateFrom,
             dateTo,
         });
-        // const payrolls = await this.payrollsService.findBetween(position.id, dateFrom, dateTo, true);
+        const payrolls = await this.payrollsService.findBetween(position.id, dateFrom, dateTo, true);
         const priorPayFunds = await this.payFundsService.findBetween(position.id, dateFrom, dateTo, true);
         // this.initNextPayFundId();
         for (const accPeriod of accPeriods) {
@@ -206,7 +202,7 @@ export class PayFundCalculationService {
             ctx.payFundTypes.forEach((payFundType) => {
                 const calcMethod = this.getCalcMethod(accPeriod, payFundType, currentPayFunds);
                 if (calcMethod) {
-                    const payFund = calcMethod.calculate();
+                    const payFund = calcMethod.calculate(ctx, position, payrolls);
                     currentPayFunds.push(payFund);
                 }
             });
