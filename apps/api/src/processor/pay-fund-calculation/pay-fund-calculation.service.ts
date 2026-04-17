@@ -8,27 +8,16 @@ import {
     PayrollsService,
     PositionsService,
 } from '@/resources';
-import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
+import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { PayFundCalcMethod } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
-import { MinWage } from './../../resources/min-wage/entities/min-wage.entity';
 import { PayFundType } from './../../resources/pay-fund-types/entities/pay-fund-type.entity';
 import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
 import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
 import { Position } from './../../resources/positions/entities/position.entity';
 import { EcbMinWage, EcbSalary } from './calc-methods';
-import { PayFundCalc } from './calc-methods/abstract/pay-fund-calc';
-
-export type Context = {
-    userId: string;
-    company: CompanyReadDto;
-    paymentTypes: PaymentType[];
-    payFundTypes: PayFundType[];
-    minWages: MinWage[];
-    payPeriod: PayPeriod;
-};
+import { Context, PayFundCalc } from './calc-methods/base/pay-fund-calc';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayFundCalculationService {
@@ -171,11 +160,18 @@ export class PayFundCalculationService {
     //     return this.payFundId
     // }
 
-    private getCalcMethod(accPeriod: PayPeriod, payFundType: PayFundType, current: PayFund[]): PayFundCalc | null {
+    private getCalcMethod(
+        ctx: Context,
+        position: Position,
+        payrolls: Payroll[],
+        accPeriod: PayPeriod,
+        payFundType: PayFundType,
+        current: PayFund[],
+    ): PayFundCalc | null {
         if (payFundType.calcMethod === PayFundCalcMethod.EcbSalary) {
-            return new EcbSalary(this, accPeriod, payFundType, current);
+            return new EcbSalary(ctx, position, payrolls, accPeriod, payFundType, current);
         } else if (payFundType.calcMethod === PayFundCalcMethod.EcbMinWage) {
-            return new EcbMinWage(this, accPeriod, payFundType, current);
+            return new EcbMinWage(ctx, position, payrolls, accPeriod, payFundType, current);
         }
         // throw new Error(`Bad PayFund calc method ${payFundType.calcMethod}.`);
         return null;
@@ -195,9 +191,9 @@ export class PayFundCalculationService {
         for (const accPeriod of accPeriods) {
             const currentPayFunds: PayFund[] = [];
             ctx.payFundTypes.forEach((payFundType) => {
-                const calcMethod = this.getCalcMethod(accPeriod, payFundType, currentPayFunds);
+                const calcMethod = this.getCalcMethod(ctx, position, payrolls, accPeriod, payFundType, currentPayFunds);
                 if (calcMethod) {
-                    const payFund = calcMethod.calculate(ctx, position, payrolls);
+                    const payFund = calcMethod.calculate();
                     currentPayFunds.push(payFund);
                 }
             });

@@ -1,31 +1,28 @@
+import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { Position } from '@/resources/positions/entities';
 import { PayFundGroup } from '@/types';
+import { Context, PayFundCalc } from '../base/pay-fund-calc';
 import { MinWage } from './../../../../resources/min-wage/entities/min-wage.entity';
 import { PayFundType } from './../../../../resources/pay-fund-types/entities/pay-fund-type.entity';
 import { PayFund } from './../../../../resources/pay-funds/entities/pay-fund.entity';
 import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
-import { Context } from './../../pay-fund-calculation.service';
-import { PayFundCalc } from './../abstract/pay-fund-calc';
 
 export class EcbMinWage extends PayFundCalc {
     constructor(
-        // ctx: PayFundCalculationService,
+        ctx: Context,
+        position: Position,
+        payrolls: Payroll[],
         accPeriod: PayPeriod,
         payFundType: PayFundType,
         current: PayFund[],
     ) {
-        super(
-            // ctx,
-            accPeriod,
-            payFundType,
-            current,
-        );
+        super(ctx, position, payrolls, accPeriod, payFundType, current);
     }
 
-    public calculate(ctx: Context, position: Position): PayFund {
-        const payFund = this.makePayFund(ctx, position);
+    public calculate(): PayFund {
+        const payFund = this.makePayFund();
         payFund.incomeSum = 0;
-        payFund.baseSum = this.calcBaseSum(ctx);
+        payFund.baseSum = this.calcBaseSum();
         payFund.rate = this.getRate();
         payFund.paySum = this.calcPaySum(payFund);
         return payFund;
@@ -48,13 +45,13 @@ export class EcbMinWage extends PayFundCalc {
             }, 0);
     }
 
-    private calcBaseSum(ctx: Context): number {
-        const minWage = this.getMinWage(ctx.minWages);
+    private calcBaseSum(): number {
+        const minWage = this.getMinWage(this.ctx.minWages);
         if (!minWage) {
             return 0;
         }
         const minBaseSum = minWage.paySum;
-        const priorBaseSum = this.getPriorBaseSum(ctx.payFundTypes);
+        const priorBaseSum = this.getPriorBaseSum(this.ctx.payFundTypes);
         if (priorBaseSum > 0 && priorBaseSum < minBaseSum) {
             return minBaseSum - priorBaseSum;
         }
