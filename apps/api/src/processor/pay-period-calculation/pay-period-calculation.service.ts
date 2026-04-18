@@ -1,6 +1,3 @@
-import { PayPeriodSummary } from '../../resources/pay-periods/entities/pay-period-summary.entity';
-import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
-import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import {
     CompanyService,
     PayFundsService,
@@ -10,76 +7,56 @@ import {
     PositionsService,
     UserService,
 } from '@/resources';
-import { PaymentSchedule } from '@/types';
-import { PaymentPart } from '@/types';
+import { PaymentPart, PaymentSchedule } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dropTime } from '@repo/shared';
 import { addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
-import { PeriodListGenerator } from './calc-methods/abstract/period-list-generator';
-import { EndOfMonthPayment } from './calc-methods/end-of-month-payment';
-import { Every15daysPayment } from './calc-methods/every-15-days-payment';
-import { IdGenerator } from '@/snowflake/snowflake.singleton';
+import { PayPeriodSummary } from '../../resources/pay-periods/entities/pay-period-summary.entity';
+import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
+import { Context, PeriodListGenerator } from './calc-methods/base/period-list-generator';
+import { EndOfMonthPayment } from './calc-methods/lib/end-of-month-payment';
+import { Every15daysPayment } from './calc-methods/lib/every-15-days-payment';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayPeriodCalculationService {
-    private _logger: Logger = new Logger(PayPeriodCalculationService.name);
-    private _userId: string;
-    private _company: CompanyEntity;
-    // private _id: string = 0;
+    private logger: Logger = new Logger(PayPeriodCalculationService.name);
 
     constructor(
-        @Inject(forwardRef(() => CompanyService))
-        private companiesService: CompanyService,
-        @Inject(forwardRef(() => PayPeriodsService))
-        private payPeriodsService: PayPeriodsService,
+        @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
+        @Inject(forwardRef(() => PayPeriodsService)) private payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => PayPeriodsCalcMethodService))
         private payPeriodsCalcMethodService: PayPeriodsCalcMethodService,
-        @Inject(forwardRef(() => PayrollsService))
-        private payrollsService: PayrollsService,
-        @Inject(forwardRef(() => PayFundsService))
-        private payFundsService: PayFundsService,
-        @Inject(forwardRef(() => PositionsService))
-        private positionsService: PositionsService,
-        @Inject(forwardRef(() => UserService))
-        private usersService: UserService,
+        @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
+        @Inject(forwardRef(() => PayFundsService)) private payFundsService: PayFundsService,
+        @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
+        @Inject(forwardRef(() => UserService)) private usersService: UserService,
     ) {}
 
-    public get logger() {
-        return this._logger;
-    }
-    public get userId() {
-        return this._userId;
-    }
-    public get company(): CompanyEntity {
-        return this._company;
-    }
-    public get id() {
-        // this._id = this._id + 1;
-        // return this._id;
-        return IdGenerator.nextId();
+    private async initContext(userId: string, companyId: string): Promise<Context> {
+        const company = await this.companiesService.findOne(userId, companyId);
+        return { userId, company };
     }
 
-    private getGenerator(): PeriodListGenerator {
-        if (this.company.paymentSchedule === PaymentSchedule.Every15day) {
-            return new Every15daysPayment(this);
-        } else if (this.company.paymentSchedule === PaymentSchedule.LastDay) {
-            return new EndOfMonthPayment(this);
+    private getGenerator(ctx: Context): PeriodListGenerator {
+        if (ctx.company.paymentSchedule === PaymentSchedule.Every15day) {
+            return new Every15daysPayment(ctx);
+        } else if (ctx.company.paymentSchedule === PaymentSchedule.LastDay) {
+            return new EndOfMonthPayment(ctx);
         } else {
-            return new EndOfMonthPayment(this);
+            return new EndOfMonthPayment(ctx);
         }
     }
 
     async fillPeriods(userId: string, companyId: string): Promise<void> {
-        this._company = await this.companiesService.findOne(userId, companyId);
-        this._userId = userId;
-        const dateFrom = subYears(startOfYear(this.company.payPeriod), 1);
-        const dateTo = addYears(endOfYear(this.company.payPeriod), 1);
+        const ctx = await this.initContext(userId, companyId);
+        const dateFrom = subYears(startOfYear(ctx.company.payPeriod), 1);
+        const dateTo = addYears(endOfYear(ctx.company.payPeriod), 1);
         const prior = await this.payPeriodsService.findAll({ companyId, dateFrom, dateTo });
         // this._id = prior.reduce((a, b) => (a > b.id ? a : b.id), 0);
-        const generator = this.getGenerator();
+        const generator = this.getGenerator(ctx);
         const current = generator.getPeriodList(dateFrom, dateTo);
         const { toDelete, toInsert } = this.merge(prior, current);
-        this.save(toDelete, toInsert);
+        this.save(ctx, toDelete, toInsert);
     }
 
     private merge(priorList: PayPeriod[], currentList: PayPeriod[]) {
@@ -104,12 +81,12 @@ export class PayPeriodCalculationService {
         return { toDelete, toInsert };
     }
 
-    async save(toDelete: string[], toInsert: PayPeriod[]) {
+    private async save(ctx: Context, toDelete: string[], toInsert: PayPeriod[]) {
         if (toDelete.length) {
             this.payPeriodsService.delete(toDelete);
         }
         for (const { id: _, ...period } of toInsert) {
-            this.payPeriodsService.create(this.userId, period);
+            this.payPeriodsService.create(ctx.userId, period);
         }
     }
 

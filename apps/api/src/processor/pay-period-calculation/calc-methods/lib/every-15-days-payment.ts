@@ -1,12 +1,12 @@
-import { PayPeriod } from './../../../resources/pay-periods/entities/pay-period.entity';
 import { PayPeriodState } from '@/types';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { addDays, addMonths } from 'date-fns';
-import { PayPeriodCalculationService } from '../pay-period-calculation.service';
-import { PeriodListGenerator } from './abstract/period-list-generator';
+import { PayPeriod } from '../../../../resources/pay-periods/entities/pay-period.entity';
+import { PeriodListGenerator } from '../base/period-list-generator';
+import { Context } from '../base/period-list-generator';
 
 export class Every15daysPayment extends PeriodListGenerator {
-    constructor(ctx: PayPeriodCalculationService) {
+    constructor(ctx: Context) {
         super(ctx);
     }
 

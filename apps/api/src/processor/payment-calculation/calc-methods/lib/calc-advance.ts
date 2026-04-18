@@ -1,16 +1,16 @@
-import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
-import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
 import { getAdvancePaymentDate, payFundPayPeriodFactSum, payPeriodFactSum } from '@/processor/helpers';
+import { Position } from '@/resources/positions/entities';
 import { PaymentGroup } from '@/types';
 import { dateUTC } from '@repo/shared';
-import { PaymentCalculationService } from '../../payment-calculation.service';
-import { CalcPayment } from '../abstract/calc-payment';
+import { CalcPayment, PaymentContext } from '../base/calc-payment';
+import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
+import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
 
 export class CalcAdvance extends CalcPayment {
     rate: number;
 
-    constructor(ctx: PaymentCalculationService, paymentType: PaymentType, current: PaymentPosition[]) {
-        super(ctx, paymentType, current);
+    constructor(ctx: PaymentContext, position: Position, paymentType: PaymentType, current: PaymentPosition[]) {
+        super(ctx, position, paymentType, current);
         this.rate = 0.5;
     }
 

@@ -7,6 +7,61 @@ import { NotFoundException } from '@nestjs/common';
 import { PaymentGroup } from '@/types';
 import { getMaxDate, getMinDate } from '@repo/shared';
 import { PayrollCalculationService } from './../../payroll-calculation.service';
+import { CalculatePayroll, PayrollContext } from '../base/calculate-payroll.abstract';
+import { Position } from '@/resources/positions/entities';
+import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+
+export class PayrollBasics extends CalculatePayroll {
+    constructor(
+        ctx: PayrollContext,
+        position: Position,
+        payrolls: Payroll[],
+        paymentType: PaymentType,
+        accPeriods: PayPeriod[],
+    ) {
+        super(ctx, position, payrolls, paymentType, accPeriods);
+    }
+
+    async calculate(): Promise<Payroll[]> {
+        const payrolls: Payroll[] = [];
+        for (const accPeriod of this.accPeriods) {
+            const assignments =
+                this.position.history?.filter(
+                    (o) =>
+                        o.dateFrom.getTime() <= accPeriod.dateTo.getTime() &&
+                        o.dateTo.getTime() >= accPeriod.dateFrom.getTime() &&
+                        o.paymentTypeId,
+                ) || [];
+            for (const assignment of assignments) {
+                const payroll = this.makePayroll(accPeriod);
+                payroll.paymentTypeId = assignment.paymentTypeId;
+                payroll.dateFrom = getMaxDate(
+                    assignment.dateFrom,
+                    getMaxDate(accPeriod.dateFrom, this.position.dateFrom),
+                );
+                payroll.dateTo = getMinDate(assignment.dateTo, getMinDate(accPeriod.dateTo, this.position.dateTo));
+                const plan = getWorkTimePlan(this.ctx.workTimeNorms, assignment.workTimeNormId, payroll.dateFrom);
+                payroll.planDays = plan.days;
+                payroll.planHours = plan.hours;
+                payroll.planHoursByDay = plan.hoursByDay;
+                const fact = getWorkTimeFact(plan, payroll.dateFrom, payroll.dateTo);
+                payroll.factDays = fact.days;
+                payroll.factHours = fact.hours;
+                payroll.mask1 = fact.mask;
+                payroll.factHoursByDay = fact.hoursByDay;
+                payroll.paymentType = this.ctx.paymentTypes.find((o) => o.id === payroll.paymentTypeId);
+                const calcMethod = getCalcMethod(paymentType.calcMethod);
+                payroll.factSum = calcMethod ? calcMethod(payroll) : 0;
+                payrolls.push(payroll);
+            }
+            const basicIds = this.ctx.paymentTypes
+                .filter((o) => o.paymentGroup === PaymentGroup.Basic)
+                .map((o) => o.id);
+            this.ctx.merge(basicIds, accPeriod, payrolls);
+        }
+        return [];
+    }
+}
 
 export function calculateBasics(ctx: PayrollCalculationService) {
     for (const accPeriod of ctx.accPeriods) {
@@ -23,11 +78,8 @@ export function calculateBasics(ctx: PayrollCalculationService) {
             const dateTo = getMinDate(assignment.dateTo, getMinDate(accPeriod.dateTo, ctx.position.dateTo));
             const plan = getWorkTimePlan(ctx.workTimeNorms, assignment.workTimeNormId, dateFrom);
             const fact = getWorkTimeFact(plan, dateFrom, dateTo);
-            const payroll = makePayroll(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact);
+            const payroll = this.makePayroll(ctx, assignment, accPeriod, dateFrom, dateTo, plan, fact);
             const paymentType = ctx.paymentTypes.find((o) => o.id === payroll.paymentTypeId);
-            if (!paymentType) {
-                throw new NotFoundException('paymentType not found.');
-            }
             const calcMethod = getCalcMethod(paymentType.calcMethod);
             payroll.factSum = calcMethod ? calcMethod(payroll) : 0;
             payrolls.push(payroll);

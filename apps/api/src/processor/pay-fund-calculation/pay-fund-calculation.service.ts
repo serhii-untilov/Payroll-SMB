@@ -65,6 +65,14 @@ export class PayFundCalculationService {
         await this._calculateCompanyTotals(ctx);
     }
 
+    public async calculatePosition(userId: string, positionId: string) {
+        this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
+        const position = await this.positionsService.findOne(positionId, { relations: true });
+        const ctx = await this.initContext(userId, position.companyId);
+        await this._calculatePosition(ctx, position);
+        await this._calculateCompanyTotals(ctx);
+    }
+
     public async calculateCompanyTotals(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, calculateCompanyTotals: ${companyId}`);
         const ctx = await this.initContext(userId, companyId);
@@ -76,15 +84,7 @@ export class PayFundCalculationService {
         await this.payPeriodCalculationService.updateCalcMethods(ctx.payPeriod.id);
     }
 
-    public async calculatePosition(userId: string, positionId: string) {
-        this.logger.log(`userId: ${userId}, calculatePosition: ${positionId}`);
-        const position = await this.positionsService.findOne(positionId, { relations: true });
-        const ctx = await this.initContext(userId, position.companyId);
-        await this._calculatePosition(ctx, position);
-        await this._calculateCompanyTotals(ctx);
-    }
-
-    public merge(
+    private merge(
         ctx: Context,
         accPeriod: PayPeriod,
         currentPayFunds: PayFund[],

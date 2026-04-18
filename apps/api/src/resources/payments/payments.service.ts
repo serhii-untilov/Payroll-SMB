@@ -29,16 +29,12 @@ export class PaymentsService extends AvailableForUserCompany {
     private logger: Logger = new Logger(PaymentsService.name);
 
     constructor(
-        @InjectRepository(Payment)
-        private repository: Repository<Payment>,
-        @Inject(forwardRef(() => UserAccessService))
-        public accessService: WrapperType<UserAccessService>,
+        @InjectRepository(Payment) private repository: Repository<Payment>,
+        @Inject(forwardRef(() => UserAccessService)) public accessService: WrapperType<UserAccessService>,
         @Inject(forwardRef(() => PaymentPositionsService))
         public paymentPositionsService: WrapperType<PaymentPositionsService>,
-        @Inject(forwardRef(() => PayPeriodsService))
-        public payPeriodsService: WrapperType<PayPeriodsService>,
-        @Inject(forwardRef(() => CompanyService))
-        public companiesService: WrapperType<CompanyService>,
+        @Inject(forwardRef(() => PayPeriodsService)) public payPeriodsService: WrapperType<PayPeriodsService>,
+        @Inject(forwardRef(() => CompanyService)) public companiesService: WrapperType<CompanyService>,
         private eventEmitter: EventEmitter2,
     ) {
         super(accessService);

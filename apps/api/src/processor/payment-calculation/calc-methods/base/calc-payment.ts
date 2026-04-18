@@ -1,20 +1,26 @@
-import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
-import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
-import { Payment } from './../../../../resources/payments/entities/payment.entity';
+import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
+import { PayPeriod } from '@/resources/pay-periods/entities';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { PaymentStatus, RecordFlag } from '@/types';
-import { PaymentCalculationService } from '../../payment-calculation.service';
+import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
+import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
+import { Payment } from './../../../../resources/payments/entities/payment.entity';
+import { Position } from '@/resources/positions/entities';
+
+export type PaymentContext = {
+    userId: string;
+    company: CompanyReadDto;
+    paymentTypes: PaymentType[];
+    payPeriod: PayPeriod;
+};
 
 export abstract class CalcPayment {
-    ctx: PaymentCalculationService;
-    paymentType: PaymentType;
-    dateFrom: Date;
-    current: PaymentPosition[];
-
-    constructor(ctx: PaymentCalculationService, paymentType: PaymentType, current: PaymentPosition[]) {
-        this.ctx = ctx;
-        this.paymentType = paymentType;
-        this.current = current;
-    }
+    constructor(
+        public ctx: PaymentContext,
+        public position: Position,
+        public paymentType: PaymentType,
+        public current: PaymentPosition[],
+    ) {}
 
     abstract calculate(): PaymentPosition;
 
@@ -40,10 +46,10 @@ export abstract class CalcPayment {
 
     public makePaymentPosition(): PaymentPosition {
         return Object.assign({
-            id: this.ctx.getNextPaymentPositionId(),
+            id: IdGenerator.nextId(),
             payment: null, // this.makePayment()
             paymentId: 0,
-            positionId: this.ctx.position.id,
+            positionId: this.position.id,
             baseSum: 0,
             deductions: 0,
             paySum: 0,
