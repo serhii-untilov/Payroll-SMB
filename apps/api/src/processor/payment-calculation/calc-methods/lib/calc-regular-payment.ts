@@ -1,14 +1,14 @@
 import { getRegularPaymentDate, getTotals, payFundPayPeriodFactSum, payPeriodFactSum } from '@/processor/helpers';
+import { Position } from '@/resources/positions/entities';
 import { PaymentGroup, PaymentPart } from '@/types';
 import { dateUTC } from '@repo/shared';
-import { PaymentCalculationService } from '../../payment-calculation.service';
-import { CalcPayment } from '../abstract/calc-payment';
+import { CalcPayment, PaymentContext } from '../base/calc-payment.abstract';
 import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
 import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
 
 export class CalcRegularPayment extends CalcPayment {
-    constructor(ctx: PaymentCalculationService, paymentType: PaymentType, current: PaymentPosition[]) {
-        super(ctx, paymentType, current);
+    constructor(ctx: PaymentContext, position: Position, paymentType: PaymentType, current: PaymentPosition[]) {
+        super(ctx, position, paymentType, current);
     }
 
     public calculate(): PaymentPosition {

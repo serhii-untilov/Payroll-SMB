@@ -2,7 +2,7 @@ import { getAdvancePaymentDate, payFundPayPeriodFactSum, payPeriodFactSum } from
 import { Position } from '@/resources/positions/entities';
 import { PaymentGroup } from '@/types';
 import { dateUTC } from '@repo/shared';
-import { CalcPayment, PaymentContext } from '../base/calc-payment';
+import { CalcPayment, PaymentContext } from '../base/calc-payment.abstract';
 import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
 import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
 

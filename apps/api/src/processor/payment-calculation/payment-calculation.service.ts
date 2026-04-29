@@ -57,6 +57,8 @@ export class PaymentCalculationService {
             userId,
             company,
             paymentTypes: await this.paymentTypesService.findAll(),
+            payrolls: [],
+            payFunds: [],
             payPeriod: await this.payPeriodsService.findOneBy({
                 where: { companyId: company.id, dateFrom: company.payPeriod },
             }),
@@ -101,36 +103,46 @@ export class PaymentCalculationService {
 
     private async _calculatePosition(ctx: PaymentContext, position: Position, payments: Payment[]): Promise<string[]> {
         const payrolls = await this.getPayrolls(ctx, position);
-        const payFunds = await this.getPayFunds();
+        const payFunds = await this.getPayFunds(ctx, position);
+        ctx.payrolls = payrolls;
+        ctx.payFunds = payFunds;
         const paymentPositions = await this.getPaymentPositions(ctx, position);
-        // this.initPaymentPositionId();
-        const paymentTypeList = this.paymentTypes.filter((o) => o.paymentGroup === PaymentGroup.Payments);
+        const paymentTypeList = ctx.paymentTypes.filter((o) => o.paymentGroup === PaymentGroup.Payments);
         const current: PaymentPosition[] = [];
         for (const paymentType of paymentTypeList) {
-            // // Pass copy of objects to prevent mutation
-            // const calcMethod = this.calcMethodFactory({ ...paymentType }, [...current]);
-            const calcMethod = this.calcMethodFactory(paymentType, [...current]);
+            const calcMethod = this.calcMethodFactory(ctx, position, paymentType, [...current]);
             if (calcMethod) {
                 current.push(calcMethod.calculate());
             }
         }
-        const { toInsert, toDelete } = this.merge(current);
-        const changedPaymentIds = await this.save(toInsert, toDelete);
+        const { toInsert, toDelete } = this.merge(current, paymentPositions);
+        const changedPaymentIds = await this.save(toInsert, toDelete, payments, ctx, position);
         return changedPaymentIds;
     }
 
-    private calcMethodFactory(paymentType: PaymentType, current: PaymentPosition[]): CalcPayment {
+    private calcMethodFactory(
+        ctx: PaymentContext,
+        position: Position,
+        paymentType: PaymentType,
+        current: PaymentPosition[],
+    ): CalcPayment | undefined {
         if (paymentType.calcMethod === CalcMethod.RegularPayment) {
-            return new CalcRegularPayment(this, paymentType, current);
+            return new CalcRegularPayment(ctx, position, paymentType, current);
         } else if (paymentType.calcMethod === CalcMethod.AdvancedPayment) {
-            return new CalcAdvance(this, paymentType, current);
+            return new CalcAdvance(ctx, position, paymentType, current);
         } else if (paymentType.calcMethod === CalcMethod.FastPayment) {
-            return new CalcFastPayment(this, paymentType, current);
+            return new CalcFastPayment(ctx, position, paymentType, current);
         }
         throw new Error('Undefined calc method.');
     }
 
-    private async save(toInsert: PaymentPosition[], toDelete: PaymentPosition[]): Promise<string[]> {
+    private async save(
+        toInsert: PaymentPosition[],
+        toDelete: PaymentPosition[],
+        payments: Payment[],
+        ctx: PaymentContext,
+        position: Position,
+    ): Promise<string[]> {
         const changedPaymentIds: string[] = [];
         for (const paymentPosition of toDelete) {
             if (paymentPosition?.payment?.id) {
@@ -141,13 +153,13 @@ export class PaymentCalculationService {
         for (const { id: _, ...paymentPosition } of toInsert) {
             let payment = payments.find(
                 (o) =>
-                    o.companyId === this.company.id &&
+                    o.companyId === ctx.company.id &&
                     o.accPeriod.getTime() === paymentPosition?.payment?.accPeriod.getTime() &&
                     o.paymentTypeId === paymentPosition?.payment?.paymentTypeId &&
                     o.status === PaymentStatus.Draft,
             );
             if (!payment && paymentPosition?.payment) {
-                payment = await this.createPayment(paymentPosition.payment);
+                payment = await this.createPayment(paymentPosition.payment, ctx);
                 payments.push(payment);
             }
             if (!payment) {
@@ -156,8 +168,8 @@ export class PaymentCalculationService {
             changedPaymentIds.push(payment.id);
             delete paymentPosition.payment;
             paymentPosition.paymentId = payment.id;
-            const created = await this.paymentPositionsService.create(this.userId, paymentPosition);
-            this.logger.log(`PositionId: ${this.position.id}, Inserted: ${created.id}`);
+            const created = await this.paymentPositionsService.create(ctx.userId, paymentPosition);
+            this.logger.log(`PositionId: ${position.id}, Inserted: ${created.id}`);
         }
         return changedPaymentIds;
     }
@@ -174,11 +186,11 @@ export class PaymentCalculationService {
         }, [] as PaymentPosition[]);
     }
 
-    private merge(current: PaymentPosition[]): {
+    private merge(current: PaymentPosition[], paymentPositions: PaymentPosition[]): {
         toDelete: PaymentPosition[];
         toInsert: PaymentPosition[];
     } {
-        const toDelete: PaymentPosition[] = this.paymentPositions.filter(
+        const toDelete: PaymentPosition[] = paymentPositions.filter(
             (p) =>
                 p?.payment?.status === PaymentStatus.Draft &&
                 !current.find(
@@ -190,13 +202,13 @@ export class PaymentCalculationService {
                         c.paySum === p.paySum,
                 ),
         );
-        const paymentPositions = this.collapse(
-            this.paymentPositions.filter((o) => !toDelete.find((d) => d.id === o.id)),
+        const paymentPositionsCollapsed = this.collapse(
+            paymentPositions.filter((o) => !toDelete.find((d) => d.id === o.id)),
         );
         const toInsert: PaymentPosition[] = current
             .filter(
                 (c) =>
-                    !paymentPositions.find(
+                    !paymentPositionsCollapsed.find(
                         (p) =>
                             p?.payment?.paymentTypeId === c?.payment?.paymentTypeId &&
                             p.baseSum === c.baseSum &&
@@ -206,7 +218,7 @@ export class PaymentCalculationService {
                     ),
             )
             .map((c) => {
-                const found = paymentPositions.find((p) => p?.payment?.paymentTypeId === c?.payment?.paymentTypeId);
+                const found = paymentPositionsCollapsed.find((p) => p?.payment?.paymentTypeId === c?.payment?.paymentTypeId);
                 if (found) {
                     c.baseSum = c.baseSum - found.baseSum;
                     c.deductions = c.deductions - found.deductions;
@@ -226,10 +238,10 @@ export class PaymentCalculationService {
         });
     }
 
-    private async getPayFunds(): Promise<PayFund[]> {
+    private async getPayFunds(ctx: PaymentContext, position: Position): Promise<PayFund[]> {
         return await this.payFundsService.findAll({
-            positionId: this.position.id,
-            payPeriod: this.payPeriod.dateFrom,
+            positionId: position.id,
+            payPeriod: ctx.payPeriod.dateFrom,
         });
     }
 
@@ -237,10 +249,10 @@ export class PaymentCalculationService {
         return await this.paymentPositionsService.findByPositionId(position.id, ctx.payPeriod.dateFrom);
     }
 
-    private async createPayment(payload: Payment): Promise<Payment> {
+    private async createPayment(payload: Payment, ctx: PaymentContext): Promise<Payment> {
         const { id: _, ...payment } = payload;
-        payment.docNumber = await this.paymentsService.getNextDocNumber(this.company.id, this.payPeriod.dateFrom);
+        payment.docNumber = await this.paymentsService.getNextDocNumber(ctx.company.id, ctx.payPeriod.dateFrom);
         payment.docDate = dateUTC(payment.dateFrom);
-        return await this.paymentsService.create(this.userId, payment);
+        return await this.paymentsService.create(ctx.userId, payment);
     }
 }

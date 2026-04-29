@@ -1,11 +1,11 @@
+import { Position } from '@/resources/positions/entities';
 import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
 import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
-import { PaymentCalculationService } from '../../payment-calculation.service';
-import { CalcPayment } from '../abstract/calc-payment';
+import { CalcPayment, PaymentContext } from '../base/calc-payment.abstract';
 
 export class CalcFastPayment extends CalcPayment {
-    constructor(ctx: PaymentCalculationService, paymentType: PaymentType, current: PaymentPosition[]) {
-        super(ctx, paymentType, current);
+    constructor(ctx: PaymentContext, position: Position, paymentType: PaymentType, current: PaymentPosition[]) {
+        super(ctx, position, paymentType, current);
     }
 
     public calculate(): PaymentPosition {
