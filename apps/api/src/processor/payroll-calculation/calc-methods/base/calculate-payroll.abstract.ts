@@ -3,7 +3,8 @@ import { PayPeriod } from '@/resources/pay-periods/entities';
 import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
 import { Position } from '@/resources/positions/entities';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
-import { Payroll } from './../../../../resources/payrolls/entities/payroll.entity';
+import { getPayrollUnionRecord } from '@/processor/helpers';
+import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { WorkTimeNorm } from '@/resources/work-time-norm/entities';
 import { RecordFlag } from '@/types';
 
@@ -16,29 +17,32 @@ export type PayrollContext = {
 };
 
 export abstract class CalculatePayroll {
+    toInsert: Payroll[] = [];
+    toDeleteIds: string[] = [];
+
     constructor(
         public ctx: PayrollContext,
         public position: Position,
         public payrolls: Payroll[],
-        public paymentType: PaymentType,
         public accPeriods: PayPeriod[],
     ) {}
 
-    abstract calculate(): Promise<Payroll[]>;
+    abstract calculate(): void;
 
-    public makePayroll(accPeriod: PayPeriod): Payroll {
+    public makePayroll(accPeriod: PayPeriod, paymentTypeId: string): Payroll {
         const payroll = new Payroll();
         payroll.id = IdGenerator.nextId();
         payroll.positionId = this.position.id;
         payroll.payPeriod = this.ctx.payPeriod.dateFrom;
         payroll.accPeriod = accPeriod.dateFrom;
-        payroll.paymentTypeId = this.paymentType.id;
+        payroll.paymentTypeId = paymentTypeId;
         payroll.dateFrom = accPeriod.dateFrom;
         payroll.dateTo = accPeriod.dateTo;
+        payroll.recordFlags = RecordFlag.Auto;
         return payroll;
     }
 
-    public merge(paymentTypeIds: string[], accPeriod: PayPeriod) {
+    public merge(paymentTypeIds: string[], accPeriod: PayPeriod, payrolls: Payroll[]) {
         const toInsert: Payroll[] = [];
         const toDeleteIds: string[] = [];
         const processedIds: string[] = [];
@@ -61,7 +65,7 @@ export abstract class CalculatePayroll {
                 toInsert.push(Object.assign({ ...record, id: IdGenerator.nextId() }));
             } else {
                 processedIds.push(found.id); // memorize to avoid cancelling the found record
-                const foundUnionCancel = getPayrollUnionRecord(found, this.payrolls, this.payPeriod);
+                const foundUnionCancel = getPayrollUnionRecord(found, this.payrolls, this.ctx.payPeriod);
                 if (
                     (record.factSum || 0) === (foundUnionCancel.factSum || 0) &&
                     (record.factDays || 0) === (foundUnionCancel.factDays || 0) &&
@@ -75,22 +79,22 @@ export abstract class CalculatePayroll {
                 } else {
                     if (
                         found.recordFlags & RecordFlag.Auto &&
-                        found.payPeriod.getTime() >= this.payPeriod.dateFrom.getTime() &&
-                        found.payPeriod.getTime() <= this.payPeriod.dateTo.getTime()
+                        found.payPeriod.getTime() >= this.ctx.payPeriod.dateFrom.getTime() &&
+                        found.payPeriod.getTime() <= this.ctx.payPeriod.dateTo.getTime()
                     ) {
                         toDeleteIds.push(found.id);
                         // - put payrolls.record in the result
                         toInsert.push(
                             Object.assign({
                                 ...record,
-                                id: this.getNextPayrollId(),
+                                id: IdGenerator.nextId(),
                             }),
                         );
                     } else {
                         const cancelRecord: Payroll = Object.assign({
                             ...found,
-                            id: this.getNextPayrollId(),
-                            payPeriod: this.payPeriod.dateFrom,
+                            id: IdGenerator.nextId(),
+                            payPeriod: this.ctx.payPeriod.dateFrom,
                             sourceType: null,
                             sourceId: null,
                             recordFlags: RecordFlag.Auto | RecordFlag.Cancel,
@@ -107,7 +111,7 @@ export abstract class CalculatePayroll {
                         toInsert.push(
                             Object.assign({
                                 ...record,
-                                id: this.getNextPayrollId(),
+                                id: IdGenerator.nextId(),
                                 parentId: cancelRecord.id,
                             }),
                         );
@@ -121,7 +125,7 @@ export abstract class CalculatePayroll {
             (o) =>
                 o.accPeriod.getTime() >= accPeriod.dateFrom.getTime() &&
                 o.accPeriod.getTime() <= accPeriod.dateTo.getTime() &&
-                o.payPeriod.getTime() <= this.payPeriod.dateTo.getTime() &&
+                o.payPeriod.getTime() <= this.ctx.payPeriod.dateTo.getTime() &&
                 !(o.recordFlags & RecordFlag.Cancel) &&
                 paymentTypeIds.includes(o.paymentTypeId) &&
                 !processedIds.includes(o.id),
@@ -129,17 +133,17 @@ export abstract class CalculatePayroll {
         for (const record of toCancel) {
             if (
                 record.recordFlags & RecordFlag.Auto &&
-                record.payPeriod.getTime() >= this.payPeriod.dateFrom.getTime() &&
-                record.payPeriod.getTime() <= this.payPeriod.dateTo.getTime()
+                record.payPeriod.getTime() >= this.ctx.payPeriod.dateFrom.getTime() &&
+                record.payPeriod.getTime() <= this.ctx.payPeriod.dateTo.getTime()
             ) {
                 toDeleteIds.push(record.id);
             } else {
-                const recordUnionCancel = getPayrollUnionRecord(record, this.payrolls, this.payPeriod);
+                const recordUnionCancel = getPayrollUnionRecord(record, this.payrolls, this.ctx.payPeriod);
                 toInsert.push(
                     Object.assign({
                         ...record,
-                        id: this.getNextPayrollId(),
-                        payPeriod: this.payPeriod.dateFrom,
+                        id: IdGenerator.nextId(),
+                        payPeriod: this.ctx.payPeriod.dateFrom,
                         sourceType: null,
                         sourceId: null,
                         recordFlags: RecordFlag.Auto | RecordFlag.Cancel,
