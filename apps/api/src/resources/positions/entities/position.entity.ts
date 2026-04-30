@@ -1,7 +1,7 @@
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { CompanyEntity } from '../../company/entities/company.entity';
-import { Person } from './../../persons/entities/person.entity';
+import { PersonEntity } from './../../person/entities/person.entity';
 import { PositionHistory } from './../../position-history/entities/position-history.entity';
 import { PositionBalance } from './position-balance.entity';
 
@@ -24,9 +24,9 @@ export class Position extends BaseEntity {
     @Column({ type: 'varchar', length: 260, default: '' })
     description: string;
 
-    @ManyToOne(() => Person, (person) => person.positions)
+    @ManyToOne(() => PersonEntity, (person) => person.positions)
     @JoinColumn()
-    person?: Relation<Person>;
+    person?: Relation<PersonEntity>;
 
     @Column({ type: 'bigint', nullable: true })
     personId: string | null; // Vacancy, if not defined

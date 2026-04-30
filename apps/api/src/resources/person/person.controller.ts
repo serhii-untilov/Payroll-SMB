@@ -1,7 +1,6 @@
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Patch, Post, Query, Req, UseGuards, forwardRef } from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -15,29 +14,21 @@ import {
 import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { IdDto, PageDto, SortingDto } from '../common/dto';
-import { CreatePersonCommand } from './commands/create-person.command';
-import { CreatePersonDto } from './commands/dto/create-person.dto';
-import { UpdatePersonDto } from './commands/dto/update-person.dto';
-import { RemovePersonCommand } from './commands/remove-person.command';
-import { RestorePersonCommand } from './commands/restore-person.command';
-import { UpdatePersonCommand } from './commands/update-person.command';
-import { PersonFiltersDto } from './queries/dto/person-filters.dto';
-import { ListPersonsDto } from './queries/dto/list-persons.dto';
-import { PersonReadDto } from './queries/dto/person-read.dto';
-import { PersonSearchDto } from './queries/dto/person-search.dto';
-import { FindPersonByIdQuery } from './queries/find-person-by-id.query';
-import { ListPersonsQuery } from './queries/list-persons.query';
-import { ListPersonsQueryDto } from './queries/dto/list-persons-query.dto';
+import { CreatePersonDto } from './dto/create-person.dto';
+import { UpdatePersonDto } from './dto/update-person.dto';
+import { PersonFiltersDto } from './dto/person-filters.dto';
+import { ListPersonsDto } from './dto/list-persons.dto';
+import { PersonReadDto } from './dto/person-read.dto';
+import { PersonSearchDto } from './dto/person-search.dto';
+import { PersonService } from './person.service';
+import { ListPersonsQueryDto } from './dto/list-persons-query.dto';
 
 @ApiBearerAuth()
 @ApiTags('Persons')
-@ApiExtraModels(ListPersonsQuery, SortingDto, PageDto, PersonSearchDto, PersonFiltersDto)
+@ApiExtraModels(ListPersonsQueryDto, SortingDto, PageDto, PersonSearchDto, PersonFiltersDto)
 @Controller('persons')
 export class PersonController {
-    constructor(
-        private readonly commandBus: CommandBus,
-        private readonly queryBus: QueryBus,
-    ) {}
+    constructor(@Inject(forwardRef(() => PersonService)) private readonly service: PersonService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
@@ -49,8 +40,7 @@ export class PersonController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() dto: CreatePersonDto): Promise<IdDto> {
         const userId = getUserId(req);
-        // TODO: check user role permissions
-        const id = await this.commandBus.execute(new CreatePersonCommand(userId, deepTransformToShortDate(dto)));
+        const id = await this.service.create(userId, deepTransformToShortDate(dto));
         return { id };
     }
 
@@ -67,8 +57,7 @@ export class PersonController {
         @Body() dto: UpdatePersonDto,
     ) {
         const userId = getUserId(req);
-        // TODO: check user role permissions
-        await this.commandBus.execute(new UpdatePersonCommand(userId, id, version, deepTransformToShortDate(dto)));
+        await this.service.update(userId, id, version, deepTransformToShortDate(dto));
     }
 
     @Delete(':id')
@@ -79,8 +68,7 @@ export class PersonController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id') id: string, @Query('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
-        // TODO: check user role permissions
-        await this.commandBus.execute(new RemovePersonCommand(userId, id, version));
+        await this.service.remove(userId, id, version);
     }
 
     @Post(':id/restore/:version')
@@ -91,8 +79,7 @@ export class PersonController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async restore(@Req() req: Request, @Param('id') id: string, @Query('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
-        // TODO: check user role permissions
-        await this.commandBus.execute(new RestorePersonCommand(userId, id, version));
+        await this.service.restore(userId, id, version);
     }
 
     @Get(':id')
@@ -102,7 +89,7 @@ export class PersonController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(@Req() req: Request, @Param('id') id: string): Promise<PersonReadDto> {
         const userId = getUserId(req);
-        return await this.queryBus.execute(new FindPersonByIdQuery(userId, id));
+        return await this.service.findOne(userId, id);
     }
 
     @Get()
@@ -111,6 +98,6 @@ export class PersonController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request, @Query() query: ListPersonsQueryDto): Promise<ListPersonsDto> {
         const userId = getUserId(req);
-        return this.queryBus.execute(new ListPersonsQuery(userId, query));
+        return this.service.findAll(userId, query);
     }
 }

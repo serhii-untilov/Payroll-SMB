@@ -2,7 +2,7 @@ import { UserAccessService, PayrollsService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { repositoryMockFactory } from 'test';
+import { repositoryMockFactory } from '@/test';
 import { PaymentsService } from '../payments/payments.service';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 import { PaymentPositionsController } from './payment-positions.controller';

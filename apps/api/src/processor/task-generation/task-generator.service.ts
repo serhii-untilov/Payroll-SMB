@@ -3,6 +3,7 @@ import {
     DepartmentService,
     PayPeriodsService,
     PaymentsService,
+    PersonService,
     PositionsService,
     TasksService,
     UserRoleService,
@@ -27,6 +28,7 @@ export class TaskGenerationService {
         @Inject(forwardRef(() => PositionsService)) public positionsService: PositionsService,
         @Inject(forwardRef(() => UserRoleService)) public userRoleService: UserRoleService,
         @Inject(forwardRef(() => PaymentsService)) public paymentsService: PaymentsService,
+        @Inject(forwardRef(() => PersonService)) public personService: PersonService,
     ) {}
 
     public async generate(userId: string, companyId: string) {
@@ -54,8 +56,8 @@ export class TaskGenerationService {
                 currentTaskList.push(...taskList);
             }
         }
-        const { toInsert, toDelete } = this._merge({ ctx });
-        this._save(toInsert, toDelete);
+        const { toInsert, toDelete } = this._merge(ctx);
+        this._save(ctx, toInsert, toDelete);
     }
 
     private async makeContext(userId: string, companyId: string): Promise<Context> {
@@ -84,12 +86,13 @@ export class TaskGenerationService {
             tasksService: this.tasksService,
             departmentService: this.departmentService,
             positionsService: this.positionsService,
+            personService: this.personService,
             userRoleService: this.userRoleService,
             paymentsService: this.paymentsService,
         };
     }
 
-    private _merge(): { ctx: Context; toInsert: Task[]; toDelete: string[] } {
+    private _merge(ctx: Context): { toInsert: Task[]; toDelete: string[] } {
         const toDelete: string[] = [];
         const processed: string[] = [];
         for (const task of ctx.priorTaskList) {
@@ -112,12 +115,12 @@ export class TaskGenerationService {
         return { toInsert, toDelete };
     }
 
-    private _save(toInsert: Task[], toDelete: string[]) {
+    private _save(ctx: Context, toInsert: Task[], toDelete: string[]) {
         for (const id of toDelete) {
             this.tasksService.delete(id);
         }
         for (const { id: _, ...task } of toInsert) {
-            this.tasksService.create(this.userId, task);
+            this.tasksService.create(ctx.userId, task as any);
         }
     }
 }

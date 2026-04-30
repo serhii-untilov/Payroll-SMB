@@ -3,6 +3,7 @@ import {
     DepartmentService,
     PaymentsService,
     PayPeriodsService,
+    PersonService,
     PositionsService,
     TasksService,
     UserRoleService,
@@ -26,6 +27,7 @@ export type Context = {
     tasksService: TasksService;
     departmentService: DepartmentService;
     positionsService: PositionsService;
+    personService: PersonService;
     userRoleService: UserRoleService;
     paymentsService: PaymentsService;
 };

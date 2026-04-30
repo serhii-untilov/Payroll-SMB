@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { randPassword } from '@ngneat/falso';
-import { createMockUser } from 'test';
+import { createMockUser } from '@/test';
 import * as bcrypt from 'bcrypt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';

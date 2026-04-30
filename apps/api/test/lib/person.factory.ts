@@ -1,10 +1,10 @@
-import { Person } from './../../src/resources/persons/entities/person.entity';
+import { PersonEntity } from './../../src/resources/person/entities/person.entity';
 import { incrementalNumber, randFirstName, randLastName } from '@ngneat/falso';
 import { dateUTC } from '@repo/shared';
 
 const factory = incrementalNumber();
 
-export const createMockPerson = (data?: Partial<Person>) => {
+export const createMockPerson = (data?: Partial<PersonEntity>) => {
     const firstName = randFirstName();
     const lastName = randLastName();
     const middleName = '';

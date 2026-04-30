@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { randUser } from '@ngneat/falso';
 import { Request } from 'express';
 import * as _ from 'lodash';
-import { createMockUser, repositoryMockFactory } from 'test';
+import { createMockUser, repositoryMockFactory } from '@/test';
 import { UserAccessService } from '../user-access/user-access.service';
 import { RoleService } from '../role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';

@@ -1,15 +1,15 @@
+import { MockType, repositoryMockFactory } from '@/test';
 import { createMock } from '@golevelup/ts-jest';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { MockType, repositoryMockFactory } from 'test';
 import { Repository } from 'typeorm';
-import { UserAccessService } from '../user-access/user-access.service';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PayrollsService } from '../payrolls/payrolls.service';
+import { UserAccessService } from '../user-access/user-access.service';
+import { PositionBalance } from './entities/position-balance.entity';
 import { Position } from './entities/position.entity';
 import { PositionsService } from './positions.service';
-import { PayrollsService } from '../payrolls/payrolls.service';
-import { PositionBalance } from './entities/position-balance.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('PositionsService', () => {
     let service: PositionsService;

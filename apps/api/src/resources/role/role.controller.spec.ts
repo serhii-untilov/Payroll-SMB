@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { randCountry } from '@ngneat/falso';
 import { Request } from 'express';
-import { createMockRole, repositoryMockFactory } from 'test';
+import { createMockRole, repositoryMockFactory } from '@/test';
 import { Role } from './entities/role.entity';
 import { RoleController } from './role.controller';
 import { RoleService } from './role.service';

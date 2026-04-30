@@ -1,7 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { repositoryMockFactory } from 'test';
+import { repositoryMockFactory } from '@/test';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CompanyService } from '../company/company.service';
 import { PayFundsService } from '../pay-funds/pay-funds.service';

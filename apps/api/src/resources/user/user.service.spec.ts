@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { randEmail } from '@ngneat/falso';
 import * as _ from 'lodash';
-import { MockType, createMockUser, repositoryMockFactory } from 'test';
+import { MockType, createMockUser, repositoryMockFactory } from '@/test';
 import { Repository } from 'typeorm';
 import { UserAccessService } from '../user-access/user-access.service';
 import { RoleService } from '../role/role.service';

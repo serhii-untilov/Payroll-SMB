@@ -23,7 +23,8 @@
         "isolatedModules": true,
         "strictPropertyInitialization": false,
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "@/test": ["./test/index"]
         }
     },
     "include": ["src", "test", "jest.config.ts", "tsconfig-paths-bootstrap.js"],

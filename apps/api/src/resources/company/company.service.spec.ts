@@ -3,7 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { maxDate, minDate, monthBegin, monthEnd } from '@repo/shared';
-import { MockType, createMockCompany, repositoryMockFactory } from 'test';
+import { MockType, createMockCompany, repositoryMockFactory } from '@/test';
 import { Repository } from 'typeorm';
 import { UserRoleService } from '../user-role/user-role.service';
 import { UserService } from '../user/user.service';

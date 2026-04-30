@@ -1,10 +1,12 @@
+import { Injectable } from '@nestjs/common';
 import { BaseMapper } from '@/resources/common/mapper/base.mapper';
-import { CreatePersonDto } from '../commands/dto/create-person.dto';
-import { UpdatePersonDto } from '../commands/dto/update-person.dto';
+import { CreatePersonDto } from '../dto/create-person.dto';
+import { UpdatePersonDto } from '../dto/update-person.dto';
 import { PersonEntity } from '../entities/person.entity';
-import { PersonListItemDto } from '../queries/dto/person-list-item.dto';
-import { PersonReadDto } from '../queries/dto/person-read.dto';
+import { PersonListItemDto } from '../dto/person-list-item.dto';
+import { PersonReadDto } from '../dto/person-read.dto';
 
+@Injectable()
 export class PersonMapper extends BaseMapper<
     PersonEntity,
     PersonReadDto,

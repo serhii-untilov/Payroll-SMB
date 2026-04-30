@@ -1,8 +1,7 @@
 import { AuditDiff } from '@/types';
-import { IEvent } from '@nestjs/cqrs';
 import { PersonEntity } from '../../entities/person.entity';
 
-export abstract class PersonEvent implements IEvent {
+export abstract class PersonEvent {
     constructor(
         public readonly userId: string,
         public readonly personId: string,

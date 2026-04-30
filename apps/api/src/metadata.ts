@@ -995,8 +995,8 @@ export default async () => {
                     },
                 ],
                 [import('./resources/payment-types/dto/update-payment-type.dto'), { UpdatePaymentTypeDto: {} }],
-                [import('./resources/person/commands/dto/create-person.dto'), { CreatePersonDto: {} }],
-                [import('./resources/person/commands/dto/update-person.dto'), { UpdatePersonDto: {} }],
+                [import('./resources/person/dto/create-person.dto'), { CreatePersonDto: {} }],
+                [import('./resources/person/dto/update-person.dto'), { UpdatePersonDto: {} }],
                 [
                     import('./resources/position-history/dto/create-position-history.dto'),
                     { CreatePositionHistoryDto: {} },
