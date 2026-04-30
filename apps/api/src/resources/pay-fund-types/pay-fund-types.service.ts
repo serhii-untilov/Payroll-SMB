@@ -14,10 +14,8 @@ export class PayFundTypesService extends AvailableForUser {
     public readonly userRoleResource = Resource.FundType;
 
     constructor(
-        @InjectRepository(PayFundType)
-        private repository: Repository<PayFundType>,
-        @Inject(forwardRef(() => UserAccessService))
-        accessService: UserAccessService,
+        @InjectRepository(PayFundType) private repository: Repository<PayFundType>,
+        @Inject(forwardRef(() => UserAccessService)) accessService: UserAccessService,
     ) {
         super(accessService);
     }

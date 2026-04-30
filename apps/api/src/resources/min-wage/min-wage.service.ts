@@ -1,26 +1,20 @@
 import { Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AvailableForUser } from '../common/base/available-for-user';
-import { UserAccessService } from '../user-access/user-access.service';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
 import { MinWage } from './entities/min-wage.entity';
 
 @Injectable()
-export class MinWageService extends AvailableForUser {
-    readonly userRoleResource = Resource.MinWage;
+export class MinWageService {
+    public readonly resource = Resource.MinWage;
 
     constructor(
         @InjectRepository(MinWage)
         private repository: Repository<MinWage>,
-        @Inject(forwardRef(() => UserAccessService))
-        public accessService: UserAccessService,
-    ) {
-        super(accessService);
-    }
+    ) {}
 
     async create(userId: string, payload: CreateMinWageDto): Promise<MinWage> {
         const created = await this.repository.create({

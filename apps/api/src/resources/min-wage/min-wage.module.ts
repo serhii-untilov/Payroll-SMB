@@ -1,12 +1,11 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserAccessModule } from '../user-access';
 import { MinWage } from './entities/min-wage.entity';
 import { MinWageController } from './min-wage.controller';
 import { MinWageService } from './min-wage.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([MinWage]), forwardRef(() => UserAccessModule)],
+    imports: [TypeOrmModule.forFeature([MinWage])],
     controllers: [MinWageController],
     providers: [MinWageService],
     exports: [MinWageService],
