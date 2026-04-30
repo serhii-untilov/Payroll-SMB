@@ -26,6 +26,7 @@
     "db:win32": "scripts\\docker_db.cmd",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "format": "turbo run format",
     "test": "turbo run test",
     "deploy": "turbo run deploy",
     "start": "npm run db && npm --workspace @repo/api run m:run && npm --workspace @repo/api start",

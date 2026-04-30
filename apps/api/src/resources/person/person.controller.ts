@@ -1,6 +1,20 @@
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Patch, Post, Query, Req, UseGuards, forwardRef } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Inject,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
+    Req,
+    UseGuards,
+    forwardRef,
+} from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -15,13 +29,13 @@ import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { IdDto, PageDto, SortingDto } from '../common/dto';
 import { CreatePersonDto } from './dto/create-person.dto';
-import { UpdatePersonDto } from './dto/update-person.dto';
-import { PersonFiltersDto } from './dto/person-filters.dto';
+import { ListPersonsQueryDto } from './dto/list-persons-query.dto';
 import { ListPersonsDto } from './dto/list-persons.dto';
+import { PersonFiltersDto } from './dto/person-filters.dto';
 import { PersonReadDto } from './dto/person-read.dto';
 import { PersonSearchDto } from './dto/person-search.dto';
+import { UpdatePersonDto } from './dto/update-person.dto';
 import { PersonService } from './person.service';
-import { ListPersonsQueryDto } from './dto/list-persons-query.dto';
 
 @ApiBearerAuth()
 @ApiTags('Persons')

@@ -8,14 +8,11 @@ import {
     PayrollsService,
     PositionsService,
 } from '@/resources';
-import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { CalcMethod, PaymentGroup, PaymentStatus } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dateUTC } from '@repo/shared';
-import { CompanyEntity } from '../../resources/company/entities/company.entity';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
-import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
 import { PaymentPosition } from './../../resources/payment-positions/entities/paymentPosition.entity';
 import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
 import { Payment } from './../../resources/payments/entities/payment.entity';
@@ -186,7 +183,10 @@ export class PaymentCalculationService {
         }, [] as PaymentPosition[]);
     }
 
-    private merge(current: PaymentPosition[], paymentPositions: PaymentPosition[]): {
+    private merge(
+        current: PaymentPosition[],
+        paymentPositions: PaymentPosition[],
+    ): {
         toDelete: PaymentPosition[];
         toInsert: PaymentPosition[];
     } {
@@ -218,7 +218,9 @@ export class PaymentCalculationService {
                     ),
             )
             .map((c) => {
-                const found = paymentPositionsCollapsed.find((p) => p?.payment?.paymentTypeId === c?.payment?.paymentTypeId);
+                const found = paymentPositionsCollapsed.find(
+                    (p) => p?.payment?.paymentTypeId === c?.payment?.paymentTypeId,
+                );
                 if (found) {
                     c.baseSum = c.baseSum - found.baseSum;
                     c.deductions = c.deductions - found.deductions;
