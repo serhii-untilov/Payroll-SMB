@@ -1,10 +1,10 @@
-import { Task } from './../../../../resources/tasks/entities/task.entity';
+import { Task } from '@/resources/tasks/entities/task.entity';
 import { TaskStatus, TaskType } from '@/types';
-import { TaskGenerationService } from '../../task-generator.service';
-import { TaskGenerator } from '../abstract/task-generator';
+import { TaskGenerator } from '../base/task-generator';
+import { Context } from '../base/task-generator.context';
 
 export class TaskFillPositionList extends TaskGenerator {
-    constructor(ctx: TaskGenerationService, type: TaskType) {
+    constructor(ctx: Context, type: TaskType) {
         super(ctx, type);
     }
 
@@ -13,7 +13,7 @@ export class TaskFillPositionList extends TaskGenerator {
         const countEmployees = await this.ctx.positionsService.countEmployees(this.ctx.company.id);
         task.status = countEmployees ? TaskStatus.Done : TaskStatus.Todo;
         if (countEmployees) {
-            const countClosed = await this.ctx.payPeriodsService.countClosed(this.ctx.company.id);
+            const countClosed = await this.ctx.payPeriodService.countClosed(this.ctx.company.id);
             if (countClosed) {
                 return [];
             }

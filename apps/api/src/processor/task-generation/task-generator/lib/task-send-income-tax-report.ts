@@ -1,13 +1,13 @@
-import { Task } from './../../../../resources/tasks/entities/task.entity';
 import { getWorkDayBeforeOrEqual } from '@/processor/helpers';
 import { TaskType } from '@/types';
 import { monthBegin } from '@repo/shared';
 import { add } from 'date-fns';
-import { TaskGenerationService } from '../../task-generator.service';
-import { TaskGenerator } from '../abstract/task-generator';
+import { TaskGenerator } from '../base/task-generator';
+import { Context } from '../base/task-generator.context';
+import { Task } from './../../../../resources/tasks/entities/task.entity';
 
 export class TaskSendIncomeTaxReport extends TaskGenerator {
-    constructor(ctx: TaskGenerationService, type: TaskType) {
+    constructor(ctx: Context, type: TaskType) {
         super(ctx, type);
     }
 
@@ -16,7 +16,7 @@ export class TaskSendIncomeTaxReport extends TaskGenerator {
         if (monthNumber % 3 !== 0) {
             return [];
         }
-        const countClosed = await this.ctx.payPeriodsService.countClosed(this.ctx.company.id);
+        const countClosed = await this.ctx.payPeriodService.countClosed(this.ctx.company.id);
         if (!countClosed) {
             return [];
         }

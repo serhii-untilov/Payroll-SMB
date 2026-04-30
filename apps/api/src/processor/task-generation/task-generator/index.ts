@@ -1,4 +1,4 @@
-export * from './abstract/task-generator';
+export * from './base/task-generator';
 export * from './lib/task-close-pay-period';
 export * from './lib/task-create-company';
 export * from './lib/task-fill-department-list';

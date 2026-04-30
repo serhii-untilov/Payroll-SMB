@@ -1,10 +1,10 @@
-import { Task } from './../../../../resources/tasks/entities/task.entity';
 import { TaskType } from '@/types';
-import { TaskGenerationService } from '../../task-generator.service';
-import { TaskGenerator } from '../abstract/task-generator';
+import { TaskGenerator } from '../base/task-generator';
+import { Context } from '../base/task-generator.context';
+import { Task } from './../../../../resources/tasks/entities/task.entity';
 
 export class TaskPostWorkSheet extends TaskGenerator {
-    constructor(ctx: TaskGenerationService, type: TaskType) {
+    constructor(ctx: Context, type: TaskType) {
         super(ctx, type);
     }
 

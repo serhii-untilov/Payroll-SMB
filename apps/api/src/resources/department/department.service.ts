@@ -104,4 +104,14 @@ export class DepartmentService extends BaseUserAccess {
             .getOneOrFail();
         return this.mapper.toReadDto(department);
     }
+
+    async count(companyId: string): Promise<number> {
+        const { count } = await this.repository
+            .createQueryBuilder('company_department')
+            .select('COUNT(*)', 'count')
+            .where('"companyId" = :companyId', { companyId })
+            .andWhere('"deletedDate" is null')
+            .getRawOne();
+        return Number(count);
+    }
 }

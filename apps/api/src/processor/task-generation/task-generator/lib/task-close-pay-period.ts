@@ -1,11 +1,11 @@
-import { Task } from './../../../../resources/tasks/entities/task.entity';
 import { getWorkDayBeforeOrEqual } from '@/processor/helpers';
 import { TaskType } from '@/types';
-import { TaskGenerationService } from '../../task-generator.service';
-import { TaskGenerator } from '../abstract/task-generator';
+import { TaskGenerator } from '../base/task-generator';
+import { Task } from '@/resources/tasks/entities/task.entity';
+import { Context } from '../base/task-generator.context';
 
 export class TaskClosePayPeriod extends TaskGenerator {
-    constructor(ctx: TaskGenerationService, type: TaskType) {
+    constructor(ctx: Context, type: TaskType) {
         super(ctx, type);
     }
 

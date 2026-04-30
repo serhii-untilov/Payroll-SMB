@@ -1,13 +1,14 @@
-import { Task } from './../../../../resources/tasks/entities/task.entity';
 import { getWorkDayBeforeOrEqual } from '@/processor/helpers';
+import { Task } from '@/resources/tasks/entities/task.entity';
+import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { TaskStatus, TaskType } from '@/types';
-import { TaskGenerationService } from '../../task-generator.service';
+import { Context } from './task-generator.context';
 
 export abstract class TaskGenerator {
-    ctx: TaskGenerationService;
+    ctx: Context;
     type: TaskType;
 
-    constructor(ctx: TaskGenerationService, type: TaskType) {
+    constructor(ctx: Context, type: TaskType) {
         this.ctx = ctx;
         this.type = type;
     }
@@ -16,7 +17,7 @@ export abstract class TaskGenerator {
 
     public makeTask(): Task {
         const task = Object.assign({
-            id: this.ctx.id,
+            id: IdGenerator.nextId(),
             companyId: this.ctx.company.id,
             type: this.type,
             dateFrom: new Date(this.ctx.payPeriod.dateFrom),
