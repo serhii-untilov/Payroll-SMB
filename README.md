@@ -34,6 +34,10 @@
 - [swagger.json](https://payroll.untilov.com.ua/api/v1/swagger.json)
 - [swagger.yaml](https://payroll.untilov.com.ua/api/v1/swagger.yaml)
 
+## Docs
+
+[Application documentation index page](docs/Home.md)
+
 ## Quick Start the latest version
 
 For a quick start, run this command on a Linux server:
