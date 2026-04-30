@@ -27,7 +27,6 @@ import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
 import { FindAllPaymentPositionDto } from './dto/find-all-payment-position.dto';
-import { FindOnePaymentPositionDto } from './dto/find-one-payment-position.dto';
 import { UpdatePaymentPositionDto } from './dto/update-payment-position.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 import { PaymentPositionsService } from './payment-positions.service';
@@ -47,8 +46,6 @@ export class PaymentPositionsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePaymentPositionDto): Promise<PaymentPosition> {
         const userId = getUserId(req);
-        const companyId = await this.service.getCompanyId(payload.paymentId);
-        await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
@@ -59,10 +56,7 @@ export class PaymentPositionsController {
         schema: { type: 'array', items: { $ref: getSchemaPath(PaymentPosition) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Req() req: Request, @Body() params: FindAllPaymentPositionDto): Promise<PaymentPosition[]> {
-        const userId = getUserId(req);
-        const companyId = await this.service.getPaymentCompanyId(params.paymentId);
-        await this.service.availableFindAllOrFail(userId, companyId);
+    async findAll(@Body() params: FindAllPaymentPositionDto): Promise<PaymentPosition[]> {
         return await this.service.findAll(deepTransformToShortDate(params));
     }
 
@@ -72,9 +66,8 @@ export class PaymentPositionsController {
     @ApiOkResponse({ description: 'The found record', type: PaymentPosition })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Req() req: Request, @Param('id') id: string): Promise<PaymentPosition> {
-        const userId = getUserId(req);
-        return await this.service.findOne(userId, id);
+    async findOne(@Param('id') id: string): Promise<PaymentPosition> {
+        return await this.service.findOne(id);
     }
 
     @Patch(':id')
@@ -89,7 +82,6 @@ export class PaymentPositionsController {
         @Body() payload: UpdatePaymentPositionDto,
     ): Promise<PaymentPosition> {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
@@ -104,7 +96,6 @@ export class PaymentPositionsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<PaymentPosition> {
         const userId = getUserId(req);
-        await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 }

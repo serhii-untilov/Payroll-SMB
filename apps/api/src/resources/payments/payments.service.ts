@@ -1,13 +1,13 @@
 import {
-    UserAccessService,
-    AvailableForUserCompany,
+    BaseUserAccess,
     CompanyService,
     PayPeriodsService,
     PaymentPositionsService,
+    UserAccessService,
 } from '@/resources';
 import { PaymentStatus, RecordFlag, Resource, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
-import { BadRequestException, Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { dateUTC } from '@repo/shared';
@@ -24,20 +24,17 @@ import { Payment } from './entities/payment.entity';
 import { PaymentCreatedEvent, PaymentDeletedEvent, PaymentUpdatedEvent } from './events';
 
 @Injectable()
-export class PaymentsService extends AvailableForUserCompany {
-    public readonly resource = Resource.Payment;
-    private logger: Logger = new Logger(PaymentsService.name);
-
+export class PaymentsService extends BaseUserAccess {
     constructor(
         @InjectRepository(Payment) private repository: Repository<Payment>,
-        @Inject(forwardRef(() => UserAccessService)) public accessService: WrapperType<UserAccessService>,
+        @Inject(forwardRef(() => UserAccessService)) public userAccessService: WrapperType<UserAccessService>,
         @Inject(forwardRef(() => PaymentPositionsService))
         public paymentPositionsService: WrapperType<PaymentPositionsService>,
         @Inject(forwardRef(() => PayPeriodsService)) public payPeriodsService: WrapperType<PayPeriodsService>,
         @Inject(forwardRef(() => CompanyService)) public companiesService: WrapperType<CompanyService>,
         private eventEmitter: EventEmitter2,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.Payment);
     }
 
     async getCompanyId(entityId: string): Promise<string> {

@@ -3,7 +3,7 @@ import { checkVersionOrFail } from '@/utils';
 import { HttpException, HttpStatus, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AvailableForUser } from '../common/base/available-for-user';
+import { BaseUserAccess } from '../common/base';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CreateWorkTimeNormDto } from './dto/create-work-time-norm.dto';
 import { FindWorkTimeNormDto } from './dto/find-work-time-norm.dto';
@@ -11,19 +11,16 @@ import { UpdateWorkTimeNormDto } from './dto/update-work-time-norm.dto';
 import { WorkTimeNorm } from './entities/work-time-norm.entity';
 
 @Injectable()
-export class WorkTimeNormService extends AvailableForUser {
-    public readonly userRoleResource = Resource.WorkTimeNorm;
-
+export class WorkTimeNormService extends BaseUserAccess {
     constructor(
-        @InjectRepository(WorkTimeNorm)
-        private repository: Repository<WorkTimeNorm>,
-        @Inject(forwardRef(() => UserAccessService))
-        public accessService: UserAccessService,
+        @InjectRepository(WorkTimeNorm) private repository: Repository<WorkTimeNorm>,
+        @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.WorkTimeNorm);
     }
 
     async create(userId: string, payload: CreateWorkTimeNormDto) {
+        await this.canOrFail(userId, Action.Create);
         const exists = await this.repository.findOneBy({ name: payload.name });
         if (exists) {
             throw new HttpException(`WorkTimeNorm '${payload.name}' already exists.`, HttpStatus.CONFLICT);
@@ -49,7 +46,7 @@ export class WorkTimeNormService extends AvailableForUser {
 
     async update(userId: string, id: string, payload: UpdateWorkTimeNormDto) {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        await this.accessService.availableForUserOrFail(userId, this.userRoleResource, Action.Update);
+        await this.canOrFail(userId, Action.Update);
         checkVersionOrFail(record, payload);
         const updated = await this.repository.save({
             ...payload,
@@ -61,6 +58,7 @@ export class WorkTimeNormService extends AvailableForUser {
     }
 
     async remove(userId: string, id: string) {
+        await this.canOrFail(userId, Action.Remove);
         await this.repository.findOneOrFail({ where: { id } });
         await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
         return this.repository.findOneOrFail({ where: { id }, withDeleted: true });

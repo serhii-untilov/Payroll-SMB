@@ -1,4 +1,3 @@
-import { PayFundType } from './entities/pay-fund-type.entity';
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
@@ -14,6 +13,7 @@ import {
 import { Request } from 'express';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
 import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';
+import { PayFundType } from './entities/pay-fund-type.entity';
 import { PayFundTypesService } from './pay-fund-types.service';
 
 @Controller('pay-fund-types')
@@ -31,7 +31,6 @@ export class PayFundTypesController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePayFundTypeDto) {
         const userId = getUserId(req);
-        await this.service.availableCreateOrFail(userId);
         return await this.service.create(userId, payload);
     }
 
@@ -42,9 +41,7 @@ export class PayFundTypesController {
         schema: { type: 'array', items: { $ref: getSchemaPath(PayFundType) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Req() req: Request) {
-        const userId = getUserId(req);
-        await this.service.availableFindAllOrFail(userId);
+    async findAll() {
         return await this.service.findAll();
     }
 
@@ -53,9 +50,7 @@ export class PayFundTypesController {
     @ApiOkResponse({ description: 'The found record', type: PayFundType })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
-        const userId = getUserId(req);
-        await this.service.availableFindOneOrFail(userId);
+    async findOne(@Param('id', ParseIntPipe) id: string) {
         return await this.service.findOne(id);
     }
 
@@ -71,7 +66,6 @@ export class PayFundTypesController {
         @Body() updateFundTypeDto: UpdatePayFundTypeDto,
     ) {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId);
         return await this.service.update(userId, id, updateFundTypeDto);
     }
 
@@ -83,7 +77,6 @@ export class PayFundTypesController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId);
         return await this.service.remove(userId, id);
     }
 }

@@ -5,34 +5,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { dateUTC, formatPeriod, monthBegin, monthEnd } from '@repo/shared';
 import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { UserAccessService } from '../user-access/user-access.service';
+import { BaseUserAccess } from '../common/base';
 import { CompanyService } from '../company/company.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import {
     ClosePayPeriodDto,
     CreatePayPeriodDto,
     FindAllPayPeriodDto,
     FindCurrentPayPeriodDto,
-    FindOnePayPeriodDto,
     OpenPayPeriodDto,
     UpdatePayPeriodDto,
 } from './dto';
 import { PayPeriod, defaultFieldList } from './entities';
 
 @Injectable()
-export class PayPeriodsService extends AvailableForUserCompany {
+export class PayPeriodsService extends BaseUserAccess {
     private _logger: Logger = new Logger(PayPeriodsService.name);
     public readonly resource = Resource.PayPeriod;
 
     constructor(
-        @InjectRepository(PayPeriod)
-        private repository: Repository<PayPeriod>,
-        @Inject(forwardRef(() => UserAccessService))
-        public accessService: UserAccessService,
-        @Inject(forwardRef(() => CompanyService))
-        private companiesService: CompanyService,
+        @InjectRepository(PayPeriod) private repository: Repository<PayPeriod>,
+        @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
+        @Inject(forwardRef(() => CompanyService)) private companyService: CompanyService,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.PayPeriod);
     }
 
     async getCompanyId(entityId: string): Promise<string> {
@@ -94,11 +90,11 @@ export class PayPeriodsService extends AvailableForUserCompany {
         }
     }
 
-    async findOne(userId: string, id: string): Promise<PayPeriodReadDto> {
+    async findOne(userId: string, id: string): Promise<PayPeriod> {
         return await this.repository.findOneOrFail({
             where: { id },
-            relations: { company: !!params?.relations },
-            ...(!!params?.fullFieldList ? {} : defaultFieldList),
+            relations: { company: true },
+            ...defaultFieldList,
         });
     }
 
@@ -141,7 +137,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
                 state: PayPeriodState.Opened,
             });
         }
-        const company = await this.companiesService.findOne(userId, companyId);
+        const company = await this.companyService.findOne(userId, companyId);
         const options = {
             where: { companyId: company.id, dateFrom: company.payPeriod },
             relations: { company: relations },
@@ -165,7 +161,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
     async close(userId: string, currentPayPeriodId: string, payload: ClosePayPeriodDto): Promise<PayPeriod> {
         const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
         checkVersionOrFail(current, payload);
-        const company = await this.companiesService.findOne(userId, current.companyId);
+        const company = await this.companyService.findOne(userId, current.companyId);
         if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
             throw new HttpException(
                 `The record doesn't current period. Try again after reloading.`,
@@ -192,7 +188,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
                 updatedDate: new Date(),
             });
         }
-        await this.companiesService.update(userId, company.id, {
+        await this.companyService.update(userId, company.id, {
             payPeriod: next.dateFrom,
             version: company.version,
         });
@@ -205,7 +201,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
         if (current.state !== PayPeriodState.Opened) {
             throw new HttpException('The given period is not opened.', HttpStatus.CONFLICT);
         }
-        const company = await this.companiesService.findOne(userId, current.companyId);
+        const company = await this.companyService.findOne(userId, current.companyId);
         if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
             throw new HttpException(
                 `The record doesn't current period. Try again after reloading.`,
@@ -224,7 +220,7 @@ export class PayPeriodsService extends AvailableForUserCompany {
                 updatedDate: new Date(),
             });
         }
-        await this.companiesService.update(userId, company.id, {
+        await this.companyService.update(userId, company.id, {
             payPeriod: prior.dateFrom,
             version: company.version,
         });

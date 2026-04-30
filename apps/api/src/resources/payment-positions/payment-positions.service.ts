@@ -1,4 +1,4 @@
-import { UserAccessService, AvailableForUserCompany, PayrollsService } from '@/resources';
+import { BaseUserAccess, PayrollsService, UserAccessService } from '@/resources';
 import { Resource, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
@@ -15,20 +15,14 @@ import {
 import { PaymentPosition } from './entities/paymentPosition.entity';
 
 @Injectable()
-export class PaymentPositionsService extends AvailableForUserCompany {
-    public readonly resource = Resource.PaymentPosition;
-
+export class PaymentPositionsService extends BaseUserAccess {
     constructor(
-        @InjectRepository(PaymentPosition)
-        private repository: Repository<PaymentPosition>,
-        @Inject(forwardRef(() => UserAccessService))
-        public accessService: WrapperType<UserAccessService>,
-        @Inject(forwardRef(() => PaymentsService))
-        public paymentsService: WrapperType<PaymentsService>,
-        @Inject(forwardRef(() => PayrollsService))
-        public payrollsService: WrapperType<PayrollsService>,
+        @InjectRepository(PaymentPosition) private repository: Repository<PaymentPosition>,
+        @Inject(forwardRef(() => UserAccessService)) public userAccessService: WrapperType<UserAccessService>,
+        @Inject(forwardRef(() => PaymentsService)) public paymentsService: WrapperType<PaymentsService>,
+        @Inject(forwardRef(() => PayrollsService)) public payrollsService: WrapperType<PayrollsService>,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.PaymentPosition);
     }
 
     async getCompanyId(entityId: string): Promise<string> {

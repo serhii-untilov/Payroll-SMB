@@ -1,4 +1,3 @@
-import { ClosePayPeriodDto, OpenPayPeriodDto } from './dto';
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
 import {
@@ -27,10 +26,11 @@ import {
 import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import {
+    ClosePayPeriodDto,
     CreatePayPeriodDto,
     FindAllPayPeriodDto,
     FindCurrentPayPeriodDto,
-    FindOnePayPeriodDto,
+    OpenPayPeriodDto,
     UpdatePayPeriodDto,
 } from './dto';
 import { PayPeriod } from './entities';
@@ -51,7 +51,6 @@ export class PayPeriodsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePayPeriodDto) {
         const userId = getUserId(req);
-        await this.service.availableCreateOrFail(userId, payload.companyId);
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
@@ -63,9 +62,7 @@ export class PayPeriodsController {
         schema: { type: 'array', items: { $ref: getSchemaPath(PayPeriod) } },
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findAll(@Req() req: Request, @Body() params: FindAllPayPeriodDto) {
-        const userId = getUserId(req);
-        params.companyId && (await this.service.availableFindAllOrFail(userId, params.companyId));
+    async findAll(@Body() params: FindAllPayPeriodDto) {
         return await this.service.findAll(params);
     }
 
@@ -77,9 +74,6 @@ export class PayPeriodsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findCurrent(@Req() req: Request, @Body() params: FindCurrentPayPeriodDto) {
         const userId = getUserId(req);
-        if (params?.companyId) {
-            await this.service.availableFindAllOrFail(userId, params.companyId);
-        }
         return await this.service.findCurrent(userId, params);
     }
 
@@ -102,7 +96,6 @@ export class PayPeriodsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: UpdatePayPeriodDto) {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
@@ -114,7 +107,6 @@ export class PayPeriodsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
         const userId = getUserId(req);
-        await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 
@@ -128,7 +120,6 @@ export class PayPeriodsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async close(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: ClosePayPeriodDto) {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.close(userId, id, payload);
     }
 
@@ -142,7 +133,6 @@ export class PayPeriodsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async open(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: OpenPayPeriodDto) {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.open(userId, id, payload);
     }
 }

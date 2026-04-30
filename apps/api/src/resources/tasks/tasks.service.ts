@@ -4,9 +4,9 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { UserAccessService } from '../user-access/user-access.service';
+import { BaseUserAccess } from '../common/base';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { FindAllTaskDto } from './dto/find-all-task.dto';
 import { FindOneTaskDto } from './dto/find-one-task.dto';
@@ -14,18 +14,13 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
 
 @Injectable()
-export class TasksService extends AvailableForUserCompany {
-    public readonly resource = Resource.Task;
-
+export class TasksService extends BaseUserAccess {
     constructor(
-        @InjectRepository(Task)
-        private repository: Repository<Task>,
-        @Inject(forwardRef(() => UserAccessService))
-        accessService: UserAccessService,
-        @Inject(forwardRef(() => PayPeriodsService))
-        private readonly payPeriodsService: PayPeriodsService,
+        @InjectRepository(Task) private repository: Repository<Task>,
+        @Inject(forwardRef(() => UserAccessService)) userAccessService: UserAccessService,
+        @Inject(forwardRef(() => PayPeriodsService)) private readonly payPeriodsService: PayPeriodsService,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.Task);
     }
 
     async getCompanyId(entityId: string): Promise<string> {

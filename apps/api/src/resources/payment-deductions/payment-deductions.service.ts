@@ -1,4 +1,4 @@
-import { UserAccessService, AvailableForUserCompany } from '@/resources';
+import { BaseUserAccess, UserAccessService } from '@/resources';
 import { Resource } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,20 +9,14 @@ import { CreatePaymentDeductionDto, UpdatePaymentDeductionDto } from './dto';
 import { PaymentDeduction } from './entities/payment-deduction.entity';
 
 @Injectable()
-export class PaymentDeductionsService extends AvailableForUserCompany {
-    public readonly resource = Resource.Payment;
-
+export class PaymentDeductionsService extends BaseUserAccess {
     constructor(
-        @InjectRepository(PaymentDeduction)
-        private repository: Repository<PaymentDeduction>,
-        @Inject(forwardRef(() => UserAccessService))
-        public accessService: UserAccessService,
-        @Inject(forwardRef(() => PaymentsService))
-        public paymentsService: PaymentsService,
-        @Inject(forwardRef(() => PaymentPositionsService))
-        public paymentPositionsService: PaymentPositionsService,
+        @InjectRepository(PaymentDeduction) private repository: Repository<PaymentDeduction>,
+        @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
+        @Inject(forwardRef(() => PaymentsService)) public paymentsService: PaymentsService,
+        @Inject(forwardRef(() => PaymentPositionsService)) public paymentPositionsService: PaymentPositionsService,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.Payment);
     }
 
     async getCompanyId(entityId: string): Promise<string> {

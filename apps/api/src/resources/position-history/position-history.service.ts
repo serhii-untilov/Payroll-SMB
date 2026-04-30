@@ -5,11 +5,11 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { add, sub } from 'date-fns';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { UserAccessService } from '../user-access/user-access.service';
+import { BaseUserAccess } from '../common/base';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 import { PositionsService } from '../positions/positions.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindAllPositionHistoryDto } from './dto/find-all-position-history.dto';
 import { FindOnePositionHistoryDto } from './dto/find-one-position-history.dto';
@@ -17,21 +17,15 @@ import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
 import { PositionHistory } from './entities/position-history.entity';
 
 @Injectable()
-export class PositionHistoryService extends AvailableForUserCompany {
-    public readonly resource = Resource.Position;
-
+export class PositionHistoryService extends BaseUserAccess {
     constructor(
-        @InjectRepository(PositionHistory)
-        private repository: Repository<PositionHistory>,
-        @Inject(forwardRef(() => PositionsService))
-        private readonly positionsService: PositionsService,
-        @Inject(forwardRef(() => PayPeriodsService))
-        private readonly payPeriodsService: PayPeriodsService,
-        @Inject(forwardRef(() => UserAccessService))
-        public accessService: UserAccessService,
+        @InjectRepository(PositionHistory) private repository: Repository<PositionHistory>,
+        @Inject(forwardRef(() => PositionsService)) private readonly positionsService: PositionsService,
+        @Inject(forwardRef(() => PayPeriodsService)) private readonly payPeriodsService: PayPeriodsService,
+        @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
         private eventEmitter: EventEmitter2,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.Position);
     }
 
     async getCompanyId(entityId: string): Promise<string> {

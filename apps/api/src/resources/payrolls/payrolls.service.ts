@@ -1,28 +1,33 @@
-import { CalcMethod, Resource, WrapperType } from '@/types';
-import { PaymentGroupsTotal, PaymentPartsTotal, defaultPaymentGroupsTotal, defaultPaymentPartsTotal } from '@/types';
+import {
+    CalcMethod,
+    PaymentGroupsTotal,
+    PaymentPartsTotal,
+    Resource,
+    WrapperType,
+    defaultPaymentGroupsTotal,
+    defaultPaymentPartsTotal,
+} from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { UserAccessService } from '../user-access/user-access.service';
+import { BaseUserAccess } from '../common/base';
 import { PositionsService } from '../positions/positions.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePayrollDto } from './dto/create-payroll.dto';
 import { FindPayrollDto } from './dto/find-payroll.dto';
 import { UpdatePayrollDto } from './dto/update-payroll.dto';
 import { Payroll } from './entities/payroll.entity';
 
 @Injectable()
-export class PayrollsService extends AvailableForUserCompany {
-    public readonly resource = Resource.Payroll;
-
+export class PayrollsService extends BaseUserAccess {
     constructor(
         @InjectRepository(Payroll) private repository: Repository<Payroll>,
-        @Inject(forwardRef(() => UserAccessService)) public accessService: WrapperType<UserAccessService>,
+        @Inject(forwardRef(() => UserAccessService)) public userAccessService: WrapperType<UserAccessService>,
         @Inject(forwardRef(() => PositionsService))
         private positionsService: WrapperType<PositionsService>,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.Payroll);
     }
 
     async getCompanyId(entityId: string): Promise<string> {

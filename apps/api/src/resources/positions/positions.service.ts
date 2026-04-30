@@ -1,4 +1,4 @@
-import { WorkTimeBalance, PaymentPart, Resource, WrapperType } from '@/types';
+import { PaymentPart, Resource, WorkTimeBalance, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -16,10 +16,10 @@ import {
     Not,
     Repository,
 } from 'typeorm';
-import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { UserAccessService } from '../user-access/user-access.service';
+import { BaseUserAccess } from '../common/base';
 import { PayPeriodsService } from '../pay-periods/pay-periods.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { FindAllPositionDto } from './dto/find-all-position.dto';
 import { FindOnePositionDto } from './dto/find-one-position.dto';
@@ -34,23 +34,16 @@ import { PositionDeletedEvent } from './events/position-deleted.event';
 import { PositionUpdatedEvent } from './events/position-updated.event';
 
 @Injectable()
-export class PositionsService extends AvailableForUserCompany {
-    public readonly resource = Resource.Position;
-
+export class PositionsService extends BaseUserAccess {
     constructor(
-        @InjectRepository(Position)
-        private repository: Repository<Position>,
-        @InjectRepository(PositionBalance)
-        private repositoryPositionBalance: Repository<PositionBalance>,
-        @Inject(forwardRef(() => PayPeriodsService))
-        private readonly payPeriodsService: WrapperType<PayPeriodsService>,
-        @Inject(forwardRef(() => PayrollsService))
-        private payrollsService: WrapperType<PayrollsService>,
+        @InjectRepository(Position) private repository: Repository<Position>,
+        @InjectRepository(PositionBalance) private repositoryPositionBalance: Repository<PositionBalance>,
+        @Inject(forwardRef(() => PayPeriodsService)) private readonly payPeriodsService: WrapperType<PayPeriodsService>,
+        @Inject(forwardRef(() => PayrollsService)) private payrollsService: WrapperType<PayrollsService>,
+        @Inject(forwardRef(() => UserAccessService)) userAccessService: WrapperType<UserAccessService>,
         private eventEmitter: EventEmitter2,
-        @Inject(forwardRef(() => UserAccessService))
-        accessService: WrapperType<UserAccessService>,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.Position);
     }
 
     async getCompanyId(entityId: string): Promise<string> {

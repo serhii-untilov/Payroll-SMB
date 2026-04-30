@@ -1,5 +1,3 @@
-import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import {
     PayFundCategoryTotal,
     PayFundGroupTotal,
@@ -7,31 +5,29 @@ import {
     defaultPayFundCategoryTotal,
     defaultPayFundGroupsTotal,
 } from '@/types';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
-import { AvailableForUserCompany } from '../common/base/available-for-user-company';
-import { UserAccessService } from '../user-access/user-access.service';
+import { BaseUserAccess } from '../common/base';
 import { CompanyService } from '../company/company.service';
 import { PositionsService } from '../positions/positions.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePayFundDto } from './dto/create-pay-fund.dto';
 import { FindPayFundDto } from './dto/find-pay-fund.dto';
 import { UpdatePayFundDto } from './dto/update-pay-fund.dto';
 import { PayFund } from './entities/pay-fund.entity';
 
 @Injectable()
-export class PayFundsService extends AvailableForUserCompany {
+export class PayFundsService extends BaseUserAccess {
     public readonly resource = Resource.PayFund;
 
     constructor(
-        @InjectRepository(PayFund)
-        private repository: Repository<PayFund>,
-        @Inject(forwardRef(() => UserAccessService))
-        public accessService: UserAccessService,
-        @Inject(forwardRef(() => PositionsService))
-        private positionsService: PositionsService,
-        @Inject(forwardRef(() => CompanyService))
-        private companiesService: CompanyService,
+        @InjectRepository(PayFund) private repository: Repository<PayFund>,
+        @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
+        @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
+        @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.PayFund);
     }
 
     async getCompanyId(entityId: string): Promise<string> {

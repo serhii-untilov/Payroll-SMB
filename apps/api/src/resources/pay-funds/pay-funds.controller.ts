@@ -50,8 +50,6 @@ export class PayFundsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePayFundDto): Promise<PayFund> {
         const userId = getUserId(req);
-        const companyId = await this.service.getPositionCompanyId(payload.positionId);
-        await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
@@ -63,12 +61,9 @@ export class PayFundsController {
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(
-        @Req() req: Request,
         @Param('id', ParseIntPipe) id: string,
         @Query('relations', ParseBoolPipe) relations: boolean,
     ): Promise<PayFund> {
-        const userId = getUserId(req);
-        await this.service.availableFindOneOrFail(userId, id);
         return await this.service.findOne(id, relations);
     }
 
@@ -83,7 +78,6 @@ export class PayFundsController {
         @Body() payload: UpdatePayFundDto,
     ): Promise<PayFund> {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
@@ -95,7 +89,6 @@ export class PayFundsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<PayFund> {
         const userId = getUserId(req);
-        await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 
@@ -108,16 +101,7 @@ export class PayFundsController {
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiBadRequestResponse({ description: 'Bad request' })
-    async findAll(@Req() req: Request, @Body() params: FindPayFundDto): Promise<PayFund[]> {
-        const userId = getUserId(req);
-        if (params.companyId) {
-            await this.service.availableFindAllOrFail(userId, params.companyId);
-        } else if (params.positionId) {
-            const companyId = await this.service.getPositionCompanyId(params.positionId);
-            await this.service.availableFindAllOrFail(userId, companyId);
-        } else {
-            throw new BadRequestException('Company or Position should be defined.');
-        }
+    async findAll(@Body() params: FindPayFundDto): Promise<PayFund[]> {
         return await this.service.findAll(deepTransformToShortDate(params));
     }
 }

@@ -117,7 +117,6 @@ export class AuthService {
     }
 
     async demo(): Promise<AuthDto> {
-        // await this.accessService.availableForRoleTypeOrFail(RoleType.Accountant, Resource.Demo, Action.Read);
         if (process.env['DEMO_AVAILABLE'] === 'true') {
             return {
                 email: process.env['DEMO_LOGIN'] || '',

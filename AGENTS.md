@@ -39,7 +39,6 @@ npm run codegen          # generate DTOs from OpenAPI spec
 - `Resource` enum in `@/types` — services expose `public readonly resource = Resource.Xxx`
 - `BaseEntity` in `src/resources/common/base/` — use instead of raw TypeORM `BaseEntity`
 - `checkVersionOrFail(record, payload)` in `@/utils` — optimistic concurrency check
-- `AvailableForUser` base class does **not** exist; `available*OrFail` methods are obsolete
 - Resource pattern: simple `@Injectable()` service with CRUD, no CQRS (see `laws` resource)
 - Tests: `NODE_ENV=test jest --passWithNoTests --bail` (Linux) in `apps/api`
 
@@ -77,9 +76,9 @@ npm run codegen          # generate DTOs from OpenAPI spec
 
 - Do NOT use raw TypeORM `BaseEntity` — use project BaseEntity
 - Do NOT introduce CQRS pattern
-- Do NOT use deprecated `available*OrFail` methods
 - Always use `checkVersionOrFail` for updates
 - Respect multi-tenant access (ABAC/RBAC)
+- Always use `deepTransformToShortDate(params)` if params type has a Date type member
 
 ## Security
 
