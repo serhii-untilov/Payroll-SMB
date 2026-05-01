@@ -58,14 +58,15 @@ npm run codegen          # generate DTOs from OpenAPI spec
 - Services are simple CRUD providers (no CQRS)
 - Use enums for resource identification
 - Prefer composition over inheritance
+- Respect multi-tenant access (ABAC/RBAC)
 
 ## Rules
 
+- Do NOT user `Action` from rxjs, instead use `Action` from `@/types`
 - Do NOT use raw TypeORM `BaseEntity` — use project BaseEntity
 - Do NOT introduce CQRS pattern
 - Always use extends BaseEntity for a resource class, find the BaseEntity in the project, don't use raw TypeORM
-- Always use `checkVersionOrFail` for updates
-- Respect multi-tenant access (ABAC/RBAC)
+- Do NOT use `checkVersionOrFail`, instead use `version: number` as a parameter for update, remove, or delete repository operations, if entity extends the BaseEntity abstract class.
 - Always use `deepTransformToShortDate(params)` if params type has a Date type member
 - Always describe members of a DTO class using `ApiProperty` and `ApiPropertyOptional` from `@nestjs/swagger`, using `Type` from `class-transformer`, using `Is*` from `class-validator`
 - Always describe members of an entity class using `typeorm` types annotations

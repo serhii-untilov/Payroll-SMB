@@ -17,3 +17,5 @@ stats.html
 
 **/add.json
 # apps/api/src/metadata.ts
+
+.obsidian/
