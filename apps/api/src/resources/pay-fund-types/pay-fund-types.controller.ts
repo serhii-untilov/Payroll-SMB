@@ -8,7 +8,6 @@ import {
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
-    getSchemaPath,
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
@@ -38,7 +37,7 @@ export class PayFundTypesController {
     @UseGuards(AccessTokenGuard)
     @ApiOkResponse({
         description: 'The found records',
-        schema: { type: 'array', items: { $ref: getSchemaPath(PayFundType) } },
+        type: [PayFundType],
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll() {
@@ -50,11 +49,12 @@ export class PayFundTypesController {
     @ApiOkResponse({ description: 'The found record', type: PayFundType })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: string) {
-        return await this.service.findOne(id);
+    async findOne(@Req() req: Request, @Param('id') id: string) {
+        const userId = getUserId(req);
+        return await this.service.findOne(userId, id);
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update a Pay Fund Type record' })
     @ApiOkResponse({ description: 'The updated record', type: PayFundType })
@@ -62,21 +62,22 @@ export class PayFundTypesController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
         @Body() updateFundTypeDto: UpdatePayFundTypeDto,
     ) {
         const userId = getUserId(req);
-        return await this.service.update(userId, id, updateFundTypeDto);
+        return await this.service.update(userId, id, version, updateFundTypeDto);
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a Pay Fund Type record' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: PayFundType })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
+    async remove(@Req() req: Request, @Param('id') id: string, @Param('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
-        return await this.service.remove(userId, id);
+        return await this.service.remove(userId, id, version);
     }
 }

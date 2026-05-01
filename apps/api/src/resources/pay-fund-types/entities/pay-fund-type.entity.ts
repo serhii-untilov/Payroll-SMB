@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { PayFundCalcMethod, PayFundGroup } from './../../../types';
@@ -6,6 +6,7 @@ import { PayFundCalcMethod, PayFundGroup } from './../../../types';
 @Entity()
 export class PayFundType extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
+    @ApiProperty()
     name: string;
 
     @Column({ type: 'varchar', length: 30 })
@@ -17,8 +18,10 @@ export class PayFundType extends BaseEntity {
     calcMethod: PayFundCalcMethod;
 
     @Column({ type: 'integer' })
+    @ApiProperty()
     sequence: number;
 
     @Column({ type: 'varchar', length: 300, default: '' })
+    @ApiPropertyOptional()
     description: string;
 }
