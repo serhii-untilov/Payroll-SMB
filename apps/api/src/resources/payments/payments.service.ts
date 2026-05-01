@@ -30,7 +30,7 @@ export class PaymentsService extends BaseUserAccess {
         @Inject(forwardRef(() => UserAccessService)) public userAccessService: WrapperType<UserAccessService>,
         @Inject(forwardRef(() => PaymentPositionsService))
         public paymentPositionsService: WrapperType<PaymentPositionsService>,
-        @Inject(forwardRef(() => PayPeriodService)) public payPeriodsService: WrapperType<PayPeriodService>,
+        @Inject(forwardRef(() => PayPeriodService)) public payPeriodService: WrapperType<PayPeriodService>,
         @Inject(forwardRef(() => CompanyService)) public companiesService: WrapperType<CompanyService>,
         private eventEmitter: EventEmitter2,
     ) {
@@ -44,7 +44,7 @@ export class PaymentsService extends BaseUserAccess {
     async create(userId: string, payload: CreatePaymentDto): Promise<Payment> {
         const { companyId, payPeriod, accPeriod, ...other } = payload;
         const company = await this.companiesService.findOne(userId, payload.companyId);
-        const accPeriodRecord = await this.payPeriodsService.findOneBy({
+        const accPeriodRecord = await this.payPeriodService.findOneBy({
             where: {
                 companyId,
                 dateFrom: accPeriod ?? payPeriod ?? company.payPeriod,

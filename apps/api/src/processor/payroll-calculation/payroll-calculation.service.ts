@@ -24,7 +24,7 @@ export class PayrollCalculationService {
         @Inject(forwardRef(() => UserAccessService)) private accessService: UserAccessService,
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypeService)) private paymentTypeService: PaymentTypeService,
-        @Inject(forwardRef(() => PayPeriodService)) private payPeriodsService: PayPeriodService,
+        @Inject(forwardRef(() => PayPeriodService)) private payPeriodService: PayPeriodService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
         @Inject(forwardRef(() => WorkTimeNormService)) public workTimeNormService: WorkTimeNormService,
@@ -37,7 +37,7 @@ export class PayrollCalculationService {
         return {
             userId,
             company,
-            payPeriod: await this.payPeriodsService.findOneBy({
+            payPeriod: await this.payPeriodService.findOneBy({
                 where: { companyId, dateFrom: company.payPeriod },
             }),
             paymentTypes: await this.paymentTypeService.findAll(),
@@ -63,7 +63,7 @@ export class PayrollCalculationService {
     public async calculateCompanyTotals(userId: string, companyId: string) {
         this.logger.log(`userId: ${userId}, calculateCompanyTotals: ${companyId}`);
         const company = await this.companiesService.findOne(userId, companyId);
-        const payPeriod = await this.payPeriodsService.findOneBy({
+        const payPeriod = await this.payPeriodService.findOneBy({
             where: { companyId: company.id, dateFrom: company.payPeriod },
         });
         await this._calculateCompanyTotals(payPeriod);
@@ -85,7 +85,7 @@ export class PayrollCalculationService {
     private async _calculatePosition(ctx: PayrollContext, position: Position) {
         const dateFrom = await this.getMinCalculateDate(ctx.payPeriod.dateFrom);
         const dateTo = await this.getMaxCalculateDate(ctx.payPeriod.dateTo);
-        const accPeriods = await this.payPeriodsService.findAll({ companyId: ctx.company.id, dateFrom, dateTo });
+        const accPeriods = await this.payPeriodService.findAll({ companyId: ctx.company.id, dateFrom, dateTo });
         const payrolls = await this.payrollsService.findBetween(position.id, dateFrom, dateTo, true);
 
         const { toInsert, toDeleteIds } = this.collectCalculations(ctx, position, payrolls, accPeriods);

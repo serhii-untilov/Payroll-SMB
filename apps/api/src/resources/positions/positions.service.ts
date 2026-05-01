@@ -38,7 +38,7 @@ export class PositionsService extends BaseUserAccess {
     constructor(
         @InjectRepository(Position) private repository: Repository<Position>,
         @InjectRepository(PositionBalance) private repositoryPositionBalance: Repository<PositionBalance>,
-        @Inject(forwardRef(() => PayPeriodService)) private readonly payPeriodsService: WrapperType<PayPeriodService>,
+        @Inject(forwardRef(() => PayPeriodService)) private readonly payPeriodService: WrapperType<PayPeriodService>,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: WrapperType<PayrollsService>,
         @Inject(forwardRef(() => UserAccessService)) userAccessService: WrapperType<UserAccessService>,
         private eventEmitter: EventEmitter2,
@@ -94,7 +94,7 @@ export class PositionsService extends BaseUserAccess {
             includeDeleted,
         } = payload;
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOneBy({
+            ? await this.payPeriodService.findOneBy({
                   where: {
                       companyId,
                       dateFrom: onPayPeriodDate,
@@ -191,7 +191,7 @@ export class PositionsService extends BaseUserAccess {
             return position;
         }
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOneBy({
+            ? await this.payPeriodService.findOneBy({
                   where: {
                       companyId: position.companyId,
                       dateFrom: onPayPeriodDate,
@@ -289,7 +289,7 @@ export class PositionsService extends BaseUserAccess {
 
     async calculateBalance(positionId: string, payPeriod: Date, balanceWorkingTime: WorkTimeBalance) {
         const position = await this.repository.findOneByOrFail({ id: positionId });
-        const prevPayPeriod = await this.payPeriodsService.findOneBy({
+        const prevPayPeriod = await this.payPeriodService.findOneBy({
             where: {
                 companyId: position.companyId,
                 dateTo: sub(payPeriod, { days: 1 }),
@@ -321,7 +321,7 @@ export class PositionsService extends BaseUserAccess {
     }
 
     async findAllBalance(params: FindAllPositionBalanceDto): Promise<PositionBalanceExtendedDto[]> {
-        const payPeriod = await this.payPeriodsService.findOneBy({
+        const payPeriod = await this.payPeriodService.findOneBy({
             where: {
                 companyId: params.companyId,
                 dateFrom: params.payPeriod,
@@ -498,7 +498,7 @@ export class PositionsService extends BaseUserAccess {
             return position;
         }
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOneBy({
+            ? await this.payPeriodService.findOneBy({
                   where: {
                       companyId: position.companyId,
                       dateFrom: onPayPeriodDate,

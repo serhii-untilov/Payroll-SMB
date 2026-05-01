@@ -22,7 +22,7 @@ export class TaskGenerationService {
 
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
-        @Inject(forwardRef(() => PayPeriodService)) public payPeriodsService: PayPeriodService,
+        @Inject(forwardRef(() => PayPeriodService)) public payPeriodService: PayPeriodService,
         @Inject(forwardRef(() => TasksService)) private tasksService: TasksService,
         @Inject(forwardRef(() => DepartmentService)) public departmentService: DepartmentService,
         @Inject(forwardRef(() => PositionsService)) public positionsService: PositionsService,
@@ -62,7 +62,7 @@ export class TaskGenerationService {
 
     private async makeContext(userId: string, companyId: string): Promise<Context> {
         const company = await this.companiesService.findOne(userId, companyId);
-        const payPeriod = await this.payPeriodsService.findOneBy({
+        const payPeriod = await this.payPeriodService.findOneBy({
             where: { companyId, dateFrom: company.payPeriod },
         });
         return {
@@ -82,7 +82,7 @@ export class TaskGenerationService {
                 relations: true,
             }),
             companiesService: this.companiesService,
-            payPeriodService: this.payPeriodsService,
+            payPeriodService: this.payPeriodService,
             tasksService: this.tasksService,
             departmentService: this.departmentService,
             positionsService: this.positionsService,

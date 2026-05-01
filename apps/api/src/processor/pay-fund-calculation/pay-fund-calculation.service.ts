@@ -27,7 +27,7 @@ export class PayFundCalculationService {
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypeService)) private paymentTypeService: PaymentTypeService,
         @Inject(forwardRef(() => PayFundTypesService)) private payFundTypesService: PayFundTypesService,
-        @Inject(forwardRef(() => PayPeriodService)) private payPeriodsService: PayPeriodService,
+        @Inject(forwardRef(() => PayPeriodService)) private payPeriodService: PayPeriodService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
         @Inject(forwardRef(() => PayFundsService)) private payFundsService: PayFundsService,
@@ -44,7 +44,7 @@ export class PayFundCalculationService {
             paymentTypes: await this.paymentTypeService.findAll(),
             payFundTypes: (await this.payFundTypesService.findAll()).sort((a, b) => a.sequence - b.sequence),
             minWages: await this.minWageService.findAll(),
-            payPeriod: await this.payPeriodsService.findOneBy({
+            payPeriod: await this.payPeriodService.findOneBy({
                 where: { companyId: company.id, dateFrom: company.payPeriod },
             }),
         };
@@ -180,7 +180,7 @@ export class PayFundCalculationService {
     private async _calculatePosition(ctx: Context, position: Position) {
         const dateFrom = await this.getMinCalculateDate(ctx.payPeriod.dateFrom);
         const dateTo = await this.getMaxCalculateDate(ctx.payPeriod.dateTo);
-        const accPeriods = await this.payPeriodsService.findAll({
+        const accPeriods = await this.payPeriodService.findAll({
             companyId: ctx.company.id,
             dateFrom,
             dateTo,

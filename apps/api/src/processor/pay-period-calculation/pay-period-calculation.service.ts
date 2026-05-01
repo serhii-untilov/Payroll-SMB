@@ -23,7 +23,7 @@ export class PayPeriodCalculationService {
 
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
-        @Inject(forwardRef(() => PayPeriodService)) private payPeriodsService: PayPeriodService,
+        @Inject(forwardRef(() => PayPeriodService)) private payPeriodService: PayPeriodService,
         @Inject(forwardRef(() => PayPeriodCalcMethodService))
         private payPeriodsCalcMethodService: PayPeriodCalcMethodService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
@@ -51,7 +51,7 @@ export class PayPeriodCalculationService {
         const ctx = await this.initContext(userId, companyId);
         const dateFrom = subYears(startOfYear(ctx.company.payPeriod), 1);
         const dateTo = addYears(endOfYear(ctx.company.payPeriod), 1);
-        const prior = await this.payPeriodsService.findAll({ companyId, dateFrom, dateTo });
+        const prior = await this.payPeriodService.findAll({ companyId, dateFrom, dateTo });
         // this._id = prior.reduce((a, b) => (a > b.id ? a : b.id), 0);
         const generator = this.getGenerator(ctx);
         const current = generator.getPeriodList(dateFrom, dateTo);
@@ -83,17 +83,17 @@ export class PayPeriodCalculationService {
 
     private async save(ctx: Context, toDelete: string[], toInsert: PayPeriod[]) {
         if (toDelete.length) {
-            this.payPeriodsService.delete(toDelete);
+            this.payPeriodService.delete(toDelete);
         }
         for (const { id: _, ...period } of toInsert) {
-            this.payPeriodsService.create(ctx.userId, period);
+            this.payPeriodService.create(ctx.userId, period);
         }
     }
 
     async updateBalance(id: string): Promise<PayPeriod> {
-        const payPeriod = await this.payPeriodsService.findOneBy({ where: { id } });
+        const payPeriod = await this.payPeriodService.findOneBy({ where: { id } });
         // Calculate In Balance
-        const prior = await this.payPeriodsService.findOneBy({
+        const prior = await this.payPeriodService.findOneBy({
             where: { companyId: payPeriod.companyId, dateTo: sub(payPeriod.dateFrom, { days: 1 }) },
         });
         const inBalance = prior?.outBalance || 0;
@@ -117,7 +117,7 @@ export class PayPeriodCalculationService {
         const outEmployeeDebt = await this.positionsService.calcEmployeeDebt(payPeriod.companyId, payPeriod.dateFrom);
         const funds = await this.payFundsService.paySum(payPeriod.companyId, payPeriod.dateFrom);
         const systemUserId = await this.usersService.getSystemUserId();
-        return await this.payPeriodsService.update(systemUserId, payPeriod.id, {
+        await this.payPeriodService.update(systemUserId, payPeriod.id, payPeriod.version, {
             ...payPeriod,
             inBalance,
             inCompanyDebt,
@@ -129,10 +129,11 @@ export class PayPeriodCalculationService {
             outEmployeeDebt,
             funds,
         });
+        return await this.payPeriodService.findOneBy({ where: { id: payPeriod.id } });
     }
 
     async updateCalcMethods(id: string): Promise<PayPeriodSummary[]> {
-        const payPeriod = await this.payPeriodsService.findOneBy({ where: { id } });
+        const payPeriod = await this.payPeriodService.findOneBy({ where: { id } });
         const calculatedRecords = await this.payrollsService.payrollCompanyCalcMethods(
             payPeriod.companyId,
             payPeriod.dateFrom,

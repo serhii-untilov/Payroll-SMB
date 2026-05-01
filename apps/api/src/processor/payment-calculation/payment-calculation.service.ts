@@ -38,7 +38,7 @@ export class PaymentCalculationService {
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypeService)) private paymentTypeService: PaymentTypeService,
-        @Inject(forwardRef(() => PayPeriodService)) private payPeriodsService: PayPeriodService,
+        @Inject(forwardRef(() => PayPeriodService)) private payPeriodService: PayPeriodService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
         @Inject(forwardRef(() => PayFundsService)) private payFundsService: PayFundsService,
@@ -56,7 +56,7 @@ export class PaymentCalculationService {
             paymentTypes: await this.paymentTypeService.findAll(),
             payrolls: [],
             payFunds: [],
-            payPeriod: await this.payPeriodsService.findOneBy({
+            payPeriod: await this.payPeriodService.findOneBy({
                 where: { companyId: company.id, dateFrom: company.payPeriod },
             }),
         };

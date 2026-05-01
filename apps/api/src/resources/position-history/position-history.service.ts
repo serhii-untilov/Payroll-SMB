@@ -21,7 +21,7 @@ export class PositionHistoryService extends BaseUserAccess {
     constructor(
         @InjectRepository(PositionHistory) private repository: Repository<PositionHistory>,
         @Inject(forwardRef(() => PositionsService)) private readonly positionsService: PositionsService,
-        @Inject(forwardRef(() => PayPeriodService)) private readonly payPeriodsService: PayPeriodService,
+        @Inject(forwardRef(() => PayPeriodService)) private readonly payPeriodService: PayPeriodService,
         @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
         private eventEmitter: EventEmitter2,
     ) {
@@ -58,7 +58,7 @@ export class PositionHistoryService extends BaseUserAccess {
         const position = params.onPayPeriodDate ? await this.positionsService.findOne(params.positionId) : null;
         const payPeriod =
             params.onPayPeriodDate && position
-                ? await this.payPeriodsService.findOneBy({
+                ? await this.payPeriodService.findOneBy({
                       where: { companyId: position.companyId, dateFrom: params.onPayPeriodDate },
                   })
                 : null;

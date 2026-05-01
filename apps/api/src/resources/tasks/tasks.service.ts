@@ -18,7 +18,7 @@ export class TasksService extends BaseUserAccess {
     constructor(
         @InjectRepository(Task) private repository: Repository<Task>,
         @Inject(forwardRef(() => UserAccessService)) userAccessService: UserAccessService,
-        @Inject(forwardRef(() => PayPeriodService)) private readonly payPeriodsService: PayPeriodService,
+        @Inject(forwardRef(() => PayPeriodService)) private readonly payPeriodService: PayPeriodService,
     ) {
         super(userAccessService, Resource.Task);
     }
@@ -42,7 +42,7 @@ export class TasksService extends BaseUserAccess {
             return this._generateFakeTaskList();
         }
         const payPeriod = onPayPeriodDate
-            ? await this.payPeriodsService.findOneBy({
+            ? await this.payPeriodService.findOneBy({
                   where: {
                       companyId,
                       dateFrom: onPayPeriodDate,
