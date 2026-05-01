@@ -28,12 +28,12 @@ import { Request } from 'express';
 import { CreatePaymentTypeDto } from './dto/create-payment-type.dto';
 import { FindAllPaymentTypeDto } from './dto/find-all-payment-type.dto';
 import { UpdatePaymentTypeDto } from './dto/update-payment-type.dto';
-import { PaymentTypesService } from './payment-types.service';
+import { PaymentTypeService } from './payment-type.service';
 
-@Controller('payment-types')
+@Controller('payment-type')
 @ApiBearerAuth()
-export class PaymentTypesController {
-    constructor(private readonly service: PaymentTypesService) {}
+export class PaymentTypeController {
+    constructor(private readonly service: PaymentTypeService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
@@ -65,11 +65,12 @@ export class PaymentTypesController {
     @ApiOkResponse({ description: 'The found record', type: PaymentType })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: string): Promise<PaymentType> {
-        return await this.service.findOne(id);
+    async findOne(@Req() req: Request, @Param('id') id: string): Promise<PaymentType> {
+        const userId = getUserId(req);
+        return await this.service.findOne(userId, id);
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update a Payment Type record' })
     @ApiOkResponse({ description: 'The updated record', type: PaymentType })
@@ -77,21 +78,22 @@ export class PaymentTypesController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
         @Body() updatePaymentTypeDto: UpdatePaymentTypeDto,
     ) {
         const userId = getUserId(req);
-        return await this.service.update(userId, id, updatePaymentTypeDto);
+        return await this.service.update(userId, id, version, updatePaymentTypeDto);
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a Payment Type record' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: PaymentType })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
+    async remove(@Req() req: Request, @Param('id') id: string, @Param('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
-        return await this.service.remove(userId, id);
+        return await this.service.remove(userId, id, version);
     }
 }

@@ -12,7 +12,7 @@ export * from './payment-deductions';
 export * from './payment-funds';
 export * from './payment-positions';
 export * from './payments';
-export * from './payment-types';
+export * from './payment-type';
 export * from './payrolls';
 export * from './person';
 export * from './position-history';

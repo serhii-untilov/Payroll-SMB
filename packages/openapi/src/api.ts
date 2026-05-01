@@ -9312,7 +9312,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         ): Promise<RequestArgs> => {
             // verify required parameter 'createPaymentTypeDto' is not null or undefined
             assertParamExists('paymentTypesCreate', 'createPaymentTypeDto', createPaymentTypeDto);
-            const localVarPath = `/api/payment-types`;
+            const localVarPath = `/api/payment-type`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9360,7 +9360,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         ): Promise<RequestArgs> => {
             // verify required parameter 'findAllPaymentTypeDto' is not null or undefined
             assertParamExists('paymentTypesFindAll', 'findAllPaymentTypeDto', findAllPaymentTypeDto);
-            const localVarPath = `/api/payment-types/find`;
+            const localVarPath = `/api/payment-type/find`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9405,7 +9405,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         paymentTypesFindOne: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('paymentTypesFindOne', 'id', id);
-            const localVarPath = `/api/payment-types/id`.replace(`{${'id'}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/api/payment-type/id`.replace(`{${'id'}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9444,7 +9444,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         paymentTypesRemove: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('paymentTypesRemove', 'id', id);
-            const localVarPath = `/api/payment-types/{id}`.replace(`{${'id'}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/api/payment-type/{id}`.replace(`{${'id'}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -9490,7 +9490,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('paymentTypesUpdate', 'id', id);
             // verify required parameter 'updatePaymentTypeDto' is not null or undefined
             assertParamExists('paymentTypesUpdate', 'updatePaymentTypeDto', updatePaymentTypeDto);
-            const localVarPath = `/api/payment-types/{id}`.replace(`{${'id'}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/api/payment-type/{id}`.replace(`{${'id'}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;

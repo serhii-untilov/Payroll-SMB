@@ -4,25 +4,25 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '@/test';
 import { UserAccessService } from '../user-access/user-access.service';
 import { PaymentType } from './entities/payment-type.entity';
-import { PaymentTypesController } from './payment-types.controller';
-import { PaymentTypesService } from './payment-types.service';
+import { PaymentTypeController } from './payment-type.controller';
+import { PaymentTypeService } from './payment-type.service';
 
-describe('PaymentTypesController', () => {
-    let controller: PaymentTypesController;
-    let service: PaymentTypesService;
+describe('PaymentTypeController', () => {
+    let controller: PaymentTypeController;
+    let service: PaymentTypeService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [PaymentTypesController],
+            controllers: [PaymentTypeController],
             providers: [
-                PaymentTypesService,
+                PaymentTypeService,
                 { provide: getRepositoryToken(PaymentType), useFactory: repositoryMockFactory },
                 { provide: UserAccessService, useValue: createMock<UserAccessService>() },
             ],
         }).compile();
 
-        controller = module.get<PaymentTypesController>(PaymentTypesController);
-        service = module.get<PaymentTypesService>(PaymentTypesService);
+        controller = module.get<PaymentTypeController>(PaymentTypeController);
+        service = module.get<PaymentTypeService>(PaymentTypeService);
     });
 
     it('should be defined', () => {

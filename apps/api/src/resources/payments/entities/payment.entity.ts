@@ -4,7 +4,7 @@ import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
 import { PaymentStatus, RecordFlag } from './../../../types';
 import { CompanyEntity } from '../../company/entities/company.entity';
-import { PaymentType } from './../../payment-types/entities/payment-type.entity';
+import { PaymentType } from './../../payment-type/entities/payment-type.entity';
 
 @Entity()
 @Index('IDX_PAYMENT_COMP_ACC_STATUS', ['companyId', 'accPeriod', 'status'])

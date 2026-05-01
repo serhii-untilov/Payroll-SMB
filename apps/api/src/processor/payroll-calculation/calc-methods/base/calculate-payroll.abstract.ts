@@ -1,6 +1,6 @@
 import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
 import { PayPeriod } from '@/resources/pay-periods/entities';
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+import { PaymentType } from '@/resources/payment-type/entities/payment-type.entity';
 import { Position } from '@/resources/positions/entities';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { getPayrollUnionRecord } from '@/processor/helpers';

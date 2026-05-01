@@ -2,7 +2,7 @@ import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, Relation } from 'type
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { DepartmentEntity } from '../../department/entities/department.entity';
 import { JobEntity } from '../../job/entities/job.entity';
-import { PaymentType } from './../../payment-types/entities/payment-type.entity';
+import { PaymentType } from './../../payment-type/entities/payment-type.entity';
 import { Position } from './../../positions/entities/position.entity';
 import { WorkTimeNorm } from '../../work-time-norm/entities/work-time-norm.entity';
 

@@ -1,6 +1,6 @@
 import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
 import { MinWage } from '@/resources/min-wage/entities/min-wage.entity';
-import { PaymentType } from '@/resources/payment-types/entities/payment-type.entity';
+import { PaymentType } from '@/resources/payment-type/entities/payment-type.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { Position } from '@/resources/positions/entities';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';

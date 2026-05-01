@@ -4,6 +4,7 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     HttpCode,
     HttpStatus,
     Param,
@@ -30,7 +31,7 @@ import { UpdateWorkTimeNormDto } from './dto/update-work-time-norm.dto';
 import { WorkTimeNorm } from './entities/work-time-norm.entity';
 import { WorkTimeNormService } from './work-time-norm.service';
 
-@Controller('work-time-norms')
+@Controller('work-time-norm')
 @ApiBearerAuth()
 export class WorkTimeNormController {
     constructor(private readonly service: WorkTimeNormService) {}
@@ -45,7 +46,6 @@ export class WorkTimeNormController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreateWorkTimeNormDto) {
         const userId = getUserId(req);
-        await this.service.availableCreateOrFail(userId);
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
@@ -67,31 +67,35 @@ export class WorkTimeNormController {
     @ApiOkResponse({ description: 'The found record', type: WorkTimeNorm })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: string, @Body() params: FindWorkTimeNormDto) {
-        return await this.service.findOne(id, params);
+    async findOne(@Req() req: Request, @Param('id') id: string, @Body() params: FindWorkTimeNormDto) {
+        const userId = getUserId(req);
+        return await this.service.findOne(userId, id, params);
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update a Work Norm record' })
     @ApiOkResponse({ description: 'The updated record', type: WorkTimeNorm })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async update(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: UpdateWorkTimeNormDto) {
+    async update(
+        @Req() req: Request,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
+        @Body() payload: UpdateWorkTimeNormDto,
+    ) {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId);
-        return await this.service.update(userId, id, deepTransformToShortDate(payload));
+        return await this.service.update(userId, id, version, deepTransformToShortDate(payload));
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a Work Norm record' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: WorkTimeNorm })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
+    async remove(@Req() req: Request, @Param('id') id: string, @Param('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
-        await this.service.availableDeleteOrFail(userId);
-        return await this.service.remove(userId, id);
+        return await this.service.remove(userId, id, version);
     }
 }

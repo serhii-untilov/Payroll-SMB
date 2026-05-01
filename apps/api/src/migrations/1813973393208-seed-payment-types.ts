@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { CalcMethod } from '../types';
 import { getSystemUserId } from '../utils/lib/system-user';
 import { langPipe } from '../utils/lib/lang-pipe';
-import { PaymentType } from '../resources/payment-types/entities/payment-type.entity';
+import { PaymentType } from '../resources/payment-type/entities/payment-type.entity';
 
 const lang = process.env.LANGUAGE ?? 'uk';
 const law = process.env.LAW;

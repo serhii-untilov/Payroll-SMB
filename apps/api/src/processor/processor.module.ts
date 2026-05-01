@@ -7,7 +7,7 @@ import {
     PayFundsModule,
     PayPeriodsModule,
     PaymentPositionsModule,
-    PaymentTypesModule,
+    PaymentTypeModule,
     PaymentsModule,
     PayrollsModule,
     PersonModule,
@@ -35,7 +35,7 @@ import { ScheduleService } from './schedule/schedule.service';
 @Module({
     imports: [
         forwardRef(() => UserAccessModule),
-        forwardRef(() => PaymentTypesModule),
+        forwardRef(() => PaymentTypeModule),
         forwardRef(() => PayFundTypesModule),
         forwardRef(() => CompanyModule),
         forwardRef(() => PositionsModule),

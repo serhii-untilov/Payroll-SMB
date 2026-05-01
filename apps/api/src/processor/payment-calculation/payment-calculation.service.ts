@@ -3,7 +3,7 @@ import {
     PayFundsService,
     PayPeriodsService,
     PaymentPositionsService,
-    PaymentTypesService,
+    PaymentTypeService,
     PaymentsService,
     PayrollsService,
     PositionsService,
@@ -14,7 +14,7 @@ import { dateUTC } from '@repo/shared';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
 import { PaymentPosition } from './../../resources/payment-positions/entities/paymentPosition.entity';
-import { PaymentType } from './../../resources/payment-types/entities/payment-type.entity';
+import { PaymentType } from './../../resources/payment-type/entities/payment-type.entity';
 import { Payment } from './../../resources/payments/entities/payment.entity';
 import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
 import { Position } from './../../resources/positions/entities/position.entity';
@@ -37,7 +37,7 @@ export class PaymentCalculationService {
 
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
-        @Inject(forwardRef(() => PaymentTypesService)) private paymentTypesService: PaymentTypesService,
+        @Inject(forwardRef(() => PaymentTypeService)) private paymentTypeService: PaymentTypeService,
         @Inject(forwardRef(() => PayPeriodsService)) private payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
@@ -53,7 +53,7 @@ export class PaymentCalculationService {
         return {
             userId,
             company,
-            paymentTypes: await this.paymentTypesService.findAll(),
+            paymentTypes: await this.paymentTypeService.findAll(),
             payrolls: [],
             payFunds: [],
             payPeriod: await this.payPeriodsService.findOneBy({

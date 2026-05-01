@@ -4,7 +4,7 @@ import {
     PayFundTypesService,
     PayFundsService,
     PayPeriodsService,
-    PaymentTypesService,
+    PaymentTypeService,
     PayrollsService,
     PositionsService,
 } from '@/resources';
@@ -25,7 +25,7 @@ export class PayFundCalculationService {
 
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
-        @Inject(forwardRef(() => PaymentTypesService)) private paymentTypesService: PaymentTypesService,
+        @Inject(forwardRef(() => PaymentTypeService)) private paymentTypeService: PaymentTypeService,
         @Inject(forwardRef(() => PayFundTypesService)) private payFundTypesService: PayFundTypesService,
         @Inject(forwardRef(() => PayPeriodsService)) private payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
@@ -41,7 +41,7 @@ export class PayFundCalculationService {
         return {
             userId,
             company,
-            paymentTypes: await this.paymentTypesService.findAll(),
+            paymentTypes: await this.paymentTypeService.findAll(),
             payFundTypes: (await this.payFundTypesService.findAll()).sort((a, b) => a.sequence - b.sequence),
             minWages: await this.minWageService.findAll(),
             payPeriod: await this.payPeriodsService.findOneBy({

@@ -4,7 +4,7 @@ import { PaymentGroup } from '@/types';
 import { dateUTC } from '@repo/shared';
 import { CalcPayment, PaymentContext } from '../base/calc-payment.abstract';
 import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
-import { PaymentType } from './../../../../resources/payment-types/entities/payment-type.entity';
+import { PaymentType } from './../../../../resources/payment-type/entities/payment-type.entity';
 
 export class CalcAdvance extends CalcPayment {
     rate: number;

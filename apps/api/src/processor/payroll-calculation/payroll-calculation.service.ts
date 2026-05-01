@@ -2,7 +2,7 @@ import { calcBalanceWorkTime } from '@/processor/helpers';
 import {
     CompanyService,
     PayPeriodsService,
-    PaymentTypesService,
+    PaymentTypeService,
     PayrollsService,
     PositionsService,
     UserAccessService,
@@ -23,7 +23,7 @@ export class PayrollCalculationService {
     constructor(
         @Inject(forwardRef(() => UserAccessService)) private accessService: UserAccessService,
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
-        @Inject(forwardRef(() => PaymentTypesService)) private paymentTypesService: PaymentTypesService,
+        @Inject(forwardRef(() => PaymentTypeService)) private paymentTypeService: PaymentTypeService,
         @Inject(forwardRef(() => PayPeriodsService)) private payPeriodsService: PayPeriodsService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
@@ -40,7 +40,7 @@ export class PayrollCalculationService {
             payPeriod: await this.payPeriodsService.findOneBy({
                 where: { companyId, dateFrom: company.payPeriod },
             }),
-            paymentTypes: await this.paymentTypesService.findAll(),
+            paymentTypes: await this.paymentTypeService.findAll(),
             workTimeNorms: await this.workTimeNormService.findAll({ relations: true }),
         };
     }

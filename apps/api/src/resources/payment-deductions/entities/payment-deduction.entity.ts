@@ -1,4 +1,4 @@
-import { PaymentType } from '../../payment-types/entities/payment-type.entity';
+import { PaymentType } from '../../payment-type/entities/payment-type.entity';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
 import { RecordFlag } from './../../../types';

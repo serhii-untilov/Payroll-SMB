@@ -21,8 +21,8 @@ export default async () => {
             './resources/work-time-norm/entities/work-time-norm-day.entity'
         ),
         ['./resources/jobs/entities/job.entity']: await import('./resources/job/entities/job.entity'),
-        ['./resources/payment-types/entities/payment-type.entity']: await import(
-            './resources/payment-types/entities/payment-type.entity'
+        ['./resources/payment-type/entities/payment-type.entity']: await import(
+            './resources/payment-type/entities/payment-type.entity'
         ),
         ['./resources/person/entities/person.entity']: await import('./resources/person/entities/person.entity'),
         ['./resources/position-history/entities/position-history.entity']: await import(
@@ -177,7 +177,7 @@ export default async () => {
                     { Job: { name: { required: true, type: () => String } } },
                 ],
                 [
-                    import('./resources/payment-types/entities/payment-type.entity'),
+                    import('./resources/payment-type/entities/payment-type.entity'),
                     {
                         PaymentType: {
                             name: { required: true, type: () => String },
@@ -251,7 +251,7 @@ export default async () => {
                             workTimeNormId: { required: true, type: () => String, nullable: true },
                             paymentType: {
                                 required: false,
-                                type: () => t['./resources/payment-types/entities/payment-type.entity'].PaymentType,
+                                type: () => t['./resources/payment-type/entities/payment-type.entity'].PaymentType,
                             },
                             paymentTypeId: { required: true, type: () => String, nullable: true },
                             wage: { required: true, type: () => Number },
@@ -503,7 +503,7 @@ export default async () => {
                             accPeriod: { required: true, type: () => Date },
                             paymentType: {
                                 required: false,
-                                type: () => t['./resources/payment-types/entities/payment-type.entity'].PaymentType,
+                                type: () => t['./resources/payment-type/entities/payment-type.entity'].PaymentType,
                             },
                             paymentTypeId: { required: true, type: () => String },
                             dateFrom: { required: true, type: () => Date },
@@ -597,7 +597,7 @@ export default async () => {
                             docDate: { required: true, type: () => Date },
                             paymentType: {
                                 required: false,
-                                type: () => t['./resources/payment-types/entities/payment-type.entity'].PaymentType,
+                                type: () => t['./resources/payment-type/entities/payment-type.entity'].PaymentType,
                             },
                             paymentTypeId: { required: true, type: () => String },
                             dateFrom: { required: true, type: () => Date },
@@ -937,7 +937,7 @@ export default async () => {
                             paymentPositionId: { required: true, type: () => String },
                             paymentType: {
                                 required: false,
-                                type: () => t['./resources/payment-types/entities/payment-type.entity'].PaymentType,
+                                type: () => t['./resources/payment-type/entities/payment-type.entity'].PaymentType,
                             },
                             paymentTypeId: { required: true, type: () => String },
                             baseSum: { required: true, type: () => Number },
@@ -982,9 +982,9 @@ export default async () => {
                     },
                 ],
                 [import('./resources/payment-funds/dto/update-payment-fund.dto'), { UpdatePaymentFundDto: {} }],
-                [import('./resources/payment-types/dto/create-payment-type.dto'), { CreatePaymentTypeDto: {} }],
+                [import('./resources/payment-type/dto/create-payment-type.dto'), { CreatePaymentTypeDto: {} }],
                 [
-                    import('./resources/payment-types/dto/find-all-payment-type.dto'),
+                    import('./resources/payment-type/dto/find-all-payment-type.dto'),
                     {
                         FindAllPaymentTypeDto: {
                             part: { required: false, type: () => String },
@@ -994,7 +994,7 @@ export default async () => {
                         },
                     },
                 ],
-                [import('./resources/payment-types/dto/update-payment-type.dto'), { UpdatePaymentTypeDto: {} }],
+                [import('./resources/payment-type/dto/update-payment-type.dto'), { UpdatePaymentTypeDto: {} }],
                 [import('./resources/person/dto/create-person.dto'), { CreatePersonDto: {} }],
                 [import('./resources/person/dto/update-person.dto'), { UpdatePersonDto: {} }],
                 [
@@ -1336,16 +1336,16 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/payment-types/payment-types.controller'),
+                    import('./resources/payment-type/payment-type.controller'),
                     {
                         PaymentTypesController: {
-                            create: { type: t['./resources/payment-types/entities/payment-type.entity'].PaymentType },
+                            create: { type: t['./resources/payment-type/entities/payment-type.entity'].PaymentType },
                             findAll: {
-                                type: [t['./resources/payment-types/entities/payment-type.entity'].PaymentType],
+                                type: [t['./resources/payment-type/entities/payment-type.entity'].PaymentType],
                             },
-                            findOne: { type: t['./resources/payment-types/entities/payment-type.entity'].PaymentType },
-                            update: { type: t['./resources/payment-types/entities/payment-type.entity'].PaymentType },
-                            remove: { type: t['./resources/payment-types/entities/payment-type.entity'].PaymentType },
+                            findOne: { type: t['./resources/payment-type/entities/payment-type.entity'].PaymentType },
+                            update: { type: t['./resources/payment-type/entities/payment-type.entity'].PaymentType },
+                            remove: { type: t['./resources/payment-type/entities/payment-type.entity'].PaymentType },
                         },
                     },
                 ],
