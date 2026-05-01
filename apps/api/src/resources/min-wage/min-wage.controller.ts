@@ -1,6 +1,7 @@
 import { MinWage } from './entities/min-wage.entity';
 import { AccessTokenGuard } from '@/guards';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { getUserId } from '@/utils';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -11,6 +12,7 @@ import {
     getSchemaPath,
 } from '@nestjs/swagger';
 import { deepTransformToShortDate } from '@repo/shared';
+import { Request } from 'express';
 import { CreateMinWageDto } from './dto/create-min-wage.dto';
 import { UpdateMinWageDto } from './dto/update-min-wage.dto';
 import { MinWageService } from './min-wage.service';
@@ -28,8 +30,9 @@ export class MinWageController {
         type: MinWage,
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async create(@Body() payload: CreateMinWageDto): Promise<MinWage> {
-        return await this.service.create('', deepTransformToShortDate(payload));
+    async create(@Req() req: Request, @Body() payload: CreateMinWageDto): Promise<string> {
+        const userId = getUserId(req);
+        return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
     @Get()
@@ -48,27 +51,39 @@ export class MinWageController {
     @ApiOkResponse({ description: 'The found record', type: MinWage })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id', ParseIntPipe) id: string): Promise<MinWage> {
-        return await this.service.findOne(id);
+    async findOne(@Req() req: Request, @Param('id') id: string): Promise<MinWage> {
+        const userId = getUserId(req);
+        return await this.service.findOne(userId, id);
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update a Min Wage record' })
     @ApiOkResponse({ description: 'The updated record', type: MinWage })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async update(@Param('id', ParseIntPipe) id: string, @Body() payload: UpdateMinWageDto): Promise<MinWage> {
-        return await this.service.update('', id, deepTransformToShortDate(payload));
+    async update(
+        @Req() req: Request,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
+        @Body() payload: UpdateMinWageDto,
+    ): Promise<void> {
+        const userId = getUserId(req);
+        return await this.service.update(userId, id, version, deepTransformToShortDate(payload));
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a Min Wage record' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: MinWage })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Param('id', ParseIntPipe) id: string): Promise<MinWage> {
-        return await this.service.remove('', id);
+    async remove(
+        @Req() req: Request,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
+    ): Promise<void> {
+        const userId = getUserId(req);
+        return await this.service.remove(userId, id, version);
     }
 }
