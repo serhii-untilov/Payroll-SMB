@@ -1,41 +1,39 @@
-import { BaseUserAccess, PayrollsService, UserAccessService } from '@/resources';
-import { Resource, WrapperType } from '@/types';
-import { checkVersionOrFail } from '@/utils';
+import { Action, Resource } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { BaseUserAccess } from '../common/base';
 import { Payment } from '../payments/entities/payment.entity';
-import { PaymentsService } from '../payments/payments.service';
-import {
-    CreatePaymentPositionDto,
-    FindAllPaymentPositionDto,
-    FindOnePaymentPositionDto,
-    UpdatePaymentPositionDto,
-} from './dto';
+import { PayrollsService } from '../payrolls';
+import { UserAccessService } from '../user-access/user-access.service';
+import { FindAllPaymentPositionDto, FindOnePaymentPositionDto } from './dto';
+import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
+import { UpdatePaymentPositionDto } from './dto/update-payment-position.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 
 @Injectable()
-export class PaymentPositionsService extends BaseUserAccess {
+export class PaymentPositionService extends BaseUserAccess {
+    public readonly resource = Resource.PaymentPosition;
+
     constructor(
         @InjectRepository(PaymentPosition) private repository: Repository<PaymentPosition>,
-        @Inject(forwardRef(() => UserAccessService)) public userAccessService: WrapperType<UserAccessService>,
-        @Inject(forwardRef(() => PaymentsService)) public paymentsService: WrapperType<PaymentsService>,
-        @Inject(forwardRef(() => PayrollsService)) public payrollsService: WrapperType<PayrollsService>,
+        @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
+        @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
     ) {
         super(userAccessService, Resource.PaymentPosition);
     }
 
-    async getCompanyId(entityId: string): Promise<string> {
-        const paymentPosition = await this.repository.findOneOrFail({
-            where: { id: entityId },
-            withDeleted: true,
-        });
-        return (await this.paymentsService.findOne(paymentPosition.paymentId, { withDeleted: true })).companyId;
-    }
+    // async getCompanyId(entityId: string): Promise<string> {
+    //     const paymentPosition = await this.repository.findOneOrFail({
+    //         where: { id: entityId },
+    //         withDeleted: true,
+    //     });
+    //     return (await this.repository.findOne(paymentPosition.paymentId, { withDeleted: true }))?.companyId;
+    // }
 
-    async getPaymentCompanyId(paymentId: string): Promise<string> {
-        return (await this.paymentsService.findOne(paymentId, { withDeleted: true })).companyId;
-    }
+    // async getPaymentCompanyId(paymentId: string): Promise<string> {
+    //     return (await this.paymentsService.findOne(paymentId, { withDeleted: true })).companyId;
+    // }
 
     async create(userId: string, payload: CreatePaymentPositionDto): Promise<PaymentPosition> {
         const created = await this.repository.save({
@@ -78,7 +76,8 @@ export class PaymentPositionsService extends BaseUserAccess {
         });
     }
 
-    async findOne(id: string, params?: FindOnePaymentPositionDto): Promise<PaymentPosition> {
+    async findOne(userId: string, id: string, params?: FindOnePaymentPositionDto): Promise<PaymentPosition> {
+        await this.canOrFail(userId, Action.Read, { resourceId: id });
         const record = await this.repository.findOneOrFail({
             withDeleted: !!params?.withDeleted,
             where: { id },
@@ -95,21 +94,15 @@ export class PaymentPositionsService extends BaseUserAccess {
         return record;
     }
 
-    async update(userId: string, id: string, payload: UpdatePaymentPositionDto) {
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        checkVersionOrFail(record, payload);
-        await this.repository.save({
-            ...payload,
-            id,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
-        return await this.repository.findOneOrFail({ where: { id } });
+    async update(userId: string, id: string, version: number, payload: UpdatePaymentPositionDto): Promise<void> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.repository.update({ id, version }, { ...payload, updatedUserId: userId, updatedDate: new Date() });
+        await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: string, id: string): Promise<PaymentPosition> {
-        await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+    async remove(userId: string, id: string, version: number): Promise<void> {
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
     }
 
     async delete(ids: string[]) {

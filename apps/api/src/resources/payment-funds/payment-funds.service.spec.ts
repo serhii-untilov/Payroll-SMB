@@ -1,4 +1,4 @@
-import { UserAccessService, PaymentPositionsService, PaymentsService } from '@/resources';
+import { UserAccessService, PaymentPositionService, PaymentsService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -19,8 +19,8 @@ describe('PaymentFundsService', () => {
                 },
                 { provide: PaymentsService, useValue: createMock<PaymentsService>() },
                 {
-                    provide: PaymentPositionsService,
-                    useValue: createMock<PaymentPositionsService>(),
+                    provide: PaymentPositionService,
+                    useValue: createMock<PaymentPositionService>(),
                 },
                 { provide: UserAccessService, useValue: createMock<UserAccessService>() },
             ],

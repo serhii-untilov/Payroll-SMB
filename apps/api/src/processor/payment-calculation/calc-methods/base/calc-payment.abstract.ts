@@ -4,7 +4,7 @@ import { PayPeriod } from '@/resources/pay-period/entities';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { PaymentStatus, RecordFlag } from '@/types';
-import { PaymentPosition } from '../../../../resources/payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from '../../../../resources/payment-position/entities/paymentPosition.entity';
 import { PaymentType } from '../../../../resources/payment-type/entities/payment-type.entity';
 import { Payment } from '../../../../resources/payments/entities/payment.entity';
 import { Position } from '@/resources/positions/entities';

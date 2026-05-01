@@ -3,7 +3,7 @@ import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '@/test';
-import { PaymentPositionsService } from './../payment-positions';
+import { PaymentPositionService } from './../payment-position';
 import { PaymentsService } from './../payments';
 import { PaymentDeduction } from './entities/payment-deduction.entity';
 import { PaymentDeductionsService } from './payment-deductions.service';
@@ -21,8 +21,8 @@ describe('PaymentDeductionsService', () => {
                 },
                 { provide: PaymentsService, useValue: createMock<PaymentsService>() },
                 {
-                    provide: PaymentPositionsService,
-                    useValue: createMock<PaymentPositionsService>(),
+                    provide: PaymentPositionService,
+                    useValue: createMock<PaymentPositionService>(),
                 },
                 { provide: UserAccessService, useValue: createMock<UserAccessService>() },
             ],

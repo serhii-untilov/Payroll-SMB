@@ -2,7 +2,7 @@ import {
     BaseUserAccess,
     CompanyService,
     PayPeriodService,
-    PaymentPositionsService,
+    PaymentPositionService,
     UserAccessService,
 } from '@/resources';
 import { PaymentStatus, RecordFlag, Resource, WrapperType } from '@/types';
@@ -28,8 +28,8 @@ export class PaymentsService extends BaseUserAccess {
     constructor(
         @InjectRepository(Payment) private repository: Repository<Payment>,
         @Inject(forwardRef(() => UserAccessService)) public userAccessService: WrapperType<UserAccessService>,
-        @Inject(forwardRef(() => PaymentPositionsService))
-        public paymentPositionsService: WrapperType<PaymentPositionsService>,
+        @Inject(forwardRef(() => PaymentPositionService))
+        public paymentPositionsService: WrapperType<PaymentPositionService>,
         @Inject(forwardRef(() => PayPeriodService)) public payPeriodService: WrapperType<PayPeriodService>,
         @Inject(forwardRef(() => CompanyService)) public companiesService: WrapperType<CompanyService>,
         private eventEmitter: EventEmitter2,

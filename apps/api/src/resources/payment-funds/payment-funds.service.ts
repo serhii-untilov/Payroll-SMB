@@ -3,7 +3,7 @@ import { Resource } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PaymentPositionsService } from '../payment-positions';
+import { PaymentPositionService } from '../payment-position';
 import { PaymentsService } from '../payments';
 import { CreatePaymentFundDto, UpdatePaymentFundDto } from './dto';
 import { PaymentFund } from './entities/payment-fund.entity';
@@ -14,7 +14,7 @@ export class PaymentFundsService extends BaseUserAccess {
         @InjectRepository(PaymentFund) private repository: Repository<PaymentFund>,
         @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
         @Inject(forwardRef(() => PaymentsService)) public paymentsService: PaymentsService,
-        @Inject(forwardRef(() => PaymentPositionsService)) public paymentPositionsService: PaymentPositionsService,
+        @Inject(forwardRef(() => PaymentPositionService)) public paymentPositionsService: PaymentPositionService,
     ) {
         super(userAccessService, Resource.Payment);
     }

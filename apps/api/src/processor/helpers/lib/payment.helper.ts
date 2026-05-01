@@ -1,5 +1,5 @@
 import { PayPeriod } from './../../../resources/pay-period/entities/pay-period.entity';
-import { PaymentPosition } from './../../../resources/payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from './../../../resources/payment-position/entities/paymentPosition.entity';
 import { monthBegin } from '@repo/shared';
 import { add } from 'date-fns';
 import { getWorkDayBeforeOrEqual } from './work-time.helper';

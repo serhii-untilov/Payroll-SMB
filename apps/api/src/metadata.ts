@@ -59,8 +59,8 @@ export default async () => {
         ),
         ['./types/lib/pay-fund-category']: await import('./types/lib/pay-fund-category'),
         ['./types/lib/payment-status']: await import('./types/lib/payment-status'),
-        ['./resources/payment-positions/entities/paymentPosition.entity']: await import(
-            './resources/payment-positions/entities/paymentPosition.entity'
+        ['./resources/payment-position/entities/paymentPosition.entity']: await import(
+            './resources/payment-position/entities/paymentPosition.entity'
         ),
         ['./resources/payments/entities/payment.entity']: await import('./resources/payments/entities/payment.entity'),
         ['./types/lib/task-type']: await import('./types/lib/task-type'),
@@ -612,14 +612,14 @@ export default async () => {
                             paymentPositions: {
                                 required: false,
                                 type: () => [
-                                    t['./resources/payment-positions/entities/paymentPosition.entity'].PaymentPosition,
+                                    t['./resources/payment-position/entities/paymentPosition.entity'].PaymentPosition,
                                 ],
                             },
                         },
                     },
                 ],
                 [
-                    import('./resources/payment-positions/entities/paymentPosition.entity'),
+                    import('./resources/payment-position/entities/paymentPosition.entity'),
                     {
                         PaymentPosition: {
                             payment: {
@@ -854,11 +854,11 @@ export default async () => {
                 ],
                 [import('./resources/positions/dto/update-position.dto'), { UpdatePositionDto: {} }],
                 [
-                    import('./resources/payment-positions/dto/create-payment-position.dto'),
+                    import('./resources/payment-position/dto/create-payment-position.dto'),
                     { CreatePaymentPositionDto: {} },
                 ],
                 [
-                    import('./resources/payment-positions/dto/find-all-payment-position.dto'),
+                    import('./resources/payment-position/dto/find-all-payment-position.dto'),
                     {
                         FindAllPaymentPositionDto: {
                             paymentId: { required: true, type: () => String },
@@ -867,7 +867,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/payment-positions/dto/find-one-payment-position.dto'),
+                    import('./resources/payment-position/dto/find-one-payment-position.dto'),
                     {
                         FindOnePaymentPositionDto: {
                             relations: { required: false, type: () => Boolean },
@@ -876,7 +876,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/payment-positions/dto/update-payment-position.dto'),
+                    import('./resources/payment-position/dto/update-payment-position.dto'),
                     { UpdatePaymentPositionDto: {} },
                 ],
                 [import('./resources/payments/dto/create-payment.dto'), { CreatePaymentDto: {} }],
@@ -932,7 +932,7 @@ export default async () => {
                             paymentPosition: {
                                 required: false,
                                 type: () =>
-                                    t['./resources/payment-positions/entities/paymentPosition.entity'].PaymentPosition,
+                                    t['./resources/payment-position/entities/paymentPosition.entity'].PaymentPosition,
                             },
                             paymentPositionId: { required: true, type: () => String },
                             paymentType: {
@@ -954,7 +954,7 @@ export default async () => {
                             paymentPosition: {
                                 required: false,
                                 type: () =>
-                                    t['./resources/payment-positions/entities/paymentPosition.entity'].PaymentPosition,
+                                    t['./resources/payment-position/entities/paymentPosition.entity'].PaymentPosition,
                             },
                             paymentPositionId: { required: true, type: () => String },
                             payFundType: {
@@ -1293,28 +1293,28 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/payment-positions/payment-positions.controller'),
+                    import('./resources/payment-position/payment-position.controller'),
                     {
-                        PaymentPositionsController: {
+                        PaymentPositionController: {
                             create: {
-                                type: t['./resources/payment-positions/entities/paymentPosition.entity']
+                                type: t['./resources/payment-position/entities/paymentPosition.entity']
                                     .PaymentPosition,
                             },
                             findAll: {
                                 type: [
-                                    t['./resources/payment-positions/entities/paymentPosition.entity'].PaymentPosition,
+                                    t['./resources/payment-position/entities/paymentPosition.entity'].PaymentPosition,
                                 ],
                             },
                             findOne: {
-                                type: t['./resources/payment-positions/entities/paymentPosition.entity']
+                                type: t['./resources/payment-position/entities/paymentPosition.entity']
                                     .PaymentPosition,
                             },
                             update: {
-                                type: t['./resources/payment-positions/entities/paymentPosition.entity']
+                                type: t['./resources/payment-position/entities/paymentPosition.entity']
                                     .PaymentPosition,
                             },
                             remove: {
-                                type: t['./resources/payment-positions/entities/paymentPosition.entity']
+                                type: t['./resources/payment-position/entities/paymentPosition.entity']
                                     .PaymentPosition,
                             },
                         },

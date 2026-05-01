@@ -1,6 +1,6 @@
 import { PaymentType } from '../../payment-type/entities/payment-type.entity';
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { PaymentPosition } from '../../payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from '../../payment-position/entities/paymentPosition.entity';
 import { RecordFlag } from './../../../types';
 import { ApiProperty } from '@nestjs/swagger';
 

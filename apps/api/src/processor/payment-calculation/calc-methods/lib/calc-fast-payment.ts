@@ -1,6 +1,6 @@
 import { Position } from '@/resources/positions/entities';
 import { PaymentType } from './../../../../resources/payment-type/entities/payment-type.entity';
-import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from './../../../../resources/payment-position/entities/paymentPosition.entity';
 import { CalcPayment, PaymentContext } from '../base/calc-payment.abstract';
 
 export class CalcFastPayment extends CalcPayment {

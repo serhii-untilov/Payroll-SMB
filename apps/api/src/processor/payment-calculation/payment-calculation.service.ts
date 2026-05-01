@@ -2,7 +2,7 @@ import {
     CompanyService,
     PayFundsService,
     PayPeriodService,
-    PaymentPositionsService,
+    PaymentPositionService,
     PaymentTypeService,
     PaymentsService,
     PayrollsService,
@@ -13,7 +13,7 @@ import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dateUTC } from '@repo/shared';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
-import { PaymentPosition } from './../../resources/payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from './../../resources/payment-position/entities/paymentPosition.entity';
 import { PaymentType } from './../../resources/payment-type/entities/payment-type.entity';
 import { Payment } from './../../resources/payments/entities/payment.entity';
 import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
@@ -43,7 +43,7 @@ export class PaymentCalculationService {
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
         @Inject(forwardRef(() => PayFundsService)) private payFundsService: PayFundsService,
         @Inject(forwardRef(() => PaymentsService)) private paymentsService: PaymentsService,
-        @Inject(forwardRef(() => PaymentPositionsService)) private paymentPositionsService: PaymentPositionsService,
+        @Inject(forwardRef(() => PaymentPositionService)) private paymentPositionsService: PaymentPositionService,
         @Inject(forwardRef(() => PayPeriodCalculationService))
         public payPeriodCalculationService: PayPeriodCalculationService,
     ) {}

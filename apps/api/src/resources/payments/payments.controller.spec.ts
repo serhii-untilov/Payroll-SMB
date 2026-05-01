@@ -8,7 +8,7 @@ import { CompanyService } from '../company/company.service';
 import { PayPeriodService } from '../pay-period/pay-period.service';
 import { PositionsService } from '../positions/positions.service';
 import { Payment } from './entities/payment.entity';
-import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
+import { PaymentPositionService } from '../payment-position/payment-position.service';
 import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
 
@@ -28,8 +28,8 @@ describe('PaymentsController', () => {
                 { provide: CompanyService, useValue: createMock<CompanyService>() },
                 { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 {
-                    provide: PaymentPositionsService,
-                    useValue: createMock<PaymentPositionsService>(),
+                    provide: PaymentPositionService,
+                    useValue: createMock<PaymentPositionService>(),
                 },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
                 { provide: PayPeriodService, useValue: createMock<PayPeriodService>() },

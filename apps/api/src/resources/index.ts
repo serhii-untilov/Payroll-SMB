@@ -10,7 +10,7 @@ export * from './pay-funds';
 export * from './pay-period';
 export * from './payment-deductions';
 export * from './payment-funds';
-export * from './payment-positions';
+export * from './payment-position';
 export * from './payments';
 export * from './payment-type';
 export * from './payrolls';

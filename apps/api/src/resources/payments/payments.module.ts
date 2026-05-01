@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserAccessModule } from '../user-access';
 import { CompanyModule } from '../company';
 import { PayPeriodModule } from '../pay-period';
-import { PaymentPositionsModule } from '../payment-positions';
+import { PaymentPositionModule } from '../payment-position';
 import { PayrollsModule } from '../payrolls/payrolls.module';
 import { PositionsModule } from '../positions/positions.module';
 import { Payment } from './entities/payment.entity';
@@ -15,7 +15,7 @@ import { PaymentsService } from './payments.service';
         TypeOrmModule.forFeature([Payment]),
         forwardRef(() => UserAccessModule),
         forwardRef(() => CompanyModule),
-        forwardRef(() => PaymentPositionsModule),
+        forwardRef(() => PaymentPositionModule),
         forwardRef(() => PayPeriodModule),
         forwardRef(() => PayrollsModule),
         forwardRef(() => PositionsModule),

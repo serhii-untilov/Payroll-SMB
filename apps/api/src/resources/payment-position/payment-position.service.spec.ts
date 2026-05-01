@@ -5,17 +5,15 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '@/test';
 import { PaymentsService } from '../payments/payments.service';
 import { PaymentPosition } from './entities/paymentPosition.entity';
-import { PaymentPositionsController } from './payment-positions.controller';
-import { PaymentPositionsService } from './payment-positions.service';
+import { PaymentPositionService } from './payment-position.service';
 
-describe('PaymentPositionsController', () => {
-    let controller: PaymentPositionsController;
+describe('PaymentPositionService', () => {
+    let service: PaymentPositionService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [PaymentPositionsController],
             providers: [
-                PaymentPositionsService,
+                PaymentPositionService,
                 {
                     provide: getRepositoryToken(PaymentPosition),
                     useFactory: repositoryMockFactory,
@@ -26,10 +24,10 @@ describe('PaymentPositionsController', () => {
             ],
         }).compile();
 
-        controller = module.get<PaymentPositionsController>(PaymentPositionsController);
+        service = module.get<PaymentPositionService>(PaymentPositionService);
     });
 
     it('should be defined', () => {
-        expect(controller).toBeDefined();
+        expect(service).toBeDefined();
     });
 });

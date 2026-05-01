@@ -1,19 +1,6 @@
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    Req,
-    UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
@@ -29,12 +16,13 @@ import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
 import { FindAllPaymentPositionDto } from './dto/find-all-payment-position.dto';
 import { UpdatePaymentPositionDto } from './dto/update-payment-position.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
-import { PaymentPositionsService } from './payment-positions.service';
+import { PaymentPositionService } from './payment-position.service';
+import { FindOnePaymentPositionDto } from './dto';
 
 @Controller('payment-positions')
 @ApiBearerAuth()
-export class PaymentPositionsController {
-    constructor(private readonly service: PaymentPositionsService) {}
+export class PaymentPositionController {
+    constructor(private readonly service: PaymentPositionService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)
@@ -62,15 +50,15 @@ export class PaymentPositionsController {
 
     @Get(':id')
     @UseGuards(AccessTokenGuard)
-    @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'The found record', type: PaymentPosition })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(@Param('id') id: string): Promise<PaymentPosition> {
-        return await this.service.findOne(id);
+    async findOne(@Req() req: Request, @Param('id') id: string, @Body() params: FindOnePaymentPositionDto) {
+        const userId = getUserId(req);
+        return await this.service.findOne(userId, id, params);
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update a Payment Position record' })
     @ApiOkResponse({ description: 'The updated record', type: PaymentPosition })
@@ -78,24 +66,22 @@ export class PaymentPositionsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
-        @Param('id', ParseIntPipe) id: string,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
         @Body() payload: UpdatePaymentPositionDto,
-    ): Promise<PaymentPosition> {
+    ) {
         const userId = getUserId(req);
-        return await this.service.update(userId, id, deepTransformToShortDate(payload));
+        return await this.service.update(userId, id, version, payload);
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a Payment Position record' })
-    @ApiOkResponse({
-        description: 'The record has been successfully deleted',
-        type: PaymentPosition,
-    })
+    @ApiOkResponse({ description: 'The record has been successfully deleted', type: PaymentPosition })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<PaymentPosition> {
+    async remove(@Req() req: Request, @Param('id') id: string, @Param('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
-        return await this.service.remove(userId, id);
+        return await this.service.remove(userId, id, version);
     }
 }

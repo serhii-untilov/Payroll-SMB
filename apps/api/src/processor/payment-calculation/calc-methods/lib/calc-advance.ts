@@ -3,7 +3,7 @@ import { Position } from '@/resources/positions/entities';
 import { PaymentGroup } from '@/types';
 import { dateUTC } from '@repo/shared';
 import { CalcPayment, PaymentContext } from '../base/calc-payment.abstract';
-import { PaymentPosition } from './../../../../resources/payment-positions/entities/paymentPosition.entity';
+import { PaymentPosition } from './../../../../resources/payment-position/entities/paymentPosition.entity';
 import { PaymentType } from './../../../../resources/payment-type/entities/payment-type.entity';
 
 export class CalcAdvance extends CalcPayment {
