@@ -17,7 +17,7 @@ import {
     Repository,
 } from 'typeorm';
 import { BaseUserAccess } from '../common/base';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PayPeriodService } from '../pay-period/pay-period.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePositionDto } from './dto/create-position.dto';
@@ -38,7 +38,7 @@ export class PositionsService extends BaseUserAccess {
     constructor(
         @InjectRepository(Position) private repository: Repository<Position>,
         @InjectRepository(PositionBalance) private repositoryPositionBalance: Repository<PositionBalance>,
-        @Inject(forwardRef(() => PayPeriodsService)) private readonly payPeriodsService: WrapperType<PayPeriodsService>,
+        @Inject(forwardRef(() => PayPeriodService)) private readonly payPeriodsService: WrapperType<PayPeriodService>,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: WrapperType<PayrollsService>,
         @Inject(forwardRef(() => UserAccessService)) userAccessService: WrapperType<UserAccessService>,
         private eventEmitter: EventEmitter2,

@@ -4,7 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PayPeriodService } from '../pay-period/pay-period.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { UserAccessService } from '../user-access/user-access.service';
 import { PositionBalance } from './entities/position-balance.entity';
@@ -28,7 +28,7 @@ describe('PositionsService', () => {
                     useFactory: repositoryMockFactory,
                 },
                 { provide: UserAccessService, useValue: createMock<UserAccessService>() },
-                { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
+                { provide: PayPeriodService, useValue: createMock<PayPeriodService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],

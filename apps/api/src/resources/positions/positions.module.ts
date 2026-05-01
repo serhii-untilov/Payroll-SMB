@@ -1,7 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserAccessModule } from '../user-access';
-import { PayPeriodsModule } from '../pay-periods/pay-periods.module';
+import { PayPeriodModule } from '../pay-period/pay-period.module';
 import { Position } from './entities/position.entity';
 import { PositionsController } from './positions.controller';
 import { PositionsService } from './positions.service';
@@ -12,7 +12,7 @@ import { PayrollsModule } from '../payrolls/payrolls.module';
     imports: [
         TypeOrmModule.forFeature([Position, PositionBalance]),
         forwardRef(() => UserAccessModule),
-        forwardRef(() => PayPeriodsModule),
+        forwardRef(() => PayPeriodModule),
         forwardRef(() => PayrollsModule),
     ],
     controllers: [PositionsController],

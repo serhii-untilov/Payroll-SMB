@@ -9,18 +9,18 @@ import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
 import { UserService } from '../users/users.service';
 import { PayPeriod } from './entities/pay-period.entity';
-import { PayPeriodsController } from './pay-periods.controller';
-import { PayPeriodsService } from './pay-periods.service';
+import { PayPeriodController } from './pay-period.controller';
+import { PayPeriodService } from './pay-period.service';
 
-describe('PayPeriodsController', () => {
-    let controller: PayPeriodsController;
-    let service: PayPeriodsService;
+describe('PayPeriodController', () => {
+    let controller: PayPeriodController;
+    let service: PayPeriodService;
 
     beforeEach(async () => {
         const module = await Test.createTestingModule({
-            controllers: [PayPeriodsController],
+            controllers: [PayPeriodController],
             providers: [
-                PayPeriodsService,
+                PayPeriodService,
                 {
                     provide: getRepositoryToken(PayPeriod),
                     useFactory: repositoryMockFactory,
@@ -35,8 +35,8 @@ describe('PayPeriodsController', () => {
             ],
         }).compile();
 
-        controller = module.get<PayPeriodsController>(PayPeriodsController);
-        service = module.get<PayPeriodsService>(PayPeriodsService);
+        controller = module.get<PayPeriodController>(PayPeriodController);
+        service = module.get<PayPeriodService>(PayPeriodService);
     });
 
     it('should be defined', () => {

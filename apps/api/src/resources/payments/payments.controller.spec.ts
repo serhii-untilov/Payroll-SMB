@@ -5,7 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '@/test';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CompanyService } from '../company/company.service';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PayPeriodService } from '../pay-period/pay-period.service';
 import { PositionsService } from '../positions/positions.service';
 import { Payment } from './entities/payment.entity';
 import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
@@ -32,7 +32,7 @@ describe('PaymentsController', () => {
                     useValue: createMock<PaymentPositionsService>(),
                 },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
-                { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
+                { provide: PayPeriodService, useValue: createMock<PayPeriodService>() },
             ],
         }).compile();
 

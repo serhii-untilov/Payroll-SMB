@@ -1,7 +1,7 @@
 import { PayPeriodState } from '@/types';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { addDays, addMonths } from 'date-fns';
-import { PayPeriod } from '../../../../resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from '../../../../resources/pay-period/entities/pay-period.entity';
 import { PeriodListGenerator } from '../base/period-list-generator';
 import { Context } from '../base/period-list-generator';
 

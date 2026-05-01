@@ -1,5 +1,5 @@
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
-import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from './../../../../resources/pay-period/entities/pay-period.entity';
 import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
 
 export type Context = {

@@ -44,11 +44,11 @@ export default async () => {
         ['./resources/user/entities/user.entity']: await import('./resources/user/entities/user.entity'),
         ['./types/lib/resource']: await import('./types/lib/resource'),
         ['./types/lib/action']: await import('./types/lib/action'),
-        ['./resources/pay-periods/entities/pay-period-summary.entity']: await import(
-            './resources/pay-periods/entities/pay-period-summary.entity'
+        ['./resources/pay-period/entities/pay-period-summary.entity']: await import(
+            './resources/pay-period/entities/pay-period-summary.entity'
         ),
-        ['./resources/pay-periods/entities/pay-period.entity']: await import(
-            './resources/pay-periods/entities/pay-period.entity'
+        ['./resources/pay-period/entities/pay-period.entity']: await import(
+            './resources/pay-period/entities/pay-period.entity'
         ),
         ['./types/lib/record-flag']: await import('./types/lib/record-flag'),
         ['./types/lib/fixed-flag']: await import('./types/lib/fixed-flag'),
@@ -436,7 +436,7 @@ export default async () => {
                 [import('./resources/company/dto/create-company.dto'), { CreateCompanyDto: {} }],
                 [import('./resources/company/dto/update-company.dto'), { UpdateCompanyDto: {} }],
                 [
-                    import('./resources/pay-periods/entities/pay-period.entity'),
+                    import('./resources/pay-period/entities/pay-period.entity'),
                     {
                         PayPeriod: {
                             company: {
@@ -469,20 +469,20 @@ export default async () => {
                             calcMethods: {
                                 required: false,
                                 type: () => [
-                                    t['./resources/pay-periods/entities/pay-period-summary.entity'].PayPeriodSummary,
+                                    t['./resources/pay-period/entities/pay-period-summary.entity'].PayPeriodSummary,
                                 ],
                             },
                         },
                     },
                 ],
                 [
-                    import('./resources/pay-periods/entities/pay-period-summary.entity'),
+                    import('./resources/pay-period/entities/pay-period-summary.entity'),
                     {
                         PayPeriodSummary: {
                             id: { required: true, type: () => String },
                             payPeriod: {
                                 required: false,
-                                type: () => t['./resources/pay-periods/entities/pay-period.entity'].PayPeriod,
+                                type: () => t['./resources/pay-period/entities/pay-period.entity'].PayPeriod,
                             },
                             payPeriodId: { required: true, type: () => String },
                             calcMethod: { required: true, enum: t['./types/lib/calc-method'].CalcMethod },
@@ -695,7 +695,7 @@ export default async () => {
                 ],
                 [import('./resources/pay-funds/dto/update-pay-fund.dto'), { UpdatePayFundDto: {} }],
                 [
-                    import('./resources/pay-periods/dto/create-pay-period.dto'),
+                    import('./resources/pay-period/dto/create-pay-period.dto'),
                     {
                         CreatePayPeriodDto: {
                             companyId: { required: true, type: () => String },
@@ -725,11 +725,11 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/pay-periods/dto/create-pay-period-calc-method.dto'),
+                    import('./resources/pay-period/dto/create-pay-period-calc-method.dto'),
                     { CreatePayPeriodSummaryDto: {} },
                 ],
                 [
-                    import('./resources/pay-periods/dto/find-all-pay-period.dto'),
+                    import('./resources/pay-period/dto/find-all-pay-period.dto'),
                     {
                         FindAllPayPeriodDto: {
                             relations: { required: false, type: () => Boolean },
@@ -738,7 +738,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/pay-periods/dto/find-current-pay-period.dto'),
+                    import('./resources/pay-period/dto/find-current-pay-period.dto'),
                     {
                         FindCurrentPayPeriodDto: {
                             relations: { required: false, type: () => Boolean },
@@ -747,7 +747,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/pay-periods/dto/find-one-pay-period.dto'),
+                    import('./resources/pay-period/dto/find-one-pay-period.dto'),
                     {
                         FindOnePayPeriodDto: {
                             relations: { required: false, type: () => Boolean },
@@ -755,13 +755,13 @@ export default async () => {
                         },
                     },
                 ],
-                [import('./resources/pay-periods/dto/update-pay-period.dto'), { UpdatePayPeriodDto: {} }],
+                [import('./resources/pay-period/dto/update-pay-period.dto'), { UpdatePayPeriodDto: {} }],
                 [
-                    import('./resources/pay-periods/dto/update-pay-period-calc-method.dto'),
+                    import('./resources/pay-period/dto/update-pay-period-calc-method.dto'),
                     { UpdatePayPeriodSummaryDto: {} },
                 ],
-                [import('./resources/pay-periods/dto/close-pay-period.dto'), { ClosePayPeriodDto: {} }],
-                [import('./resources/pay-periods/dto/open-pay-period.dto'), { OpenPayPeriodDto: {} }],
+                [import('./resources/pay-period/dto/close-pay-period.dto'), { ClosePayPeriodDto: {} }],
+                [import('./resources/pay-period/dto/open-pay-period.dto'), { OpenPayPeriodDto: {} }],
                 [import('./resources/payrolls/dto/create-payroll.dto'), { CreatePayrollDto: {} }],
                 [
                     import('./resources/payrolls/dto/find-payroll.dto'),
@@ -1259,17 +1259,17 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/pay-periods/pay-periods.controller'),
+                    import('./resources/pay-period/pay-period.controller'),
                     {
-                        PayPeriodsController: {
-                            create: { type: t['./resources/pay-periods/entities/pay-period.entity'].PayPeriod },
-                            findAll: { type: [t['./resources/pay-periods/entities/pay-period.entity'].PayPeriod] },
-                            findCurrent: { type: t['./resources/pay-periods/entities/pay-period.entity'].PayPeriod },
-                            findOne: { type: t['./resources/pay-periods/entities/pay-period.entity'].PayPeriod },
-                            update: { type: t['./resources/pay-periods/entities/pay-period.entity'].PayPeriod },
-                            remove: { type: t['./resources/pay-periods/entities/pay-period.entity'].PayPeriod },
-                            close: { type: t['./resources/pay-periods/entities/pay-period.entity'].PayPeriod },
-                            open: { type: t['./resources/pay-periods/entities/pay-period.entity'].PayPeriod },
+                        PayPeriodController: {
+                            create: { type: t['./resources/pay-period/entities/pay-period.entity'].PayPeriod },
+                            findAll: { type: [t['./resources/pay-period/entities/pay-period.entity'].PayPeriod] },
+                            findCurrent: { type: t['./resources/pay-period/entities/pay-period.entity'].PayPeriod },
+                            findOne: { type: t['./resources/pay-period/entities/pay-period.entity'].PayPeriod },
+                            update: { type: t['./resources/pay-period/entities/pay-period.entity'].PayPeriod },
+                            remove: { type: t['./resources/pay-period/entities/pay-period.entity'].PayPeriod },
+                            close: { type: t['./resources/pay-period/entities/pay-period.entity'].PayPeriod },
+                            open: { type: t['./resources/pay-period/entities/pay-period.entity'].PayPeriod },
                         },
                     },
                 ],

@@ -2,7 +2,7 @@ import {
     CompanyService,
     DepartmentService,
     PaymentsService,
-    PayPeriodsService,
+    PayPeriodService,
     PersonService,
     PositionsService,
     TasksService,
@@ -20,7 +20,7 @@ describe('TaskGenerationService', () => {
             providers: [
                 TaskGenerationService,
                 { provide: CompanyService, useValue: createMock<CompanyService>() },
-                { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
+                { provide: PayPeriodService, useValue: createMock<PayPeriodService>() },
                 { provide: TasksService, useValue: createMock<TasksService>() },
                 { provide: DepartmentService, useValue: createMock<DepartmentService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },

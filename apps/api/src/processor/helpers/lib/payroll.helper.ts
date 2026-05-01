@@ -1,5 +1,5 @@
 import { Payroll } from './../../../resources/payrolls/entities/payroll.entity';
-import { PayPeriod } from './../../../resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from './../../../resources/pay-period/entities/pay-period.entity';
 import { RecordFlag } from '@/types';
 
 export function getPayrollUnionRecord(payroll: Payroll, payrolls: Payroll[], payPeriod: PayPeriod): Payroll {

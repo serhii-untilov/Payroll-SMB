@@ -19,10 +19,7 @@ import {
 import { PayPeriod, defaultFieldList } from './entities';
 
 @Injectable()
-export class PayPeriodsService extends BaseUserAccess {
-    private _logger: Logger = new Logger(PayPeriodsService.name);
-    public readonly resource = Resource.PayPeriod;
-
+export class PayPeriodService extends BaseUserAccess {
     constructor(
         @InjectRepository(PayPeriod) private repository: Repository<PayPeriod>,
         @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
@@ -188,10 +185,7 @@ export class PayPeriodsService extends BaseUserAccess {
                 updatedDate: new Date(),
             });
         }
-        await this.companyService.update(userId, company.id, {
-            payPeriod: next.dateFrom,
-            version: company.version,
-        });
+        await this.companyService.update(userId, company.id, company.version, { payPeriod: next.dateFrom });
         return await this.repository.findOneOrFail({ where: { id: next.id } });
     }
 
@@ -220,10 +214,7 @@ export class PayPeriodsService extends BaseUserAccess {
                 updatedDate: new Date(),
             });
         }
-        await this.companyService.update(userId, company.id, {
-            payPeriod: prior.dateFrom,
-            version: company.version,
-        });
+        await this.companyService.update(userId, company.id, company.version, { payPeriod: prior.dateFrom });
         return await this.repository.findOneOrFail({ where: { id: prior.id } });
     }
 }

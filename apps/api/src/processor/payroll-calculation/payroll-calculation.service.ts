@@ -1,14 +1,14 @@
 import { calcBalanceWorkTime } from '@/processor/helpers';
 import {
     CompanyService,
-    PayPeriodsService,
+    PayPeriodService,
     PaymentTypeService,
     PayrollsService,
     PositionsService,
     UserAccessService,
     WorkTimeNormService,
 } from '@/resources';
-import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from '@/resources/pay-period/entities/pay-period.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { Position } from '@/resources/positions/entities/position.entity';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
@@ -24,7 +24,7 @@ export class PayrollCalculationService {
         @Inject(forwardRef(() => UserAccessService)) private accessService: UserAccessService,
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypeService)) private paymentTypeService: PaymentTypeService,
-        @Inject(forwardRef(() => PayPeriodsService)) private payPeriodsService: PayPeriodsService,
+        @Inject(forwardRef(() => PayPeriodService)) private payPeriodsService: PayPeriodService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
         @Inject(forwardRef(() => WorkTimeNormService)) public workTimeNormService: WorkTimeNormService,

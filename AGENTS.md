@@ -69,6 +69,7 @@ npm run codegen          # generate DTOs from OpenAPI spec
 - Always use `deepTransformToShortDate(params)` if params type has a Date type member
 - Always describe members of a DTO class using `ApiProperty` and `ApiPropertyOptional` from `@nestjs/swagger`, using `Type` from `class-transformer`, using `Is*` from `class-validator`
 - Always describe members of an entity class using `typeorm` types annotations
+- Always name module, controller, service in singular, examples: CompanyModule, not CompaniesModule, DepartmentController, not DepartmentsController, PaymentService, not PaymentsService. The same for parameters and variables for modules, controllers, and services. The same for a file name, examples: company.controller.ts, not companies.controller.ts, department.service.ts, not departments.service.ts, payment.module.ts, not payments.module.ts.
 
 ## Security
 

@@ -1,7 +1,7 @@
 import {
     CompanyService,
     PayFundsService,
-    PayPeriodsService,
+    PayPeriodService,
     PaymentPositionsService,
     PaymentTypeService,
     PaymentsService,
@@ -38,7 +38,7 @@ export class PaymentCalculationService {
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypeService)) private paymentTypeService: PaymentTypeService,
-        @Inject(forwardRef(() => PayPeriodsService)) private payPeriodsService: PayPeriodsService,
+        @Inject(forwardRef(() => PayPeriodService)) private payPeriodsService: PayPeriodService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
         @Inject(forwardRef(() => PayFundsService)) private payFundsService: PayFundsService,

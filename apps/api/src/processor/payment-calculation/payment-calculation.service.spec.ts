@@ -5,7 +5,7 @@ import {
     PaymentPositionsService,
     PaymentsService,
     PaymentTypesService,
-    PayPeriodsService,
+    PayPeriodService,
     PayrollsService,
     PositionsService,
 } from '@/resources';
@@ -27,7 +27,7 @@ describe('PaymentCalculationService', () => {
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
                 { provide: PayFundsService, useValue: createMock<PayFundsService>() },
-                { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
+                { provide: PayPeriodService, useValue: createMock<PayPeriodService>() },
                 { provide: PaymentsService, useValue: createMock<PaymentsService>() },
                 {
                     provide: PaymentPositionsService,

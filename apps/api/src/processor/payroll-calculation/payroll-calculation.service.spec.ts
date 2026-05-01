@@ -2,7 +2,7 @@ import {
     UserAccessService,
     CompanyService,
     PaymentTypesService,
-    PayPeriodsService,
+    PayPeriodService,
     PayrollsService,
     PositionsService,
     WorkTimeNormService,
@@ -24,7 +24,7 @@ describe('ProcessorService', () => {
                 { provide: CompanyService, useValue: createMock<CompanyService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
-                { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
+                { provide: PayPeriodService, useValue: createMock<PayPeriodService>() },
                 { provide: WorkTimeNormService, useValue: createMock<WorkTimeNormService>() },
                 {
                     provide: PayPeriodCalculationService,

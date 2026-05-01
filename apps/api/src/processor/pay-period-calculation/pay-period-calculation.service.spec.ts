@@ -1,8 +1,8 @@
 import {
     CompanyService,
     PayFundsService,
-    PayPeriodsCalcMethodService,
-    PayPeriodsService,
+    PayPeriodCalcMethodService,
+    PayPeriodService,
     PayrollsService,
     PositionsService,
     UserService,
@@ -23,12 +23,12 @@ describe('PayPeriodCalculationService', () => {
                     useValue: createMock<CompanyService>(),
                 },
                 {
-                    provide: PayPeriodsService,
-                    useValue: createMock<PayPeriodsService>(),
+                    provide: PayPeriodService,
+                    useValue: createMock<PayPeriodService>(),
                 },
                 {
-                    provide: PayPeriodsCalcMethodService,
-                    useValue: createMock<PayPeriodsCalcMethodService>(),
+                    provide: PayPeriodCalcMethodService,
+                    useValue: createMock<PayPeriodCalcMethodService>(),
                 },
                 {
                     provide: PayrollsService,

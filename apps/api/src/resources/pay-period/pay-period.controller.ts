@@ -34,12 +34,12 @@ import {
     UpdatePayPeriodDto,
 } from './dto';
 import { PayPeriod } from './entities';
-import { PayPeriodsService } from './pay-periods.service';
+import { PayPeriodService } from './pay-period.service';
 
 @Controller('pay-periods')
 @ApiBearerAuth()
-export class PayPeriodsController {
-    constructor(private readonly service: PayPeriodsService) {}
+export class PayPeriodController {
+    constructor(private readonly service: PayPeriodService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)

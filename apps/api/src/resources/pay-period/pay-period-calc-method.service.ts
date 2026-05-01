@@ -6,7 +6,7 @@ import { UpdatePayPeriodSummaryDto } from './dto/update-pay-period-calc-method.d
 import { PayPeriodSummary } from './entities/pay-period-summary.entity';
 
 @Injectable()
-export class PayPeriodsCalcMethodService {
+export class PayPeriodCalcMethodService {
     constructor(
         @InjectRepository(PayPeriodSummary)
         private repository: Repository<PayPeriodSummary>,

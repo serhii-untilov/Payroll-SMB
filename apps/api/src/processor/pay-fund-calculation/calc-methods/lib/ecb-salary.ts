@@ -5,7 +5,7 @@ import { CalcMethod, PaymentGroup } from '@/types';
 import { Context, PayFundCalc } from '../base/pay-fund-calc';
 import { PayFundType } from './../../../../resources/pay-fund-types/entities/pay-fund-type.entity';
 import { PayFund } from './../../../../resources/pay-funds/entities/pay-fund.entity';
-import { PayPeriod } from './../../../../resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from './../../../../resources/pay-period/entities/pay-period.entity';
 
 export class EcbSalary extends PayFundCalc {
     constructor(

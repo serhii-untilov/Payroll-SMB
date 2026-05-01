@@ -1,7 +1,7 @@
 import {
     CompanyService,
     DepartmentService,
-    PayPeriodsService,
+    PayPeriodService,
     PaymentsService,
     PersonService,
     PositionsService,
@@ -22,7 +22,7 @@ export class TaskGenerationService {
 
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
-        @Inject(forwardRef(() => PayPeriodsService)) public payPeriodsService: PayPeriodsService,
+        @Inject(forwardRef(() => PayPeriodService)) public payPeriodsService: PayPeriodService,
         @Inject(forwardRef(() => TasksService)) private tasksService: TasksService,
         @Inject(forwardRef(() => DepartmentService)) public departmentService: DepartmentService,
         @Inject(forwardRef(() => PositionsService)) public positionsService: PositionsService,

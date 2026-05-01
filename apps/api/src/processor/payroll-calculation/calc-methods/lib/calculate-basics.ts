@@ -4,7 +4,7 @@ import { CalcMethod, PaymentGroup } from '@/types';
 import { NotFoundException } from '@nestjs/common';
 import { getMaxDate, getMinDate } from '@repo/shared';
 import { CalculatePayroll, PayrollContext } from '../base/calculate-payroll.abstract';
-import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from '@/resources/pay-period/entities/pay-period.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 
 export class PayrollBasics extends CalculatePayroll {

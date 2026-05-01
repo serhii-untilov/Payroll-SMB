@@ -2,7 +2,7 @@ import { HoursByDay, WorkTime, WorkTimeBalance } from '@/types';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { getMaxDate, getMinDate, monthBegin, monthEnd, setBit } from '@repo/shared';
 import { add, sub } from 'date-fns';
-import { PayPeriod } from '../../../resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from '../../../resources/pay-period/entities/pay-period.entity';
 import { PositionHistory } from '../../../resources/position-history/entities/position-history.entity';
 import { Position } from '../../../resources/positions/entities/position.entity';
 import { WorkTimeNorm } from '../../../resources/work-time-norm/entities/work-time-norm.entity';

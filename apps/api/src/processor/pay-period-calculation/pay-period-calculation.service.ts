@@ -1,8 +1,8 @@
 import {
     CompanyService,
     PayFundsService,
-    PayPeriodsCalcMethodService,
-    PayPeriodsService,
+    PayPeriodCalcMethodService,
+    PayPeriodService,
     PayrollsService,
     PositionsService,
     UserService,
@@ -11,8 +11,8 @@ import { PaymentPart, PaymentSchedule } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dropTime } from '@repo/shared';
 import { addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
-import { PayPeriodSummary } from '../../resources/pay-periods/entities/pay-period-summary.entity';
-import { PayPeriod } from './../../resources/pay-periods/entities/pay-period.entity';
+import { PayPeriodSummary } from '../../resources/pay-period/entities/pay-period-summary.entity';
+import { PayPeriod } from './../../resources/pay-period/entities/pay-period.entity';
 import { Context, PeriodListGenerator } from './calc-methods/base/period-list-generator';
 import { EndOfMonthPayment } from './calc-methods/lib/end-of-month-payment';
 import { Every15daysPayment } from './calc-methods/lib/every-15-days-payment';
@@ -23,9 +23,9 @@ export class PayPeriodCalculationService {
 
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
-        @Inject(forwardRef(() => PayPeriodsService)) private payPeriodsService: PayPeriodsService,
-        @Inject(forwardRef(() => PayPeriodsCalcMethodService))
-        private payPeriodsCalcMethodService: PayPeriodsCalcMethodService,
+        @Inject(forwardRef(() => PayPeriodService)) private payPeriodsService: PayPeriodService,
+        @Inject(forwardRef(() => PayPeriodCalcMethodService))
+        private payPeriodsCalcMethodService: PayPeriodCalcMethodService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
         @Inject(forwardRef(() => PayFundsService)) private payFundsService: PayFundsService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,

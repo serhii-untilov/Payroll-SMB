@@ -1,7 +1,7 @@
 import { accPeriodFactSum } from '@/processor/helpers';
 import { CalcMethod, PaymentPart } from '@/types';
 import { getMaxDate, getMinDate } from '@repo/shared';
-import { PayPeriod } from '@/resources/pay-periods/entities/pay-period.entity';
+import { PayPeriod } from '@/resources/pay-period/entities/pay-period.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { CalculatePayroll, PayrollContext } from '../base/calculate-payroll.abstract';
 import { Position } from '@/resources/positions/entities';

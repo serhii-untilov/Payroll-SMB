@@ -10,16 +10,16 @@ import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
 import { UserService } from '../users/users.service';
 import { PayPeriod } from './entities/pay-period.entity';
-import { PayPeriodsService } from './pay-periods.service';
+import { PayPeriodService } from './pay-period.service';
 
-describe('PayPeriodsService', () => {
-    let service: PayPeriodsService;
+describe('PayPeriodService', () => {
+    let service: PayPeriodService;
     let repoMock: MockType<Repository<PayPeriod>>;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                PayPeriodsService,
+                PayPeriodService,
                 {
                     provide: getRepositoryToken(PayPeriod),
                     useFactory: repositoryMockFactory,
@@ -34,7 +34,7 @@ describe('PayPeriodsService', () => {
             ],
         }).compile();
 
-        service = module.get<PayPeriodsService>(PayPeriodsService);
+        service = module.get<PayPeriodService>(PayPeriodService);
         repoMock = module.get(getRepositoryToken(PayPeriod));
     });
 

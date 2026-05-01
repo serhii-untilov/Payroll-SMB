@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockType, repositoryMockFactory } from '@/test';
 import { Repository } from 'typeorm';
 import { UserAccessService } from '../user-access/user-access.service';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PayPeriodService } from '../pay-period/pay-period.service';
 import { PositionsService } from '../positions/positions.service';
 import { PositionHistory } from './entities/position-history.entity';
 import { PositionHistoryService } from './position-history.service';
@@ -23,7 +23,7 @@ describe('PositionHistoryService', () => {
                     useFactory: repositoryMockFactory,
                 },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
-                { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
+                { provide: PayPeriodService, useValue: createMock<PayPeriodService>() },
                 { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
             ],

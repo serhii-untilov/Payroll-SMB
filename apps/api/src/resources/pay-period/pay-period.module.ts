@@ -8,9 +8,9 @@ import { PositionsModule } from '../positions/positions.module';
 import { UserModule } from '../user/user.module';
 import { PayPeriod } from './entities/pay-period.entity';
 import { PayPeriodSummary } from './entities/pay-period-summary.entity';
-import { PayPeriodsController } from './pay-periods.controller';
-import { PayPeriodsService } from './pay-periods.service';
-import { PayPeriodsCalcMethodService } from './pay-periods-calc-method.service';
+import { PayPeriodController } from './pay-period.controller';
+import { PayPeriodService } from './pay-period.service';
+import { PayPeriodCalcMethodService } from './pay-period-calc-method.service';
 
 @Module({
     imports: [
@@ -22,8 +22,8 @@ import { PayPeriodsCalcMethodService } from './pay-periods-calc-method.service';
         forwardRef(() => PayFundsModule),
         forwardRef(() => UserModule),
     ],
-    controllers: [PayPeriodsController],
-    providers: [PayPeriodsService, PayPeriodsCalcMethodService],
-    exports: [PayPeriodsService, PayPeriodsCalcMethodService],
+    controllers: [PayPeriodController],
+    providers: [PayPeriodService, PayPeriodCalcMethodService],
+    exports: [PayPeriodService, PayPeriodCalcMethodService],
 })
-export class PayPeriodsModule {}
+export class PayPeriodModule {}

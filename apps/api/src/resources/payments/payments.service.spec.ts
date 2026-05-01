@@ -7,7 +7,7 @@ import { Payment } from './entities/payment.entity';
 import { PaymentPositionsService } from '../payment-positions/payment-positions.service';
 import { PaymentsService } from './payments.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PayPeriodsService } from '../pay-periods/pay-periods.service';
+import { PayPeriodService } from '../pay-period/pay-period.service';
 import { CompanyService } from '../company';
 
 describe('PaymentsService', () => {
@@ -27,7 +27,7 @@ describe('PaymentsService', () => {
                 },
                 { provide: UserAccessService, useValue: createMock<UserAccessService>() },
                 { provide: EventEmitter2, useValue: createMock<EventEmitter2>() },
-                { provide: PayPeriodsService, useValue: createMock<PayPeriodsService>() },
+                { provide: PayPeriodService, useValue: createMock<PayPeriodService>() },
                 { provide: CompanyService, useValue: createMock<CompanyService>() },
             ],
         }).compile();

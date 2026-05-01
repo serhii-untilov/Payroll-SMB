@@ -1,7 +1,7 @@
 import {
     BaseUserAccess,
     CompanyService,
-    PayPeriodsService,
+    PayPeriodService,
     PaymentPositionsService,
     UserAccessService,
 } from '@/resources';
@@ -30,7 +30,7 @@ export class PaymentsService extends BaseUserAccess {
         @Inject(forwardRef(() => UserAccessService)) public userAccessService: WrapperType<UserAccessService>,
         @Inject(forwardRef(() => PaymentPositionsService))
         public paymentPositionsService: WrapperType<PaymentPositionsService>,
-        @Inject(forwardRef(() => PayPeriodsService)) public payPeriodsService: WrapperType<PayPeriodsService>,
+        @Inject(forwardRef(() => PayPeriodService)) public payPeriodsService: WrapperType<PayPeriodService>,
         @Inject(forwardRef(() => CompanyService)) public companiesService: WrapperType<CompanyService>,
         private eventEmitter: EventEmitter2,
     ) {
