@@ -59,6 +59,27 @@ npm run codegen          # generate DTOs from OpenAPI spec
 - Use enums for resource identification
 - Prefer composition over inheritance
 
+## Rules
+
+- Do NOT use raw TypeORM `BaseEntity` — use project BaseEntity
+- Do NOT introduce CQRS pattern
+- Always use extends BaseEntity for a resource class, find the BaseEntity in the project, don't use raw TypeORM
+- Always use `checkVersionOrFail` for updates
+- Respect multi-tenant access (ABAC/RBAC)
+- Always use `deepTransformToShortDate(params)` if params type has a Date type member
+- Always describe members of a DTO class using `ApiProperty` and `ApiPropertyOptional` from `@nestjs/swagger`, using `Type` from `class-transformer`, using `Is*` from `class-validator`
+- Always describe members of an entity class using `typeorm` types annotations
+
+## Security
+
+- Respect tenant isolation
+- No auth bypass
+- No unsafe queries
+- Do not expose internal APIs or secrets
+- Do not bypass authorization checks
+- All queries must respect tenant boundaries
+- Never return data without access validation
+
 ## How to add a new resource (API)
 
 1. Create entity in `entities/`
@@ -71,21 +92,3 @@ npm run codegen          # generate DTOs from OpenAPI spec
 4. Add controller
 5. Add migration if schema changed
 6. Add tests (optional but preferred)
-
-## Rules
-
-- Do NOT use raw TypeORM `BaseEntity` — use project BaseEntity
-- Do NOT introduce CQRS pattern
-- Always use `checkVersionOrFail` for updates
-- Respect multi-tenant access (ABAC/RBAC)
-- Always use `deepTransformToShortDate(params)` if params type has a Date type member
-
-## Security
-
-- Respect tenant isolation
-- No auth bypass
-- No unsafe queries
-- Do not expose internal APIs or secrets
-- Do not bypass authorization checks
-- All queries must respect tenant boundaries
-- Never return data without access validation

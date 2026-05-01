@@ -58,10 +58,7 @@ export class MinWageController {
     @ApiOkResponse({ description: 'The updated record', type: MinWage })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async update(
-        @Param('id', ParseIntPipe) id: string,
-        @Body() payload: UpdateMinWageDto,
-    ): Promise<MinWage> {
+    async update(@Param('id', ParseIntPipe) id: string, @Body() payload: UpdateMinWageDto): Promise<MinWage> {
         return await this.service.update('', id, deepTransformToShortDate(payload));
     }
 

@@ -15,7 +15,7 @@ import { UserService } from './user.service';
 describe('UserService', () => {
     let userService: UserService;
     let repoUserMock: MockType<Repository<User>>;
-    let userId: string = '1'; // Example userId for testing
+    const userId: string = '1'; // Example userId for testing
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
