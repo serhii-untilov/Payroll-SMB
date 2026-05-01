@@ -1,6 +1,5 @@
-import { PayPeriodState, Resource } from '@/types';
-import { checkVersionOrFail } from '@/utils';
-import { HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException, forwardRef } from '@nestjs/common';
+import { Action, PayPeriodState, Resource } from '@/types';
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { dateUTC, formatPeriod, monthBegin, monthEnd } from '@repo/shared';
 import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
@@ -88,6 +87,7 @@ export class PayPeriodService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<PayPeriod> {
+        await this.canOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true },
@@ -101,20 +101,15 @@ export class PayPeriodService extends BaseUserAccess {
         return found;
     }
 
-    async update(userId: string, id: string, payload: UpdatePayPeriodDto): Promise<PayPeriod> {
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        checkVersionOrFail(record, payload);
-        return await this.repository.save({
-            ...payload,
-            id,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
+    async update(userId: string, id: string, version: number, payload: UpdatePayPeriodDto): Promise<void> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.repository.update({ id, version }, { ...payload, updatedUserId: userId, updatedDate: new Date() });
+        await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: string, id: string): Promise<PayPeriod> {
-        await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
-        return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
+    async remove(userId: string, id: string, version: number): Promise<void> {
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
     }
 
     async delete(ids: string[]): Promise<void> {
@@ -155,9 +150,9 @@ export class PayPeriodService extends BaseUserAccess {
         return Number(count);
     }
 
-    async close(userId: string, currentPayPeriodId: string, payload: ClosePayPeriodDto): Promise<PayPeriod> {
-        const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
-        checkVersionOrFail(current, payload);
+    async close(userId: string, id: string, version: number, _payload: ClosePayPeriodDto): Promise<PayPeriod> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        const current = await this.repository.findOneOrFail({ where: { id } });
         const company = await this.companyService.findOne(userId, current.companyId);
         if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
             throw new HttpException(
@@ -170,28 +165,24 @@ export class PayPeriodService extends BaseUserAccess {
             where: { companyId: current.companyId, dateFrom: nextDateFrom },
         });
         if (current.state !== PayPeriodState.Closed) {
-            await this.repository.save({
-                id: currentPayPeriodId,
-                state: PayPeriodState.Closed,
-                updatedUserId: userId,
-                updatedDate: new Date(),
-            });
+            await this.repository.update(
+                { id, version: version },
+                { state: PayPeriodState.Closed, updatedUserId: userId, updatedDate: new Date() },
+            );
         }
         if (next.state !== PayPeriodState.Opened) {
-            await this.repository.save({
-                id: next.id,
-                state: PayPeriodState.Opened,
-                updatedUserId: userId,
-                updatedDate: new Date(),
-            });
+            await this.repository.update(
+                { id: next.id, version: next.version },
+                { state: PayPeriodState.Opened, updatedUserId: userId, updatedDate: new Date() },
+            );
         }
         await this.companyService.update(userId, company.id, company.version, { payPeriod: next.dateFrom });
         return await this.repository.findOneOrFail({ where: { id: next.id } });
     }
 
-    async open(userId: string, currentPayPeriodId: string, payload: OpenPayPeriodDto): Promise<PayPeriod> {
-        const current = await this.repository.findOneOrFail({ where: { id: currentPayPeriodId } });
-        checkVersionOrFail(current, payload);
+    async open(userId: string, id: string, version: number, _payload: OpenPayPeriodDto): Promise<PayPeriod> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        const current = await this.repository.findOneOrFail({ where: { id } });
         if (current.state !== PayPeriodState.Opened) {
             throw new HttpException('The given period is not opened.', HttpStatus.CONFLICT);
         }
@@ -207,13 +198,15 @@ export class PayPeriodService extends BaseUserAccess {
             where: { companyId: current.companyId, dateTo: priorDateTo },
         });
         if (prior.state !== PayPeriodState.Opened) {
-            await this.repository.save({
-                id: prior.id,
-                state: PayPeriodState.Opened,
-                updatedUserId: userId,
-                updatedDate: new Date(),
-            });
+            await this.repository.update(
+                { id: prior.id, version: prior.version },
+                { state: PayPeriodState.Opened, updatedUserId: userId, updatedDate: new Date() },
+            );
         }
+        await this.repository.update(
+            { id, version },
+            { state: PayPeriodState.Closed, updatedUserId: userId, updatedDate: new Date() },
+        );
         await this.companyService.update(userId, company.id, company.version, { payPeriod: prior.dateFrom });
         return await this.repository.findOneOrFail({ where: { id: prior.id } });
     }

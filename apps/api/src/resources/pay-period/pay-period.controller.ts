@@ -88,29 +88,34 @@ export class PayPeriodController {
         return await this.service.findOne(userId, id);
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update a Pay Period record' })
     @ApiOkResponse({ description: 'The updated record', type: PayPeriod })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async update(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: UpdatePayPeriodDto) {
+    async update(
+        @Req() req: Request,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
+        @Body() payload: UpdatePayPeriodDto,
+    ) {
         const userId = getUserId(req);
-        return await this.service.update(userId, id, deepTransformToShortDate(payload));
+        return await this.service.update(userId, id, version, deepTransformToShortDate(payload));
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a Pay Period record' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: PayPeriod })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string) {
+    async remove(@Req() req: Request, @Param('id') id: string, @Param('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
-        return await this.service.remove(userId, id);
+        return await this.service.remove(userId, id, version);
     }
 
-    @Post('close/:id')
+    @Post('close/:id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Close Pay Period' })
     @ApiCreatedResponse({
@@ -118,12 +123,17 @@ export class PayPeriodController {
         type: PayPeriod,
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async close(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: ClosePayPeriodDto) {
+    async close(
+        @Req() req: Request,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
+        @Body() payload: ClosePayPeriodDto,
+    ) {
         const userId = getUserId(req);
-        return await this.service.close(userId, id, payload);
+        return await this.service.close(userId, id, version, payload);
     }
 
-    @Post('open/:id')
+    @Post('open/:id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Open Pay Period' })
     @ApiCreatedResponse({
@@ -131,8 +141,13 @@ export class PayPeriodController {
         type: PayPeriod,
     })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async open(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() payload: OpenPayPeriodDto) {
+    async open(
+        @Req() req: Request,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
+        @Body() payload: OpenPayPeriodDto,
+    ) {
         const userId = getUserId(req);
-        return await this.service.open(userId, id, payload);
+        return await this.service.open(userId, id, version, payload);
     }
 }
