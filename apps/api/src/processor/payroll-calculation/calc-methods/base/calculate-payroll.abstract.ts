@@ -6,7 +6,7 @@ import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { getPayrollUnionRecord } from '@/processor/helpers';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { WorkTimeNorm } from '@/resources/work-time-norm/entities';
-import { RecordFlag } from '@/types';
+import { RecordFlags } from '@/types';
 
 export type PayrollContext = {
     userId: string;
@@ -38,7 +38,7 @@ export abstract class CalculatePayroll {
         payroll.paymentTypeId = paymentTypeId;
         payroll.dateFrom = accPeriod.dateFrom;
         payroll.dateTo = accPeriod.dateTo;
-        payroll.recordFlags = RecordFlag.Auto;
+        payroll.recordFlags = RecordFlags.Auto;
         return payroll;
     }
 
@@ -59,7 +59,7 @@ export abstract class CalculatePayroll {
                     o.accPeriod.getTime() === record.accPeriod.getTime() &&
                     o.dateFrom.getTime() === record.dateFrom.getTime() &&
                     o.dateTo.getTime() === record.dateTo.getTime() &&
-                    (o.recordFlags & RecordFlag.Cancel) === 0,
+                    (o.recordFlags & RecordFlags.Cancel) === 0,
             );
             if (!found) {
                 toInsert.push(Object.assign({ ...record, id: IdGenerator.nextId() }));
@@ -78,7 +78,7 @@ export abstract class CalculatePayroll {
                     // skip record
                 } else {
                     if (
-                        found.recordFlags & RecordFlag.Auto &&
+                        found.recordFlags & RecordFlags.Auto &&
                         found.payPeriod.getTime() >= this.ctx.payPeriod.dateFrom.getTime() &&
                         found.payPeriod.getTime() <= this.ctx.payPeriod.dateTo.getTime()
                     ) {
@@ -97,7 +97,7 @@ export abstract class CalculatePayroll {
                             payPeriod: this.ctx.payPeriod.dateFrom,
                             sourceType: null,
                             sourceId: null,
-                            recordFlags: RecordFlag.Auto | RecordFlag.Cancel,
+                            recordFlags: RecordFlags.Auto | RecordFlags.Cancel,
                             fixedFlags: 0,
                             parentId: found.id,
                             factSum: -foundUnionCancel.factSum,
@@ -126,13 +126,13 @@ export abstract class CalculatePayroll {
                 o.accPeriod.getTime() >= accPeriod.dateFrom.getTime() &&
                 o.accPeriod.getTime() <= accPeriod.dateTo.getTime() &&
                 o.payPeriod.getTime() <= this.ctx.payPeriod.dateTo.getTime() &&
-                !(o.recordFlags & RecordFlag.Cancel) &&
+                !(o.recordFlags & RecordFlags.Cancel) &&
                 paymentTypeIds.includes(o.paymentTypeId) &&
                 !processedIds.includes(o.id),
         );
         for (const record of toCancel) {
             if (
-                record.recordFlags & RecordFlag.Auto &&
+                record.recordFlags & RecordFlags.Auto &&
                 record.payPeriod.getTime() >= this.ctx.payPeriod.dateFrom.getTime() &&
                 record.payPeriod.getTime() <= this.ctx.payPeriod.dateTo.getTime()
             ) {
@@ -146,7 +146,7 @@ export abstract class CalculatePayroll {
                         payPeriod: this.ctx.payPeriod.dateFrom,
                         sourceType: null,
                         sourceId: null,
-                        recordFlags: RecordFlag.Auto | RecordFlag.Cancel,
+                        recordFlags: RecordFlags.Auto | RecordFlags.Cancel,
                         fixedFlags: 0,
                         parentId: record.id,
                         factSum: -recordUnionCancel.factSum,

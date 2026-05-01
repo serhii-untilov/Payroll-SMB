@@ -3,7 +3,7 @@ import { AfterLoad, Column, Entity, Index, ManyToOne, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { PaymentType } from '../../payment-type/entities/payment-type.entity';
 import { Position } from '../../positions/entities/position.entity';
-import { FixedFlag, HoursByDay, RecordFlag, Resource } from './../../../types';
+import { FixedFlag, HoursByDay, RecordFlags, Resource } from './../../../types';
 
 @Entity()
 @Index('IDX_PAYROLL_POSITION_PAY_PERIOD', ['positionId', 'payPeriod'])
@@ -74,8 +74,8 @@ export class Payroll extends BaseEntity {
     mask2: number;
 
     @Column({ type: 'bigint' })
-    @ApiProperty({ enum: RecordFlag, default: 0, enumName: 'RecordFlags' })
-    recordFlags: RecordFlag;
+    @ApiProperty({ enum: RecordFlags, default: 0, enumName: 'RecordFlags' })
+    recordFlags: RecordFlags;
 
     @Column({ type: 'bigint', default: 0 })
     @ApiProperty({ enum: FixedFlag, enumName: 'FixedFlags' })

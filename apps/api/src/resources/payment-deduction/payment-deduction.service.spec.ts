@@ -6,15 +6,15 @@ import { repositoryMockFactory } from '@/test';
 import { PaymentPositionService } from './../payment-position';
 import { PaymentsService } from './../payments';
 import { PaymentDeduction } from './entities/payment-deduction.entity';
-import { PaymentDeductionsService } from './payment-deductions.service';
+import { PaymentDeductionService } from './payment-deduction.service';
 
-describe('PaymentDeductionsService', () => {
-    let service: PaymentDeductionsService;
+describe('PaymentDeductionService', () => {
+    let service: PaymentDeductionService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                PaymentDeductionsService,
+                PaymentDeductionService,
                 {
                     provide: getRepositoryToken(PaymentDeduction),
                     useFactory: repositoryMockFactory,
@@ -28,7 +28,7 @@ describe('PaymentDeductionsService', () => {
             ],
         }).compile();
 
-        service = module.get<PaymentDeductionsService>(PaymentDeductionsService);
+        service = module.get<PaymentDeductionService>(PaymentDeductionService);
     });
 
     it('should be defined', () => {

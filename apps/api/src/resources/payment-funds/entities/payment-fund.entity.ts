@@ -2,7 +2,7 @@ import { PayFundType } from '../../pay-fund-types/entities/pay-fund-type.entity'
 import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PaymentPosition } from '../../payment-position/entities/paymentPosition.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { RecordFlag } from './../../../types';
+import { RecordFlags } from './../../../types';
 
 @Entity()
 export class PaymentFund {
@@ -28,8 +28,8 @@ export class PaymentFund {
     paySum: number;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: RecordFlag, enumName: 'RecordFlags' })
-    recordFlags: RecordFlag;
+    @ApiProperty({ enum: RecordFlags, enumName: 'RecordFlags' })
+    recordFlags: RecordFlags;
 
     @AfterLoad()
     transform() {

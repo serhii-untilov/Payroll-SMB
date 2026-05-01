@@ -8,7 +8,7 @@ export * from './min-wage';
 export * from './pay-fund-types';
 export * from './pay-funds';
 export * from './pay-period';
-export * from './payment-deductions';
+export * from './payment-deduction';
 export * from './payment-funds';
 export * from './payment-position';
 export * from './payments';

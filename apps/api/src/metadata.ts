@@ -521,7 +521,7 @@ export default async () => {
                             factSum: { required: true, type: () => Number },
                             mask1: { required: true, type: () => Number },
                             mask2: { required: true, type: () => Number },
-                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlag },
+                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlags },
                             fixedFlags: { required: true, enum: t['./types/lib/fixed-flag'].FixedFlag },
                             planHoursByDay: { required: true, type: () => Object, nullable: true },
                             factHoursByDay: { required: true, type: () => Object, nullable: true },
@@ -607,7 +607,7 @@ export default async () => {
                             paySum: { required: true, type: () => Number },
                             funds: { required: true, type: () => Number },
                             status: { required: true, enum: t['./types/lib/payment-status'].PaymentStatus },
-                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlag },
+                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlags },
                             description: { required: true, type: () => String },
                             paymentPositions: {
                                 required: false,
@@ -636,7 +636,7 @@ export default async () => {
                             deductions: { required: true, type: () => Number },
                             paySum: { required: true, type: () => Number },
                             funds: { required: true, type: () => Number },
-                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlag },
+                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlags },
                         },
                     },
                 ],
@@ -908,7 +908,7 @@ export default async () => {
                 [import('./resources/payments/dto/update-payment.dto'), { UpdatePaymentDto: {} }],
                 [import('./resources/payments/dto/withdraw-payment.dto'), { WithdrawPaymentDto: {} }],
                 [
-                    import('./resources/payment-deductions/dto/create-payment-deduction.dto'),
+                    import('./resources/payment-deduction/dto/create-payment-deduction.dto'),
                     {
                         CreatePaymentDeductionDto: {
                             id: { required: true, type: () => String },
@@ -921,11 +921,11 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/payment-deductions/dto/update-payment-deduction.dto'),
+                    import('./resources/payment-deduction/dto/update-payment-deduction.dto'),
                     { UpdatePaymentDeductionDto: {} },
                 ],
                 [
-                    import('./resources/payment-deductions/entities/payment-deduction.entity'),
+                    import('./resources/payment-deduction/entities/payment-deduction.entity'),
                     {
                         PaymentDeduction: {
                             id: { required: true, type: () => String },
@@ -942,7 +942,7 @@ export default async () => {
                             paymentTypeId: { required: true, type: () => String },
                             baseSum: { required: true, type: () => Number },
                             paySum: { required: true, type: () => Number },
-                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlag },
+                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlags },
                         },
                     },
                 ],
@@ -964,7 +964,7 @@ export default async () => {
                             payFundTypeId: { required: true, type: () => String },
                             baseSum: { required: true, type: () => Number },
                             paySum: { required: true, type: () => Number },
-                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlag },
+                            recordFlags: { required: true, enum: t['./types/lib/record-flag'].RecordFlags },
                         },
                     },
                 ],
@@ -1297,8 +1297,7 @@ export default async () => {
                     {
                         PaymentPositionController: {
                             create: {
-                                type: t['./resources/payment-position/entities/paymentPosition.entity']
-                                    .PaymentPosition,
+                                type: t['./resources/payment-position/entities/paymentPosition.entity'].PaymentPosition,
                             },
                             findAll: {
                                 type: [
@@ -1306,16 +1305,13 @@ export default async () => {
                                 ],
                             },
                             findOne: {
-                                type: t['./resources/payment-position/entities/paymentPosition.entity']
-                                    .PaymentPosition,
+                                type: t['./resources/payment-position/entities/paymentPosition.entity'].PaymentPosition,
                             },
                             update: {
-                                type: t['./resources/payment-position/entities/paymentPosition.entity']
-                                    .PaymentPosition,
+                                type: t['./resources/payment-position/entities/paymentPosition.entity'].PaymentPosition,
                             },
                             remove: {
-                                type: t['./resources/payment-position/entities/paymentPosition.entity']
-                                    .PaymentPosition,
+                                type: t['./resources/payment-position/entities/paymentPosition.entity'].PaymentPosition,
                             },
                         },
                     },

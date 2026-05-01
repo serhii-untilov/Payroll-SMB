@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AfterLoad, Column, Entity, Index, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { PaymentPosition } from '../../payment-position/entities/paymentPosition.entity';
-import { PaymentStatus, RecordFlag } from './../../../types';
+import { PaymentStatus, RecordFlags } from './../../../types';
 import { CompanyEntity } from '../../company/entities/company.entity';
 import { PaymentType } from './../../payment-type/entities/payment-type.entity';
 
@@ -56,8 +56,8 @@ export class Payment extends BaseEntity {
     status: PaymentStatus;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: RecordFlag, enumName: 'RecordFlags' })
-    recordFlags: RecordFlag;
+    @ApiProperty({ enum: RecordFlags, enumName: 'RecordFlags' })
+    recordFlags: RecordFlags;
 
     @Column({ type: 'varchar', length: 256, default: '' })
     description: string;

@@ -9,7 +9,7 @@ import { CreatePaymentDeductionDto, UpdatePaymentDeductionDto } from './dto';
 import { PaymentDeduction } from './entities/payment-deduction.entity';
 
 @Injectable()
-export class PaymentDeductionsService extends BaseUserAccess {
+export class PaymentDeductionService extends BaseUserAccess {
     constructor(
         @InjectRepository(PaymentDeduction) private repository: Repository<PaymentDeduction>,
         @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
@@ -19,14 +19,14 @@ export class PaymentDeductionsService extends BaseUserAccess {
         super(userAccessService, Resource.Payment);
     }
 
-    async getCompanyId(entityId: string): Promise<string> {
-        const paymentDeduction = await this.repository.findOneOrFail({
-            where: { id: entityId },
-            withDeleted: true,
-        });
-        const paymentPosition = await this.paymentPositionsService.findOne(paymentDeduction.paymentPositionId);
-        return (await this.paymentsService.findOne(paymentPosition.paymentId)).companyId;
-    }
+    // async getCompanyId(entityId: string): Promise<string> {
+    //     const paymentDeduction = await this.repository.findOneOrFail({
+    //         where: { id: entityId },
+    //         withDeleted: true,
+    //     });
+    //     const paymentPosition = await this.paymentPositionsService.findOne(paymentDeduction.paymentPositionId);
+    //     return (await this.paymentsService.findOne(paymentPosition.paymentId)).companyId;
+    // }
 
     async create(userId: string, payload: CreatePaymentDeductionDto): Promise<PaymentDeduction> {
         const created = await this.repository.save({

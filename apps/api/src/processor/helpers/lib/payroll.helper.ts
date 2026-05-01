@@ -1,6 +1,6 @@
 import { Payroll } from './../../../resources/payrolls/entities/payroll.entity';
 import { PayPeriod } from './../../../resources/pay-period/entities/pay-period.entity';
-import { RecordFlag } from '@/types';
+import { RecordFlags } from '@/types';
 
 export function getPayrollUnionRecord(payroll: Payroll, payrolls: Payroll[], payPeriod: PayPeriod): Payroll {
     const result = Object.assign(payroll);
@@ -9,7 +9,7 @@ export function getPayrollUnionRecord(payroll: Payroll, payrolls: Payroll[], pay
             (o) =>
                 o.parentId === payroll.id &&
                 o.payPeriod.getTime() <= payPeriod.dateTo.getTime() &&
-                o.recordFlags & RecordFlag.Cancel,
+                o.recordFlags & RecordFlags.Cancel,
         )
         .forEach((o) => {
             result.factDays += o.factDays;

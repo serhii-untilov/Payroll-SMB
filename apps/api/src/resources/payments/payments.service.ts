@@ -5,7 +5,7 @@ import {
     PaymentPositionService,
     UserAccessService,
 } from '@/resources';
-import { PaymentStatus, RecordFlag, Resource, WrapperType } from '@/types';
+import { PaymentStatus, RecordFlags, Resource, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -61,7 +61,7 @@ export class PaymentsService extends BaseUserAccess {
             dateFrom: payload.dateFrom || accPeriodRecord.dateFrom,
             dateTo: payload.dateTo || accPeriodRecord.dateTo,
             status: payload.status || PaymentStatus.Draft,
-            recordFlags: payload.recordFlags || RecordFlag.Auto,
+            recordFlags: payload.recordFlags || RecordFlags.Auto,
             createdUserId: userId,
             updatedUserId: userId,
         });

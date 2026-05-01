@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserAccessModule } from '../user-access';
 import { PaymentPositionModule } from '../payment-position';
 import { PaymentDeduction } from './entities/payment-deduction.entity';
-import { PaymentDeductionsController } from './payment-deductions.controller';
-import { PaymentDeductionsService } from './payment-deductions.service';
+import { PaymentDeductionController } from './payment-deduction.controller';
+import { PaymentDeductionService } from './payment-deduction.service';
 
 @Module({
     imports: [
@@ -13,8 +13,8 @@ import { PaymentDeductionsService } from './payment-deductions.service';
         forwardRef(() => UserAccessModule),
         forwardRef(() => PaymentPositionModule),
     ],
-    controllers: [PaymentDeductionsController],
-    providers: [PaymentDeductionsService],
-    exports: [PaymentDeductionsService],
+    controllers: [PaymentDeductionController],
+    providers: [PaymentDeductionService],
+    exports: [PaymentDeductionService],
 })
 export class PaymentsModule {}

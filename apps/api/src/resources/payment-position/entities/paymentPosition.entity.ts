@@ -3,7 +3,7 @@ import { AfterLoad, Column, Entity, ManyToOne, Relation } from 'typeorm';
 import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { Payment } from '../../payments/entities/payment.entity';
 import { Position } from '../../positions/entities/position.entity';
-import { RecordFlag } from './../../../types';
+import { RecordFlags } from './../../../types';
 
 @Entity()
 export class PaymentPosition extends BaseEntity {
@@ -32,8 +32,8 @@ export class PaymentPosition extends BaseEntity {
     funds: number;
 
     @Column({ type: 'bigint', default: 0 })
-    @ApiProperty({ enum: RecordFlag, enumName: 'RecordFlags' })
-    recordFlags: RecordFlag;
+    @ApiProperty({ enum: RecordFlags, enumName: 'RecordFlags' })
+    recordFlags: RecordFlags;
 
     @AfterLoad()
     transform() {

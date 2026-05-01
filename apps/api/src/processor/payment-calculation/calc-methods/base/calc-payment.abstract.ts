@@ -3,7 +3,7 @@ import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
 import { PayPeriod } from '@/resources/pay-period/entities';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
-import { PaymentStatus, RecordFlag } from '@/types';
+import { PaymentStatus, RecordFlags } from '@/types';
 import { PaymentPosition } from '../../../../resources/payment-position/entities/paymentPosition.entity';
 import { PaymentType } from '../../../../resources/payment-type/entities/payment-type.entity';
 import { Payment } from '../../../../resources/payments/entities/payment.entity';
@@ -44,7 +44,7 @@ export abstract class CalcPayment {
             paySum: 0,
             funds: 0,
             status: PaymentStatus.Draft,
-            recordFlags: RecordFlag.Auto,
+            recordFlags: RecordFlags.Auto,
         });
     }
 
@@ -58,7 +58,7 @@ export abstract class CalcPayment {
             deductions: 0,
             paySum: 0,
             funds: 0,
-            recordFlags: RecordFlag.Auto,
+            recordFlags: RecordFlags.Auto,
         });
     }
 }
