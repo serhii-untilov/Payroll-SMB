@@ -1,13 +1,24 @@
-import { PayFundType } from './../entities/pay-fund-type.entity';
-import { OmitType } from '@nestjs/swagger';
+import { PayFundCalcMethod, PayFundGroup } from '@/types';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class CreatePayFundTypeDto extends OmitType(PayFundType, [
-    'id',
-    'createdDate',
-    'createdUserId',
-    'updatedDate',
-    'updatedUserId',
-    'deletedDate',
-    'deletedUserId',
-    'version',
-]) {}
+export class CreatePayFundTypeDto {
+    @ApiProperty()
+    @IsString()
+    name: string;
+
+    @ApiProperty({ enum: PayFundGroup, enumName: 'PayFundGroup' })
+    @IsEnum(PayFundGroup)
+    group: PayFundGroup;
+
+    @ApiProperty({ enum: PayFundCalcMethod, enumName: 'PayFundCalcMethod' })
+    @IsEnum(PayFundCalcMethod)
+    calcMethod: PayFundCalcMethod;
+
+    @IsNumber()
+    sequence: number;
+
+    @IsString()
+    @IsOptional()
+    description: string;
+}

@@ -1,8 +1,4 @@
-import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
-import { PositionHistory } from './../entities/position-history.entity';
+import { PartialType } from '@nestjs/swagger';
 import { CreatePositionHistoryDto } from './create-position-history.dto';
 
-export class UpdatePositionHistoryDto extends IntersectionType(
-    PickType(PositionHistory, ['version']),
-    PartialType(CreatePositionHistoryDto),
-) {}
+export class UpdatePositionHistoryDto extends PartialType(CreatePositionHistoryDto) {}

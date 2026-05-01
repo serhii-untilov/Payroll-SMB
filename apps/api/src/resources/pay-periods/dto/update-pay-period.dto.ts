@@ -1,21 +1,4 @@
-import { IntersectionType, OmitType, PartialType, PickType } from '@nestjs/swagger';
-import { PayPeriod } from './../entities/pay-period.entity';
+import { PartialType } from '@nestjs/swagger';
+import { CreatePayPeriodDto } from './create-pay-period.dto';
 
-export class UpdatePayPeriodDto extends IntersectionType(
-    PickType(PayPeriod, ['version']),
-    PartialType(
-        OmitType(PayPeriod, [
-            'id',
-            'company',
-            'companyId',
-            'transform',
-            'createdDate',
-            'createdUserId',
-            'updatedDate',
-            'updatedUserId',
-            'deletedDate',
-            'deletedUserId',
-            'version',
-        ]),
-    ),
-) {}
+export class UpdatePayPeriodDto extends PartialType(CreatePayPeriodDto) {}

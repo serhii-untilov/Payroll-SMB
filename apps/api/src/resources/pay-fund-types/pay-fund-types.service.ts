@@ -3,21 +3,21 @@ import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AvailableForUser } from '../common/base/available-for-user';
+import { BaseUserAccess } from '../common/base';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
 import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';
 import { PayFundType } from './entities/pay-fund-type.entity';
 
 @Injectable()
-export class PayFundTypesService extends AvailableForUser {
+export class PayFundTypesService extends BaseUserAccess {
     public readonly userRoleResource = Resource.FundType;
 
     constructor(
         @InjectRepository(PayFundType) private repository: Repository<PayFundType>,
-        @Inject(forwardRef(() => UserAccessService)) accessService: UserAccessService,
+        @Inject(forwardRef(() => UserAccessService)) userAccessService: UserAccessService,
     ) {
-        super(accessService);
+        super(userAccessService, Resource.FundType);
     }
 
     async create(userId: string, payload: CreatePayFundTypeDto): Promise<PayFundType> {
@@ -40,9 +40,9 @@ export class PayFundTypesService extends AvailableForUser {
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async update(userId: string, id: string, payload: UpdatePayFundTypeDto): Promise<PayFundType> {
+    async update(userId: string, id: string, version: number, payload: UpdatePayFundTypeDto): Promise<PayFundType> {
         const record = await this.repository.findOneOrFail({ where: { id } });
-        checkVersionOrFail(record, payload);
+        checkVersionOrFail(record, { version });
         await this.repository.save({
             ...payload,
             id,

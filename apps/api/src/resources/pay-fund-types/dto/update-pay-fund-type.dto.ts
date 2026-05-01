@@ -1,14 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/swagger';
-import { PayFundType } from './../entities/pay-fund-type.entity';
+import { PartialType } from '@nestjs/swagger';
+import { CreatePayFundTypeDto } from './create-pay-fund-type.dto';
 
-export class UpdatePayFundTypeDto extends PartialType(
-    OmitType(PayFundType, [
-        'id',
-        'createdDate',
-        'createdUserId',
-        'updatedDate',
-        'updatedUserId',
-        'deletedDate',
-        'deletedUserId',
-    ]),
-) {}
+export class UpdatePayFundTypeDto extends PartialType(CreatePayFundTypeDto) {}
