@@ -19,7 +19,7 @@ export class MinWageService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreateMinWageDto): Promise<string> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         const id = IdGenerator.nextId();
         await this.repository.save({
             ...payload,
@@ -35,12 +35,12 @@ export class MinWageService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<MinWage> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async update(userId: string, id: string, version: number, payload: UpdateMinWageDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -53,7 +53,7 @@ export class MinWageService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
     }
 }

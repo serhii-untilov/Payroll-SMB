@@ -66,10 +66,10 @@ export class PayrollsController {
     async findAll(@Req() req: Request, @Body() params: FindPayrollDto): Promise<Payroll[]> {
         const userId = getUserId(req);
         if (params.companyId) {
-            await this.service.canOrFail(userId, Action.Read, { companyId: params.companyId });
+            await this.service.requireAccessOrFail(userId, Action.Read, { companyId: params.companyId });
         } else if (params.positionId) {
             const companyId = await this.service.getPositionCompanyId(params.positionId);
-            await this.service.canOrFail(userId, Action.Read, { companyId });
+            await this.service.requireAccessOrFail(userId, Action.Read, { companyId });
         } else {
             throw new BadRequestException('Company or Position required.');
         }
@@ -88,7 +88,7 @@ export class PayrollsController {
     ): Promise<Payroll> {
         const userId = getUserId(req);
         const companyId = await this.service.getCompanyId(id);
-        await this.service.canOrFail(userId, Action.Read, { companyId });
+        await this.service.requireAccessOrFail(userId, Action.Read, { companyId });
         return await this.service.findOne(id, relations);
     }
 

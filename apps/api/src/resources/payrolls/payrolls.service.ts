@@ -45,7 +45,7 @@ export class PayrollsService extends BaseUserAccess {
 
     async create(userId: string, payload: CreatePayrollDto): Promise<Payroll> {
         const companyId = await this.getPositionCompanyId(payload.positionId);
-        await this.canOrFail(userId, Action.Create, { companyId });
+        await this.requireAccessOrFail(userId, Action.Create, { companyId });
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -94,7 +94,7 @@ export class PayrollsService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, payload: UpdatePayrollDto): Promise<Payroll> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -107,7 +107,7 @@ export class PayrollsService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<Payroll> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }

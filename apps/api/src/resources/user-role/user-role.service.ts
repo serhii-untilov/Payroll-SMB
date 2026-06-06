@@ -21,34 +21,34 @@ export class UserRoleService extends BaseUserAccess {
     }
 
     async create(userId: string, dto: CreateUserRoleDto): Promise<string> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         const id = IdGenerator.nextId();
         await this.repository.save({ id, ...dto, createdUserId: userId, updatedUserId: userId });
         return id;
     }
 
     async update(userId: string, id: string, version: number, payload: UpdateUserRoleDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update({ id, version }, { ...payload, updatedUserId: userId, updatedDate: new Date() });
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
     }
 
     async restore(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Restore, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Restore, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: null, deletedDate: null });
     }
 
     async findAll(userId: string): Promise<UserRole[]> {
-        await this.canOrFail(userId, Action.Read);
+        await this.requireAccessOrFail(userId, Action.Read);
         return await this.repository.find({ where: { userId } });
     }
 
     async findOne(userId: string, id: string): Promise<UserRole> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
@@ -114,7 +114,7 @@ export class UserRoleService extends BaseUserAccess {
     }
 
     async findAllByRoleType(userId: string, roleType: RoleType): Promise<UserRole[]> {
-        await this.canOrFail(userId, Action.Read);
+        await this.requireAccessOrFail(userId, Action.Read);
         return await this.repository.find({
             where: {
                 role: {

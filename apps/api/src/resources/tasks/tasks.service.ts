@@ -27,7 +27,7 @@ export class TasksService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreateTaskDto): Promise<Task> {
-        await this.canOrFail(userId, Action.Create, { companyId: payload.companyId });
+        await this.requireAccessOrFail(userId, Action.Create, { companyId: payload.companyId });
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -83,7 +83,7 @@ export class TasksService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, payload: UpdateTaskDto) {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -97,7 +97,7 @@ export class TasksService extends BaseUserAccess {
 
     // Soft delete
     async remove(userId: string, id: string, version: number): Promise<Task> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({
             where: { id },

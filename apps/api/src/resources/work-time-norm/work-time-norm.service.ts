@@ -22,7 +22,7 @@ export class WorkTimeNormService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreateWorkTimeNormDto): Promise<string> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         const exists = await this.repository.findOneBy({ name: payload.name });
         if (exists) {
             throw new HttpException(`WorkTimeNorm '${payload.name}' already exists.`, HttpStatus.CONFLICT);
@@ -42,7 +42,7 @@ export class WorkTimeNormService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string, params?: FindWorkTimeNormDto) {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({
             relations: { days: !!params?.relations },
             where: { id },
@@ -50,7 +50,7 @@ export class WorkTimeNormService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, payload: UpdateWorkTimeNormDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -63,7 +63,7 @@ export class WorkTimeNormService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
     }
 }

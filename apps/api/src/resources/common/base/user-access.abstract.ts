@@ -9,8 +9,8 @@ export abstract class BaseUserAccess {
         readonly resource: Resource,
     ) {}
 
-    async canOrFail(userId: string, action: Action, context?: ActionContextDto): Promise<void> {
-        if (!(await this.userAccess.canUser({ userId, resource: this.resource, action, context }))) {
+    async requireAccessOrFail(userId: string, action: Action, context?: ActionContextDto): Promise<void> {
+        if (!(await this.userAccess.isAllowed({ userId, resource: this.resource, action, context }))) {
             throw new ForbiddenException();
         }
     }

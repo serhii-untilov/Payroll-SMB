@@ -42,7 +42,7 @@ export class PositionHistoryService extends BaseUserAccess {
 
     async create(userId: string, payload: CreatePositionHistoryDto): Promise<PositionHistory> {
         const companyId = await this.getPositionCompanyId(payload.positionId);
-        await this.canOrFail(userId, Action.Create, { companyId });
+        await this.requireAccessOrFail(userId, Action.Create, { companyId });
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -57,7 +57,7 @@ export class PositionHistoryService extends BaseUserAccess {
 
     async findAll(userId: string, params: FindAllPositionHistoryDto): Promise<PositionHistory[]> {
         const companyId = await this.getPositionCompanyId(params.positionId);
-        await this.canOrFail(userId, Action.Read, { companyId });
+        await this.requireAccessOrFail(userId, Action.Read, { companyId });
         const position = params.onPayPeriodDate ? await this.positionsService.findOne(params.positionId) : null;
         const payPeriod =
             params.onPayPeriodDate && position
@@ -89,7 +89,7 @@ export class PositionHistoryService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string, params?: FindOnePositionHistoryDto): Promise<PositionHistory> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({
             where: { id },
             relations: {
@@ -108,7 +108,7 @@ export class PositionHistoryService extends BaseUserAccess {
         version: number,
         payload: UpdatePositionHistoryDto,
     ): Promise<PositionHistory> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({ where: { id } });
         await this.repository.update(
             { id, version },
@@ -126,7 +126,7 @@ export class PositionHistoryService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<PositionHistory> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
         await this.normalizeAfterDeleted(userId, deleted);

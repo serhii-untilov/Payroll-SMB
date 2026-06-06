@@ -62,7 +62,7 @@ export class TasksController {
     async findAll(@Req() req: Request, @Body() payload: FindAllTaskDto): Promise<Task[]> {
         const userId = getUserId(req);
         if (payload.companyId) {
-            await this.tasksService.canOrFail(userId, Action.Read, { companyId: payload.companyId });
+            await this.tasksService.requireAccessOrFail(userId, Action.Read, { companyId: payload.companyId });
         }
         return await this.tasksService.findAll(deepTransformToShortDate(payload));
     }
@@ -76,7 +76,7 @@ export class TasksController {
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() params?: FindOneTaskDto) {
         const userId = getUserId(req);
         const found = await this.tasksService.findOne(id, params);
-        await this.tasksService.canOrFail(userId, Action.Read, { companyId: found.companyId });
+        await this.tasksService.requireAccessOrFail(userId, Action.Read, { companyId: found.companyId });
         return found;
     }
 

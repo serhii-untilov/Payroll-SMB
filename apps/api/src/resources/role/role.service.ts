@@ -18,7 +18,7 @@ export class RoleService extends BaseUserAccess {
     }
 
     async create(userId: string, dto: CreateRoleDto): Promise<Role> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         return await this.repository.save({
             ...dto,
             createdUserId: userId,
@@ -27,27 +27,27 @@ export class RoleService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, data: UpdateRoleDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update({ id, version }, { ...data, updatedUserId: userId, updatedDate: new Date() });
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
     }
 
     async restore(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Restore, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Restore, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: null, deletedDate: null });
     }
 
     async findAll(userId: string, params?: FindManyOptions): Promise<Role[]> {
-        await this.canOrFail(userId, Action.Read);
+        await this.requireAccessOrFail(userId, Action.Read);
         return await this.repository.find(params);
     }
 
     async findOne(userId: string, id: string): Promise<Role> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 

@@ -63,7 +63,7 @@ export class PositionsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request, @Body() payload: FindAllPositionDto): Promise<Position[]> {
         const userId = getUserId(req);
-        await this.service.canOrFail(userId, Action.Read, { companyId: payload.companyId });
+        await this.service.requireAccessOrFail(userId, Action.Read, { companyId: payload.companyId });
         return await this.service.findAll(deepTransformToShortDate(payload));
     }
 
@@ -80,7 +80,7 @@ export class PositionsController {
     ): Promise<Position> {
         const userId = getUserId(req);
         const found = await this.service.findOne(id, params);
-        await this.service.canOrFail(userId, Action.Read, { companyId: found.companyId });
+        await this.service.requireAccessOrFail(userId, Action.Read, { companyId: found.companyId });
         return found;
     }
 
@@ -129,7 +129,7 @@ export class PositionsController {
         @Body() payload: FindAllPositionBalanceDto,
     ): Promise<PositionBalanceExtendedDto[]> {
         const userId = getUserId(req);
-        await this.service.canOrFail(userId, Action.Read, { companyId: payload.companyId });
+        await this.service.requireAccessOrFail(userId, Action.Read, { companyId: payload.companyId });
         return await this.service.findAllBalance(deepTransformToShortDate(payload));
     }
 
@@ -141,7 +141,7 @@ export class PositionsController {
     async findFirstByPersonId(@Req() req: Request, @Body() payload: FindPositionByPersonDto): Promise<Position> {
         const userId = getUserId(req);
         const found = await this.service.findFirstByPersonId(payload);
-        await this.service.canOrFail(userId, Action.Read, { companyId: found.companyId });
+        await this.service.requireAccessOrFail(userId, Action.Read, { companyId: found.companyId });
         return found;
     }
 }

@@ -21,7 +21,7 @@ export class PayFundTypesService extends BaseUserAccess {
     }
 
     async create(userId: string, dto: CreatePayFundTypeDto): Promise<string> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         const existing = await this.repository.findOneBy({ name: dto.name });
         if (existing) {
             throw new BadRequestException(`FundType '${dto.name}' already exists.`);
@@ -32,7 +32,7 @@ export class PayFundTypesService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, dto: UpdatePayFundTypeDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -45,7 +45,7 @@ export class PayFundTypesService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
     }
 
@@ -54,7 +54,7 @@ export class PayFundTypesService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<PayFundType> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 }

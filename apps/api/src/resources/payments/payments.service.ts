@@ -41,7 +41,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreatePaymentDto): Promise<Payment> {
-        await this.canOrFail(userId, Action.Create, { companyId: payload.companyId });
+        await this.requireAccessOrFail(userId, Action.Create, { companyId: payload.companyId });
         const { companyId, payPeriod, accPeriod, ...other } = payload;
         const company = await this.companiesService.findOne(userId, payload.companyId);
         const accPeriodRecord = await this.payPeriodService.findOneBy({
@@ -107,7 +107,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, payload: UpdatePaymentDto): Promise<Payment> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -120,7 +120,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<Payment> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
         const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
         this.eventEmitter.emit('payment.deleted', new PaymentDeletedEvent(userId, deleted));
@@ -180,7 +180,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async process(userId: string, id: string, payload: ProcessPaymentDto): Promise<Payment> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },
@@ -196,7 +196,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async withdraw(userId: string, id: string, payload: WithdrawPaymentDto): Promise<Payment> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },

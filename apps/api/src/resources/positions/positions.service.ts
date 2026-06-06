@@ -56,7 +56,7 @@ export class PositionsService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreatePositionDto): Promise<Position> {
-        await this.canOrFail(userId, Action.Create, { companyId: payload.companyId });
+        await this.requireAccessOrFail(userId, Action.Create, { companyId: payload.companyId });
         if (payload?.cardNumber) {
             const existing = payload?.cardNumber
                 ? await this.repository.findOne({
@@ -236,7 +236,7 @@ export class PositionsService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, payload: UpdatePositionDto): Promise<Position> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -251,7 +251,7 @@ export class PositionsService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<Position> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({
             where: { id },

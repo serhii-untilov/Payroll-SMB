@@ -35,7 +35,7 @@ export class PersonService extends BaseUserAccess {
     }
 
     async create(userId: string, dto: CreatePersonDto): Promise<string> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         const person = this.mapper.toEntity(dto);
         person.createdUserId = userId;
         person.updatedUserId = userId;
@@ -47,7 +47,7 @@ export class PersonService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, dto: UpdatePersonDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         const personBefore = await this.repository.findOneByOrFail({ id });
         const changes = this.mapper.diff(personBefore as any, dto as any);
         const result = await this.repository.update(
@@ -61,7 +61,7 @@ export class PersonService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         const personBefore = await this.repository.findOneByOrFail({ id });
         const changes = this.mapper.diff(personBefore as any, {} as any);
         const result = await this.repository.update(
@@ -75,7 +75,7 @@ export class PersonService extends BaseUserAccess {
     }
 
     async restore(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Restore, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Restore, { resourceId: id });
         const personBefore = await this.repository.findOneOrFail({
             where: { id },
             withDeleted: true,
@@ -90,7 +90,7 @@ export class PersonService extends BaseUserAccess {
     }
 
     async findAll(userId: string, query: ListPersonsQueryDto): Promise<ListPersonsDto> {
-        await this.canOrFail(userId, Action.Read);
+        await this.requireAccessOrFail(userId, Action.Read);
         const qb = this.repository.createQueryBuilder('p');
 
         // search
@@ -128,7 +128,7 @@ export class PersonService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<PersonReadDto> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         const person = await this.repository.findOneByOrFail({ id });
         return this.mapper.toReadDto(person);
     }

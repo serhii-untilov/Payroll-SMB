@@ -33,7 +33,7 @@ export class JobService extends BaseUserAccess {
     }
 
     async create(userId: string, dto: CreateJobDto): Promise<string> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         const id = IdGenerator.nextId();
         const job = await this.repository.save({ ...dto, id, createdUserId: userId, updatedUserId: userId });
         this.eventEmitter.emit(JobCreatedEvent.name, new JobCreatedEvent(userId, job.id));
@@ -41,25 +41,25 @@ export class JobService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, dto: UpdateJobDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update({ id, version }, { ...dto, updatedUserId: userId, updatedDate: new Date() });
         this.eventEmitter.emit(JobUpdatedEvent.name, new JobUpdatedEvent(userId, id));
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
         this.eventEmitter.emit(JobDeletedEvent.name, new JobDeletedEvent(userId, id));
     }
 
     async restore(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Restore, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Restore, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: null, deletedDate: null });
         this.eventEmitter.emit(JobRestoredEvent.name, new JobRestoredEvent(userId, id));
     }
 
     async findAll(userId: string, query: ListJobsQueryDto): Promise<ListJobsDto> {
-        await this.canOrFail(userId, Action.Read);
+        await this.requireAccessOrFail(userId, Action.Read);
         const qb = this.repository.createQueryBuilder('d').distinct(true);
 
         // search
@@ -85,7 +85,7 @@ export class JobService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<JobReadDto> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         const job = await this.repository.createQueryBuilder('d').where('d.id = :id', { id }).getOneOrFail();
         return this.mapper.toReadDto(job);
     }

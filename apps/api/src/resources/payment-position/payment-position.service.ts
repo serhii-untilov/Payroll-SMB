@@ -77,7 +77,7 @@ export class PaymentPositionService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string, params?: FindOnePaymentPositionDto): Promise<PaymentPosition> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         const record = await this.repository.findOneOrFail({
             withDeleted: !!params?.withDeleted,
             where: { id },
@@ -95,13 +95,13 @@ export class PaymentPositionService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, payload: UpdatePaymentPositionDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update({ id, version }, { ...payload, updatedUserId: userId, updatedDate: new Date() });
         await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
     }
 

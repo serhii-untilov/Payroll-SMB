@@ -33,7 +33,7 @@ export class DepartmentService extends BaseUserAccess {
     }
 
     async create(userId: string, dto: CreateDepartmentDto): Promise<string> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         const id = IdGenerator.nextId();
         const department = await this.repository.save({ ...dto, id, createdUserId: userId, updatedUserId: userId });
         this.eventEmitter.emit(DepartmentCreatedEvent.name, new DepartmentCreatedEvent(userId, department.id));
@@ -41,25 +41,25 @@ export class DepartmentService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, dto: UpdateDepartmentDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update({ id, version }, { ...dto, updatedUserId: userId, updatedDate: new Date() });
         this.eventEmitter.emit(DepartmentUpdatedEvent.name, new DepartmentUpdatedEvent(userId, id));
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
         this.eventEmitter.emit(DepartmentDeletedEvent.name, new DepartmentDeletedEvent(userId, id));
     }
 
     async restore(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Restore, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Restore, { resourceId: id });
         await this.repository.update({ id, version }, { deletedUserId: null, deletedDate: null });
         this.eventEmitter.emit(DepartmentRestoredEvent.name, new DepartmentRestoredEvent(userId, id));
     }
 
     async findAll(userId: string, query: ListDepartmentsQueryDto): Promise<ListDepartmentsDto> {
-        await this.canOrFail(userId, Action.Read);
+        await this.requireAccessOrFail(userId, Action.Read);
         const qb = this.repository.createQueryBuilder('d').distinct(true);
 
         // search
@@ -93,7 +93,7 @@ export class DepartmentService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<DepartmentReadDto> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         const department = await this.repository
             .createQueryBuilder('d')
             .innerJoinAndSelect('d.company', 'c')

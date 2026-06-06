@@ -87,7 +87,7 @@ export class PayPeriodService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<PayPeriod> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true },
@@ -102,13 +102,13 @@ export class PayPeriodService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, payload: UpdatePayPeriodDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update({ id, version }, { ...payload, updatedUserId: userId, updatedDate: new Date() });
         await this.repository.findOneOrFail({ where: { id } });
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
     }
 
@@ -151,7 +151,7 @@ export class PayPeriodService extends BaseUserAccess {
     }
 
     async close(userId: string, id: string, version: number, _payload: ClosePayPeriodDto): Promise<PayPeriod> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         const current = await this.repository.findOneOrFail({ where: { id } });
         const company = await this.companyService.findOne(userId, current.companyId);
         if (company.payPeriod.getTime() !== current.dateFrom.getTime()) {
@@ -181,7 +181,7 @@ export class PayPeriodService extends BaseUserAccess {
     }
 
     async open(userId: string, id: string, version: number, _payload: OpenPayPeriodDto): Promise<PayPeriod> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         const current = await this.repository.findOneOrFail({ where: { id } });
         if (current.state !== PayPeriodState.Opened) {
             throw new HttpException('The given period is not opened.', HttpStatus.CONFLICT);

@@ -4,7 +4,7 @@ import { IsNumberString, IsOptional } from 'class-validator';
 import { ActionContextDto } from './action-context.dto';
 import { Type } from 'class-transformer';
 
-export class CanUserDto {
+export class AccessCheckDto {
     @ApiPropertyOptional()
     @IsOptional()
     @IsNumberString()

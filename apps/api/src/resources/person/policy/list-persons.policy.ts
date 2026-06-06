@@ -8,7 +8,7 @@ export class ListPersonsPolicy implements QueryPolicy<any> {
     constructor(private readonly userAccess: UserAccessService) {}
 
     async canExecute(query: any): Promise<boolean> {
-        return await this.userAccess.canUser({
+        return await this.userAccess.isAllowed({
             userId: query.userId,
             resource: Resource.Person,
             action: Action.Read,

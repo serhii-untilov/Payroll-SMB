@@ -22,7 +22,7 @@ export class PaymentTypeService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreatePaymentTypeDto): Promise<string> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         const existing = await this.repository.findOneBy({ name: payload.name });
         if (existing) {
             throw new BadRequestException(`PaymentType '${payload.name}' already exists.`);
@@ -53,12 +53,12 @@ export class PaymentTypeService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<PaymentType> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async update(userId: string, id: string, version: number, payload: UpdatePaymentTypeDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -71,7 +71,7 @@ export class PaymentTypeService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
     }
 }

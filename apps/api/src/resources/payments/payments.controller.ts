@@ -64,7 +64,7 @@ export class PaymentsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request, @Body() params: FindAllPaymentDto): Promise<Payment[]> {
         const userId = getUserId(req);
-        await this.service.canOrFail(userId, Action.Read, { companyId: params.companyId });
+        await this.service.requireAccessOrFail(userId, Action.Read, { companyId: params.companyId });
         return await this.service.findAll(deepTransformToShortDate(params));
     }
 
@@ -77,7 +77,7 @@ export class PaymentsController {
     async findOne(@Req() req: Request, @Param('id') id: string): Promise<Payment> {
         const userId = getUserId(req);
         const companyId = await this.service.getCompanyId(id);
-        await this.service.canOrFail(userId, Action.Read, { companyId });
+        await this.service.requireAccessOrFail(userId, Action.Read, { companyId });
         return await this.service.findOne(id);
     }
 

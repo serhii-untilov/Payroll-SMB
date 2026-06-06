@@ -39,7 +39,7 @@ export class CompanyService extends BaseUserAccess {
         super(userAccess, Resource.Company);
     }
     async create(userId: string, dto: CreateCompanyDto): Promise<string> {
-        await this.canOrFail(userId, Action.Create);
+        await this.requireAccessOrFail(userId, Action.Create);
         const role = await this.roleService.findRoleByType(RoleType.CompanyAdmin);
         const id = IdGenerator.nextId();
         const company = await this.repository.save({ id, ...dto, createdUserId: userId, updatedUserId: userId });
@@ -49,7 +49,7 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, version: number, dto: UpdateCompanyDto): Promise<void> {
-        await this.canOrFail(userId, Action.Update, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Update, { resourceId: id });
         await this.repository.update(
             { id, version },
             {
@@ -63,19 +63,19 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Remove, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
         this.eventEmitter.emit(CompanyDeletedEvent.name, new CompanyDeletedEvent(userId, id));
     }
 
     async restore(userId: string, id: string, version: number): Promise<void> {
-        await this.canOrFail(userId, Action.Restore, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Restore, { resourceId: id });
         await this.repository.update({ id, version }, { deletedDate: null, deletedUserId: null });
         this.eventEmitter.emit(CompanyRestoredEvent.name, new CompanyRestoredEvent(userId, id));
     }
 
     async findAll(userId: string, query: ListCompaniesQueryDto): Promise<ListCompaniesDto> {
-        await this.canOrFail(userId, Action.Read);
+        await this.requireAccessOrFail(userId, Action.Read);
         const qb = this.repository.createQueryBuilder('c').distinct(true);
         // search
         ApplyFiltersUtil.apply(qb, 'c', query.search);
@@ -103,7 +103,7 @@ export class CompanyService extends BaseUserAccess {
     }
 
     async findOne(userId: string, id: string): Promise<CompanyReadDto> {
-        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        await this.requireAccessOrFail(userId, Action.Read, { resourceId: id });
         const company = await this.repository.findOneOrFail({
             relations: {
                 law: true,
