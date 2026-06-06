@@ -12,8 +12,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import * as _ from 'lodash';
 import { FindOneOptions, Repository } from 'typeorm';
-import { UserAccessService } from '../user-access/user-access.service';
 import { RoleService } from '../role/role.service';
+import { UserAccessService } from '../user-access/user-access.service';
 import { UserRole } from '../user-role/entities/user-role.entity';
 import { CreateUserDto, PublicUserDataDto, UpdateUserDto } from './dto';
 import { User } from './entities/user.entity';

@@ -8,11 +8,9 @@ import {
     HttpCode,
     HttpStatus,
     Param,
-    ParseBoolPipe,
     ParseIntPipe,
     Patch,
     Post,
-    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
@@ -27,7 +25,6 @@ import {
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
-import { FindOneUserDto } from './dto/find-one-user.dto';
 import { PublicUserDataDto } from './dto/public-user-data.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -71,11 +68,10 @@ export class UserController {
     @ApiOkResponse({ description: 'The found record', type: User })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findCurrent(@Req() req: Request, @Body() params: FindOneUserDto): Promise<PublicUserDataDto> {
+    async findCurrent(@Req() req: Request): Promise<PublicUserDataDto> {
         const id: string = getUserId(req);
         const user = await this.usersService.findOneOrFail({
             where: { id },
-            relations: { role: !!params.relations },
         });
         return this.usersService.toPublic(user);
     }
@@ -85,13 +81,9 @@ export class UserController {
     @ApiOkResponse({ description: 'The found record', type: User })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    async findOne(
-        @Param('id', ParseIntPipe) id: string,
-        @Query('relations', new ParseBoolPipe({ optional: true })) relations?: boolean,
-    ): Promise<PublicUserDataDto> {
+    async findOne(@Param('id', ParseIntPipe) id: string): Promise<PublicUserDataDto> {
         const user = await this.usersService.findOneOrFail({
             where: { id },
-            relations: { role: !!relations },
         });
         return this.usersService.toPublic(user);
     }
