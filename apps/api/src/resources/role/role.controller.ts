@@ -51,29 +51,49 @@ export class RoleController {
         return await this.service.findOne(userId, id);
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
-    @ApiOperation({ summary: 'Update a company' })
+    @ApiOperation({ summary: 'Update a role' })
     @ApiOkResponse({ description: 'The updated record', type: Role })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
         @Body() payload: UpdateRoleDto,
     ): Promise<void> {
         const userId = getUserId(req);
-        await this.service.update(userId, id, payload);
+        await this.service.update(userId, id, version, payload);
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a role' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Role })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<void> {
+    async remove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
+    ): Promise<void> {
         const userId = getUserId(req);
-        await this.service.remove(userId, id);
+        await this.service.remove(userId, id, version);
+    }
+
+    @Post(':id/restore/:version')
+    @UseGuards(AccessTokenGuard)
+    @ApiOperation({ summary: 'Restore a role' })
+    @ApiOkResponse({ description: 'The record has been successfully restored', type: Role })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    @ApiNotFoundResponse({ description: 'Not found' })
+    async restore(
+        @Req() req: Request,
+        @Param('id') id: string,
+        @Param('version', ParseIntPipe) version: number,
+    ): Promise<void> {
+        const userId = getUserId(req);
+        await this.service.restore(userId, id, version);
     }
 }

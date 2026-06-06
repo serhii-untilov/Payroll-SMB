@@ -66,14 +66,14 @@ describe('RoleService', () => {
         repoMock.findOneBy?.mockReturnValue(role);
         repoMock.save?.mockReturnValue({ ...role, name: newName });
         repoMock.findOneOrFail?.mockReturnValue({ ...role, name: newName });
-        const res = await service.update(userId, role.id, { name: newName });
+        const res = await service.update(userId, role.id, 1, { name: newName });
         expect(res).toStrictEqual({ ...role, name: newName });
     });
 
     it.skip('should throw if a role could not be found during update', async () => {
         repoMock.findOneBy?.mockImplementation(() => null);
         try {
-            await service.update(userId, '0', {});
+            await service.update(userId, '0', 1, {});
         } catch (err) {
             expect(err).toBeInstanceOf(NotFoundException);
         }
@@ -82,14 +82,14 @@ describe('RoleService', () => {
     it.skip('should remove a role if it exists', async () => {
         const role = createMockRole();
         repoMock.findOneBy?.mockReturnValue(role);
-        const res = await service.remove(userId, role.id);
+        const res = await service.remove(userId, role.id, 1);
         expect(res).toStrictEqual(role);
     });
 
     it.skip('should throw if a role could not be found during remove', async () => {
         repoMock.findOneBy?.mockImplementation(() => null);
         try {
-            await service.remove(userId, '0');
+            await service.remove(userId, '0', 1);
         } catch (err) {
             expect(err).toBeInstanceOf(NotFoundException);
         }

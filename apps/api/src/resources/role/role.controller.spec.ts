@@ -51,7 +51,7 @@ describe('RoleController', () => {
         const newName = randCountry();
         const updatedRole = { ...role, name: newName };
         jest.spyOn(service, 'update').mockReturnValue(Promise.resolve(void 0));
-        const res = await controller.update({ body: {} } as any as Request, role.id, {
+        const res = await controller.update({ body: {} } as any as Request, role.id, 1, {
             name: newName,
         });
         expect(res).toStrictEqual(updatedRole);
@@ -60,7 +60,7 @@ describe('RoleController', () => {
     it.skip('should remove a role', async () => {
         const role = createMockRole();
         jest.spyOn(service, 'remove').mockReturnValue(Promise.resolve(void 0));
-        const res = await controller.remove({ body: {} } as any as Request, role.id);
+        const res = await controller.remove({ body: {} } as any as Request, role.id, 1);
         expect(res).toStrictEqual(role);
     });
 });
