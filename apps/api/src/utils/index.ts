@@ -1,4 +1,4 @@
-export * from './lib/access';
+// export * from './lib/access';
 export * from './lib/refresh-token';
 export * from './lib/system-role';
 export * from './lib/system-user';
