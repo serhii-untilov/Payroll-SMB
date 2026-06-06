@@ -5,7 +5,7 @@ import {
     PaymentPositionService,
     UserAccessService,
 } from '@/resources';
-import { PaymentStatus, RecordFlags, Resource, WrapperType } from '@/types';
+import { Action, PaymentStatus, RecordFlags, Resource, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -42,6 +42,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreatePaymentDto): Promise<Payment> {
+        await this.canOrFail(userId, Action.Create, { companyId: payload.companyId });
         const { companyId, payPeriod, accPeriod, ...other } = payload;
         const company = await this.companiesService.findOne(userId, payload.companyId);
         const accPeriodRecord = await this.payPeriodService.findOneBy({
@@ -107,6 +108,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, payload: UpdatePaymentDto): Promise<Payment> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -119,6 +121,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string): Promise<Payment> {
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
         this.eventEmitter.emit('payment.deleted', new PaymentDeletedEvent(userId, deleted));
@@ -181,6 +184,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async process(userId: string, id: string, payload: ProcessPaymentDto): Promise<Payment> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },
@@ -196,6 +200,7 @@ export class PaymentsService extends BaseUserAccess {
     }
 
     async withdraw(userId: string, id: string, payload: WithdrawPaymentDto): Promise<Payment> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({
             where: { id },
             relations: { company: true, paymentType: true },

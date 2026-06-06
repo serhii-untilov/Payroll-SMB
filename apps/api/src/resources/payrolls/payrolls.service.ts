@@ -1,4 +1,5 @@
 import {
+    Action,
     CalcMethod,
     PaymentGroupsTotal,
     PaymentPartsTotal,
@@ -44,6 +45,8 @@ export class PayrollsService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreatePayrollDto): Promise<Payroll> {
+        const companyId = await this.getPositionCompanyId(payload.positionId);
+        await this.canOrFail(userId, Action.Create, { companyId });
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -92,6 +95,7 @@ export class PayrollsService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, payload: UpdatePayrollDto): Promise<Payroll> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -104,6 +108,7 @@ export class PayrollsService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string): Promise<Payroll> {
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }

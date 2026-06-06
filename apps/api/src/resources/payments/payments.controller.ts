@@ -1,6 +1,7 @@
 import { Payment } from './entities/payment.entity';
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
+import { Action } from '@/types';
 import {
     Body,
     Controller,
@@ -50,8 +51,6 @@ export class PaymentsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePaymentDto): Promise<Payment> {
         const userId = getUserId(req);
-        const companyId = await this.service.getCompanyId(payload.companyId);
-        await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
@@ -65,6 +64,7 @@ export class PaymentsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request, @Body() params: FindAllPaymentDto): Promise<Payment[]> {
         const userId = getUserId(req);
+        await this.service.canOrFail(userId, Action.Read, { companyId: params.companyId });
         return await this.service.findAll(deepTransformToShortDate(params));
     }
 
@@ -76,7 +76,9 @@ export class PaymentsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findOne(@Req() req: Request, @Param('id') id: string): Promise<Payment> {
         const userId = getUserId(req);
-        return await this.service.findOne(userId, id);
+        const companyId = await this.service.getCompanyId(id);
+        await this.service.canOrFail(userId, Action.Read, { companyId });
+        return await this.service.findOne(id);
     }
 
     @Patch(':id')
@@ -91,7 +93,6 @@ export class PaymentsController {
         @Body() payload: UpdatePaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
@@ -103,7 +104,6 @@ export class PaymentsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Payment> {
         const userId = getUserId(req);
-        await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 
@@ -113,7 +113,7 @@ export class PaymentsController {
     @ApiOperation({ summary: 'Restore the deleted payment record' })
     @ApiOkResponse({ description: 'The record has been successfully restored', type: Payment })
     @ApiForbiddenResponse({ description: 'Forbidden' })
-    @ApiNotFoundResponse({ description: 'Not found' })
+    @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiBadRequestResponse({ description: 'Bad request' })
     async restore(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Payment> {
         const userId = getUserId(req);
@@ -136,7 +136,6 @@ export class PaymentsController {
         @Body() params: ProcessPaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return this.service.process(userId, id, params);
     }
 
@@ -156,7 +155,6 @@ export class PaymentsController {
         @Body() params: WithdrawPaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return this.service.withdraw(userId, id, params);
     }
 }

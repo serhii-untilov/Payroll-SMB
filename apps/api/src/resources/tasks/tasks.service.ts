@@ -1,4 +1,4 @@
-import { Resource, TaskStatus, TaskType } from '@/types';
+import { Action, Resource, TaskStatus, TaskType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -28,6 +28,7 @@ export class TasksService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreateTaskDto): Promise<Task> {
+        await this.canOrFail(userId, Action.Create, { companyId: payload.companyId });
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -83,6 +84,7 @@ export class TasksService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, payload: UpdateTaskDto) {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -96,6 +98,7 @@ export class TasksService extends BaseUserAccess {
 
     // Soft delete
     async remove(userId: string, id: string): Promise<Task> {
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({
             where: { id },

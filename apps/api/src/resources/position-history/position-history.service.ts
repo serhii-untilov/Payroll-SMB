@@ -1,4 +1,4 @@
-import { Resource } from '@/types';
+import { Action, Resource } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -42,6 +42,8 @@ export class PositionHistoryService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreatePositionHistoryDto): Promise<PositionHistory> {
+        const companyId = await this.getPositionCompanyId(payload.positionId);
+        await this.canOrFail(userId, Action.Create, { companyId });
         const created = await this.repository.save({
             ...payload,
             createdUserId: userId,
@@ -54,7 +56,9 @@ export class PositionHistoryService extends BaseUserAccess {
         return record;
     }
 
-    async findAll(params: FindAllPositionHistoryDto): Promise<PositionHistory[]> {
+    async findAll(userId: string, params: FindAllPositionHistoryDto): Promise<PositionHistory[]> {
+        const companyId = await this.getPositionCompanyId(params.positionId);
+        await this.canOrFail(userId, Action.Read, { companyId });
         const position = params.onPayPeriodDate ? await this.positionsService.findOne(params.positionId) : null;
         const payPeriod =
             params.onPayPeriodDate && position
@@ -85,7 +89,8 @@ export class PositionHistoryService extends BaseUserAccess {
         return response;
     }
 
-    async findOne(id: string, params?: FindOnePositionHistoryDto): Promise<PositionHistory> {
+    async findOne(userId: string, id: string, params?: FindOnePositionHistoryDto): Promise<PositionHistory> {
+        await this.canOrFail(userId, Action.Read, { resourceId: id });
         return await this.repository.findOneOrFail({
             where: { id },
             relations: {
@@ -114,6 +119,7 @@ export class PositionHistoryService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string): Promise<PositionHistory> {
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
         const deleted = await this.repository.save({
             id,
             deletedUserId: userId,

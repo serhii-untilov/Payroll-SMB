@@ -1,6 +1,7 @@
 import { Position } from './entities/position.entity';
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
+import { Action } from '@/types';
 import {
     Body,
     Controller,
@@ -49,7 +50,6 @@ export class PositionsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePositionDto): Promise<Position> {
         const userId = getUserId(req);
-        await this.service.availableCreateOrFail(userId, payload.companyId);
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
@@ -62,7 +62,7 @@ export class PositionsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request, @Body() payload: FindAllPositionDto): Promise<Position[]> {
         const userId = getUserId(req);
-        await this.service.availableFindAllOrFail(userId, payload.companyId);
+        await this.service.canOrFail(userId, Action.Read, { companyId: payload.companyId });
         return await this.service.findAll(deepTransformToShortDate(payload));
     }
 
@@ -79,7 +79,7 @@ export class PositionsController {
     ): Promise<Position> {
         const userId = getUserId(req);
         const found = await this.service.findOne(id, params);
-        await this.service.availableFindAllOrFail(userId, found.companyId);
+        await this.service.canOrFail(userId, Action.Read, { companyId: found.companyId });
         return found;
     }
 
@@ -95,7 +95,6 @@ export class PositionsController {
         @Body() payload: UpdatePositionDto,
     ): Promise<Position> {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
@@ -107,7 +106,6 @@ export class PositionsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Position> {
         const userId = getUserId(req);
-        await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 
@@ -125,7 +123,7 @@ export class PositionsController {
         @Body() payload: FindAllPositionBalanceDto,
     ): Promise<PositionBalanceExtendedDto[]> {
         const userId = getUserId(req);
-        await this.service.availableFindAllOrFail(userId, payload.companyId);
+        await this.service.canOrFail(userId, Action.Read, { companyId: payload.companyId });
         return await this.service.findAllBalance(deepTransformToShortDate(payload));
     }
 
@@ -137,7 +135,7 @@ export class PositionsController {
     async findFirstByPersonId(@Req() req: Request, @Body() payload: FindPositionByPersonDto): Promise<Position> {
         const userId = getUserId(req);
         const found = await this.service.findFirstByPersonId(payload);
-        await this.service.availableFindAllOrFail(userId, found.companyId);
+        await this.service.canOrFail(userId, Action.Read, { companyId: found.companyId });
         return found;
     }
 }

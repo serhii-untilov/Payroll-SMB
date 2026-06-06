@@ -1,4 +1,4 @@
-import { PaymentPart, Resource, WorkTimeBalance, WrapperType } from '@/types';
+import { Action, PaymentPart, Resource, WorkTimeBalance, WrapperType } from '@/types';
 import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -57,6 +57,7 @@ export class PositionsService extends BaseUserAccess {
     }
 
     async create(userId: string, payload: CreatePositionDto): Promise<Position> {
+        await this.canOrFail(userId, Action.Create, { companyId: payload.companyId });
         if (payload?.cardNumber) {
             const existing = payload?.cardNumber
                 ? await this.repository.findOne({
@@ -236,6 +237,7 @@ export class PositionsService extends BaseUserAccess {
     }
 
     async update(userId: string, id: string, payload: UpdatePositionDto): Promise<Position> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({ where: { id } });
         checkVersionOrFail(record, payload);
         await this.repository.save({
@@ -250,6 +252,7 @@ export class PositionsService extends BaseUserAccess {
     }
 
     async remove(userId: string, id: string): Promise<Position> {
+        await this.canOrFail(userId, Action.Remove, { resourceId: id });
         await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({
             where: { id },

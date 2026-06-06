@@ -47,8 +47,6 @@ export class PositionHistoryController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePositionHistoryDto): Promise<PositionHistory> {
         const userId = getUserId(req);
-        const companyId = await this.service.getPositionCompanyId(payload.positionId);
-        await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
@@ -62,9 +60,7 @@ export class PositionHistoryController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findAll(@Req() req: Request, @Body() params: FindAllPositionHistoryDto): Promise<PositionHistory[]> {
         const userId = getUserId(req);
-        const companyId = await this.service.getPositionCompanyId(params.positionId);
-        await this.service.availableCreateOrFail(userId, companyId);
-        return await this.service.findAll(deepTransformToShortDate(params));
+        return await this.service.findAll(userId, deepTransformToShortDate(params));
     }
 
     @Post('find/last')
@@ -75,9 +71,7 @@ export class PositionHistoryController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async findLast(@Req() req: Request, @Body() params: FindAllPositionHistoryDto): Promise<PositionHistory | null> {
         const userId = getUserId(req);
-        const companyId = await this.service.getPositionCompanyId(params.positionId);
-        await this.service.availableFindAllOrFail(userId, companyId);
-        const response = await this.service.findAll({
+        const response = await this.service.findAll(userId, {
             ...deepTransformToShortDate(params),
             last: true,
         });
@@ -120,7 +114,6 @@ export class PositionHistoryController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<PositionHistory> {
         const userId = getUserId(req);
-        await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 }

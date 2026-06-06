@@ -1,6 +1,7 @@
 import { Payroll } from './entities/payroll.entity';
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
+import { Action } from '@/types';
 import {
     BadRequestException,
     Body,
@@ -50,8 +51,6 @@ export class PayrollsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreatePayrollDto): Promise<Payroll> {
         const userId = getUserId(req);
-        const companyId = await this.service.getPositionCompanyId(payload.positionId);
-        await this.service.availableCreateOrFail(userId, companyId);
         return await this.service.create(userId, deepTransformToShortDate(payload));
     }
 
@@ -67,10 +66,10 @@ export class PayrollsController {
     async findAll(@Req() req: Request, @Body() params: FindPayrollDto): Promise<Payroll[]> {
         const userId = getUserId(req);
         if (params.companyId) {
-            await this.service.availableFindAllOrFail(userId, params.companyId);
+            await this.service.canOrFail(userId, Action.Read, { companyId: params.companyId });
         } else if (params.positionId) {
             const companyId = await this.service.getPositionCompanyId(params.positionId);
-            await this.service.availableFindAllOrFail(userId, companyId);
+            await this.service.canOrFail(userId, Action.Read, { companyId });
         } else {
             throw new BadRequestException('Company or Position required.');
         }
@@ -88,7 +87,8 @@ export class PayrollsController {
         @Query('relations', ParseBoolPipe) relations: boolean,
     ): Promise<Payroll> {
         const userId = getUserId(req);
-        await this.service.availableFindOneOrFail(userId, id);
+        const companyId = await this.service.getCompanyId(id);
+        await this.service.canOrFail(userId, Action.Read, { companyId });
         return await this.service.findOne(id, relations);
     }
 
@@ -104,7 +104,6 @@ export class PayrollsController {
         @Body() payload: UpdatePayrollDto,
     ): Promise<Payroll> {
         const userId = getUserId(req);
-        await this.service.availableUpdateOrFail(userId, id);
         return await this.service.update(userId, id, deepTransformToShortDate(payload));
     }
 
@@ -116,7 +115,6 @@ export class PayrollsController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Payroll> {
         const userId = getUserId(req);
-        await this.service.availableDeleteOrFail(userId, id);
         return await this.service.remove(userId, id);
     }
 }

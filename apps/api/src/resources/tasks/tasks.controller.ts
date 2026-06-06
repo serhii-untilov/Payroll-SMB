@@ -1,5 +1,6 @@
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
+import { Action } from '@/types';
 import {
     Body,
     Controller,
@@ -47,7 +48,6 @@ export class TasksController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     async create(@Req() req: Request, @Body() payload: CreateTaskDto): Promise<Task> {
         const userId = getUserId(req);
-        await this.tasksService.availableCreateOrFail(userId, payload.companyId);
         return await this.tasksService.create(userId, deepTransformToShortDate(payload));
     }
 
@@ -62,7 +62,7 @@ export class TasksController {
     async findAll(@Req() req: Request, @Body() payload: FindAllTaskDto): Promise<Task[]> {
         const userId = getUserId(req);
         if (payload.companyId) {
-            await this.tasksService.availableFindAllOrFail(userId, payload.companyId);
+            await this.tasksService.canOrFail(userId, Action.Read, { companyId: payload.companyId });
         }
         return await this.tasksService.findAll(deepTransformToShortDate(payload));
     }
@@ -76,7 +76,7 @@ export class TasksController {
     async findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: string, @Body() params?: FindOneTaskDto) {
         const userId = getUserId(req);
         const found = await this.tasksService.findOne(id, params);
-        await this.tasksService.availableFindAllOrFail(userId, found.companyId);
+        await this.tasksService.canOrFail(userId, Action.Read, { companyId: found.companyId });
         return found;
     }
 
@@ -92,7 +92,6 @@ export class TasksController {
         @Body() payload: UpdateTaskDto,
     ): Promise<Task> {
         const userId = getUserId(req);
-        await this.tasksService.availableUpdateOrFail(userId, id);
         return await this.tasksService.update(userId, id, deepTransformToShortDate(payload));
     }
 
@@ -104,7 +103,6 @@ export class TasksController {
     @ApiNotFoundResponse({ description: 'Not found' })
     async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Task> {
         const userId = getUserId(req);
-        await this.tasksService.availableDeleteOrFail(userId, id);
         return await this.tasksService.remove(userId, id);
     }
 }
