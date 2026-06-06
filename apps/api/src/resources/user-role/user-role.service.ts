@@ -4,7 +4,6 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { CreateUserRoleDto } from './dto/create-user-role.dto';
-import { FindUserRoleDto } from './dto/find-user-role.dto';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 import { UserRole } from './entities/user-role.entity';
 import { BaseUserAccess } from '../common/base/user-access.abstract';
@@ -12,7 +11,7 @@ import { UserAccessService } from '../user-access/user-access.service';
 
 @Injectable()
 export class UserRoleService extends BaseUserAccess {
-    public readonly userRoleResource = Resource.Company;
+    public readonly resource = Resource.UserRole;
 
     constructor(
         @InjectRepository(UserRole) private repository: Repository<UserRole>,
@@ -43,22 +42,14 @@ export class UserRoleService extends BaseUserAccess {
         await this.repository.update({ id, version }, { deletedUserId: null, deletedDate: null });
     }
 
-    async findAll({ userId: string, relations, withDeleted }: FindUserRoleDto) {
+    async findAll(userId: string): Promise<UserRole[]> {
         await this.canOrFail(userId, Action.Read);
-        return await this.repository.find({
-            where: { userId },
-            relations: { company: relations, role: relations },
-            withDeleted,
-        });
+        return await this.repository.find({ where: { userId } });
     }
 
-    async findOne(id: string, { relations, withDeleted }: FindUserRoleDto) {
-        const userCompany = this.repository.findOneOrFail({
-            where: { id },
-            relations: { company: relations, role: relations },
-            withDeleted,
-        });
-        return userCompany;
+    async findOne(userId: string, id: string): Promise<UserRole> {
+        await this.canOrFail(userId, Action.Read, { resourceId: id });
+        return await this.repository.findOneOrFail({ where: { id } });
     }
 
     async findOneByCompanyName(userId: string, name: string) {
@@ -122,7 +113,8 @@ export class UserRoleService extends BaseUserAccess {
         return Number(count);
     }
 
-    async findAllByRoleType({ roleType, relations, withDeleted }: FindUserRoleDto) {
+    async findAllByRoleType(userId: string, roleType: RoleType): Promise<UserRole[]> {
+        await this.canOrFail(userId, Action.Read);
         return await this.repository.find({
             where: {
                 role: {
@@ -136,8 +128,6 @@ export class UserRoleService extends BaseUserAccess {
                     deletedDate: IsNull(),
                 },
             },
-            relations: { company: relations, role: relations },
-            withDeleted,
         });
     }
 }
