@@ -6,6 +6,7 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     HttpCode,
     HttpStatus,
     Param,
@@ -83,7 +84,7 @@ export class PositionsController {
         return found;
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update a Position record' })
     @ApiOkResponse({ description: 'The updated record', type: Position })
@@ -92,21 +93,26 @@ export class PositionsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
         @Body() payload: UpdatePositionDto,
     ): Promise<Position> {
         const userId = getUserId(req);
-        return await this.service.update(userId, id, deepTransformToShortDate(payload));
+        return await this.service.update(userId, id, version, deepTransformToShortDate(payload));
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a Position record' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Position })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Position> {
+    async remove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
+    ): Promise<Position> {
         const userId = getUserId(req);
-        return await this.service.remove(userId, id);
+        return await this.service.remove(userId, id, version);
     }
 
     @Post('balance')

@@ -1,5 +1,4 @@
 import { Action, Resource } from '@/types';
-import { checkVersionOrFail } from '@/utils';
 import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -103,33 +102,37 @@ export class PositionHistoryService extends BaseUserAccess {
         });
     }
 
-    async update(userId: string, id: string, payload: UpdatePositionHistoryDto): Promise<PositionHistory> {
+    async update(
+        userId: string,
+        id: string,
+        version: number,
+        payload: UpdatePositionHistoryDto,
+    ): Promise<PositionHistory> {
+        await this.canOrFail(userId, Action.Update, { resourceId: id });
         const record = await this.repository.findOneOrFail({ where: { id } });
-        checkVersionOrFail(record, payload);
-        const updated = await this.repository.save({
-            ...payload,
-            id,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
+        await this.repository.update(
+            { id, version },
+            {
+                ...payload,
+                updatedUserId: userId,
+                updatedDate: new Date(),
+            },
+        );
+        const updated = await this.repository.findOneOrFail({ where: { id } });
         await this.normalizeAfterCreateOrUpdate(userId, updated);
         const position = await this.positionsService.findOne(record.positionId);
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: string, id: string): Promise<PositionHistory> {
+    async remove(userId: string, id: string, version: number): Promise<PositionHistory> {
         await this.canOrFail(userId, Action.Remove, { resourceId: id });
-        const deleted = await this.repository.save({
-            id,
-            deletedUserId: userId,
-            deletedDate: new Date(),
-        });
+        await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
+        const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
         await this.normalizeAfterDeleted(userId, deleted);
-        const record = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
-        const position = await this.positionsService.findOne(record.positionId);
+        const position = await this.positionsService.findOne(deleted.positionId);
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, position));
-        return record;
+        return deleted;
     }
 
     private async normalizeAfterCreateOrUpdate(userId: string, record: PositionHistory): Promise<void> {

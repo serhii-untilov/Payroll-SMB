@@ -6,6 +6,7 @@ export class UpdateTaskDto extends PartialType(
         'id',
         'company',
         'transform',
+        'version',
         'createdDate',
         'createdUserId',
         'updatedDate',

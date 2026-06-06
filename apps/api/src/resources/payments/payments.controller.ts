@@ -81,7 +81,7 @@ export class PaymentsController {
         return await this.service.findOne(id);
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update payment' })
     @ApiOkResponse({ description: 'The updated record', type: Payment })
@@ -90,21 +90,26 @@ export class PaymentsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
         @Body() payload: UpdatePaymentDto,
     ): Promise<Payment> {
         const userId = getUserId(req);
-        return await this.service.update(userId, id, deepTransformToShortDate(payload));
+        return await this.service.update(userId, id, version, deepTransformToShortDate(payload));
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a payment record' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Payment })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Payment> {
+    async remove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
+    ): Promise<Payment> {
         const userId = getUserId(req);
-        return await this.service.remove(userId, id);
+        return await this.service.remove(userId, id, version);
     }
 
     @Post(':id/restore/:version')
@@ -115,9 +120,13 @@ export class PaymentsController {
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Record not found' })
     @ApiBadRequestResponse({ description: 'Bad request' })
-    async restore(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Payment> {
+    async restore(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
+    ): Promise<Payment> {
         const userId = getUserId(req);
-        return await this.service.restore(userId, id);
+        return await this.service.restore(userId, id, version);
     }
 
     @Post('process/:id')

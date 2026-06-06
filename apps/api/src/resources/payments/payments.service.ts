@@ -6,7 +6,6 @@ import {
     UserAccessService,
 } from '@/resources';
 import { Action, PaymentStatus, RecordFlags, Resource, WrapperType } from '@/types';
-import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -107,35 +106,32 @@ export class PaymentsService extends BaseUserAccess {
         return found.length ? found[0] : null;
     }
 
-    async update(userId: string, id: string, payload: UpdatePaymentDto): Promise<Payment> {
+    async update(userId: string, id: string, version: number, payload: UpdatePaymentDto): Promise<Payment> {
         await this.canOrFail(userId, Action.Update, { resourceId: id });
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        checkVersionOrFail(record, payload);
-        await this.repository.save({
-            ...payload,
-            id,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
+        await this.repository.update(
+            { id, version },
+            {
+                ...payload,
+                updatedUserId: userId,
+                updatedDate: new Date(),
+            },
+        );
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: string, id: string): Promise<Payment> {
+    async remove(userId: string, id: string, version: number): Promise<Payment> {
         await this.canOrFail(userId, Action.Remove, { resourceId: id });
-        await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
+        await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
         const deleted = await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
         this.eventEmitter.emit('payment.deleted', new PaymentDeletedEvent(userId, deleted));
         return deleted;
     }
 
-    async restore(userId: string, id: string): Promise<Payment> {
-        await this.repository.save({
-            id,
-            deletedDate: null,
-            deletedUserId: null,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
+    async restore(userId: string, id: string, version: number): Promise<Payment> {
+        await this.repository.update(
+            { id, version },
+            { deletedDate: null, deletedUserId: null, updatedUserId: userId, updatedDate: new Date() },
+        );
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
         return updated;
@@ -192,7 +188,7 @@ export class PaymentsService extends BaseUserAccess {
         if (record.status === PaymentStatus.Paid) return record;
         // TODO startTransaction(); {
         await this.paymentPositionsService.process(userId, record);
-        await this.update(userId, id, { status: PaymentStatus.Paid, version: payload.version });
+        await this.update(userId, id, payload.version, { status: PaymentStatus.Paid });
         // TODO }
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));
@@ -208,7 +204,7 @@ export class PaymentsService extends BaseUserAccess {
         if (record.status === PaymentStatus.Draft) return record;
         // TODO startTransaction(); {
         await this.paymentPositionsService.withdraw(id);
-        await this.update(userId, id, { status: PaymentStatus.Draft, version: payload.version });
+        await this.update(userId, id, payload.version, { status: PaymentStatus.Draft });
         const updated = await this.repository.findOneOrFail({ where: { id } });
         // TODO }
         this.eventEmitter.emit('payment.updated', new PaymentUpdatedEvent(userId, updated));

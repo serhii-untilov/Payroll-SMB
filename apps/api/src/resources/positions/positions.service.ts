@@ -1,5 +1,4 @@
 import { Action, PaymentPart, Resource, WorkTimeBalance, WrapperType } from '@/types';
-import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -236,24 +235,24 @@ export class PositionsService extends BaseUserAccess {
         return await this.repository.findOneOrFail(options);
     }
 
-    async update(userId: string, id: string, payload: UpdatePositionDto): Promise<Position> {
+    async update(userId: string, id: string, version: number, payload: UpdatePositionDto): Promise<Position> {
         await this.canOrFail(userId, Action.Update, { resourceId: id });
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        checkVersionOrFail(record, payload);
-        await this.repository.save({
-            ...payload,
-            id,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
+        await this.repository.update(
+            { id, version },
+            {
+                ...payload,
+                updatedUserId: userId,
+                updatedDate: new Date(),
+            },
+        );
         const updated = await this.repository.findOneOrFail({ where: { id } });
         this.eventEmitter.emit('position.updated', new PositionUpdatedEvent(userId, updated));
         return updated;
     }
 
-    async remove(userId: string, id: string): Promise<Position> {
+    async remove(userId: string, id: string, version: number): Promise<Position> {
         await this.canOrFail(userId, Action.Remove, { resourceId: id });
-        await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
+        await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({
             where: { id },
             withDeleted: true,

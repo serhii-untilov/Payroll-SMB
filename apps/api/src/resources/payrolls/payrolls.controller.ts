@@ -92,7 +92,7 @@ export class PayrollsController {
         return await this.service.findOne(id, relations);
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update payroll' })
     @ApiOkResponse({ description: 'The updated record', type: Payroll })
@@ -101,20 +101,25 @@ export class PayrollsController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
         @Body() payload: UpdatePayrollDto,
     ): Promise<Payroll> {
         const userId = getUserId(req);
-        return await this.service.update(userId, id, deepTransformToShortDate(payload));
+        return await this.service.update(userId, id, version, deepTransformToShortDate(payload));
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete payroll' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Payroll })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Payroll> {
+    async remove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
+    ): Promise<Payroll> {
         const userId = getUserId(req);
-        return await this.service.remove(userId, id);
+        return await this.service.remove(userId, id, version);
     }
 }

@@ -7,6 +7,7 @@ export class UpdatePayrollDto extends PartialType(
         'position',
         'paymentType',
         'transform',
+        'version',
         'createdDate',
         'createdUserId',
         'updatedDate',

@@ -1,5 +1,4 @@
 import { Action, Resource, TaskStatus, TaskType } from '@/types';
-import { checkVersionOrFail } from '@/utils';
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { monthBegin, monthEnd } from '@repo/shared';
@@ -83,23 +82,23 @@ export class TasksService extends BaseUserAccess {
         });
     }
 
-    async update(userId: string, id: string, payload: UpdateTaskDto) {
+    async update(userId: string, id: string, version: number, payload: UpdateTaskDto) {
         await this.canOrFail(userId, Action.Update, { resourceId: id });
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        checkVersionOrFail(record, payload);
-        await this.repository.save({
-            ...payload,
-            id,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
+        await this.repository.update(
+            { id, version },
+            {
+                ...payload,
+                updatedUserId: userId,
+                updatedDate: new Date(),
+            },
+        );
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
     // Soft delete
-    async remove(userId: string, id: string): Promise<Task> {
+    async remove(userId: string, id: string, version: number): Promise<Task> {
         await this.canOrFail(userId, Action.Remove, { resourceId: id });
-        await this.repository.save({ id, deletedUserId: userId, deletedDate: new Date() });
+        await this.repository.update({ id, version }, { deletedUserId: userId, deletedDate: new Date() });
         const deleted = await this.repository.findOneOrFail({
             where: { id },
             withDeleted: true,

@@ -8,7 +8,6 @@ import {
     defaultPaymentGroupsTotal,
     defaultPaymentPartsTotal,
 } from '@/types';
-import { checkVersionOrFail } from '@/utils';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
@@ -94,22 +93,22 @@ export class PayrollsService extends BaseUserAccess {
         return payroll;
     }
 
-    async update(userId: string, id: string, payload: UpdatePayrollDto): Promise<Payroll> {
+    async update(userId: string, id: string, version: number, payload: UpdatePayrollDto): Promise<Payroll> {
         await this.canOrFail(userId, Action.Update, { resourceId: id });
-        const record = await this.repository.findOneOrFail({ where: { id } });
-        checkVersionOrFail(record, payload);
-        await this.repository.save({
-            ...payload,
-            id,
-            updatedUserId: userId,
-            updatedDate: new Date(),
-        });
+        await this.repository.update(
+            { id, version },
+            {
+                ...payload,
+                updatedUserId: userId,
+                updatedDate: new Date(),
+            },
+        );
         return await this.repository.findOneOrFail({ where: { id } });
     }
 
-    async remove(userId: string, id: string): Promise<Payroll> {
+    async remove(userId: string, id: string, version: number): Promise<Payroll> {
         await this.canOrFail(userId, Action.Remove, { resourceId: id });
-        await this.repository.save({ id, deletedDate: new Date(), deletedUserId: userId });
+        await this.repository.update({ id, version }, { deletedDate: new Date(), deletedUserId: userId });
         return await this.repository.findOneOrFail({ where: { id }, withDeleted: true });
     }
 

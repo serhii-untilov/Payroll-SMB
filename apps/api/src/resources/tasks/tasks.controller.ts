@@ -80,7 +80,7 @@ export class TasksController {
         return found;
     }
 
-    @Patch(':id')
+    @Patch(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Update a task' })
     @ApiOkResponse({ description: 'The updated record', type: Task })
@@ -89,20 +89,25 @@ export class TasksController {
     async update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
         @Body() payload: UpdateTaskDto,
     ): Promise<Task> {
         const userId = getUserId(req);
-        return await this.tasksService.update(userId, id, deepTransformToShortDate(payload));
+        return await this.tasksService.update(userId, id, version, deepTransformToShortDate(payload));
     }
 
-    @Delete(':id')
+    @Delete(':id/:version')
     @UseGuards(AccessTokenGuard)
     @ApiOperation({ summary: 'Soft delete a task' })
     @ApiOkResponse({ description: 'The record has been successfully deleted', type: Task })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async remove(@Req() req: Request, @Param('id', ParseIntPipe) id: string): Promise<Task> {
+    async remove(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: string,
+        @Param('version', ParseIntPipe) version: number,
+    ): Promise<Task> {
         const userId = getUserId(req);
-        return await this.tasksService.remove(userId, id);
+        return await this.tasksService.remove(userId, id, version);
     }
 }
