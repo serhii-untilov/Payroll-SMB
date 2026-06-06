@@ -34,4 +34,19 @@ export class UserAccessService {
         // TODO: implement proper access checks
         return true;
     }
+
+    canManageRole(current: RoleType, target: RoleType): boolean {
+        if (target === RoleType.System) return false;
+
+        const hierarchy: RoleType[] = [
+            RoleType.System,
+            RoleType.SystemAdmin,
+            RoleType.CompanyAdmin,
+            RoleType.Accountant,
+            RoleType.Manager,
+            RoleType.Employee,
+        ];
+
+        return hierarchy.indexOf(current) <= hierarchy.indexOf(target);
+    }
 }

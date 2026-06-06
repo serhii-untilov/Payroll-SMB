@@ -43,8 +43,8 @@ export class UserService {
             throw new HttpException('User already exists.', HttpStatus.CONFLICT);
         }
         const currentRoleType = await this.getUserRoleType(userId);
-        const newRoleType = await this.rolesService.getRoleType(payload.roleId);
-        if (!this.accessService.canOperateRoleType(currentRoleType, newRoleType)) {
+        const newRoleType = (await this.rolesService.getRoleType(payload.roleId)) as RoleType;
+        if (!this.accessService.canManageRole(currentRoleType, newRoleType)) {
             throw new ForbiddenException(`User doesn't have access to the requested operation.`);
         }
         const id = IdGenerator.nextId();
