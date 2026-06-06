@@ -1,6 +1,6 @@
 import {
     CompanyService,
-    PayFundsService,
+    PayFundService,
     PayPeriodCalcMethodService,
     PayPeriodService,
     PayrollsService,
@@ -27,7 +27,7 @@ export class PayPeriodCalculationService {
         @Inject(forwardRef(() => PayPeriodCalcMethodService))
         private payPeriodsCalcMethodService: PayPeriodCalcMethodService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
-        @Inject(forwardRef(() => PayFundsService)) private payFundsService: PayFundsService,
+        @Inject(forwardRef(() => PayFundService)) private payFundsService: PayFundService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => UserService)) private usersService: UserService,
     ) {}

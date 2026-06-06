@@ -2,7 +2,7 @@ import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserAccessModule } from '../user-access';
 import { CompanyModule } from '../company/company.module';
-import { PayFundsModule } from '../pay-funds/pay-funds.module';
+import { PayFundModule } from '../pay-fund/pay-fund.module';
 import { PayrollsModule } from '../payrolls/payrolls.module';
 import { PositionsModule } from '../positions/positions.module';
 import { UserModule } from '../user/user.module';
@@ -19,7 +19,7 @@ import { PayPeriodCalcMethodService } from './pay-period-calc-method.service';
         forwardRef(() => CompanyModule),
         forwardRef(() => PositionsModule),
         forwardRef(() => PayrollsModule),
-        forwardRef(() => PayFundsModule),
+        forwardRef(() => PayFundModule),
         forwardRef(() => UserModule),
     ],
     controllers: [PayPeriodController],

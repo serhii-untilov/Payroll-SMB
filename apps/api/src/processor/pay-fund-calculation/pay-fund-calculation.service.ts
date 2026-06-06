@@ -2,7 +2,7 @@ import {
     CompanyService,
     MinWageService,
     PayFundTypesService,
-    PayFundsService,
+    PayFundService,
     PayPeriodService,
     PaymentTypeService,
     PayrollsService,
@@ -13,7 +13,7 @@ import { PayFundCalcMethod } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
 import { PayFundType } from './../../resources/pay-fund-types/entities/pay-fund-type.entity';
-import { PayFund } from './../../resources/pay-funds/entities/pay-fund.entity';
+import { PayFund } from './../../resources/pay-fund/entities/pay-fund.entity';
 import { PayPeriod } from './../../resources/pay-period/entities/pay-period.entity';
 import { Position } from './../../resources/positions/entities/position.entity';
 import { EcbMinWage, EcbSalary } from './calc-methods';
@@ -30,7 +30,7 @@ export class PayFundCalculationService {
         @Inject(forwardRef(() => PayPeriodService)) private payPeriodService: PayPeriodService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => PayrollsService)) private payrollsService: PayrollsService,
-        @Inject(forwardRef(() => PayFundsService)) private payFundsService: PayFundsService,
+        @Inject(forwardRef(() => PayFundService)) private payFundsService: PayFundService,
         @Inject(forwardRef(() => MinWageService)) public minWageService: MinWageService,
         @Inject(forwardRef(() => PayPeriodCalculationService))
         public payPeriodCalculationService: PayPeriodCalculationService,

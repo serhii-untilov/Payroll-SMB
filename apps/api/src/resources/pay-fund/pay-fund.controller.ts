@@ -33,12 +33,12 @@ import { Request } from 'express';
 import { CreatePayFundDto } from './dto/create-pay-fund.dto';
 import { FindPayFundDto } from './dto/find-pay-fund.dto';
 import { UpdatePayFundDto } from './dto/update-pay-fund.dto';
-import { PayFundsService } from './pay-funds.service';
+import { PayFundService } from './pay-fund.service';
 
 @Controller('fund')
 @ApiBearerAuth()
-export class PayFundsController {
-    constructor(private readonly service: PayFundsService) {}
+export class PayFundController {
+    constructor(private readonly service: PayFundService) {}
 
     @Post()
     @UseGuards(AccessTokenGuard)

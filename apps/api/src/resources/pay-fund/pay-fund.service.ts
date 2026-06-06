@@ -18,7 +18,7 @@ import { UpdatePayFundDto } from './dto/update-pay-fund.dto';
 import { PayFund } from './entities/pay-fund.entity';
 
 @Injectable()
-export class PayFundsService extends BaseUserAccess {
+export class PayFundService extends BaseUserAccess {
     public readonly resource = Resource.PayFund;
 
     constructor(

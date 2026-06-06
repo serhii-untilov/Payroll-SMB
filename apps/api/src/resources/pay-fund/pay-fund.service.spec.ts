@@ -6,15 +6,15 @@ import { UserAccessService } from '../user-access/user-access.service';
 import { CompanyService } from '../company/company.service';
 import { PositionsService } from '../positions/positions.service';
 import { PayFund } from './entities/pay-fund.entity';
-import { PayFundsService } from './pay-funds.service';
+import { PayFundService } from './pay-fund.service';
 
 describe('FundService', () => {
-    let service: PayFundsService;
+    let service: PayFundService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                PayFundsService,
+                PayFundService,
                 {
                     provide: getRepositoryToken(PayFund),
                     useFactory: repositoryMockFactory,
@@ -25,7 +25,7 @@ describe('FundService', () => {
             ],
         }).compile();
 
-        service = module.get<PayFundsService>(PayFundsService);
+        service = module.get<PayFundService>(PayFundService);
     });
 
     it('should be defined', () => {

@@ -4,8 +4,8 @@ import { UserAccessModule } from '../user-access';
 import { CompanyModule } from '../company/company.module';
 import { PositionsModule } from '../positions/positions.module';
 import { PayFund } from './entities/pay-fund.entity';
-import { PayFundsController } from './pay-funds.controller';
-import { PayFundsService } from './pay-funds.service';
+import { PayFundController } from './pay-fund.controller';
+import { PayFundService } from './pay-fund.service';
 
 @Module({
     imports: [
@@ -14,8 +14,8 @@ import { PayFundsService } from './pay-funds.service';
         forwardRef(() => CompanyModule),
         forwardRef(() => UserAccessModule),
     ],
-    controllers: [PayFundsController],
-    providers: [PayFundsService],
-    exports: [PayFundsService],
+    controllers: [PayFundController],
+    providers: [PayFundService],
+    exports: [PayFundService],
 })
-export class PayFundsModule {}
+export class PayFundModule {}

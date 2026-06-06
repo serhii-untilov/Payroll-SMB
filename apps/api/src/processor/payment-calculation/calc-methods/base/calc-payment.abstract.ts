@@ -1,5 +1,5 @@
 import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
-import { PayFund } from '@/resources/pay-funds/entities/pay-fund.entity';
+import { PayFund } from '@/resources/pay-fund/entities/pay-fund.entity';
 import { PayPeriod } from '@/resources/pay-period/entities';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';

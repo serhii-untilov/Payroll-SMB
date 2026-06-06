@@ -6,7 +6,7 @@ import { Position } from '@/resources/positions/entities';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { PayFundCategory } from '@/types';
 import { PayFundType } from '../../../../resources/pay-fund-types/entities/pay-fund-type.entity';
-import { PayFund } from '../../../../resources/pay-funds/entities/pay-fund.entity';
+import { PayFund } from '../../../../resources/pay-fund/entities/pay-fund.entity';
 import { PayPeriod } from '../../../../resources/pay-period/entities/pay-period.entity';
 
 export type Context = {

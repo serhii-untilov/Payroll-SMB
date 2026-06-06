@@ -60,12 +60,38 @@ npm run codegen          # generate DTOs from OpenAPI spec
 - Prefer composition over inheritance
 - Respect multi-tenant access (ABAC/RBAC)
 
+## Resource Types
+
+### Full-Feature Resources
+- Extend `BaseEntity` (from `@/resources/common/base/base-entity.abstract`)
+- Have audit fields + `version` for optimistic concurrency
+- Use `version: number` parameter for update/remove
+- Use `repository.update({ id, version }, ...)` for optimistic concurrency
+- Use `canOrFail()` for permission checks
+- Examples: `Company`, `PayPeriod`, `Payment`, `Payroll`, `Position`, `Person`
+
+### Simple Reference Resources
+- Do NOT extend `BaseEntity`
+- No audit fields or version needed
+- No `version` parameter needed
+- No `canOrFail()` typically needed
+- Examples: `Law`, `PayFundType`, `PaymentType`
+
+### Calculation Datasheet Resources
+- Do NOT extend `BaseEntity`
+- Huge datasets filled by automatic calculations
+- No audit fields (data is regenerated, not manually edited)
+- No `version` parameter (no manual optimistic locking)
+- No `canOrFail()` typically needed
+- Examples: `PayFund`, `PaymentDeduction`, `PositionBalance`
+- These resources are typically updated by processors, not direct user actions
+
 ## Rules
 
 - Do NOT user `Action` from rxjs, instead use `Action` from `@/types`
 - Do NOT use raw TypeORM `BaseEntity` — use project BaseEntity
 - Do NOT introduce CQRS pattern
-- Always use extends BaseEntity for a resource class, find the BaseEntity in the project, don't use raw TypeORM
+- For extending a BaseEntity for a resource class, find the BaseEntity in the project, don't use raw TypeORM
 - Do NOT use `checkVersionOrFail`, instead use `version: number` as a parameter for update, remove, or delete repository operations, if entity extends the BaseEntity abstract class.
 - Always use `deepTransformToShortDate(params)` if params type has a Date type member
 - Always describe members of a DTO class using `ApiProperty` and `ApiPropertyOptional` from `@nestjs/swagger`, using `Type` from `class-transformer`, using `Is*` from `class-validator`

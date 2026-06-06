@@ -75,8 +75,8 @@ export default async () => {
         ['./resources/min-wage/entities/min-wage.entity']: await import(
             './resources/min-wage/entities/min-wage.entity'
         ),
-        ['./resources/pay-funds/entities/pay-fund.entity']: await import(
-            './resources/pay-funds/entities/pay-fund.entity'
+        ['./resources/pay-fund/entities/pay-fund.entity']: await import(
+            './resources/pay-fund/entities/pay-fund.entity'
         ),
         ['./resources/payrolls/entities/payroll.entity']: await import('./resources/payrolls/entities/payroll.entity'),
         ['./resources/positions/dto/position-balance-extended.dto']: await import(
@@ -545,7 +545,7 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/pay-funds/entities/pay-fund.entity'),
+                    import('./resources/pay-fund/entities/pay-fund.entity'),
                     {
                         PayFund: {
                             id: { required: true, type: () => String },
@@ -681,9 +681,9 @@ export default async () => {
                 ],
                 [import('./resources/pay-fund-types/dto/create-pay-fund-type.dto'), { CreatePayFundTypeDto: {} }],
                 [import('./resources/pay-fund-types/dto/update-pay-fund-type.dto'), { UpdatePayFundTypeDto: {} }],
-                [import('./resources/pay-funds/dto/create-pay-fund.dto'), { CreatePayFundDto: {} }],
+                [import('./resources/pay-fund/dto/create-pay-fund.dto'), { CreatePayFundDto: {} }],
                 [
-                    import('./resources/pay-funds/dto/find-pay-fund.dto'),
+                    import('./resources/pay-fund/dto/find-pay-fund.dto'),
                     {
                         FindPayFundDto: {
                             companyId: { required: false, type: () => String },
@@ -693,7 +693,7 @@ export default async () => {
                         },
                     },
                 ],
-                [import('./resources/pay-funds/dto/update-pay-fund.dto'), { UpdatePayFundDto: {} }],
+                [import('./resources/pay-fund/dto/update-pay-fund.dto'), { UpdatePayFundDto: {} }],
                 [
                     import('./resources/pay-period/dto/create-pay-period.dto'),
                     {
@@ -1235,14 +1235,14 @@ export default async () => {
                     },
                 ],
                 [
-                    import('./resources/pay-funds/pay-funds.controller'),
+                    import('./resources/pay-fund/pay-fund.controller'),
                     {
-                        PayFundsController: {
-                            create: { type: t['./resources/pay-funds/entities/pay-fund.entity'].PayFund },
-                            findOne: { type: t['./resources/pay-funds/entities/pay-fund.entity'].PayFund },
-                            update: { type: t['./resources/pay-funds/entities/pay-fund.entity'].PayFund },
-                            remove: { type: t['./resources/pay-funds/entities/pay-fund.entity'].PayFund },
-                            findAll: { type: [t['./resources/pay-funds/entities/pay-fund.entity'].PayFund] },
+                        PayFundController: {
+                            create: { type: t['./resources/pay-fund/entities/pay-fund.entity'].PayFund },
+                            findOne: { type: t['./resources/pay-fund/entities/pay-fund.entity'].PayFund },
+                            update: { type: t['./resources/pay-fund/entities/pay-fund.entity'].PayFund },
+                            remove: { type: t['./resources/pay-fund/entities/pay-fund.entity'].PayFund },
+                            findAll: { type: [t['./resources/pay-fund/entities/pay-fund.entity'].PayFund] },
                         },
                     },
                 ],

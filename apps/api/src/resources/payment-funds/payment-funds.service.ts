@@ -19,16 +19,16 @@ export class PaymentFundsService extends BaseUserAccess {
         super(userAccessService, Resource.Payment);
     }
 
-    async getCompanyId(entityId: string): Promise<string> {
-        const paymentFund = await this.repository.findOneOrFail({
-            where: { id: entityId },
-            withDeleted: true,
-        });
-        const paymentPosition = await this.paymentPositionsService.findOne(paymentFund.paymentPositionId, {
-            withDeleted: true,
-        });
-        return (await this.paymentsService.findOne(paymentPosition.paymentId, { withDeleted: true })).companyId;
-    }
+    // async getCompanyId(entityId: string): Promise<string> {
+    //     const paymentFund = await this.repository.findOneOrFail({
+    //         where: { id: entityId },
+    //         withDeleted: true,
+    //     });
+    //     const paymentPosition = await this.paymentPositionsService.findOne(paymentFund.paymentPositionId, {
+    //         withDeleted: true,
+    //     });
+    //     return (await this.paymentsService.findOne(paymentPosition.paymentId, { withDeleted: true })).companyId;
+    // }
 
     async create(userId: string, payload: CreatePaymentFundDto): Promise<PaymentFund> {
         const created = await this.repository.save({

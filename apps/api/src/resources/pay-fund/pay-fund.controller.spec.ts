@@ -6,17 +6,17 @@ import { UserAccessService } from '../user-access/user-access.service';
 import { CompanyService } from '../company/company.service';
 import { PositionsService } from '../positions/positions.service';
 import { PayFund } from './entities/pay-fund.entity';
-import { PayFundsController } from './pay-funds.controller';
-import { PayFundsService } from './pay-funds.service';
+import { PayFundController } from './pay-fund.controller';
+import { PayFundService } from './pay-fund.service';
 
 describe('FundController', () => {
-    let controller: PayFundsController;
+    let controller: PayFundController;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [PayFundsController],
+            controllers: [PayFundController],
             providers: [
-                PayFundsService,
+                PayFundService,
                 {
                     provide: getRepositoryToken(PayFund),
                     useFactory: repositoryMockFactory,
@@ -27,7 +27,7 @@ describe('FundController', () => {
             ],
         }).compile();
 
-        controller = module.get<PayFundsController>(PayFundsController);
+        controller = module.get<PayFundController>(PayFundController);
     });
 
     it('should be defined', () => {

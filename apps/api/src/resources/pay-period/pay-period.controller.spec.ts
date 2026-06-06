@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '@/test';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CompanyService } from '../company/company.service';
-import { PayFundsService } from '../pay-funds/pay-funds.service';
+import { PayFundService } from '../pay-fund/pay-fund.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { PositionsService } from '../positions/positions.service';
 import { UserService } from '../users/users.service';
@@ -30,7 +30,7 @@ describe('PayPeriodController', () => {
                 { provide: CompanyService, useValue: createMock<CompanyService>() },
                 { provide: PositionsService, useValue: createMock<PositionsService>() },
                 { provide: PayrollsService, useValue: createMock<PayrollsService>() },
-                { provide: PayFundsService, useValue: createMock<PayFundsService>() },
+                { provide: PayFundService, useValue: createMock<PayFundService>() },
                 { provide: UserService, useValue: createMock<UserService>() },
             ],
         }).compile();
