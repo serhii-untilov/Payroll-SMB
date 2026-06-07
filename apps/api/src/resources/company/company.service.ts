@@ -20,9 +20,9 @@ import { CompanyEntity } from './entities/company.entity';
 import { CalculateCompanyEvent } from './events/calculate-company.event';
 import { CompanyCreatedEvent } from './events/company-created.event';
 import { CompanyDeletedEvent } from './events/company-deleted.event';
+import { CompanyRestoredEvent } from './events/company-restored.event';
 import { CompanyUpdatedEvent } from './events/company-updated.event';
 import { CompanyMapper } from './mappers/company.mapper';
-import { CompanyRestoredEvent } from './events/company-restored.event';
 
 @Injectable()
 export class CompanyService extends BaseUserAccess {

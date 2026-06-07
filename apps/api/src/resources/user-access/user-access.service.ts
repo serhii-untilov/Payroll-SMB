@@ -2,6 +2,7 @@ import { RoleType } from '@/types';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { UserRoleService } from '../user-role';
 import { AccessCheckDto } from './dto/access-check.dto';
+import { IUserAccessService } from '../common/base/user-access.interface';
 
 /**
  * User Access Service
@@ -17,7 +18,7 @@ import { AccessCheckDto } from './dto/access-check.dto';
  *  canUserPerformActionOnResourceInScope
  */
 @Injectable()
-export class UserAccessService {
+export class UserAccessService implements IUserAccessService {
     constructor(@Inject(forwardRef(() => UserRoleService)) private userRoleService: UserRoleService) {}
 
     async isAllowed(dto: AccessCheckDto): Promise<boolean> {

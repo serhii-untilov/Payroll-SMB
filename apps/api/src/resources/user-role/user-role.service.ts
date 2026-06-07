@@ -3,11 +3,11 @@ import { Action, Resource, RoleType } from '@/types';
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
+import { IUserAccessService } from '../common/base/user-access.interface';
 import { CreateUserRoleDto } from './dto/create-user-role.dto';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 import { UserRole } from './entities/user-role.entity';
-import { BaseUserAccess } from '../common/base/user-access.abstract';
-import { UserAccessService } from '../user-access/user-access.service';
 
 @Injectable()
 export class UserRoleService extends BaseUserAccess {
@@ -15,7 +15,8 @@ export class UserRoleService extends BaseUserAccess {
 
     constructor(
         @InjectRepository(UserRole) private repository: Repository<UserRole>,
-        readonly userAccess: UserAccessService,
+        readonly userAccess: IUserAccessService,
+        // @Inject(forwardRef(() => UserAccessService)) readonly userAccess: UserAccessService,
     ) {
         super(userAccess, Resource.UserRole);
     }
