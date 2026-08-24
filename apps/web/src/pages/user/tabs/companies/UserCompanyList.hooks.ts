@@ -4,7 +4,7 @@ import { selectCompany, setCompany } from '@/store/slices/companySlice';
 import { useAppDispatch, useAppSelector } from '@/store/store.hooks';
 import { snackbarError } from '@/utils/snackbar';
 import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import { UserCompany } from '@repo/openapi';
+import { UserRole as UserCompany } from '@repo/openapi';
 import { date2view } from '@repo/shared';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -34,16 +34,17 @@ const useUserCompanyList = (params: Params) => {
     };
 
     const onSelectCompany = async (companyId: string) => {
-        dispatch(setCompany((await api.companiesFindOne(companyId)).data));
+        dispatch(setCompany((await api.companyFindOne(companyId)).data));
         navigate(`/company/${companyId}?tab-index=0&return=true`);
     };
 
     const onDeleteCompany = async () => {
         let attemptToDeleteCurrentCompany = false;
         for (const id of notDeletedSelection()) {
-            const companyId = userCompanies?.find((o) => o.id === id)?.companyId;
+            const userCompany = userCompanies?.find((o) => o.id === id);
+            const companyId = userCompany?.companyId;
             if (companyId !== currentCompany?.id) {
-                await removeUserCompany.mutateAsync(id);
+                await removeUserCompany.mutateAsync({ id, version: userCompany!.version });
             } else {
                 attemptToDeleteCurrentCompany = true;
             }
@@ -71,7 +72,10 @@ const useUserCompanyList = (params: Params) => {
 
     const onRestoreDeleted = async () => {
         for (const id of deletedSelection()) {
-            await restoreUserCompany.mutateAsync(id);
+            const userCompany = userCompanies?.find((o) => o.id === id);
+            if (userCompany) {
+                await restoreUserCompany.mutateAsync({ id, version: userCompany.version });
+            }
         }
         setRowSelectionModel([]);
     };

@@ -8,7 +8,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Company, Department } from '@repo/openapi';
+import { CompanyEntity as Company, DepartmentEntity as Department } from '@repo/openapi';
 import { Dispatch, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import useDepartmentForm from './DepartmentForm.hooks';

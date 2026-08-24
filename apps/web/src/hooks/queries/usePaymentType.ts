@@ -6,7 +6,7 @@ const useGetPaymentTypeList = (params?: FindAllPaymentTypeDto) => {
     return useQuery<PaymentType[], Error>({
         queryKey: [Resource.PaymentType, params],
         queryFn: async () =>
-            (await api.paymentTypesFindAll(params ?? {})).data.sort((a, b) =>
+            (await api.paymentTypeFindAll(params ?? {})).data.sort((a: PaymentType, b: PaymentType) =>
                 a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
             ),
     });

@@ -1,4 +1,4 @@
-import { Company, PayPeriod } from '@repo/openapi';
+import { CompanyEntity as Company, PayPeriod } from '@repo/openapi';
 import PaymentForm from './PaymentForm';
 
 interface CreatePaymentProps {

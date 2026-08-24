@@ -1,10 +1,11 @@
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetUserCompanyList } from '@/hooks/queries/useUserCompany';
+import { User } from '@repo/openapi';
 import { useState } from 'react';
 import UserCompanyList from './UserCompanyList';
 
-const UserCompanyTab = ({ user }) => {
+const UserCompanyTab = ({ user }: { user: User }) => {
     const [showDeleted, setShowDeleted] = useState<boolean>(false);
     const {
         data: userCompanyList,

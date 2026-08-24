@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
-import { Company } from '@repo/openapi';
+import { CompanyEntity as Company } from '@repo/openapi';
 
 // Define a type for the slice state
 export interface CompanyState {

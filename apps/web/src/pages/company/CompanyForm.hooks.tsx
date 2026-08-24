@@ -1,4 +1,4 @@
-import { Company } from '@repo/openapi';
+import { CompanyEntity as Company } from '@repo/openapi';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import AccountsTab from './tabs/accounts/AccountsTab';

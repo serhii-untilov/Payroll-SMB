@@ -13,7 +13,7 @@ import SequenceField from '@/components/SequenceField';
 import WageField from '@/components/WageField';
 import { AddCircleRounded, HistoryRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
-import { Company, PaymentGroup, Position, PositionHistory } from '@repo/openapi';
+import { CompanyEntity as Company, PaymentGroup, Position, PositionHistory } from '@repo/openapi';
 import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 import useJobForm from './JobForm.hooks';

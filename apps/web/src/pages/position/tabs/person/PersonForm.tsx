@@ -10,10 +10,11 @@ import { SelectGender } from '@/components/SelectGender';
 import TaxIdField from '@/components/TaxIdField';
 import { AddCircleRounded } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
+import { PersonReadDto } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 import usePersonForm from './PersonForm.hooks';
 
-const PersonForm = ({ person }) => {
+const PersonForm = ({ person }: { person: PersonReadDto }) => {
     const { t } = useTranslation();
     const { control, isDirty, handleSubmit, onSubmit, onCancel } = usePersonForm({ person });
 

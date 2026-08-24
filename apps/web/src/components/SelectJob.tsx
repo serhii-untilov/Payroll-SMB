@@ -1,4 +1,5 @@
 import { useGetJobList } from '@/hooks/queries/useJob';
+import { JobEntity as Job } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 import { FormAutocomplete } from './form/FormAutocomplete';
 import ErrorDisplay from './ErrorDisplay';
@@ -26,7 +27,7 @@ export function SelectJob({ control, label, id, name }: Props) {
                     id={id ?? 'jobId'}
                     autoComplete="jobId"
                     options={
-                        data?.map((o) => {
+                        data?.map((o: Job) => {
                             return { label: o.name, value: o.id };
                         }) ?? []
                     }

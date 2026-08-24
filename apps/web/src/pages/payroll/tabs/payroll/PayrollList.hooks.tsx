@@ -2,7 +2,7 @@ import { getUnitByCalcMethod } from '@/utils/getUnitByCalcMethod';
 import { sumFormatter } from '@/utils/sumFormatter';
 import { Box, Typography } from '@mui/material';
 import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import { CalcMethod } from '@repo/openapi';
+import { CalcMethod, CalcMethodBalanceDto } from '@repo/openapi';
 import { getFullName, maxDate } from '@repo/shared';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -202,10 +202,10 @@ export default function usePayrollList(_params: PayrollListParams) {
                 renderCell: (params) => {
                     const accruals = params.row?.accruals || 0;
                     const incomeTax = params.row?.calcMethodBalance.find(
-                        (o) => o.calcMethod === CalcMethod.IncomeTax,
+                        (o: CalcMethodBalanceDto) => o.calcMethod === CalcMethod.IncomeTax,
                     )?.factSum;
                     const militaryTax = params.row?.calcMethodBalance.find(
-                        (o) => o.calcMethod === CalcMethod.MilitaryTax,
+                        (o: CalcMethodBalanceDto) => o.calcMethod === CalcMethod.MilitaryTax,
                     )?.factSum;
                     const otherDeductions = params.row?.other_deductions;
                     return (

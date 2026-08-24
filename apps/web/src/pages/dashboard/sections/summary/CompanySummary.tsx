@@ -2,9 +2,10 @@ import CompanyName from '@/components/CompanyName';
 import CurrentPayPeriod from '@/components/CurrentPayPeriod';
 import PayPeriodTotalExpenses from '@/components/PayPeriodTotalExpenses';
 import PayrollCalcDate from '@/components/PayrollCalcDate';
+import { CompanyEntity as Company, PayPeriod } from '@repo/openapi';
 import { Grid } from '@mui/material';
 
-const CompanySummary = ({ company, payPeriod }) => {
+const CompanySummary = ({ company, payPeriod }: { company: Company; payPeriod?: PayPeriod }) => {
     return (
         <Grid container flexDirection="row">
             <Grid item xs={12} lg={6} container flexDirection="column">
@@ -24,8 +25,8 @@ const CompanySummary = ({ company, payPeriod }) => {
                     spacing={1}
                     sx={{ alignItems: { xs: 'start', lg: 'end' } }}
                 >
-                    <Grid item>{company && <PayrollCalcDate payPeriod={payPeriod} />}</Grid>
-                    <Grid item>{company && <PayPeriodTotalExpenses payPeriod={payPeriod} />}</Grid>
+                    <Grid item>{company && <PayrollCalcDate payPeriod={payPeriod!} />}</Grid>
+                    <Grid item>{company && <PayPeriodTotalExpenses payPeriod={payPeriod!} />}</Grid>
                 </Grid>
             </Grid>
         </Grid>

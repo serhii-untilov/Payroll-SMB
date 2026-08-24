@@ -33,10 +33,10 @@ export default function useCompanyDetails(props: CompanyDetailsProps) {
         handleSubmit,
         reset,
         formState: { errors: formErrors },
-    } = useReactHookForm({
-        defaultValues: company,
-        values: company,
-        resolver: yupResolver<FormType>(formSchema),
+    } = useReactHookForm<FormType>({
+        defaultValues: company as unknown as FormType,
+        values: company as unknown as FormType,
+        resolver: yupResolver(formSchema),
         shouldFocusError: true,
     });
     const { dirtyFields, isDirty } = useFormState({ control });
@@ -50,9 +50,10 @@ export default function useCompanyDetails(props: CompanyDetailsProps) {
             return company?.id
                 ? await updateCompany.mutateAsync({
                       id: company.id,
-                      dto: { ...(dirtyValues as UpdateCompanyDto), version: company.version },
+                      version: company.version,
+                      dto: dirtyValues as UpdateCompanyDto,
                   })
-                : await createCompany.mutateAsync(data as CreateCompanyDto);
+                : await createCompany.mutateAsync(data as unknown as CreateCompanyDto);
         },
         [company, createCompany, dirtyFields, updateCompany],
     );
@@ -63,7 +64,7 @@ export default function useCompanyDetails(props: CompanyDetailsProps) {
             try {
                 const response = await save(data);
                 if (setCompanyId) setCompanyId(response.id);
-                reset(formSchema.cast(response));
+                reset(formSchema.cast(response) as unknown as FormType);
                 if (!currentCompany || currentCompany.id === response.id) {
                     dispatch(setCompany(response));
                 }
@@ -77,7 +78,7 @@ export default function useCompanyDetails(props: CompanyDetailsProps) {
 
     const onCancel = useCallback(async () => {
         if (setCompanyId) setCompanyId(company?.id);
-        reset(formSchema.cast(company));
+        reset(formSchema.cast(company) as unknown as FormType);
         await invalidateQueries([Resource.Company]);
     }, [company, reset, setCompanyId, invalidateQueries, formSchema]);
 

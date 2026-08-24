@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-const TaskDescription = ({ description }) => {
+const TaskDescription = ({ description }: { description: string }) => {
     return <Typography sx={{ color: 'text.primary' }}>{description}</Typography>;
 };
 

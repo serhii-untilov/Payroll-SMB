@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 // TODO
 
-const useGetPaymentMandatoryList = ({ _paymentId }) => {
+const useGetPaymentMandatoryList = (_: { _paymentId: string }) => {
     return useQuery<any[], Error>({
         queryKey: ['Todo Mandatory Payments'],
         queryFn: () => [],

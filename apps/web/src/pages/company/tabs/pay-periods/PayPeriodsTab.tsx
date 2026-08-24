@@ -1,7 +1,7 @@
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetCurrentPayPeriod, useGetPayPeriodList } from '@/hooks/queries/usePayPeriod';
-import { Company } from '@repo/openapi';
+import { CompanyEntity as Company } from '@repo/openapi';
 import { PayPeriodList } from './PayPeriodList';
 
 type PayPeriodsTabProps = {

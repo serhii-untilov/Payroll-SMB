@@ -1,5 +1,5 @@
 import { Autocomplete, TextField, createFilterOptions } from '@mui/material';
-import { CreatePersonDto, Person } from '@repo/openapi';
+import { CreatePersonDto, PersonListItemDto } from '@repo/openapi';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,7 @@ interface SelectPersonFormProps {
     control: any;
     label: string;
     autoFocus?: boolean;
-    personList: Person[];
+    personList: PersonListItemDto[];
 }
 
 export type SelectPersonOption = {
@@ -61,7 +61,7 @@ export const SelectPersonForm = (props: SelectPersonFormProps) => {
                                                 ...defaultValue,
                                                 lastName,
                                                 firstName,
-                                                middleName,
+                                                middleName: middleName as unknown as object,
                                             });
                                         });
                                     } else if (option && option.inputValue) {
@@ -72,7 +72,7 @@ export const SelectPersonForm = (props: SelectPersonFormProps) => {
                                             ...defaultValue,
                                             lastName,
                                             firstName,
-                                            middleName,
+                                            middleName: middleName as unknown as object,
                                         });
                                     } else if (option && !option.inputValue && option.label) {
                                         toggleOpen(true);

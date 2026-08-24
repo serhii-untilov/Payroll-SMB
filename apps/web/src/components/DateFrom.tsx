@@ -1,8 +1,9 @@
+import { Control } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { FormDateField } from './form/FormDateField';
 import { formatDate, minDate } from '@repo/shared';
 
-const DateFrom = ({ control }) => {
+const DateFrom = ({ control }: { control: Control<any> }) => {
     const { t } = useTranslation();
     return (
         <FormDateField

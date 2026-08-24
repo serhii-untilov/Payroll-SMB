@@ -2,7 +2,7 @@ import { Button } from '@/components/layout/Button';
 import TextField from '@/components/layout/TextField';
 import { useCreatePerson } from '@/hooks/queries/usePerson';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from '@mui/material';
-import { CreatePersonDto } from '@repo/openapi';
+import { CreatePersonDto, CreatePersonDtoGenderEnum } from '@repo/openapi';
 import { useTranslation } from 'react-i18next';
 
 interface CreatePersonFormProps {
@@ -53,7 +53,7 @@ export default function CreatePerson(props: CreatePersonFormProps) {
                             <TextField
                                 label={t('Middle Name')}
                                 value={dialogValue.middleName}
-                                onChange={(value) => setDialogValue({ ...dialogValue, middleName: value })}
+                                onChange={(value) => setDialogValue({ ...dialogValue, middleName: value as unknown as object })}
                             />
                         </Grid>
                         <Grid item xs={4}>
@@ -67,14 +67,14 @@ export default function CreatePerson(props: CreatePersonFormProps) {
                             <TextField
                                 label={t('Birth Date')}
                                 value={dialogValue.birthDate}
-                                onChange={(value) => setDialogValue({ ...dialogValue, birthDate: new Date(value) })}
+                                onChange={(value) => setDialogValue({ ...dialogValue, birthDate: value })}
                             />
                         </Grid>
                         <Grid item xs={4}>
                             <TextField
                                 label={t('Sex')}
                                 value={dialogValue.gender}
-                                onChange={(value) => setDialogValue({ ...dialogValue, gender: value })}
+                                onChange={(value) => setDialogValue({ ...dialogValue, gender: value as CreatePersonDtoGenderEnum })}
                             />
                         </Grid>
                     </Grid>

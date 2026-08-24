@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
-const UseCaseImage = ({ image }) => {
+const UseCaseImage = ({ image }: { image: string }) => {
     return (
         <Box
             id="use-case__image"

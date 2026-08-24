@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useFeatures from './Features.hooks';
 
-const FeaturesAccountant = ({ isEmbedded }) => {
+const FeaturesAccountant = ({ isEmbedded }: { isEmbedded: boolean }) => {
     const { t } = useTranslation();
     const { featuresAccountant } = useFeatures();
     return (

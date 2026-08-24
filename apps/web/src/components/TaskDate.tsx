@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 
-const TaskDate = ({ date }) => {
+const TaskDate = ({ date }: { date: string }) => {
     return (
         <Grid
             alignItems={'middle'}

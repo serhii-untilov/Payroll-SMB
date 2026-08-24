@@ -7,7 +7,7 @@ import TaxIdField from '@/components/TaxIdField';
 import { selectCompany } from '@/store/slices/companySlice';
 import { useAppSelector } from '@/store/store.hooks';
 import { Grid } from '@mui/material';
-import { Company } from '@repo/openapi';
+import { CompanyEntity as Company } from '@repo/openapi';
 import useCompanyDetails from './CompanyDetails.hooks';
 
 export type CompanyDetailsProps = {

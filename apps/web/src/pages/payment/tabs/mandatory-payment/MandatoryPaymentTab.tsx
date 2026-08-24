@@ -1,6 +1,6 @@
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
-import { Company, Payment, PayPeriod } from '@repo/openapi';
+import { CompanyEntity as Company, Payment, PayPeriod } from '@repo/openapi';
 import { MandatoryPaymentList } from './MandatoryPaymentList';
 import { useGetPaymentMandatoryList } from '@/hooks/queries/usePaymentMandatory';
 

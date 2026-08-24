@@ -1,4 +1,4 @@
-import { Company } from '@repo/openapi';
+import { CompanyEntity as Company } from '@repo/openapi';
 import AccountsList from './AccountList';
 
 type AccountsTabProps = {
@@ -7,7 +7,7 @@ type AccountsTabProps = {
 
 export default function AccountsTab(props: AccountsTabProps) {
     // TODO
-    const accounts = [];
+    const accounts: any[] = [];
 
     return <AccountsList company={props.company} accounts={accounts} />;
 }

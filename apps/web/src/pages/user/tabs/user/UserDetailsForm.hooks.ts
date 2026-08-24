@@ -3,13 +3,14 @@ import { useUpdateUser } from '@/hooks/queries/useUser';
 import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
+import { User } from '@repo/openapi';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { t } from 'i18next';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { InferType, object, string } from 'yup';
 
-const useUserDetailsForm = ({ user }) => {
+const useUserDetailsForm = ({ user }: { user: User }) => {
     const { setLanguage } = useLocale();
     const updateUser = useUpdateUser();
     const formSchema = useFormSchema();
@@ -34,13 +35,10 @@ const useUserDetailsForm = ({ user }) => {
             const dirtyValues = getDirtyValues(dirtyFields, data);
             return await updateUser.mutateAsync({
                 id: user.id,
-                dto: {
-                    ...dirtyValues,
-                    version: user.version,
-                },
+                dto: dirtyValues,
             });
         },
-        [dirtyFields, updateUser, user.id, user.version],
+        [dirtyFields, updateUser, user.id],
     );
 
     const onSubmit = useCallback<SubmitHandler<FormType>>(

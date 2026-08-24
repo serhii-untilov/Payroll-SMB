@@ -116,6 +116,54 @@ export type AccessCheckDtoActionEnum = typeof AccessCheckDtoActionEnum[keyof typ
 export interface Accounting {
     /**
      * 
+     * @type {string}
+     * @memberof Accounting
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Accounting
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Accounting
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Accounting
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Accounting
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Accounting
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Accounting
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Accounting
+     */
+    'version': number;
+    /**
+     * 
      * @type {AccountingType}
      * @memberof Accounting
      */
@@ -275,9 +323,70 @@ export interface CalcMethodBalanceDto {
 /**
  * 
  * @export
+ * @interface ClosePayPeriodDto
+ */
+export interface ClosePayPeriodDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ClosePayPeriodDto
+     */
+    'version': number;
+}
+/**
+ * 
+ * @export
  * @interface CompanyEntity
  */
 export interface CompanyEntity {
+    /**
+     * 
+     * @type {string}
+     * @memberof CompanyEntity
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof CompanyEntity
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof CompanyEntity
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof CompanyEntity
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof CompanyEntity
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof CompanyEntity
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CompanyEntity
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CompanyEntity
+     */
+    'version': number;
     /**
      * 
      * @type {PaymentSchedule}
@@ -1592,6 +1701,54 @@ export interface DepartmentEntity {
      * @type {string}
      * @memberof DepartmentEntity
      */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof DepartmentEntity
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof DepartmentEntity
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof DepartmentEntity
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof DepartmentEntity
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof DepartmentEntity
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof DepartmentEntity
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof DepartmentEntity
+     */
+    'version': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DepartmentEntity
+     */
     'name': string;
     /**
      * 
@@ -2254,6 +2411,54 @@ export interface JobEntity {
      * @type {string}
      * @memberof JobEntity
      */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof JobEntity
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobEntity
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof JobEntity
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobEntity
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof JobEntity
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobEntity
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof JobEntity
+     */
+    'version': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof JobEntity
+     */
     'name': string;
 }
 /**
@@ -2289,16 +2494,16 @@ export interface JobListItemDto {
 export interface Law {
     /**
      * 
-     * @type {LawType}
-     * @memberof Law
-     */
-    'type': LawType;
-    /**
-     * 
      * @type {string}
      * @memberof Law
      */
     'id': string;
+    /**
+     * 
+     * @type {LawType}
+     * @memberof Law
+     */
+    'type': LawType;
     /**
      * 
      * @type {string}
@@ -2437,6 +2642,54 @@ export interface ListPersonsQueryDto {
 export interface MinWage {
     /**
      * 
+     * @type {string}
+     * @memberof MinWage
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof MinWage
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof MinWage
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof MinWage
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof MinWage
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof MinWage
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MinWage
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MinWage
+     */
+    'version': number;
+    /**
+     * 
      * @type {Date}
      * @memberof MinWage
      */
@@ -2453,6 +2706,19 @@ export interface MinWage {
      * @memberof MinWage
      */
     'paySum': number;
+}
+/**
+ * 
+ * @export
+ * @interface OpenPayPeriodDto
+ */
+export interface OpenPayPeriodDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof OpenPayPeriodDto
+     */
+    'version': number;
 }
 /**
  * 
@@ -2506,16 +2772,16 @@ export interface PageMetaDto {
 export interface PayFund {
     /**
      * 
-     * @type {PayFundCategory}
-     * @memberof PayFund
-     */
-    'payFundCategory': PayFundCategory;
-    /**
-     * 
      * @type {string}
      * @memberof PayFund
      */
     'id': string;
+    /**
+     * 
+     * @type {PayFundCategory}
+     * @memberof PayFund
+     */
+    'payFundCategory': PayFundCategory;
     /**
      * 
      * @type {Position}
@@ -2640,6 +2906,54 @@ export interface PayFundType {
      * @type {string}
      * @memberof PayFundType
      */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PayFundType
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayFundType
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PayFundType
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayFundType
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PayFundType
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayFundType
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayFundType
+     */
+    'version': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayFundType
+     */
     'name': string;
     /**
      * 
@@ -2674,6 +2988,54 @@ export interface PayFundType {
  * @interface PayPeriod
  */
 export interface PayPeriod {
+    /**
+     * 
+     * @type {string}
+     * @memberof PayPeriod
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PayPeriod
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayPeriod
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PayPeriod
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayPeriod
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PayPeriod
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PayPeriod
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PayPeriod
+     */
+    'version': number;
     /**
      * 
      * @type {CompanyEntity}
@@ -2833,16 +3195,16 @@ export interface PayPeriod {
 export interface PayPeriodSummary {
     /**
      * 
-     * @type {CalcMethod}
-     * @memberof PayPeriodSummary
-     */
-    'calcMethod': CalcMethod;
-    /**
-     * 
      * @type {string}
      * @memberof PayPeriodSummary
      */
     'id': string;
+    /**
+     * 
+     * @type {CalcMethod}
+     * @memberof PayPeriodSummary
+     */
+    'calcMethod': CalcMethod;
     /**
      * 
      * @type {PayPeriod}
@@ -2870,6 +3232,54 @@ export interface PayPeriodSummary {
  * @interface Payment
  */
 export interface Payment {
+    /**
+     * 
+     * @type {string}
+     * @memberof Payment
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Payment
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payment
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Payment
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payment
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Payment
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payment
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payment
+     */
+    'version': number;
     /**
      * 
      * @type {PaymentStatus}
@@ -3025,6 +3435,54 @@ export type PaymentPart = typeof PaymentPart[keyof typeof PaymentPart];
 export interface PaymentPosition {
     /**
      * 
+     * @type {string}
+     * @memberof PaymentPosition
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PaymentPosition
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentPosition
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PaymentPosition
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentPosition
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PaymentPosition
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentPosition
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentPosition
+     */
+    'version': number;
+    /**
+     * 
      * @type {RecordFlags}
      * @memberof PaymentPosition
      */
@@ -3119,6 +3577,54 @@ export type PaymentStatus = typeof PaymentStatus[keyof typeof PaymentStatus];
 export interface PaymentType {
     /**
      * 
+     * @type {string}
+     * @memberof PaymentType
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PaymentType
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentType
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PaymentType
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentType
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PaymentType
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentType
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaymentType
+     */
+    'version': number;
+    /**
+     * 
      * @type {PaymentPart}
      * @memberof PaymentType
      */
@@ -3156,6 +3662,54 @@ export interface PaymentType {
  * @interface Payroll
  */
 export interface Payroll {
+    /**
+     * 
+     * @type {string}
+     * @memberof Payroll
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Payroll
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payroll
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Payroll
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payroll
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Payroll
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Payroll
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Payroll
+     */
+    'version': number;
     /**
      * 
      * @type {Resource}
@@ -3321,6 +3875,54 @@ export interface Payroll {
  * @interface PersonEntity
  */
 export interface PersonEntity {
+    /**
+     * 
+     * @type {string}
+     * @memberof PersonEntity
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PersonEntity
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PersonEntity
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PersonEntity
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PersonEntity
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PersonEntity
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PersonEntity
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PersonEntity
+     */
+    'version': number;
     /**
      * 
      * @type {Gender}
@@ -3624,6 +4226,54 @@ export interface PersonSearchDto {
 export interface Position {
     /**
      * 
+     * @type {string}
+     * @memberof Position
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Position
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Position
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Position
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Position
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Position
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Position
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Position
+     */
+    'version': number;
+    /**
+     * 
      * @type {CompanyEntity}
      * @memberof Position
      */
@@ -3839,6 +4489,12 @@ export interface PositionBalanceExtendedDto {
      * @type {string}
      * @memberof PositionBalanceExtendedDto
      */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionBalanceExtendedDto
+     */
     'departmentName'?: string;
     /**
      * 
@@ -3876,12 +4532,6 @@ export interface PositionBalanceExtendedDto {
      * @memberof PositionBalanceExtendedDto
      */
     'calcMethodBalance': Array<CalcMethodBalanceDto>;
-    /**
-     * 
-     * @type {string}
-     * @memberof PositionBalanceExtendedDto
-     */
-    'id': string;
     /**
      * 
      * @type {Position}
@@ -4113,6 +4763,54 @@ export interface PositionBalanceExtendedDto {
 export interface PositionHistory {
     /**
      * 
+     * @type {string}
+     * @memberof PositionHistory
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PositionHistory
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionHistory
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PositionHistory
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionHistory
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PositionHistory
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PositionHistory
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PositionHistory
+     */
+    'version': number;
+    /**
+     * 
      * @type {Position}
      * @memberof PositionHistory
      */
@@ -4199,9 +4897,70 @@ export interface PositionHistory {
 /**
  * 
  * @export
+ * @interface ProcessPaymentDto
+ */
+export interface ProcessPaymentDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ProcessPaymentDto
+     */
+    'version': number;
+}
+/**
+ * 
+ * @export
  * @interface PublicUserDataDto
  */
 export interface PublicUserDataDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PublicUserDataDto
+     */
+    'createdDate'?: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PublicUserDataDto
+     */
+    'updatedDate'?: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PublicUserDataDto
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PublicUserDataDto
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicUserDataDto
+     */
+    'version'?: number;
     /**
      * 
      * @type {string}
@@ -4308,6 +5067,54 @@ export type Resource = typeof Resource[keyof typeof Resource];
 export interface Role {
     /**
      * 
+     * @type {string}
+     * @memberof Role
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Role
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Role
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Role
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Role
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Role
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Role
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Role
+     */
+    'version': number;
+    /**
+     * 
      * @type {RoleType}
      * @memberof Role
      */
@@ -4372,6 +5179,54 @@ export type SortingDtoOrderEnum = typeof SortingDtoOrderEnum[keyof typeof Sortin
  * @interface Task
  */
 export interface Task {
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Task
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Task
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Task
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Task
+     */
+    'version': number;
     /**
      * 
      * @type {TaskType}
@@ -5471,6 +6326,48 @@ export interface UpdateTaskDto {
 export interface UpdateUserDto {
     /**
      * 
+     * @type {Date}
+     * @memberof UpdateUserDto
+     */
+    'createdDate'?: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UpdateUserDto
+     */
+    'updatedDate'?: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UpdateUserDto
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateUserDto
+     */
+    'version'?: number;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateUserDto
      */
@@ -5623,6 +6520,54 @@ export interface User {
      * @type {string}
      * @memberof User
      */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof User
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof User
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof User
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    'version': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
     'firstName': string;
     /**
      * 
@@ -5669,6 +6614,54 @@ export interface User {
 export interface UserRole {
     /**
      * 
+     * @type {string}
+     * @memberof UserRole
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UserRole
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserRole
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UserRole
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserRole
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UserRole
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserRole
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserRole
+     */
+    'version': number;
+    /**
+     * 
      * @type {User}
      * @memberof UserRole
      */
@@ -5707,9 +6700,70 @@ export interface UserRole {
 /**
  * 
  * @export
+ * @interface WithdrawPaymentDto
+ */
+export interface WithdrawPaymentDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof WithdrawPaymentDto
+     */
+    'version': number;
+}
+/**
+ * 
+ * @export
  * @interface WorkTimeNorm
  */
 export interface WorkTimeNorm {
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkTimeNorm
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof WorkTimeNorm
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkTimeNorm
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof WorkTimeNorm
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkTimeNorm
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof WorkTimeNorm
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkTimeNorm
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkTimeNorm
+     */
+    'version': number;
     /**
      * 
      * @type {WorkTimeNormType}
@@ -5791,6 +6845,54 @@ export interface WorkTimeNorm {
  * @interface WorkTimeNormDay
  */
 export interface WorkTimeNormDay {
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkTimeNormDay
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof WorkTimeNormDay
+     */
+    'createdDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkTimeNormDay
+     */
+    'createdUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof WorkTimeNormDay
+     */
+    'updatedDate': Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkTimeNormDay
+     */
+    'updatedUserId'?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof WorkTimeNormDay
+     */
+    'deletedDate'?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkTimeNormDay
+     */
+    'deletedUserId'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkTimeNormDay
+     */
+    'version': number;
     /**
      * 
      * @type {WorkTimeNorm}
@@ -7707,17 +8809,17 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Close Pay Period
          * @param {string} id 
          * @param {number} version 
-         * @param {object} body 
+         * @param {ClosePayPeriodDto} closePayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodClose: async (id: string, version: number, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        payPeriodClose: async (id: string, version: number, closePayPeriodDto: ClosePayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('payPeriodClose', 'id', id)
             // verify required parameter 'version' is not null or undefined
             assertParamExists('payPeriodClose', 'version', version)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('payPeriodClose', 'body', body)
+            // verify required parameter 'closePayPeriodDto' is not null or undefined
+            assertParamExists('payPeriodClose', 'closePayPeriodDto', closePayPeriodDto)
             const localVarPath = `/api/pay-periods/close/{id}/{version}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
                 .replace(`{${"version"}}`, encodeURIComponent(String(version)));
@@ -7743,7 +8845,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(closePayPeriodDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -7910,17 +9012,17 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Open Pay Period
          * @param {string} id 
          * @param {number} version 
-         * @param {object} body 
+         * @param {OpenPayPeriodDto} openPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodOpen: async (id: string, version: number, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        payPeriodOpen: async (id: string, version: number, openPayPeriodDto: OpenPayPeriodDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('payPeriodOpen', 'id', id)
             // verify required parameter 'version' is not null or undefined
             assertParamExists('payPeriodOpen', 'version', version)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('payPeriodOpen', 'body', body)
+            // verify required parameter 'openPayPeriodDto' is not null or undefined
+            assertParamExists('payPeriodOpen', 'openPayPeriodDto', openPayPeriodDto)
             const localVarPath = `/api/pay-periods/open/{id}/{version}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
                 .replace(`{${"version"}}`, encodeURIComponent(String(version)));
@@ -7946,7 +9048,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(openPayPeriodDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8581,15 +9683,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Process payment
          * @param {string} id 
-         * @param {object} body 
+         * @param {ProcessPaymentDto} processPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsProcess: async (id: string, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        paymentsProcess: async (id: string, processPaymentDto: ProcessPaymentDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('paymentsProcess', 'id', id)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('paymentsProcess', 'body', body)
+            // verify required parameter 'processPaymentDto' is not null or undefined
+            assertParamExists('paymentsProcess', 'processPaymentDto', processPaymentDto)
             const localVarPath = `/api/payments/process/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8614,7 +9716,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(processPaymentDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -8757,15 +9859,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Withdraw payment
          * @param {string} id 
-         * @param {object} body 
+         * @param {WithdrawPaymentDto} withdrawPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsWithdraw: async (id: string, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        paymentsWithdraw: async (id: string, withdrawPaymentDto: WithdrawPaymentDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('paymentsWithdraw', 'id', id)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('paymentsWithdraw', 'body', body)
+            // verify required parameter 'withdrawPaymentDto' is not null or undefined
+            assertParamExists('paymentsWithdraw', 'withdrawPaymentDto', withdrawPaymentDto)
             const localVarPath = `/api/payments/withdraw/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -8790,7 +9892,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(withdrawPaymentDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9004,6 +10106,314 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(updatePayrollDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Create person
+         * @param {CreatePersonDto} createPersonDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personCreate: async (createPersonDto: CreatePersonDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createPersonDto' is not null or undefined
+            assertParamExists('personCreate', 'createPersonDto', createPersonDto)
+            const localVarPath = `/api/persons`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createPersonDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [firstName] 
+         * @param {string} [lastName] 
+         * @param {string} [middleName] 
+         * @param {string} [taxId] 
+         * @param {string} [phone] 
+         * @param {string} [email] 
+         * @param {Array<string>} [birthDate] Birthday range [from, to] YYYY-MM-DD
+         * @param {Array<PersonFindAllGenderEnum>} [gender] 
+         * @param {string} [field] 
+         * @param {PersonFindAllOrderEnum} [order] 
+         * @param {number} [page] Page number
+         * @param {number} [limit] Page size
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personFindAll: async (firstName?: string, lastName?: string, middleName?: string, taxId?: string, phone?: string, email?: string, birthDate?: Array<string>, gender?: Array<PersonFindAllGenderEnum>, field?: string, order?: PersonFindAllOrderEnum, page?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/persons`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (firstName !== undefined) {
+                localVarQueryParameter['firstName'] = firstName;
+            }
+
+            if (lastName !== undefined) {
+                localVarQueryParameter['lastName'] = lastName;
+            }
+
+            if (middleName !== undefined) {
+                localVarQueryParameter['middleName'] = middleName;
+            }
+
+            if (taxId !== undefined) {
+                localVarQueryParameter['taxId'] = taxId;
+            }
+
+            if (phone !== undefined) {
+                localVarQueryParameter['phone'] = phone;
+            }
+
+            if (email !== undefined) {
+                localVarQueryParameter['email'] = email;
+            }
+
+            if (birthDate) {
+                localVarQueryParameter['birthDate'] = birthDate;
+            }
+
+            if (gender) {
+                localVarQueryParameter['gender'] = gender;
+            }
+
+            if (field !== undefined) {
+                localVarQueryParameter['field'] = field;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personFindOne: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('personFindOne', 'id', id)
+            const localVarPath = `/api/persons/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Soft delete a Person record
+         * @param {string} id 
+         * @param {number} version 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personRemove: async (id: string, version: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('personRemove', 'id', id)
+            // verify required parameter 'version' is not null or undefined
+            assertParamExists('personRemove', 'version', version)
+            const localVarPath = `/api/persons/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (version !== undefined) {
+                localVarQueryParameter['version'] = version;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Restore a Person record
+         * @param {string} id 
+         * @param {number} version 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personRestore: async (id: string, version: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('personRestore', 'id', id)
+            // verify required parameter 'version' is not null or undefined
+            assertParamExists('personRestore', 'version', version)
+            const localVarPath = `/api/persons/{id}/restore/{version}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"version"}}`, encodeURIComponent(String(version)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update a Person record
+         * @param {string} id 
+         * @param {number} version 
+         * @param {UpdatePersonDto} updatePersonDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personUpdate: async (id: string, version: number, updatePersonDto: UpdatePersonDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('personUpdate', 'id', id)
+            // verify required parameter 'version' is not null or undefined
+            assertParamExists('personUpdate', 'version', version)
+            // verify required parameter 'updatePersonDto' is not null or undefined
+            assertParamExists('personUpdate', 'updatePersonDto', updatePersonDto)
+            const localVarPath = `/api/persons/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (version !== undefined) {
+                localVarQueryParameter['version'] = version;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updatePersonDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11392,12 +12802,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Close Pay Period
          * @param {string} id 
          * @param {number} version 
-         * @param {object} body 
+         * @param {ClosePayPeriodDto} closePayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async payPeriodClose(id: string, version: number, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodClose(id, version, body, options);
+        async payPeriodClose(id: string, version: number, closePayPeriodDto: ClosePayPeriodDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodClose(id, version, closePayPeriodDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.payPeriodClose']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11456,12 +12866,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Open Pay Period
          * @param {string} id 
          * @param {number} version 
-         * @param {object} body 
+         * @param {OpenPayPeriodDto} openPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async payPeriodOpen(id: string, version: number, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodOpen(id, version, body, options);
+        async payPeriodOpen(id: string, version: number, openPayPeriodDto: OpenPayPeriodDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PayPeriod>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.payPeriodOpen(id, version, openPayPeriodDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.payPeriodOpen']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11669,12 +13079,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary Process payment
          * @param {string} id 
-         * @param {object} body 
+         * @param {ProcessPaymentDto} processPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paymentsProcess(id: string, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsProcess(id, body, options);
+        async paymentsProcess(id: string, processPaymentDto: ProcessPaymentDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsProcess(id, processPaymentDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentsProcess']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11726,12 +13136,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary Withdraw payment
          * @param {string} id 
-         * @param {object} body 
+         * @param {WithdrawPaymentDto} withdrawPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async paymentsWithdraw(id: string, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsWithdraw(id, body, options);
+        async paymentsWithdraw(id: string, withdrawPaymentDto: WithdrawPaymentDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.paymentsWithdraw(id, withdrawPaymentDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.paymentsWithdraw']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -11801,6 +13211,97 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.payrollsUpdate(id, version, updatePayrollDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.payrollsUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Create person
+         * @param {CreatePersonDto} createPersonDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async personCreate(createPersonDto: CreatePersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.personCreate(createPersonDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.personCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} [firstName] 
+         * @param {string} [lastName] 
+         * @param {string} [middleName] 
+         * @param {string} [taxId] 
+         * @param {string} [phone] 
+         * @param {string} [email] 
+         * @param {Array<string>} [birthDate] Birthday range [from, to] YYYY-MM-DD
+         * @param {Array<PersonFindAllGenderEnum>} [gender] 
+         * @param {string} [field] 
+         * @param {PersonFindAllOrderEnum} [order] 
+         * @param {number} [page] Page number
+         * @param {number} [limit] Page size
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async personFindAll(firstName?: string, lastName?: string, middleName?: string, taxId?: string, phone?: string, email?: string, birthDate?: Array<string>, gender?: Array<PersonFindAllGenderEnum>, field?: string, order?: PersonFindAllOrderEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListPersonsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.personFindAll(firstName, lastName, middleName, taxId, phone, email, birthDate, gender, field, order, page, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.personFindAll']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async personFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PersonReadDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.personFindOne(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.personFindOne']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Soft delete a Person record
+         * @param {string} id 
+         * @param {number} version 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async personRemove(id: string, version: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.personRemove(id, version, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.personRemove']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Restore a Person record
+         * @param {string} id 
+         * @param {number} version 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async personRestore(id: string, version: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.personRestore(id, version, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.personRestore']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Update a Person record
+         * @param {string} id 
+         * @param {number} version 
+         * @param {UpdatePersonDto} updatePersonDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async personUpdate(id: string, version: number, updatePersonDto: UpdatePersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.personUpdate(id, version, updatePersonDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.personUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -12854,12 +14355,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @summary Close Pay Period
          * @param {string} id 
          * @param {number} version 
-         * @param {object} body 
+         * @param {ClosePayPeriodDto} closePayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodClose(id: string, version: number, body: object, options?: any): AxiosPromise<PayPeriod> {
-            return localVarFp.payPeriodClose(id, version, body, options).then((request) => request(axios, basePath));
+        payPeriodClose(id: string, version: number, closePayPeriodDto: ClosePayPeriodDto, options?: any): AxiosPromise<PayPeriod> {
+            return localVarFp.payPeriodClose(id, version, closePayPeriodDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12903,12 +14404,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @summary Open Pay Period
          * @param {string} id 
          * @param {number} version 
-         * @param {object} body 
+         * @param {OpenPayPeriodDto} openPayPeriodDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        payPeriodOpen(id: string, version: number, body: object, options?: any): AxiosPromise<PayPeriod> {
-            return localVarFp.payPeriodOpen(id, version, body, options).then((request) => request(axios, basePath));
+        payPeriodOpen(id: string, version: number, openPayPeriodDto: OpenPayPeriodDto, options?: any): AxiosPromise<PayPeriod> {
+            return localVarFp.payPeriodOpen(id, version, openPayPeriodDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13068,12 +14569,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary Process payment
          * @param {string} id 
-         * @param {object} body 
+         * @param {ProcessPaymentDto} processPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsProcess(id: string, body: object, options?: any): AxiosPromise<Payment> {
-            return localVarFp.paymentsProcess(id, body, options).then((request) => request(axios, basePath));
+        paymentsProcess(id: string, processPaymentDto: ProcessPaymentDto, options?: any): AxiosPromise<Payment> {
+            return localVarFp.paymentsProcess(id, processPaymentDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13113,12 +14614,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary Withdraw payment
          * @param {string} id 
-         * @param {object} body 
+         * @param {WithdrawPaymentDto} withdrawPaymentDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        paymentsWithdraw(id: string, body: object, options?: any): AxiosPromise<Payment> {
-            return localVarFp.paymentsWithdraw(id, body, options).then((request) => request(axios, basePath));
+        paymentsWithdraw(id: string, withdrawPaymentDto: WithdrawPaymentDto, options?: any): AxiosPromise<Payment> {
+            return localVarFp.paymentsWithdraw(id, withdrawPaymentDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13171,6 +14672,79 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         payrollsUpdate(id: string, version: number, updatePayrollDto: UpdatePayrollDto, options?: any): AxiosPromise<Payroll> {
             return localVarFp.payrollsUpdate(id, version, updatePayrollDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Create person
+         * @param {CreatePersonDto} createPersonDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personCreate(createPersonDto: CreatePersonDto, options?: any): AxiosPromise<IdDto> {
+            return localVarFp.personCreate(createPersonDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [firstName] 
+         * @param {string} [lastName] 
+         * @param {string} [middleName] 
+         * @param {string} [taxId] 
+         * @param {string} [phone] 
+         * @param {string} [email] 
+         * @param {Array<string>} [birthDate] Birthday range [from, to] YYYY-MM-DD
+         * @param {Array<PersonFindAllGenderEnum>} [gender] 
+         * @param {string} [field] 
+         * @param {PersonFindAllOrderEnum} [order] 
+         * @param {number} [page] Page number
+         * @param {number} [limit] Page size
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personFindAll(firstName?: string, lastName?: string, middleName?: string, taxId?: string, phone?: string, email?: string, birthDate?: Array<string>, gender?: Array<PersonFindAllGenderEnum>, field?: string, order?: PersonFindAllOrderEnum, page?: number, limit?: number, options?: any): AxiosPromise<ListPersonsDto> {
+            return localVarFp.personFindAll(firstName, lastName, middleName, taxId, phone, email, birthDate, gender, field, order, page, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personFindOne(id: string, options?: any): AxiosPromise<PersonReadDto> {
+            return localVarFp.personFindOne(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Soft delete a Person record
+         * @param {string} id 
+         * @param {number} version 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personRemove(id: string, version: number, options?: any): AxiosPromise<void> {
+            return localVarFp.personRemove(id, version, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Restore a Person record
+         * @param {string} id 
+         * @param {number} version 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personRestore(id: string, version: number, options?: any): AxiosPromise<void> {
+            return localVarFp.personRestore(id, version, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update a Person record
+         * @param {string} id 
+         * @param {number} version 
+         * @param {UpdatePersonDto} updatePersonDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        personUpdate(id: string, version: number, updatePersonDto: UpdatePersonDto, options?: any): AxiosPromise<void> {
+            return localVarFp.personUpdate(id, version, updatePersonDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14192,13 +15766,13 @@ export class DefaultApi extends BaseAPI {
      * @summary Close Pay Period
      * @param {string} id 
      * @param {number} version 
-     * @param {object} body 
+     * @param {ClosePayPeriodDto} closePayPeriodDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public payPeriodClose(id: string, version: number, body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).payPeriodClose(id, version, body, options).then((request) => request(this.axios, this.basePath));
+    public payPeriodClose(id: string, version: number, closePayPeriodDto: ClosePayPeriodDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).payPeriodClose(id, version, closePayPeriodDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14251,13 +15825,13 @@ export class DefaultApi extends BaseAPI {
      * @summary Open Pay Period
      * @param {string} id 
      * @param {number} version 
-     * @param {object} body 
+     * @param {OpenPayPeriodDto} openPayPeriodDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public payPeriodOpen(id: string, version: number, body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).payPeriodOpen(id, version, body, options).then((request) => request(this.axios, this.basePath));
+    public payPeriodOpen(id: string, version: number, openPayPeriodDto: OpenPayPeriodDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).payPeriodOpen(id, version, openPayPeriodDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14448,13 +16022,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary Process payment
      * @param {string} id 
-     * @param {object} body 
+     * @param {ProcessPaymentDto} processPaymentDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public paymentsProcess(id: string, body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentsProcess(id, body, options).then((request) => request(this.axios, this.basePath));
+    public paymentsProcess(id: string, processPaymentDto: ProcessPaymentDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentsProcess(id, processPaymentDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14501,13 +16075,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary Withdraw payment
      * @param {string} id 
-     * @param {object} body 
+     * @param {WithdrawPaymentDto} withdrawPaymentDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public paymentsWithdraw(id: string, body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).paymentsWithdraw(id, body, options).then((request) => request(this.axios, this.basePath));
+    public paymentsWithdraw(id: string, withdrawPaymentDto: WithdrawPaymentDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).paymentsWithdraw(id, withdrawPaymentDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14570,6 +16144,91 @@ export class DefaultApi extends BaseAPI {
      */
     public payrollsUpdate(id: string, version: number, updatePayrollDto: UpdatePayrollDto, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).payrollsUpdate(id, version, updatePayrollDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Create person
+     * @param {CreatePersonDto} createPersonDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public personCreate(createPersonDto: CreatePersonDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).personCreate(createPersonDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [firstName] 
+     * @param {string} [lastName] 
+     * @param {string} [middleName] 
+     * @param {string} [taxId] 
+     * @param {string} [phone] 
+     * @param {string} [email] 
+     * @param {Array<string>} [birthDate] Birthday range [from, to] YYYY-MM-DD
+     * @param {Array<PersonFindAllGenderEnum>} [gender] 
+     * @param {string} [field] 
+     * @param {PersonFindAllOrderEnum} [order] 
+     * @param {number} [page] Page number
+     * @param {number} [limit] Page size
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public personFindAll(firstName?: string, lastName?: string, middleName?: string, taxId?: string, phone?: string, email?: string, birthDate?: Array<string>, gender?: Array<PersonFindAllGenderEnum>, field?: string, order?: PersonFindAllOrderEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).personFindAll(firstName, lastName, middleName, taxId, phone, email, birthDate, gender, field, order, page, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public personFindOne(id: string, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).personFindOne(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Soft delete a Person record
+     * @param {string} id 
+     * @param {number} version 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public personRemove(id: string, version: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).personRemove(id, version, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Restore a Person record
+     * @param {string} id 
+     * @param {number} version 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public personRestore(id: string, version: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).personRestore(id, version, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update a Person record
+     * @param {string} id 
+     * @param {number} version 
+     * @param {UpdatePersonDto} updatePersonDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public personUpdate(id: string, version: number, updatePersonDto: UpdatePersonDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).personUpdate(id, version, updatePersonDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15089,602 +16748,6 @@ export class DefaultApi extends BaseAPI {
      */
     public workTimeNormUpdate(id: string, version: number, updateWorkTimeNormDto: UpdateWorkTimeNormDto, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).workTimeNormUpdate(id, version, updateWorkTimeNormDto, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * PersonsApi - axios parameter creator
- * @export
- */
-export const PersonsApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Create person
-         * @param {CreatePersonDto} createPersonDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personCreate: async (createPersonDto: CreatePersonDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createPersonDto' is not null or undefined
-            assertParamExists('personCreate', 'createPersonDto', createPersonDto)
-            const localVarPath = `/api/persons`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createPersonDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} [firstName] 
-         * @param {string} [lastName] 
-         * @param {string} [middleName] 
-         * @param {string} [taxId] 
-         * @param {string} [phone] 
-         * @param {string} [email] 
-         * @param {Array<string>} [birthDate] Birthday range [from, to] YYYY-MM-DD
-         * @param {Array<PersonFindAllGenderEnum>} [gender] 
-         * @param {string} [field] 
-         * @param {PersonFindAllOrderEnum} [order] 
-         * @param {number} [page] Page number
-         * @param {number} [limit] Page size
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personFindAll: async (firstName?: string, lastName?: string, middleName?: string, taxId?: string, phone?: string, email?: string, birthDate?: Array<string>, gender?: Array<PersonFindAllGenderEnum>, field?: string, order?: PersonFindAllOrderEnum, page?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/persons`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (firstName !== undefined) {
-                localVarQueryParameter['firstName'] = firstName;
-            }
-
-            if (lastName !== undefined) {
-                localVarQueryParameter['lastName'] = lastName;
-            }
-
-            if (middleName !== undefined) {
-                localVarQueryParameter['middleName'] = middleName;
-            }
-
-            if (taxId !== undefined) {
-                localVarQueryParameter['taxId'] = taxId;
-            }
-
-            if (phone !== undefined) {
-                localVarQueryParameter['phone'] = phone;
-            }
-
-            if (email !== undefined) {
-                localVarQueryParameter['email'] = email;
-            }
-
-            if (birthDate) {
-                localVarQueryParameter['birthDate'] = birthDate;
-            }
-
-            if (gender) {
-                localVarQueryParameter['gender'] = gender;
-            }
-
-            if (field !== undefined) {
-                localVarQueryParameter['field'] = field;
-            }
-
-            if (order !== undefined) {
-                localVarQueryParameter['order'] = order;
-            }
-
-            if (page !== undefined) {
-                localVarQueryParameter['page'] = page;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personFindOne: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('personFindOne', 'id', id)
-            const localVarPath = `/api/persons/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Soft delete a Person record
-         * @param {string} id 
-         * @param {number} version 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personRemove: async (id: string, version: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('personRemove', 'id', id)
-            // verify required parameter 'version' is not null or undefined
-            assertParamExists('personRemove', 'version', version)
-            const localVarPath = `/api/persons/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (version !== undefined) {
-                localVarQueryParameter['version'] = version;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Restore a Person record
-         * @param {string} id 
-         * @param {number} version 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personRestore: async (id: string, version: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('personRestore', 'id', id)
-            // verify required parameter 'version' is not null or undefined
-            assertParamExists('personRestore', 'version', version)
-            const localVarPath = `/api/persons/{id}/restore/{version}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
-                .replace(`{${"version"}}`, encodeURIComponent(String(version)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Update a Person record
-         * @param {string} id 
-         * @param {number} version 
-         * @param {UpdatePersonDto} updatePersonDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personUpdate: async (id: string, version: number, updatePersonDto: UpdatePersonDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('personUpdate', 'id', id)
-            // verify required parameter 'version' is not null or undefined
-            assertParamExists('personUpdate', 'version', version)
-            // verify required parameter 'updatePersonDto' is not null or undefined
-            assertParamExists('personUpdate', 'updatePersonDto', updatePersonDto)
-            const localVarPath = `/api/persons/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (version !== undefined) {
-                localVarQueryParameter['version'] = version;
-            }
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updatePersonDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * PersonsApi - functional programming interface
- * @export
- */
-export const PersonsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = PersonsApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @summary Create person
-         * @param {CreatePersonDto} createPersonDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async personCreate(createPersonDto: CreatePersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.personCreate(createPersonDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PersonsApi.personCreate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} [firstName] 
-         * @param {string} [lastName] 
-         * @param {string} [middleName] 
-         * @param {string} [taxId] 
-         * @param {string} [phone] 
-         * @param {string} [email] 
-         * @param {Array<string>} [birthDate] Birthday range [from, to] YYYY-MM-DD
-         * @param {Array<PersonFindAllGenderEnum>} [gender] 
-         * @param {string} [field] 
-         * @param {PersonFindAllOrderEnum} [order] 
-         * @param {number} [page] Page number
-         * @param {number} [limit] Page size
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async personFindAll(firstName?: string, lastName?: string, middleName?: string, taxId?: string, phone?: string, email?: string, birthDate?: Array<string>, gender?: Array<PersonFindAllGenderEnum>, field?: string, order?: PersonFindAllOrderEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListPersonsDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.personFindAll(firstName, lastName, middleName, taxId, phone, email, birthDate, gender, field, order, page, limit, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PersonsApi.personFindAll']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async personFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PersonReadDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.personFindOne(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PersonsApi.personFindOne']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary Soft delete a Person record
-         * @param {string} id 
-         * @param {number} version 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async personRemove(id: string, version: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.personRemove(id, version, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PersonsApi.personRemove']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary Restore a Person record
-         * @param {string} id 
-         * @param {number} version 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async personRestore(id: string, version: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.personRestore(id, version, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PersonsApi.personRestore']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary Update a Person record
-         * @param {string} id 
-         * @param {number} version 
-         * @param {UpdatePersonDto} updatePersonDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async personUpdate(id: string, version: number, updatePersonDto: UpdatePersonDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.personUpdate(id, version, updatePersonDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['PersonsApi.personUpdate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * PersonsApi - factory interface
- * @export
- */
-export const PersonsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = PersonsApiFp(configuration)
-    return {
-        /**
-         * 
-         * @summary Create person
-         * @param {CreatePersonDto} createPersonDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personCreate(createPersonDto: CreatePersonDto, options?: any): AxiosPromise<IdDto> {
-            return localVarFp.personCreate(createPersonDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} [firstName] 
-         * @param {string} [lastName] 
-         * @param {string} [middleName] 
-         * @param {string} [taxId] 
-         * @param {string} [phone] 
-         * @param {string} [email] 
-         * @param {Array<string>} [birthDate] Birthday range [from, to] YYYY-MM-DD
-         * @param {Array<PersonFindAllGenderEnum>} [gender] 
-         * @param {string} [field] 
-         * @param {PersonFindAllOrderEnum} [order] 
-         * @param {number} [page] Page number
-         * @param {number} [limit] Page size
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personFindAll(firstName?: string, lastName?: string, middleName?: string, taxId?: string, phone?: string, email?: string, birthDate?: Array<string>, gender?: Array<PersonFindAllGenderEnum>, field?: string, order?: PersonFindAllOrderEnum, page?: number, limit?: number, options?: any): AxiosPromise<ListPersonsDto> {
-            return localVarFp.personFindAll(firstName, lastName, middleName, taxId, phone, email, birthDate, gender, field, order, page, limit, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personFindOne(id: string, options?: any): AxiosPromise<PersonReadDto> {
-            return localVarFp.personFindOne(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Soft delete a Person record
-         * @param {string} id 
-         * @param {number} version 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personRemove(id: string, version: number, options?: any): AxiosPromise<void> {
-            return localVarFp.personRemove(id, version, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Restore a Person record
-         * @param {string} id 
-         * @param {number} version 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personRestore(id: string, version: number, options?: any): AxiosPromise<void> {
-            return localVarFp.personRestore(id, version, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Update a Person record
-         * @param {string} id 
-         * @param {number} version 
-         * @param {UpdatePersonDto} updatePersonDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        personUpdate(id: string, version: number, updatePersonDto: UpdatePersonDto, options?: any): AxiosPromise<void> {
-            return localVarFp.personUpdate(id, version, updatePersonDto, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * PersonsApi - object-oriented interface
- * @export
- * @class PersonsApi
- * @extends {BaseAPI}
- */
-export class PersonsApi extends BaseAPI {
-    /**
-     * 
-     * @summary Create person
-     * @param {CreatePersonDto} createPersonDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PersonsApi
-     */
-    public personCreate(createPersonDto: CreatePersonDto, options?: RawAxiosRequestConfig) {
-        return PersonsApiFp(this.configuration).personCreate(createPersonDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} [firstName] 
-     * @param {string} [lastName] 
-     * @param {string} [middleName] 
-     * @param {string} [taxId] 
-     * @param {string} [phone] 
-     * @param {string} [email] 
-     * @param {Array<string>} [birthDate] Birthday range [from, to] YYYY-MM-DD
-     * @param {Array<PersonFindAllGenderEnum>} [gender] 
-     * @param {string} [field] 
-     * @param {PersonFindAllOrderEnum} [order] 
-     * @param {number} [page] Page number
-     * @param {number} [limit] Page size
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PersonsApi
-     */
-    public personFindAll(firstName?: string, lastName?: string, middleName?: string, taxId?: string, phone?: string, email?: string, birthDate?: Array<string>, gender?: Array<PersonFindAllGenderEnum>, field?: string, order?: PersonFindAllOrderEnum, page?: number, limit?: number, options?: RawAxiosRequestConfig) {
-        return PersonsApiFp(this.configuration).personFindAll(firstName, lastName, middleName, taxId, phone, email, birthDate, gender, field, order, page, limit, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PersonsApi
-     */
-    public personFindOne(id: string, options?: RawAxiosRequestConfig) {
-        return PersonsApiFp(this.configuration).personFindOne(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Soft delete a Person record
-     * @param {string} id 
-     * @param {number} version 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PersonsApi
-     */
-    public personRemove(id: string, version: number, options?: RawAxiosRequestConfig) {
-        return PersonsApiFp(this.configuration).personRemove(id, version, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Restore a Person record
-     * @param {string} id 
-     * @param {number} version 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PersonsApi
-     */
-    public personRestore(id: string, version: number, options?: RawAxiosRequestConfig) {
-        return PersonsApiFp(this.configuration).personRestore(id, version, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Update a Person record
-     * @param {string} id 
-     * @param {number} version 
-     * @param {UpdatePersonDto} updatePersonDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PersonsApi
-     */
-    public personUpdate(id: string, version: number, updatePersonDto: UpdatePersonDto, options?: RawAxiosRequestConfig) {
-        return PersonsApiFp(this.configuration).personUpdate(id, version, updatePersonDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

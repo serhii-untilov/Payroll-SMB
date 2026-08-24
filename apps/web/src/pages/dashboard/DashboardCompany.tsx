@@ -1,9 +1,10 @@
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetCurrentPayPeriod } from '@/hooks/queries/usePayPeriod';
+import { CompanyEntity as Company, Task } from '@repo/openapi';
 import DashboardForm from './DashboardForm';
 
-const DashboardCompany = ({ company, taskList }) => {
+const DashboardCompany = ({ company, taskList }: { company: Company; taskList: Task[] }) => {
     const {
         data: payPeriod,
         isLoading,

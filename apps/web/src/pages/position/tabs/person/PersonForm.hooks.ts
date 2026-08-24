@@ -6,13 +6,13 @@ import { AppMessage } from '@/types';
 import { getDirtyValues } from '@/utils/getDirtyValues';
 import { snackbarError, snackbarFormErrors } from '@/utils/snackbar';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Resource, UpdatePersonDto } from '@repo/openapi';
+import { PersonReadDto, Resource, UpdatePersonDto } from '@repo/openapi';
 import { useCallback, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { date, InferType, number, object, string } from 'yup';
+import { date, InferType, object, string } from 'yup';
 
-const usePersonForm = ({ person }) => {
+const usePersonForm = ({ person }: { person: PersonReadDto }) => {
     const { t } = useTranslation();
     const { invalidateQueries } = useInvalidateQueries();
     const { locale } = useLocale();
@@ -24,10 +24,10 @@ const usePersonForm = ({ person }) => {
         handleSubmit,
         reset,
         formState: { errors: formErrors },
-    } = useForm({
-        defaultValues: person,
-        values: person,
-        resolver: yupResolver<FormType>(formSchema),
+    } = useForm<FormType>({
+        defaultValues: person as unknown as FormType,
+        values: person as unknown as FormType,
+        resolver: yupResolver<FormType>(formSchema as any),
         shouldFocusError: true,
     });
     const { dirtyFields, isDirty } = useFormState({ control });
@@ -40,10 +40,8 @@ const usePersonForm = ({ person }) => {
             const dirtyValues = getDirtyValues(dirtyFields, data);
             return await updatePerson.mutateAsync({
                 id: data.id,
-                dto: {
-                    ...(dirtyValues as UpdatePersonDto),
-                    version: person.version,
-                },
+                version: person.version,
+                dto: dirtyValues as UpdatePersonDto,
             });
         },
         [dirtyFields, person.version, updatePerson],
@@ -54,8 +52,8 @@ const usePersonForm = ({ person }) => {
             if (!isDirty || !data || !person) return;
             try {
                 await save(data);
-                const updated = (await api.personsFindOne(person.id)).data;
-                reset(updated as FormType);
+                const updated = (await api.personFindOne(person.id)).data;
+                reset(updated as unknown as FormType);
             } catch (e: unknown) {
                 snackbarError(e as AppMessage);
             }
@@ -64,7 +62,7 @@ const usePersonForm = ({ person }) => {
     );
 
     const onCancel = useCallback(async () => {
-        reset(formSchema.cast(person));
+        reset(formSchema.cast(person) as unknown as FormType);
         await invalidateQueries([Resource.Person]);
     }, [formSchema, person, invalidateQueries, reset]);
 

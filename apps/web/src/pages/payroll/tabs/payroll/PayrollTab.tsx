@@ -1,7 +1,7 @@
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetPositionBalanceList } from '@/hooks/queries/usePosition';
-import { Company, PayPeriod } from '@repo/openapi';
+import { CompanyEntity as Company, PayPeriod } from '@repo/openapi';
 import PayrollList from './PayrollList';
 
 type PayrollTabProps = {

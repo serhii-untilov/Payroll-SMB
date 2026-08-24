@@ -1,7 +1,7 @@
 import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import { GridCellParams, GridRowParams, GridRowSelectionModel, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
-import { Company, Payment, PayPeriod } from '@repo/openapi';
+import { CompanyEntity as Company, Payment, PayPeriod } from '@repo/openapi';
 import { useState } from 'react';
 import useMandatoryPaymentList from './MandatoryPaymentList.hooks';
 import useGrid from '@/hooks/useGrid';

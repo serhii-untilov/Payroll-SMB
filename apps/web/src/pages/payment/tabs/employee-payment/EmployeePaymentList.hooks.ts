@@ -1,13 +1,17 @@
 import { useRemovePaymentPosition } from '@/hooks/queries/usePaymentPosition';
+import { PaymentPosition } from '@repo/openapi';
 import { sumFormatter } from '@/utils/sumFormatter';
-import { GridRowSelectionModel } from '@mui/x-data-grid';
+import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { PaymentStatus } from '@repo/openapi';
 import { dateUTC } from '@repo/shared';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-export default function useEmployeePaymentList(rowSelectionModel: GridRowSelectionModel) {
+export default function useEmployeePaymentList(
+    rowSelectionModel: GridRowSelectionModel,
+    paymentList: PaymentPosition[],
+) {
     const navigate = useNavigate();
 
     const removePaymentPosition = useRemovePaymentPosition();
@@ -35,9 +39,12 @@ export default function useEmployeePaymentList(rowSelectionModel: GridRowSelecti
 
     const onDeletePayment = useCallback(async () => {
         for (const id of rowSelectionModel.map(String)) {
-            await removePaymentPosition.mutateAsync(id);
+            const paymentPosition = paymentList?.find((o) => o.id === id);
+            if (paymentPosition) {
+                await removePaymentPosition.mutateAsync({ id, version: paymentPosition.version });
+            }
         }
-    }, [removePaymentPosition, rowSelectionModel]);
+    }, [paymentList, removePaymentPosition, rowSelectionModel]);
 
     const columns = useColumns();
 
@@ -52,7 +59,7 @@ export default function useEmployeePaymentList(rowSelectionModel: GridRowSelecti
 
 const useColumns = () => {
     const { t } = useTranslation();
-    return useMemo(
+    return useMemo<GridColDef[]>(
         () => [
             {
                 field: 'cardNumber',

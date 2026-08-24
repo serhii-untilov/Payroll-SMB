@@ -1,7 +1,8 @@
 import useTaskDate from '@/hooks/useTaskDate';
+import { Task } from '@repo/openapi';
 import TaskCard from '../task-card/TaskCard';
 
-const UpcomingTask = ({ task }) => {
+const UpcomingTask = ({ task }: { task: Task }) => {
     const taskDate = useTaskDate(task);
     return <TaskCard task={task} date={taskDate} />;
 };

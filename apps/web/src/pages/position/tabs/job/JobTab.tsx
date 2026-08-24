@@ -1,4 +1,4 @@
-import { Company, PayPeriod, Position, PositionHistory } from '@repo/openapi';
+import { CompanyEntity as Company, PayPeriod, Position, PositionHistory } from '@repo/openapi';
 import JobForm from './JobForm';
 import { Dispatch } from 'react';
 

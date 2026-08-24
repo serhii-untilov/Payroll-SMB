@@ -5,6 +5,7 @@ import { PayPeriod } from './pay-period.entity';
 
 @Entity()
 export class PayPeriodSummary {
+    @ApiProperty({ type: String })
     @PrimaryGeneratedColumn('identity')
     id: string;
 

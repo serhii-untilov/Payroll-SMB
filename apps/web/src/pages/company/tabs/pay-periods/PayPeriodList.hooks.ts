@@ -59,9 +59,7 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
         if (params.currentPayPeriod) {
             const next = await closePayPeriod.mutateAsync({
                 id: params.currentPayPeriod.id,
-                dto: {
-                    version: params.currentPayPeriod.version,
-                },
+                version: params.currentPayPeriod.version,
             });
             dispatch(setPayPeriod(next));
             await invalidate();
@@ -72,9 +70,7 @@ export default function usePayPeriodList(params: PayPeriodListProps) {
         if (params.currentPayPeriod) {
             const prior = await openPayPeriod.mutateAsync({
                 id: params.currentPayPeriod.id,
-                dto: {
-                    version: params.currentPayPeriod.version,
-                },
+                version: params.currentPayPeriod.version,
             });
             setPayPeriod(prior);
             await invalidate();

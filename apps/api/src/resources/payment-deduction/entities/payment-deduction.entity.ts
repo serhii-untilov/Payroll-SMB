@@ -6,6 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class PaymentDeduction {
+    @ApiProperty({ type: String })
     @PrimaryGeneratedColumn('identity')
     id: string;
 

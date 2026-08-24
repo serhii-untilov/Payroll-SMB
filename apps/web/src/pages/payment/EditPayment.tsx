@@ -2,7 +2,7 @@ import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetPayment } from '@/hooks/queries/usePayment';
 import PaymentForm from './PaymentForm';
-import { Company, PayPeriod } from '@repo/openapi';
+import { CompanyEntity as Company, PayPeriod } from '@repo/openapi';
 
 interface EditPaymentProps {
     company: Company;

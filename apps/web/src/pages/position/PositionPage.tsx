@@ -10,7 +10,7 @@ import EditPosition from './EditPosition';
 
 const PositionPage = () => {
     const params = useParams();
-    const [positionId, setPositionId] = useState(Number(params.positionId));
+    const [positionId, setPositionId] = useState(params.positionId);
     const [searchParams] = useSearchParams();
     const tabIndex = searchParams.get('tab-index');
     const goBack = searchParams.get('return') === 'true';

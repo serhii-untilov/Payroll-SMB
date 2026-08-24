@@ -1,4 +1,4 @@
-import { authLogin, authLogout, authRegister, usersFindCurrent } from '@/services/auth/auth.service';
+import { authLogin, authLogout, authRegister, userFindCurrent } from '@/services/auth/auth.service';
 import { getUserAccessToken } from '@/services/auth/token.service';
 import { AuthDto, CreateUserDto, PublicUserDataDto } from '@repo/openapi';
 import PropTypes from 'prop-types';
@@ -109,7 +109,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         const initialize = async (): Promise<void> => {
             try {
                 const accessToken = getUserAccessToken();
-                const user = accessToken ? await usersFindCurrent() : null;
+                const user = accessToken ? await userFindCurrent() : null;
                 if (user) {
                     dispatch({
                         type: 'INITIALIZE',
@@ -144,7 +144,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
 
     const login = async (params: AuthDto): Promise<void> => {
         await authLogin(params);
-        const user = await usersFindCurrent();
+        const user = await userFindCurrent();
         if (user) {
             dispatch({
                 type: 'LOGIN',
@@ -162,7 +162,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
 
     const register = async (params: CreateUserDto): Promise<void> => {
         await authRegister(params);
-        const user = await usersFindCurrent();
+        const user = await userFindCurrent();
         if (user) {
             dispatch({
                 type: 'REGISTER',

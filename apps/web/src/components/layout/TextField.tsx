@@ -5,7 +5,7 @@ interface TextFieldProps {
     label: string;
     value?: unknown;
     type?: string;
-    onChange: (value) => void;
+    onChange: (value: string) => void;
     autoFocus?: boolean;
 }
 

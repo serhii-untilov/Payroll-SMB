@@ -4,6 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Law {
+    @ApiProperty({ type: String })
     @PrimaryGeneratedColumn('identity')
     id: string;
 

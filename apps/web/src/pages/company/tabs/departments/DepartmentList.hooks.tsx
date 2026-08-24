@@ -1,10 +1,12 @@
 import { useRemoveDepartment } from '@/hooks/queries/useDepartment';
+import { DepartmentEntity as Department } from '@repo/openapi';
 import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { date2view } from '@repo/shared';
 import { Dispatch, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface DepartmentListParams {
+    departments: Department[];
     setOpenForm: Dispatch<boolean>;
     setDepartmentId: Dispatch<string>;
     rowSelectionModel: GridRowSelectionModel;
@@ -30,9 +32,12 @@ export default function useDepartmentList(params: DepartmentListParams) {
 
     const onDeleteDepartment = useCallback(async () => {
         for (const id of params.rowSelectionModel.map(String)) {
-            await removeDepartment.mutateAsync(id);
+            const department = params.departments?.find((o) => o.id === id);
+            if (department) {
+                await removeDepartment.mutateAsync({ id, version: department.version });
+            }
         }
-    }, [params.rowSelectionModel, removeDepartment]);
+    }, [params, removeDepartment]);
 
     // TODO
     const onTreeView = useCallback(() => console.log('onTreeView'), []);

@@ -1,11 +1,11 @@
 import { api } from '@/api';
 import {
+    ClosePayPeriodDto,
     FindAllPayPeriodDto,
     FindCurrentPayPeriodDto,
-    FindOnePayPeriodDto,
+    OpenPayPeriodDto,
     PayPeriod,
     Resource,
-    UpdatePayPeriodDto,
 } from '@repo/openapi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import useInvalidateQueries from '../useInvalidateQueries';
@@ -14,34 +14,34 @@ const useGetPayPeriodList = (params: FindAllPayPeriodDto) => {
     return useQuery<PayPeriod[], Error>({
         queryKey: [Resource.PayPeriod, 'all', params],
         queryFn: async () =>
-            (await api.payPeriodsFindAll(params)).data.sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime()),
+            (await api.payPeriodFindAll(params)).data.sort((a: PayPeriod, b: PayPeriod) => a.dateFrom.getTime() - b.dateFrom.getTime()),
     });
 };
 
-const useGetPayPeriod = (id: string, options: FindOnePayPeriodDto) => {
+const useGetPayPeriod = (id: string, options?: Record<string, unknown>) => {
     return useQuery<PayPeriod, Error>({
         queryKey: [Resource.PayPeriod, 'one', { id, ...options }],
-        queryFn: async () => (await api.payPeriodsFindOne(id, options)).data,
+        queryFn: async () => (await api.payPeriodFindOne(id, options)).data,
     });
 };
 
 const useGetCurrentPayPeriod = (params: FindCurrentPayPeriodDto) => {
     return useQuery<PayPeriod, Error>({
         queryKey: [Resource.PayPeriod, 'current', { params }],
-        queryFn: async () => (await api.payPeriodsFindCurrent(params)).data,
+        queryFn: async () => (await api.payPeriodFindCurrent(params)).data,
     });
 };
 
-type UpdatePayPeriod = {
+type VersionedPayPeriod = {
     id: string;
-    dto: UpdatePayPeriodDto;
+    version: number;
 };
 
 const useClosePayPeriod = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdatePayPeriod): Promise<PayPeriod> =>
-            (await api.payPeriodsClose(id, dto)).data,
+        mutationFn: async ({ id, version }: VersionedPayPeriod): Promise<PayPeriod> =>
+            (await api.payPeriodClose(id, version, { version } as ClosePayPeriodDto)).data,
         onSuccess: () => {
             invalidateQueries([
                 Resource.PayPeriod,
@@ -59,8 +59,8 @@ const useClosePayPeriod = () => {
 const useOpenPayPeriod = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdatePayPeriod): Promise<PayPeriod> =>
-            (await api.payPeriodsOpen(id, dto)).data,
+        mutationFn: async ({ id, version }: VersionedPayPeriod): Promise<PayPeriod> =>
+            (await api.payPeriodOpen(id, version, { version } as OpenPayPeriodDto)).data,
         onSuccess: () => {
             invalidateQueries([
                 Resource.PayPeriod,

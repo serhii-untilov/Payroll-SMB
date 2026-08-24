@@ -6,6 +6,7 @@ import { RecordFlags } from './../../../types';
 
 @Entity()
 export class PaymentFund {
+    @ApiProperty({ type: String })
     @PrimaryGeneratedColumn('identity')
     id: string;
 

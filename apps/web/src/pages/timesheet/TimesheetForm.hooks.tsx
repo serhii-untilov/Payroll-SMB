@@ -2,7 +2,7 @@ import { TabComponent } from '@/components/layout/TabsContainer';
 import useLocale from '@/hooks/context/useLocale';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Company, PayPeriod } from '@repo/openapi';
+import { CompanyEntity as Company, PayPeriod } from '@repo/openapi';
 
 export type TimesheetFormProps = {
     company: Company;

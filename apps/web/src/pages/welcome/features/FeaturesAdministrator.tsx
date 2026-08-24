@@ -3,7 +3,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import { useTranslation } from 'react-i18next';
 import useFeatures from './Features.hooks';
 
-const FeaturesAdministrator = ({ isEmbedded }) => {
+const FeaturesAdministrator = ({ isEmbedded }: { isEmbedded: boolean }) => {
     const { t } = useTranslation();
     const { featuresAdministrator } = useFeatures();
     return (

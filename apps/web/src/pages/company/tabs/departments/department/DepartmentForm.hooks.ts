@@ -43,10 +43,8 @@ export default function useDepartmentForm(props: DepartmentFormProps) {
             return props.department
                 ? await updateDepartment.mutateAsync({
                       id: props.department.id,
-                      dto: {
-                          ...dirtyValues,
-                          version: props.department.version,
-                      },
+                      version: props.department.version,
+                      dto: dirtyValues,
                   })
                 : await createDepartment.mutateAsync(data);
         },
@@ -89,7 +87,7 @@ function useFormSchema(props: DepartmentFormProps) {
                 dateFrom: date().default(minDate()),
                 dateTo: date().default(maxDate()),
                 parentDepartmentId: string().nullable(),
-            }),
+            }) as any,
         [props],
     );
 }

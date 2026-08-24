@@ -3,7 +3,7 @@ import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetPerson } from '@/hooks/queries/usePerson';
 import PersonForm from './PersonForm';
 
-const PersonTab = ({ personId }) => {
+const PersonTab = ({ personId }: { personId: string }) => {
     const { data, isLoading, isError, error } = useGetPerson(personId);
 
     return (

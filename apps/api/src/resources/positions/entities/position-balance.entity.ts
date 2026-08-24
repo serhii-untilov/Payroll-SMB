@@ -1,9 +1,11 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { AfterLoad, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Position } from './position.entity';
 
 @Entity()
 @Index('IDX_POSITION_BALANCE_POSITION_PERIOD', ['positionId', 'payPeriod'])
 export class PositionBalance {
+    @ApiProperty({ type: String })
     @PrimaryGeneratedColumn('identity')
     id: string;
 

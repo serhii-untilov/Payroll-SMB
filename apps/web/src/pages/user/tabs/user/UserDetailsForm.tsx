@@ -4,11 +4,12 @@ import LastNameField from '@/components/LastNameField';
 import Toolbar from '@/components/layout/Toolbar';
 import SelectLanguage from '@/components/SelectLanguage';
 import useLocale from '@/hooks/context/useLocale';
+import { User } from '@repo/openapi';
 import { Grid } from '@mui/material';
 import { useEffect } from 'react';
 import useUserDetailsForm from './UserDetailsForm.hooks';
 
-const UserDetailsForm = ({ user }) => {
+const UserDetailsForm = ({ user }: { user: User }) => {
     const { locale } = useLocale();
     const { control, isDirty, handleSubmit, onSubmit, onCancel } = useUserDetailsForm({ user });
 

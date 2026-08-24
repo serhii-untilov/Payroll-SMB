@@ -1,9 +1,10 @@
 import { Link } from '@/components/layout/Link';
 import usePayPeriodName from '@/hooks/usePayPeriodName';
+import { CompanyEntity as Company, PayPeriod } from '@repo/openapi';
 import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-export default function CurrentPayPeriod({ company, payPeriod }) {
+export default function CurrentPayPeriod({ company, payPeriod }: { company: Company; payPeriod: PayPeriod }) {
     const { t } = useTranslation();
     const periodName = usePayPeriodName(payPeriod);
 

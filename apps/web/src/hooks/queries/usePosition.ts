@@ -75,13 +75,20 @@ const useCreatePosition = () => {
 
 type UpdatePosition = {
     id: string;
+    version: number;
     dto: UpdatePositionDto;
+};
+
+type RemovePosition = {
+    id: string;
+    version: number;
 };
 
 const useUpdatePosition = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdatePosition): Promise<Position> => (await api.positionsUpdate(id, dto)).data,
+        mutationFn: async ({ id, version, dto }: UpdatePosition): Promise<Position> =>
+            (await api.positionsUpdate(id, version, dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Position, Resource.Task]);
         },
@@ -91,7 +98,7 @@ const useUpdatePosition = () => {
 const useRemovePosition = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: string) => (await api.positionsRemove(id)).data,
+        mutationFn: async ({ id, version }: RemovePosition) => (await api.positionsRemove(id, version)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Position, Resource.Task]);
         },

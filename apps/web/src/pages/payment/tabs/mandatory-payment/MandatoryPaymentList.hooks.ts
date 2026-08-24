@@ -1,4 +1,5 @@
 import { sumFormatter } from '@/utils/sumFormatter';
+import { GridColDef } from '@mui/x-data-grid';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +14,7 @@ export default function useMandatoryPaymentList(_props: MandatoryPaymentListProp
     const onDeletePayment = useCallback(async () => console.log('onDeletePayment'), []);
     const onEditPayment = useCallback((id: string) => navigate(`/payments/${id}`), [navigate]);
 
-    const columns = useMemo(
+    const columns = useMemo<GridColDef[]>(
         () => [
             {
                 field: 'name',

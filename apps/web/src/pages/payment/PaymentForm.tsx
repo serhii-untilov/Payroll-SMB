@@ -3,7 +3,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
 import TotalSumChip from '@/components/TotalSumChip';
 import { Box } from '@mui/material';
-import { Company, Payment, PayPeriod } from '@repo/openapi';
+import { CompanyEntity as Company, Payment, PayPeriod } from '@repo/openapi';
 import usePaymentForm from './PaymentForm.hooks';
 
 export interface PaymentFormProps {

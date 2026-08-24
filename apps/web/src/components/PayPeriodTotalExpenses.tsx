@@ -1,9 +1,10 @@
 import { sumFormatter } from '@/utils/sumFormatter';
+import { PayPeriod } from '@repo/openapi';
 import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link } from './layout/Link';
 
-const PayPeriodTotalExpenses = ({ payPeriod }) => {
+const PayPeriodTotalExpenses = ({ payPeriod }: { payPeriod: PayPeriod }) => {
     const { t } = useTranslation();
     return (
         <Link to={'/payroll?tab-index=0&return=true'}>

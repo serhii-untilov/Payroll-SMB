@@ -1,7 +1,7 @@
 import ErrorDisplay from '@/components/ErrorDisplay';
 import { LoadingDisplay } from '@/components/LoadingDisplay';
 import { useGetDepartmentList } from '@/hooks/queries/useDepartment';
-import { Company } from '@repo/openapi';
+import { CompanyEntity as Company } from '@repo/openapi';
 import DepartmentList from './DepartmentList';
 
 type DepartmentsTabProps = {

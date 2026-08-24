@@ -2,7 +2,7 @@ import PageLayout from '@/components/layout/PageLayout';
 import PageTitle from '@/components/layout/PageTitle';
 import { TabsContainer } from '@/components/layout/TabsContainer';
 import { AvatarBox } from '@/components/AvatarBox';
-import { Company, PayPeriod, Position, PositionHistory } from '@repo/openapi';
+import { CompanyEntity as Company, PayPeriod, Position, PositionHistory } from '@repo/openapi';
 import usePositionForm from './PositionForm.hooks';
 
 export interface PositionFormProps {
@@ -12,7 +12,7 @@ export interface PositionFormProps {
     positionHistory?: PositionHistory;
     tabIndex?: string | null;
     goBack?: boolean;
-    setPositionId?: (number) => void;
+    setPositionId?: (id: string) => void;
 }
 
 const PositionForm = (props: PositionFormProps) => {

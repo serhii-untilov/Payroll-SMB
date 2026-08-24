@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import useFeatures from './Features.hooks';
 import PageTitle from '@/components/layout/PageTitle';
 
-const FeaturesEmployee = ({ isEmbedded }) => {
+const FeaturesEmployee = ({ isEmbedded }: { isEmbedded: boolean }) => {
     const { t } = useTranslation();
     const { featuresEmployee } = useFeatures();
 

@@ -1,22 +1,22 @@
 import { api } from '@/api';
-import { CreatePersonDto, Person, Resource, UpdatePersonDto } from '@repo/openapi';
+import { CreatePersonDto, IdDto, PersonListItemDto, PersonReadDto, Resource, UpdatePersonDto } from '@repo/openapi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import useInvalidateQueries from '../useInvalidateQueries';
 
 const useGetPerson = (id: string) => {
-    return useQuery<Person, Error>({
+    return useQuery<PersonReadDto, Error>({
         queryKey: [Resource.Person, { id }],
-        queryFn: async () => (await api.personsFindOne(id)).data,
+        queryFn: async () => (await api.personFindOne(id)).data,
         enabled: !!id,
     });
 };
 
 const useGetPersonList = () => {
-    return useQuery<Person[], Error>({
+    return useQuery<PersonListItemDto[], Error>({
         queryKey: [Resource.Person],
         queryFn: async () => {
-            return (await api.personsFindAll()).data.sort((a, b) =>
-                a.fullName.toUpperCase().localeCompare(b.fullName.toUpperCase()),
+            return (await api.personFindAll()).data.items?.sort((a: PersonListItemDto, b: PersonListItemDto) =>
+                a.fullName?.toUpperCase().localeCompare(b.fullName?.toUpperCase() ?? '') ?? 0,
             );
         },
     });
@@ -25,7 +25,7 @@ const useGetPersonList = () => {
 const useCreatePerson = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (dto: CreatePersonDto): Promise<Person> => (await api.personsCreate(dto)).data,
+        mutationFn: async (dto: CreatePersonDto): Promise<IdDto> => (await api.personCreate(dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Person, Resource.Task]);
         },
@@ -34,21 +34,29 @@ const useCreatePerson = () => {
 
 type UpdatePerson = {
     id: string;
+    version: number;
     dto: UpdatePersonDto;
 };
 
 const useUpdatePerson = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdatePerson): Promise<Person> => (await api.personsUpdate(id, dto)).data,
+        mutationFn: async ({ id, version, dto }: UpdatePerson): Promise<void> => {
+            await api.personUpdate(id, version, dto);
+        },
         onSuccess: () => invalidateQueries([Resource.Person, Resource.Task]),
     });
+};
+
+type RemovePerson = {
+    id: string;
+    version: number;
 };
 
 const useRemovePerson = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: string) => (await api.personsRemove(id)).data,
+        mutationFn: async ({ id, version }: RemovePerson) => await api.personRemove(id, version),
         onSuccess: () => invalidateQueries([Resource.Person, Resource.Task]),
     });
 };

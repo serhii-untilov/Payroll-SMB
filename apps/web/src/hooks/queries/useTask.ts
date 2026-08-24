@@ -30,13 +30,20 @@ const useCreateTask = () => {
 
 type UpdateTask = {
     id: string;
+    version: number;
     dto: UpdateTaskDto;
+};
+
+type RemoveTask = {
+    id: string;
+    version: number;
 };
 
 const useUpdateTask = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdateTask): Promise<Task> => (await api.tasksUpdate(id, dto)).data,
+        mutationFn: async ({ id, version, dto }: UpdateTask): Promise<Task> =>
+            (await api.tasksUpdate(id, version, dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.Task, Resource.PayPeriod, Resource.Position]);
         },
@@ -46,7 +53,7 @@ const useUpdateTask = () => {
 const useRemoveTask = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: string) => (await api.tasksRemove(id)).data,
+        mutationFn: async ({ id, version }: RemoveTask) => (await api.tasksRemove(id, version)).data,
         onSuccess: () => {
             invalidateQueries([
                 Resource.Task,

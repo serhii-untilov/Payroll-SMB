@@ -7,7 +7,7 @@ const useGetUserList = (relations?: boolean) => {
     return useQuery<User[], Error>({
         queryKey: [Resource.User, { relations }],
         queryFn: async () =>
-            (await api.usersFindAll(!!relations)).data.sort((a, b) =>
+            (await api.userFindAll()).data.sort((a: User, b: User) =>
                 a.email.toUpperCase().localeCompare(b.email.toUpperCase()),
             ),
     });
@@ -16,7 +16,7 @@ const useGetUserList = (relations?: boolean) => {
 const useGetUser = (userId: string, relations?: boolean) => {
     return useQuery<User, Error>({
         queryKey: [Resource.User, { userId, relations }],
-        queryFn: async () => (await api.usersFindOne(userId, !!relations)).data,
+        queryFn: async () => (await api.userFindOne(userId)).data,
         enabled: !!userId,
     });
 };
@@ -24,14 +24,14 @@ const useGetUser = (userId: string, relations?: boolean) => {
 const useGetCurrentUser = () => {
     return useQuery<User, Error>({
         queryKey: [Resource.User, 'current', { relations: true }],
-        queryFn: async () => (await api.usersFindCurrent({ relations: true })).data,
+        queryFn: async () => (await api.userFindCurrent()).data,
     });
 };
 
 const useCreateUser = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (dto: CreateUserDto): Promise<PublicUserDataDto> => (await api.usersCreate(dto)).data,
+        mutationFn: async (dto: CreateUserDto): Promise<PublicUserDataDto> => (await api.userCreate(dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.User]);
         },
@@ -46,7 +46,7 @@ type UpdateUser = {
 const useUpdateUser = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdateUser): Promise<User> => (await api.usersUpdate(id, dto)).data,
+        mutationFn: async ({ id, dto }: UpdateUser): Promise<User> => (await api.userUpdate(id, dto)).data,
         onSuccess: () => {
             invalidateQueries([Resource.User]);
         },
@@ -56,7 +56,7 @@ const useUpdateUser = () => {
 const useRemoveUser = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: string) => (await api.usersRemove(id)).data,
+        mutationFn: async (id: string) => (await api.userRemove(id)).data,
         onSuccess: () => {
             invalidateQueries([Resource.User]);
         },

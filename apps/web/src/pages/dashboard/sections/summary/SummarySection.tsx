@@ -1,9 +1,10 @@
 import { Box, Grid } from '@mui/material';
 import { blue } from '@mui/material/colors';
+import { CompanyEntity as Company, PayPeriod } from '@repo/openapi';
 import CompanySummary from './CompanySummary';
 import WelcomeNewUser from './WelcomeNewUser';
 
-const SummarySection = ({ company, payPeriod }) => {
+const SummarySection = ({ company, payPeriod }: { company?: Company; payPeriod?: PayPeriod }) => {
     return (
         <Box
             component="section"

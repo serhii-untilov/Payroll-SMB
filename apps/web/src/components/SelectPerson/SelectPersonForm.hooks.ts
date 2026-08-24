@@ -1,8 +1,8 @@
-import { CreatePersonDto, Person } from '@repo/openapi';
+import { CreatePersonDto, PersonListItemDto } from '@repo/openapi';
 import { useCallback, useMemo } from 'react';
 import { SelectPersonOption } from './SelectPersonForm';
 
-export default function useForm(personList: Person[]) {
+export default function useForm(personList: PersonListItemDto[]) {
     const getOptionLabel = useCallback((option: SelectPersonOption) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -20,7 +20,7 @@ export default function useForm(personList: Person[]) {
         return {
             lastName: '',
             firstName: '',
-            middleName: '',
+            middleName: '' as unknown as object,
             taxId: '',
         };
     }, []);

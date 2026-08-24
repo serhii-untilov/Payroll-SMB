@@ -1,5 +1,5 @@
 import { api } from '@/api';
-import { AuthDto, CreateUserDto, FindOneUserDto } from '@repo/openapi';
+import { AuthDto, CreateUserDto } from '@repo/openapi';
 import { removeUserTokens, saveUserTokens } from './token.service';
 
 export async function authRegister(params: CreateUserDto) {
@@ -27,8 +27,8 @@ export async function authLogout() {
     }
 }
 
-export async function usersFindCurrent(params?: FindOneUserDto) {
-    return (await api.usersFindCurrent(params ?? {})).data;
+export async function userFindCurrent(params?: Record<string, unknown>) {
+    return (await api.userFindCurrent(params ?? {})).data;
 }
 
 export async function demo() {

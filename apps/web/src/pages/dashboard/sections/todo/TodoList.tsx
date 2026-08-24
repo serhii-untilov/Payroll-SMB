@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import TaskListTitle from '@/components/TaskListTitle';
 import TodoTask from './TodoTask';
 
-const TodoList = ({ taskList }) => {
+const TodoList = ({ taskList }: { taskList: Task[] }) => {
     const { t } = useTranslation();
     return (
         <Box>

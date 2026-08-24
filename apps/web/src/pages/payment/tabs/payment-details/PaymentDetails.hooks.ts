@@ -45,10 +45,8 @@ export default function usePaymentDetails(props: PaymentDetailsProps) {
             return payment
                 ? await updatePayment.mutateAsync({
                       id: payment.id,
-                      dto: {
-                          ...(dirtyValues as UpdatePaymentDto),
-                          version: payment.version,
-                      },
+                      version: payment.version,
+                      dto: dirtyValues as UpdatePaymentDto,
                   })
                 : await createPayment.mutateAsync({
                       ...(data as CreatePaymentDto),
@@ -77,7 +75,7 @@ export default function usePaymentDetails(props: PaymentDetailsProps) {
 
     const onProcess = async () => {
         if (payment) {
-            await processPayment.mutateAsync({ id: payment.id, dto: { version: payment.version } });
+            await processPayment.mutateAsync({ id: payment.id, version: payment.version });
         }
     };
 
@@ -85,7 +83,7 @@ export default function usePaymentDetails(props: PaymentDetailsProps) {
         if (payment) {
             await withdrawPayment.mutateAsync({
                 id: payment.id,
-                dto: { version: payment.version },
+                version: payment.version,
             });
         }
     };

@@ -1,6 +1,6 @@
 import { useRemovePayment, useRestorePayment } from '@/hooks/queries/usePayment';
 import { sumFormatter } from '@/utils/sumFormatter';
-import { GridRowSelectionModel } from '@mui/x-data-grid';
+import { GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { PaymentStatus } from '@repo/openapi';
 import { date2view, dateUTC } from '@repo/shared';
 import { useCallback, useMemo } from 'react';
@@ -26,7 +26,7 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
         for (const id of rowSelectionModel.map(String)) {
             const payment = payments.find((o) => o.id === id);
             if (payment?.status === PaymentStatus.Draft) {
-                await removePayment.mutateAsync(id);
+                await removePayment.mutateAsync({ id, version: payment.version });
             }
         }
     }, [payments, removePayment, rowSelectionModel]);
@@ -59,7 +59,7 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
         for (const id of rowSelectionModel.map(String)) {
             const payment = payments.find((o) => o.id === id);
             if (payment?.status === PaymentStatus.Draft && payment.deletedDate) {
-                await restorePayment.mutateAsync(id);
+                await restorePayment.mutateAsync({ id, version: payment.version });
             }
         }
     }, [payments, restorePayment, rowSelectionModel]);
@@ -97,7 +97,7 @@ export default function usePaymentListTab(params: PaymentListTabParams) {
 
 function useColumns() {
     const { t } = useTranslation();
-    return useMemo(
+    return useMemo<GridColDef[]>(
         () => [
             {
                 field: 'docNumber',

@@ -92,10 +92,8 @@ const useJobForm = (props: JobFormProps) => {
                     pos = position
                         ? await updatePosition.mutateAsync({
                               id: position.id,
-                              dto: {
-                                  ...positionDirtyValues,
-                                  version: position.version,
-                              },
+                              version: position.version,
+                              dto: positionDirtyValues,
                           })
                         : await createPosition.mutateAsync(positionData);
                 }
@@ -107,10 +105,8 @@ const useJobForm = (props: JobFormProps) => {
                     history = positionHistory
                         ? await updatePositionHistory.mutateAsync({
                               id: positionHistory.id,
-                              dto: {
-                                  ...positionHistoryDirtyValues,
-                                  version: positionHistory.version,
-                              },
+                              version: positionHistory.version,
+                              dto: positionHistoryDirtyValues,
                           })
                         : await createPositionHistory.mutateAsync({
                               ...positionHistoryDirtyValues,

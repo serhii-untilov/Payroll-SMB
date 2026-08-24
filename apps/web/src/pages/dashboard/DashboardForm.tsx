@@ -6,7 +6,7 @@ import useLocale from '@/hooks/context/useLocale';
 import { selectThemeMode } from '@/store/slices/themeModeSlice';
 import { useAppSelector } from '@/store/store.hooks';
 import { Grid } from '@mui/material';
-import { Company, PayPeriod, Task } from '@repo/openapi';
+import { CompanyEntity as Company, PayPeriod, Task } from '@repo/openapi';
 import { useEffect } from 'react';
 import ReminderSection from './sections/reminder/ReminderSection';
 import SummarySection from './sections/summary/SummarySection';

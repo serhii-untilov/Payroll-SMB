@@ -23,7 +23,6 @@ import {
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
-    ApiTags,
 } from '@nestjs/swagger';
 import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
@@ -40,7 +39,6 @@ import { UpdatePersonDto } from './dto/update-person.dto';
 import { PersonService } from './person.service';
 
 @ApiBearerAuth()
-@ApiTags('Persons')
 @ApiExtraModels(ListPersonsQueryDto, SortingDto, PageDto, PersonSearchDto, PersonFiltersDto)
 @Controller('persons')
 export class PersonController {

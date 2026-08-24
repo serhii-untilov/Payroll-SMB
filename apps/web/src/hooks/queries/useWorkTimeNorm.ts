@@ -41,14 +41,20 @@ const useCreateWorkTimeNorm = () => {
 
 type UpdateWorkTimeNorm = {
     id: string;
+    version: number;
     dto: UpdateWorkTimeNormDto;
+};
+
+type RemoveWorkTimeNorm = {
+    id: string;
+    version: number;
 };
 
 const useUpdateWorkTimeNorm = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async ({ id, dto }: UpdateWorkTimeNorm): Promise<WorkTimeNorm> =>
-            (await api.workTimeNormUpdate(id, dto)).data,
+        mutationFn: async ({ id, version, dto }: UpdateWorkTimeNorm): Promise<WorkTimeNorm> =>
+            (await api.workTimeNormUpdate(id, version, dto)).data,
         onSuccess: () => invalidateQueries([Resource.WorkTimeNorm]),
     });
 };
@@ -56,7 +62,7 @@ const useUpdateWorkTimeNorm = () => {
 const useRemoveWorkTimeNorm = () => {
     const { invalidateQueries } = useInvalidateQueries();
     return useMutation({
-        mutationFn: async (id: string) => (await api.workTimeNormRemove(id)).data,
+        mutationFn: async ({ id, version }: RemoveWorkTimeNorm) => (await api.workTimeNormRemove(id, version)).data,
         onSuccess: () => invalidateQueries([Resource.WorkTimeNorm]),
     });
 };

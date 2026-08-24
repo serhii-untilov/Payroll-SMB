@@ -5,7 +5,7 @@ import TaskListTitle from '@/components/TaskListTitle';
 import HappyBirthdayTask from './happy-birthday/HappyBirthdayTask';
 import ReminderTask from './ReminderTask';
 
-const ReminderList = ({ taskList }) => {
+const ReminderList = ({ taskList }: { taskList: Task[] }) => {
     const { t } = useTranslation();
     return (
         <Box>

@@ -1,7 +1,8 @@
 import { FormTextField } from '@/components/form/FormTextField';
+import { Control } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-const CompanyNameField = ({ control }) => {
+const CompanyNameField = ({ control }: { control: Control<any> }) => {
     const { t } = useTranslation();
     return (
         <FormTextField

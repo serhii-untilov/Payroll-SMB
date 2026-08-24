@@ -9,7 +9,7 @@ import {
     MuiEvent,
     useGridApiRef,
 } from '@mui/x-data-grid';
-import { User, UserCompany } from '@repo/openapi';
+import { User, UserRole as UserCompany } from '@repo/openapi';
 import { useState } from 'react';
 import useUserCompanyList from './UserCompanyList.hooks';
 

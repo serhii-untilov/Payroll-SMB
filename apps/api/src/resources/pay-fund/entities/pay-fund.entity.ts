@@ -6,6 +6,7 @@ import { AfterLoad, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'ty
 
 @Entity()
 export class PayFund {
+    @ApiProperty({ type: String })
     @PrimaryGeneratedColumn('identity')
     id: string;
 

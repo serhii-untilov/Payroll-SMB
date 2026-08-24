@@ -48,7 +48,7 @@ export default function useApp() {
             const companyId = localStorage.getItem('companyId');
             const company =
                 user &&
-                (companyId ? (await api.companiesFindOne(companyId)).data : (await api.companiesFindLast()).data);
+                (companyId ? (await api.companyFindOne(companyId)).data : (await api.companyFindLast()).data);
             dispatch(setCompany(company));
         };
         initCompany();
@@ -63,7 +63,7 @@ export default function useApp() {
     useEffect(() => {
         const initPayPeriod = async () => {
             const payPeriod = company?.id
-                ? (await api.payPeriodsFindCurrent({ companyId: company.id })).data
+                ? (await api.payPeriodFindCurrent({ companyId: company.id })).data
                 : undefined;
             dispatch(setPayPeriod(payPeriod));
         };

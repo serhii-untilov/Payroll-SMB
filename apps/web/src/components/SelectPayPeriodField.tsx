@@ -1,6 +1,6 @@
 import { InputLabel } from '@/components/layout/InputLabel';
 import SelectPayPeriod from '@/components/SelectPayPeriod';
-import { Company } from '@repo/openapi';
+import { CompanyEntity as Company } from '@repo/openapi';
 import { monthBegin } from '@repo/shared';
 import { format } from 'date-fns';
 import { Controller } from 'react-hook-form';

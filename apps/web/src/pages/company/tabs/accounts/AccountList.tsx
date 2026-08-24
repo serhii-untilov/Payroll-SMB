@@ -4,7 +4,7 @@ import { GridCellParams, GridRowSelectionModel, MuiEvent, useGridApiRef } from '
 import { useState } from 'react';
 import useAccountList from './AccountList.hooks';
 
-import { Company } from '@repo/openapi';
+import { CompanyEntity as Company } from '@repo/openapi';
 import useGrid from '@/hooks/useGrid';
 
 type AccountListProps = {

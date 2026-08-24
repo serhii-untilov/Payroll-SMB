@@ -2,14 +2,15 @@ import { DataGrid } from '@/components/grid/DataGrid';
 import Toolbar from '@/components/layout/Toolbar';
 import { GridCellParams, GridRowParams, GridRowSelectionModel, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import useGrid from '@/hooks/useGrid';
+import { PaymentPosition } from '@repo/openapi';
 import { useState } from 'react';
 import useEmployeePaymentList from './EmployeePaymentList.hooks';
 
-const EmployeePaymentsList = ({ paymentList }) => {
+const EmployeePaymentsList = ({ paymentList }: { paymentList: PaymentPosition[] }) => {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const gridRef = useGridApiRef();
     const { columns, getRowStatus, onAddPayment, onEditPayment, onDeletePayment } =
-        useEmployeePaymentList(rowSelectionModel);
+        useEmployeePaymentList(rowSelectionModel, paymentList);
     const { onPrint, onExport } = useGrid(gridRef);
 
     return (

@@ -1,7 +1,13 @@
 import { Box, Typography } from '@mui/material';
 import UseCaseImage from './UseCaseImage';
 
-const UseCaseCard = ({ item, index }) => {
+type UseCaseItem = {
+    name: string;
+    description: string[];
+    image: string;
+};
+
+const UseCaseCard = ({ item, index }: { item: UseCaseItem; index: number }) => {
     return (
         <Box
             sx={{
@@ -35,7 +41,7 @@ const UseCaseCard = ({ item, index }) => {
                 <Typography variant="h3" color="primary">
                     {item.name}
                 </Typography>
-                {item.description.map((element, index) => {
+                {item.description.map((element: string, index: number) => {
                     return <Typography key={index}>{element}</Typography>;
                 })}
             </Box>

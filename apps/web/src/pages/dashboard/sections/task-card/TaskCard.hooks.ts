@@ -30,9 +30,9 @@ export default function useTaskCard(props: { task: Task }) {
     const markAsDone = useCallback(async () => {
         return await updateTask.mutateAsync({
             id: task.id,
+            version: task.version,
             dto: {
                 status: TaskStatus.DoneByUser,
-                version: task.version,
             },
         });
     }, [task.id, task.version, updateTask]);
@@ -40,9 +40,9 @@ export default function useTaskCard(props: { task: Task }) {
     const markAsTodo = useCallback(async () => {
         return await updateTask.mutateAsync({
             id: task.id,
+            version: task.version,
             dto: {
                 status: TaskStatus.Todo,
-                version: task.version,
             },
         });
     }, [task.id, task.version, updateTask]);
