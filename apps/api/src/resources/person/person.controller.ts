@@ -93,7 +93,7 @@ export class PersonController {
     @ApiOkResponse({ description: 'The restored record' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiNotFoundResponse({ description: 'Not found' })
-    async restore(@Req() req: Request, @Param('id') id: string, @Query('version', ParseIntPipe) version: number) {
+    async restore(@Req() req: Request, @Param('id') id: string, @Param('version', ParseIntPipe) version: number) {
         const userId = getUserId(req);
         await this.service.restore(userId, id, version);
     }

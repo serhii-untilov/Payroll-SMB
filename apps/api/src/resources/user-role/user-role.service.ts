@@ -1,6 +1,6 @@
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { Action, Resource, RoleType } from '@/types';
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { BaseUserAccess } from '../common/base/user-access.abstract';
@@ -15,8 +15,7 @@ export class UserRoleService extends BaseUserAccess {
 
     constructor(
         @InjectRepository(UserRole) private repository: Repository<UserRole>,
-        readonly userAccess: IUserAccessService,
-        // @Inject(forwardRef(() => UserAccessService)) readonly userAccess: UserAccessService,
+        @Inject(IUserAccessService) readonly userAccess: IUserAccessService,
     ) {
         super(userAccess, Resource.UserRole);
     }

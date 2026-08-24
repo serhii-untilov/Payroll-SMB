@@ -51,7 +51,7 @@ services:
     ports:
       - 5532:5432
     volumes:
-      - ../payroll-smb-db:/var/lib/postgresql/data
+      - payroll_db_data:/var/lib/postgresql/data
       - ../payroll-smb-backup:/backup
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
@@ -69,6 +69,9 @@ services:
   #   restart: always
   #   ports:
   #     - 80:80
+
+volumes:
+  payroll_db_data:
 
 networks:
   default:
