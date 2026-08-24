@@ -1,0 +1,32 @@
+{
+    // Code-RAG configuration
+    // Run "npx code-rag init" to regenerate defaults
+    "embed": {
+        // Embedding provider: "ollama" or "lmstudio"
+        "provider": "lmstudio",
+        // Model name for the embedding provider
+        "modelName": "text-embedding-nomic-embed-text-v1.5",
+        // Base URL for the embedding provider API
+        "baseUrl": "http://192.168.1.136:1234/v1",
+        // Vector dimensions for the embedding model
+        "dimensions": 768
+    },
+    "qdrant": {
+        // Qdrant server URL
+        "url": "http://localhost:6333",
+        // Collection name for storing code units
+        "collection": "payroll-smb"
+    },
+    "ingest": {
+        // Repository path to ingest (defaults to current directory)
+        // "repoPath": ".",
+        // Directories to exclude from indexing
+        "excludedDirs": ["node_modules", ".git", "dist", "build", "coverage"],
+        // File extensions to index
+        "supportedExtensions": [".ts", ".tsx", ".js", ".jsx", ".py"]
+    },
+    "server": {
+        // MCP server transport: "stdio"
+        "transport": "stdio"
+    }
+}

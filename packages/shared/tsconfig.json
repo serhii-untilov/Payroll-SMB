@@ -13,9 +13,15 @@
         "incremental": true,
         "skipLibCheck": true,
         "strictNullChecks": true,
-        "noImplicitAny": false,
+        // "noImplicitAny": false,
         "strictBindCallApply": false,
         "forceConsistentCasingInFileNames": false,
-        "noFallthroughCasesInSwitch": false
+        "noFallthroughCasesInSwitch": false,
+
+        // To make AI fixes more accurate:
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitAny": true
     }
 }

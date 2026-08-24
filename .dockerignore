@@ -12,7 +12,7 @@ stats.html
 
 *.bak
 
-/postgres-backup
-/postgres-data
+#/postgres-backup
+#/postgres-data
 
 **/swagger.json

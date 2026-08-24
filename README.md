@@ -233,7 +233,7 @@ Creating a backup of a database
 ./scripts/db_backup
 ```
 
-This will create a ./postgres-backup/payroll.dump file.
+This will create a ../payroll-smb-backup/payroll.dump file.
 
 Restoring a database from a backup file
 

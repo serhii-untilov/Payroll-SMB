@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+coverage/
+.git/
+.next/
+
+*.log
+*.png
+*.jpg
+*.svg
+*.pdf
+
+package-lock.json
+pnpm-lock.yaml
+
+*.sqlite

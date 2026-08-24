@@ -43,7 +43,7 @@ export class AppService {
         try {
             return await fsPromise.writeFile(fileName, content);
         } catch (error) {
-            this.logger.error(error.message);
+            this.logger.error(error);
         }
     }
 }

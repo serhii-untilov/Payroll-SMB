@@ -15,17 +15,24 @@
         "jsx": "react-jsx",
 
         /* Linting */
-        "strict": true,
-        "noUnusedLocals": false,
-        "noUnusedParameters": false,
+        // "strict": true,
+        // "noUnusedLocals": false,
+        // "noUnusedParameters": false,
         "noFallthroughCasesInSwitch": true,
         "allowSyntheticDefaultImports": true,
-        "noImplicitAny": false,
+        // "noImplicitAny": false,
 
         /* Yup: https://github.com/jquense/yup?tab=readme-ov-file#typescript-integration */
         "strictNullChecks": true,
         "strictFunctionTypes": false,
         // "baseUrl": "./src",
+
+        // To make AI fixes more accurate:
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitAny": true,
+
         "paths": {
             "@/*": ["./src/*"]
         }

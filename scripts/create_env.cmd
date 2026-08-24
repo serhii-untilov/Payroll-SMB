@@ -6,10 +6,10 @@ if not exist ./.env (
   @ECHO "# Replace "localhost" with the real ip address of an API backend server\nNEXT_PUBLIC_API_URL=http://localhost:3001" >.env
 )
 
-if not exist postgres-backup/ (
-  mkdir postgres-backup
+if not exist ../payroll-smb-backup/ (
+  mkdir ../payroll-smb-backup
 )
 
-if not exist postgres-data/ (
-  mkdir postgres-data
+if not exist ../payroll-smb-db/ (
+  mkdir ../payroll-smb-db
 )

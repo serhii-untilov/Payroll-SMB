@@ -12,8 +12,8 @@ stats.html
 
 *.bak
 
-/postgres-backup
-/postgres-data
+#/postgres-backup
+#/postgres-data
 
 **/add.json
 # apps/api/src/metadata.ts
