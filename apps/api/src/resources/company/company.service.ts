@@ -8,7 +8,7 @@ import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { ApplyFiltersUtil } from '../common/db/apply-filters.util';
 import { PaginationUtils } from '../common/db/pagination.utils';
 import { SortingUtils } from '../common/db/sorting.utils';
-import { RoleService } from '../role';
+import { RoleService } from '../role/role.service';
 import { UserAccessService } from '../user-access/user-access.service';
 import { UserRoleService } from '../user-role/user-role.service';
 import { CompanyReadDto } from './dto/company-read.dto';

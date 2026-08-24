@@ -1,5 +1,5 @@
 import { getWorkTimeFact, getWorkTimePlan } from '@/processor/helpers';
-import { Position } from '@/resources/positions/entities';
+import { Position } from '@/resources/positions/entities/position.entity';
 import { CalcMethod, PaymentGroup } from '@/types';
 import { NotFoundException } from '@nestjs/common';
 import { getMaxDate, getMinDate } from '@repo/shared';

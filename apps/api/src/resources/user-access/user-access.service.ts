@@ -1,6 +1,6 @@
 import { RoleType } from '@/types';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { UserRoleService } from '../user-role';
+import { UserRoleService } from '../user-role/user-role.service';
 import { AccessCheckDto } from './dto/access-check.dto';
 import { IUserAccessService } from '../common/base/user-access.interface';
 

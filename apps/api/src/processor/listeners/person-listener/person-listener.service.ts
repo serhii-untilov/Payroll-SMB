@@ -2,18 +2,18 @@ import { PayFundCalculationService } from '@/processor/pay-fund-calculation/pay-
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
-import { PositionsService } from '@/resources';
-import { PersonEvent } from '@/resources/person/events/base/person-event.abstract';
-import { PersonCreatedEvent } from '@/resources/person/events/person-created.event';
-import { PersonDeletedEvent } from '@/resources/person/events/person-deleted.event';
-import { PersonUpdatedEvent } from '@/resources/person/events/person-updated.event';
 import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { PersonEvent } from '../../../resources/person/events/base/person-event.abstract';
+import { PersonCreatedEvent } from '../../../resources/person/events/person-created.event';
+import { PersonDeletedEvent } from '../../../resources/person/events/person-deleted.event';
+import { PersonUpdatedEvent } from '../../../resources/person/events/person-updated.event';
+import { PositionsService } from '../../../resources/positions/positions.service';
 
 @Injectable()
 export class PersonListenerService {
-    private _logger: Logger = new Logger(PersonListenerService.name);
+    private readonly logger: Logger = new Logger(PersonListenerService.name);
 
     constructor(
         @Inject(forwardRef(() => PositionsService))
@@ -30,19 +30,19 @@ export class PersonListenerService {
 
     @OnEvent(PersonCreatedEvent.name)
     async handlePersonCreatedEvent(event: PersonCreatedEvent) {
-        this._logger.log(`${JSON.stringify(event)}`);
+        this.logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
     @OnEvent(PersonUpdatedEvent.name)
     async handlePersonUpdatedEvent(event: PersonUpdatedEvent) {
-        this._logger.log(`${JSON.stringify(event)}`);
+        this.logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
     @OnEvent(PersonDeletedEvent.name)
     async handlePersonDeletedEvent(event: PersonDeletedEvent) {
-        this._logger.log(`${JSON.stringify(event)}`);
+        this.logger.log(`${JSON.stringify(event)}`);
         this.runBatch(event);
     }
 
@@ -64,7 +64,7 @@ export class PersonListenerService {
                 await this.taskListService.generate(event.userId, companyId);
                 this.sseService.event(companyId, { data: ServerEvent.PayrollFinished });
             } catch (e) {
-                this._logger.fatal(`companyId ${companyId} ${ServerEvent.PayrollFailed} ${e}`);
+                this.logger.fatal(`companyId ${companyId} ${ServerEvent.PayrollFailed} ${e}`);
                 this.sseService.event(companyId, { data: ServerEvent.PayrollFailed });
             }
         }

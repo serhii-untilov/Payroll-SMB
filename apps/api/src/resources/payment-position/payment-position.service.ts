@@ -2,12 +2,13 @@ import { Action, Resource } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BaseUserAccess } from '../common/base';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { Payment } from '../payments/entities/payment.entity';
-import { PayrollsService } from '../payrolls';
+import { PayrollsService } from '../payrolls/payrolls.service';
 import { UserAccessService } from '../user-access/user-access.service';
-import { FindAllPaymentPositionDto, FindOnePaymentPositionDto } from './dto';
 import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
+import { FindAllPaymentPositionDto } from './dto/find-all-payment-position.dto';
+import { FindOnePaymentPositionDto } from './dto/find-one-payment-position.dto';
 import { UpdatePaymentPositionDto } from './dto/update-payment-position.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 

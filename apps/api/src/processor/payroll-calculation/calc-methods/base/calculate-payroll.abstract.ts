@@ -1,11 +1,11 @@
 import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
-import { PayPeriod } from '@/resources/pay-period/entities';
+import { PayPeriod } from '@/resources/pay-period/entities/pay-period.entity';
 import { PaymentType } from '@/resources/payment-type/entities/payment-type.entity';
-import { Position } from '@/resources/positions/entities';
+import { Position } from '@/resources/positions/entities/position.entity';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { getPayrollUnionRecord } from '@/processor/helpers';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
-import { WorkTimeNorm } from '@/resources/work-time-norm/entities';
+import { WorkTimeNorm } from '@/resources/work-time-norm/entities/work-time-norm.entity';
 import { RecordFlags } from '@/types';
 
 export type PayrollContext = {
@@ -17,15 +17,18 @@ export type PayrollContext = {
 };
 
 export abstract class CalculatePayroll {
-    toInsert: Payroll[] = [];
-    toDeleteIds: string[] = [];
+    toInsert: Payroll[];
+    toDeleteIds: string[];
 
     constructor(
         public ctx: PayrollContext,
         public position: Position,
         public payrolls: Payroll[],
         public accPeriods: PayPeriod[],
-    ) {}
+    ) {
+        this.toInsert = [];
+        this.toDeleteIds = [];
+    }
 
     abstract calculate(): void;
 

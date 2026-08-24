@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserAccessModule } from '../user-access';
+import { UserAccessModule } from '../user-access/user-access.module';
 import { PaymentType } from './entities/payment-type.entity';
 import { PaymentTypeController } from './payment-type.controller';
 import { PaymentTypeService } from './payment-type.service';

@@ -1,14 +1,5 @@
-import {
-    CompanyService,
-    PayFundService,
-    PayPeriodCalcMethodService,
-    PayPeriodService,
-    PayrollsService,
-    PositionsService,
-    UserService,
-} from '@/resources';
 import { PaymentPart, PaymentSchedule } from '@/types';
-import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, Scope, forwardRef } from '@nestjs/common';
 import { dropTime } from '@repo/shared';
 import { addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { PayPeriodSummary } from '../../resources/pay-period/entities/pay-period-summary.entity';
@@ -16,11 +7,16 @@ import { PayPeriod } from './../../resources/pay-period/entities/pay-period.enti
 import { Context, PeriodListGenerator } from './calc-methods/base/period-list-generator';
 import { EndOfMonthPayment } from './calc-methods/lib/end-of-month-payment';
 import { Every15daysPayment } from './calc-methods/lib/every-15-days-payment';
+import { CompanyService } from '../../resources/company/company.service';
+import { PayFundService } from '../../resources/pay-fund/pay-fund.service';
+import { PayPeriodCalcMethodService } from '../../resources/pay-period/pay-period-calc-method.service';
+import { PayPeriodService } from '../../resources/pay-period/pay-period.service';
+import { PayrollsService } from '../../resources/payrolls/payrolls.service';
+import { PositionsService } from '../../resources/positions/positions.service';
+import { UserService } from '../../resources/user/user.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayPeriodCalculationService {
-    private logger: Logger = new Logger(PayPeriodCalculationService.name);
-
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
         @Inject(forwardRef(() => PayPeriodService)) private payPeriodService: PayPeriodService,
@@ -30,7 +26,7 @@ export class PayPeriodCalculationService {
         @Inject(forwardRef(() => PayFundService)) private payFundsService: PayFundService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
         @Inject(forwardRef(() => UserService)) private usersService: UserService,
-    ) {}
+    ) { }
 
     private async initContext(userId: string, companyId: string): Promise<Context> {
         const company = await this.companiesService.findOne(userId, companyId);

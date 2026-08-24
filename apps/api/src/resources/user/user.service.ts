@@ -15,7 +15,9 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { RoleService } from '../role/role.service';
 import { UserAccessService } from '../user-access/user-access.service';
 import { UserRole } from '../user-role/entities/user-role.entity';
-import { CreateUserDto, PublicUserDataDto, UpdateUserDto } from './dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { PublicUserDataDto } from './dto/public-user-data.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()

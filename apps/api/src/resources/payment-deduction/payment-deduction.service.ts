@@ -1,11 +1,13 @@
-import { BaseUserAccess, UserAccessService } from '@/resources';
 import { Resource } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PaymentPositionService } from './../payment-position';
-import { PaymentsService } from './../payments';
-import { CreatePaymentDeductionDto, UpdatePaymentDeductionDto } from './dto';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
+import { UserAccessService } from '../user-access/user-access.service';
+import { PaymentPositionService } from '../payment-position/payment-position.service';
+import { PaymentsService } from '../payments/payments.service';
+import { CreatePaymentDeductionDto } from './dto/create-payment-deduction.dto';
+import { UpdatePaymentDeductionDto } from './dto/update-payment-deduction.dto';
 import { PaymentDeduction } from './entities/payment-deduction.entity';
 
 @Injectable()

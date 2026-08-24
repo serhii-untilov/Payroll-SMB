@@ -1,6 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserAccessModule } from '../user-access';
+import { UserAccessModule } from '../user-access/user-access.module';
 import { CompanyModule } from '../company/company.module';
 import { PositionsModule } from '../positions/positions.module';
 import { PayFund } from './entities/pay-fund.entity';

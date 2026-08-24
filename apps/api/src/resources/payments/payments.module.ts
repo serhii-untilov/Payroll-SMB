@@ -1,9 +1,9 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserAccessModule } from '../user-access';
-import { CompanyModule } from '../company';
-import { PayPeriodModule } from '../pay-period';
-import { PaymentPositionModule } from '../payment-position';
+import { UserAccessModule } from '../user-access/user-access.module';
+import { CompanyModule } from '../company/company.module';
+import { PayPeriodModule } from '../pay-period/pay-period.module';
+import { PaymentPositionModule } from '../payment-position/payment-position.module';
 import { PayrollsModule } from '../payrolls/payrolls.module';
 import { PositionsModule } from '../positions/positions.module';
 import { Payment } from './entities/payment.entity';

@@ -1,13 +1,3 @@
-import {
-    CompanyService,
-    MinWageService,
-    PayFundTypesService,
-    PayFundService,
-    PayPeriodService,
-    PaymentTypeService,
-    PayrollsService,
-    PositionsService,
-} from '@/resources';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { PayFundCalcMethod } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
@@ -16,12 +6,21 @@ import { PayFundType } from './../../resources/pay-fund-types/entities/pay-fund-
 import { PayFund } from './../../resources/pay-fund/entities/pay-fund.entity';
 import { PayPeriod } from './../../resources/pay-period/entities/pay-period.entity';
 import { Position } from './../../resources/positions/entities/position.entity';
-import { EcbMinWage, EcbSalary } from './calc-methods';
 import { Context, PayFundCalc } from './calc-methods/base/pay-fund-calc';
+import { EcbMinWage } from './calc-methods/lib/ecb-min-wage';
+import { EcbSalary } from './calc-methods/lib/ecb-salary';
+import { CompanyService } from '../../resources/company/company.service';
+import { MinWageService } from '../../resources/min-wage/min-wage.service';
+import { PayFundTypesService } from '../../resources/pay-fund-types/pay-fund-types.service';
+import { PayFundService } from '../../resources/pay-fund/pay-fund.service';
+import { PayPeriodService } from '../../resources/pay-period/pay-period.service';
+import { PaymentTypeService } from '../../resources/payment-type/payment-type.service';
+import { PayrollsService } from '../../resources/payrolls/payrolls.service';
+import { PositionsService } from '../../resources/positions/positions.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayFundCalculationService {
-    private logger: Logger = new Logger(PayFundCalculationService.name);
+    private readonly logger: Logger = new Logger(PayFundCalculationService.name);
 
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,

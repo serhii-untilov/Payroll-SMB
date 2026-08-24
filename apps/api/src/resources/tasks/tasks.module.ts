@@ -3,7 +3,7 @@ import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
-import { UserAccessModule } from '../user-access';
+import { UserAccessModule } from '../user-access/user-access.module';
 import { PayPeriodModule } from '../pay-period/pay-period.module';
 
 @Module({

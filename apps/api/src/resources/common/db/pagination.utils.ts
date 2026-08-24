@@ -1,5 +1,5 @@
 import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
-import { PageDto } from '../dto';
+import { PageDto } from '../dto/page.dto';
 
 export interface PaginationMeta {
     page: number;

@@ -1,6 +1,5 @@
 import { User } from './../resources/user/entities/user.entity';
 import { appConfig, authConfig, dbConfig, googleConfig } from '@/config';
-import { UserAccessService, UserService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -10,6 +9,8 @@ import { createMockUser } from '@/test';
 import * as bcrypt from 'bcrypt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { UserAccessService } from '../resources/user-access/user-access.service';
+import { UserService } from '../resources/user/user.service';
 
 describe('AuthController', () => {
     let controller: AuthController;

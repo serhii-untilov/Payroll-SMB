@@ -4,7 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { add, sub } from 'date-fns';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { BaseUserAccess } from '../common/base';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { PayPeriodService } from '../pay-period/pay-period.service';
 import { PositionUpdatedEvent } from '../positions/events/position-updated.event';
 import { PositionsService } from '../positions/positions.service';

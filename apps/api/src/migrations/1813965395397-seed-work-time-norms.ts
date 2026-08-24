@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { WorkTimeNorm, WorkTimeNormDay } from '../resources/work-time-norm/entities';
+import { WorkTimeNorm } from '../resources/work-time-norm/entities/work-time-norm.entity';
+import { WorkTimeNormDay } from '../resources/work-time-norm/entities/work-time-norm-day.entity';
 import { WorkTimeNormType } from '../types';
 import { langPipe } from '../utils/lib/lang-pipe';
 import { getSystemUserId } from '../utils/lib/system-user';

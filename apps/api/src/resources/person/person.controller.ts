@@ -27,7 +27,9 @@ import {
 } from '@nestjs/swagger';
 import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import { IdDto, PageDto, SortingDto } from '../common/dto';
+import { IdDto } from '../common/dto/id.dto';
+import { PageDto } from '../common/dto/page.dto';
+import { SortingDto } from '../common/dto/sorting.dto';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { ListPersonsQueryDto } from './dto/list-persons-query.dto';
 import { ListPersonsDto } from './dto/list-persons.dto';

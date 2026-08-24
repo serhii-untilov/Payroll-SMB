@@ -1,4 +1,4 @@
-import { BaseEntity } from '@/resources/common/base';
+import { BaseEntity } from '@/resources/common/base/base-entity.abstract';
 import { PaymentSchedule } from '@/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { monthBegin, monthEnd } from '@repo/shared';

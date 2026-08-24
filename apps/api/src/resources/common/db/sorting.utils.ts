@@ -1,5 +1,5 @@
 import { SelectQueryBuilder } from 'typeorm';
-import { SortingDto } from '../dto';
+import { SortingDto } from '../dto/sorting.dto';
 
 export class SortingUtils {
     static apply(

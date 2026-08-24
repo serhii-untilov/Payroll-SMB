@@ -1,9 +1,10 @@
-import { UserAccessService, UserService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
+import { UserAccessService } from '../resources/user-access/user-access.service';
+import { UserService } from '../resources/user/user.service';
 
 describe('AuthService', () => {
     let service: AuthService;

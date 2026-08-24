@@ -9,10 +9,13 @@ type JwtPayload = {
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
-    constructor(private configService: ConfigService) {
+    constructor() {
         super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: configService.get<string>('auth.accessSecret'),
+            useFactory: (config: ConfigService) => ({
+                jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+                secretOrKey: config.getOrThrow<string>('auth.accessSecret'),
+            }),
+            inject: [ConfigService],
         });
     }
 

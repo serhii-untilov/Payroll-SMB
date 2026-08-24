@@ -1,30 +1,6 @@
 import { AuthModule } from '@/auth/auth.module';
 import { appConfig, authConfig, dbConfig, googleConfig, TypeormConfigService } from '@/config';
 import { ErrorsInterceptor } from '@/interceptors/errors.interceptor';
-import {
-    AccountingModule,
-    CompanyModule,
-    DepartmentModule,
-    JobModule,
-    LawsModule,
-    MinWageModule,
-    PayFundModule,
-    PayFundTypesModule,
-    PaymentPositionModule,
-    PaymentsModule,
-    PaymentTypeModule,
-    PayPeriodModule,
-    PayrollsModule,
-    PersonModule,
-    PositionHistoryModule,
-    PositionsModule,
-    RolesModule,
-    TasksModule,
-    UserAccessModule,
-    UserModule,
-    UserRoleModule,
-    WorkTimeNormModule,
-} from '@/resources';
 import { SnowflakeModule } from '@/snowflake/snowflake.module';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { Module, OnModuleInit } from '@nestjs/common';
@@ -37,6 +13,28 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AccountingModule } from '../resources/accounting/accounting.module';
+import { CompanyModule } from '../resources/company/company.module';
+import { DepartmentModule } from '../resources/department/department.module';
+import { JobModule } from '../resources/job/job.module';
+import { LawsModule } from '../resources/laws/laws.module';
+import { MinWageModule } from '../resources/min-wage/min-wage.module';
+import { PayFundModule } from '../resources/pay-fund/pay-fund.module';
+import { PayFundTypesModule } from '../resources/pay-fund-types/pay-fund-types.module';
+import { PaymentPositionModule } from '../resources/payment-position/payment-position.module';
+import { PaymentsModule } from '../resources/payments/payments.module';
+import { PaymentTypeModule } from '../resources/payment-type/payment-type.module';
+import { PayPeriodModule } from '../resources/pay-period/pay-period.module';
+import { PayrollsModule } from '../resources/payrolls/payrolls.module';
+import { PersonModule } from '../resources/person/person.module';
+import { PositionHistoryModule } from '../resources/position-history/position-history.module';
+import { PositionsModule } from '../resources/positions/positions.module';
+import { RolesModule } from '../resources/role/role.module';
+import { TasksModule } from '../resources/tasks/tasks.module';
+import { UserAccessModule } from '../resources/user-access/user-access.module';
+import { UserModule } from '../resources/user/user.module';
+import { UserRoleModule } from '../resources/user-role/user-role.module';
+import { WorkTimeNormModule } from '../resources/work-time-norm/work-time-norm.module';
 
 @Module({
     imports: [

@@ -4,10 +4,9 @@ import * as fsPromise from 'fs/promises';
 
 @Injectable()
 export class AppService {
-    constructor(
-        private configService: ConfigService,
-        private readonly logger = new Logger(AppService.name),
-    ) {}
+    private readonly logger = new Logger(AppService.name);
+
+    constructor(private configService: ConfigService) {}
 
     getHello(name?: string): string {
         return `Hello ${name || 'World'}!`;

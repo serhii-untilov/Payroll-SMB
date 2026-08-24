@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity } from 'typeorm';
 import { AccountingType } from './../../../types';
-import { BaseEntity } from '@/resources/common/base';
+import { BaseEntity } from '@/resources/common/base/base-entity.abstract';
 
 @Entity({ name: 'accounting' })
 export class Accounting extends BaseEntity {

@@ -11,7 +11,7 @@ import {
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
-import { BaseUserAccess } from '../common/base';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { PositionsService } from '../positions/positions.service';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePayrollDto } from './dto/create-payroll.dto';

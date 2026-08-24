@@ -1,4 +1,3 @@
-import { PositionHistory } from './entities/position-history.entity';
 import { AccessTokenGuard } from '@/guards';
 import { getUserId } from '@/utils';
 import {
@@ -28,8 +27,8 @@ import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePositionHistoryDto } from './dto/create-position-history.dto';
 import { FindAllPositionHistoryDto } from './dto/find-all-position-history.dto';
-import { FindOnePositionHistoryDto } from './dto/find-one-position-history.dto';
 import { UpdatePositionHistoryDto } from './dto/update-position-history.dto';
+import { PositionHistory } from './entities/position-history.entity';
 import { PositionHistoryService } from './position-history.service';
 
 @Controller('position-history')

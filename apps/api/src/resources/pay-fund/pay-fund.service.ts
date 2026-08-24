@@ -8,8 +8,7 @@ import {
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
-import { BaseUserAccess } from '../common/base';
-import { CompanyService } from '../company/company.service';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { PositionsService } from '../positions/positions.service';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePayFundDto } from './dto/create-pay-fund.dto';
@@ -25,7 +24,6 @@ export class PayFundService extends BaseUserAccess {
         @InjectRepository(PayFund) private repository: Repository<PayFund>,
         @Inject(forwardRef(() => UserAccessService)) public userAccessService: UserAccessService,
         @Inject(forwardRef(() => PositionsService)) private positionsService: PositionsService,
-        @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
     ) {
         super(userAccessService, Resource.PayFund);
     }

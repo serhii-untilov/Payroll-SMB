@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JobEntity } from './entities/job.entity';
 import { JobController } from './job.controller';
 import { JobService } from './job.service';
-import { UserAccessModule } from '../user-access';
+import { UserAccessModule } from '../user-access/user-access.module';
 
 @Module({
     imports: [TypeOrmModule.forFeature([JobEntity]), forwardRef(() => UserAccessModule)],

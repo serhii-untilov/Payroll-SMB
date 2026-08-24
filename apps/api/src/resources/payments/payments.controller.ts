@@ -1,7 +1,6 @@
-import { Payment } from './entities/payment.entity';
 import { AccessTokenGuard } from '@/guards';
-import { getUserId } from '@/utils';
 import { Action } from '@/types';
+import { getUserId } from '@/utils';
 import {
     Body,
     Controller,
@@ -30,10 +29,10 @@ import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { FindAllPaymentDto } from './dto/find-all-payment.dto';
-import { FindOnePaymentDto } from './dto/find-one-payment.dto';
 import { ProcessPaymentDto } from './dto/process-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
+import { Payment } from './entities/payment.entity';
 import { PaymentsService } from './payments.service';
 
 @Controller('payments')

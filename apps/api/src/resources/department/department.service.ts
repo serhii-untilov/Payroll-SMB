@@ -8,7 +8,7 @@ import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { ApplyFiltersUtil } from '../common/db/apply-filters.util';
 import { PaginationUtils } from '../common/db/pagination.utils';
 import { SortingUtils } from '../common/db/sorting.utils';
-import { UserAccessService } from '../user-access';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { DepartmentReadDto } from './dto/department-read.dto';
 import { ListDepartmentsQueryDto } from './dto/list-departments-query.dto';

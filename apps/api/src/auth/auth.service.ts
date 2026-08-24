@@ -1,4 +1,4 @@
-import { UserService } from '@/resources';
+import { UserService } from '../resources/user/user.service';
 import {
     BadRequestException,
     ForbiddenException,

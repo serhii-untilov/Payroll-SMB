@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserAccessModule } from '../user-access';
+import { UserAccessModule } from '../user-access/user-access.module';
 import { WorkTimeNormDay } from './entities/work-time-norm-day.entity';
 import { WorkTimeNorm } from './entities/work-time-norm.entity';
 import { WorkTimeNormController } from './work-time-norm.controller';

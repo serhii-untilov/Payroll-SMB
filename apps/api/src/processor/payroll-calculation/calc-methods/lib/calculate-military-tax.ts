@@ -4,7 +4,7 @@ import { getMaxDate, getMinDate } from '@repo/shared';
 import { PayPeriod } from '@/resources/pay-period/entities/pay-period.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { CalculatePayroll, PayrollContext } from '../base/calculate-payroll.abstract';
-import { Position } from '@/resources/positions/entities';
+import { Position } from '@/resources/positions/entities/position.entity';
 
 export class PayrollMilitaryTax extends CalculatePayroll {
     constructor(ctx: PayrollContext, position: Position, payrolls: Payroll[], accPeriods: PayPeriod[]) {

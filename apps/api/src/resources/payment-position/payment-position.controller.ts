@@ -14,10 +14,10 @@ import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
 import { CreatePaymentPositionDto } from './dto/create-payment-position.dto';
 import { FindAllPaymentPositionDto } from './dto/find-all-payment-position.dto';
+import { FindOnePaymentPositionDto } from './dto/find-one-payment-position.dto';
 import { UpdatePaymentPositionDto } from './dto/update-payment-position.dto';
 import { PaymentPosition } from './entities/paymentPosition.entity';
 import { PaymentPositionService } from './payment-position.service';
-import { FindOnePaymentPositionDto } from './dto';
 
 @Controller('payment-positions')
 @ApiBearerAuth()

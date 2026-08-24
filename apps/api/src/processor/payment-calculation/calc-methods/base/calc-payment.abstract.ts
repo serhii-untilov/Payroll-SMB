@@ -1,13 +1,13 @@
 import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
 import { PayFund } from '@/resources/pay-fund/entities/pay-fund.entity';
-import { PayPeriod } from '@/resources/pay-period/entities';
+import { PayPeriod } from '@/resources/pay-period/entities/pay-period.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { PaymentStatus, RecordFlags } from '@/types';
 import { PaymentPosition } from '../../../../resources/payment-position/entities/paymentPosition.entity';
 import { PaymentType } from '../../../../resources/payment-type/entities/payment-type.entity';
 import { Payment } from '../../../../resources/payments/entities/payment.entity';
-import { Position } from '@/resources/positions/entities';
+import { Position } from '@/resources/positions/entities/position.entity';
 
 export type PaymentContext = {
     userId: string;

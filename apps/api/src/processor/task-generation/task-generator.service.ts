@@ -1,24 +1,22 @@
-import {
-    CompanyService,
-    DepartmentService,
-    PayPeriodService,
-    PaymentsService,
-    PersonService,
-    PositionsService,
-    TasksService,
-    UserRoleService,
-} from '@/resources';
 import { Task } from '@/resources/tasks/entities/task.entity';
 import { TaskStatus, TaskType } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dropTime } from '@repo/shared';
-import { FixedSequenceNumber } from './task-sequence-number';
 import { makeTaskGenerator } from './task-generator/base/task-generator.factory';
 import { Context } from './task-generator/base/task-generator.context';
+import { FixedSequenceNumber } from './task-sequence-number/lib/fixed-sequence-number';
+import { CompanyService } from '../../resources/company/company.service';
+import { DepartmentService } from '../../resources/department/department.service';
+import { PayPeriodService } from '../../resources/pay-period/pay-period.service';
+import { PaymentsService } from '../../resources/payments/payments.service';
+import { PersonService } from '../../resources/person/person.service';
+import { PositionsService } from '../../resources/positions/positions.service';
+import { TasksService } from '../../resources/tasks/tasks.service';
+import { UserRoleService } from '../../resources/user-role/user-role.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TaskGenerationService {
-    private logger: Logger = new Logger(TaskGenerationService.name);
+    private readonly logger: Logger = new Logger(TaskGenerationService.name);
 
     constructor(
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,

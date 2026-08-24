@@ -3,16 +3,14 @@ import { PaymentCalculationService } from '@/processor/payment-calculation/payme
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
-import {
-    PositionCreatedEvent,
-    PositionDeletedEvent,
-    PositionEvent,
-    PositionEventType,
-    PositionUpdatedEvent,
-} from '@/resources';
 import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { PositionCreatedEvent } from '../../../resources/positions/events/position-created.event';
+import { PositionDeletedEvent } from '../../../resources/positions/events/position-deleted.event';
+import { PositionEvent } from '../../../resources/positions/events/abstract/position-event';
+import { PositionEventType } from '../../../resources/positions/events/abstract/position-event';
+import { PositionUpdatedEvent } from '../../../resources/positions/events/position-updated.event';
 
 @Injectable()
 export class PositionListenerService {

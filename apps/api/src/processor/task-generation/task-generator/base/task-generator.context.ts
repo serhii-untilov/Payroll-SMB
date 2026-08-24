@@ -1,18 +1,16 @@
-import {
-    CompanyService,
-    DepartmentService,
-    PaymentsService,
-    PayPeriodService,
-    PersonService,
-    PositionsService,
-    TasksService,
-    UserRoleService,
-} from '@/resources';
 import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
-import { PayPeriod } from '@/resources/pay-period/entities';
+import { PayPeriod } from '@/resources/pay-period/entities/pay-period.entity';
 import { Payment } from '@/resources/payments/entities/payment.entity';
 import { Task } from '@/resources/tasks/entities/task.entity';
-import { TaskSequenceNumber } from '../../task-sequence-number';
+import { TaskSequenceNumber } from '../../task-sequence-number/abstract/task-sequence-number';
+import { CompanyService } from '../../../../resources/company/company.service';
+import { DepartmentService } from '../../../../resources/department/department.service';
+import { PayPeriodService } from '../../../../resources/pay-period/pay-period.service';
+import { PaymentsService } from '../../../../resources/payments/payments.service';
+import { PersonService } from '../../../../resources/person/person.service';
+import { PositionsService } from '../../../../resources/positions/positions.service';
+import { TasksService } from '../../../../resources/tasks/tasks.service';
+import { UserRoleService } from '../../../../resources/user-role/user-role.service';
 
 export type Context = {
     userId: string;

@@ -1,13 +1,3 @@
-import {
-    CompanyService,
-    PayFundService,
-    PayPeriodService,
-    PaymentPositionService,
-    PaymentTypeService,
-    PaymentsService,
-    PayrollsService,
-    PositionsService,
-} from '@/resources';
 import { CalcMethod, PaymentGroup, PaymentStatus } from '@/types';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { dateUTC } from '@repo/shared';
@@ -18,11 +8,23 @@ import { PaymentType } from './../../resources/payment-type/entities/payment-typ
 import { Payment } from './../../resources/payments/entities/payment.entity';
 import { Payroll } from './../../resources/payrolls/entities/payroll.entity';
 import { Position } from './../../resources/positions/entities/position.entity';
-import { CalcAdvance, CalcFastPayment, CalcPayment, CalcRegularPayment, PaymentContext } from './calc-methods';
+import { PaymentContext } from './calc-methods/base/calc-payment.abstract';
+import { CalcAdvance } from './calc-methods/lib/calc-advance';
+import { CalcFastPayment } from './calc-methods/lib/calc-fast-payment';
+import { CalcPayment } from './calc-methods/base/calc-payment.abstract';
+import { CalcRegularPayment } from './calc-methods/lib/calc-regular-payment';
+import { CompanyService } from '../../resources/company/company.service';
+import { PayFundService } from '../../resources/pay-fund/pay-fund.service';
+import { PayPeriodService } from '../../resources/pay-period/pay-period.service';
+import { PaymentPositionService } from '../../resources/payment-position/payment-position.service';
+import { PaymentTypeService } from '../../resources/payment-type/payment-type.service';
+import { PaymentsService } from '../../resources/payments/payments.service';
+import { PayrollsService } from '../../resources/payrolls/payrolls.service';
+import { PositionsService } from '../../resources/positions/positions.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PaymentCalculationService {
-    logger: Logger = new Logger(PaymentCalculationService.name);
+    private readonly logger: Logger = new Logger(PaymentCalculationService.name);
     // userId: string;
     // company: CompanyEntity;
     // paymentTypes: PaymentType[];

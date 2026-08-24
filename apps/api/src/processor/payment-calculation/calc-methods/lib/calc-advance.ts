@@ -1,5 +1,5 @@
 import { getAdvancePaymentDate, payFundPayPeriodFactSum, payPeriodFactSum } from '@/processor/helpers';
-import { Position } from '@/resources/positions/entities';
+import { Position } from '@/resources/positions/entities/position.entity';
 import { PaymentGroup } from '@/types';
 import { dateUTC } from '@repo/shared';
 import { CalcPayment, PaymentContext } from '../base/calc-payment.abstract';

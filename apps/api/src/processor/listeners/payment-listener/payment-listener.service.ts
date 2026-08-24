@@ -1,29 +1,27 @@
 import { PayFundCalculationService } from '@/processor/pay-fund-calculation/pay-fund-calculation.service';
-import { PaymentCalculationService } from '@/processor/payment-calculation/payment-calculation.service';
+// import { PaymentCalculationService } from '@/processor/payment-calculation/payment-calculation.service';
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
-import {
-    PaymentCreatedEvent,
-    PaymentDeletedEvent,
-    PaymentEvent,
-    PaymentEventType,
-    PaymentUpdatedEvent,
-} from '@/resources';
 import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { PaymentEvent, PaymentEventType } from '../../../resources/payments/events/abstract/payment-event';
+import { PaymentCreatedEvent } from '../../../resources/payments/events/payment-created.event';
+import { PaymentDeletedEvent } from '../../../resources/payments/events/payment-deleted.event';
+import { PaymentUpdatedEvent } from '../../../resources/payments/events/payment-updated.event';
 
 @Injectable()
 export class PaymentListenerService {
-    private logger: Logger = new Logger(PaymentListenerService.name);
+    private readonly logger: Logger = new Logger(PaymentListenerService.name);
+
     private semaphore = 0;
 
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
         private payrollCalculationService: PayrollCalculationService,
-        @Inject(forwardRef(() => PaymentCalculationService))
-        private paymentCalculationService: PaymentCalculationService,
+        // @Inject(forwardRef(() => PaymentCalculationService))
+        // private paymentCalculationService: PaymentCalculationService,
         @Inject(forwardRef(() => PayFundCalculationService))
         private payFundCalculationService: PayFundCalculationService,
         @Inject(forwardRef(() => TaskGenerationService))

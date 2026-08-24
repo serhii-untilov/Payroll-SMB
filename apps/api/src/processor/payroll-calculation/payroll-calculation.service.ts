@@ -1,27 +1,26 @@
 import { calcBalanceWorkTime } from '@/processor/helpers';
-import {
-    CompanyService,
-    PayPeriodService,
-    PaymentTypeService,
-    PayrollsService,
-    PositionsService,
-    UserAccessService,
-    WorkTimeNormService,
-} from '@/resources';
 import { PayPeriod } from '@/resources/pay-period/entities/pay-period.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
 import { Position } from '@/resources/positions/entities/position.entity';
 import { Inject, Injectable, Logger, Scope, forwardRef } from '@nestjs/common';
 import { PayPeriodCalculationService } from '../pay-period-calculation/pay-period-calculation.service';
-import { calculateBasics, calculateIncomeTax, calculateMilitaryTax } from './calc-methods';
 import { PayrollContext } from './calc-methods/base/calculate-payroll.abstract';
+import { calculateBasics } from './calc-methods/lib/calculate-basics';
+import { calculateIncomeTax } from './calc-methods/lib/calculate-income-tax';
+import { calculateMilitaryTax } from './calc-methods/lib/calculate-military-tax';
+import { CompanyService } from '../../resources/company/company.service';
+import { PayPeriodService } from '../../resources/pay-period/pay-period.service';
+import { PaymentTypeService } from '../../resources/payment-type/payment-type.service';
+import { PayrollsService } from '../../resources/payrolls/payrolls.service';
+import { PositionsService } from '../../resources/positions/positions.service';
+import { WorkTimeNormService } from '../../resources/work-time-norm/work-time-norm.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PayrollCalculationService {
-    private logger: Logger = new Logger(PayrollCalculationService.name);
+    private readonly logger: Logger = new Logger(PayrollCalculationService.name);
 
     constructor(
-        @Inject(forwardRef(() => UserAccessService)) private accessService: UserAccessService,
+        // @Inject(forwardRef(() => UserAccessService)) private accessService: UserAccessService,
         @Inject(forwardRef(() => CompanyService)) private companiesService: CompanyService,
         @Inject(forwardRef(() => PaymentTypeService)) private paymentTypeService: PaymentTypeService,
         @Inject(forwardRef(() => PayPeriodService)) private payPeriodService: PayPeriodService,
@@ -146,8 +145,8 @@ export class PayrollCalculationService {
         }
     }
 
-    private async clean(positionId: string) {
-        await this.payrollsService.deleteBy({ positionId });
-        await this.positionsService.deletePositionBalanceBy({ positionId });
-    }
+    // private async clean(positionId: string) {
+    //     await this.payrollsService.deleteBy({ positionId });
+    //     await this.positionsService.deletePositionBalanceBy({ positionId });
+    // }
 }

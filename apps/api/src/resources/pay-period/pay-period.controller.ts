@@ -25,15 +25,13 @@ import {
 } from '@nestjs/swagger';
 import { deepTransformToShortDate } from '@repo/shared';
 import { Request } from 'express';
-import {
-    ClosePayPeriodDto,
-    CreatePayPeriodDto,
-    FindAllPayPeriodDto,
-    FindCurrentPayPeriodDto,
-    OpenPayPeriodDto,
-    UpdatePayPeriodDto,
-} from './dto';
-import { PayPeriod } from './entities';
+import { ClosePayPeriodDto } from './dto/close-pay-period.dto';
+import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
+import { FindAllPayPeriodDto } from './dto/find-all-pay-period.dto';
+import { FindCurrentPayPeriodDto } from './dto/find-current-pay-period.dto';
+import { OpenPayPeriodDto } from './dto/open-pay-period.dto';
+import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
+import { PayPeriod } from './entities/pay-period.entity';
 import { PayPeriodService } from './pay-period.service';
 
 @Controller('pay-periods')

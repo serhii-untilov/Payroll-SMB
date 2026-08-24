@@ -4,13 +4,18 @@ import { PaymentCalculationService } from '@/processor/payment-calculation/payme
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
-import { CalculateCompanyEvent, CompanyCreatedEvent, CompanyDeletedEvent, CompanyUpdatedEvent } from '@/resources';
 import { ServerEvent } from '@/types';
 import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { CalculateCompanyEvent } from '../../../resources/company/events/calculate-company.event';
+import { CompanyCreatedEvent } from '../../../resources/company/events/company-created.event';
+import { CompanyDeletedEvent } from '../../../resources/company/events/company-deleted.event';
+import { CompanyUpdatedEvent } from '../../../resources/company/events/company-updated.event';
 
 @Injectable()
 export class CompanyListenerService {
+    private readonly logger = new Logger(CompanyListenerService.name);
+
     constructor(
         @Inject(forwardRef(() => PayrollCalculationService))
         private payrollCalculationService: PayrollCalculationService,
@@ -24,7 +29,6 @@ export class CompanyListenerService {
         private payPeriodCalculationService: PayPeriodCalculationService,
         @Inject(forwardRef(() => SseService))
         private sseService: SseService,
-        private readonly logger = new Logger(CompanyListenerService.name),
     ) {}
 
     @OnEvent(CompanyCreatedEvent.name)

@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RolesModule } from '../role';
-import { UserRoleModule } from '../user-role';
+import { RolesModule } from '../role/role.module';
+import { UserRoleModule } from '../user-role/user-role.module';
 import { UserModule } from '../user/user.module';
 import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';

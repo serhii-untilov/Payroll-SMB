@@ -3,7 +3,7 @@ import { Action, Resource } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BaseUserAccess } from '../common/base';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CreatePayFundTypeDto } from './dto/create-pay-fund-type.dto';
 import { UpdatePayFundTypeDto } from './dto/update-pay-fund-type.dto';

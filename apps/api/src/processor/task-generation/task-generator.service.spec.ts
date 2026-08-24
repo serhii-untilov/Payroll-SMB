@@ -1,16 +1,14 @@
-import {
-    CompanyService,
-    DepartmentService,
-    PaymentsService,
-    PayPeriodService,
-    PersonService,
-    PositionsService,
-    TasksService,
-    UserRoleService,
-} from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TaskGenerationService } from './task-generator.service';
+import { CompanyService } from '../../resources/company/company.service';
+import { DepartmentService } from '../../resources/department/department.service';
+import { PayPeriodService } from '../../resources/pay-period/pay-period.service';
+import { PaymentsService } from '../../resources/payments/payments.service';
+import { PersonService } from '../../resources/person/person.service';
+import { PositionsService } from '../../resources/positions/positions.service';
+import { TasksService } from '../../resources/tasks/tasks.service';
+import { UserRoleService } from '../../resources/user-role/user-role.service';
 
 describe('TaskGenerationService', () => {
     let service: TaskGenerationService;

@@ -1,5 +1,5 @@
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
-import { BaseEntity } from '../../common/base';
+import { BaseEntity } from '../../common/base/base-entity.abstract';
 import { CompanyEntity } from '../../company/entities/company.entity';
 import { PayPeriodState } from './../../../types';
 import { PayPeriodSummary } from './pay-period-summary.entity';

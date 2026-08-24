@@ -4,10 +4,10 @@ import { PayPeriodCalculationService } from '@/processor/pay-period-calculation/
 import { PayrollCalculationService } from '@/processor/payroll-calculation/payroll-calculation.service';
 import { SseService } from '@/processor/server-sent-events/sse.service';
 import { TaskGenerationService } from '@/processor/task-generation/task-generator.service';
-import { PayPeriodService } from '@/resources';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyListenerService } from './company-listener.service';
+import { PayPeriodService } from '../../../resources/pay-period/pay-period.service';
 
 describe('CompanyListenerService', () => {
     let service: CompanyListenerService;

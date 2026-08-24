@@ -3,7 +3,7 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { monthBegin, monthEnd } from '@repo/shared';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { BaseUserAccess } from '../common/base';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { PayPeriodService } from '../pay-period/pay-period.service';
 import { UserAccessService } from '../user-access/user-access.service';
 import { CreateTaskDto } from './dto/create-task.dto';

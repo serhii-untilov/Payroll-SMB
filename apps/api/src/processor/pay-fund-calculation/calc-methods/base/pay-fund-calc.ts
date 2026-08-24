@@ -2,7 +2,7 @@ import { CompanyReadDto } from '@/resources/company/dto/company-read.dto';
 import { MinWage } from '@/resources/min-wage/entities/min-wage.entity';
 import { PaymentType } from '@/resources/payment-type/entities/payment-type.entity';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
-import { Position } from '@/resources/positions/entities';
+import { Position } from '@/resources/positions/entities/position.entity';
 import { IdGenerator } from '@/snowflake/snowflake.singleton';
 import { PayFundCategory } from '@/types';
 import { PayFundType } from '../../../../resources/pay-fund-types/entities/pay-fund-type.entity';

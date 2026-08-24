@@ -4,7 +4,7 @@ import { PayrollsController } from './payrolls.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payroll } from './entities/payroll.entity';
 import { PositionsModule } from '../positions/positions.module';
-import { UserAccessModule } from '../user-access';
+import { UserAccessModule } from '../user-access/user-access.module';
 import { CompanyModule } from '../company/company.module';
 
 @Module({

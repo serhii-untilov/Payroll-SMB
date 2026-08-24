@@ -4,18 +4,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { dateUTC, formatPeriod, monthBegin, monthEnd } from '@repo/shared';
 import { add, addMonths, addYears, endOfYear, startOfYear, sub, subYears } from 'date-fns';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { BaseUserAccess } from '../common/base';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { CompanyService } from '../company/company.service';
 import { UserAccessService } from '../user-access/user-access.service';
-import {
-    ClosePayPeriodDto,
-    CreatePayPeriodDto,
-    FindAllPayPeriodDto,
-    FindCurrentPayPeriodDto,
-    OpenPayPeriodDto,
-    UpdatePayPeriodDto,
-} from './dto';
-import { PayPeriod, defaultFieldList } from './entities';
+import { ClosePayPeriodDto } from './dto/close-pay-period.dto';
+import { CreatePayPeriodDto } from './dto/create-pay-period.dto';
+import { FindAllPayPeriodDto } from './dto/find-all-pay-period.dto';
+import { FindCurrentPayPeriodDto } from './dto/find-current-pay-period.dto';
+import { OpenPayPeriodDto } from './dto/open-pay-period.dto';
+import { UpdatePayPeriodDto } from './dto/update-pay-period.dto';
+import { defaultFieldList, PayPeriod } from './entities/pay-period.entity';
 
 @Injectable()
 export class PayPeriodService extends BaseUserAccess {

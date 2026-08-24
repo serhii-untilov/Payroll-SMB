@@ -1,4 +1,5 @@
-import { PageDto, SortingDto } from '@/resources/common/dto';
+import { PageDto } from '@/resources/common/dto/page.dto';
+import { SortingDto } from '@/resources/common/dto/sorting.dto';
 import { PaginatedQuery } from '@/resources/common/queries/paginated.query';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';

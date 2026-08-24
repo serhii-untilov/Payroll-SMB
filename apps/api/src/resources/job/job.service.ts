@@ -8,7 +8,7 @@ import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { ApplyFiltersUtil } from '../common/db/apply-filters.util';
 import { PaginationUtils } from '../common/db/pagination.utils';
 import { SortingUtils } from '../common/db/sorting.utils';
-import { UserAccessService } from '../user-access';
+import { UserAccessService } from '../user-access/user-access.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { JobReadDto } from './dto/job-read.dto';
 import { ListJobsQueryDto } from './dto/list-jobs-query.dto';

@@ -1,6 +1,6 @@
 import { accPeriodFactSum } from '@/processor/helpers';
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
-import { Position } from '@/resources/positions/entities';
+import { Position } from '@/resources/positions/entities/position.entity';
 import { CalcMethod, PaymentGroup } from '@/types';
 import { Context, PayFundCalc } from '../base/pay-fund-calc';
 import { PayFundType } from './../../../../resources/pay-fund-types/entities/pay-fund-type.entity';

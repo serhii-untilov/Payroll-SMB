@@ -1,5 +1,5 @@
 import { Payroll } from '@/resources/payrolls/entities/payroll.entity';
-import { Position } from '@/resources/positions/entities';
+import { Position } from '@/resources/positions/entities/position.entity';
 import { PayFundGroup } from '@/types';
 import { Context, PayFundCalc } from '../base/pay-fund-calc';
 import { MinWage } from './../../../../resources/min-wage/entities/min-wage.entity';

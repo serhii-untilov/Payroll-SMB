@@ -15,7 +15,7 @@ import {
     Not,
     Repository,
 } from 'typeorm';
-import { BaseUserAccess } from '../common/base';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
 import { PayPeriodService } from '../pay-period/pay-period.service';
 import { PayrollsService } from '../payrolls/payrolls.service';
 import { UserAccessService } from '../user-access/user-access.service';

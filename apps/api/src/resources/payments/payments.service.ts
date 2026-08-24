@@ -1,26 +1,24 @@
-import {
-    BaseUserAccess,
-    CompanyService,
-    PayPeriodService,
-    PaymentPositionService,
-    UserAccessService,
-} from '@/resources';
 import { Action, PaymentStatus, RecordFlags, Resource, WrapperType } from '@/types';
 import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { dateUTC } from '@repo/shared';
 import { Repository } from 'typeorm';
-import {
-    CreatePaymentDto,
-    FindAllPaymentDto,
-    FindOnePaymentDto,
-    ProcessPaymentDto,
-    UpdatePaymentDto,
-    WithdrawPaymentDto,
-} from './dto';
+import { BaseUserAccess } from '../common/base/user-access.abstract';
+import { CompanyService } from '../company/company.service';
+import { PayPeriodService } from '../pay-period/pay-period.service';
+import { PaymentPositionService } from '../payment-position/payment-position.service';
+import { UserAccessService } from '../user-access/user-access.service';
+import { CreatePaymentDto } from './dto/create-payment.dto';
+import { FindAllPaymentDto } from './dto/find-all-payment.dto';
+import { FindOnePaymentDto } from './dto/find-one-payment.dto';
+import { ProcessPaymentDto } from './dto/process-payment.dto';
+import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { WithdrawPaymentDto } from './dto/withdraw-payment.dto';
 import { Payment } from './entities/payment.entity';
-import { PaymentCreatedEvent, PaymentDeletedEvent, PaymentUpdatedEvent } from './events';
+import { PaymentCreatedEvent } from './events/payment-created.event';
+import { PaymentDeletedEvent } from './events/payment-deleted.event';
+import { PaymentUpdatedEvent } from './events/payment-updated.event';
 
 @Injectable()
 export class PaymentsService extends BaseUserAccess {
