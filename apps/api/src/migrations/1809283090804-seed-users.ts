@@ -1,10 +1,7 @@
-import { RoleType } from '../types';
 import * as bcrypt from 'bcrypt';
-import { getRoleIdByType } from '../utils/lib/system-role';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { User } from '../resources/user/entities/user.entity';
 import { langPipe } from '../utils/lib/lang-pipe';
-import { getSystemUserId } from '@/utils';
 
 const lang = process.env.LANGUAGE ?? 'uk';
 const entity = User;
@@ -15,7 +12,6 @@ const recordList = [
         lastName: '',
         email: 'system@payroll.smb',
         password: null, // To prevent this user from logging in.
-        roleType: RoleType.System ?? 'system',
     },
     {
         id: '2',
@@ -23,7 +19,6 @@ const recordList = [
         lastName: '',
         email: 'system.admin@payroll.smb',
         password: 'admin',
-        roleType: RoleType.SystemAdmin,
     },
     {
         id: '3',
@@ -31,7 +26,6 @@ const recordList = [
         lastName: '',
         email: 'company.admin@payroll.smb',
         password: 'admin',
-        roleType: RoleType.CompanyAdmin,
     },
     {
         id: '4',
@@ -39,7 +33,6 @@ const recordList = [
         lastName: '',
         email: 'accountant@payroll.smb',
         password: 'accountant',
-        roleType: RoleType.Accountant,
     },
     {
         id: '5',
@@ -47,7 +40,6 @@ const recordList = [
         lastName: '',
         email: 'employee@payroll.smb',
         password: 'employee',
-        roleType: RoleType.Employee,
     },
     {
         id: '6',
@@ -55,7 +47,6 @@ const recordList = [
         lastName: '',
         email: 'manager@payroll.smb',
         password: 'manager',
-        roleType: RoleType.Manager,
     },
     {
         id: '7',
@@ -63,41 +54,30 @@ const recordList = [
         lastName: { en: 'Carefree', uk: 'Безтурботна' },
         email: 'demo@payroll.smb',
         password: 'demo',
-        roleType: RoleType.Accountant,
     },
 ];
 
 export class Seed1809283090804 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
-        const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
-            const { roleType, ...record } = recordList[n];
-            record['createdUserId'] = userId;
-            record['updatedUserId'] = userId;
-            record['password'] = record.password ? bcrypt.hashSync(record.password, 10) : '';
-            record['roleId'] = await getRoleIdByType(dataSource, roleType);
+            const { password, ...record } = langPipe(lang, recordList[n]);
+            record['password_hash'] = password ? bcrypt.hashSync(password, 10) : null;
             await dataSource
                 .createQueryBuilder()
                 .insert()
                 .into(entity)
                 .values(langPipe(lang, record))
-                .orUpdate(['first_name', 'last_name', 'password', 'email', 'role_id', 'updated_user_id'], ['id'])
+                .orUpdate(['first_name', 'last_name', 'password_hash', 'email'], ['id'])
                 .execute();
         }
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         const dataSource = queryRunner.connection;
-        const userId = await getSystemUserId(dataSource);
         for (let n = 0; n < recordList.length; n++) {
             const record = langPipe(lang, recordList[n]);
-            await dataSource
-                .createQueryBuilder()
-                .delete()
-                .from(entity)
-                .where('id = :id and createdUserId = :userId', { id: record.id, userId })
-                .execute();
+            await dataSource.createQueryBuilder().delete().from(entity).where('id = :id', { id: record.id }).execute();
         }
     }
 }

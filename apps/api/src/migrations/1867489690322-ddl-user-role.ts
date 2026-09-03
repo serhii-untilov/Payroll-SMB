@@ -1,12 +1,14 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
- * role_type             | company_id
- * --------------------- | -------------
- * system_administrator  | **NULL only**
- * company_administrator | **NOT NULL**
- * accountant            | **NOT NULL**
- * employee              | **NOT NULL**
+ * role_type     | company_id
+ * --------------|--------------
+ * system        | **NULL only**
+ * system-admin  | **NULL only**
+ * company-admin | **NOT NULL**
+ * accountant    | **NOT NULL**
+ * employee      | **NOT NULL**
+ * manager       | **NOT NULL**
  */
 export class Seed1867489690322 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -14,19 +16,19 @@ export class Seed1867489690322 implements MigrationInterface {
             CREATE OR REPLACE FUNCTION enforce_user_role_company_scope()
             RETURNS trigger AS $$
             DECLARE
-                v_role_type role_type;
+                v_role_type TEXT;
             BEGIN
-                SELECT r.role_type
+                SELECT r."type"::TEXT
                 INTO v_role_type
                 FROM roles r
                 WHERE r.id = NEW.role_id;
 
-                IF v_role_type = 'system_administrator' AND NEW.company_id IS NOT NULL THEN
+                IF v_role_type in ('system', 'system-admin') AND NEW.company_id IS NOT NULL THEN
                     RAISE EXCEPTION
-                        'system_administrator role must NOT be assigned to a company';
+                        'system and system-admin role must NOT be assigned to a company';
                 END IF;
 
-                IF v_role_type <> 'system_administrator' AND NEW.company_id IS NULL THEN
+                IF v_role_type not in ('system', 'system-admin') AND NEW.company_id IS NULL THEN
                     RAISE EXCEPTION
                         'non-system roles MUST be assigned to a company';
                 END IF;

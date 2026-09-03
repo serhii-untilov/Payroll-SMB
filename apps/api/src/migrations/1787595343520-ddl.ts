@@ -1,33 +1,9 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Ddl1767172540261 implements MigrationInterface {
-    name = 'Ddl1767172540261';
+export class Ddl1787595343520 implements MigrationInterface {
+    name = 'Ddl1787595343520'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
-            CREATE TABLE "work_time_norms" (
-                "id" bigint NOT NULL,
-                "created_date" TIMESTAMP NOT NULL DEFAULT now(),
-                "created_user_id" bigint,
-                "updated_date" TIMESTAMP NOT NULL DEFAULT now(),
-                "updated_user_id" bigint,
-                "deleted_date" TIMESTAMP,
-                "deleted_user_id" bigint,
-                "version" integer NOT NULL DEFAULT '1',
-                "code" character varying(10) NOT NULL,
-                "name" character varying(50) NOT NULL,
-                "description" character varying(250) NOT NULL,
-                "type" character varying(10) NOT NULL DEFAULT 'day',
-                "date_from" date NOT NULL DEFAULT '1900-01-01',
-                "date_to" date NOT NULL DEFAULT '9999-12-31',
-                "apply_holidays" boolean NOT NULL DEFAULT true,
-                "apply_shortened_days" boolean NOT NULL DEFAULT true,
-                "apply_moved_days" boolean NOT NULL DEFAULT true,
-                "apply_phases" boolean NOT NULL DEFAULT false,
-                "apply_rate" boolean NOT NULL DEFAULT false,
-                CONSTRAINT "PK_cf5c6a14081e737da97e570170a" PRIMARY KEY ("id")
-            )
-        `);
         await queryRunner.query(`
             CREATE TABLE "work_time_norm_days" (
                 "id" bigint NOT NULL,
@@ -45,7 +21,7 @@ export class Ddl1767172540261 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "roles" (
+            CREATE TABLE "work_time_norms" (
                 "id" bigint NOT NULL,
                 "created_date" TIMESTAMP NOT NULL DEFAULT now(),
                 "created_user_id" bigint,
@@ -54,30 +30,18 @@ export class Ddl1767172540261 implements MigrationInterface {
                 "deleted_date" TIMESTAMP,
                 "deleted_user_id" bigint,
                 "version" integer NOT NULL DEFAULT '1',
+                "code" character varying(10),
                 "name" character varying(50) NOT NULL,
-                "type" character varying(15) NOT NULL DEFAULT 'manager',
-                CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id")
-            )
-        `);
-        await queryRunner.query(`
-            CREATE TABLE "users" (
-                "id" bigint NOT NULL,
-                "created_date" TIMESTAMP NOT NULL DEFAULT now(),
-                "created_user_id" bigint,
-                "updated_date" TIMESTAMP NOT NULL DEFAULT now(),
-                "updated_user_id" bigint,
-                "deleted_date" TIMESTAMP,
-                "deleted_user_id" bigint,
-                "version" integer NOT NULL DEFAULT '1',
-                "first_name" character varying(50) NOT NULL,
-                "last_name" character varying(50) NOT NULL,
-                "email" character varying(50) NOT NULL,
-                "password" character varying(60) NOT NULL,
-                "refresh_token" character varying,
-                "is_active" boolean NOT NULL DEFAULT true,
-                "language" character varying(5),
-                "role_id" bigint NOT NULL,
-                CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id")
+                "description" character varying(250),
+                "type" character varying(10) NOT NULL DEFAULT 'day',
+                "date_from" date NOT NULL DEFAULT '1900-01-01',
+                "date_to" date NOT NULL DEFAULT '9999-12-31',
+                "apply_holidays" boolean NOT NULL DEFAULT true,
+                "apply_shortened_days" boolean NOT NULL DEFAULT true,
+                "apply_moved_days" boolean NOT NULL DEFAULT true,
+                "apply_phases" boolean NOT NULL DEFAULT false,
+                "apply_rate" boolean NOT NULL DEFAULT false,
+                CONSTRAINT "PK_cf5c6a14081e737da97e570170a" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
@@ -96,7 +60,7 @@ export class Ddl1767172540261 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "departments" (
+            CREATE TABLE "department_entities" (
                 "id" bigint NOT NULL,
                 "created_date" TIMESTAMP NOT NULL DEFAULT now(),
                 "created_user_id" bigint,
@@ -110,7 +74,7 @@ export class Ddl1767172540261 implements MigrationInterface {
                 "date_from" date NOT NULL DEFAULT '1900-01-01',
                 "date_to" date NOT NULL DEFAULT '9999-12-31',
                 "parent_department_id" bigint,
-                CONSTRAINT "PK_839517a681a86bb84cbcc6a1e9d" PRIMARY KEY ("id")
+                CONSTRAINT "PK_8b2a3bbdffdd99eef01e9394a07" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
@@ -122,7 +86,10 @@ export class Ddl1767172540261 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "persons" (
+            CREATE TYPE "public"."person_entities_gender_enum" AS ENUM('male', 'female')
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "person_entities" (
                 "id" bigint NOT NULL,
                 "created_date" TIMESTAMP NOT NULL DEFAULT now(),
                 "created_user_id" bigint,
@@ -133,18 +100,24 @@ export class Ddl1767172540261 implements MigrationInterface {
                 "version" integer NOT NULL DEFAULT '1',
                 "first_name" character varying(30) NOT NULL,
                 "last_name" character varying(30) NOT NULL,
-                "middle_name" character varying(30) NOT NULL DEFAULT '',
-                "birthday" date,
-                "tax_id" character varying(15) NOT NULL DEFAULT '',
-                "sex" character varying(10) DEFAULT '',
-                "phone" character varying(20) NOT NULL DEFAULT '',
-                "email" character varying(50) NOT NULL DEFAULT '',
-                "photo" character varying(260) NOT NULL DEFAULT '',
-                CONSTRAINT "PK_74278d8812a049233ce41440ac7" PRIMARY KEY ("id")
+                "middle_name" character varying(30),
+                "birth_date" date,
+                "gender" "public"."person_entities_gender_enum",
+                "tax_id" character varying(15),
+                "phone" character varying(20),
+                "email" character varying(50),
+                "photo" character varying(260),
+                CONSTRAINT "PK_97bd2864a3d4b75b68854aa0202" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "jobs" (
+            CREATE UNIQUE INDEX "idx_person_entities_tax_id" ON "person_entities" ("tax_id")
+        `);
+        await queryRunner.query(`
+            CREATE UNIQUE INDEX "idx_person_entities_email" ON "person_entities" ("email")
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "job_entities" (
                 "id" bigint NOT NULL,
                 "created_date" TIMESTAMP NOT NULL DEFAULT now(),
                 "created_user_id" bigint,
@@ -154,7 +127,7 @@ export class Ddl1767172540261 implements MigrationInterface {
                 "deleted_user_id" bigint,
                 "version" integer NOT NULL DEFAULT '1',
                 "name" character varying(50) NOT NULL,
-                CONSTRAINT "PK_cf0a6c42b72fcc7f7c237def345" PRIMARY KEY ("id")
+                CONSTRAINT "PK_3d5a79eeb6feebb4a90b1d06112" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
@@ -247,7 +220,7 @@ export class Ddl1767172540261 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "companies" (
+            CREATE TABLE "company_entities" (
                 "id" bigint NOT NULL,
                 "created_date" TIMESTAMP NOT NULL DEFAULT now(),
                 "created_user_id" bigint,
@@ -257,7 +230,7 @@ export class Ddl1767172540261 implements MigrationInterface {
                 "deleted_user_id" bigint,
                 "version" integer NOT NULL DEFAULT '1',
                 "name" character varying(50) NOT NULL,
-                "tax_id" character varying(15) NOT NULL DEFAULT '',
+                "tax_id" character varying(15) DEFAULT '',
                 "law_id" integer,
                 "accounting_id" bigint,
                 "payment_schedule" character varying(10) NOT NULL DEFAULT 'last-day',
@@ -265,11 +238,47 @@ export class Ddl1767172540261 implements MigrationInterface {
                 "date_to" date NOT NULL DEFAULT '9999-12-31',
                 "pay_period" date NOT NULL,
                 "check_date" date NOT NULL,
-                CONSTRAINT "PK_d4bc3e82a314fa9e29f652c2c22" PRIMARY KEY ("id")
+                CONSTRAINT "PK_d3389bc1fa0045b79438ec2800a" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "user_companies" (
+            CREATE TABLE "roles" (
+                "id" bigint NOT NULL,
+                "created_date" TIMESTAMP NOT NULL DEFAULT now(),
+                "created_user_id" bigint,
+                "updated_date" TIMESTAMP NOT NULL DEFAULT now(),
+                "updated_user_id" bigint,
+                "deleted_date" TIMESTAMP,
+                "deleted_user_id" bigint,
+                "version" integer NOT NULL DEFAULT '1',
+                "name" character varying(50) NOT NULL,
+                "type" character varying(15) NOT NULL DEFAULT 'manager',
+                CONSTRAINT "UQ_648e3f5447f725579d7d4ffdfb7" UNIQUE ("name"),
+                CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id")
+            )
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "users" (
+                "id" bigint NOT NULL,
+                "created_date" TIMESTAMP NOT NULL DEFAULT now(),
+                "created_user_id" bigint,
+                "updated_date" TIMESTAMP NOT NULL DEFAULT now(),
+                "updated_user_id" bigint,
+                "deleted_date" TIMESTAMP,
+                "deleted_user_id" bigint,
+                "version" integer NOT NULL DEFAULT '1',
+                "first_name" character varying(50) NOT NULL,
+                "last_name" character varying(50) NOT NULL,
+                "email" character varying(50) NOT NULL,
+                "password_hash" character varying(60),
+                "refresh_token" character varying,
+                "is_active" boolean NOT NULL DEFAULT true,
+                "language" character varying(5),
+                CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id")
+            )
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "user_roles" (
                 "id" bigint NOT NULL,
                 "created_date" TIMESTAMP NOT NULL DEFAULT now(),
                 "created_user_id" bigint,
@@ -279,9 +288,9 @@ export class Ddl1767172540261 implements MigrationInterface {
                 "deleted_user_id" bigint,
                 "version" integer NOT NULL DEFAULT '1',
                 "user_id" bigint NOT NULL,
-                "company_id" bigint NOT NULL,
                 "role_id" bigint NOT NULL,
-                CONSTRAINT "PK_f41bd3ea569c8c877b9a9063abb" PRIMARY KEY ("id")
+                "company_id" bigint,
+                CONSTRAINT "PK_8acd5cf26ebd158416f477de799" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
@@ -518,19 +527,18 @@ export class Ddl1767172540261 implements MigrationInterface {
             CREATE UNIQUE INDEX "MIN_WAGE_DATE_FROM_INDEX" ON "min_wages" ("date_from", "date_to", "pay_sum")
         `);
         await queryRunner.query(`
-            CREATE TABLE "access" (
+            CREATE TYPE "public"."audit_logs_action_enum" AS ENUM('created', 'updated', 'deleted', 'restored')
+        `);
+        await queryRunner.query(`
+            CREATE TABLE "audit_logs" (
                 "id" bigint NOT NULL,
-                "created_date" TIMESTAMP NOT NULL DEFAULT now(),
-                "created_user_id" bigint,
-                "updated_date" TIMESTAMP NOT NULL DEFAULT now(),
-                "updated_user_id" bigint,
-                "deleted_date" TIMESTAMP,
-                "deleted_user_id" bigint,
-                "version" integer NOT NULL DEFAULT '1',
-                "role_type" character varying(20) NOT NULL,
-                "resource" character varying(20) NOT NULL,
-                "action" character varying(20) NOT NULL,
-                CONSTRAINT "PK_e386259e6046c45ab06811584ed" PRIMARY KEY ("id")
+                "aggregate_type" character varying NOT NULL,
+                "aggregate_id" character varying NOT NULL,
+                "action" "public"."audit_logs_action_enum" NOT NULL,
+                "diff" jsonb,
+                "user_id" character varying NOT NULL,
+                "occurred_at" TIMESTAMP NOT NULL,
+                CONSTRAINT "PK_1bb179d048bbc581caa3b013439" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
@@ -538,12 +546,12 @@ export class Ddl1767172540261 implements MigrationInterface {
             ADD CONSTRAINT "fk_work_time_norm_days_work_time_norm_id_work_time_norms" FOREIGN KEY ("work_time_norm_id") REFERENCES "work_time_norms"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
-            ALTER TABLE "departments"
-            ADD CONSTRAINT "fk_departments_company_id_companies" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ALTER TABLE "department_entities"
+            ADD CONSTRAINT "fk_department_entities_company_id_company_entities" FOREIGN KEY ("company_id") REFERENCES "company_entities"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
-            ALTER TABLE "departments"
-            ADD CONSTRAINT "fk_departments_parent_department_id_departments" FOREIGN KEY ("parent_department_id") REFERENCES "departments"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ALTER TABLE "department_entities"
+            ADD CONSTRAINT "fk_department_entities_parent_department_id_department_entities" FOREIGN KEY ("parent_department_id") REFERENCES "department_entities"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
             ALTER TABLE "position_history"
@@ -555,15 +563,15 @@ export class Ddl1767172540261 implements MigrationInterface {
         `);
         await queryRunner.query(`
             ALTER TABLE "positions"
-            ADD CONSTRAINT "fk_positions_company_id_companies" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "fk_positions_company_id_company_entities" FOREIGN KEY ("company_id") REFERENCES "company_entities"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
             ALTER TABLE "positions"
-            ADD CONSTRAINT "fk_positions_person_id_persons" FOREIGN KEY ("person_id") REFERENCES "persons"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "fk_positions_person_id_person_entities" FOREIGN KEY ("person_id") REFERENCES "person_entities"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
-            ALTER TABLE "user_companies"
-            ADD CONSTRAINT "fk_user_companies_company_id_companies" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ALTER TABLE "user_roles"
+            ADD CONSTRAINT "fk_user_roles_company_id_company_entities" FOREIGN KEY ("company_id") REFERENCES "company_entities"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
             ALTER TABLE "payment_positions"
@@ -575,13 +583,13 @@ export class Ddl1767172540261 implements MigrationInterface {
         `);
         await queryRunner.query(`
             ALTER TABLE "pay_periods"
-            ADD CONSTRAINT "fk_pay_periods_company_id_companies" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "fk_pay_periods_company_id_company_entities" FOREIGN KEY ("company_id") REFERENCES "company_entities"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            ALTER TABLE "pay_periods" DROP CONSTRAINT "fk_pay_periods_company_id_companies"
+            ALTER TABLE "pay_periods" DROP CONSTRAINT "fk_pay_periods_company_id_company_entities"
         `);
         await queryRunner.query(`
             ALTER TABLE "pay_period_summaries" DROP CONSTRAINT "fk_pay_period_summaries_pay_period_id_pay_periods"
@@ -590,13 +598,13 @@ export class Ddl1767172540261 implements MigrationInterface {
             ALTER TABLE "payment_positions" DROP CONSTRAINT "fk_payment_positions_payment_id_payments"
         `);
         await queryRunner.query(`
-            ALTER TABLE "user_companies" DROP CONSTRAINT "fk_user_companies_company_id_companies"
+            ALTER TABLE "user_roles" DROP CONSTRAINT "fk_user_roles_company_id_company_entities"
         `);
         await queryRunner.query(`
-            ALTER TABLE "positions" DROP CONSTRAINT "fk_positions_person_id_persons"
+            ALTER TABLE "positions" DROP CONSTRAINT "fk_positions_person_id_person_entities"
         `);
         await queryRunner.query(`
-            ALTER TABLE "positions" DROP CONSTRAINT "fk_positions_company_id_companies"
+            ALTER TABLE "positions" DROP CONSTRAINT "fk_positions_company_id_company_entities"
         `);
         await queryRunner.query(`
             ALTER TABLE "position_balances" DROP CONSTRAINT "fk_position_balances_position_id_positions"
@@ -605,16 +613,19 @@ export class Ddl1767172540261 implements MigrationInterface {
             ALTER TABLE "position_history" DROP CONSTRAINT "fk_position_history_position_id_positions"
         `);
         await queryRunner.query(`
-            ALTER TABLE "departments" DROP CONSTRAINT "fk_departments_parent_department_id_departments"
+            ALTER TABLE "department_entities" DROP CONSTRAINT "fk_department_entities_parent_department_id_department_entities"
         `);
         await queryRunner.query(`
-            ALTER TABLE "departments" DROP CONSTRAINT "fk_departments_company_id_companies"
+            ALTER TABLE "department_entities" DROP CONSTRAINT "fk_department_entities_company_id_company_entities"
         `);
         await queryRunner.query(`
             ALTER TABLE "work_time_norm_days" DROP CONSTRAINT "fk_work_time_norm_days_work_time_norm_id_work_time_norms"
         `);
         await queryRunner.query(`
-            DROP TABLE "access"
+            DROP TABLE "audit_logs"
+        `);
+        await queryRunner.query(`
+            DROP TYPE "public"."audit_logs_action_enum"
         `);
         await queryRunner.query(`
             DROP INDEX "public"."MIN_WAGE_DATE_FROM_INDEX"
@@ -662,10 +673,16 @@ export class Ddl1767172540261 implements MigrationInterface {
             DROP TABLE "tasks"
         `);
         await queryRunner.query(`
-            DROP TABLE "user_companies"
+            DROP TABLE "user_roles"
         `);
         await queryRunner.query(`
-            DROP TABLE "companies"
+            DROP TABLE "users"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "roles"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "company_entities"
         `);
         await queryRunner.query(`
             DROP TABLE "positions"
@@ -683,31 +700,35 @@ export class Ddl1767172540261 implements MigrationInterface {
             DROP TABLE "payment_types"
         `);
         await queryRunner.query(`
-            DROP TABLE "jobs"
+            DROP TABLE "job_entities"
         `);
         await queryRunner.query(`
-            DROP TABLE "persons"
+            DROP INDEX "public"."idx_person_entities_email"
+        `);
+        await queryRunner.query(`
+            DROP INDEX "public"."idx_person_entities_tax_id"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "person_entities"
+        `);
+        await queryRunner.query(`
+            DROP TYPE "public"."person_entities_gender_enum"
         `);
         await queryRunner.query(`
             DROP TABLE "laws"
         `);
         await queryRunner.query(`
-            DROP TABLE "departments"
+            DROP TABLE "department_entities"
         `);
         await queryRunner.query(`
             DROP TABLE "accounting"
         `);
         await queryRunner.query(`
-            DROP TABLE "users"
-        `);
-        await queryRunner.query(`
-            DROP TABLE "roles"
+            DROP TABLE "work_time_norms"
         `);
         await queryRunner.query(`
             DROP TABLE "work_time_norm_days"
         `);
-        await queryRunner.query(`
-            DROP TABLE "work_time_norms"
-        `);
     }
+
 }

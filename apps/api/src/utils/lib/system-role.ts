@@ -5,8 +5,9 @@ import { Logger } from '@nestjs/common';
 const logger = new Logger(__filename);
 
 export async function getRoleIdByType(dataSource: DataSource, roleType: string): Promise<number> {
-    logger.debug(`!!! roleType ${roleType}`);
-    console.log('!!!');
+    // debugger;
+    // logger.debug(`!!! roleType ${roleType}`);
+    // console.log('!!!');
     const { role_id } = await dataSource
         .getRepository(Role)
         .createQueryBuilder('role')

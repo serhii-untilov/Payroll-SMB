@@ -1,4 +1,15 @@
 {
+    "editor.hover.enabled": "on",
+    "editor.parameterHints.enabled": true,
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": true,
+        "strings": true
+    },
+    "editor.suggestSelection": "first",
+    "python.analysis.languageServerMode": "default",
+
     "cSpell.words": [
         "AUTOINCREMENT",
         "avvvatars",
